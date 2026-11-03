@@ -6,6 +6,8 @@ import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import { Briefcase, Search, ArrowRight, TrendingUp } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 
 export default function CareersPage() {
   const { language, getLocalized } = useLanguage();
@@ -69,8 +71,19 @@ export default function CareersPage() {
 
         {/* Careers Grid */}
         {isLoading ? (
-          <div className="py-20 text-center text-sm text-[#68708A]">
-            {language === "km" ? "កំពុងទាញយកទិន្នន័យអាជីព..." : "Loading careers..."}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="rounded-3xl bg-white border border-[#E6E8F0] p-6 space-y-4 shadow-2xs">
+                <div className="flex justify-between items-center">
+                  <Skeleton className="h-6 w-24 rounded-full" />
+                  <Skeleton className="h-4 w-20" />
+                </div>
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-16 w-full rounded-xl" />
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-9 w-full rounded-xl" />
+              </div>
+            ))}
           </div>
         ) : careers && careers.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

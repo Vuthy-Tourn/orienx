@@ -6,6 +6,8 @@ import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import { Search, Compass, BookOpen, ArrowRight, Sparkles, Building2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 
 export default function MajorsPage() {
   const { language, getLocalized } = useLanguage();
@@ -104,8 +106,22 @@ export default function MajorsPage() {
 
         {/* Majors Grid */}
         {isLoading ? (
-          <div className="py-20 text-center text-sm text-[#68708A]">
-            {language === "km" ? "កំពុងទាញយកទិន្នន័យជំនាញ..." : "Loading majors..."}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="rounded-3xl bg-white border border-[#E6E8F0] p-6 space-y-4 shadow-2xs">
+                <div className="flex justify-between items-center">
+                  <Skeleton className="h-6 w-24 rounded-full" />
+                  <Skeleton className="h-5 w-12 rounded-full" />
+                </div>
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-16 w-full rounded-xl" />
+                <div className="flex gap-2">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+                <Skeleton className="h-9 w-full rounded-xl" />
+              </div>
+            ))}
           </div>
         ) : majors && majors.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

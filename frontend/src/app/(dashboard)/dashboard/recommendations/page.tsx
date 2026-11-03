@@ -18,6 +18,9 @@ import {
   DollarSign,
   AlertCircle,
 } from "lucide-react";
+import { BorderBeam } from "@/components/magicui/border-beam";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
 
 export default function RecommendationsPage() {
   const { language, getLocalized } = useLanguage();
@@ -84,8 +87,25 @@ export default function RecommendationsPage() {
       </div>
 
       {isLoading ? (
-        <div className="py-20 text-center text-sm text-[#68708A]">
-          {language === "km" ? "កំពុងគណនាអនុសាសន៍ជំនាញ..." : "Calculating personalized recommendations..."}
+        <div className="space-y-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] space-y-4 shadow-2xs">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2.5">
+                  <Skeleton className="h-7 w-7 rounded-xl" />
+                  <Skeleton className="h-6 w-48" />
+                </div>
+                <Skeleton className="h-6 w-24 rounded-full" />
+              </div>
+              <Skeleton className="h-24 w-full rounded-2xl" />
+              <div className="grid grid-cols-4 gap-2">
+                <Skeleton className="h-10 w-full rounded-xl" />
+                <Skeleton className="h-10 w-full rounded-xl" />
+                <Skeleton className="h-10 w-full rounded-xl" />
+                <Skeleton className="h-10 w-full rounded-xl" />
+              </div>
+            </div>
+          ))}
         </div>
       ) : error ? (
         <div className="py-16 text-center text-sm text-rose-600">
@@ -101,12 +121,16 @@ export default function RecommendationsPage() {
             return (
               <div
                 key={rec.id}
-                className={`p-6 sm:p-7 rounded-3xl border transition-all ${
+                className={`p-6 sm:p-7 rounded-3xl border transition-all relative overflow-hidden ${
                   isTopMatch
-                    ? "bg-white border-2 border-[#111965] shadow-md ring-4 ring-[#111965]/5"
+                    ? "bg-white border-2 border-[#111965] shadow-lg ring-4 ring-[#111965]/5"
                     : "bg-white border-[#E6E8F0] shadow-2xs hover:border-slate-300"
                 }`}
               >
+                {/* Border Beam on Top Ranked Major Match */}
+                {isTopMatch && (
+                  <BorderBeam size={240} duration={14} colorFrom="#F7CE4D" colorTo="#111965" />
+                )}
                 <div className="space-y-4">
                   {/* Top Header Row */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">

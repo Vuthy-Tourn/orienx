@@ -17,6 +17,9 @@ import {
   Check,
   Scale,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export default function UniversitiesPage() {
   const { language, getLocalized } = useLanguage();
@@ -136,8 +139,21 @@ export default function UniversitiesPage() {
 
         {/* Directory Grid */}
         {isLoading ? (
-          <div className="py-20 text-center text-sm text-[#68708A]">
-            {language === "km" ? "កំពុងទាញយកទិន្នន័យសាកលវិទ្យាល័យ..." : "Loading universities..."}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="rounded-3xl bg-white border border-[#E6E8F0] p-6 space-y-4 shadow-2xs">
+                <div className="flex justify-between items-center">
+                  <Skeleton className="h-6 w-24 rounded-full" />
+                  <Skeleton className="h-8 w-20 rounded-xl" />
+                </div>
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-6 w-3/4" />
+                </div>
+                <Skeleton className="h-20 w-full rounded-2xl" />
+                <Skeleton className="h-10 w-full rounded-xl" />
+              </div>
+            ))}
           </div>
         ) : error ? (
           <div className="py-12 text-center text-rose-600 text-sm">

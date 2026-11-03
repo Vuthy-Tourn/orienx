@@ -18,8 +18,11 @@ import {
   LayoutDashboard,
   LogOut,
   ShieldCheck,
+  ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Sheet, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -127,76 +130,97 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-b border-[#E6E8F0] bg-white px-4 pt-2 pb-6 space-y-3">
-          <div className="space-y-1">
-            {navLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-[#171A2C] hover:bg-slate-50"
-              >
-                {item.icon && <item.icon className="w-4 h-4 text-[#111965]" />}
-                <span>{item.label}</span>
-              </Link>
-            ))}
-          </div>
+      {/* Mobile Drawer (Accessible Sheet) */}
+      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen} side="right" className="w-[85vw] max-w-sm">
+        <div className="space-y-6">
+          <SheetHeader>
+            <SheetTitle>Futera Navigation</SheetTitle>
+            <SheetDescription>Discover Your Direction. Shape Your Future.</SheetDescription>
+          </SheetHeader>
 
-          <div className="pt-3 border-t border-[#E6E8F0] space-y-2">
-            {user ? (
-              <>
+          {/* Navigation Links with large touch targets */}
+          <div className="space-y-1.5">
+            {navLinks.map((item) => {
+              const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
+              return (
                 <Link
-                  href="/dashboard"
+                  key={item.href}
+                  href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg text-sm font-semibold text-white bg-[#111965]"
+                  className={cn(
+                    "flex items-center justify-between p-3.5 rounded-2xl text-sm font-semibold transition-colors min-h-[48px]",
+                    isActive
+                      ? "bg-[#F0F2FA] text-[#111965]"
+                      : "text-[#171A2C] hover:bg-slate-50"
+                  )}
                 >
-                  <LayoutDashboard className="w-4 h-4" />
-                  <span>{t("nav.dashboard")}</span>
+                  <div className="flex items-center gap-3">
+                    {item.icon && <item.icon className="w-5 h-5 text-[#111965]" />}
+                    <span>{item.label}</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-300" />
                 </Link>
-                {isAdmin && (
-                  <Link
-                    href="/admin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200"
-                  >
-                    <ShieldCheck className="w-4 h-4" />
-                    <span>Admin Panel</span>
-                  </Link>
-                )}
-                <button
-                  onClick={() => {
-                    logout();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm font-semibold text-rose-600 hover:bg-rose-50"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>{t("nav.logout")}</span>
-                </button>
-              </>
-            ) : (
-              <div className="flex flex-col gap-2">
-                <Link
-                  href="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2 rounded-lg text-sm font-semibold text-[#111965] border border-[#E6E8F0]"
-                >
-                  {t("nav.signIn")}
-                </Link>
-                <Link
-                  href="/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2.5 rounded-lg text-sm font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B]"
-                >
-                  {t("nav.getStarted")}
-                </Link>
-              </div>
-            )}
+              );
+            })}
           </div>
         </div>
-      )}
+
+        {/* Footer Actions */}
+        <div className="pt-6 border-t border-[#E6E8F0] space-y-3">
+          {user ? (
+            <div className="space-y-2">
+              <Link
+                href="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl text-sm font-bold text-white bg-[#111965] shadow-sm min-h-[48px]"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                <span>{t("nav.dashboard")}</span>
+              </Link>
+
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 min-h-[44px]"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Admin Panel</span>
+                </Link>
+              )}
+
+              <button
+                type="button"
+                onClick={() => {
+                  logout();
+                  setMobileMenuOpen(false);
+                }}
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl text-xs font-semibold text-rose-600 hover:bg-rose-50 min-h-[44px]"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>{t("nav.logout")}</span>
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2.5">
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full text-center py-3 rounded-2xl text-sm font-bold text-[#111965] border-2 border-[#E6E8F0] hover:bg-slate-50 min-h-[48px] flex items-center justify-center"
+              >
+                {t("nav.signIn")}
+              </Link>
+              <Link
+                href="/register"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full text-center py-3 rounded-2xl text-sm font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-sm min-h-[48px] flex items-center justify-center"
+              >
+                {t("nav.getStarted")}
+              </Link>
+            </div>
+          )}
+        </div>
+      </Sheet>
     </header>
   );
 }

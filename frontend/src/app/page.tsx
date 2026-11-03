@@ -23,6 +23,13 @@ import {
   Search,
 } from "lucide-react";
 import { formatUSD } from "@/lib/utils";
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { BorderBeam } from "@/components/magicui/border-beam";
+import { NumberTicker } from "@/components/magicui/number-ticker";
+import { DotPattern } from "@/components/magicui/dot-pattern";
+import { BentoGrid, BentoGridItem } from "@/components/aceternity/bento-grid";
+import { Accordion, AccordionItem } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 
 export default function HomePage() {
   const { t, language } = useLanguage();
@@ -134,12 +141,15 @@ export default function HomePage() {
           1. HERO SECTION
           ===================================================================== */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#F0F2FA] via-[#F5F6FA] to-white pt-12 pb-20 lg:pt-20 lg:pb-28 border-b border-[#E6E8F0]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Subtle Architectural Dot Pattern */}
+        <DotPattern className="[mask-image:radial-gradient(650px_circle_at_center,white,transparent)] opacity-60" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column: Headline & Action */}
             <div className="lg:col-span-7 space-y-6">
               {/* Contextual Pill */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-[#E6E8F0] shadow-2xs">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E6E8F0] shadow-2xs">
                 <span className="w-2 h-2 rounded-full bg-[#111965] animate-pulse" />
                 <span className="text-xs font-semibold text-[#111965]">
                   {t("hero.badge")}
@@ -156,19 +166,22 @@ export default function HomePage() {
                 {t("hero.subtitle")}
               </p>
 
-              {/* CTAs */}
+              {/* CTAs with Magic UI ShimmerButton */}
               <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
-                <Link
-                  href="/register"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-base text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-sm hover:shadow transition-all duration-200"
-                >
-                  <span>{t("hero.ctaPrimary")}</span>
-                  <ArrowRight className="w-4 h-4" />
+                <Link href="/register" className="inline-block">
+                  <ShimmerButton
+                    shimmerColor="#F7CE4D"
+                    background="#111965"
+                    className="font-bold text-sm sm:text-base text-white shadow-md w-full sm:w-auto"
+                  >
+                    <span>{t("hero.ctaPrimary")}</span>
+                    <ArrowRight className="w-4 h-4 ml-2 inline text-[#F7CE4D]" />
+                  </ShimmerButton>
                 </Link>
 
                 <Link
                   href="/majors"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-base text-[#111965] bg-white hover:bg-slate-50 border border-[#E6E8F0] shadow-2xs transition-all duration-200"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-semibold text-sm sm:text-base text-[#111965] bg-white hover:bg-slate-50 border-2 border-[#E6E8F0] shadow-2xs transition-all duration-200"
                 >
                   <Compass className="w-4 h-4 text-[#111965]" />
                   <span>{t("hero.ctaSecondary")}</span>
@@ -192,13 +205,15 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Column: Interactive Recommendation Preview Card */}
+            {/* Right Column: Interactive Recommendation Preview Card with Aceternity BorderBeam */}
             <div className="lg:col-span-5">
               <div className="relative mx-auto max-w-md lg:max-w-none">
                 {/* Background decorative frame */}
-                <div className="absolute -inset-1.5 rounded-2xl bg-gradient-to-tr from-[#111965]/10 via-[#F7CE4D]/20 to-transparent blur-sm" />
+                <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-tr from-[#111965]/10 via-[#F7CE4D]/20 to-transparent blur-sm" />
 
-                <div className="relative rounded-2xl bg-white border border-[#E6E8F0] p-6 shadow-md space-y-5">
+                <div className="relative rounded-3xl bg-white border border-[#E6E8F0] p-6 sm:p-7 shadow-lg space-y-5 overflow-hidden">
+                  {/* Magic UI Border Beam */}
+                  <BorderBeam size={220} duration={12} delay={9} colorFrom="#F7CE4D" colorTo="#111965" />
                   <div className="flex items-center justify-between pb-3 border-b border-[#E6E8F0]">
                     <div className="flex items-center gap-2">
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
@@ -256,6 +271,63 @@ export default function HomePage() {
                   </Link>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================================
+          IMPACT BENCHMARK NUMBERS (MAGIC UI NUMBER TICKER)
+          ===================================================================== */}
+      <section className="bg-white py-10 border-b border-[#E6E8F0] relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            {/* Stat 1 */}
+            <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1 text-center">
+              <div className="text-2xl sm:text-4xl font-extrabold text-[#111965] flex items-center justify-center">
+                <NumberTicker value={5} />
+                <span className="text-[#F7CE4D]">+</span>
+              </div>
+              <div className="text-xs sm:text-sm font-bold text-[#171A2C]">
+                {language === "km" ? "សាកលវិទ្យាល័យឈានមុខ" : "Verified Universities"}
+              </div>
+              <p className="text-[11px] text-[#68708A]">RUPP, ITC, AUPP, Paragon, NUM</p>
+            </div>
+
+            {/* Stat 2 */}
+            <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1 text-center">
+              <div className="text-2xl sm:text-4xl font-extrabold text-[#111965] flex items-center justify-center">
+                <NumberTicker value={6} />
+                <span className="text-[#F7CE4D]">+</span>
+              </div>
+              <div className="text-xs sm:text-sm font-bold text-[#171A2C]">
+                {language === "km" ? "ជំនាញសិក្សាតម្រូវការខ្ពស់" : "High-Demand Majors"}
+              </div>
+              <p className="text-[11px] text-[#68708A]">STEM, Business & Diplomacy</p>
+            </div>
+
+            {/* Stat 3 */}
+            <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1 text-center">
+              <div className="text-2xl sm:text-4xl font-extrabold text-[#111965] flex items-center justify-center">
+                <span className="text-[#F7CE4D] mr-0.5">$</span>
+                <NumberTicker value={250} />
+              </div>
+              <div className="text-xs sm:text-sm font-bold text-[#171A2C]">
+                {language === "km" ? "តម្លៃសិក្សាចាប់ផ្តើម" : "Starting Tuition / Yr"}
+              </div>
+              <p className="text-[11px] text-[#68708A]">{language === "km" ? "តម្លៃពិតជាក់ស្តែង" : "Fact-Verified Tuition"}</p>
+            </div>
+
+            {/* Stat 4 */}
+            <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1 text-center">
+              <div className="text-2xl sm:text-4xl font-extrabold text-[#111965] flex items-center justify-center">
+                <NumberTicker value={100} />
+                <span className="text-[#F7CE4D]">%</span>
+              </div>
+              <div className="text-xs sm:text-sm font-bold text-[#171A2C]">
+                {language === "km" ? "តម្លាភាពក្នុងការវិភាគ" : "Transparent Logic"}
+              </div>
+              <p className="text-[11px] text-[#68708A]">{language === "km" ? "គ្មានការលម្អៀង" : "Explainable Guidance"}</p>
             </div>
           </div>
         </div>
@@ -610,36 +682,17 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="space-y-3">
-            {faqs.map((faq, idx) => {
-              const isOpen = openFaq === idx;
-              return (
-                <div
-                  key={idx}
-                  className="rounded-2xl border border-[#E6E8F0] overflow-hidden transition-colors"
-                >
-                  <button
-                    onClick={() => setOpenFaq(isOpen ? null : idx)}
-                    className="w-full flex items-center justify-between p-5 text-left bg-white hover:bg-[#F5F6FA] transition-colors"
-                  >
-                    <span className="font-bold text-sm sm:text-base text-[#111965]">
-                      {language === "km" ? faq.qKm : faq.qEn}
-                    </span>
-                    <ChevronDown
-                      className={`w-4 h-4 text-[#68708A] transition-transform duration-200 ${
-                        isOpen ? "transform rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                  {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-[#68708A] leading-relaxed border-t border-[#E6E8F0] bg-[#F5F6FA]/50">
-                      {language === "km" ? faq.aKm : faq.aEn}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          <Accordion className="space-y-3">
+            {faqs.map((faq, idx) => (
+              <AccordionItem
+                key={idx}
+                title={language === "km" ? faq.qKm : faq.qEn}
+                defaultOpen={idx === 0}
+              >
+                {language === "km" ? faq.aKm : faq.aEn}
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </section>
 
