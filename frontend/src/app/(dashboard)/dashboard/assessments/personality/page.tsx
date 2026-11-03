@@ -298,7 +298,7 @@ export default function PersonalityAssessmentPage() {
               <div className="flex-shrink-0 self-center sm:self-auto relative pt-8 pb-2">
                 <FuteraMascot
                   variant="full-jumping"
-                  isCelebrating={true}
+                  emotion="completed"
                   showSpeech={true}
                   size={210}
                   speechText={language === "km" ? "អបអរសាទរ! 🌟" : "Congratulations! 🌟"}
@@ -432,14 +432,31 @@ export default function PersonalityAssessmentPage() {
 
           {/* Main Stage Card with 3D Overhanging Mascot on Right Side */}
           <div className="relative pt-6">
-            {/* Overhanging Extracted 3D Mascot Peeking on Top-Right Corner */}
+            {/* Overhanging Extracted Mascot Peeking on Top-Right Corner */}
             <div className="absolute -top-14 -right-1 sm:-top-16 sm:-right-4 z-20 pointer-events-auto">
               <FuteraMascot
                 variant="peeking-right"
-                isCelebrating={isAnswered}
-                isWaving={!isAnswered}
+                emotion={
+                  isAnswered
+                    ? "celebrating"
+                    : currentIndex === 0
+                    ? "greeting"
+                    : "thinking"
+                }
                 showSpeech={true}
-                speechText={speechText}
+                speechText={
+                  isAnswered
+                    ? language === "km"
+                      ? "ចម្លើយល្អណាស់! 🌟"
+                      : "Great answer! 🌟"
+                    : currentIndex === 0
+                    ? language === "km"
+                      ? "សួស្តី! ចាប់ផ្តើមសំណួរដំបូង! 👋"
+                      : "Hello! Let's start Q1! 👋"
+                    : language === "km"
+                    ? "តើអ្នកយល់យ៉ាងណាដែរ? 🤔"
+                    : "What do you think? 🤔"
+                }
               />
             </div>
 
