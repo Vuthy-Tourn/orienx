@@ -16,7 +16,6 @@ interface StepConfig {
   level: number;
   labelEn: string;
   labelKm: string;
-  emoji: string;
   themeColor: string;
   gradientFrom: string;
   gradientTo: string;
@@ -34,7 +33,6 @@ const SCALE_STEPS: StepConfig[] = [
     level: 1,
     labelEn: "Strongly Agree",
     labelKm: "យល់ស្របខ្លាំងបំផុត",
-    emoji: "🌟",
     themeColor: "#0284C7",
     gradientFrom: "#38BDF8",
     gradientTo: "#0284C7",
@@ -47,7 +45,6 @@ const SCALE_STEPS: StepConfig[] = [
     level: 2,
     labelEn: "Agree",
     labelKm: "យល់ស្រប",
-    emoji: "😊",
     themeColor: "#059669",
     gradientFrom: "#34D399",
     gradientTo: "#059669",
@@ -60,7 +57,6 @@ const SCALE_STEPS: StepConfig[] = [
     level: 3,
     labelEn: "Slightly Agree",
     labelKm: "យល់ស្របបន្តិច",
-    emoji: "🙂",
     themeColor: "#65A30D",
     gradientFrom: "#A3E635",
     gradientTo: "#65A30D",
@@ -73,7 +69,6 @@ const SCALE_STEPS: StepConfig[] = [
     level: 4,
     labelEn: "Neutral",
     labelKm: "កណ្តាល",
-    emoji: "🤔",
     themeColor: "#D97706",
     gradientFrom: "#FACC15",
     gradientTo: "#D97706",
@@ -86,7 +81,6 @@ const SCALE_STEPS: StepConfig[] = [
     level: 5,
     labelEn: "Slightly Disagree",
     labelKm: "មិនសូវយល់ស្រប",
-    emoji: "😕",
     themeColor: "#EA580C",
     gradientFrom: "#FB923C",
     gradientTo: "#EA580C",
@@ -99,7 +93,6 @@ const SCALE_STEPS: StepConfig[] = [
     level: 6,
     labelEn: "Disagree",
     labelKm: "មិនយល់ស្រប",
-    emoji: "🥺",
     themeColor: "#DC2626",
     gradientFrom: "#F87171",
     gradientTo: "#DC2626",
@@ -112,7 +105,6 @@ const SCALE_STEPS: StepConfig[] = [
     level: 7,
     labelEn: "Strongly Disagree",
     labelKm: "មិនយល់ស្របទាល់តែសោះ",
-    emoji: "😤",
     themeColor: "#B91C1C",
     gradientFrom: "#EF4444",
     gradientTo: "#991B1B",
@@ -206,8 +198,8 @@ export function Scale16p({
                     ? `${step.idleBg} ${step.idleBorder} -translate-y-1 scale-105 shadow-md z-0`
                     : `${step.idleBg} ${step.idleBorder} shadow-2xs hover:shadow-sm z-0`
                 }`}
-                title={`${step.labelEn} (${step.emoji})`}
-                aria-label={`${step.labelEn}`}
+                title={language === "km" ? step.labelKm : step.labelEn}
+                aria-label={language === "km" ? step.labelKm : step.labelEn}
               >
                 {/* Expressive Emoticon matching the reference cards */}
                 <div
@@ -269,35 +261,27 @@ export function Scale16p({
         </div>
       </div>
 
-      {/* 4. Floating Dynamic Feedback Pill */}
-      <div className="h-9 flex items-center justify-center">
+      {/* 4. Dynamic Feedback Text (Clean text label without emojis or level tags, matching pic 2) */}
+      <div className="h-8 flex items-center justify-center">
         {currentStep ? (
           <div
-            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-xs font-black shadow-md border animate-in fade-in zoom-in-95 duration-150 transition-all"
+            className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-extrabold shadow-xs border animate-in fade-in zoom-in-95 duration-150 transition-all"
             style={{
               backgroundColor: "#FFFFFF",
               borderColor: currentStep.themeColor,
               color: currentStep.themeColor,
             }}
           >
-            <span className="text-sm leading-none">{currentStep.emoji}</span>
             <span>
               {language === "km" ? currentStep.labelKm : currentStep.labelEn}
             </span>
-            <span
-              className="text-[10px] px-2 py-0.5 rounded-full text-white font-extrabold"
-              style={{ backgroundColor: currentStep.themeColor }}
-            >
-              {language === "km" ? `កម្រិត ${currentStep.level}` : `Level ${currentStep.level}`}
-            </span>
           </div>
         ) : (
-          <div className="inline-flex items-center gap-2 text-xs font-bold text-slate-400">
-            <span>✨</span>
+          <div className="inline-flex items-center text-xs font-semibold text-slate-400">
             <span>
               {language === "km"
-                ? "សូមជ្រើសរើសកម្រិតដែលត្រូវនឹងអ្នក"
-                : "Choose the level that best reflects you"}
+                ? "សូមជ្រើសរើសជម្រើសដែលត្រូវនឹងអ្នក"
+                : "Choose the option that best reflects you"}
             </span>
           </div>
         )}

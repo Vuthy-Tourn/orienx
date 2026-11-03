@@ -105,16 +105,16 @@ export function FuteraMascot({
   // Default contextual speech text
   const defaultSpeech =
     resolvedId === "click_on_it"
-      ? "តោះលេងជាមួយគ្នា! ✨"
+      ? "តោះលេងជាមួយគ្នា!"
       : resolvedId === "happy"
-      ? "យល់ស្រប! អស្ចារ្យណាស់! 🌟"
+      ? "យល់ស្រប! អស្ចារ្យណាស់!"
       : resolvedId === "angry"
-      ? "មិនយល់ស្របដាច់ខាត! 😤"
+      ? "មិនយល់ស្របដាច់ខាត!"
       : resolvedId === "sad"
-      ? "មិនយល់ស្របទេ? ខ្ញុំយល់ហើយ... 🥺"
+      ? "មិនយល់ស្របទេ? ខ្ញុំយល់ហើយ..."
       : resolvedId === "congratulation"
-      ? "អបអរសាទរ! អ្នកពិតជាអស្ចារ្យ! 🌟"
-      : "តើអ្នកយល់យ៉ាងណាដែរ? 🤔";
+      ? "អបអរសាទរ! អ្នកពិតជាអស្ចារ្យ!"
+      : "តើអ្នកយល់យ៉ាងណាដែរ?";
 
   const renderedSpeech = speechText ?? defaultSpeech;
   const isSad = resolvedId === "sad";
@@ -155,7 +155,7 @@ export function FuteraMascot({
           onClick={handleMascotClick}
           className="relative flex-shrink-0 cursor-pointer group transition-transform duration-200 hover:scale-106 active:scale-95"
           style={{ width: widthPx, height: heightPx }}
-          title={isAngry ? "Tara is angry! 😤" : isSad ? "Click to cheer up Tara! 🥺" : "Click Tara to play! 🌟"}
+          title={isAngry ? "Tara" : isSad ? "Tara" : "Tara"}
         >
           {/* Floating Sparkles */}
           <span

@@ -442,26 +442,26 @@ export default function PersonalityAssessmentPage() {
                   currentAnswer?.scaleLevel !== undefined && currentAnswer?.scaleLevel !== null
                     ? currentAnswer.scaleLevel <= 3
                       ? language === "km"
-                        ? "យល់ស្រប! អស្ចារ្យណាស់! 🌟"
-                        : "Agree! Awesome! 🌟"
+                        ? "យល់ស្រប! អស្ចារ្យណាស់!"
+                        : "Agree! Awesome!"
                       : currentAnswer.scaleLevel === 7
                       ? language === "km"
-                        ? "មិនយល់ស្របដាច់ខាត! 😤"
-                        : "Strongly Disagree! 😤"
+                        ? "មិនយល់ស្របដាច់ខាត!"
+                        : "Strongly Disagree!"
                       : currentAnswer.scaleLevel >= 5
                       ? language === "km"
-                        ? "មិនយល់ស្របទេ? ខ្ញុំយល់ហើយ... 🥺"
-                        : "Disagree? I understand... 🥺"
+                        ? "មិនយល់ស្របទេ? ខ្ញុំយល់ហើយ..."
+                        : "Disagree? I understand..."
                       : language === "km"
-                      ? "អព្យាក្រឹត... កំពុងគិត 🤔"
-                      : "Neutral... Thinking 🤔"
+                      ? "អព្យាក្រឹត... កំពុងគិត"
+                      : "Neutral... Thinking"
                     : currentIndex === 0
                     ? language === "km"
-                      ? "សួស្តី! ចាប់ផ្តើមសំណួរដំបូង! 👋"
-                      : "Hello! Let's start Q1! 👋"
+                      ? "សួស្តី! ចាប់ផ្តើមសំណួរដំបូង!"
+                      : "Hello! Let's start Q1!"
                     : language === "km"
-                    ? "តើអ្នកយល់យ៉ាងណាដែរ? 🤔"
-                    : "What do you think? 🤔"
+                    ? "តើអ្នកយល់យ៉ាងណាដែរ?"
+                    : "What do you think?"
                 }
               />
             </div>
