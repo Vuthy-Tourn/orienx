@@ -294,12 +294,13 @@ export default function PersonalityAssessmentPage() {
                 </div>
               </div>
 
-              {/* Celebrating Mascot Tara */}
-              <div className="flex-shrink-0 self-center sm:self-auto">
+              {/* Celebrating Mascot Tara on Glowing Pedestal */}
+              <div className="flex-shrink-0 self-center sm:self-auto p-3 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl">
                 <FuteraMascot
                   variant="full-jumping"
                   isCelebrating={true}
                   showSpeech={true}
+                  size={220}
                   speechText={language === "km" ? "អបអរសាទរ! 🌟" : "Congratulations! 🌟"}
                 />
               </div>

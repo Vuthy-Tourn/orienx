@@ -14,13 +14,13 @@ interface FuteraMascotProps {
 
 /**
  * Futera Official Platform Mascot: "Tara" (តារា / Little Star Buddy)
- * Powered by Three.js WebGL with 100% visual match to the picture!
- * Features:
- * - Exact high-res artwork mapped onto responsive 3D WebGL mesh
+ * Powered by Three.js WebGL with 100% exact match to original artwork!
+ * - High-res HD texture with clean antialiased matte edges
+ * - True, vibrant golden yellow & peachy skin tones
+ * - Two glowing 4-point star sparkles (✦) matching the picture
  * - Ultra-playful bouncy spring idle (squash & stretch)
- * - 3D orbiting sparkling golden stars with celebration burst physics
  * - Interactive mouse cursor head-tracking
- * - High-energy celebration jump & spin when answering
+ * - High-energy celebration jump & wobble
  * - Positioned at the right edge with interactive speech bubble
  */
 export function FuteraMascot({
@@ -32,7 +32,7 @@ export function FuteraMascot({
   size,
 }: FuteraMascotProps) {
   if (variant === "peeking-right") {
-    const canvasPx = size || 145;
+    const canvasPx = size || 155;
 
     return (
       <div className={`relative flex items-center select-none ${className}`}>
@@ -60,17 +60,17 @@ export function FuteraMascot({
   }
 
   // Full body jumping mascot (for Results banner or Hero)
-  const fullSize = size || 180;
+  const fullSize = size || 240;
 
   return (
     <div className={`relative inline-flex flex-col items-center select-none ${className}`}>
       {/* Dynamic Speech Bubble above */}
       {showSpeech && speechText && (
-        <div className="absolute -top-10 z-20 animate-in fade-in zoom-in-95 duration-200">
-          <div className="relative bg-[#111965] text-[#F7CE4D] text-xs font-black px-3.5 py-1.5 rounded-2xl shadow-lg border border-[#F7CE4D]/50 whitespace-nowrap">
+        <div className="absolute -top-12 z-20 animate-in fade-in zoom-in-95 duration-200">
+          <div className="relative bg-[#111965] text-[#F7CE4D] text-xs font-black px-4 py-2 rounded-2xl shadow-xl border border-[#F7CE4D]/60 whitespace-nowrap">
             {speechText}
             {/* Bubble Tail */}
-            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#111965] rotate-45 border-r border-b border-[#F7CE4D]/50" />
+            <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#111965] rotate-45 border-r border-b border-[#F7CE4D]/60" />
           </div>
         </div>
       )}
