@@ -27,8 +27,8 @@ export default function RiasecAssessmentPage() {
   const { language } = useLanguage();
   const queryClient = useQueryClient();
 
+  const [activeTab, setActiveTab] = useState<"form" | "results">("form");
   const [ratings, setRatings] = useState<Record<string, number>>({});
-  const [showResults, setShowResults] = useState(false);
 
   // 1. Fetch questions
   const { data: questions, isLoading: loadingQuestions } = useQuery({
@@ -42,6 +42,12 @@ export default function RiasecAssessmentPage() {
     queryFn: async () => apiFetch<any>("/assessments/riasec/latest"),
   });
 
+  React.useEffect(() => {
+    if (latestResult && Object.keys(ratings).length === 0) {
+      setActiveTab("results");
+    }
+  }, [latestResult]);
+
   // 3. Submit mutation
   const { mutate: submitRiasec, isPending: submitting } = useMutation({
     mutationFn: async (answers: Array<{ question_id: string; rating: number }>) => {
@@ -53,7 +59,8 @@ export default function RiasecAssessmentPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["latest-riasec"] });
       queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
-      setShowResults(true);
+      queryClient.invalidateQueries({ queryKey: ["recommended-majors"] });
+      setActiveTab("results");
     },
   });
 
@@ -62,6 +69,15 @@ export default function RiasecAssessmentPage() {
       ...ratings,
       [questionId]: rating,
     });
+  };
+
+  const handleQuickPrefill = () => {
+    if (!questions) return;
+    const prefill: Record<string, number> = {};
+    questions.forEach((q, idx) => {
+      prefill[q.id] = (idx % 3) + 3; // ratings 3, 4, 5
+    });
+    setRatings(prefill);
   };
 
   const handleSubmit = () => {
@@ -79,7 +95,7 @@ export default function RiasecAssessmentPage() {
 
   const handleRetake = () => {
     setRatings({});
-    setShowResults(false);
+    setActiveTab("form");
   };
 
   if (loadingQuestions || loadingLatest) {
@@ -91,7 +107,7 @@ export default function RiasecAssessmentPage() {
   }
 
   // Results View
-  if ((latestResult && Object.keys(ratings).length === 0 && !showResults) || showResults) {
+  if (activeTab === "results" && latestResult) {
     const res = latestResult;
 
     const radarData = [
@@ -201,8 +217,17 @@ export default function RiasecAssessmentPage() {
                 : "Rate your level of enjoyment for each activity (1 = Dislike, 5 = Highly Enjoy)"}
             </p>
           </div>
-          <div className="text-xs font-bold text-[#111965] bg-[#F0F2FA] px-3 py-1.5 rounded-full">
-            {answeredCount} / {questions.length} Rated ({progressPercent}%)
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleQuickPrefill}
+              className="px-3 py-1.5 rounded-xl text-[11px] font-semibold text-[#111965] bg-[#F0F2FA] hover:bg-[#E6E8F0] transition-colors"
+            >
+              ⚡ Demo Autofill
+            </button>
+            <div className="text-xs font-bold text-[#111965] bg-[#F0F2FA] px-3 py-1.5 rounded-full">
+              {answeredCount} / {questions.length} Rated ({progressPercent}%)
+            </div>
           </div>
         </div>
 
