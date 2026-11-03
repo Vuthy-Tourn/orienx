@@ -174,3 +174,4 @@ Futera models 28 comprehensive relational tables:
 
 Developed with pride for the students of Cambodia.  
 Built with Next.js, FastAPI, PostgreSQL, and Tailwind CSS.
+

@@ -212,3 +212,4 @@ export function ResonanceGauge({ value, onChange, language }: ResonanceGaugeProp
     </div>
   );
 }
+

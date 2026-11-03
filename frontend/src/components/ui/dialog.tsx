@@ -66,3 +66,4 @@ export function DialogDescription({ className, ...props }: React.HTMLAttributes<
 export function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return <div className={cn("flex flex-col sm:flex-row items-center justify-end gap-3 mt-6 pt-4 border-t border-[#E6E8F0]", className)} {...props} />;
 }
+

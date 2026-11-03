@@ -43,3 +43,4 @@ export function AccordionItem({ title, children, defaultOpen = false, className 
 export function Accordion({ children, className }: { children: React.ReactNode; className?: string }) {
   return <div className={cn("space-y-3", className)}>{children}</div>;
 }
+

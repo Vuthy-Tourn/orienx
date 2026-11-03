@@ -114,3 +114,4 @@ export function ArchetypeGlyph({ trait, className = "w-6 h-6", isSelected = fals
       );
   }
 }
+
