@@ -68,6 +68,7 @@ export default function PersonalityAssessmentPage() {
   const [answers, setAnswers] = useState<
     Record<string, { scaleLevel: number; selectedOptionId: string }>
   >({});
+  const [surpriseTrigger, setSurpriseTrigger] = useState(false);
   const [autoAdvance, setAutoAdvance] = useState(true);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -109,6 +110,12 @@ export default function PersonalityAssessmentPage() {
     const optA = question.options[0];
     const optB = question.options[1];
     const chosenOptionId = scaleLevel <= 3 ? optA?.id : scaleLevel >= 5 ? optB?.id : optA?.id;
+
+    const prevAnswer = answers[question.id];
+    if (prevAnswer && Math.abs(scaleLevel - prevAnswer.scaleLevel) >= 4) {
+      setSurpriseTrigger(true);
+      setTimeout(() => setSurpriseTrigger(false), 1800);
+    }
 
     setAnswers((prev) => ({
       ...prev,
@@ -298,7 +305,7 @@ export default function PersonalityAssessmentPage() {
               <div className="flex-shrink-0 self-center sm:self-auto relative pt-8 pb-2">
                 <FuteraMascot
                   variant="full-jumping"
-                  emotion="completed"
+                  emotion="congratulation"
                   showSpeech={true}
                   size={210}
                   speechText={language === "km" ? "អបអរសាទរ! 🌟" : "Congratulations! 🌟"}
@@ -436,10 +443,26 @@ export default function PersonalityAssessmentPage() {
             <div className="absolute -top-14 -right-1 sm:-top-16 sm:-right-4 z-20 pointer-events-auto">
               <FuteraMascot
                 variant="peeking-right"
-                scaleLevel={currentAnswer?.scaleLevel ?? null}
+                emotion={
+                  surpriseTrigger
+                    ? "surprise"
+                    : currentAnswer
+                    ? currentAnswer.scaleLevel <= 3
+                      ? "happy"
+                      : currentAnswer.scaleLevel >= 5
+                      ? "sad"
+                      : "thinking"
+                    : currentIndex === 0
+                    ? "waiting"
+                    : "thinking"
+                }
                 showSpeech={true}
                 speechText={
-                  currentAnswer?.scaleLevel !== undefined && currentAnswer?.scaleLevel !== null
+                  surpriseTrigger
+                    ? language === "km"
+                      ? "អីយ៉ា! ផ្លាស់ប្តូរលឿនម្ល៉េះ! 😲"
+                      : "Woah! Big change! 😲"
+                    : currentAnswer?.scaleLevel !== undefined && currentAnswer?.scaleLevel !== null
                     ? currentAnswer.scaleLevel <= 3
                       ? language === "km"
                         ? "យល់ស្រប! អស្ចារ្យណាស់! 🌟"
