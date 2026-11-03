@@ -436,19 +436,21 @@ export default function PersonalityAssessmentPage() {
             <div className="absolute -top-14 -right-1 sm:-top-16 sm:-right-4 z-20 pointer-events-auto">
               <FuteraMascot
                 variant="peeking-right"
-                emotion={
-                  isAnswered
-                    ? "celebrating"
-                    : currentIndex === 0
-                    ? "greeting"
-                    : "thinking"
-                }
+                scaleLevel={currentAnswer?.scaleLevel ?? null}
                 showSpeech={true}
                 speechText={
-                  isAnswered
-                    ? language === "km"
-                      ? "ចម្លើយល្អណាស់! 🌟"
-                      : "Great answer! 🌟"
+                  currentAnswer?.scaleLevel !== undefined && currentAnswer?.scaleLevel !== null
+                    ? currentAnswer.scaleLevel <= 3
+                      ? language === "km"
+                        ? "យល់ស្រប! អស្ចារ្យណាស់! 🌟"
+                        : "Agree! Awesome! 🌟"
+                      : currentAnswer.scaleLevel >= 5
+                      ? language === "km"
+                        ? "មិនយល់ស្របទេ? ខ្ញុំយល់ហើយ... 🥺"
+                        : "Disagree? I understand... 🥺"
+                      : language === "km"
+                      ? "អព្យាក្រឹត... កំពុងគិត 🤔"
+                      : "Neutral... Thinking 🤔"
                     : currentIndex === 0
                     ? language === "km"
                       ? "សួស្តី! ចាប់ផ្តើមសំណួរដំបូង! 👋"
