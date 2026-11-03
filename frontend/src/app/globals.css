@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --primary-navy: #111965;
+    --navy-dark: #0A0F3D;
+    --navy-light: #1E277A;
+    --navy-50: #F0F2FA;
+    --accent-yellow: #F7CE4D;
+    --yellow-hover: #E5BD3B;
+    --yellow-light: #FFF9E6;
+    --bg-base: #F5F6FA;
+    --surface-white: #FFFFFF;
+    --text-primary: #171A2C;
+    --text-secondary: #68708A;
+    --border-subtle: #E6E8F0;
+  }
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-jakarta), var(--font-khmer), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Khmer Typography Adjustments */
+.khmer-text {
+  font-family: var(--font-khmer), sans-serif;
+  line-height: 1.75;
+}
+
+/* Custom modern scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F5F6FA;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}

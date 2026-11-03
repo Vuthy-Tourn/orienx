@@ -1,0 +1,74 @@
+{
+  "brand": {
+    "name": "Futera",
+    "tagline": "Discover Your Direction. Shape Your Future."
+  },
+  "nav": {
+    "home": "Home",
+    "majors": "Explore Majors",
+    "universities": "Universities",
+    "careers": "Careers",
+    "scholarships": "Scholarships",
+    "about": "About",
+    "signIn": "Sign In",
+    "getStarted": "Get Started",
+    "dashboard": "Dashboard",
+    "logout": "Log Out"
+  },
+  "hero": {
+    "badge": "Designed for Cambodian High School & University Students",
+    "title": "Your Future Starts With Understanding Yourself.",
+    "subtitle": "Discover your interests, explore university majors, investigate career opportunities, and find verified Cambodian university programs tailored to your unique strengths.",
+    "ctaPrimary": "Start Your Journey",
+    "ctaSecondary": "Explore Majors",
+    "statsStudents": "5,000+ Students Guided",
+    "statsUniversities": "Official Verified Cambodian Universities",
+    "statsAccuracy": "Explainable Rule-Based Matching"
+  },
+  "howItWorks": {
+    "title": "How Futera Works",
+    "subtitle": "A transparent 4-step pathway designed to help you make confident decisions about your education and future career.",
+    "step1Title": "1. Understand Yourself",
+    "step1Desc": "Complete an original MBTI-inspired personality test and RIASEC career interest assessment.",
+    "step2Title": "2. State Your Preferences",
+    "step2Desc": "Share your favorite subjects, strongest academic areas, budget requirements, and study location.",
+    "step3Title": "3. Receive Personalized Recommendations",
+    "step3Desc": "Get explainable major recommendations with transparent match percentages and clear reasons.",
+    "step4Title": "4. Explore & Compare",
+    "step4Desc": "Discover verified Cambodian universities, real tuition costs, career progression, and scholarship openings."
+  },
+  "universitiesSection": {
+    "title": "Explore Cambodian Universities",
+    "subtitle": "Accurate, verified institutional information directly from official university portals.",
+    "viewDirectory": "View All Universities",
+    "compare": "Compare Universities",
+    "public": "Public State University",
+    "private": "Private University",
+    "verifiedNotice": "Information verified from official admissions portals"
+  },
+  "assessments": {
+    "personalityTitle": "Personality Assessment",
+    "personalityDesc": "Understand your cognitive preferences across 4 essential dimensions.",
+    "riasecTitle": "RIASEC Career Interest Assessment",
+    "riasecDesc": "Discover your Holland interest code and related professional fields.",
+    "preferencesTitle": "Academic Preferences & Budget",
+    "preferencesDesc": "Tailor recommendations to your favorite subjects and location.",
+    "next": "Next Question",
+    "previous": "Previous",
+    "submit": "Complete & View Results",
+    "retake": "Retake Assessment"
+  },
+  "common": {
+    "search": "Search...",
+    "filter": "Filter",
+    "viewDetails": "View Details",
+    "save": "Save to Favorites",
+    "saved": "Saved",
+    "loading": "Loading...",
+    "tuition": "Tuition",
+    "duration": "Duration",
+    "years": "Years",
+    "province": "Province",
+    "applyNow": "Official Application Link"
+  }
+}
