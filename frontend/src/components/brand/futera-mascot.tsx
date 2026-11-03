@@ -9,18 +9,19 @@ interface FuteraMascotProps {
   speechText?: string;
   showSpeech?: boolean;
   isCelebrating?: boolean;
-  size?: number; // Canvas size in px
+  size?: number;
 }
 
 /**
  * Futera Official Platform Mascot: "Tara" (តារា / Little Star Buddy)
- * Powered by real-time interactive Three.js 3D canvas rendering!
+ * Powered by Three.js WebGL with 100% visual match to the picture!
  * Features:
- * - 3D Puffy star hoodie with soft pastel golden yellow shader
- * - Real-time mouse cursor head tracking & breathing float
- * - Dynamic 3D celebration jumps & spin upon selecting answers
- * - Orbiting twinkling 3D star sparkles
- * - Interactive click-to-play in 3D
+ * - Exact high-res artwork mapped onto responsive 3D WebGL mesh
+ * - Ultra-playful bouncy spring idle (squash & stretch)
+ * - 3D orbiting sparkling golden stars with celebration burst physics
+ * - Interactive mouse cursor head-tracking
+ * - High-energy celebration jump & spin when answering
+ * - Positioned at the right edge with interactive speech bubble
  */
 export function FuteraMascot({
   className = "",
@@ -31,14 +32,14 @@ export function FuteraMascot({
   size,
 }: FuteraMascotProps) {
   if (variant === "peeking-right") {
-    const canvasPx = size || 130;
+    const canvasPx = size || 145;
 
     return (
       <div className={`relative flex items-center select-none ${className}`}>
-        {/* Dynamic Speech Bubble pointing left towards the question */}
+        {/* Dynamic Speech Bubble pointing left towards the statement */}
         {showSpeech && speechText && (
           <div className="mr-1 sm:mr-2 animate-in fade-in zoom-in-95 duration-200">
-            <div className="relative bg-[#111965] text-[#F7CE4D] text-xs font-black px-3.5 py-2 rounded-2xl shadow-lg border border-[#F7CE4D]/50 max-w-[190px] sm:max-w-[240px] text-right leading-tight">
+            <div className="relative bg-[#111965] text-[#F7CE4D] text-[11px] sm:text-xs font-black px-3.5 py-2 rounded-2xl shadow-lg border border-[#F7CE4D]/50 max-w-[180px] sm:max-w-[240px] text-right leading-tight">
               {speechText}
               {/* Bubble Tail pointing Right towards Tara */}
               <div className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-3 h-3 bg-[#111965] rotate-45 border-t border-r border-[#F7CE4D]/50" />
@@ -46,7 +47,7 @@ export function FuteraMascot({
           </div>
         )}
 
-        {/* Real-Time Three.js 3D Mascot Canvas */}
+        {/* Real-Time Three.js 3D Mascot Canvas (Right Edge) */}
         <div className="relative flex-shrink-0">
           <FuteraMascot3D
             size={canvasPx}
@@ -58,7 +59,7 @@ export function FuteraMascot({
     );
   }
 
-  // Full body jumping mascot (e.g. in Results view or Hero)
+  // Full body jumping mascot (for Results banner or Hero)
   const fullSize = size || 180;
 
   return (
