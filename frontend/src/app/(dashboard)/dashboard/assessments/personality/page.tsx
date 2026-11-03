@@ -431,8 +431,8 @@ export default function PersonalityAssessmentPage() {
 
           {/* Main Stage Card with 3D Overhanging Mascot on Right Side */}
           <div className="relative pt-6">
-            {/* Overhanging Extracted Mascot Peeking on Top-Right Corner */}
-            <div className="absolute -top-12 -right-2 sm:-top-14 sm:-right-4 z-20 pointer-events-none">
+            {/* Overhanging Extracted 3D Mascot Peeking on Top-Right Corner */}
+            <div className="absolute -top-14 -right-1 sm:-top-16 sm:-right-4 z-20 pointer-events-auto">
               <FuteraMascot
                 variant="peeking-right"
                 isCelebrating={isAnswered}
