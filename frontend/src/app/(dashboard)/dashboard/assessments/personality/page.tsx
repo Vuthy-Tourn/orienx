@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { ArchetypeGlyph } from "@/components/assessments/archetype-glyph";
 import {
   BrainCircuit,
   ArrowRight,
@@ -65,6 +66,17 @@ const DIMENSION_INFO: Record<
     desc_km: "របៀបរៀបចំជីវិត និងការងារ៖ ផែនការច្បាស់លាស់ កាលវិភាគ ឬភាពបត់បែន ធ្វើតាមកាលៈទេសៈជាក់ស្តែង។",
     color: "from-purple-600 to-pink-600",
   },
+};
+
+const TRAIT_TITLES: Record<string, { en: string; km: string }> = {
+  E: { en: "Outward Collaboration", km: "កិច្ចសហការ និងថាមពលខាងក្រៅ" },
+  I: { en: "Deep Solo Focus", km: "ការផ្តោតអារម្មណ៍ស៊ីជម្រៅម្នាក់ឯង" },
+  S: { en: "Concrete Facts & Reality", km: "ការពិត និងការអនុវត្តជាក់ស្តែង" },
+  N: { en: "Theories & Future Vision", km: "ទ្រឹស្តី និងទស្សនវិស័យអនាគត" },
+  T: { en: "Objective Logic & Principles", km: "តក្កវិជ្ជា និងគោលការណ៍ត្រឹមត្រូវ" },
+  F: { en: "Human Values & Empathy", km: "តម្លៃមនុស្សធម៌ និងការយល់ចិត្ត" },
+  J: { en: "Structured Schedule & Deadlines", km: "កាលវិភាគ និងផែនការច្បាស់លាស់" },
+  P: { en: "Spontaneous & Adaptable Flow", km: "ភាពបត់បែនតាមកាលៈទេសៈជាក់ស្តែង" },
 };
 
 export default function PersonalityAssessmentPage() {
@@ -555,40 +567,79 @@ export default function PersonalityAssessmentPage() {
                               </h4>
                             </div>
 
-                            {/* 2 Options for this MBTI Question */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-0 sm:pl-9">
+                            {/* 2 Options for this MBTI Question — Architectural Stance Tiles */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pl-0 sm:pl-9">
                               {q.options.map((opt: any) => {
                                 const isSelected = selectedAnswers[q.id] === opt.id;
+                                const traitInfo = TRAIT_TITLES[opt.target_trait] || { en: `Trait ${opt.target_trait}`, km: `លក្ខណៈ ${opt.target_trait}` };
 
                                 return (
                                   <button
                                     key={opt.id}
                                     type="button"
                                     onClick={() => handleSelectOption(q.id, opt.id)}
-                                    className={`p-4 rounded-2xl text-left border-2 transition-all flex items-start gap-3 relative ${
+                                    className={`p-5 rounded-3xl text-left border-2 transition-all duration-200 flex flex-col justify-between gap-4 group relative overflow-hidden ${
                                       isSelected
-                                        ? "border-[#111965] bg-[#F0F2FA] shadow-xs"
-                                        : "border-[#E6E8F0] hover:border-slate-300 bg-white"
+                                        ? "border-[#111965] bg-gradient-to-br from-[#F0F2FA] to-white ring-2 ring-[#F7CE4D] shadow-md"
+                                        : "border-[#E6E8F0] hover:border-slate-300 bg-white hover:bg-slate-50/50 shadow-2xs"
                                     }`}
                                   >
-                                    <div
-                                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                                        isSelected ? "border-[#111965] bg-[#111965]" : "border-slate-300"
-                                      }`}
-                                    >
-                                      {isSelected && (
-                                        <div className="w-2 h-2 rounded-full bg-[#F7CE4D]" />
-                                      )}
+                                    {/* Top Metadata Header */}
+                                    <div className="flex items-center justify-between w-full">
+                                      <div className="flex items-center gap-2.5">
+                                        <div
+                                          className={`w-9 h-9 rounded-2xl flex items-center justify-center transition-all ${
+                                            isSelected
+                                              ? "bg-[#111965] text-[#F7CE4D] shadow-xs"
+                                              : "bg-[#F5F6FA] text-slate-500 group-hover:text-[#111965]"
+                                          }`}
+                                        >
+                                          <ArchetypeGlyph
+                                            trait={opt.target_trait}
+                                            className="w-5 h-5"
+                                            isSelected={isSelected}
+                                          />
+                                        </div>
+                                        <div>
+                                          <span className="block text-[10px] font-extrabold uppercase tracking-wider text-[#68708A]">
+                                            Trait {opt.target_trait} Stance
+                                          </span>
+                                          <span className="block text-xs font-bold text-[#111965]">
+                                            {language === "km" ? traitInfo.km : traitInfo.en}
+                                          </span>
+                                        </div>
+                                      </div>
+
+                                      {/* Interactive Selection Pill */}
+                                      <div
+                                        className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition-all flex items-center gap-1 ${
+                                          isSelected
+                                            ? "bg-[#F7CE4D] text-[#111965]"
+                                            : "bg-slate-100 text-slate-400 group-hover:text-slate-600"
+                                        }`}
+                                      >
+                                        {isSelected ? (
+                                          <>
+                                            <span>✓</span>
+                                            <span>{language === "km" ? "ជ្រើសរើស" : "Chosen Stance"}</span>
+                                          </>
+                                        ) : (
+                                          <span>{language === "km" ? "ចុចជ្រើសរើស" : "Select"}</span>
+                                        )}
+                                      </div>
                                     </div>
 
-                                    <div className="space-y-1 flex-1">
-                                      <div className="text-xs sm:text-sm font-medium text-[#171A2C] leading-relaxed">
-                                        {language === "km" ? opt.label_km : opt.label_en}
-                                      </div>
-                                      <span className="inline-block text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-[#68708A]">
-                                        Trait: {opt.target_trait}
-                                      </span>
+                                    {/* Scenario Text */}
+                                    <div className="text-xs sm:text-sm font-medium text-[#171A2C] leading-relaxed pt-1">
+                                      {language === "km" ? opt.label_km : opt.label_en}
                                     </div>
+
+                                    {/* Bottom subtle accent line */}
+                                    <div
+                                      className={`h-1 w-full rounded-full transition-all duration-300 ${
+                                        isSelected ? "bg-[#111965]" : "bg-transparent group-hover:bg-slate-200"
+                                      }`}
+                                    />
                                   </button>
                                 );
                               })}
@@ -657,33 +708,75 @@ export default function PersonalityAssessmentPage() {
                         </h2>
                       </div>
 
-                      {/* Options */}
-                      <div className="space-y-3">
+                      {/* Options — Architectural Stance Tiles */}
+                      <div className="space-y-4">
                         {currentQ.options.map((opt: any) => {
                           const isSelected = selectedAnswers[currentQ.id] === opt.id;
+                          const traitInfo = TRAIT_TITLES[opt.target_trait] || { en: `Trait ${opt.target_trait}`, km: `លក្ខណៈ ${opt.target_trait}` };
 
                           return (
                             <button
                               key={opt.id}
                               type="button"
                               onClick={() => handleSelectOption(currentQ.id, opt.id)}
-                              className={`w-full p-4 rounded-2xl text-left transition-all border-2 flex items-start gap-3 ${
+                              className={`w-full p-5 rounded-3xl text-left border-2 transition-all duration-200 flex flex-col gap-3 group relative overflow-hidden ${
                                 isSelected
-                                  ? "border-[#111965] bg-[#F0F2FA] shadow-xs"
-                                  : "border-[#E6E8F0] hover:border-slate-300 bg-white"
+                                  ? "border-[#111965] bg-gradient-to-br from-[#F0F2FA] to-white ring-2 ring-[#F7CE4D] shadow-md"
+                                  : "border-[#E6E8F0] hover:border-slate-300 bg-white hover:bg-slate-50/50 shadow-2xs"
                               }`}
                             >
-                              <div
-                                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                                  isSelected ? "border-[#111965] bg-[#111965]" : "border-slate-300"
-                                }`}
-                              >
-                                {isSelected && <div className="w-2 h-2 rounded-full bg-[#F7CE4D]" />}
+                              <div className="flex items-center justify-between w-full">
+                                <div className="flex items-center gap-3">
+                                  <div
+                                    className={`w-9 h-9 rounded-2xl flex items-center justify-center transition-all ${
+                                      isSelected
+                                        ? "bg-[#111965] text-[#F7CE4D] shadow-xs"
+                                        : "bg-[#F5F6FA] text-slate-500 group-hover:text-[#111965]"
+                                    }`}
+                                  >
+                                    <ArchetypeGlyph
+                                      trait={opt.target_trait}
+                                      className="w-5 h-5"
+                                      isSelected={isSelected}
+                                    />
+                                  </div>
+                                  <div>
+                                    <span className="block text-[10px] font-extrabold uppercase tracking-wider text-[#68708A]">
+                                      Trait {opt.target_trait} Stance
+                                    </span>
+                                    <span className="block text-xs font-bold text-[#111965]">
+                                      {language === "km" ? traitInfo.km : traitInfo.en}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div
+                                  className={`px-3 py-1 rounded-full text-[10px] font-bold transition-all flex items-center gap-1 ${
+                                    isSelected
+                                      ? "bg-[#F7CE4D] text-[#111965]"
+                                      : "bg-slate-100 text-slate-400 group-hover:text-slate-600"
+                                  }`}
+                                >
+                                  {isSelected ? (
+                                    <>
+                                      <span>✓</span>
+                                      <span>{language === "km" ? "ជ្រើសរើស" : "Chosen Stance"}</span>
+                                    </>
+                                  ) : (
+                                    <span>{language === "km" ? "ចុចជ្រើសរើស" : "Select"}</span>
+                                  )}
+                                </div>
                               </div>
 
-                              <div className="text-xs sm:text-sm font-medium text-[#171A2C] leading-relaxed">
+                              <div className="text-xs sm:text-sm font-medium text-[#171A2C] leading-relaxed pt-1">
                                 {language === "km" ? opt.label_km : opt.label_en}
                               </div>
+
+                              <div
+                                className={`h-1 w-full rounded-full transition-all duration-300 ${
+                                  isSelected ? "bg-[#111965]" : "bg-transparent group-hover:bg-slate-200"
+                                }`}
+                              />
                             </button>
                           );
                         })}

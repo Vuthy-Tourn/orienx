@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { ResonanceGauge } from "@/components/assessments/resonance-gauge";
 import {
   Compass,
   ArrowRight,
@@ -264,31 +265,12 @@ export default function RiasecAssessmentPage() {
                   </div>
                 </div>
 
-                {/* Likert Scale (1 to 5) */}
-                <div className="grid grid-cols-5 gap-2 pt-1">
-                  {[1, 2, 3, 4, 5].map((val) => {
-                    const isSelected = currentVal === val;
-                    const labels = ["Dislike", "Slight", "Neutral", "Enjoy", "Love"];
-                    const labelsKm = ["មិនចូលចិត្ត", "បន្តិចបន្តួច", "មធ្យម", "ចូលចិត្ត", "ចូលចិត្តខ្លាំង"];
-                    return (
-                      <button
-                        key={val}
-                        type="button"
-                        onClick={() => handleRatingChange(q.id, val)}
-                        className={`py-2 px-1 rounded-xl text-center border-2 transition-all flex flex-col items-center justify-center ${
-                          isSelected
-                            ? "border-[#111965] bg-[#111965] text-white font-bold"
-                            : "border-[#E6E8F0] hover:border-slate-300 text-[#68708A] bg-[#F5F6FA]"
-                        }`}
-                      >
-                        <span className="text-sm font-extrabold">{val}</span>
-                        <span className="text-[9px] truncate max-w-full">
-                          {language === "km" ? labelsKm[val - 1] : labels[val - 1]}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
+                {/* Futera Signature Resonance Gauge */}
+                <ResonanceGauge
+                  value={currentVal}
+                  onChange={(val) => handleRatingChange(q.id, val)}
+                  language={language}
+                />
               </div>
             </div>
           );
