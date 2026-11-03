@@ -45,3 +45,4 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
     </div>
   );
 }
+

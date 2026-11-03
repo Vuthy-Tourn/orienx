@@ -13,3 +13,4 @@ export function formatUSD(amount?: number | null): string {
     maximumFractionDigits: 0,
   }).format(amount);
 }
+

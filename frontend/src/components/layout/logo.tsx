@@ -63,3 +63,4 @@ export function Logo({ className, isLight = false, showText = true }: LogoProps)
     </Link>
   );
 }
+

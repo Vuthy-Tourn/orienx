@@ -241,3 +241,4 @@ export default function MajorDetailPage() {
     </div>
   );
 }
+
