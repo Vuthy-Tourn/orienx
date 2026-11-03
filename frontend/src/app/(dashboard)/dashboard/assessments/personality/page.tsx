@@ -25,27 +25,37 @@ const DIMENSION_TITLES: Record<
     code: string;
     nameEn: string;
     nameKm: string;
+    tipEn: string;
+    tipKm: string;
   }
 > = {
   EI: {
     code: "E vs I",
     nameEn: "Energy & Social Focus (Extraversion vs Introversion)",
     nameKm: "ថាមពល និងការប្រាស្រ័យទាក់ទង (Extraversion vs Introversion)",
+    tipEn: "Where do you naturally recharge your energy? 🌟",
+    tipKm: "តើអ្នកបញ្ចូលថាមពលដោយវិធីណា? 🌟",
   },
   SN: {
     code: "S vs N",
     nameEn: "Information Processing (Sensing vs Intuition)",
     nameKm: "ការទទួលព័ត៌មាន (Sensing vs Intuition)",
+    tipEn: "Do you focus on practical facts or big ideas? 🧱✨",
+    tipKm: "តើអ្នកផ្តោតលើការអនុវត្តជាក់ស្តែង ឬគំនិតច្នៃប្រឌិត? 🧱✨",
   },
   TF: {
     code: "T vs F",
     nameEn: "Decision Making (Thinking vs Feeling)",
     nameKm: "ការសម្រេចចិត្ត (Thinking vs Feeling)",
+    tipEn: "What guides your choices: logic or empathy? 💎🌸",
+    tipKm: "តើអ្វីដឹកនាំការសម្រេចចិត្ត៖ តក្កវិជ្ជា ឬអារម្មណ៍? 💎🌸",
   },
   JP: {
     code: "J vs P",
     nameEn: "Lifestyle Structure (Judging vs Perceiving)",
     nameKm: "រចនាសម្ព័ន្ធជីវិត (Judging vs Perceiving)",
+    tipEn: "Do you prefer a clear plan or flexible freedom? 📋🌊",
+    tipKm: "តើអ្នកចូលចិត្តផែនការរៀបរយ ឬសេរីភាពបត់បែន? 📋🌊",
   },
 };
 
@@ -108,7 +118,7 @@ export default function PersonalityAssessmentPage() {
       },
     }));
 
-    // Smooth 16Personalities-style auto-advance
+    // Smooth auto-advance
     if (autoAdvance && questions && currentIndex < questions.length - 1) {
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(() => {
@@ -186,8 +196,15 @@ export default function PersonalityAssessmentPage() {
   const statementEn = currentQ?.options[0]?.label_en || currentQ?.prompt_en;
   const statementKm = currentQ?.options[0]?.label_km || currentQ?.prompt_km;
 
-  // Mascot dynamic encouragement
+  // Mascot dynamic speech: greeting tip when idle vs enthusiastic cheer when answered
   const isAnswered = !!currentAnswer;
+  const speechText = isAnswered
+    ? language === "km"
+      ? "ចម្លើយល្អណាស់! បន្តទៀត! ✨"
+      : "Awesome choice! Keep shining! ✨"
+    : language === "km"
+    ? dimMeta.tipKm
+    : dimMeta.tipEn;
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in pb-20 select-none">
@@ -277,10 +294,10 @@ export default function PersonalityAssessmentPage() {
                 </div>
               </div>
 
-              {/* Celebrating Mascot Card */}
+              {/* Celebrating Mascot Tara */}
               <div className="flex-shrink-0 self-center sm:self-auto">
                 <FuteraMascot
-                  size="lg"
+                  variant="full-jumping"
                   isCelebrating={true}
                   showSpeech={true}
                   speechText={language === "km" ? "អបអរសាទរ! 🌟" : "Congratulations! 🌟"}
@@ -375,7 +392,7 @@ export default function PersonalityAssessmentPage() {
       )}
 
       {/* ========================================================
-          CLEAN 16PERSONALITIES STYLE WITH PLATFORM MASCOT (PIC 1 & PIC 3)
+          CLEAN 16PERSONALITIES STYLE WITH EXTRACTED TARA MASCOT
           ======================================================== */}
       {activeTab === "form" && currentQ && (
         <div className="space-y-8 animate-in fade-in">
@@ -412,41 +429,40 @@ export default function PersonalityAssessmentPage() {
             </div>
           </div>
 
-          {/* Main Stage Card with Single Platform Mascot (Pic 3) */}
-          <div className="p-6 sm:p-10 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-8 text-center relative overflow-hidden">
-            {/* Single Platform Mascot: Tara the Star Buddy (Pic 3) */}
-            <div className="flex justify-center -mt-2">
+          {/* Main Stage Card with 3D Overhanging Mascot on Right Side */}
+          <div className="relative pt-6">
+            {/* Overhanging Extracted Mascot Peeking on Top-Right Corner */}
+            <div className="absolute -top-12 -right-2 sm:-top-14 sm:-right-4 z-20 pointer-events-none">
               <FuteraMascot
-                size="md"
+                variant="peeking-right"
                 isCelebrating={isAnswered}
-                showSpeech={isAnswered}
-                speechText={
-                  language === "km"
-                    ? "ចម្លើយល្អណាស់! បន្តទៀត! 🌟"
-                    : "Great choice! Keep shining! 🌟"
-                }
+                showSpeech={true}
+                speechText={speechText}
               />
             </div>
 
-            {/* Declarative Statement (16Personalities style) */}
-            <div className="max-w-xl mx-auto space-y-2 py-1">
-              <h2 className="text-xl sm:text-2xl font-black text-[#111965] leading-snug">
-                {language === "km" ? statementKm : statementEn}
-              </h2>
-              <p className="text-xs text-[#68708A]">
-                {language === "km"
-                  ? currentQ?.prompt_km
-                  : currentQ?.prompt_en}
-              </p>
-            </div>
+            {/* Clean White Card */}
+            <div className="p-6 sm:p-10 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-8 text-center relative overflow-hidden">
+              {/* Declarative Statement (16Personalities style) */}
+              <div className="max-w-xl mx-auto space-y-2 pt-2 pb-1">
+                <h2 className="text-xl sm:text-2xl font-black text-[#111965] leading-snug">
+                  {language === "km" ? statementKm : statementEn}
+                </h2>
+                <p className="text-xs text-[#68708A]">
+                  {language === "km"
+                    ? currentQ?.prompt_km
+                    : currentQ?.prompt_en}
+                </p>
+              </div>
 
-            {/* Clean 7-Circle Likert Scale exactly matching Pic 1 */}
-            <div className="pt-2">
-              <Scale16p
-                value={currentAnswer?.scaleLevel ?? null}
-                onChange={(level) => handleScaleChange(currentQ, level)}
-                language={language}
-              />
+              {/* Clean 7-Circle Likert Scale exactly matching Pic 1 */}
+              <div className="pt-2">
+                <Scale16p
+                  value={currentAnswer?.scaleLevel ?? null}
+                  onChange={(level) => handleScaleChange(currentQ, level)}
+                  language={language}
+                />
+              </div>
             </div>
           </div>
 
