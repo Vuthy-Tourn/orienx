@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
-import { FuteraBlobCharacter, TraitCode } from "@/components/assessments/futera-character";
+import { FuteraMascot } from "@/components/brand/futera-mascot";
 import { Scale16p } from "@/components/assessments/scale-16p";
 import {
   ArrowRight,
@@ -19,77 +19,33 @@ import {
 
 type DimensionGroup = "EI" | "SN" | "TF" | "JP";
 
-interface MascotMeta {
-  traitA: TraitCode;
-  traitB: TraitCode;
-  nameAEn: string;
-  nameAKm: string;
-  nameBEn: string;
-  nameBKm: string;
-  speechAEn: string;
-  speechAKm: string;
-  speechBEn: string;
-  speechBKm: string;
-  groupTitleEn: string;
-  groupTitleKm: string;
-}
-
-const DIMENSION_METAS: Record<DimensionGroup, MascotMeta> = {
+const DIMENSION_TITLES: Record<
+  DimensionGroup,
+  {
+    code: string;
+    nameEn: string;
+    nameKm: string;
+  }
+> = {
   EI: {
-    traitA: "E",
-    traitB: "I",
-    nameAEn: "Sol ☀️ (Extravert)",
-    nameAKm: "Sol ☀️ (ថាមពលសង្គម)",
-    nameBEn: "Luna 🎧 (Introvert)",
-    nameBKm: "Luna 🎧 (ថាមពលស្ងប់ស្ងាត់)",
-    speechAEn: "I love social energy! ☀️",
-    speechAKm: "ចូលចិត្តជួបជុំមិត្តភក្តិ! ☀️",
-    speechBEn: "Quiet space recharges me! 🎧",
-    speechBKm: "ភាពស្ងប់ស្ងាត់ជួយផ្ដល់ថាមពល! 🎧",
-    groupTitleEn: "Energy & Social Focus (E vs I)",
-    groupTitleKm: "ថាមពល និងការប្រាស្រ័យទាក់ទង (E vs I)",
+    code: "E vs I",
+    nameEn: "Energy & Social Focus (Extraversion vs Introversion)",
+    nameKm: "ថាមពល និងការប្រាស្រ័យទាក់ទង (Extraversion vs Introversion)",
   },
   SN: {
-    traitA: "S",
-    traitB: "N",
-    nameAEn: "Geo 🧱 (Sensing)",
-    nameAKm: "Geo 🧱 (ការអនុវត្តជាក់ស្តែង)",
-    nameBEn: "Nova ☁️ (Intuition)",
-    nameBKm: "Nova ☁️ (ទស្សនវិស័យ)",
-    speechAEn: "Real facts & practical details! 🧱",
-    speechAKm: "ផ្តោតលើការពិត និងការអនុវត្តផ្ទាល់! 🧱",
-    speechBEn: "Big vision & imagination! ☁️",
-    speechBKm: "គំនិតច្នៃប្រឌិត និងអនាគត! ☁️",
-    groupTitleEn: "Information Processing (S vs N)",
-    groupTitleKm: "ការទទួលព័ត៌មាន (S vs N)",
+    code: "S vs N",
+    nameEn: "Information Processing (Sensing vs Intuition)",
+    nameKm: "ការទទួលព័ត៌មាន (Sensing vs Intuition)",
   },
   TF: {
-    traitA: "T",
-    traitB: "F",
-    nameAEn: "Prism 💎 (Thinking)",
-    nameAKm: "Prism 💎 (តក្កវិជ្ជា)",
-    nameBEn: "Hearty 🌸 (Feeling)",
-    nameBKm: "Hearty 🌸 (ការយល់ចិត្ត)",
-    speechAEn: "Logic & objective truth! 💎",
-    speechAKm: "តក្កវិជ្ជា និងភាពច្បាស់លាស់! 💎",
-    speechBEn: "Empathy & harmony! 🌸",
-    speechBKm: "អារម្មណ៍ និងការយល់ចិត្ត! 🌸",
-    groupTitleEn: "Decision Making (T vs F)",
-    groupTitleKm: "ការសម្រេចចិត្ត (T vs F)",
+    code: "T vs F",
+    nameEn: "Decision Making (Thinking vs Feeling)",
+    nameKm: "ការសម្រេចចិត្ត (Thinking vs Feeling)",
   },
   JP: {
-    traitA: "J",
-    traitB: "P",
-    nameAEn: "Checky 📋 (Judging)",
-    nameAKm: "Checky 📋 (ផែនការរៀបរយ)",
-    nameBEn: "Wavey 🌊 (Perceiving)",
-    nameBKm: "Wavey 🌊 (ភាពបត់បែន)",
-    speechAEn: "Clear checklist & plans! 📋",
-    speechAKm: "ផែនការច្បាស់លាស់ និងរៀបរយ! 📋",
-    speechBEn: "Flow with spontaneous freedom! 🌊",
-    speechBKm: "បត់បែនតាមកាលៈទេសៈ! 🌊",
-    groupTitleEn: "Lifestyle Structure (J vs P)",
-    groupTitleKm: "រចនាសម្ព័ន្ធជីវិត (J vs P)",
+    code: "J vs P",
+    nameEn: "Lifestyle Structure (Judging vs Perceiving)",
+    nameKm: "រចនាសម្ព័ន្ធជីវិត (Judging vs Perceiving)",
   },
 };
 
@@ -223,18 +179,15 @@ export default function PersonalityAssessmentPage() {
 
   const currentQ = questions?.[currentIndex];
   const dimGroup = (currentQ?.dimension as DimensionGroup) || "EI";
-  const dimMeta = DIMENSION_METAS[dimGroup] || DIMENSION_METAS.EI;
+  const dimMeta = DIMENSION_TITLES[dimGroup] || DIMENSION_TITLES.EI;
   const currentAnswer = currentQ ? answers[currentQ.id] : null;
 
   // Declarative statement
   const statementEn = currentQ?.options[0]?.label_en || currentQ?.prompt_en;
   const statementKm = currentQ?.options[0]?.label_km || currentQ?.prompt_km;
 
-  // Dynamic reactions for the two opposing mascots on stage
-  const scaleVal = currentAnswer?.scaleLevel;
-  const isAgreeLeaning = scaleVal !== undefined && scaleVal <= 3;
-  const isDisagreeLeaning = scaleVal !== undefined && scaleVal >= 5;
-  const isNeutral = scaleVal === 4;
+  // Mascot dynamic encouragement
+  const isAnswered = !!currentAnswer;
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in pb-20 select-none">
@@ -291,36 +244,48 @@ export default function PersonalityAssessmentPage() {
           ======================================================== */}
       {activeTab === "results" && latestResult && (
         <div className="space-y-8 animate-in fade-in">
-          {/* Result Banner */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#111965] to-[#1E277A] text-white shadow-lg space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <span className="px-3.5 py-1 rounded-full text-xs font-black bg-[#F7CE4D] text-[#111965] uppercase tracking-wider self-start">
-                {language === "km" ? "លទ្ធផលបុគ្គលិកលក្ខណៈរបស់អ្នក" : "Your Personality Type Profile"}
-              </span>
+          {/* Result Banner with Platform Mascot Celebrating */}
+          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#111965] to-[#1E277A] text-white shadow-lg relative overflow-hidden">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10">
+              <div className="space-y-3 max-w-xl">
+                <span className="px-3.5 py-1 rounded-full text-xs font-black bg-[#F7CE4D] text-[#111965] uppercase tracking-wider inline-block">
+                  {language === "km" ? "លទ្ធផលបុគ្គលិកលក្ខណៈរបស់អ្នក" : "Your Personality Type Profile"}
+                </span>
 
-              <button
-                onClick={handleRetake}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white transition-colors self-start sm:self-auto"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>{language === "km" ? "ធ្វើតេស្តឡើងវិញ (Retake)" : "Retake Assessment"}</span>
-              </button>
-            </div>
+                <div className="text-5xl sm:text-6xl font-black text-[#F7CE4D] tracking-tight">
+                  {latestResult.personality_type}
+                </div>
+                <h2 className="text-xl sm:text-2xl font-bold text-white">
+                  {language === "km"
+                    ? latestResult.traits_summary_km?.title || "អ្នកដឹកនាំ និងរៀបចំយុទ្ធសាស្ត្រ"
+                    : latestResult.traits_summary_en?.title || "Strategic Planner & Organizer"}
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                  {language === "km"
+                    ? latestResult.traits_summary_km?.work_style
+                    : latestResult.traits_summary_en?.work_style}
+                </p>
 
-            <div className="space-y-1">
-              <div className="text-5xl sm:text-6xl font-black text-[#F7CE4D] tracking-tight">
-                {latestResult.personality_type}
+                <div className="pt-2">
+                  <button
+                    onClick={handleRetake}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white transition-colors"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>{language === "km" ? "ធ្វើតេស្តឡើងវិញ (Retake)" : "Retake Assessment"}</span>
+                  </button>
+                </div>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white">
-                {language === "km"
-                  ? latestResult.traits_summary_km?.title || "អ្នកដឹកនាំ និងរៀបចំយុទ្ធសាស្ត្រ"
-                  : latestResult.traits_summary_en?.title || "Strategic Planner & Organizer"}
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-200 max-w-2xl leading-relaxed mt-2">
-                {language === "km"
-                  ? latestResult.traits_summary_km?.work_style
-                  : latestResult.traits_summary_en?.work_style}
-              </p>
+
+              {/* Celebrating Mascot Card */}
+              <div className="flex-shrink-0 self-center sm:self-auto">
+                <FuteraMascot
+                  size="lg"
+                  isCelebrating={true}
+                  showSpeech={true}
+                  speechText={language === "km" ? "អបអរសាទរ! 🌟" : "Congratulations! 🌟"}
+                />
+              </div>
             </div>
           </div>
 
@@ -360,11 +325,11 @@ export default function PersonalityAssessmentPage() {
                 <div className="w-full h-3.5 rounded-full bg-slate-100 flex overflow-hidden p-0.5">
                   <div
                     style={{ width: `${latestResult.sensing_score}%` }}
-                    className="bg-orange-500 rounded-l-full"
+                    className="bg-emerald-500 rounded-l-full"
                   />
                   <div
                     style={{ width: `${latestResult.intuition_score}%` }}
-                    className="bg-sky-500 rounded-r-full"
+                    className="bg-purple-600 rounded-r-full"
                   />
                 </div>
               </div>
@@ -378,11 +343,11 @@ export default function PersonalityAssessmentPage() {
                 <div className="w-full h-3.5 rounded-full bg-slate-100 flex overflow-hidden p-0.5">
                   <div
                     style={{ width: `${latestResult.thinking_score}%` }}
-                    className="bg-teal-500 rounded-l-full"
+                    className="bg-emerald-500 rounded-l-full"
                   />
                   <div
                     style={{ width: `${latestResult.feeling_score}%` }}
-                    className="bg-pink-500 rounded-r-full"
+                    className="bg-purple-600 rounded-r-full"
                   />
                 </div>
               </div>
@@ -396,11 +361,11 @@ export default function PersonalityAssessmentPage() {
                 <div className="w-full h-3.5 rounded-full bg-slate-100 flex overflow-hidden p-0.5">
                   <div
                     style={{ width: `${latestResult.judging_score}%` }}
-                    className="bg-emerald-600 rounded-l-full"
+                    className="bg-emerald-500 rounded-l-full"
                   />
                   <div
                     style={{ width: `${latestResult.perceiving_score}%` }}
-                    className="bg-amber-500 rounded-r-full"
+                    className="bg-purple-600 rounded-r-full"
                   />
                 </div>
               </div>
@@ -410,7 +375,7 @@ export default function PersonalityAssessmentPage() {
       )}
 
       {/* ========================================================
-          16PERSONALITIES STYLE WITH BESPOKE FUTERA GEOMETRIC MASCOTS
+          CLEAN 16PERSONALITIES STYLE WITH PLATFORM MASCOT (PIC 1 & PIC 3)
           ======================================================== */}
       {activeTab === "form" && currentQ && (
         <div className="space-y-8 animate-in fade-in">
@@ -419,7 +384,7 @@ export default function PersonalityAssessmentPage() {
             <div className="flex items-center justify-between text-xs font-extrabold text-[#68708A]">
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#111965] text-[#F7CE4D] uppercase tracking-wider">
-                  {language === "km" ? dimMeta.groupTitleKm : dimMeta.groupTitleEn}
+                  {language === "km" ? dimMeta.nameKm : dimMeta.nameEn}
                 </span>
                 <span className="text-[#111965] font-black tracking-wide hidden sm:inline">
                   • {currentIndex + 1} / {totalCount}
@@ -447,48 +412,24 @@ export default function PersonalityAssessmentPage() {
             </div>
           </div>
 
-          {/* Main Stage Card */}
+          {/* Main Stage Card with Single Platform Mascot (Pic 3) */}
           <div className="p-6 sm:p-10 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-8 text-center relative overflow-hidden">
-            {/* Playful Opposing Mascots Arena (Inspired by Image 1) */}
-            <div className="flex items-center justify-between px-2 sm:px-8 pt-4">
-              {/* Left Mascot (Agree Pole) */}
-              <div className="flex flex-col items-center gap-1.5 transition-all">
-                <FuteraBlobCharacter
-                  trait={dimMeta.traitA}
-                  className="w-20 h-20 sm:w-24 sm:h-24"
-                  expression={isAgreeLeaning ? "excited" : isNeutral ? "curious" : "idle"}
-                  showSpeech={isAgreeLeaning}
-                  speechText={language === "km" ? dimMeta.speechAKm : dimMeta.speechAEn}
-                />
-                <span className="text-[11px] sm:text-xs font-black text-emerald-700 max-w-[120px] text-center">
-                  {language === "km" ? dimMeta.nameAKm : dimMeta.nameAEn}
-                </span>
-              </div>
-
-              {/* Central VS Badge */}
-              <div className="hidden sm:flex flex-col items-center opacity-60">
-                <span className="px-2.5 py-1 rounded-full bg-slate-100 text-[10px] font-black text-slate-500 uppercase tracking-widest border border-slate-200">
-                  VS
-                </span>
-              </div>
-
-              {/* Right Mascot (Disagree Pole) */}
-              <div className="flex flex-col items-center gap-1.5 transition-all">
-                <FuteraBlobCharacter
-                  trait={dimMeta.traitB}
-                  className="w-20 h-20 sm:w-24 sm:h-24"
-                  expression={isDisagreeLeaning ? "excited" : isNeutral ? "curious" : "idle"}
-                  showSpeech={isDisagreeLeaning}
-                  speechText={language === "km" ? dimMeta.speechBKm : dimMeta.speechBEn}
-                />
-                <span className="text-[11px] sm:text-xs font-black text-purple-700 max-w-[120px] text-center">
-                  {language === "km" ? dimMeta.nameBKm : dimMeta.nameBEn}
-                </span>
-              </div>
+            {/* Single Platform Mascot: Tara the Star Buddy (Pic 3) */}
+            <div className="flex justify-center -mt-2">
+              <FuteraMascot
+                size="md"
+                isCelebrating={isAnswered}
+                showSpeech={isAnswered}
+                speechText={
+                  language === "km"
+                    ? "ចម្លើយល្អណាស់! បន្តទៀត! 🌟"
+                    : "Great choice! Keep shining! 🌟"
+                }
+              />
             </div>
 
             {/* Declarative Statement (16Personalities style) */}
-            <div className="max-w-xl mx-auto space-y-2 py-2">
+            <div className="max-w-xl mx-auto space-y-2 py-1">
               <h2 className="text-xl sm:text-2xl font-black text-[#111965] leading-snug">
                 {language === "km" ? statementKm : statementEn}
               </h2>
@@ -499,16 +440,12 @@ export default function PersonalityAssessmentPage() {
               </p>
             </div>
 
-            {/* 16Personalities-Style 7 Scaled Circles with Cute Animated Micro-Faces */}
+            {/* Clean 7-Circle Likert Scale exactly matching Pic 1 */}
             <div className="pt-2">
               <Scale16p
                 value={currentAnswer?.scaleLevel ?? null}
                 onChange={(level) => handleScaleChange(currentQ, level)}
                 language={language}
-                agreeLabelEn="Agree"
-                agreeLabelKm="យល់ស្រប"
-                disagreeLabelEn="Disagree"
-                disagreeLabelKm="មិនយល់ស្រប"
               />
             </div>
           </div>
