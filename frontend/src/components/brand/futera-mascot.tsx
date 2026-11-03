@@ -10,7 +10,8 @@ export type MascotEmotion =
   | "thinking"
   | "angry"
   | "congratulation"
-  | "waiting";
+  | "waiting"
+  | "click_on_it";
 
 export interface FuteraMascotProps {
   className?: string;
@@ -35,6 +36,7 @@ const VIDEO_EMOTIONS: Array<{
   { id: "sad", src: "/images/sad.webp", alt: "Tara Sad Sympathetic Pout" },
   { id: "angry", src: "/images/angry.webp", alt: "Tara Disagree Pouting Stomp" },
   { id: "congratulation", src: "/images/Congratulation.webp", alt: "Tara Victory Celebration Jump" },
+  { id: "click_on_it", src: "/images/click_on_it.webp", alt: "Tara Playful Interactive Click" },
 ];
 
 /**
@@ -45,8 +47,10 @@ const VIDEO_EMOTIONS: Array<{
  *    - sad.webp: Sympathetic drooping pout (Disagree, 5-6)
  *    - angry.webp: Determined stomping pout (Strongly Disagree, 7)
  *    - Congratulation.webp: High celebratory victory jump (Assessment finished)
- * 2. 100% Borderless & No Background: Clean 2px morphological erosion eliminates halo fringe.
- * 3. 100% Glitch-Free: All animations persistent in DOM with CSS opacity transitions.
+ *    - click_on_it.webp: Interactive playful click animation (Interactive click reaction)
+ * 2. Interactive Clicks: Alternates/randomizes between the current jump and the new click_on_it action!
+ * 3. 100% Borderless & No Background: Clean 2px morphological erosion eliminates halo fringe.
+ * 4. 100% Glitch-Free: All animations persistent in DOM with CSS opacity transitions.
  */
 export function FuteraMascot({
   className = "",
@@ -59,12 +63,14 @@ export function FuteraMascot({
   size,
   onClick,
 }: FuteraMascotProps) {
-  const [clickedHappy, setClickedHappy] = useState(false);
+  const [clickAction, setClickAction] = useState<"happy" | "click_on_it" | null>(null);
 
   // Determine active emotion
   let resolvedId: MascotEmotion = "think";
 
-  if (clickedHappy) {
+  if (clickAction === "click_on_it") {
+    resolvedId = "click_on_it";
+  } else if (clickAction === "happy") {
     resolvedId = "happy";
   } else if (isCelebrating) {
     resolvedId = "congratulation";
@@ -84,8 +90,11 @@ export function FuteraMascot({
   }
 
   const handleMascotClick = () => {
-    setClickedHappy(true);
-    setTimeout(() => setClickedHappy(false), 2400);
+    // Sometime display current action ("happy"), sometime display new action ("click_on_it")
+    const nextAction: "happy" | "click_on_it" = Math.random() < 0.5 ? "click_on_it" : "happy";
+    setClickAction(nextAction);
+    const durationMs = nextAction === "click_on_it" ? 1400 : 2400;
+    setTimeout(() => setClickAction(null), durationMs);
     if (onClick) onClick();
   };
 
@@ -95,7 +104,9 @@ export function FuteraMascot({
 
   // Default contextual speech text
   const defaultSpeech =
-    resolvedId === "happy"
+    resolvedId === "click_on_it"
+      ? "តោះលេងជាមួយគ្នា! ✨"
+      : resolvedId === "happy"
       ? "យល់ស្រប! អស្ចារ្យណាស់! 🌟"
       : resolvedId === "angry"
       ? "មិនយល់ស្របដាច់ខាត! 😤"
