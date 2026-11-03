@@ -9,6 +9,7 @@ interface FuteraMascotProps {
   speechText?: string;
   showSpeech?: boolean;
   isCelebrating?: boolean;
+  isWaving?: boolean;
   size?: number;
 }
 
@@ -29,6 +30,7 @@ export function FuteraMascot({
   speechText,
   showSpeech = true,
   isCelebrating = false,
+  isWaving = false,
   size,
 }: FuteraMascotProps) {
   if (variant === "peeking-right") {
@@ -52,6 +54,7 @@ export function FuteraMascot({
           <FuteraMascot3D
             size={canvasPx}
             isCelebrating={isCelebrating}
+            isWaving={isWaving}
             interactive={true}
           />
         </div>
@@ -80,6 +83,7 @@ export function FuteraMascot({
         <FuteraMascot3D
           size={fullSize}
           isCelebrating={isCelebrating}
+          isWaving={isWaving}
           interactive={true}
         />
       </div>

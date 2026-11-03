@@ -437,6 +437,7 @@ export default function PersonalityAssessmentPage() {
               <FuteraMascot
                 variant="peeking-right"
                 isCelebrating={isAnswered}
+                isWaving={!isAnswered}
                 showSpeech={true}
                 speechText={speechText}
               />
