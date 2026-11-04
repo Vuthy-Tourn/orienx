@@ -110,10 +110,10 @@ export default function HomePage() {
 
   const faqs = [
     {
-      qEn: "How does Futera recommend majors without just guessing?",
-      qKm: "តើ Futera ផ្តល់អនុសាសន៍ជំនាញសិក្សាដោយរបៀបណា ដោយមិនមែនជាការទស្សន៍ទាយ?",
-      aEn: "Futera combines 4 distinct data points: your original MBTI-inspired personality preferences, your RIASEC Holland interest codes, your strongest school subjects (e.g. Mathematics, Physics, English), and your practical budget constraints. Every recommendation comes with an explainable match breakdown showing exactly why the major fits your profile.",
-      aKm: "Futera វិភាគលើទិន្នន័យ ៤ ចំណុច៖ បុគ្គលិកលក្ខណៈ ៤ វិមាត្រ, កូដចំណាប់អារម្មណ៍អាជីព RIASEC, មុខវិជ្ជាដែលអ្នកពូកែ និងចូលចិត្ត និងលក្ខខណ្ឌថវិកាជាក់ស្តែង។ អនុសាសន៍នីមួយៗមានរបាយការណ៍ពន្យល់ពីមូលហេតុយ៉ាងច្បាស់លាស់។"
+      qEn: "How does OrienX recommend majors without just guessing?",
+      qKm: "តើ OrienX ផ្តល់អនុសាសន៍ជំនាញសិក្សាដោយរបៀបណា ដោយមិនមែនជាការទស្សន៍ទាយ?",
+      aEn: "OrienX combines 4 distinct data points: your original MBTI-inspired personality preferences, your RIASEC Holland interest codes, your strongest school subjects (e.g. Mathematics, Physics, English), and your practical budget constraints. Every recommendation comes with an explainable match breakdown showing exactly why the major fits your profile.",
+      aKm: "OrienX វិភាគលើទិន្នន័យ ៤ ចំណុច៖ បុគ្គលិកលក្ខណៈ ៤ វិមាត្រ, កូដចំណាប់អារម្មណ៍អាជីព RIASEC, មុខវិជ្ជាដែលអ្នកពូកែ និងចូលចិត្ត និងលក្ខខណ្ឌថវិកាជាក់ស្តែង។ អនុសាសន៍នីមួយៗមានរបាយការណ៍ពន្យល់ពីមូលហេតុយ៉ាងច្បាស់លាស់។"
     },
     {
       qEn: "Is the university tuition information accurate and verified?",
@@ -128,8 +128,8 @@ export default function HomePage() {
       aKm: "បានយ៉ាងពិតប្រាកដ។ សិស្សនិស្សិតអាចធ្វើតេស្តបុគ្គលិកលក្ខណៈ និងតេស្ត RIASEC ម្តងទៀតនៅពេលណាក៏បានពីផ្ទាំងគ្រប់គ្រង (Dashboard)។ ប្រព័ន្ធនឹងគណនាអនុសាសន៍ថ្មីភ្លាមៗ។"
     },
     {
-      qEn: "Is Futera free for Cambodian students?",
-      qKm: "តើ Futera ឥតគិតថ្លៃសម្រាប់សិស្សានុសិស្សកម្ពុជាដែរឬទេ?",
+      qEn: "Is OrienX free for Cambodian students?",
+      qKm: "តើ OrienX ឥតគិតថ្លៃសម្រាប់សិស្សានុសិស្សកម្ពុជាដែរឬទេ?",
       aEn: "Yes, taking assessments, exploring university directories, comparing programs, and receiving personalized major recommendations is 100% free for students.",
       aKm: "បាទ/ចាស! ការធ្វើតេស្ត ការស្វែងរកសាកលវិទ្យាល័យ ការប្រៀបធៀបតម្លៃ និងការទទួលបានការតម្រង់ទិសគឺឥតគិតថ្លៃ ១០០% សម្រាប់សិស្សានុសិស្ស។"
     }
@@ -608,12 +608,12 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
-              {language === "km" ? "មតិពីសិស្សានុសិស្សដែលបានប្រើប្រាស់ Futera" : "Empowering Cambodian Students"}
+              {language === "km" ? "មតិពីសិស្សានុសិស្សដែលបានប្រើប្រាស់ OrienX" : "Empowering Cambodian Students"}
             </h2>
             <p className="text-sm text-[#68708A]">
               {language === "km"
                 ? "ការតម្រង់ទិសច្បាស់លាស់ជួយឱ្យសិស្សានុសិស្សជ្រើសរើសជំនាញដោយទំនុកចិត្ត។"
-                : "Real feedback from students who discovered their university direction with Futera."}
+                : "Real feedback from students who discovered their university direction with OrienX."}
             </p>
           </div>
 
@@ -624,8 +624,8 @@ export default function HomePage() {
               </div>
               <p className="text-xs sm:text-sm text-[#171A2C] leading-relaxed italic">
                 {language === "km"
-                  ? "«កាលពីប្រឡងបាក់ឌុបរួច ខ្ញុំមិនដឹងថាគួររៀន IT ឬវិស្វកម្មសំណង់ទេ។ តេស្ត RIASEC របស់ Futera បានពន្យល់ពីចំណុចខ្លាំងរបស់ខ្ញុំច្បាស់លាស់ ឥឡូវខ្ញុំកំពុងរៀនវិស្វកម្មកម្មវិធីនៅតិចណូដោយក្តីសង្ឃឹម។»"
-                  : "\"After Grade 12 exams, I was torn between IT and Civil Engineering. Futera's RIASEC assessment clearly broke down my analytical strengths. I'm now confidently studying Software Engineering at ITC.\""}
+                  ? "«កាលពីប្រឡងបាក់ឌុបរួច ខ្ញុំមិនដឹងថាគួររៀន IT ឬវិស្វកម្មសំណង់ទេ។ តេស្ត RIASEC របស់ OrienX បានពន្យល់ពីចំណុចខ្លាំងរបស់ខ្ញុំច្បាស់លាស់ ឥឡូវខ្ញុំកំពុងរៀនវិស្វកម្មកម្មវិធីនៅតិចណូដោយក្តីសង្ឃឹម។»"
+                  : "\"After Grade 12 exams, I was torn between IT and Civil Engineering. OrienX's RIASEC assessment clearly broke down my analytical strengths. I'm now confidently studying Software Engineering at ITC.\""}
               </p>
               <div className="pt-2 border-t border-[#E6E8F0] flex items-center justify-between text-xs">
                 <span className="font-bold text-[#111965]">Chea Sokheng</span>
@@ -677,7 +677,7 @@ export default function HomePage() {
             </h2>
             <p className="text-sm text-[#68708A]">
               {language === "km"
-                ? "ស្វែងយល់បន្ថែមអំពីរបៀបដែល Futera ដំណើរការ និងវិធីសាស្ត្រតម្រង់ទិសរបស់យើង។"
+                ? "ស្វែងយល់បន្ថែមអំពីរបៀបដែល OrienX ដំណើរការ និងវិធីសាស្ត្រតម្រង់ទិសរបស់យើង។"
                 : "Learn more about our methodology, data sources, and guidance approach."}
             </p>
           </div>
@@ -710,7 +710,7 @@ export default function HomePage() {
             <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
               {language === "km"
                 ? "ចូលរួមជាមួយសិស្សានុសិស្សកម្ពុជារាប់ពាន់នាក់ ដើម្បីធ្វើការសម្រេចចិត្តលើជំនាញសាកលវិទ្យាល័យដោយទំនុកចិត្ត។"
-                : "Join thousands of Cambodian students using Futera to make confident, informed decisions about university and future careers."}
+                : "Join thousands of Cambodian students using OrienX to make confident, informed decisions about university and future careers."}
             </p>
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link

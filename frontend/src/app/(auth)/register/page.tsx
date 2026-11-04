@@ -83,7 +83,7 @@ export default function RegisterPage() {
             <Logo showText={false} />
           </div>
           <h1 className="text-2xl font-extrabold text-[#111965]">
-            {language === "km" ? "បង្កើតគណនី Futera ឥតគិតថ្លៃ" : "Create Your Free Account"}
+            {language === "km" ? "បង្កើតគណនី OrienX ឥតគិតថ្លៃ" : "Create Your Free Account"}
           </h1>
           <p className="text-xs text-[#68708A]">
             {language === "km"

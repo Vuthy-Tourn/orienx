@@ -21,7 +21,7 @@ const notoSansKhmer = Noto_Sans_Khmer({
 });
 
 export const metadata: Metadata = {
-  title: "Futera — Discover Your Direction. Shape Your Future.",
+  title: "OrienX — Discover Your Direction. Shape Your Future.",
   description:
     "Cambodia's modern education and career guidance platform. Discover your interests through MBTI and RIASEC assessments, explore verified Cambodian university majors, compare tuition, and find scholarships.",
   keywords: [

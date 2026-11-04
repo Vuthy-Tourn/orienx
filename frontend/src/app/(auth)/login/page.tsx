@@ -51,7 +51,7 @@ export default function LoginPage() {
             <Logo showText={false} />
           </div>
           <h1 className="text-2xl font-extrabold text-[#111965]">
-            {language === "km" ? "ចូលប្រើប្រាស់ Futera" : "Sign In to Futera"}
+            {language === "km" ? "ចូលប្រើប្រាស់ OrienX" : "Sign In to OrienX"}
           </h1>
           <p className="text-xs text-[#68708A]">
             {language === "km"

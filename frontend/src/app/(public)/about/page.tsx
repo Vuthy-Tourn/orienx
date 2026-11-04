@@ -21,17 +21,17 @@ export default function AboutPage() {
         <div className="space-y-3 text-center">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F0F2FA] text-[#111965] text-xs font-semibold">
             <Compass className="w-3.5 h-3.5" />
-            <span>Futera Mission & Methodology</span>
+            <span>OrienX Mission & Methodology</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-[#111965]">
             {language === "km"
-              ? "អំពីវេទិកាតម្រង់ទិស Futera"
-              : "About Futera Education & Career Guidance"}
+              ? "អំពីវេទិកាតម្រង់ទិស OrienX"
+              : "About OrienX Education & Career Guidance"}
           </h1>
           <p className="text-sm sm:text-base text-[#68708A] max-w-2xl mx-auto leading-relaxed">
             {language === "km"
               ? "បេសកកម្មរបស់យើងគឺជួយសិស្សានុសិស្សកម្ពុជាឱ្យស្វែងយល់ពីខ្លួនឯង ជ្រើសរើសជំនាញសិក្សាដែលត្រូវនឹងនិស្ស័យ និងធ្វើការសម្រេចចិត្តដោយផ្អែកលើទិន្នន័យជាក់ស្តែង។"
-              : "Futera is dedicated to helping Cambodian high school students, Grade 12 graduates, and young people discover their true direction through scientific assessments and verified university programs."}
+              : "OrienX is dedicated to helping Cambodian high school students, Grade 12 graduates, and young people discover their true direction through scientific assessments and verified university programs."}
           </p>
         </div>
 
@@ -86,7 +86,7 @@ export default function AboutPage() {
             {language === "km" ? "ការប្តេជ្ញាចិត្តចំពោះក្រមសីលធម៌នៃការតម្រង់ទិស" : "Ethical Guidance & Data Integrity Commitment"}
           </h3>
           <p className="text-xs text-[#68708A] leading-relaxed">
-            Futera assessments represent self-reported preferences and are designed to inspire exploration and informed reflection, not to rigidly dictate a student's destiny. We strongly encourage students to discuss their Futera recommendations with high school teachers, university counselors, and family members.
+            OrienX assessments represent self-reported preferences and are designed to inspire exploration and informed reflection, not to rigidly dictate a student's destiny. We strongly encourage students to discuss their OrienX recommendations with high school teachers, university counselors, and family members.
           </p>
           <div className="pt-2">
             <Link

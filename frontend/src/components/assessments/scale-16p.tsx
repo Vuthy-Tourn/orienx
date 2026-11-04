@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { cn } from "@/lib/utils";
 
 interface Scale16pProps {
   value: number | null; // 1 to 7 (1: Strong Agree ... 4: Neutral ... 7: Strong Disagree)
@@ -125,55 +126,157 @@ export function Scale16p({
   disagreeLabelKm = "មិនយល់ស្រប",
 }: Scale16pProps) {
   const [hovered, setHovered] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const railRef = useRef<HTMLDivElement>(null);
+  const currentValueRef = useRef<number | null>(value);
+
+  useEffect(() => {
+    currentValueRef.current = value;
+  }, [value]);
+
+  // Scrollable / Wheel interaction to select options on the bar
+  useEffect(() => {
+    const el = railRef.current;
+    if (!el) return;
+
+    let lastWheelTime = 0;
+    const onWheel = (e: WheelEvent) => {
+      const now = Date.now();
+      if (now - lastWheelTime < 130) {
+        e.preventDefault();
+        return;
+      }
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      if (Math.abs(delta) < 8) return;
+
+      e.preventDefault();
+      lastWheelTime = now;
+
+      const curr = currentValueRef.current ?? 4;
+      if (delta > 0 && curr < 7) {
+        onChange(curr + 1);
+        setHovered(curr + 1);
+      } else if (delta < 0 && curr > 1) {
+        onChange(curr - 1);
+        setHovered(curr - 1);
+      }
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+    };
+  }, [onChange]);
+
+  // Calculate corresponding option level (1 to 7) from clientX on track
+  const getLevelFromClientX = useCallback((clientX: number): number => {
+    if (!trackRef.current) return 4;
+    const rect = trackRef.current.getBoundingClientRect();
+    if (rect.width <= 0) return 4;
+    const clampedX = Math.max(0, Math.min(rect.width, clientX - rect.left));
+    const ratio = clampedX / rect.width; // 0 to 1
+    const rawLevel = ratio * 6 + 1; // 1 to 7
+    return Math.max(1, Math.min(7, Math.round(rawLevel)));
+  }, []);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+    setIsDragging(true);
+    const newLevel = getLevelFromClientX(e.clientX);
+    onChange(newLevel);
+    setHovered(newLevel);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const newLevel = getLevelFromClientX(e.clientX);
+    if (isDragging) {
+      if (newLevel !== value) {
+        onChange(newLevel);
+      }
+      setHovered(newLevel);
+    } else {
+      setHovered(newLevel);
+    }
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isDragging) {
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {}
+      setIsDragging(false);
+    }
+  };
+
+  const handlePointerLeave = () => {
+    if (!isDragging) {
+      setHovered(null);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const curr = value ?? 4;
+    if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+      e.preventDefault();
+      if (curr > 1) onChange(curr - 1);
+    } else if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+      e.preventDefault();
+      if (curr < 7) onChange(curr + 1);
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      onChange(1);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      onChange(7);
+    }
+  };
 
   const activeLevel = hovered ?? value;
   const currentStep = SCALE_STEPS.find((s) => s.level === activeLevel);
   const selectedStep = SCALE_STEPS.find((s) => s.level === value);
+  const thumbLevel = activeLevel ?? 4;
+  const thumbStep = currentStep ?? SCALE_STEPS[3];
+  const thumbPositionPercent = ((thumbLevel - 1) / 6) * 100;
 
   return (
     <div className="w-full space-y-6 select-none py-1">
-      {/* 1. Top Header Labels (Positive / Negative Indicators) */}
+      {/* 1. Top Header Labels (Clean Agree / Disagree without +Positive / -Negative) */}
       <div className="flex items-center justify-between px-2 sm:px-6">
-        {/* Agree Label (Left - Positive Blue/Emerald) */}
-        <div
-          className="flex items-center gap-2 group cursor-pointer"
+        {/* Agree Label (Left) */}
+        <button
+          type="button"
+          className="flex items-center gap-2 group cursor-pointer transition-transform hover:scale-105 active:scale-95 select-none"
           onClick={() => onChange(1)}
         >
           <span className="flex h-3 w-3 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-60" />
             <span className="relative inline-flex rounded-full h-3 w-3 bg-[#0284C7]" />
           </span>
-          <div className="flex flex-col text-left leading-tight">
-            <span className="text-sm sm:text-base font-black text-sky-800 tracking-tight">
-              {language === "km" ? agreeLabelKm : agreeLabelEn}
-            </span>
-            <span className="text-[10px] font-bold text-sky-600/80 uppercase tracking-widest hidden sm:inline">
-              + Positive
-            </span>
-          </div>
-        </div>
+          <span className="text-sm sm:text-base font-black text-sky-800 tracking-tight">
+            {language === "km" ? agreeLabelKm : agreeLabelEn}
+          </span>
+        </button>
 
-        {/* Disagree Label (Right - Negative Coral/Red) */}
-        <div
-          className="flex items-center gap-2 group cursor-pointer"
+        {/* Disagree Label (Right) */}
+        <button
+          type="button"
+          className="flex items-center gap-2 group cursor-pointer transition-transform hover:scale-105 active:scale-95 select-none"
           onClick={() => onChange(7)}
         >
-          <div className="flex flex-col text-right leading-tight">
-            <span className="text-sm sm:text-base font-black text-rose-800 tracking-tight">
-              {language === "km" ? disagreeLabelKm : disagreeLabelEn}
-            </span>
-            <span className="text-[10px] font-bold text-rose-600/80 uppercase tracking-widest hidden sm:inline">
-              − Negative
-            </span>
-          </div>
+          <span className="text-sm sm:text-base font-black text-rose-800 tracking-tight">
+            {language === "km" ? disagreeLabelKm : disagreeLabelEn}
+          </span>
           <span className="flex h-3 w-3 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-60" />
             <span className="relative inline-flex rounded-full h-3 w-3 bg-[#DC2626]" />
           </span>
-        </div>
+        </button>
       </div>
 
-      {/* 2. Row of 7 Uniform Squircle Emotion Cards (Clean, Untangled) */}
+      {/* 2. Row of 7 Uniform Squircle Emotion Cards */}
       <div className="flex items-center justify-between max-w-xl mx-auto gap-2 sm:gap-3 px-2 sm:px-4">
         {SCALE_STEPS.map((step) => {
           const isSelected = value === step.level;
@@ -223,45 +326,78 @@ export function Scale16p({
         })}
       </div>
 
-      {/* 3. Spectrum Slider Rail (Strictly UNDERNEATH the cards with ZERO overlap!) */}
-      <div className="relative max-w-xl mx-auto px-2 sm:px-4 pt-1">
-        <div className="flex items-center gap-3">
-          {/* Left (+) Marker */}
-          <span className="text-[#0284C7] font-black text-base sm:text-lg select-none leading-none">
-            +
-          </span>
-
-          {/* Continuous Spectrum Track */}
-          <div className="flex-1 relative py-2">
-            <div className="h-2 sm:h-2.5 rounded-full overflow-hidden shadow-inner bg-slate-200/90 border border-slate-300/40">
-              {/* Colorful gradient matching the exact card sequence */}
+      {/* 3. Interactive Spectrum Slider Rail (Scrollable, Draggable & Clickable) */}
+      <div
+        ref={railRef}
+        className="relative max-w-xl mx-auto px-2 sm:px-4 pt-1.5 group outline-none"
+        tabIndex={0}
+        role="slider"
+        aria-label="Agreement Scale"
+        aria-valuemin={1}
+        aria-valuemax={7}
+        aria-valuenow={value ?? 4}
+        aria-valuetext={
+          currentStep
+            ? language === "km"
+              ? currentStep.labelKm
+              : currentStep.labelEn
+            : undefined
+        }
+        onKeyDown={handleKeyDown}
+      >
+        {/* Track container with margins matching half card width (1/14 of container width on each side) */}
+        <div style={{ paddingLeft: "calc(100% / 14)", paddingRight: "calc(100% / 14)" }}>
+          <div
+            ref={trackRef}
+            className="relative h-2.5 sm:h-3 rounded-full cursor-pointer touch-none select-none py-3 -my-3 flex items-center"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+            onPointerLeave={handlePointerLeave}
+          >
+            {/* Colorful spectrum bar */}
+            <div className="w-full h-2 sm:h-2.5 rounded-full shadow-inner bg-slate-200/90 border border-slate-300/40 overflow-hidden relative">
               <div className="w-full h-full rounded-full bg-gradient-to-r from-[#38BDF8] via-[#34D399] via-[#84CC16] via-[#FACC15] via-[#FB923C] via-[#F87171] to-[#EF4444] opacity-95" />
             </div>
 
-            {/* Glowing Tracker Pip Following Selection */}
-            {selectedStep && (
+            {/* 7 Discrete Snap Ticks */}
+            {SCALE_STEPS.map((s) => (
+              <span
+                key={s.level}
+                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white/70 pointer-events-none shadow-xs"
+                style={{ left: `${((s.level - 1) / 6) * 100}%` }}
+              />
+            ))}
+
+            {/* Interactive Draggable Thumb */}
+            <div
+              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 pointer-events-none transition-all duration-150 ease-out z-20"
+              style={{
+                left: `${thumbPositionPercent}%`,
+              }}
+            >
               <div
-                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none"
+                className={cn(
+                  "w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2.5 border-white shadow-[0_4px_16px_rgba(0,0,0,0.25)] ring-2 ring-black/10 flex items-center justify-center transition-all duration-150",
+                  isDragging
+                    ? "scale-125 shadow-xl ring-4 ring-sky-400/40"
+                    : value !== null
+                    ? "scale-105"
+                    : "scale-90 opacity-60"
+                )}
                 style={{
-                  left: `${selectedStep.trackPositionPercent}%`,
+                  backgroundColor: thumbStep.themeColor,
                 }}
               >
-                <div
-                  className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 border-white shadow-md ring-2 ring-black/10 scale-110"
-                  style={{ backgroundColor: selectedStep.themeColor }}
-                />
+                <div className="w-1.5 h-1.5 rounded-full bg-white shadow-xs" />
               </div>
-            )}
+            </div>
           </div>
-
-          {/* Right (−) Marker */}
-          <span className="text-[#DC2626] font-black text-base sm:text-lg select-none leading-none">
-            −
-          </span>
         </div>
       </div>
 
-      {/* 4. Dynamic Feedback Text (Clean text label without emojis or level tags, matching pic 2) */}
+      {/* 4. Dynamic Feedback Text */}
       <div className="h-8 flex items-center justify-center">
         {currentStep ? (
           <div

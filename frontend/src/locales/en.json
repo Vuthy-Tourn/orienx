@@ -1,6 +1,6 @@
 {
   "brand": {
-    "name": "Futera",
+    "name": "OrienX",
     "tagline": "Discover Your Direction. Shape Your Future."
   },
   "nav": {
@@ -26,7 +26,7 @@
     "statsAccuracy": "Explainable Rule-Based Matching"
   },
   "howItWorks": {
-    "title": "How Futera Works",
+    "title": "How OrienX Works",
     "subtitle": "A transparent 4-step pathway designed to help you make confident decisions about your education and future career.",
     "step1Title": "1. Understand Yourself",
     "step1Desc": "Complete an original MBTI-inspired personality test and RIASEC career interest assessment.",

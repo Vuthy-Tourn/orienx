@@ -11,7 +11,7 @@ export function Footer() {
           <div className="lg:col-span-2 space-y-4">
             <Logo isLight={true} />
             <p className="text-slate-300 text-sm leading-relaxed max-w-sm">
-              Futera helps Cambodian high school students, Grade 12 graduates, and young people discover their true direction through scientific assessments, verified Cambodian university programs, and transparent guidance.
+              OrienX helps Cambodian high school students, Grade 12 graduates, and young people discover their true direction through scientific assessments, verified Cambodian university programs, and transparent guidance.
             </p>
             <div className="pt-2 flex items-center gap-3 text-xs text-slate-400">
               <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-white/10 text-white font-medium">
@@ -99,14 +99,14 @@ export function Footer() {
               Assessment results reflect self-reported student preferences and are designed to broaden horizons, not definitively restrict opportunities. University tuition and admission requirements are sourced from official published portals.
             </p>
             <div className="text-xs text-slate-400">
-              Support: <span className="text-white">guidance@futera.edu.kh</span>
+              Support: <span className="text-white">guidance@orienx.edu.kh</span>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© {new Date().getFullYear()} Futera Platform. Discover Your Direction. Shape Your Future.</p>
+          <p>© {new Date().getFullYear()} OrienX Platform. Discover Your Direction. Shape Your Future.</p>
           <div className="flex items-center gap-6">
             <Link href="/about" className="hover:text-white">
               About Methodology
