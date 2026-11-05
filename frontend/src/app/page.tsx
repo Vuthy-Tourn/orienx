@@ -2,7 +2,12 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
+import { MascotInteractiveHero } from "@/components/hero/mascot-interactive-hero";
+import { HowItWorksFlow } from "@/components/home/how-it-works-flow";
+
 import {
   Compass,
   GraduationCap,
@@ -21,6 +26,9 @@ import {
   ShieldCheck,
   BrainCircuit,
   Search,
+  MousePointer2,
+  Camera,
+  Calendar,
 } from "lucide-react";
 import { formatUSD } from "@/lib/utils";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
@@ -138,270 +146,14 @@ export default function HomePage() {
   return (
     <div className="flex flex-col w-full">
       {/* =====================================================================
-          1. HERO SECTION
+          1. MODERN INTERACTIVE MASCOT HERO (DYNAMIC TALKING TARA)
           ===================================================================== */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#F0F2FA] via-[#F5F6FA] to-white pt-12 pb-20 lg:pt-20 lg:pb-28 border-b border-[#E6E8F0]">
-        {/* Subtle Architectural Dot Pattern */}
-        <DotPattern className="[mask-image:radial-gradient(650px_circle_at_center,white,transparent)] opacity-60" />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Column: Headline & Action */}
-            <div className="lg:col-span-7 space-y-6">
-              {/* Contextual Pill */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E6E8F0] shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-[#111965] animate-pulse" />
-                <span className="text-xs font-semibold text-[#111965]">
-                  {t("hero.badge")}
-                </span>
-              </div>
-
-              {/* Main Headline */}
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#111965] tracking-tight leading-[1.2]">
-                {t("hero.title")}
-              </h1>
-
-              {/* Subtitle */}
-              <p className="text-base sm:text-lg text-[#68708A] leading-relaxed max-w-2xl">
-                {t("hero.subtitle")}
-              </p>
-
-              {/* CTAs with Magic UI ShimmerButton */}
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
-                <Link href="/register" className="inline-block">
-                  <ShimmerButton
-                    shimmerColor="#F7CE4D"
-                    background="#111965"
-                    className="font-bold text-sm sm:text-base text-white shadow-md w-full sm:w-auto"
-                  >
-                    <span>{t("hero.ctaPrimary")}</span>
-                    <ArrowRight className="w-4 h-4 ml-2 inline text-[#F7CE4D]" />
-                  </ShimmerButton>
-                </Link>
-
-                <Link
-                  href="/majors"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-semibold text-sm sm:text-base text-[#111965] bg-white hover:bg-slate-50 border-2 border-[#E6E8F0] shadow-2xs transition-all duration-200"
-                >
-                  <Compass className="w-4 h-4 text-[#111965]" />
-                  <span>{t("hero.ctaSecondary")}</span>
-                </Link>
-              </div>
-
-              {/* Trust Indicators */}
-              <div className="pt-6 border-t border-[#E6E8F0]/80 grid grid-cols-3 gap-4 text-xs font-medium text-[#68708A]">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                  <span>{language === "km" ? "ផ្ទៀងផ្ទាត់សាកលវិទ្យាល័យ" : "Verified University Info"}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                  <span>{language === "km" ? "តេស្តវិទ្យាសាស្ត្រច្បាស់លាស់" : "Holland & MBTI Engine"}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                  <span>{language === "km" ? "ឥតគិតថ្លៃសម្រាប់សិស្ស" : "100% Free For Students"}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Interactive Recommendation Preview Card with Aceternity BorderBeam */}
-            <div className="lg:col-span-5">
-              <div className="relative mx-auto max-w-md lg:max-w-none">
-                {/* Background decorative frame */}
-                <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-tr from-[#111965]/10 via-[#F7CE4D]/20 to-transparent blur-sm" />
-
-                <div className="relative rounded-3xl bg-white border border-[#E6E8F0] p-6 sm:p-7 shadow-lg space-y-5 overflow-hidden">
-                  {/* Magic UI Border Beam */}
-                  <BorderBeam size={220} duration={12} delay={9} colorFrom="#F7CE4D" colorTo="#111965" />
-                  <div className="flex items-center justify-between pb-3 border-b border-[#E6E8F0]">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                      <span className="text-xs font-bold text-[#111965] uppercase tracking-wider">
-                        {language === "km" ? "លទ្ធផលគំរូរបស់សិស្ស" : "Sample Student Profile"}
-                      </span>
-                    </div>
-                    <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      94% Match Fit
-                    </span>
-                  </div>
-
-                  {/* Sample Personality & RIASEC summary */}
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0]">
-                      <div className="text-[10px] text-[#68708A] uppercase font-semibold">Personality</div>
-                      <div className="text-base font-bold text-[#111965] mt-0.5">INTJ</div>
-                      <div className="text-[11px] text-[#68708A]">{language === "km" ? "ស្ថាបត្យករយុទ្ធសាស្ត្រ" : "Strategic Architect"}</div>
-                    </div>
-                    <div className="p-3 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0]">
-                      <div className="text-[10px] text-[#68708A] uppercase font-semibold">Holland Code</div>
-                      <div className="text-base font-bold text-[#111965] mt-0.5">I - R - E</div>
-                      <div className="text-[11px] text-[#68708A]">{language === "km" ? "ស្រាវជ្រាវ និងបច្ចេកទេស" : "Investigative & Realistic"}</div>
-                    </div>
-                  </div>
-
-                  {/* Top Match Result Card */}
-                  <div className="p-4 rounded-xl border-2 border-[#111965] bg-[#F0F2FA] space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-[#111965] uppercase tracking-wide">
-                        #1 Top Recommendation
-                      </span>
-                      <span className="text-xs font-bold text-[#111965]">94%</span>
-                    </div>
-                    <h4 className="text-base font-bold text-[#111965]">
-                      {language === "km" ? "វិទ្យាសាស្ត្រកុំព្យូទ័រ និងវិស្វកម្មកម្មវិធី" : "Software Engineering & Computer Science"}
-                    </h4>
-                    <p className="text-xs text-[#68708A] leading-relaxed">
-                      {language === "km"
-                        ? "ត្រូវគ្នាយ៉ាងខ្លាំងនឹងចំណុចខ្លាំងផ្នែកគណិតវិទ្យា និងចំណាប់អារម្មណ៍កម្រិតខ្ពស់លើការដោះស្រាយបញ្ហាបច្ចេកវិទ្យា។"
-                        : "Direct alignment with your Mathematics strengths and high Investigative interest in technical problem solving."}
-                    </p>
-                    <div className="pt-2 flex items-center justify-between text-[11px] font-medium text-[#111965]">
-                      <span>{language === "km" ? "សាកលវិទ្យាល័យដែលផ្តល់ការបង្រៀន:" : "Available At:"}</span>
-                      <span className="font-semibold">RUPP, ITC, AUPP, Paragon</span>
-                    </div>
-                  </div>
-
-                  <Link
-                    href="/dashboard/assessments/personality"
-                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-bold text-white bg-[#111965] hover:bg-[#1E277A] transition-colors"
-                  >
-                    <span>{language === "km" ? "សាកល្បងធ្វើតេស្តឥតគិតថ្លៃ" : "Try Free Assessment Now"}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <MascotInteractiveHero />
 
       {/* =====================================================================
-          IMPACT BENCHMARK NUMBERS (MAGIC UI NUMBER TICKER)
+          2. HOW ORIENX WORKS (GSAP STEP-BY-STEP FLOW ANIMATION)
           ===================================================================== */}
-      <section className="bg-white py-10 border-b border-[#E6E8F0] relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {/* Stat 1 */}
-            <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1 text-center">
-              <div className="text-2xl sm:text-4xl font-extrabold text-[#111965] flex items-center justify-center">
-                <NumberTicker value={5} />
-                <span className="text-[#F7CE4D]">+</span>
-              </div>
-              <div className="text-xs sm:text-sm font-bold text-[#171A2C]">
-                {language === "km" ? "សាកលវិទ្យាល័យឈានមុខ" : "Verified Universities"}
-              </div>
-              <p className="text-[11px] text-[#68708A]">RUPP, ITC, AUPP, Paragon, NUM</p>
-            </div>
-
-            {/* Stat 2 */}
-            <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1 text-center">
-              <div className="text-2xl sm:text-4xl font-extrabold text-[#111965] flex items-center justify-center">
-                <NumberTicker value={6} />
-                <span className="text-[#F7CE4D]">+</span>
-              </div>
-              <div className="text-xs sm:text-sm font-bold text-[#171A2C]">
-                {language === "km" ? "ជំនាញសិក្សាតម្រូវការខ្ពស់" : "High-Demand Majors"}
-              </div>
-              <p className="text-[11px] text-[#68708A]">STEM, Business & Diplomacy</p>
-            </div>
-
-            {/* Stat 3 */}
-            <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1 text-center">
-              <div className="text-2xl sm:text-4xl font-extrabold text-[#111965] flex items-center justify-center">
-                <span className="text-[#F7CE4D] mr-0.5">$</span>
-                <NumberTicker value={250} />
-              </div>
-              <div className="text-xs sm:text-sm font-bold text-[#171A2C]">
-                {language === "km" ? "តម្លៃសិក្សាចាប់ផ្តើម" : "Starting Tuition / Yr"}
-              </div>
-              <p className="text-[11px] text-[#68708A]">{language === "km" ? "តម្លៃពិតជាក់ស្តែង" : "Fact-Verified Tuition"}</p>
-            </div>
-
-            {/* Stat 4 */}
-            <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1 text-center">
-              <div className="text-2xl sm:text-4xl font-extrabold text-[#111965] flex items-center justify-center">
-                <NumberTicker value={100} />
-                <span className="text-[#F7CE4D]">%</span>
-              </div>
-              <div className="text-xs sm:text-sm font-bold text-[#171A2C]">
-                {language === "km" ? "តម្លាភាពក្នុងការវិភាគ" : "Transparent Logic"}
-              </div>
-              <p className="text-[11px] text-[#68708A]">{language === "km" ? "គ្មានការលម្អៀង" : "Explainable Guidance"}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          2. HOW FUTERA WORKS (4 STEPS)
-          ===================================================================== */}
-      <section className="py-16 lg:py-24 bg-white border-b border-[#E6E8F0]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-3">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
-              {t("howItWorks.title")}
-            </h2>
-            <p className="text-sm sm:text-base text-[#68708A]">
-              {t("howItWorks.subtitle")}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Step 1 */}
-            <div className="p-6 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-3 relative group hover:border-[#111965] transition-all">
-              <div className="w-10 h-10 rounded-xl bg-[#111965] text-white flex items-center justify-center font-bold text-sm">
-                01
-              </div>
-              <h3 className="text-base font-bold text-[#111965]">
-                {t("howItWorks.step1Title")}
-              </h3>
-              <p className="text-xs text-[#68708A] leading-relaxed">
-                {t("howItWorks.step1Desc")}
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="p-6 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-3 relative group hover:border-[#111965] transition-all">
-              <div className="w-10 h-10 rounded-xl bg-[#111965] text-white flex items-center justify-center font-bold text-sm">
-                02
-              </div>
-              <h3 className="text-base font-bold text-[#111965]">
-                {t("howItWorks.step2Title")}
-              </h3>
-              <p className="text-xs text-[#68708A] leading-relaxed">
-                {t("howItWorks.step2Desc")}
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="p-6 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-3 relative group hover:border-[#111965] transition-all">
-              <div className="w-10 h-10 rounded-xl bg-[#111965] text-white flex items-center justify-center font-bold text-sm">
-                03
-              </div>
-              <h3 className="text-base font-bold text-[#111965]">
-                {t("howItWorks.step3Title")}
-              </h3>
-              <p className="text-xs text-[#68708A] leading-relaxed">
-                {t("howItWorks.step3Desc")}
-              </p>
-            </div>
-
-            {/* Step 4 */}
-            <div className="p-6 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-3 relative group hover:border-[#111965] transition-all">
-              <div className="w-10 h-10 rounded-xl bg-[#111965] text-white flex items-center justify-center font-bold text-sm">
-                04
-              </div>
-              <h3 className="text-base font-bold text-[#111965]">
-                {t("howItWorks.step4Title")}
-              </h3>
-              <p className="text-xs text-[#68708A] leading-relaxed">
-                {t("howItWorks.step4Desc")}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HowItWorksFlow />
 
       {/* =====================================================================
           3. FEATURED MAJORS PREVIEW

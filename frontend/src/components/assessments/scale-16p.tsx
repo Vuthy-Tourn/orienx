@@ -169,15 +169,15 @@ export function Scale16p({
     };
   }, [onChange]);
 
-  // Calculate corresponding option level (1 to 7) from clientX on track
+  // Calculate corresponding option level (1 to 7) from clientX across 7 even columns (matching each card)
   const getLevelFromClientX = useCallback((clientX: number): number => {
     if (!trackRef.current) return 4;
     const rect = trackRef.current.getBoundingClientRect();
     if (rect.width <= 0) return 4;
     const clampedX = Math.max(0, Math.min(rect.width, clientX - rect.left));
-    const ratio = clampedX / rect.width; // 0 to 1
-    const rawLevel = ratio * 6 + 1; // 1 to 7
-    return Math.max(1, Math.min(7, Math.round(rawLevel)));
+    const ratio = clampedX / rect.width; // 0.0 to 1.0
+    const col = Math.min(6, Math.max(0, Math.floor(ratio * 7)));
+    return col + 1; // 1 to 7
   }, []);
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -239,7 +239,8 @@ export function Scale16p({
   const selectedStep = SCALE_STEPS.find((s) => s.level === value);
   const thumbLevel = activeLevel ?? 4;
   const thumbStep = currentStep ?? SCALE_STEPS[3];
-  const thumbPositionPercent = ((thumbLevel - 1) / 6) * 100;
+  // Calculate position: ((thumbLevel - 0.5) / 7) aligns 100% directly below the middle of Card (thumbLevel):
+  const thumbPercent = ((thumbLevel - 0.5) / 7) * 100;
 
   return (
     <div className="w-full space-y-6 select-none py-1">
@@ -345,53 +346,53 @@ export function Scale16p({
         }
         onKeyDown={handleKeyDown}
       >
-        {/* Track container with margins matching half card width (1/14 of container width on each side) */}
-        <div style={{ paddingLeft: "calc(100% / 14)", paddingRight: "calc(100% / 14)" }}>
+        {/* Track container matching the cards row */}
+        <div
+          ref={trackRef}
+          className="relative h-7 flex items-center cursor-pointer touch-none select-none py-2"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+          onPointerLeave={handlePointerLeave}
+        >
+          {/* Continuous gradient spectrum bar starting at Card 1 edge and ending at Card 7 edge */}
           <div
-            ref={trackRef}
-            className="relative h-2.5 sm:h-3 rounded-full cursor-pointer touch-none select-none py-3 -my-3 flex items-center"
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={handlePointerUp}
-            onPointerLeave={handlePointerLeave}
+            className="absolute h-2.5 sm:h-3 rounded-full shadow-[inset_0_1.5px_2px_rgba(0,0,0,0.15)] border border-black/5"
+            style={{
+              left: "calc(100% / 14 - 11px)",
+              right: "calc(100% / 14 - 11px)",
+              background:
+                "linear-gradient(to right, #2787B9 0%, #6CAED7 20%, #C4A999 40%, #F69649 55%, #F87F4D 75%, #DC2626 100%)",
+            }}
+          />
+
+          {/* Refined Slider Knob (Directly below the middle of each active card; scrolls right to the bar edges) */}
+          <div
+            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 pointer-events-none transition-all duration-150 ease-out z-20"
+            style={{
+              left: `${thumbPercent}%`,
+            }}
           >
-            {/* Colorful spectrum bar */}
-            <div className="w-full h-2 sm:h-2.5 rounded-full shadow-inner bg-slate-200/90 border border-slate-300/40 overflow-hidden relative">
-              <div className="w-full h-full rounded-full bg-gradient-to-r from-[#38BDF8] via-[#34D399] via-[#84CC16] via-[#FACC15] via-[#FB923C] via-[#F87171] to-[#EF4444] opacity-95" />
-            </div>
-
-            {/* 7 Discrete Snap Ticks */}
-            {SCALE_STEPS.map((s) => (
-              <span
-                key={s.level}
-                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white/70 pointer-events-none shadow-xs"
-                style={{ left: `${((s.level - 1) / 6) * 100}%` }}
-              />
-            ))}
-
-            {/* Interactive Draggable Thumb */}
             <div
-              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 pointer-events-none transition-all duration-150 ease-out z-20"
+              className={cn(
+                "w-5.5 h-5.5 sm:w-5.5 sm:h-5.5 rounded-full bg-white flex items-center justify-center transition-all duration-150",
+                isDragging ? "scale-115" : "scale-100",
+                value === null && !isDragging && "opacity-80"
+              )}
               style={{
-                left: `${thumbPositionPercent}%`,
+                boxShadow: isDragging
+                  ? `0 0 0 3px ${thumbStep.themeColor}40, 0 2px 6px rgba(0,0,0,0.22)`
+                  : "0 1px 3px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.08)",
               }}
             >
+              {/* Inner vibrant colored core */}
               <div
-                className={cn(
-                  "w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2.5 border-white shadow-[0_4px_16px_rgba(0,0,0,0.25)] ring-2 ring-black/10 flex items-center justify-center transition-all duration-150",
-                  isDragging
-                    ? "scale-125 shadow-xl ring-4 ring-sky-400/40"
-                    : value !== null
-                    ? "scale-105"
-                    : "scale-90 opacity-60"
-                )}
+                className="w-2.5 h-2.5 rounded-full transition-colors duration-150 shadow-inner"
                 style={{
                   backgroundColor: thumbStep.themeColor,
                 }}
-              >
-                <div className="w-1.5 h-1.5 rounded-full bg-white shadow-xs" />
-              </div>
+              />
             </div>
           </div>
         </div>

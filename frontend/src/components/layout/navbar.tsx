@@ -29,6 +29,19 @@ export function Navbar() {
   const { t } = useLanguage();
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const isHomePage = pathname === "/";
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 60);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navLinks = [
     { href: "/majors", label: t("nav.majors"), icon: Compass },
@@ -41,7 +54,17 @@ export function Navbar() {
   const isAdmin = user?.roles?.some((r) => r === "ADMIN" || r === "SUPER_ADMIN");
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-[#E6E8F0]">
+    <header
+      className={cn(
+        "fixed top-0 z-50 w-full transition-all duration-500 ease-in-out",
+        isHomePage && !scrolled
+          ? "-translate-y-full opacity-0 pointer-events-none"
+          : "translate-y-0 opacity-100",
+        scrolled
+          ? "bg-white/95 backdrop-blur-md border-b border-[#E6E8F0] shadow-xs"
+          : "bg-white/90 backdrop-blur-md border-b border-[#E6E8F0]/80"
+      )}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Logo */}
         <Logo />
