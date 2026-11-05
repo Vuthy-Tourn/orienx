@@ -40,8 +40,8 @@ const DIMENSION_TITLES: Record<
     code: "S vs N",
     nameEn: "Information Processing (Sensing vs Intuition)",
     nameKm: "ការទទួលព័ត៌មាន (Sensing vs Intuition)",
-    tipEn: "Do you focus on practical facts or big ideas? 🧱✨",
-    tipKm: "តើអ្នកផ្តោតលើការអនុវត្តជាក់ស្តែង ឬគំនិតច្នៃប្រឌិត? 🧱✨",
+    tipEn: "Do you focus on practical facts or big ideas?",
+    tipKm: "តើអ្នកផ្តោតលើការអនុវត្តជាក់ស្តែង ឬគំនិតច្នៃប្រឌិត?",
   },
   TF: {
     code: "T vs F",
@@ -200,8 +200,8 @@ export default function PersonalityAssessmentPage() {
   const isAnswered = !!currentAnswer;
   const speechText = isAnswered
     ? language === "km"
-      ? "ចម្លើយល្អណាស់! បន្តទៀត! ✨"
-      : "Awesome choice! Keep shining! ✨"
+      ? "ចម្លើយល្អណាស់! បន្តទៀត!"
+      : "Awesome choice! Keep shining!"
     : language === "km"
     ? dimMeta.tipKm
     : dimMeta.tipEn;

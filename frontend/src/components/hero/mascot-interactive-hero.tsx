@@ -7,6 +7,7 @@ import {
   Compass,
   ArrowRight,
   CheckCircle2,
+  Sparkles,
 } from "lucide-react";
 import TechText from "@/components/react-bits/tech-text";
 import LightRays from "@/components/react-bits/light-rays";
@@ -41,6 +42,23 @@ export function MascotInteractiveHero() {
 
     return () => clearInterval(interval);
   }, [targetSpeech]);
+
+  // Helper to highlight Tara's name with brand amber accent
+  const renderFormattedSpeech = (text: string) => {
+    if (text.includes("Tara")) {
+      const parts = text.split("Tara");
+      return (
+        <>
+          {parts[0]}
+          <span className="text-[#F69D0D] font-extrabold drop-shadow-[0_0_10px_rgba(246,157,13,0.45)]">
+            Tara
+          </span>
+          {parts.slice(1).join("Tara")}
+        </>
+      );
+    }
+    return text;
+  };
 
   const handleMascotClick = () => {
     setTaraBounce(true);
@@ -183,26 +201,30 @@ export function MascotInteractiveHero() {
 
             {/* Stage Container */}
             <div className="relative flex flex-col items-center space-y-3">
-              {/* COMPACT, SLEEK FLOATING SPEECH BUBBLE (Takes Minimal Space) */}
-              <div className="relative inline-flex items-center gap-2.5 px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl bg-white text-[#0A1045] shadow-[0_16px_36px_rgba(0,0,0,0.4),0_0_24px_rgba(246,157,13,0.18)] border border-white/90 backdrop-blur-xl max-w-sm sm:max-w-md transition-all hover:scale-[1.02]">
-                <div className="flex items-center gap-2">
-                  <p className="text-xs sm:text-[13.5px] font-bold text-[#0A1045] leading-snug">
-                    {displayedSpeech}
+              {/* LUMINOUS COSMIC GLASS SPEECH BUBBLE */}
+              <div className="relative group/bubble select-none transition-all duration-300 hover:scale-[1.02]">
+                {/* Ambient Backlight Glow */}
+                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-amber-500/25 via-blue-500/15 to-amber-500/25 blur-lg opacity-75 group-hover/bubble:opacity-100 transition-opacity pointer-events-none" />
+
+                {/* Glass Card */}
+                <div className="relative flex items-center gap-2.5 px-5 sm:px-6 py-3 rounded-2xl sm:rounded-[22px] bg-[#0A1033]/85 backdrop-blur-2xl border border-amber-400/35 shadow-[0_20px_50px_rgba(0,0,0,0.55),0_0_24px_rgba(246,157,13,0.18),inset_0_1px_1px_rgba(255,255,255,0.2)] max-w-sm sm:max-w-md">
+                  {/* Sparkling Star Accent */}
+
+                  {/* Speech Message */}
+                  <p className="text-xs sm:text-[13.5px] font-semibold text-slate-100 leading-snug tracking-tight">
+                    {renderFormattedSpeech(displayedSpeech)}
                     {isTyping && (
-                      <span className="inline-block w-1.5 h-3.5 ml-1 bg-[#F69D0D] animate-pulse rounded-full align-middle" />
+                      <span className="inline-block w-1.5 h-3.5 ml-1 bg-[#F69D0D] animate-pulse rounded-full align-middle shadow-[0_0_6px_#F69D0D]" />
                     )}
                   </p>
-                </div>
 
-                {/* Smooth Organic Tail Pointing Down to Tara */}
-                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex justify-center pointer-events-none">
-                  <svg
-                    className="w-4 h-2 text-white fill-current filter drop-shadow-[0_2px_3px_rgba(4,10,40,0.15)]"
-                    viewBox="0 0 16 8"
-                    fill="none"
-                  >
-                    <path d="M0 0 C4 0 6 2 8 8 C10 2 12 0 16 0 Z" fill="white" />
-                  </svg>
+                  {/* Organic Downward Tail */}
+                  <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 flex justify-center pointer-events-none text-[#0A1033]">
+                    <svg className="w-5 h-2.5 filter drop-shadow-[0_3px_4px_rgba(0,0,0,0.5)]" viewBox="0 0 20 10" fill="none">
+                      <path d="M0 0 C6 0 8 4 10 10 C12 4 14 0 20 0 Z" fill="#0A1033" />
+                      <path d="M0 0 C6 0 8 4 10 10 C12 4 14 0 20 0" stroke="rgba(246, 157, 13, 0.4)" strokeWidth="1" fill="none" />
+                    </svg>
+                  </div>
                 </div>
               </div>
 
