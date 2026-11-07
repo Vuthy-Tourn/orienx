@@ -5,9 +5,9 @@ from app.core.config import settings
 from app.api.v1.api import api_router
 
 app = FastAPI(
-    title="Futera API — Cambodian Education & Career Guidance Platform",
+    title="OrienX API — Cambodian Education & Career Guidance Platform",
     description=(
-        "Production REST API for Futera: empowering Cambodian high school and university students "
+        "Production REST API for OrienX: empowering Cambodian high school and university students "
         "to discover their direction through MBTI-inspired personality assessments, RIASEC career interests, "
         "verified university exploration, major directories, and explainable recommendations."
     ),
@@ -41,7 +41,7 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 async def health_check():
     return {
         "status": "healthy",
-        "platform": "Futera",
+        "platform": "OrienX",
         "version": "1.0.0",
         "tagline": "Discover Your Direction. Shape Your Future.",
         "api_v1_docs": "/docs"

@@ -7,22 +7,39 @@ import {
   Compass,
   ArrowRight,
   CheckCircle2,
-  Sparkles,
+  ShieldCheck,
 } from "lucide-react";
 import TechText from "@/components/react-bits/tech-text";
-import LightRays from "@/components/react-bits/light-rays";
 
 export function MascotInteractiveHero() {
-  const { t, language } = useLanguage();
-  const [isTyping, setIsTyping] = useState(false);
+  const { language } = useLanguage();
   const [displayedSpeech, setDisplayedSpeech] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   const [taraBounce, setTaraBounce] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
 
-  // Concise, punchy greeting (compact, no clutter)
-  const targetSpeech =
-    language === "km"
-      ? "សួស្តី! ខ្ញុំគឺ Tara, មកស្វែងរកផ្លូវរបស់អ្នកទាំងអស់គ្នា!"
-      : "Hey! I'm Tara, Let's discover your path together!";
+  // Conversational dialogues from Tara
+  const greetings = [
+    {
+      km: "សួស្តី! ខ្ញុំគឺ Tara 🌟 មកស្វែងរកជំនាញ និងសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុតសម្រាប់អ្នកទាំងអស់គ្នា!",
+      en: "Hey! I'm Tara 🌟 Let's find your dream major and verified university in Cambodia together!",
+    },
+    {
+      km: "ខ្ញុំនឹងជួយវិភាគលើបុគ្គលិកលក្ខណៈ និងចំណូលចិត្ត RIASEC របស់អ្នក ដើម្បីរកជំនាញដែលត្រូវ 100%!",
+      en: "I'll analyze your MBTI personality and Holland RIASEC interests to recommend majors that fit you best!",
+    },
+    {
+      km: "ស្វែងរកតម្លៃសិក្សា និងអាហារូបករណ៍ពិតប្រាកដនៅ RUPP, ITC Techno, AUPP, Paragon និង CADT!",
+      en: "Explore verified tuition fees and real scholarships directly from official admissions portals!",
+    },
+    {
+      km: "តេស្ត ៥ នាទីប៉ុណ្ណោះ ហើយឥតគិតថ្លៃ ១០០% សម្រាប់សិស្សានុសិស្សកម្ពុជាទាំងអស់! តោះចាប់ផ្តើម!",
+      en: "Takes just 5 minutes and is 100% free for all students! Ready to uncover your unique strengths?",
+    },
+  ];
+
+  const currentDialogue = greetings[clickCount % greetings.length];
+  const targetText = language === "km" ? currentDialogue.km : currentDialogue.en;
 
   // Smooth typewriter effect
   useEffect(() => {
@@ -31,28 +48,26 @@ export function MascotInteractiveHero() {
 
     let i = 0;
     const interval = setInterval(() => {
-      if (i < targetSpeech.length) {
-        setDisplayedSpeech(targetSpeech.slice(0, i + 1));
+      if (i < targetText.length) {
+        setDisplayedSpeech(targetText.slice(0, i + 1));
         i++;
       } else {
         setIsTyping(false);
         clearInterval(interval);
       }
-    }, 20);
+    }, 18);
 
     return () => clearInterval(interval);
-  }, [targetSpeech]);
+  }, [targetText]);
 
-  // Helper to highlight Tara's name with brand amber accent
+  // Highlight Tara's name in speech
   const renderFormattedSpeech = (text: string) => {
     if (text.includes("Tara")) {
       const parts = text.split("Tara");
       return (
         <>
           {parts[0]}
-          <span className="text-[#F69D0D] font-extrabold drop-shadow-[0_0_10px_rgba(246,157,13,0.45)]">
-            Tara
-          </span>
+          <span className="text-[#D97706] font-bold">Tara</span>
           {parts.slice(1).join("Tara")}
         </>
       );
@@ -62,191 +77,159 @@ export function MascotInteractiveHero() {
 
   const handleMascotClick = () => {
     setTaraBounce(true);
+    setClickCount((prev) => prev + 1);
     setTimeout(() => setTaraBounce(false), 500);
   };
 
   return (
-    <section className="relative w-full min-h-screen min-h-[100dvh] flex items-center bg-[#060A22] text-white overflow-hidden py-12 lg:py-16 select-none">
-      {/* ===================================================================
-          1. SUBTLE VOLUMETRIC LIGHT RAYS (A GENTLE AMBIENT SHINE, NOT OVERPOWERING)
-          =================================================================== */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <LightRays
-          raysOrigin="top-center"
-          raysColor="#F69D0D"
-          raysSpeed={0.6}
-          lightSpread={0.7}
-          rayLength={2.0}
-          rayDensity={0.85}
-          raySharpness={0.38}
-          intensity={0.75}
-          glow={0.35}
-          haze={0.14}
-          atmosphere={0.85}
-          followMouse={true}
-          mouseInfluence={0.1}
-          opacity={0.38}
-          className="w-full h-full"
-        />
-      </div>
+    <section className="relative w-full min-h-[88vh] flex items-center bg-gradient-to-b from-slate-50/70 via-[#FAFBFD] to-white text-[#111965] border-b border-[#E6E8F0] overflow-hidden py-14 lg:py-20 select-none">
+      {/* Subtle Radial Ambient Lighting */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[350px] bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(17,25,101,0.03),transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/3 right-1/4 -translate-y-1/2 w-[420px] h-[420px] rounded-full bg-amber-400/[0.07] blur-[120px] pointer-events-none" />
 
-      {/* Soft Ambient Radial Backdrop */}
-      <div className="absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] rounded-full bg-blue-600/10 blur-[140px] pointer-events-none z-1" />
-      <div className="absolute top-1/2 right-1/4 -translate-x-1/2 -translate-y-1/2 w-[480px] h-[480px] rounded-full bg-amber-500/10 blur-[140px] pointer-events-none z-1" />
-
-      {/* ===================================================================
-          2. BALANCED HERO: HUGE TECHTEXT "OrienX" + CONTENT & LARGE TARA
-          =================================================================== */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* ===================================================================
-              LEFT COLUMN: HUGE TECHTEXT "OrienX" & ESSENTIAL GUIDANCE CONTENT
+              LEFT COLUMN: CLEAN, CONFIDENT EDITORIAL HEADLINE & ACTIONS
               =================================================================== */}
-          <div className="lg:col-span-7 space-y-6 text-left">
-
-            {/* HUGE Interactive TechText: OrienX (X in #F69D0D) */}
-            <div className="w-full">
-              <div className="h-32 sm:h-40 md:h-48 lg:h-52 w-full max-w-xl">
-                <TechText
-                  text="OrienX"
-                  fontSize={200}
-                  fontWeight={800}
-                  color="#FFFFFF"
-                  accentColor="#F69D0D"
-                  align="left"
-                  lineStyle="dashed"
-                  labels={true}
-                  draggable={true}
-                  clickKick={true}
-                  intro="assemble"
-                  introDuration={1.3}
-                  className="w-full h-full"
-                />
-              </div>
-
-              {/* Core Inspiring Headline */}
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-snug pt-2">
+          <div className="lg:col-span-6 space-y-6 text-left">
+            {/* Verified Badge Pill (Matches Cambodia Universities badge design) */}
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+              <span>
                 {language === "km"
-                  ? "អនាគតរបស់អ្នក ចាប់ផ្តើមពីការស្គាល់ខ្លួនឯង។"
-                  : "Your Future Starts With Understanding Yourself."}
-              </h1>
+                  ? "ព័ត៌មានផ្ទៀងផ្ទាត់ផ្លូវការពីសាកលវិទ្យាល័យ"
+                  : "Information verified from official admissions portals"}
+              </span>
             </div>
 
-            {/* Clean, Human-Centered Subtitle */}
-            <p className="text-sm sm:text-base text-slate-300/85 leading-relaxed max-w-lg font-normal">
+            {/* Interactive TechText Brand Wordmark */}
+            <div className="w-full max-w-[320px] sm:max-w-[360px] h-20 sm:h-24 -ml-1">
+              <TechText
+                text="OrienX"
+                fontSize={110}
+                fontWeight={800}
+                color="#111965"
+                accentColor="#F69D0D"
+                align="left"
+                lineStyle="dashed"
+                labels={true}
+                draggable={true}
+                clickKick={true}
+                intro="assemble"
+                introDuration={1.2}
+                className="w-full h-full"
+              />
+            </div>
+
+            {/* Main Editorial Headline */}
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#111965] tracking-tight leading-[1.25]">
+              {language === "km"
+                ? "អនាគតរបស់អ្នក ចាប់ផ្តើមពីការស្គាល់ខ្លួនឯង"
+                : "Your Future Starts With Understanding Yourself"}
+              <span className="text-[#F69D0D]">.</span>
+            </h1>
+
+            {/* Subtitle */}
+            <p className="text-sm sm:text-base text-[#68708A] max-w-xl font-normal leading-relaxed">
               {language === "km"
                 ? "ស្វែងយល់ពីចំណាប់អារម្មណ៍ បុគ្គលិកលក្ខណៈ ជំនាញសាកលវិទ្យាល័យ និងឱកាសការងារដែលស័ក្តិសមបំផុតសម្រាប់អ្នកនៅកម្ពុជា។"
                 : "Discover your unique strengths, explore verified Cambodian university majors, and find the career path tailored to you."}
             </p>
 
-            {/* Two Clean Action Buttons */}
+            {/* Action CTAs */}
             <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
               <Link
                 href="/dashboard/assessments/personality"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl font-bold text-sm sm:text-base text-slate-950 bg-gradient-to-r from-[#F69D0D] to-[#D97706] hover:brightness-105 shadow-lg shadow-amber-500/25 hover:scale-[1.02] transition-all"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base text-slate-950 bg-[#F69D0D] hover:bg-[#E58F0C] shadow-sm hover:shadow-md transition-all active:scale-98"
               >
-                <span>
-                  {language === "km" ? "ចាប់ផ្តើមឥតគិតថ្លៃ" : "Start Free Assessment"}
-                </span>
+                <span>{language === "km" ? "ចាប់ផ្តើមឥតគិតថ្លៃ" : "Start Free Assessment"}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
 
               <Link
                 href="/universities"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-sm sm:text-base text-white bg-white/[0.07] hover:bg-white/[0.14] border border-white/15 backdrop-blur-md transition-all"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm sm:text-base text-[#111965] bg-white hover:bg-slate-50 border border-[#E6E8F0] shadow-2xs hover:shadow-xs transition-all"
               >
-                <Compass className="w-4 h-4 text-[#F69D0D]" />
-                <span>
-                  {language === "km" ? "ស្វែងរកសាកលវិទ្យាល័យ" : "Explore Universities"}
-                </span>
+                <Compass className="w-4 h-4 text-[#68708A]" />
+                <span>{language === "km" ? "ស្វែងរកសាកលវិទ្យាល័យ" : "Explore Universities"}</span>
               </Link>
             </div>
 
-            {/* Quiet, Minimal Trust Proof */}
-            <div className="pt-3 text-xs font-semibold text-slate-300/80 flex items-center gap-5 sm:gap-7 flex-wrap">
+            {/* Quiet, Minimal Trust Indicators */}
+            <div className="pt-6 border-t border-[#E6E8F0] flex flex-wrap items-center gap-6 text-xs font-medium text-[#68708A]">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                <span>
-                  {language === "km"
-                    ? "ព័ត៌មានផ្ទៀងផ្ទាត់ផ្លូវការ"
-                    : "Verified Universities"}
-                </span>
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                <span>{language === "km" ? "ព័ត៌មានផ្ទៀងផ្ទាត់ផ្លូវការ" : "Verified University Info"}</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                <span>
-                  {language === "km"
-                    ? "តេស្ត Holland & MBTI"
-                    : "Holland & MBTI Engine"}
-                </span>
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                <span>{language === "km" ? "តេស្ត Holland & MBTI" : "Holland & MBTI Engine"}</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                <span>
-                  {language === "km"
-                    ? "ឥតគិតថ្លៃ ១០០%"
-                    : "100% Free For Students"}
-                </span>
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                <span>{language === "km" ? "ឥតគិតថ្លៃ ១០០%" : "100% Free For Students"}</span>
               </div>
             </div>
           </div>
 
           {/* ===================================================================
-              RIGHT COLUMN: LARGE TARA MASCOT WITH COMPACT FLOATING SPEECH PILL
+              RIGHT COLUMN: TARA MASCOT WITH NATURAL, FLOATING CONVERSATIONAL BUBBLE
+              (Positioned naturally to the upper-left of Tara — NOT stuck on her head!)
               =================================================================== */}
-          <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
-            {/* Ambient Radial Aura Behind Tara */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-amber-500/15 blur-[100px] pointer-events-none" />
-            <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-blue-500/12 blur-[90px] pointer-events-none" />
-
-            {/* Stage Container */}
-            <div className="relative flex flex-col items-center space-y-3">
-              {/* LUMINOUS COSMIC GLASS SPEECH BUBBLE */}
-              <div className="relative group/bubble select-none transition-all duration-300 hover:scale-[1.02]">
-                {/* Ambient Backlight Glow */}
-                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-amber-500/25 via-blue-500/15 to-amber-500/25 blur-lg opacity-75 group-hover/bubble:opacity-100 transition-opacity pointer-events-none" />
-
-                {/* Glass Card */}
-                <div className="relative flex items-center gap-2.5 px-5 sm:px-6 py-3 rounded-2xl sm:rounded-[22px] bg-[#0A1033]/85 backdrop-blur-2xl border border-amber-400/35 shadow-[0_20px_50px_rgba(0,0,0,0.55),0_0_24px_rgba(246,157,13,0.18),inset_0_1px_1px_rgba(255,255,255,0.2)] max-w-sm sm:max-w-md">
-                  {/* Sparkling Star Accent */}
+          <div className="lg:col-span-6 flex flex-col items-center justify-center relative min-h-[440px] sm:min-h-[480px]">
+            <div className="relative w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center">
+              {/* Natural Conversational Speech Bubble (Floating to the upper-left of Tara) */}
+              <div className="w-full lg:absolute lg:-top-6 lg:-left-6 xl:-left-12 z-20 max-w-sm sm:max-w-[340px] mb-4 lg:mb-0">
+                <div className="relative rounded-2xl bg-white border border-[#E6E8F0] shadow-[0_12px_28px_rgba(17,25,101,0.06)] p-4 transition-all hover:shadow-md">
+                  {/* Subtle Bubble Header */}
+                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-xs font-bold text-[#111965]">
+                        {language === "km" ? "Tara • ជំនួយការតម្រង់ទិស" : "Tara • AI Career Guide"}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-semibold text-[#68708A] bg-slate-50 px-2 py-0.5 rounded-full border border-slate-200/60">
+                      {language === "km" ? "ចុចលើ Tara 👋" : "Tap Tara 👋"}
+                    </span>
+                  </div>
 
                   {/* Speech Message */}
-                  <p className="text-xs sm:text-[13.5px] font-semibold text-slate-100 leading-snug tracking-tight">
+                  <p className="text-xs sm:text-[13px] font-semibold text-[#111965] leading-relaxed">
                     {renderFormattedSpeech(displayedSpeech)}
                     {isTyping && (
-                      <span className="inline-block w-1.5 h-3.5 ml-1 bg-[#F69D0D] animate-pulse rounded-full align-middle shadow-[0_0_6px_#F69D0D]" />
+                      <span className="inline-block w-1.5 h-3 ml-1 bg-[#F69D0D] animate-pulse rounded-full align-middle" />
                     )}
                   </p>
 
-                  {/* Organic Downward Tail */}
-                  <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 flex justify-center pointer-events-none text-[#0A1033]">
-                    <svg className="w-5 h-2.5 filter drop-shadow-[0_3px_4px_rgba(0,0,0,0.5)]" viewBox="0 0 20 10" fill="none">
-                      <path d="M0 0 C6 0 8 4 10 10 C12 4 14 0 20 0 Z" fill="#0A1033" />
-                      <path d="M0 0 C6 0 8 4 10 10 C12 4 14 0 20 0" stroke="rgba(246, 157, 13, 0.4)" strokeWidth="1" fill="none" />
+                  {/* Downward-Right Tail pointing toward Tara's shoulder/face */}
+                  <div className="hidden lg:block absolute -bottom-2.5 right-8 pointer-events-none">
+                    <svg className="w-4 h-2.5 filter drop-shadow-[0_1px_2px_rgba(17,25,101,0.04)]" viewBox="0 0 16 10" fill="none">
+                      <path d="M0 0 C4 0 6 3 8 10 C10 3 12 0 16 0 Z" fill="#FFFFFF" />
+                      <path d="M0 0 C4 0 6 3 8 10 C10 3 12 0 16 0" stroke="#E6E8F0" strokeWidth="1" fill="none" />
                     </svg>
                   </div>
                 </div>
               </div>
 
-              {/* CRISP LARGE MASCOT (Prominent, High-Definition, Not Small) */}
+              {/* Large Crisp Tara Mascot */}
               <div
                 onClick={handleMascotClick}
-                className="relative flex flex-col items-center pt-2 group cursor-pointer select-none"
+                className="relative flex flex-col items-center group cursor-pointer select-none lg:ml-20 xl:ml-28"
                 title="Tap Tara to wave!"
               >
-                {/* Luminous Floor Spotlight */}
-                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-72 sm:w-80 md:w-96 h-12 rounded-[100%] bg-amber-500/25 blur-lg pointer-events-none" />
-                {/* Soft Contact Floor Shadow */}
-                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-60 sm:w-72 md:w-80 h-6 rounded-[100%] bg-[#040A28] blur-sm pointer-events-none transition-all group-hover:scale-95" />
+                {/* Soft Contact Ground Shadow */}
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-64 sm:w-72 md:w-80 h-5 rounded-[100%] bg-[#111965]/10 blur-sm pointer-events-none transition-all group-hover:scale-95" />
 
-                {/* High-Definition Large Crisp Tara Mascot */}
+                {/* Big High-Definition Crisp Tara Mascot */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/welcome-hd.webp"
                   alt="Tara OrienX Mascot"
                   width={720}
                   height={760}
-                  className={`relative z-10 w-64 sm:w-72 md:w-80 lg:w-[350px] xl:w-[380px] h-auto object-contain drop-shadow-[0_24px_45px_rgba(4,12,50,0.65)] transition-all duration-300 ease-out group-hover:scale-105 ${
+                  className={`relative z-10 w-72 sm:w-80 md:w-88 lg:w-[350px] xl:w-[380px] h-auto object-contain drop-shadow-[0_20px_35px_rgba(17,25,101,0.12)] transition-all duration-300 ease-out group-hover:scale-105 active:scale-95 ${
                     taraBounce ? "scale-110 -translate-y-4" : ""
                   }`}
                 />

@@ -700,24 +700,6 @@ export function HowItWorksFlow() {
             );
           })}
         </div>
-
-        {/* =====================================================================
-            BOTTOM FOOTER BAR: Styled directly from Picture 1 (2022essentials & website)
-            ===================================================================== */}
-        <div className="pt-12 mt-6 border-t border-slate-200/70 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-[#68708A]">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>2026 OrienX Guidance Engine • 100% Free For Students</span>
-          </div>
-
-          <Link
-            href="/dashboard/assessments/personality"
-            className="inline-flex items-center gap-1.5 text-[#0284C7] hover:text-[#2563EB] font-bold transition-colors cursor-pointer"
-          >
-            <span>{language === "km" ? "ចាប់ផ្តើមការវាយតម្លៃឥតគិតថ្លៃ" : "Start Free Assessment"}</span>
-            <ArrowUpRight className="w-4 h-4" />
-          </Link>
-        </div>
       </div>
     </section>
   );

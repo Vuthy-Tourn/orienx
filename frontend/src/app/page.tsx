@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
 import { MascotInteractiveHero } from "@/components/hero/mascot-interactive-hero";
 import { HowItWorksFlow } from "@/components/home/how-it-works-flow";
+import { FeaturedMajorsGrid } from "@/components/home/featured-majors-grid";
 
 import {
   Compass,
@@ -19,6 +20,7 @@ import {
   BookOpen,
   DollarSign,
   MapPin,
+  ChevronLeft,
   ChevronRight,
   ChevronDown,
   Layers,
@@ -38,17 +40,26 @@ import { DotPattern } from "@/components/magicui/dot-pattern";
 import { BentoGrid, BentoGridItem } from "@/components/aceternity/bento-grid";
 import { Accordion, AccordionItem } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import CircularGallery from "@/components/ui/circular-gallery";
 
 export default function HomePage() {
   const { t, language } = useLanguage();
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activeUniIndex, setActiveUniIndex] = useState<number>(0);
+  const [mounted, setMounted] = useState<boolean>(false);
 
-  // Verified Cambodian Universities featured on landing
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Verified Cambodian Universities featured on landing with real building photographs
   const featuredUniversities = [
     {
       slug: "rupp",
       nameEn: "Royal University of Phnom Penh (RUPP)",
-      nameKm: "សាកលវិទ្យាល័យភូមិន្ទភ្នំពេញ",
+      nameKm: "សាកលវិទ្យាល័យភូមិន្ទភ្នំពេញ (RUPP)",
+      shortName: "RUPP",
+      image: "/images/universities/rupp.jpg",
       type: "PUBLIC",
       typeLabel: language === "km" ? "សាកលវិទ្យាល័យរដ្ឋ" : "Public State University",
       tuition: "$250 – $500 / year",
@@ -58,10 +69,12 @@ export default function HomePage() {
     },
     {
       slug: "itc",
-      nameEn: "Institute of Technology of Cambodia (Techno)",
+      nameEn: "Institute of Technology of Cambodia (ITC Techno)",
       nameKm: "វិទ្យាស្ថានបច្ចេកវិទ្យាកម្ពុជា (តិចណូ)",
+      shortName: "ITC (Techno)",
+      image: "/images/universities/itc.jpg",
       type: "PUBLIC",
-      typeLabel: language === "km" ? "សាកលវិទ្យាល័យរដ្ឋ" : "Public Premier Engineering",
+      typeLabel: language === "km" ? "វិទ្យាស្ថានវិស្វកម្មរដ្ឋ" : "Public Premier Engineering",
       tuition: "$600 – $800 / year",
       location: language === "km" ? "រាជធានីភ្នំពេញ" : "Phnom Penh",
       highlight: language === "km" ? "សញ្ញាបត្រវិស្វករជាតិ និងស្តង់ដារអន្តរជាតិ CTI" : "National Engineer & CTI International Accreditation",
@@ -70,51 +83,53 @@ export default function HomePage() {
     {
       slug: "aupp",
       nameEn: "American University of Phnom Penh (AUPP)",
-      nameKm: "សាកលវិទ្យាល័យអាមេរិកាំងភ្នំពេញ",
+      nameKm: "សាកលវិទ្យាល័យអាមេរិកាំងភ្នំពេញ (AUPP)",
+      shortName: "AUPP",
+      image: "/images/universities/aupp.jpg",
       type: "PRIVATE",
-      typeLabel: language === "km" ? "សាកលវិទ្យាល័យឯកជន" : "Private International",
+      typeLabel: language === "km" ? "សាកលវិទ្យាល័យឯកជនអន្តរជាតិ" : "Private International",
       tuition: "$6,000 / year (Single) • $9,000 / year (Dual US)",
       location: language === "km" ? "រាជធានីភ្នំពេញ" : "Phnom Penh",
-      highlight: language === "km" ? "សញ្ញាបត្រទ្វេភាគីជាមួយសាកលវិទ្យាល័យនៅអាមេរិក (Univ of Arizona)" : "Dual Degree with University of Arizona",
+      highlight: language === "km" ? "សញ្ញាបត្រទ្វេភាគីជាមួយសាកលវិទ្យាល័យនៅអាមេរិក (Univ of Arizona)" : "Dual Degree with University of Arizona (US-Accredited)",
       majorsCount: "12+ Programs",
+    },
+    {
+      slug: "paragoniu",
+      nameEn: "Paragon International University",
+      nameKm: "សាកលវិទ្យាល័យអន្តរជាតិផារ៉ាហ្គន",
+      shortName: "Paragon IU",
+      image: "/images/universities/paragoniu.jpg",
+      type: "PRIVATE",
+      typeLabel: language === "km" ? "សាកលវិទ្យាល័យឯកជន" : "Private International",
+      tuition: "$2,500 – $3,500 / year",
+      location: language === "km" ? "រាជធានីភ្នំពេញ" : "Phnom Penh",
+      highlight: language === "km" ? "កម្មវិធីបង្រៀនជាភាសាអង់គ្លេស ១០០% លើវិស្វកម្ម ស្ថាបត្យកម្ម និងកុំព្យូទ័រ" : "100% English medium Engineering, Architecture & CS",
+      majorsCount: "15+ Majors",
+    },
+    {
+      slug: "cadt",
+      nameEn: "Cambodia Academy of Digital Technology (CADT)",
+      nameKm: "បណ្ឌិត្យសភាបច្ចេកវិទ្យាឌីជីថលកម្ពុជា (CADT)",
+      shortName: "CADT",
+      image: "/images/universities/cadt.jpg",
+      type: "PUBLIC",
+      typeLabel: language === "km" ? "បណ្ឌិត្យសភាបច្ចេកវិទ្យាឌីជីថលជាតិ" : "Public Digital Academy",
+      tuition: "$1,000 – $1,500 / year",
+      location: language === "km" ? "រាជធានីភ្នំពេញ" : "Phnom Penh",
+      highlight: language === "km" ? "អាហារូបករណ៍ទេពកោសល្យឌីជីថលតេជោ (Techo Digital Talent)" : "Techo Digital Talent Scholarships for AI, Data & Cybersecurity",
+      majorsCount: "8+ Tech Majors",
     },
   ];
 
-  const featuredMajors = [
-    {
-      titleEn: "Software Engineering & Computer Science",
-      titleKm: "វិទ្យាសាស្ត្រកុំព្យូទ័រ និងវិស្វកម្មកម្មវិធី",
-      category: "Information Technology",
-      riasec: "IRE",
-      personality: "INTJ, INTP",
-      descEn: "Build full-stack web and mobile systems, cloud infrastructure, and software applications.",
-      descKm: "អភិវឌ្ឍប្រព័ន្ធកម្មវិធីកុំព្យូទ័រ កម្មវិធីទូរស័ព្ទដៃ និងហេដ្ឋារចនាសម្ព័ន្ធពពក។",
-      salaryEn: "$500 – $2,500+ / mo",
-      slug: "software-engineering",
-    },
-    {
-      titleEn: "Business Administration & Management",
-      titleKm: "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រង",
-      category: "Business & Economics",
-      riasec: "ECS",
-      personality: "ENTJ, ESTJ",
-      descEn: "Develop organizational leadership, corporate strategic planning, and modern enterprise management.",
-      descKm: "បណ្តុះបណ្តាលភាពជាអ្នកដឹកនាំស្ថាប័ន យុទ្ធសាស្ត្រធុរកិច្ច និងការគ្រប់គ្រងសហគ្រាសទំនើប។",
-      salaryEn: "$400 – $2,000+ / mo",
-      slug: "business-administration",
-    },
-    {
-      titleEn: "Civil Engineering & Structural Design",
-      titleKm: "វិស្វកម្មសំណង់ស៊ីវិល",
-      category: "Engineering",
-      riasec: "RIC",
-      personality: "ISTP, ESTJ",
-      descEn: "Plan, design, and supervise infrastructure: bridges, roads, high-rise buildings, and structural systems.",
-      descKm: "រៀបចំផែនការ គណនាគ្រឿងផ្គុំ និងត្រួតពិនិត្យការសាងសង់ស្ពាន ថ្នល់ និងអគារទំនើប។",
-      salaryEn: "$450 – $2,200+ / mo",
-      slug: "civil-engineering",
-    },
-  ];
+  // Gallery items for CircularGallery WebGL
+  const galleryItems = featuredUniversities.map((uni) => ({
+    image: uni.image,
+    text: uni.shortName,
+    description: `${uni.nameEn} • ${uni.tuition}`,
+    alt: uni.nameEn,
+  }));
+
+  const activeUni = featuredUniversities[activeUniIndex % featuredUniversities.length] || featuredUniversities[0];
 
   const faqs = [
     {
@@ -156,166 +171,206 @@ export default function HomePage() {
       <HowItWorksFlow />
 
       {/* =====================================================================
-          3. FEATURED MAJORS PREVIEW
+          3. FEATURED MAJORS PREVIEW (VIBRANT 3D STAGGERED SHOWCASE)
           ===================================================================== */}
-      <section className="py-16 lg:py-24 bg-[#F5F6FA] border-b border-[#E6E8F0]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div className="space-y-2">
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
-                {language === "km" ? "ជំនាញសាកលវិទ្យាល័យដែលពេញនិយម" : "Explore University Majors"}
-              </h2>
-              <p className="text-sm text-[#68708A]">
-                {language === "km"
-                  ? "ស្វែងយល់ពីមុខវិជ្ជាសិក្សា ជំនាញដែលត្រូវការ និងឱកាសការងារជាក់ស្តែងនៅកម្ពុជា។"
-                  : "Discover curricula, required foundational skills, and career opportunities in Cambodia."}
-              </p>
-            </div>
-            <Link
-              href="/majors"
-              className="inline-flex items-center gap-1.5 text-sm font-bold text-[#111965] hover:text-[#1E277A]"
-            >
-              <span>{language === "km" ? "មើលជំនាញទាំងអស់" : "View All Majors"}</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredMajors.map((m) => (
-              <div
-                key={m.slug}
-                className="rounded-2xl bg-white border border-[#E6E8F0] p-6 shadow-2xs hover:shadow-md transition-all duration-200 flex flex-col justify-between space-y-4"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F0F2FA] text-[#111965]">
-                      {m.category}
-                    </span>
-                    <span className="text-[11px] font-bold text-[#68708A]">
-                      RIASEC: {m.riasec}
-                    </span>
-                  </div>
-
-                  <h3 className="text-base font-bold text-[#111965] leading-snug">
-                    {language === "km" ? m.titleKm : m.titleEn}
-                  </h3>
-
-                  <p className="text-xs text-[#68708A] leading-relaxed">
-                    {language === "km" ? m.descKm : m.descEn}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-between">
-                  <div>
-                    <div className="text-[10px] text-[#68708A] uppercase font-semibold">
-                      {language === "km" ? "កម្រិតប្រាក់បៀវត្ស" : "Salary Range"}
-                    </div>
-                    <div className="text-xs font-bold text-emerald-700">{m.salaryEn}</div>
-                  </div>
-                  <Link
-                    href={`/majors/${m.slug}`}
-                    className="p-2 rounded-lg text-[#111965] hover:bg-[#F0F2FA] transition-colors"
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <FeaturedMajorsGrid />
 
       {/* =====================================================================
-          4. CAMBODIAN UNIVERSITIES (VERIFIED PRICING)
+          4. CAMBODIAN UNIVERSITIES (VERIFIED PRICING - FULL WIDTH 3D CIRCULAR GALLERY)
           ===================================================================== */}
-      <section className="py-16 lg:py-24 bg-white border-b border-[#E6E8F0]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <section
+        id="featured-universities-section"
+        className="py-16 lg:py-24 bg-white border-b border-[#E6E8F0] overflow-hidden select-none"
+      >
+        {/* Section Header (Contained in Max-7XL grid) */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div className="space-y-2">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
-                <ShieldCheck className="w-3.5 h-3.5" />
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                 <span>{t("universitiesSection.verifiedNotice")}</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#111965] tracking-tight">
                 {t("universitiesSection.title")}
               </h2>
-              <p className="text-sm text-[#68708A]">
+              <p className="text-sm sm:text-base text-[#68708A] max-w-2xl font-normal">
                 {t("universitiesSection.subtitle")}
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
-              <Link
-                href="/universities/compare?ids=rupp,itc,aupp"
-                className="px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-2xs transition-colors"
-              >
-                {t("universitiesSection.compare")}
-              </Link>
-              <Link
-                href="/universities"
-                className="px-4 py-2 rounded-xl text-xs font-semibold text-[#111965] bg-slate-50 hover:bg-slate-100 border border-[#E6E8F0] transition-colors"
-              >
-                {t("universitiesSection.viewDirectory")}
-              </Link>
-            </div>
+            <Link
+              href="/universities"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-[#111965] bg-white hover:bg-slate-50 border border-[#E6E8F0] shadow-2xs hover:shadow-sm transition-all self-start sm:self-auto"
+            >
+              <span>{language === "km" ? "មើលសាកលវិទ្យាល័យទាំងអស់" : "View All Universities"}</span>
+              <ChevronRight className="w-4 h-4 text-[#68708A]" />
+            </Link>
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredUniversities.map((uni) => (
-              <div
-                key={uni.slug}
-                className="rounded-2xl bg-white border border-[#E6E8F0] p-6 shadow-2xs hover:shadow-md transition-all duration-200 flex flex-col justify-between space-y-5"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
+        {/* FULL-WIDTH 3D CIRCULAR GALLERY SHOWCASE (Flows from Laptop Screen Edges) */}
+        <div className="relative w-full h-[460px] sm:h-[500px] lg:h-[540px] my-1 overflow-hidden select-none group">
+          {/* Animated studio spotlight backdrop */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-50/50 via-white to-slate-50/30 pointer-events-none" />
+          <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[350px] sm:w-[500px] h-[300px] bg-blue-200/25 rounded-full blur-3xl pointer-events-none animate-pulse" />
+          <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[350px] sm:w-[500px] h-[300px] bg-amber-200/25 rounded-full blur-3xl pointer-events-none animate-pulse" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[1000px] h-[320px] bg-[radial-gradient(ellipse_75%_50%_at_50%_45%,rgba(17,25,101,0.04),transparent_75%)] pointer-events-none" />
+
+          {/* Minimal edge fade so cards visibly emerge directly from laptop bezel */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
+
+          {/* Left / Right Interactive Navigation Arrows */}
+          <button
+            type="button"
+            onClick={() => setActiveUniIndex((prev) => (prev - 1 + featuredUniversities.length) % featuredUniversities.length)}
+            aria-label="Previous University"
+            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white backdrop-blur-md border border-slate-200 shadow-md text-[#111965] flex items-center justify-center transition-all opacity-80 hover:opacity-100 hover:scale-105 active:scale-95"
+          >
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveUniIndex((prev) => (prev + 1) % featuredUniversities.length)}
+            aria-label="Next University"
+            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white backdrop-blur-md border border-slate-200 shadow-md text-[#111965] flex items-center justify-center transition-all opacity-80 hover:opacity-100 hover:scale-105 active:scale-95"
+          >
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+
+          {mounted ? (
+            <CircularGallery
+              items={galleryItems}
+              bend={0.85}
+              textColor="#111965"
+              borderRadius={0.06}
+              scrollSpeed={2.2}
+              scrollEase={0.07}
+              itemSize={0.92}
+              itemAspect={1.32}
+              gap={0.22}
+              wave={0.0}
+              fadeEdges={0.02}
+              shadow={0.18}
+              grayscale={false}
+              showTitles={true}
+              snap={true}
+              autoScroll={3.8}
+              openOnClick={false}
+              intro={false}
+              enableVerticalWheel={true}
+              activeIndex={activeUniIndex}
+              onActiveChange={(idx) => setActiveUniIndex(idx)}
+              onItemClick={(_item, idx) => setActiveUniIndex(idx)}
+              className="w-full h-full"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-slate-50/50">
+              <div className="w-9 h-9 border-3 border-[#111965] border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
+        </div>
+
+        {/* Active University Detailed Spotlight Card (Contained in Max-7XL grid, visually anchored to gallery) */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-3 sm:-mt-5 relative z-20">
+          {activeUni && (
+            <div
+              className="relative p-6 sm:p-8 rounded-2xl bg-white border border-[#E6E8F0] shadow-sm text-[#111965] transition-all duration-300"
+            >
+              {/* Visual Anchor Indicator pointing up to the 3D card */}
+              <div className="absolute -top-2 left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-none">
+                <div className="w-4 h-4 bg-white border-t border-l border-[#E6E8F0] rotate-45 rounded-tl-xs shadow-2xs" />
+              </div>
+
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div className="space-y-3 flex-1">
+                  <div className="flex flex-wrap items-center gap-2.5">
                     <span
-                      className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                        uni.type === "PUBLIC"
+                      className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                        activeUni.type === "PUBLIC"
                           ? "bg-blue-50 text-blue-800 border border-blue-200"
                           : "bg-purple-50 text-purple-800 border border-purple-200"
                       }`}
                     >
-                      {uni.typeLabel}
+                      {activeUni.typeLabel}
                     </span>
-                    <span className="flex items-center gap-1 text-xs text-[#68708A]">
-                      <MapPin className="w-3 h-3 text-[#111965]" />
-                      <span>{uni.location}</span>
+                    <span className="flex items-center gap-1.5 text-xs text-[#68708A] font-medium">
+                      <MapPin className="w-3.5 h-3.5 text-[#111965]" />
+                      <span>{activeUni.location}</span>
+                    </span>
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-semibold border border-slate-200/60">
+                      {activeUni.majorsCount}
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-[#111965] leading-snug">
-                    {language === "km" ? uni.nameKm : uni.nameEn}
-                  </h3>
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-black text-[#111965] tracking-tight">
+                      {language === "km" ? activeUni.nameKm : activeUni.nameEn}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-[#68708A] mt-1 leading-relaxed">
+                      {activeUni.highlight}
+                    </p>
+                  </div>
+                </div>
 
-                  <div className="p-3 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1">
-                    <div className="text-[10px] text-[#68708A] uppercase font-bold">
+                <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row items-start sm:items-center lg:items-end xl:items-center gap-4 shrink-0">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] min-w-[210px]">
+                    <div className="text-[10px] text-[#68708A] uppercase font-bold tracking-wider">
                       {language === "km" ? "តម្លៃសិក្សាប្រចាំឆ្នាំ (ផ្ទៀងផ្ទាត់)" : "Verified Annual Tuition"}
                     </div>
-                    <div className="text-sm font-extrabold text-[#111965]">
-                      {uni.tuition}
+                    <div className="text-base sm:lg font-black text-[#111965] mt-0.5">
+                      {activeUni.tuition}
                     </div>
                   </div>
 
-                  <p className="text-xs text-[#68708A] leading-relaxed">
-                    {uni.highlight}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-between">
-                  <span className="text-xs font-semibold text-[#111965]">
-                    {uni.majorsCount}
-                  </span>
-                  <Link
-                    href={`/universities/${uni.slug}`}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-[#111965] hover:text-[#1E277A]"
-                  >
-                    <span>{t("common.viewDetails")}</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
+                  <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                    <Link
+                      href={`/universities/${activeUni.slug}`}
+                      className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#111965] hover:bg-[#1E277A] shadow-xs transition-colors"
+                    >
+                      <span>{language === "km" ? "មើលព័ត៌មានលម្អិត" : "View University Profile"}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                    <Link
+                      href={`/universities/compare?ids=${activeUni.slug},rupp,itc`}
+                      className="inline-flex items-center justify-center p-3 rounded-xl text-xs font-semibold text-[#111965] bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors"
+                      title={language === "km" ? "ប្រៀបធៀប" : "Compare"}
+                    >
+                      <Layers className="w-4 h-4" />
+                    </Link>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
+
+              {/* Quick Selector Thumbnails */}
+              <div className="mt-6 pt-5 border-t border-[#E6E8F0]/80 flex flex-wrap items-center gap-2">
+                <span className="text-xs font-medium text-[#68708A] mr-1">
+                  {language === "km" ? "ជ្រើសរើសរហ័ស៖" : "Quick select:"}
+                </span>
+                {featuredUniversities.map((uni, idx) => {
+                  const isActive = activeUniIndex === idx;
+                  return (
+                    <button
+                      key={uni.slug}
+                      type="button"
+                      onClick={() => setActiveUniIndex(idx)}
+                      className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                        isActive
+                          ? "bg-[#111965] text-white shadow-xs scale-105"
+                          : "bg-slate-100 text-[#68708A] hover:bg-slate-200 hover:text-[#111965]"
+                      }`}
+                    >
+                      {isActive && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#F7CE4D] animate-pulse" />
+                      )}
+                      <span>{uni.shortName}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 

@@ -20,7 +20,7 @@ async def seed():
     session_factory = async_sessionmaker(bind=engine, expire_on_commit=False)
 
     async with session_factory() as session:
-        print("🌱 Seeding Futera platform data...")
+        print("🌱 Seeding OrienX platform data...")
 
         # -----------------------------------------------------------------
         # 1. ROLES & PERMISSIONS
@@ -263,6 +263,37 @@ async def seed():
                 "facilities": {
                     "en": ["Digital Innovation Lab", "Incubation Center", "Auditorium", "Business Library"],
                     "km": ["មន្ទីរពិសោធន៍នវានុវត្តន៍ឌីជីថល", "មជ្ឈមណ្ឌលបណ្តុះធុរកិច្ចថ្មី"]
+                }
+            },
+            {
+                "slug": "cadt",
+                "name": {"en": "Cambodia Academy of Digital Technology", "km": "បណ្ឌិត្យសភាបច្ចេកវិទ្យាឌីជីថលកម្ពុជា"},
+                "acronym": {"en": "CADT", "km": "ប.ប.ឌ.ក"},
+                "description": {
+                    "en": "Cambodia's flagship national digital academy under MPTC, leading higher education and research in Artificial Intelligence, Software Engineering, Cybersecurity, and Data Science.",
+                    "km": "បណ្ឌិត្យសភាបច្ចេកវិទ្យាឌីជីថលជាតិឈានមុខគេក្រោមឱវាទក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍ (MPTC) បណ្តុះបណ្តាលលើបញ្ញាសិប្បនិម្មិត (AI) វិស្វកម្មសូហ្វវែរ សុវត្ថិភាពអ៊ីនធឺណិត និងវិទ្យាសាស្ត្រទិន្នន័យ។"
+                },
+                "university_type": "PUBLIC",
+                "province": "Phnom Penh",
+                "address": {
+                    "en": "National Road 6A, Prek Leap, Chroy Changvar, Phnom Penh",
+                    "km": "ផ្លូវជាតិលេខ ៦A សង្កាត់ព្រែកលៀប ខណ្ឌជ្រោយចង្វារ រាជធានីភ្នំពេញ"
+                },
+                "website_url": "https://www.cadt.edu.kh",
+                "contact_email": "info@cadt.edu.kh",
+                "contact_phone": "+855 23 999 501",
+                "established_year": 2014,
+                "tuition_range_min_usd": 1000.00,
+                "tuition_range_max_usd": 1500.00,
+                "is_tuition_verified": True,
+                "is_verified": True,
+                "admission_requirements": {
+                    "en": ["High School BacII Diploma", "CADT National Digital Talent Entrance Exam & Interview"],
+                    "km": ["សញ្ញាបត្របាក់ឌុប", "ការប្រឡងជ្រើសរើសអាហារូបករណ៍ទេពកោសល្យឌីជីថលតេជោ"]
+                },
+                "facilities": {
+                    "en": ["AI & Robotics Innovation Hub", "Cybersecurity Cyber Range", "Makerspace & IoT Lab", "Modern Smart Classrooms"],
+                    "km": ["មជ្ឈមណ្ឌលនវានុវត្តន៍ AI និងមនុស្សយន្ត", "មន្ទីរពិសោធន៍សុវត្ថិភាពអ៊ីនធឺណិត Cyber Range", "បន្ទប់ពិសោធន៍ IoT"]
                 }
             }
         ]
