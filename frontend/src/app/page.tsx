@@ -13,6 +13,7 @@ import { FeaturedMajorsGrid } from "@/components/home/featured-majors-grid";
 import { ScholarshipsShowcase } from "@/components/home/scholarships-showcase";
 import { TestimonialsCarousel } from "@/components/home/testimonials-carousel";
 import { FaqSection } from "@/components/home/faq-section";
+import { CtaBanner } from "@/components/home/cta-banner";
 
 import {
   Compass,
@@ -353,34 +354,9 @@ export default function HomePage() {
       <FaqSection />
 
       {/* =====================================================================
-          8. CALL TO ACTION BANNER
+          8. CALL TO ACTION BANNER (REDESIGNED WITH TARA MASCOT)
           ===================================================================== */}
-      <section className="py-16 bg-[#F5F6FA]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl bg-[#111965] text-white p-8 sm:p-12 text-center space-y-6 shadow-lg border border-[#1E277A]">
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
-              {t("homeCta.title")}
-            </h2>
-            <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
-              {t("homeCta.subtitle")}
-            </p>
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/register"
-                className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-bold text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-sm transition-all"
-              >
-                {t("homeCta.button")}
-              </Link>
-              <Link
-                href="/universities"
-                className="w-full sm:w-auto px-8 py-3.5 rounded-xl font-semibold text-sm text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all"
-              >
-                {t("homeCta.exploreUnis")}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CtaBanner />
     </div>
   );
 }
