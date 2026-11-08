@@ -85,61 +85,52 @@ export function TestimonialsCarousel() {
   const prevItem = testimonials[prevIndex];
   const nextItem = testimonials[nextIndex];
 
-  // Motion variants for center card changing animation (instant simultaneous slide & 3D tilt)
+  // Silky smooth, glitch-free sliding variants for the Center Active Card
   const centerCardVariants: Variants = {
     enter: (dir: number) => ({
-      x: dir > 0 ? 120 : -120,
+      x: dir > 0 ? "100%" : "-100%",
       opacity: 0,
-      scale: 0.92,
-      rotateY: dir > 0 ? 10 : -10,
+      scale: 0.94,
     }),
     center: {
-      x: 0,
+      x: "0%",
       opacity: 1,
       scale: 1,
-      rotateY: 0,
       transition: {
-        x: { type: "spring" as const, stiffness: 320, damping: 28, mass: 0.8 },
+        x: { type: "spring" as const, stiffness: 220, damping: 26, mass: 0.8 },
+        opacity: { duration: 0.28 },
         scale: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
-        opacity: { duration: 0.25 },
-        rotateY: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
       },
     },
     exit: (dir: number) => ({
-      x: dir > 0 ? -120 : 120,
+      x: dir > 0 ? "-100%" : "100%",
       opacity: 0,
-      scale: 0.92,
-      rotateY: dir > 0 ? -10 : 10,
+      scale: 0.94,
       transition: {
-        x: { type: "spring" as const, stiffness: 320, damping: 28, mass: 0.8 },
-        scale: { duration: 0.28, ease: "easeIn" },
-        opacity: { duration: 0.2 },
-        rotateY: { duration: 0.28 },
+        x: { type: "spring" as const, stiffness: 220, damping: 26, mass: 0.8 },
+        opacity: { duration: 0.22 },
+        scale: { duration: 0.25 },
       },
     }),
   };
 
-  // Motion variants for side flanking preview cards
+  // Silky smooth, glitch-free sliding variants for the Flanking Preview Cards
   const sideCardVariants: Variants = {
     enter: (dir: number) => ({
-      x: dir > 0 ? 50 : -50,
+      x: dir > 0 ? "40%" : "-40%",
       opacity: 0,
-      scale: 0.95,
     }),
     center: {
-      x: 0,
+      x: "0%",
       opacity: 1,
-      scale: 1,
       transition: {
-        x: { type: "spring" as const, stiffness: 280, damping: 26 },
+        x: { type: "spring" as const, stiffness: 220, damping: 26 },
         opacity: { duration: 0.25 },
-        scale: { duration: 0.28 },
       },
     },
     exit: (dir: number) => ({
-      x: dir > 0 ? -50 : 50,
+      x: dir > 0 ? "-40%" : "40%",
       opacity: 0,
-      scale: 0.95,
       transition: {
         duration: 0.2,
         ease: "easeIn",
@@ -179,8 +170,9 @@ export function TestimonialsCarousel() {
               onClick={prevSlide}
               className="hidden md:flex md:col-span-3 flex-col items-center cursor-pointer opacity-50 hover:opacity-90 transition-all duration-300 transform hover:-translate-x-1"
             >
-              <div className="w-full relative min-h-[230px] flex items-center justify-center">
-                <AnimatePresence mode="popLayout" custom={direction}>
+              {/* Stable Fixed-Height Container with Absolute Stacked Animation (No PopLayout Glitch) */}
+              <div className="w-full relative h-[230px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs">
+                <AnimatePresence initial={false} custom={direction}>
                   <motion.div
                     key={`prev-card-${prevItem.id}`}
                     custom={direction}
@@ -188,7 +180,7 @@ export function TestimonialsCarousel() {
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    className="w-full bg-white border border-[#E6E8F0] rounded-2xl sm:rounded-3xl p-6 shadow-xs min-h-[230px] flex flex-col justify-between text-center relative overflow-hidden"
+                    className="absolute inset-0 w-full h-full bg-white border border-[#E6E8F0] rounded-2xl sm:rounded-3xl p-6 flex flex-col justify-between text-center overflow-hidden"
                   >
                     <div className="text-slate-300 flex justify-center mb-2">
                       <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
@@ -208,8 +200,8 @@ export function TestimonialsCarousel() {
               </div>
 
               {/* Author Info Below Left Card */}
-              <div className="mt-4 text-center min-h-[42px] flex flex-col items-center justify-center">
-                <AnimatePresence mode="popLayout" custom={direction}>
+              <div className="mt-4 text-center h-[42px] relative w-full overflow-hidden flex flex-col items-center justify-center">
+                <AnimatePresence initial={false} custom={direction}>
                   <motion.div
                     key={`prev-author-${prevItem.id}`}
                     custom={direction}
@@ -217,18 +209,20 @@ export function TestimonialsCarousel() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: direction > 0 ? -20 : 20 }}
                     transition={{ duration: 0.22 }}
+                    className="absolute inset-0 flex flex-col items-center justify-center"
                   >
-                    <h4 className="text-sm font-bold text-[#111965]">{prevItem.author}</h4>
-                    <p className="text-[11px] text-[#68708A]">{prevItem.role}</p>
+                    <h4 className="text-sm font-bold text-[#111965] truncate w-full">{prevItem.author}</h4>
+                    <p className="text-[11px] text-[#68708A] truncate w-full">{prevItem.role}</p>
                   </motion.div>
                 </AnimatePresence>
               </div>
             </div>
 
-            {/* Active Center Card: Dynamically Changing Card with 3D Slide & Spring */}
+            {/* Active Center Card: Dynamically Changing Card with Glitch-Free Absolute Slide */}
             <div className="md:col-span-6 flex flex-col items-center z-10 w-full">
-              <div className="w-full relative min-h-[270px] sm:min-h-[300px] flex items-center justify-center">
-                <AnimatePresence mode="popLayout" custom={direction}>
+              {/* Stable Fixed-Height Container with Absolute Stacked Layers (Zero Glitch / Zero Jump) */}
+              <div className="w-full relative h-[280px] sm:h-[300px] rounded-3xl overflow-hidden shadow-[0_22px_55px_rgba(17,25,101,0.38)]">
+                <AnimatePresence initial={false} custom={direction}>
                   <motion.div
                     key={`center-card-${currentItem.id}`}
                     custom={direction}
@@ -246,23 +240,22 @@ export function TestimonialsCarousel() {
                         prevSlide();
                       }
                     }}
-                    className="w-full bg-gradient-to-br from-[#111965] via-[#151F75] to-[#1E277A] text-white rounded-3xl p-8 sm:p-10 shadow-[0_22px_55px_rgba(17,25,101,0.38)] min-h-[270px] sm:min-h-[300px] flex flex-col justify-between text-center relative border border-[#F7CE4D]/25 overflow-hidden cursor-grab active:cursor-grabbing select-none"
-                    style={{ perspective: 1000 }}
+                    className="absolute inset-0 w-full h-full bg-gradient-to-br from-[#111965] via-[#151F75] to-[#1E277A] text-white rounded-3xl p-7 sm:p-9 flex flex-col justify-between text-center border border-[#F7CE4D]/25 overflow-hidden cursor-grab active:cursor-grabbing select-none"
                   >
                     {/* Brand Gold Ambient Quotation Mark */}
-                    <div className="text-[#F7CE4D]/40 flex justify-center mb-2 shrink-0">
-                      <svg className="w-12 h-10 fill-current" viewBox="0 0 24 24">
+                    <div className="text-[#F7CE4D]/40 flex justify-center mb-1 shrink-0">
+                      <svg className="w-11 h-9 sm:w-12 sm:h-10 fill-current" viewBox="0 0 24 24">
                         <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                       </svg>
                     </div>
 
                     {/* Main Quote Text */}
-                    <p className="text-sm sm:text-base md:text-lg font-medium text-white leading-relaxed italic max-w-lg mx-auto my-auto">
+                    <p className="text-sm sm:text-base md:text-lg font-medium text-white leading-relaxed italic max-w-lg mx-auto my-auto line-clamp-4">
                       &ldquo;{currentItem.text}&rdquo;
                     </p>
 
                     {/* Rating Stars (Brand Accent Yellow #F7CE4D) */}
-                    <div className="mt-5 flex items-center justify-center gap-1 text-[#F7CE4D] shrink-0">
+                    <div className="mt-4 flex items-center justify-center gap-1 text-[#F7CE4D] shrink-0">
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star key={i} className="w-4 h-4 fill-current drop-shadow-xs" />
                       ))}
@@ -272,8 +265,8 @@ export function TestimonialsCarousel() {
               </div>
 
               {/* Author Info Underneath Center Card */}
-              <div className="mt-5 text-center min-h-[50px] flex flex-col items-center justify-center">
-                <AnimatePresence mode="popLayout" custom={direction}>
+              <div className="mt-5 text-center h-[50px] relative w-full overflow-hidden flex flex-col items-center justify-center">
+                <AnimatePresence initial={false} custom={direction}>
                   <motion.div
                     key={`center-author-${currentItem.id}`}
                     custom={direction}
@@ -281,12 +274,12 @@ export function TestimonialsCarousel() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: direction > 0 ? -30 : 30 }}
                     transition={{ duration: 0.25, ease: "easeOut" }}
-                    className="space-y-0.5"
+                    className="absolute inset-0 flex flex-col items-center justify-center space-y-0.5"
                   >
-                    <h3 className="text-base sm:text-lg font-black text-[#111965] tracking-tight">
+                    <h3 className="text-base sm:text-lg font-black text-[#111965] tracking-tight truncate w-full">
                       {currentItem.author}
                     </h3>
-                    <p className="text-xs sm:text-sm font-semibold text-[#68708A]">
+                    <p className="text-xs sm:text-sm font-semibold text-[#68708A] truncate w-full">
                       {currentItem.role}
                     </p>
                   </motion.div>
@@ -299,8 +292,9 @@ export function TestimonialsCarousel() {
               onClick={nextSlide}
               className="hidden md:flex md:col-span-3 flex-col items-center cursor-pointer opacity-50 hover:opacity-90 transition-all duration-300 transform hover:translate-x-1"
             >
-              <div className="w-full relative min-h-[230px] flex items-center justify-center">
-                <AnimatePresence mode="popLayout" custom={direction}>
+              {/* Stable Fixed-Height Container with Absolute Stacked Animation (No PopLayout Glitch) */}
+              <div className="w-full relative h-[230px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xs">
+                <AnimatePresence initial={false} custom={direction}>
                   <motion.div
                     key={`next-card-${nextItem.id}`}
                     custom={direction}
@@ -308,7 +302,7 @@ export function TestimonialsCarousel() {
                     initial="enter"
                     animate="center"
                     exit="exit"
-                    className="w-full bg-white border border-[#E6E8F0] rounded-2xl sm:rounded-3xl p-6 shadow-xs min-h-[230px] flex flex-col justify-between text-center relative overflow-hidden"
+                    className="absolute inset-0 w-full h-full bg-white border border-[#E6E8F0] rounded-2xl sm:rounded-3xl p-6 flex flex-col justify-between text-center overflow-hidden"
                   >
                     <div className="text-slate-300 flex justify-center mb-2">
                       <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
@@ -328,8 +322,8 @@ export function TestimonialsCarousel() {
               </div>
 
               {/* Author Info Below Right Card */}
-              <div className="mt-4 text-center min-h-[42px] flex flex-col items-center justify-center">
-                <AnimatePresence mode="popLayout" custom={direction}>
+              <div className="mt-4 text-center h-[42px] relative w-full overflow-hidden flex flex-col items-center justify-center">
+                <AnimatePresence initial={false} custom={direction}>
                   <motion.div
                     key={`next-author-${nextItem.id}`}
                     custom={direction}
@@ -337,9 +331,10 @@ export function TestimonialsCarousel() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: direction > 0 ? -20 : 20 }}
                     transition={{ duration: 0.22 }}
+                    className="absolute inset-0 flex flex-col items-center justify-center"
                   >
-                    <h4 className="text-sm font-bold text-[#111965]">{nextItem.author}</h4>
-                    <p className="text-[11px] text-[#68708A]">{nextItem.role}</p>
+                    <h4 className="text-sm font-bold text-[#111965] truncate w-full">{nextItem.author}</h4>
+                    <p className="text-[11px] text-[#68708A] truncate w-full">{nextItem.role}</p>
                   </motion.div>
                 </AnimatePresence>
               </div>
