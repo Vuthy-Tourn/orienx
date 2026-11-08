@@ -106,18 +106,16 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Cambodian University Campuses Landmark Skyline (Clean, Compact Height) */}
+      {/* Cambodian University Campuses Landmark Skyline (Full-Width Panorama) */}
       <div className="w-full relative overflow-hidden select-none bg-[#111965] -mb-1">
-        <div className="w-full flex justify-center">
-          <Image
-            src="/images/cambodia-campuses-skyline-clean.webp"
-            alt="Cambodian University Campuses - RUPP, Western University, CADT Innovation Center, ITC"
-            width={2048}
-            height={480}
-            priority={false}
-            className="w-full max-h-52 sm:max-h-64 lg:max-h-72 object-contain object-bottom"
-          />
-        </div>
+        <Image
+          src="/images/cambodia-campuses-skyline-clean.webp"
+          alt="Cambodian University Campuses - RUPP, Western University, CADT Innovation Center, ITC"
+          width={2048}
+          height={480}
+          priority={false}
+          className="w-full h-auto object-cover object-bottom"
+        />
       </div>
 
       {/* Bottom Copyright Bar */}
