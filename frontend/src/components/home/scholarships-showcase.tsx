@@ -319,7 +319,6 @@ export function ScholarshipsShowcase() {
                 <span className="text-xs font-black text-[#111965] tracking-widest tabular-nums mr-1">
                   {String(activeIndex + 1).padStart(2, "0")} / {String(scholarships.length).padStart(2, "0")}
                 </span>
-
                 <button
                   type="button"
                   onClick={handlePrev}
@@ -356,23 +355,18 @@ export function ScholarshipsShowcase() {
               RIGHT SIDE: 3D CARDSWAP DECK WITH STAGE LIGHTING & INTERACTIVE CUE
               ================================================================= */}
           <div className="lg:col-span-6 flex flex-col items-center justify-center relative">
-            {/* Interactive Drag & Swipe Helper Hint */}
-            <div className="mb-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 border border-[#E6E8F0] text-[11px] font-bold text-[#68708A] shadow-2xs backdrop-blur-xs animate-pulse">
-              <Hand className="w-3 h-3 text-[#111965]" />
-              <span>{language === "km" ? "អូស ឬចុចលើកាតដើម្បីប្តូរ" : "Drag or click cards to swap"}</span>
-            </div>
 
-            <div className="w-full max-w-[500px] h-[350px] sm:h-[370px] relative flex items-center justify-center">
+            <div className="w-full max-w-[620px] h-[400px] sm:h-[440px] lg:h-[460px] relative flex items-center justify-center">
               {/* Radial Pedestal Shadow Under 3D Stack */}
-              <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-[380px] h-[34px] bg-[#111965]/15 blur-xl rounded-full pointer-events-none" />
+              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[480px] h-[40px] bg-[#111965]/18 blur-2xl rounded-full pointer-events-none" />
 
               <CardSwap
                 ref={cardSwapRef}
-                width={470}
-                height={320}
-                cardDistance={48}
-                verticalDistance={36}
-                depth={80}
+                width={560}
+                height={380}
+                cardDistance={52}
+                verticalDistance={40}
+                depth={85}
                 skewAmount={5}
                 visibleCards={Math.min(3, scholarships.length)}
                 delay={4200}
@@ -380,7 +374,7 @@ export function ScholarshipsShowcase() {
                 pauseOnHover={true}
                 draggable={true}
                 theme="light"
-                cardRadius={22}
+                cardRadius={24}
                 onChange={(idx) => {
                   if (typeof idx === "number" && idx >= 0 && idx < scholarships.length) {
                     setActiveIndex(idx);
@@ -393,7 +387,7 @@ export function ScholarshipsShowcase() {
                   return (
                     <Card
                       key={s.id || s.slug}
-                      className="relative w-full h-full cursor-grab active:cursor-grabbing overflow-hidden border border-[#E6E8F0] bg-white shadow-lg group select-none touch-none"
+                      className="relative w-full h-full cursor-grab active:cursor-grabbing overflow-hidden border border-[#E6E8F0] bg-white shadow-xl group select-none touch-none"
                     >
                       <div className="relative w-full h-full bg-slate-900 overflow-hidden select-none pointer-events-none">
                         <Image
@@ -404,13 +398,13 @@ export function ScholarshipsShowcase() {
                           className="object-cover group-hover:scale-103 transition-transform duration-500 pointer-events-none select-none [-webkit-user-drag:none]"
                           priority={i === 0}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none select-none" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none select-none" />
 
                         {/* Top Floating Badge */}
                         {sMeta.badgeText && (
-                          <div className="absolute top-3.5 left-3.5 z-10 pointer-events-none">
+                          <div className="absolute top-4 left-4 z-10 pointer-events-none">
                             <span
-                              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black shadow-md ${sMeta.badgeColor}`}
+                              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black shadow-md ${sMeta.badgeColor}`}
                             >
                               <Sparkles className="w-3.5 h-3.5" />
                               <span>{sMeta.badgeText}</span>
@@ -419,11 +413,11 @@ export function ScholarshipsShowcase() {
                         )}
 
                         {/* Bottom Banner on Card */}
-                        <div className="absolute bottom-3.5 left-3.5 right-3.5 z-10 text-white space-y-1 pointer-events-none">
-                          <div className="text-[11px] font-bold text-[#F7CE4D] uppercase tracking-wider truncate">
+                        <div className="absolute bottom-4 left-4 right-4 z-10 text-white space-y-1.5 pointer-events-none">
+                          <div className="text-xs font-bold text-[#F7CE4D] uppercase tracking-wider truncate">
                             {getLocalized(s.provider)}
                           </div>
-                          <h4 className="text-sm sm:text-base font-black text-white leading-tight truncate">
+                          <h4 className="text-base sm:text-lg font-black text-white leading-tight truncate">
                             {getLocalized(s.title)}
                           </h4>
                         </div>
