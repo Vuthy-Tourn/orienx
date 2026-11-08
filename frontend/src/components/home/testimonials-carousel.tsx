@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useLanguage } from "@/contexts/language-context";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 
 interface TestimonialItem {
   id: number;
@@ -14,9 +14,12 @@ interface TestimonialItem {
 
 export function TestimonialsCarousel() {
   const { t } = useLanguage();
-  const [[activeIndex, direction], setSlide] = useState<[number, number]>([0, 1]);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(true);
+  const [windowWidth, setWindowWidth] = useState(1200);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const prevSlotsRef = useRef<{ [key: number]: number }>({});
 
   const testimonials: TestimonialItem[] = [
     {
@@ -53,16 +56,29 @@ export function TestimonialsCarousel() {
 
   const total = testimonials.length;
 
+  // Responsive window tracking
+  useEffect(() => {
+    const handleResize = () => {
+      const w = window.innerWidth;
+      setWindowWidth(w);
+      setIsDesktop(w >= 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const nextSlide = useCallback(() => {
-    setSlide(([prev]) => [(prev + 1) % total, 1]);
+    setActiveIndex((prev) => (prev + 1) % total);
   }, [total]);
 
   const prevSlide = useCallback(() => {
-    setSlide(([prev]) => [(prev - 1 + total) % total, -1]);
+    setActiveIndex((prev) => (prev - 1 + total) % total);
   }, [total]);
 
   const goToSlide = useCallback((index: number) => {
-    setSlide(([prev]) => [index, index >= prev ? 1 : -1]);
+    setActiveIndex(index);
   }, []);
 
   // Auto-slide effect (changes every 5.5 seconds, pauses on hover)
@@ -78,12 +94,40 @@ export function TestimonialsCarousel() {
     };
   }, [isPaused, nextSlide]);
 
-  const prevIndex = (activeIndex - 1 + total) % total;
-  const nextIndex = (activeIndex + 1) % total;
+  // Compute circular slot (-2, -1, 0, 1, 2)
+  const getSlot = useCallback(
+    (index: number) => {
+      let slot = (index - activeIndex) % total;
+      if (slot < -Math.floor(total / 2)) slot += total;
+      if (slot > Math.floor(total / 2)) slot -= total;
+      return slot;
+    },
+    [activeIndex, total]
+  );
 
-  const currentItem = testimonials[activeIndex];
-  const prevItem = testimonials[prevIndex];
-  const nextItem = testimonials[nextIndex];
+  // Synchronize previous slots after each render
+  useEffect(() => {
+    testimonials.forEach((item, index) => {
+      prevSlotsRef.current[item.id] = getSlot(index);
+    });
+  }, [activeIndex, getSlot, testimonials]);
+
+  // Calculate horizontal position for each slot
+  const getSlotX = (slot: number) => {
+    if (slot === 0) return 0;
+    if (isDesktop) {
+      const baseOffset = windowWidth >= 1200 ? 420 : windowWidth >= 1024 ? 370 : 320;
+      if (slot === 1) return baseOffset;
+      if (slot === -1) return -baseOffset;
+      if (slot === 2) return baseOffset * 2;
+      return -baseOffset * 2;
+    } else {
+      if (slot === 1) return "108%";
+      if (slot === -1) return "-108%";
+      if (slot === 2) return "210%";
+      return "-210%";
+    }
+  };
 
   return (
     <section
@@ -104,186 +148,160 @@ export function TestimonialsCarousel() {
           </p>
         </div>
 
-        {/* 3-Card Stage: Stable Anchored Cards with Smooth Inside Content Transition */}
+        {/* 3D Kinetic Carousel Stage: Cards Physically Slide and Swap Across Positions */}
         <div
           className="relative max-w-6xl mx-auto"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Main Cards Row */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 items-center">
-            {/* Left Flanking Card (Previous) */}
-            <div
-              onClick={prevSlide}
-              className="hidden md:flex md:col-span-3 flex-col items-center cursor-pointer opacity-50 hover:opacity-90 transition-all duration-300 transform hover:-translate-x-1"
-            >
-              <div className="w-full bg-white border border-[#E6E8F0] rounded-2xl sm:rounded-3xl p-6 shadow-xs min-h-[230px] flex flex-col justify-between text-center relative overflow-hidden">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`prev-content-${prevItem.id}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="w-full flex flex-col justify-between h-full flex-1"
+          {/* Main Stage Stage Container */}
+          <div className="relative w-full h-[370px] sm:h-[400px] flex items-center justify-center overflow-visible">
+            {testimonials.map((item, index) => {
+              const slot = getSlot(index);
+              const isCenter = slot === 0;
+              const isLeft = slot === -1;
+              const isRight = slot === 1;
+              const isVisible = isCenter || (isDesktop && (isLeft || isRight));
+
+              // Check if item wrapped around behind the scenes (slot -2 <-> +2)
+              const prevSlot = prevSlotsRef.current[item.id] ?? slot;
+              const isSeamWrap =
+                (prevSlot <= -2 && slot >= 2) || (prevSlot >= 2 && slot <= -2);
+
+              return (
+                <motion.div
+                  key={item.id}
+                  initial={false}
+                  animate={{
+                    x: getSlotX(slot),
+                    scale: isCenter ? 1 : Math.abs(slot) === 1 ? 0.86 : 0.7,
+                    opacity: isCenter ? 1 : Math.abs(slot) === 1 ? (isDesktop ? 0.65 : 0) : 0,
+                    zIndex: isCenter ? 30 : Math.abs(slot) === 1 ? 20 : 10,
+                    rotateY: isDesktop
+                      ? isCenter
+                        ? 0
+                        : slot === 1
+                        ? -6
+                        : slot === -1
+                        ? 6
+                        : 0
+                      : 0,
+                  }}
+                  transition={
+                    isSeamWrap
+                      ? { duration: 0 }
+                      : {
+                          x: { type: "spring", stiffness: 240, damping: 26, mass: 0.85 },
+                          scale: { duration: 0.42, ease: [0.22, 1, 0.36, 1] },
+                          opacity: { duration: 0.35 },
+                          rotateY: { duration: 0.42, ease: [0.22, 1, 0.36, 1] },
+                        }
+                  }
+                  drag={isCenter ? "x" : false}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.25}
+                  onDragEnd={(_, info) => {
+                    if (info.offset.x < -40 || info.velocity.x < -200) {
+                      nextSlide();
+                    } else if (info.offset.x > 40 || info.velocity.x > 200) {
+                      prevSlide();
+                    }
+                  }}
+                  onClick={() => {
+                    if (isLeft) prevSlide();
+                    if (isRight) nextSlide();
+                  }}
+                  className={`absolute w-[92vw] max-w-[420px] sm:max-w-[460px] md:max-w-[480px] lg:max-w-[500px] flex flex-col items-center select-none ${
+                    isCenter
+                      ? "cursor-grab active:cursor-grabbing"
+                      : isLeft || isRight
+                      ? "cursor-pointer hover:opacity-95 transition-opacity"
+                      : "pointer-events-none"
+                  }`}
+                  style={{
+                    perspective: 1000,
+                    visibility: isVisible || !isDesktop ? "visible" : "hidden",
+                  }}
+                >
+                  {/* The Testimonial Card Box with Dynamic Navy/White Crossfade */}
+                  <div
+                    className={`w-full rounded-3xl p-6 sm:p-8 min-h-[260px] sm:min-h-[280px] flex flex-col justify-between text-center relative overflow-hidden transition-all duration-500 ${
+                      isCenter
+                        ? "shadow-[0_22px_55px_rgba(17,25,101,0.38)]"
+                        : "shadow-xs hover:shadow-md"
+                    }`}
                   >
-                    <div className="text-slate-300 flex justify-center mb-2">
-                      <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
-                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                      </svg>
+                    {/* Navy Gradient Background Layer (Active) */}
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br from-[#111965] via-[#151F75] to-[#1E277A] border border-[#F7CE4D]/30 transition-opacity duration-500 rounded-3xl ${
+                        isCenter ? "opacity-100" : "opacity-0 pointer-events-none"
+                      }`}
+                    />
+
+                    {/* White Card Background Layer (Flanking) */}
+                    <div
+                      className={`absolute inset-0 bg-white border border-[#E6E8F0] transition-opacity duration-500 rounded-3xl ${
+                        isCenter ? "opacity-0 pointer-events-none" : "opacity-100"
+                      }`}
+                    />
+
+                    {/* Card Inner Content */}
+                    <div className="relative z-10 w-full flex flex-col justify-between h-full min-h-[200px] flex-1">
+                      {/* Quotation Mark Icon */}
+                      <div
+                        className={`flex justify-center mb-2 shrink-0 transition-colors duration-500 ${
+                          isCenter ? "text-[#F7CE4D]/40" : "text-slate-300"
+                        }`}
+                      >
+                        <svg className="w-10 h-8 sm:w-12 sm:h-10 fill-current" viewBox="0 0 24 24">
+                          <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                        </svg>
+                      </div>
+
+                      {/* Main Quote Text */}
+                      <p
+                        className={`text-xs sm:text-sm md:text-base font-medium leading-relaxed italic max-w-md mx-auto my-auto transition-colors duration-500 ${
+                          isCenter
+                            ? "text-white"
+                            : "text-[#68708A] line-clamp-4"
+                        }`}
+                      >
+                        &ldquo;{item.text}&rdquo;
+                      </p>
+
+                      {/* 5-Star Rating */}
+                      <div className="mt-4 flex items-center justify-center gap-1 text-[#F7CE4D] shrink-0">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-current drop-shadow-xs" />
+                        ))}
+                      </div>
                     </div>
-                    <p className="text-xs text-[#68708A] line-clamp-4 italic leading-relaxed my-auto">
-                      &ldquo;{prevItem.text}&rdquo;
-                    </p>
-                    <div className="mt-3 flex items-center justify-center gap-0.5 text-[#F7CE4D]">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className="w-3 h-3 fill-current" />
-                      ))}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                  </div>
 
-              {/* Author Info Below Left Card */}
-              <div className="mt-4 text-center min-h-[42px] flex flex-col items-center justify-center">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`prev-author-${prevItem.id}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                  >
-                    <h4 className="text-sm font-bold text-[#111965]">{prevItem.author}</h4>
-                    <p className="text-[11px] text-[#68708A]">{prevItem.role}</p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </div>
-
-            {/* Active Center Card: Firmly Anchored Navy Card with Smooth Inside Transitions */}
-            <div className="md:col-span-6 flex flex-col items-center z-10 w-full">
-              <div className="w-full bg-gradient-to-br from-[#111965] via-[#151F75] to-[#1E277A] text-white rounded-3xl p-8 sm:p-10 shadow-[0_22px_55px_rgba(17,25,101,0.38)] min-h-[270px] sm:min-h-[300px] flex flex-col justify-between text-center relative border border-[#F7CE4D]/25 overflow-hidden">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`center-quote-${currentItem.id}`}
-                    initial={{
-                      opacity: 0,
-                      y: direction > 0 ? 12 : -12,
-                      filter: "blur(3px)",
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                      filter: "blur(0px)",
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: direction > 0 ? -12 : 12,
-                      filter: "blur(3px)",
-                    }}
-                    transition={{
-                      duration: 0.38,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                    className="w-full flex flex-col justify-between items-center h-full min-h-[210px] flex-1"
-                  >
-                    {/* Brand Gold Ambient Quotation Mark */}
-                    <div className="text-[#F7CE4D]/40 flex justify-center mb-2 shrink-0">
-                      <svg className="w-12 h-10 fill-current" viewBox="0 0 24 24">
-                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                      </svg>
-                    </div>
-
-                    {/* Main Quote Text */}
-                    <p className="text-sm sm:text-base md:text-lg font-medium text-white leading-relaxed italic max-w-lg mx-auto my-auto">
-                      &ldquo;{currentItem.text}&rdquo;
-                    </p>
-
-                    {/* Rating Stars (Brand Accent Yellow #F7CE4D) */}
-                    <div className="mt-5 flex items-center justify-center gap-1 text-[#F7CE4D] shrink-0">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-current drop-shadow-xs" />
-                      ))}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              {/* Author Info Underneath Center Card */}
-              <div className="mt-5 text-center min-h-[50px] flex flex-col items-center justify-center">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`center-author-${currentItem.id}`}
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.28, ease: "easeOut" }}
-                    className="space-y-0.5"
-                  >
-                    <h3 className="text-base sm:text-lg font-black text-[#111965] tracking-tight">
-                      {currentItem.author}
+                  {/* Student Author Information Beneath Card (Slides Together with Card) */}
+                  <div className="mt-4 text-center min-h-[46px] flex flex-col items-center justify-center space-y-0.5">
+                    <h3
+                      className={`font-black text-[#111965] tracking-tight transition-all duration-500 ${
+                        isCenter ? "text-base sm:text-lg" : "text-sm text-[#111965]/75"
+                      }`}
+                    >
+                      {item.author}
                     </h3>
-                    <p className="text-xs sm:text-sm font-semibold text-[#68708A]">
-                      {currentItem.role}
+                    <p
+                      className={`font-semibold transition-all duration-500 ${
+                        isCenter ? "text-xs sm:text-sm text-[#68708A]" : "text-[11px] text-[#68708A]/75"
+                      }`}
+                    >
+                      {item.role}
                     </p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </div>
-
-            {/* Right Flanking Card (Next) */}
-            <div
-              onClick={nextSlide}
-              className="hidden md:flex md:col-span-3 flex-col items-center cursor-pointer opacity-50 hover:opacity-90 transition-all duration-300 transform hover:translate-x-1"
-            >
-              <div className="w-full bg-white border border-[#E6E8F0] rounded-2xl sm:rounded-3xl p-6 shadow-xs min-h-[230px] flex flex-col justify-between text-center relative overflow-hidden">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`next-content-${nextItem.id}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="w-full flex flex-col justify-between h-full flex-1"
-                  >
-                    <div className="text-slate-300 flex justify-center mb-2">
-                      <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
-                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                      </svg>
-                    </div>
-                    <p className="text-xs text-[#68708A] line-clamp-4 italic leading-relaxed my-auto">
-                      &ldquo;{nextItem.text}&rdquo;
-                    </p>
-                    <div className="mt-3 flex items-center justify-center gap-0.5 text-[#F7CE4D]">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star key={i} className="w-3 h-3 fill-current" />
-                      ))}
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-              {/* Author Info Below Right Card */}
-              <div className="mt-4 text-center min-h-[42px] flex flex-col items-center justify-center">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`next-author-${nextItem.id}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                  >
-                    <h4 className="text-sm font-bold text-[#111965]">{nextItem.author}</h4>
-                    <p className="text-[11px] text-[#68708A]">{nextItem.role}</p>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
 
           {/* Navigation Controls & Dot Indicators */}
-          <div className="mt-10 flex items-center justify-center gap-4">
+          <div className="mt-8 flex items-center justify-center gap-4">
             <button
               onClick={prevSlide}
               aria-label="Previous Testimonial"
@@ -292,7 +310,7 @@ export function TestimonialsCarousel() {
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            {/* Pagination Dots with Smooth Indicator */}
+            {/* Pagination Dots with Smooth Animated Indicator */}
             <div className="flex items-center gap-2">
               {testimonials.map((_, idx) => {
                 const isActive = idx === activeIndex;
