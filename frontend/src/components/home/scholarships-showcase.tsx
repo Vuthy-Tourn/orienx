@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import CardSwap, { Card, CardSwapHandle } from "@/components/ui/card-swap";
+import { motion, AnimatePresence } from "motion/react";
 import {
   Sparkles,
   Calendar,
@@ -15,6 +16,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Building2,
+  ShieldCheck,
+  Award,
+  CheckCircle2,
+  Hand,
 } from "lucide-react";
 
 // Official poster mappings for verified scholarships
@@ -39,7 +44,7 @@ interface ScholarshipApiItem {
 }
 
 export function ScholarshipsShowcase() {
-  const { t, getLocalized } = useLanguage();
+  const { t, getLocalized, language } = useLanguage();
   const cardSwapRef = useRef<CardSwapHandle>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
@@ -169,42 +174,77 @@ export function ScholarshipsShowcase() {
       id="scholarships-section"
       className="py-16 lg:py-24 bg-[#F8F9FC] text-[#111965] border-b border-[#E6E8F0] relative overflow-hidden select-none"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* =====================================================================
+          ATMOSPHERIC LIGHTING & SUBTLE TECH GRID BACKDROP
+          ===================================================================== */}
+      <div className="absolute inset-0 bg-[radial-gradient(#111965_1px,transparent_1px)] [background-size:28px_28px] opacity-[0.03] pointer-events-none" />
+      <div className="absolute -top-24 -left-20 w-[500px] h-[500px] bg-blue-400/12 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 -right-16 w-[550px] h-[450px] bg-[#F7CE4D]/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[420px] bg-[radial-gradient(ellipse_at_center,rgba(17,25,101,0.035),transparent_75%)] pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* =================================================================
-              LEFT SIDE: CLEAN EDITORIAL OVERVIEW (NO CLUTTER, ZERO HEIGHT JITTER)
+              LEFT SIDE: EDITORIAL SPOTLIGHT (SMOOTH SYNCED ANIMATIONS & TRUST PROOFS)
               ================================================================= */}
-          <div className="lg:col-span-6 flex flex-col justify-between min-h-[440px] sm:min-h-[460px] space-y-6">
-            {/* Dynamic Headline & Description */}
-            <div className="space-y-2.5">
-              <div className="min-h-[64px] sm:min-h-[72px] flex items-center">
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965] tracking-tight leading-[1.25] transition-opacity duration-300">
-                  {getLocalized(current?.title)}
-                </h2>
+          <div className="lg:col-span-6 flex flex-col justify-between min-h-[460px] space-y-6">
+            <div className="space-y-3.5">
+              {/* Category Eyebrow Badge with Pulsing Live Status */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#E6E8F0] shadow-2xs backdrop-blur-xs">
+                <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#111965]">
+                  {language === "km" ? "អាហារូបករណ៍ផ្លូវការដែលបានផ្ទៀងផ្ទាត់" : "VERIFIED SCHOLARSHIPS 2026"}
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
+                <span className="text-[10px] sm:text-[11px] font-bold text-emerald-700">
+                  {scholarships.length} {language === "km" ? "កម្មវិធីសកម្ម" : "Active Programs"}
+                </span>
               </div>
 
-              <div className="min-h-[44px] sm:min-h-[48px] flex items-start">
-                <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed line-clamp-2 transition-opacity duration-300">
-                  {getLocalized(current?.description)}
-                </p>
-              </div>
+              {/* Dynamic Headline & Description (Smooth Slide-Fade on Change) */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={current?.slug}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.28, ease: "easeOut" }}
+                  className="space-y-2"
+                >
+                  <h2 className="text-2xl sm:text-3xl lg:text-[2.1rem] font-extrabold text-[#111965] tracking-tight leading-[1.25]">
+                    {getLocalized(current?.title)}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed line-clamp-2">
+                    {getLocalized(current?.description)}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             {/* ===============================================================
-                BENEFIT SPOTLIGHT CARD (EXACTLY MATCHING USER SCREENSHOT)
+                BENEFIT SPOTLIGHT CARD
                 =============================================================== */}
-            <div className="rounded-2xl bg-white border border-[#E6E8F0] p-4 sm:p-5 shadow-xs space-y-3.5 min-h-[156px] flex flex-col justify-between">
+            <div className="rounded-2xl bg-white border border-[#E6E8F0] p-4 sm:p-5 shadow-xs space-y-3.5 min-h-[156px] flex flex-col justify-between relative overflow-hidden group">
               {/* Highlight Ribbon: Coverage & Badge */}
-              <div className="rounded-xl bg-gradient-to-r from-amber-500/10 via-[#F7CE4D]/15 to-transparent border border-[#F7CE4D]/40 p-3 sm:p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="rounded-xl bg-gradient-to-r from-amber-500/10 via-[#F7CE4D]/15 to-transparent border border-[#F7CE4D]/45 p-3 sm:p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="space-y-0.5">
                   <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-amber-900 flex items-center gap-1">
                     <Sparkles className="w-3 h-3 text-amber-600" />
                     <span>{t("scholarshipsShowcase.verifiedBenefit")}</span>
                   </span>
                   <div className="min-h-[26px] flex items-center">
-                    <div className="text-sm sm:text-base font-black text-[#111965] leading-snug">
-                      {meta.benefitText}
-                    </div>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={meta.benefitText}
+                        initial={{ opacity: 0, x: -6 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 6 }}
+                        transition={{ duration: 0.2 }}
+                        className="text-sm sm:text-base font-black text-[#111965] leading-snug"
+                      >
+                        {meta.benefitText}
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
                 </div>
 
@@ -212,7 +252,7 @@ export function ScholarshipsShowcase() {
                   <span
                     className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black shadow-2xs self-start sm:self-auto shrink-0 ${meta.badgeColor}`}
                   >
-                    <Sparkles className="w-3.5 h-3.5" />
+                    <Award className="w-3.5 h-3.5" />
                     <span>{meta.badgeText}</span>
                   </span>
                 )}
@@ -274,8 +314,12 @@ export function ScholarshipsShowcase() {
                 </Link>
               </div>
 
-              {/* 3D Swap Arrows: Lets User Trigger the 3D Physics Animation On Demand */}
-              <div className="flex items-center gap-1.5">
+              {/* 3D Swap Arrows & Dynamic Page Counter */}
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-black text-[#111965] tracking-widest tabular-nums mr-1">
+                  {String(activeIndex + 1).padStart(2, "0")} / {String(scholarships.length).padStart(2, "0")}
+                </span>
+
                 <button
                   type="button"
                   onClick={handlePrev}
@@ -294,13 +338,34 @@ export function ScholarshipsShowcase() {
                 </button>
               </div>
             </div>
+
+            {/* Trust Proof Micro-Badges */}
+            <div className="pt-2 border-t border-[#E6E8F0]/80 flex flex-wrap items-center gap-y-2 gap-x-5 text-[11px] text-[#68708A] font-semibold">
+              <span className="inline-flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <span>{language === "km" ? "ទិន្នន័យផ្លូវការពីក្រសួង និងដៃគូ" : "Verified Admissions Data"}</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#0284C7]" />
+                <span>{language === "km" ? "ឥតគិតថ្លៃ ១០០% សម្រាប់សិស្ស" : "100% Free For Students"}</span>
+              </span>
+            </div>
           </div>
 
           {/* =================================================================
-              RIGHT SIDE: 3D CARDSWAP DECK (RESPONSIVE DRAG & FLING ANIMATION)
+              RIGHT SIDE: 3D CARDSWAP DECK WITH STAGE LIGHTING & INTERACTIVE CUE
               ================================================================= */}
-          <div className="lg:col-span-6 flex justify-center lg:justify-end">
+          <div className="lg:col-span-6 flex flex-col items-center justify-center relative">
+            {/* Interactive Drag & Swipe Helper Hint */}
+            <div className="mb-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 border border-[#E6E8F0] text-[11px] font-bold text-[#68708A] shadow-2xs backdrop-blur-xs animate-pulse">
+              <Hand className="w-3 h-3 text-[#111965]" />
+              <span>{language === "km" ? "អូស ឬចុចលើកាតដើម្បីប្តូរ" : "Drag or click cards to swap"}</span>
+            </div>
+
             <div className="w-full max-w-[500px] h-[350px] sm:h-[370px] relative flex items-center justify-center">
+              {/* Radial Pedestal Shadow Under 3D Stack */}
+              <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-[380px] h-[34px] bg-[#111965]/15 blur-xl rounded-full pointer-events-none" />
+
               <CardSwap
                 ref={cardSwapRef}
                 width={470}
