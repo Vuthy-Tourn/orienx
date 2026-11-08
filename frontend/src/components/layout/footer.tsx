@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Logo } from "@/components/layout/logo";
 
 export function Footer() {
@@ -103,18 +104,34 @@ export function Footer() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+      {/* Cambodian University Campuses Landmark Skyline */}
+      <div className="w-full relative overflow-hidden select-none bg-[#111965] -mb-1">
+        <div className="w-full">
+          <Image
+            src="/images/cambodia-campuses-skyline-seamless.webp"
+            alt="Cambodian University Campuses - RUPP, Western University, CADT Innovation Center, ITC"
+            width={2048}
+            height={1024}
+            priority={false}
+            className="w-full h-auto object-cover object-bottom"
+          />
+        </div>
+      </div>
+
+      {/* Bottom Copyright Bar */}
+      <div className="bg-[#0D144F] border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <p>© {new Date().getFullYear()} OrienX Platform. Discover Your Direction. Shape Your Future.</p>
           <div className="flex items-center gap-6">
-            <Link href="/about" className="hover:text-white">
+            <Link href="/about" className="hover:text-white transition-colors">
               About Methodology
             </Link>
-            <Link href="/about#privacy" className="hover:text-white">
+            <Link href="/about#privacy" className="hover:text-white transition-colors">
               Data Privacy
             </Link>
-            <Link href="/about#terms" className="hover:text-white">
+            <Link href="/about#terms" className="hover:text-white transition-colors">
               Terms of Guidance
             </Link>
           </div>
