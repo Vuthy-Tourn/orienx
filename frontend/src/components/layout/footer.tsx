@@ -110,7 +110,7 @@ export function Footer() {
       <div className="w-full relative overflow-hidden select-none bg-[#111965] -mb-1">
         <div className="w-full">
           <Image
-            src="/images/cambodia-campuses-skyline-seamless.webp"
+            src="/images/cambodia-campuses-skyline-transparent.webp"
             alt="Cambodian University Campuses - RUPP, Western University, CADT Innovation Center, ITC"
             width={2048}
             height={1024}
