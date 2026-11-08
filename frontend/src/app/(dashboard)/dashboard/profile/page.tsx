@@ -9,7 +9,7 @@ import { User as UserIcon, Save, CheckCircle2, MapPin, GraduationCap } from "luc
 
 export default function ProfileSettingsPage() {
   const { user, refreshUser } = useAuth();
-  const { language } = useLanguage();
+  const { t } = useLanguage();
   const queryClient = useQueryClient();
 
   const [fullNameEn, setFullNameEn] = useState("");
@@ -65,10 +65,10 @@ export default function ProfileSettingsPage() {
     <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in">
       <div className="space-y-1">
         <h1 className="text-xl sm:text-3xl font-extrabold text-[#111965]">
-          {language === "km" ? "ការកំណត់គណនី និងប្រវត្តិរូប" : "Student Profile & Account Settings"}
+          {t("profileSettings.title")}
         </h1>
         <p className="text-xs sm:text-sm text-[#68708A]">
-          Manage your student information, province, and educational background.
+          {t("profileSettings.subtitle")}
         </p>
       </div>
 
@@ -76,14 +76,14 @@ export default function ProfileSettingsPage() {
         {successMsg && (
           <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>Profile settings saved successfully!</span>
+            <span>{t("profileSettings.successMsg")}</span>
           </div>
         )}
 
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-bold text-[#171A2C]">Full Name (English)</label>
+              <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.fullNameEn")}</label>
               <input
                 type="text"
                 value={fullNameEn}
@@ -93,7 +93,7 @@ export default function ProfileSettingsPage() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-bold text-[#171A2C]">Khmer Name</label>
+              <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.fullNameKm")}</label>
               <input
                 type="text"
                 value={fullNameKm}
@@ -104,7 +104,7 @@ export default function ProfileSettingsPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-bold text-[#171A2C]">Email Address (Account Identifier)</label>
+            <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.email")}</label>
             <input
               type="email"
               disabled
@@ -115,7 +115,7 @@ export default function ProfileSettingsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-xs font-bold text-[#171A2C]">Province / City</label>
+              <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.province")}</label>
               <select
                 value={province}
                 onChange={(e) => setProvince(e.target.value)}
@@ -131,7 +131,7 @@ export default function ProfileSettingsPage() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-bold text-[#171A2C]">Education Level</label>
+              <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.educationLevel")}</label>
               <select
                 value={educationLevel}
                 onChange={(e) => setEducationLevel(e.target.value)}
@@ -146,12 +146,12 @@ export default function ProfileSettingsPage() {
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs font-bold text-[#171A2C]">High School Name</label>
+            <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.highSchool")}</label>
             <input
               type="text"
               value={highSchool}
               onChange={(e) => setHighSchool(e.target.value)}
-              placeholder="e.g. Hun Sen Bak Touk High School"
+              placeholder={t("profileSettings.highSchoolPlaceholder")}
               className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] focus:outline-hidden focus:border-[#111965]"
             />
           </div>
@@ -164,7 +164,7 @@ export default function ProfileSettingsPage() {
             className="px-6 py-2.5 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-2xs flex items-center gap-2"
           >
             <Save className="w-4 h-4" />
-            <span>{saving ? "Saving..." : "Save Profile Settings"}</span>
+            <span>{saving ? t("profileSettings.saving") : t("profileSettings.saveBtn")}</span>
           </button>
         </div>
       </div>

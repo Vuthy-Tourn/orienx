@@ -2,11 +2,12 @@
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/language-context";
 
 interface Scale16pProps {
   value: number | null; // 1 to 7 (1: Strong Agree ... 4: Neutral ... 7: Strong Disagree)
   onChange: (value: number) => void;
-  language: "en" | "km";
+  language?: "en" | "km";
   agreeLabelEn?: string;
   agreeLabelKm?: string;
   disagreeLabelEn?: string;
@@ -119,12 +120,12 @@ const SCALE_STEPS: StepConfig[] = [
 export function Scale16p({
   value,
   onChange,
-  language,
   agreeLabelEn = "Agree",
   agreeLabelKm = "យល់ស្រប",
   disagreeLabelEn = "Disagree",
   disagreeLabelKm = "មិនយល់ស្រប",
 }: Scale16pProps) {
+  const { t, getLocalized } = useLanguage();
   const [hovered, setHovered] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -257,7 +258,7 @@ export function Scale16p({
             <span className="relative inline-flex rounded-full h-3 w-3 bg-[#0284C7]" />
           </span>
           <span className="text-sm sm:text-base font-black text-sky-800 tracking-tight">
-            {language === "km" ? agreeLabelKm : agreeLabelEn}
+            {getLocalized({ km: agreeLabelKm, en: agreeLabelEn })}
           </span>
         </button>
 
@@ -268,7 +269,7 @@ export function Scale16p({
           onClick={() => onChange(7)}
         >
           <span className="text-sm sm:text-base font-black text-rose-800 tracking-tight">
-            {language === "km" ? disagreeLabelKm : disagreeLabelEn}
+            {getLocalized({ km: disagreeLabelKm, en: disagreeLabelEn })}
           </span>
           <span className="flex h-3 w-3 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-60" />
@@ -302,8 +303,8 @@ export function Scale16p({
                     ? `${step.idleBg} ${step.idleBorder} -translate-y-1 scale-105 shadow-md z-0`
                     : `${step.idleBg} ${step.idleBorder} shadow-2xs hover:shadow-sm z-0`
                 }`}
-                title={language === "km" ? step.labelKm : step.labelEn}
-                aria-label={language === "km" ? step.labelKm : step.labelEn}
+                title={getLocalized({ km: step.labelKm, en: step.labelEn })}
+                aria-label={getLocalized({ km: step.labelKm, en: step.labelEn })}
               >
                 {/* Expressive Emoticon matching the reference cards */}
                 <div
@@ -339,9 +340,7 @@ export function Scale16p({
         aria-valuenow={value ?? 4}
         aria-valuetext={
           currentStep
-            ? language === "km"
-              ? currentStep.labelKm
-              : currentStep.labelEn
+            ? getLocalized({ km: currentStep.labelKm, en: currentStep.labelEn })
             : undefined
         }
         onKeyDown={handleKeyDown}
@@ -410,15 +409,13 @@ export function Scale16p({
             }}
           >
             <span>
-              {language === "km" ? currentStep.labelKm : currentStep.labelEn}
+              {getLocalized({ km: currentStep.labelKm, en: currentStep.labelEn })}
             </span>
           </div>
         ) : (
           <div className="inline-flex items-center text-xs font-semibold text-slate-400">
             <span>
-              {language === "km"
-                ? "សូមជ្រើសរើសជម្រើសដែលត្រូវនឹងអ្នក"
-                : "Choose the option that best reflects you"}
+              {t("scale16p.chooseOption")}
             </span>
           </div>
         )}

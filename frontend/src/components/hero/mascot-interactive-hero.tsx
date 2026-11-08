@@ -12,13 +12,14 @@ import {
 import TechText from "@/components/react-bits/tech-text";
 
 export function MascotInteractiveHero() {
-  const { language } = useLanguage();
+  const { t, getLocalized } = useLanguage();
+  const [currentIdx, setCurrentIdx] = useState(0);
   const [displayedSpeech, setDisplayedSpeech] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [taraBounce, setTaraBounce] = useState(false);
-  const [clickCount, setClickCount] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
-  // Conversational dialogues from Tara
+  // Conversational dialogues from Tara (rotating automatically)
   const greetings = [
     {
       km: "សួស្តី! ខ្ញុំគឺ Tara 🌟 មកស្វែងរកជំនាញ និងសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុតសម្រាប់អ្នកទាំងអស់គ្នា!",
@@ -38,8 +39,8 @@ export function MascotInteractiveHero() {
     },
   ];
 
-  const currentDialogue = greetings[clickCount % greetings.length];
-  const targetText = language === "km" ? currentDialogue.km : currentDialogue.en;
+  const currentDialogue = greetings[currentIdx % greetings.length];
+  const targetText = getLocalized(currentDialogue);
 
   // Smooth typewriter effect
   useEffect(() => {
@@ -47,18 +48,32 @@ export function MascotInteractiveHero() {
     setDisplayedSpeech("");
 
     let i = 0;
-    const interval = setInterval(() => {
+    const typeInterval = setInterval(() => {
       if (i < targetText.length) {
         setDisplayedSpeech(targetText.slice(0, i + 1));
         i++;
       } else {
         setIsTyping(false);
-        clearInterval(interval);
+        clearInterval(typeInterval);
       }
-    }, 18);
+    }, 20);
 
-    return () => clearInterval(interval);
+    return () => clearInterval(typeInterval);
   }, [targetText]);
+
+  // Once typing completes, leave a moment for the user to read (4.2 seconds), then automatically rotate to the next message
+  useEffect(() => {
+    if (isTyping || isPaused) return;
+
+    const readTimer = setTimeout(() => {
+      // Gentle Tara bounce when speaking a new message
+      setTaraBounce(true);
+      setTimeout(() => setTaraBounce(false), 450);
+      setCurrentIdx((prev) => (prev + 1) % greetings.length);
+    }, 4200);
+
+    return () => clearTimeout(readTimer);
+  }, [isTyping, isPaused, currentIdx]);
 
   // Highlight Tara's name in speech
   const renderFormattedSpeech = (text: string) => {
@@ -75,10 +90,10 @@ export function MascotInteractiveHero() {
     return text;
   };
 
-  const handleMascotClick = () => {
+  const advanceDialogue = () => {
     setTaraBounce(true);
-    setClickCount((prev) => prev + 1);
-    setTimeout(() => setTaraBounce(false), 500);
+    setTimeout(() => setTaraBounce(false), 450);
+    setCurrentIdx((prev) => (prev + 1) % greetings.length);
   };
 
   return (
@@ -93,14 +108,10 @@ export function MascotInteractiveHero() {
               LEFT COLUMN: CLEAN, CONFIDENT EDITORIAL HEADLINE & ACTIONS
               =================================================================== */}
           <div className="lg:col-span-6 space-y-6 text-left">
-            {/* Verified Badge Pill (Matches Cambodia Universities badge design) */}
+            {/* Verified Badge Pill */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-              <span>
-                {language === "km"
-                  ? "ព័ត៌មានផ្ទៀងផ្ទាត់ផ្លូវការពីសាកលវិទ្យាល័យ"
-                  : "Information verified from official admissions portals"}
-              </span>
+              <span>{t("universitiesSection.verifiedNotice")}</span>
             </div>
 
             {/* Interactive TechText Brand Wordmark */}
@@ -124,17 +135,12 @@ export function MascotInteractiveHero() {
 
             {/* Main Editorial Headline */}
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#111965] tracking-tight leading-[1.25]">
-              {language === "km"
-                ? "អនាគតរបស់អ្នក ចាប់ផ្តើមពីការស្គាល់ខ្លួនឯង"
-                : "Your Future Starts With Understanding Yourself"}
-              <span className="text-[#F69D0D]">.</span>
+              {t("hero.title")}
             </h1>
 
             {/* Subtitle */}
             <p className="text-sm sm:text-base text-[#68708A] max-w-xl font-normal leading-relaxed">
-              {language === "km"
-                ? "ស្វែងយល់ពីចំណាប់អារម្មណ៍ បុគ្គលិកលក្ខណៈ ជំនាញសាកលវិទ្យាល័យ និងឱកាសការងារដែលស័ក្តិសមបំផុតសម្រាប់អ្នកនៅកម្ពុជា។"
-                : "Discover your unique strengths, explore verified Cambodian university majors, and find the career path tailored to you."}
+              {t("hero.subtitle")}
             </p>
 
             {/* Action CTAs */}
@@ -143,7 +149,7 @@ export function MascotInteractiveHero() {
                 href="/dashboard/assessments/personality"
                 className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base text-slate-950 bg-[#F69D0D] hover:bg-[#E58F0C] shadow-sm hover:shadow-md transition-all active:scale-98"
               >
-                <span>{language === "km" ? "ចាប់ផ្តើមឥតគិតថ្លៃ" : "Start Free Assessment"}</span>
+                <span>{t("mascotHero.startFree")}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
 
@@ -152,7 +158,7 @@ export function MascotInteractiveHero() {
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm sm:text-base text-[#111965] bg-white hover:bg-slate-50 border border-[#E6E8F0] shadow-2xs hover:shadow-xs transition-all"
               >
                 <Compass className="w-4 h-4 text-[#68708A]" />
-                <span>{language === "km" ? "ស្វែងរកសាកលវិទ្យាល័យ" : "Explore Universities"}</span>
+                <span>{t("mascotHero.exploreUniversities")}</span>
               </Link>
             </div>
 
@@ -160,48 +166,72 @@ export function MascotInteractiveHero() {
             <div className="pt-6 border-t border-[#E6E8F0] flex flex-wrap items-center gap-6 text-xs font-medium text-[#68708A]">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                <span>{language === "km" ? "ព័ត៌មានផ្ទៀងផ្ទាត់ផ្លូវការ" : "Verified University Info"}</span>
+                <span>{t("mascotHero.verifiedInfo")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                <span>{language === "km" ? "តេស្ត Holland & MBTI" : "Holland & MBTI Engine"}</span>
+                <span>{t("mascotHero.hollandEngine")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                <span>{language === "km" ? "ឥតគិតថ្លៃ ១០០%" : "100% Free For Students"}</span>
+                <span>{t("mascotHero.freeForStudents")}</span>
               </div>
             </div>
           </div>
 
           {/* ===================================================================
               RIGHT COLUMN: TARA MASCOT WITH NATURAL, FLOATING CONVERSATIONAL BUBBLE
-              (Positioned naturally to the upper-left of Tara — NOT stuck on her head!)
               =================================================================== */}
           <div className="lg:col-span-6 flex flex-col items-center justify-center relative min-h-[440px] sm:min-h-[480px]">
             <div className="relative w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center">
               {/* Natural Conversational Speech Bubble (Floating to the upper-left of Tara) */}
-              <div className="w-full lg:absolute lg:-top-6 lg:-left-6 xl:-left-12 z-20 max-w-sm sm:max-w-[340px] mb-4 lg:mb-0">
-                <div className="relative rounded-2xl bg-white border border-[#E6E8F0] shadow-[0_12px_28px_rgba(17,25,101,0.06)] p-4 transition-all hover:shadow-md">
-                  {/* Subtle Bubble Header */}
+              <div
+                className="w-full lg:absolute lg:-top-6 lg:-left-6 xl:-left-12 z-20 max-w-sm sm:max-w-[340px] mb-4 lg:mb-0 cursor-pointer"
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+                onClick={advanceDialogue}
+                title={t("mascotHero.nextTip")}
+              >
+                <div className="relative rounded-2xl bg-white border border-[#E6E8F0] shadow-[0_12px_28px_rgba(17,25,101,0.06)] p-4 transition-all hover:shadow-md hover:border-amber-200">
+                  {/* Subtle Bubble Header with Dialogue Indicator Dots */}
                   <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-100">
                     <div className="flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                       <span className="text-xs font-bold text-[#111965]">
-                        {language === "km" ? "Tara • ជំនួយការតម្រង់ទិស" : "Tara • AI Career Guide"}
+                        {t("mascotHero.guideBadge")}
                       </span>
                     </div>
-                    <span className="text-[10px] font-semibold text-[#68708A] bg-slate-50 px-2 py-0.5 rounded-full border border-slate-200/60">
-                      {language === "km" ? "ចុចលើ Tara 👋" : "Tap Tara 👋"}
-                    </span>
+
+                    {/* Interactive Carousel Progress Dots */}
+                    <div className="flex items-center gap-1">
+                      {greetings.map((_, i) => (
+                        <span
+                          key={i}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentIdx(i);
+                            setTaraBounce(true);
+                            setTimeout(() => setTaraBounce(false), 450);
+                          }}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                            i === currentIdx % greetings.length
+                              ? "w-4 bg-[#F69D0D]"
+                              : "w-1.5 bg-slate-200 hover:bg-slate-300"
+                          }`}
+                        />
+                      ))}
+                    </div>
                   </div>
 
-                  {/* Speech Message */}
-                  <p className="text-xs sm:text-[13px] font-semibold text-[#111965] leading-relaxed">
-                    {renderFormattedSpeech(displayedSpeech)}
-                    {isTyping && (
-                      <span className="inline-block w-1.5 h-3 ml-1 bg-[#F69D0D] animate-pulse rounded-full align-middle" />
-                    )}
-                  </p>
+                  {/* Speech Message (Auto-types and rotates with read delay) */}
+                  <div className="min-h-[50px] flex items-center">
+                    <p className="text-xs sm:text-[13px] font-semibold text-[#111965] leading-relaxed">
+                      {renderFormattedSpeech(displayedSpeech)}
+                      {isTyping && (
+                        <span className="inline-block w-1.5 h-3 ml-1 bg-[#F69D0D] animate-pulse rounded-full align-middle" />
+                      )}
+                    </p>
+                  </div>
 
                   {/* Downward-Right Tail pointing toward Tara's shoulder/face */}
                   <div className="hidden lg:block absolute -bottom-2.5 right-8 pointer-events-none">
@@ -215,7 +245,7 @@ export function MascotInteractiveHero() {
 
               {/* Large Crisp Tara Mascot */}
               <div
-                onClick={handleMascotClick}
+                onClick={advanceDialogue}
                 className="relative flex flex-col items-center group cursor-pointer select-none lg:ml-20 xl:ml-28"
                 title="Tap Tara to wave!"
               >

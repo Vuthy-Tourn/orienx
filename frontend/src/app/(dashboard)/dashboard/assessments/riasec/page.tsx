@@ -25,7 +25,7 @@ import {
 } from "recharts";
 
 export default function RiasecAssessmentPage() {
-  const { language } = useLanguage();
+  const { t, getLocalized } = useLanguage();
   const queryClient = useQueryClient();
 
   const [activeTab, setActiveTab] = useState<"form" | "results">("form");
@@ -88,7 +88,7 @@ export default function RiasecAssessmentPage() {
       rating: val,
     }));
     if (formatted.length < questions.length) {
-      alert(language === "km" ? "សូមវាយតម្លៃគ្រប់សកម្មភាពទាំង ១៨ មុនពេលបញ្ចប់" : "Please rate all 18 activities before submitting");
+      alert(t("riasecAssessment.rateAllAlert"));
       return;
     }
     submitRiasec(formatted);
@@ -102,7 +102,7 @@ export default function RiasecAssessmentPage() {
   if (loadingQuestions || loadingLatest) {
     return (
       <div className="py-20 text-center text-sm text-[#68708A]">
-        {language === "km" ? "កំពុងទាញយកសំណួរ RIASEC..." : "Loading RIASEC assessment..."}
+        {t("riasecAssessment.loading")}
       </div>
     );
   }
@@ -126,14 +126,14 @@ export default function RiasecAssessmentPage() {
         <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#111965] to-[#1E277A] text-white shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#F7CE4D] text-[#111965] uppercase tracking-wider">
-              Holland RIASEC Profile
+              {t("riasecAssessment.hollandProfile")}
             </span>
             <button
               onClick={handleRetake}
               className="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>{language === "km" ? "ធ្វើតេស្តឡើងវិញ" : "Retake Test"}</span>
+              <span>{t("riasecAssessment.retakeTest")}</span>
             </button>
           </div>
 
@@ -142,7 +142,7 @@ export default function RiasecAssessmentPage() {
               {res?.holland_code}
             </div>
             <p className="text-xs sm:text-sm text-slate-300">
-              {language === "km" ? res?.analysis_km?.interpretation : res?.analysis_en?.interpretation}
+              {getLocalized({ km: res?.analysis_km?.interpretation, en: res?.analysis_en?.interpretation })}
             </p>
           </div>
         </div>
@@ -150,7 +150,7 @@ export default function RiasecAssessmentPage() {
         {/* Visual Radar Chart */}
         <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-2xs space-y-4">
           <h3 className="text-base font-extrabold text-[#111965]">
-            {language === "km" ? "គំនូសតាងរ៉ាដាចំណាប់អារម្មណ៍អាជីព (Holland Radar Fit)" : "Interest Dimensions Radar"}
+            {t("riasecAssessment.radarTitle")}
           </h3>
           <div className="w-full h-72">
             <ResponsiveContainer width="100%" height="100%">
@@ -178,17 +178,17 @@ export default function RiasecAssessmentPage() {
         <div className="p-6 rounded-2xl bg-[#F0F2FA] border border-[#111965]/20 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <h4 className="text-sm font-bold text-[#111965]">
-              {language === "km" ? "ជំហានបន្ទាប់៖ បញ្ជាក់ចំណូលចិត្តការសិក្សា និងថវិកា" : "Next Step: Academic Preferences & Budget"}
+              {t("riasecAssessment.nextStepTitle")}
             </h4>
             <p className="text-xs text-[#68708A]">
-              Fine-tune your recommendations by sharing favorite subjects and location preferences.
+              {t("riasecAssessment.nextStepSubtitle")}
             </p>
           </div>
           <Link
             href="/dashboard/assessments/preferences"
             className="px-5 py-2.5 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-2xs flex items-center gap-1.5 whitespace-nowrap"
           >
-            <span>{language === "km" ? "បន្តទៅចំណូលចិត្ត" : "Set Preferences"}</span>
+            <span>{t("riasecAssessment.nextStepBtn")}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -210,12 +210,10 @@ export default function RiasecAssessmentPage() {
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <h1 className="text-xl sm:text-2xl font-extrabold text-[#111965]">
-              {language === "km" ? "តេស្តចំណាប់អារម្មណ៍អាជីព RIASEC" : "RIASEC Career Interest Assessment"}
+              {t("riasecAssessment.title")}
             </h1>
             <p className="text-xs text-[#68708A]">
-              {language === "km"
-                ? "សូមវាយតម្លៃកម្រិតចំណាប់អារម្មណ៍របស់អ្នកលើសកម្មភាពនីមួយៗ (១ = មិនចូលចិត្តទាល់តែសោះ, ៥ = ចូលចិត្តខ្លាំង)"
-                : "Rate your level of enjoyment for each activity (1 = Dislike, 5 = Highly Enjoy)"}
+              {t("riasecAssessment.subtitle")}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -224,10 +222,10 @@ export default function RiasecAssessmentPage() {
               onClick={handleQuickPrefill}
               className="px-3 py-1.5 rounded-xl text-[11px] font-semibold text-[#111965] bg-[#F0F2FA] hover:bg-[#E6E8F0] transition-colors"
             >
-              ⚡ Demo Autofill
+              {t("riasecAssessment.demoAutofill")}
             </button>
             <div className="text-xs font-bold text-[#111965] bg-[#F0F2FA] px-3 py-1.5 rounded-full">
-              {answeredCount} / {questions.length} Rated ({progressPercent}%)
+              {answeredCount} / {questions.length} {t("riasecAssessment.ratedOf")} ({progressPercent}%)
             </div>
           </div>
         </div>
@@ -260,7 +258,7 @@ export default function RiasecAssessmentPage() {
                       {idx + 1}
                     </span>
                     <span className="text-xs sm:text-sm font-semibold text-[#171A2C] leading-relaxed">
-                      {language === "km" ? q.prompt_km : q.prompt_en}
+                      {getLocalized({ km: q.prompt_km, en: q.prompt_en })}
                     </span>
                   </div>
                 </div>
@@ -269,7 +267,6 @@ export default function RiasecAssessmentPage() {
                 <ResonanceGauge
                   value={currentVal}
                   onChange={(val) => handleRatingChange(q.id, val)}
-                  language={language}
                 />
               </div>
             </div>
@@ -281,8 +278,8 @@ export default function RiasecAssessmentPage() {
       <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] flex items-center justify-between shadow-xs">
         <span className="text-xs text-[#68708A]">
           {answeredCount === questions.length
-            ? (language === "km" ? "រួចរាល់សម្រាប់ការគណនា Holland Code!" : "Ready to calculate Holland code!")
-            : (language === "km" ? `នៅសល់ ${questions.length - answeredCount} សកម្មភាពមិនទាន់វាយតម្លៃ` : `${questions.length - answeredCount} activities left to rate`)}
+            ? t("riasecAssessment.readyCalculate")
+            : `${questions.length - answeredCount} ${t("riasecAssessment.activitiesLeft")}`}
         </span>
 
         <button
@@ -290,7 +287,7 @@ export default function RiasecAssessmentPage() {
           disabled={answeredCount < questions.length || submitting}
           className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] disabled:opacity-40 shadow-sm"
         >
-          <span>{submitting ? "Calculating..." : language === "km" ? "គណនា Holland Code" : "Submit & View Profile"}</span>
+          <span>{submitting ? t("riasecAssessment.calculating") : t("riasecAssessment.submitBtn")}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

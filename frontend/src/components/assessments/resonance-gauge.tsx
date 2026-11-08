@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
+import { useLanguage } from "@/contexts/language-context";
 
 interface ResonanceGaugeProps {
   value?: number; // 1 to 5
   onChange: (value: number) => void;
-  language: "en" | "km";
+  language?: "en" | "km";
 }
 
 const RESONANCE_STEPS = [
@@ -66,7 +67,8 @@ const RESONANCE_STEPS = [
   },
 ];
 
-export function ResonanceGauge({ value, onChange, language }: ResonanceGaugeProps) {
+export function ResonanceGauge({ value, onChange }: ResonanceGaugeProps) {
+  const { t, getLocalized } = useLanguage();
   const [hovered, setHovered] = useState<number | null>(null);
   const activeStep = RESONANCE_STEPS.find((s) => s.level === (hovered ?? value));
 
@@ -174,7 +176,7 @@ export function ResonanceGauge({ value, onChange, language }: ResonanceGaugeProp
                     isSelected ? "text-[#111965]" : "text-slate-400 group-hover:text-slate-600"
                   }`}
                 >
-                  {language === "km" ? step.labelKm : step.labelEn}
+                  {getLocalized({ km: step.labelKm, en: step.labelEn })}
                 </span>
               </div>
             );
@@ -196,10 +198,10 @@ export function ResonanceGauge({ value, onChange, language }: ResonanceGaugeProp
       >
         <div className="flex items-center gap-2 overflow-hidden">
           <span className="font-bold text-xs flex-shrink-0">
-            {activeStep ? (language === "km" ? activeStep.labelKm : activeStep.labelEn) : "Select Your Stance"}
+            {activeStep ? getLocalized({ km: activeStep.labelKm, en: activeStep.labelEn }) : t("resonanceGauge.selectStance")}
           </span>
           <span className="text-[11px] opacity-75 truncate hidden sm:inline">
-            — {activeStep ? (language === "km" ? activeStep.descKm : activeStep.descEn) : "Click a point along your resonance spectrum"}
+            — {activeStep ? getLocalized({ km: activeStep.descKm, en: activeStep.descEn }) : t("resonanceGauge.clickPoint")}
           </span>
         </div>
 

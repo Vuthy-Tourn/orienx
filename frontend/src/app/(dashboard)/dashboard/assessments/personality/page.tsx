@@ -60,7 +60,7 @@ const DIMENSION_TITLES: Record<
 };
 
 export default function PersonalityAssessmentPage() {
-  const { language } = useLanguage();
+  const { t, getLocalized } = useLanguage();
   const queryClient = useQueryClient();
 
   const [activeTab, setActiveTab] = useState<"form" | "results">("form");
@@ -147,11 +147,7 @@ export default function PersonalityAssessmentPage() {
     }));
 
     if (formatted.length < questions.length) {
-      alert(
-        language === "km"
-          ? `សូមឆ្លើយគ្រប់សំណួរទាំង ${questions.length} មុនពេលបញ្ចប់`
-          : `Please answer all ${questions.length} questions before submitting.`
-      );
+      alert(t("personalityAssessment.answerAllAlert"));
       return;
     }
     submitAssessment(formatted);
@@ -199,12 +195,8 @@ export default function PersonalityAssessmentPage() {
   // Mascot dynamic speech: greeting tip when idle vs enthusiastic cheer when answered
   const isAnswered = !!currentAnswer;
   const speechText = isAnswered
-    ? language === "km"
-      ? "ចម្លើយល្អណាស់! បន្តទៀត!"
-      : "Awesome choice! Keep shining!"
-    : language === "km"
-    ? dimMeta.tipKm
-    : dimMeta.tipEn;
+    ? t("personalityAssessment.mascotCheer")
+    : getLocalized({ km: dimMeta.tipKm, en: dimMeta.tipEn });
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in pb-20 select-none">
@@ -213,16 +205,16 @@ export default function PersonalityAssessmentPage() {
         <div>
           <div className="inline-flex items-center gap-2 text-xs font-bold text-[#68708A] mb-1">
             <Link href="/dashboard" className="hover:text-[#111965]">
-              {language === "km" ? "ផ្ទាំងគ្រប់គ្រង" : "Dashboard"}
+              {t("personalityAssessment.dashboard")}
             </Link>
             <span>/</span>
             <span className="text-[#111965]">
-              {language === "km" ? "តេស្តបុគ្គលិកលក្ខណៈ" : "Personality Assessment"}
+              {t("personalityAssessment.breadcrumb")}
             </span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-black text-[#111965] tracking-tight">
-            {language === "km" ? "ស្វែងយល់បុគ្គលិកលក្ខណៈរបស់អ្នក" : "Discover Your Personality"}
+            {t("personalityAssessment.title")}
           </h1>
         </div>
 
@@ -237,7 +229,7 @@ export default function PersonalityAssessmentPage() {
             }`}
           >
             <Compass className="w-3.5 h-3.5" />
-            <span>{language === "km" ? "ធ្វើតេស្ត" : "Questions"}</span>
+            <span>{t("personalityAssessment.questionsTab")}</span>
           </button>
 
           {latestResult && (
@@ -266,21 +258,17 @@ export default function PersonalityAssessmentPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10">
               <div className="space-y-3 max-w-xl">
                 <span className="px-3.5 py-1 rounded-full text-xs font-black bg-[#F7CE4D] text-[#111965] uppercase tracking-wider inline-block">
-                  {language === "km" ? "លទ្ធផលបុគ្គលិកលក្ខណៈរបស់អ្នក" : "Your Personality Type Profile"}
+                  {t("personalityAssessment.resultsBadge")}
                 </span>
 
                 <div className="text-5xl sm:text-6xl font-black text-[#F7CE4D] tracking-tight">
                   {latestResult.personality_type}
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-white">
-                  {language === "km"
-                    ? latestResult.traits_summary_km?.title || "អ្នកដឹកនាំ និងរៀបចំយុទ្ធសាស្ត្រ"
-                    : latestResult.traits_summary_en?.title || "Strategic Planner & Organizer"}
+                  {getLocalized({ km: latestResult.traits_summary_km?.title, en: latestResult.traits_summary_en?.title }) || "Strategic Planner & Organizer"}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                  {language === "km"
-                    ? latestResult.traits_summary_km?.work_style
-                    : latestResult.traits_summary_en?.work_style}
+                  {getLocalized({ km: latestResult.traits_summary_km?.work_style, en: latestResult.traits_summary_en?.work_style })}
                 </p>
 
                 <div className="pt-2">
@@ -289,7 +277,7 @@ export default function PersonalityAssessmentPage() {
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white transition-colors"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
-                    <span>{language === "km" ? "ធ្វើតេស្តឡើងវិញ (Retake)" : "Retake Assessment"}</span>
+                    <span>{t("personalityAssessment.retake")}</span>
                   </button>
                 </div>
               </div>
@@ -301,7 +289,7 @@ export default function PersonalityAssessmentPage() {
                   emotion="congratulation"
                   showSpeech={true}
                   size={210}
-                  speechText={language === "km" ? "អបអរសាទរ! 🌟" : "Congratulations! 🌟"}
+                  speechText={t("personalityAssessment.mascotCongrats")}
                 />
               </div>
             </div>
@@ -310,9 +298,7 @@ export default function PersonalityAssessmentPage() {
           {/* 4 Dimension Breakdown */}
           <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-6">
             <h3 className="text-base sm:text-lg font-black text-[#111965]">
-              {language === "km"
-                ? "ពិន្ទុវិមាត្រទាំង ៤ (The 4 Preference Dimensions)"
-                : "The 4 Preference Dimension Breakdown"}
+              {t("personalityAssessment.dimensionBreakdown")}
             </h3>
 
             <div className="space-y-6">
@@ -402,7 +388,7 @@ export default function PersonalityAssessmentPage() {
             <div className="flex items-center justify-between text-xs font-extrabold text-[#68708A]">
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#111965] text-[#F7CE4D] uppercase tracking-wider">
-                  {language === "km" ? dimMeta.nameKm : dimMeta.nameEn}
+                  {getLocalized({ km: dimMeta.nameKm, en: dimMeta.nameEn })}
                 </span>
                 <span className="text-[#111965] font-black tracking-wide hidden sm:inline">
                   • {currentIndex + 1} / {totalCount}
@@ -416,7 +402,7 @@ export default function PersonalityAssessmentPage() {
                   className="text-[11px] font-bold text-[#111965] bg-[#F0F2FA] hover:bg-[#E6E8F0] px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
                   title="Prefill answers to test completion instantly"
                 >
-                  ⚡ Prefill
+                  {t("personalityAssessment.prefill")}
                 </button>
                 <span className="text-[#111965] font-bold">{progressPercent}%</span>
               </div>
@@ -441,27 +427,15 @@ export default function PersonalityAssessmentPage() {
                 speechText={
                   currentAnswer?.scaleLevel !== undefined && currentAnswer?.scaleLevel !== null
                     ? currentAnswer.scaleLevel <= 3
-                      ? language === "km"
-                        ? "យល់ស្រប! អស្ចារ្យណាស់!"
-                        : "Agree! Awesome!"
+                      ? t("personalityAssessment.mascotAgree")
                       : currentAnswer.scaleLevel === 7
-                      ? language === "km"
-                        ? "មិនយល់ស្របដាច់ខាត!"
-                        : "Strongly Disagree!"
+                      ? t("personalityAssessment.mascotStrongDisagree")
                       : currentAnswer.scaleLevel >= 5
-                      ? language === "km"
-                        ? "មិនយល់ស្របទេ? ខ្ញុំយល់ហើយ..."
-                        : "Disagree? I understand..."
-                      : language === "km"
-                      ? "អព្យាក្រឹត... កំពុងគិត"
-                      : "Neutral... Thinking"
+                      ? t("personalityAssessment.mascotDisagree")
+                      : t("personalityAssessment.mascotNeutral")
                     : currentIndex === 0
-                    ? language === "km"
-                      ? "សួស្តី! ចាប់ផ្តើមសំណួរដំបូង!"
-                      : "Hello! Let's start Q1!"
-                    : language === "km"
-                    ? "តើអ្នកយល់យ៉ាងណាដែរ?"
-                    : "What do you think?"
+                    ? t("personalityAssessment.mascotStart")
+                    : t("personalityAssessment.mascotAsk")
                 }
               />
             </div>
@@ -471,12 +445,10 @@ export default function PersonalityAssessmentPage() {
               {/* Declarative Statement (16Personalities style) */}
               <div className="max-w-xl mx-auto space-y-2 pt-2 pb-1">
                 <h2 className="text-xl sm:text-2xl font-black text-[#111965] leading-snug">
-                  {language === "km" ? statementKm : statementEn}
+                  {getLocalized({ km: statementKm, en: statementEn })}
                 </h2>
                 <p className="text-xs text-[#68708A]">
-                  {language === "km"
-                    ? currentQ?.prompt_km
-                    : currentQ?.prompt_en}
+                  {getLocalized({ km: currentQ?.prompt_km, en: currentQ?.prompt_en })}
                 </p>
               </div>
 
@@ -485,7 +457,6 @@ export default function PersonalityAssessmentPage() {
                 <Scale16p
                   value={currentAnswer?.scaleLevel ?? null}
                   onChange={(level) => handleScaleChange(currentQ, level)}
-                  language={language}
                 />
               </div>
             </div>
@@ -500,7 +471,7 @@ export default function PersonalityAssessmentPage() {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-bold text-[#68708A] hover:text-[#111965] hover:bg-[#F0F2FA] disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>{language === "km" ? "សំណួរមុន" : "Previous"}</span>
+              <span>{t("personalityAssessment.previous")}</span>
             </button>
 
             {/* Checkpoint Dots (1 to 12) */}
@@ -539,10 +510,8 @@ export default function PersonalityAssessmentPage() {
                 <Sparkles className="w-4 h-4 text-[#111965]" />
                 <span>
                   {submitting
-                    ? "Evaluating..."
-                    : language === "km"
-                    ? "បញ្ចប់ និងវិភាគលទ្ធផល"
-                    : "Complete Assessment"}
+                    ? t("personalityAssessment.evaluating")
+                    : t("personalityAssessment.complete")}
                 </span>
                 <CheckCircle2 className="w-4 h-4" />
               </button>
@@ -553,7 +522,7 @@ export default function PersonalityAssessmentPage() {
                 disabled={!currentAnswer}
                 className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl font-bold text-xs text-white bg-[#111965] hover:bg-[#1E277A] disabled:opacity-30 transition-all shadow-xs cursor-pointer"
               >
-                <span>{language === "km" ? "បន្ទាប់" : "Next"}</span>
+                <span>{t("personalityAssessment.next")}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             )}

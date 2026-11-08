@@ -6,13 +6,18 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { Logo } from "@/components/layout/logo";
-import { ArrowRight, Lock, Mail, AlertCircle, Sparkles } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  ArrowRight,
+  AlertCircle,
+  Sparkles,
+} from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
-  const { language } = useLanguage();
-
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -22,12 +27,11 @@ export default function LoginPage() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-
     try {
       await login(email, password);
       router.push("/dashboard");
     } catch (err: any) {
-      setError(err?.message || "Invalid email or password");
+      setError(err?.message || "Invalid credentials. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -40,23 +44,21 @@ export default function LoginPage() {
 
   const fillDemoAdmin = () => {
     setEmail("admin@futera.edu.kh");
-    setPassword("AdminPass123!");
+    setPassword("AdminSecure2026!");
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4 bg-[#F5F6FA]">
-      <div className="w-full max-w-md space-y-6">
+    <div className="min-h-screen bg-[#F5F6FA] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-6">
         <div className="text-center space-y-2">
           <div className="flex justify-center">
             <Logo showText={false} />
           </div>
           <h1 className="text-2xl font-extrabold text-[#111965]">
-            {language === "km" ? "ចូលប្រើប្រាស់ OrienX" : "Sign In to OrienX"}
+            {t("auth.signInTitle")}
           </h1>
           <p className="text-xs text-[#68708A]">
-            {language === "km"
-              ? "បន្តដំណើរស្វែងយល់ពីខ្លួនឯង និងរៀបចំអនាគតរបស់អ្នក"
-              : "Continue your personalized guidance and recommendations"}
+            {t("auth.signInSubtitle")}
           </p>
         </div>
 
@@ -64,7 +66,7 @@ export default function LoginPage() {
         <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 space-y-2">
           <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
             <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-            <span>{language === "km" ? "គណនីគំរូសម្រាប់សាកល្បង (Demo Accounts)" : "Instant Demo Login Accounts"}</span>
+            <span>{t("auth.demoTitle")}</span>
           </div>
           <div className="grid grid-cols-2 gap-2 text-xs">
             <button
@@ -95,7 +97,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-[#171A2C]">
-                {language === "km" ? "អ៊ីមែល (Email)" : "Email Address"}
+                {t("auth.emailLabel")}
               </label>
               <div className="relative">
                 <Mail className="w-4 h-4 text-[#68708A] absolute left-3 top-3" />
@@ -113,13 +115,13 @@ export default function LoginPage() {
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-bold text-[#171A2C]">
-                  {language === "km" ? "ពាក្យសម្ងាត់ (Password)" : "Password"}
+                  {t("auth.passwordLabel")}
                 </label>
                 <Link
                   href="/forgot-password"
                   className="text-xs font-semibold text-[#111965] hover:underline"
                 >
-                  {language === "km" ? "ភ្លេចពាក្យសម្ងាត់?" : "Forgot password?"}
+                  {t("auth.forgotPassword")}
                 </Link>
               </div>
               <div className="relative">
@@ -141,10 +143,10 @@ export default function LoginPage() {
               className="w-full py-2.5 rounded-xl font-bold text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-2xs transition-colors flex items-center justify-center gap-2"
             >
               {loading ? (
-                <span>{language === "km" ? "កំពុងចូល..." : "Signing In..."}</span>
+                <span>{t("auth.signingIn")}</span>
               ) : (
                 <>
-                  <span>{language === "km" ? "ចូលគណនី" : "Sign In"}</span>
+                  <span>{t("auth.signInButton")}</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
@@ -152,9 +154,9 @@ export default function LoginPage() {
           </form>
 
           <div className="pt-4 border-t border-[#E6E8F0] text-center text-xs text-[#68708A]">
-            <span>{language === "km" ? "មិនទាន់មានគណនីមែនទេ?" : "Don't have an account yet?"} </span>
+            <span>{t("auth.noAccountPrompt")} </span>
             <Link href="/register" className="font-bold text-[#111965] hover:underline">
-              {language === "km" ? "ចុះឈ្មោះឥតគិតថ្លៃ" : "Create Account"}
+              {t("auth.createAccountLink")}
             </Link>
           </div>
         </div>
@@ -162,4 +164,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

@@ -17,7 +17,7 @@ import {
 
 export default function AcademicPreferencesPage() {
   const router = useRouter();
-  const { language } = useLanguage();
+  const { t, getLocalized } = useLanguage();
   const queryClient = useQueryClient();
 
   const [favoriteSubjects, setFavoriteSubjects] = useState<string[]>([]);
@@ -112,15 +112,13 @@ export default function AcademicPreferencesPage() {
       <div className="space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F0F2FA] text-[#111965] text-xs font-semibold">
           <Sliders className="w-3.5 h-3.5" />
-          <span>Academic Preferences & Financial Constraints</span>
+          <span>{t("academicPreferences.badge")}</span>
         </div>
         <h1 className="text-xl sm:text-3xl font-extrabold text-[#111965]">
-          {language === "km" ? "ចំណូលចិត្តការសិក្សា និងថវិកា" : "Academic Strengths & Preferences"}
+          {t("academicPreferences.title")}
         </h1>
         <p className="text-xs sm:text-sm text-[#68708A]">
-          {language === "km"
-            ? "ផ្តល់ព័ត៌មានបន្ថែមអំពីមុខវិជ្ជាដែលអ្នកពូកែ មុខវិជ្ជាដែលចូលចិត្ត និងលទ្ធភាពថវិកាដើម្បីទទួលបានអនុសាសន៍ដែលត្រូវនឹងអ្នកបំផុត។"
-            : "Refine your recommendations with your strongest academic subjects and tuition budget."}
+          {t("academicPreferences.subtitle")}
         </p>
       </div>
 
@@ -128,8 +126,8 @@ export default function AcademicPreferencesPage() {
         {/* 1. Strongest Subjects */}
         <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3">
           <label className="text-sm font-bold text-[#111965] flex items-center justify-between">
-            <span>{language === "km" ? "១. មុខវិជ្ជាដែលអ្នកពូកែជាងគេ (Strongest Subjects)" : "1. Strongest Academic Subjects"}</span>
-            <span className="text-xs text-[#68708A] font-normal">Select 1 to 4</span>
+            <span>{t("academicPreferences.strongestSubjects")}</span>
+            <span className="text-xs text-[#68708A] font-normal">{t("academicPreferences.select1to4")}</span>
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {availableSubjects.map((s) => {
@@ -145,7 +143,7 @@ export default function AcademicPreferencesPage() {
                       : "border-[#E6E8F0] bg-white text-[#171A2C] hover:border-slate-300"
                   }`}
                 >
-                  {language === "km" ? s.labelKm : s.labelEn}
+                  {getLocalized({ km: s.labelKm, en: s.labelEn })}
                 </button>
               );
             })}
@@ -155,8 +153,8 @@ export default function AcademicPreferencesPage() {
         {/* 2. Favorite Subjects */}
         <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3">
           <label className="text-sm font-bold text-[#111965] flex items-center justify-between">
-            <span>{language === "km" ? "២. មុខវិជ្ជាដែលអ្នកចូលចិត្តរៀនបំផុត (Favorite Subjects)" : "2. Favorite Subjects You Enjoy"}</span>
-            <span className="text-xs text-[#68708A] font-normal">Select all that apply</span>
+            <span>{t("academicPreferences.favoriteSubjects")}</span>
+            <span className="text-xs text-[#68708A] font-normal">{t("academicPreferences.selectAll")}</span>
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {availableSubjects.map((s) => {
@@ -172,7 +170,7 @@ export default function AcademicPreferencesPage() {
                       : "border-[#E6E8F0] bg-white text-[#171A2C] hover:border-slate-300"
                   }`}
                 >
-                  {language === "km" ? s.labelKm : s.labelEn}
+                  {getLocalized({ km: s.labelKm, en: s.labelEn })}
                 </button>
               );
             })}
@@ -182,7 +180,7 @@ export default function AcademicPreferencesPage() {
         {/* 3. Enjoyed Activities */}
         <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3">
           <label className="text-sm font-bold text-[#111965]">
-            {language === "km" ? "៣. សកម្មភាពដែលអ្នកចូលចិត្តធ្វើ (Activities)" : "3. Activities You Enjoy"}
+            {t("academicPreferences.activities")}
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {availableActivities.map((act) => {
@@ -210,14 +208,14 @@ export default function AcademicPreferencesPage() {
           <div className="flex items-center justify-between">
             <div>
               <label className="text-sm font-bold text-[#111965]">
-                {language === "km" ? "៤. ថវិកាសិក្សាប្រចាំឆ្នាំដែលរំពឹងទុក (Annual Tuition Budget)" : "4. Annual Tuition Budget"}
+                {t("academicPreferences.annualBudget")}
               </label>
               <div className="text-xs text-[#68708A]">
-                Used to evaluate financial alignment and flag scholarship requirements
+                {t("academicPreferences.budgetHint")}
               </div>
             </div>
             <span className="text-base font-extrabold text-[#111965] bg-[#F0F2FA] px-3 py-1 rounded-xl">
-              ${budget} / year
+              ${budget} {t("academicPreferences.perYear")}
             </span>
           </div>
 
@@ -232,10 +230,10 @@ export default function AcademicPreferencesPage() {
           />
 
           <div className="flex justify-between text-[11px] text-[#68708A]">
-            <span>$200 / yr (State Subsidized)</span>
+            <span>{t("academicPreferences.stateSubsidized")}</span>
             <span>$1,000 / yr</span>
             <span>$3,000 / yr</span>
-            <span>$9,000 / yr (International)</span>
+            <span>{t("academicPreferences.international")}</span>
           </div>
 
           <label className="flex items-center gap-2 pt-2 text-xs font-semibold text-[#171A2C] cursor-pointer">
@@ -245,7 +243,7 @@ export default function AcademicPreferencesPage() {
               onChange={(e) => setRequiresScholarship(e.target.checked)}
               className="rounded text-[#111965]"
             />
-            <span>{language === "km" ? "ខ្ញុំត្រូវការស្វែងរកអាហារូបករណ៍ជាចាំបាច់ (Requires Scholarship)" : "I strictly require full/partial scholarship opportunities"}</span>
+            <span>{t("academicPreferences.requiresScholarship")}</span>
           </label>
         </div>
 
@@ -253,10 +251,10 @@ export default function AcademicPreferencesPage() {
         <div className="p-6 rounded-3xl bg-[#111965] text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
           <div>
             <h4 className="text-sm font-bold text-white">
-              {language === "km" ? "រួចរាល់សម្រាប់ការគណនាអនុសាសន៍!" : "Ready to calculate major recommendations!"}
+              {t("academicPreferences.readyTitle")}
             </h4>
             <p className="text-xs text-slate-300">
-              Combines your personality, RIASEC Holland code, and preferences.
+              {t("academicPreferences.readySubtitle")}
             </p>
           </div>
 
@@ -265,7 +263,7 @@ export default function AcademicPreferencesPage() {
             disabled={saving}
             className="px-6 py-3 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-2xs flex items-center gap-2 whitespace-nowrap"
           >
-            <span>{saving ? "Generating Recommendations..." : language === "km" ? "គណនាអនុសាសន៍ជំនាញ" : "Generate Recommendations"}</span>
+            <span>{saving ? t("academicPreferences.generating") : t("academicPreferences.generateBtn")}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

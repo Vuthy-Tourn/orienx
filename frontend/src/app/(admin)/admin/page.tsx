@@ -24,7 +24,7 @@ import {
 export default function AdminDashboardPage() {
   const router = useRouter();
   const { user } = useAuth();
-  const { language, getLocalized } = useLanguage();
+  const { getLocalized } = useLanguage();
   const queryClient = useQueryClient();
 
   const isAdmin = user?.roles?.some((r) => r === "ADMIN" || r === "SUPER_ADMIN");

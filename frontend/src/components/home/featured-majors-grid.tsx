@@ -1,7 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import {
   Code2,
@@ -379,127 +381,62 @@ function StipplingDashesGraphic() {
 }
 
 /* ==========================================================================
-   FEATURED MAJORS DATA (6 Verified Majors)
+   FEATURED MAJORS MAPPING & COMPONENT
    ========================================================================== */
 
-interface MajorCardItem {
-  id: string;
-  slug: string;
-  icon: React.ElementType;
-  iconBg: string;
-  tag: string;
-  categoryEn: string;
-  categoryKm: string;
-  titleEn: string;
-  titleKm: string;
-  metaEn: string;
-  metaKm: string;
-  locationEn: string;
-  locationKm: string;
-  graphic: React.FC;
-}
+const MAJOR_VISUAL_MAP: Record<
+  string,
+  {
+    icon: React.ElementType;
+    iconBg: string;
+    graphic: React.FC;
+  }
+> = {
+  "software-engineering": {
+    icon: Code2,
+    iconBg: "bg-[#8B5CF6]",
+    graphic: ContourWaveGraphic,
+  },
+  "data-science-ai": {
+    icon: BrainCircuit,
+    iconBg: "bg-[#0284C7]",
+    graphic: ParticleDotWaveGraphic,
+  },
+  "civil-engineering": {
+    icon: Building2,
+    iconBg: "bg-[#EAB308]",
+    graphic: ChevronBeamsGraphic,
+  },
+  "banking-finance": {
+    icon: Coins,
+    iconBg: "bg-[#22C55E]",
+    graphic: HalftoneClusterGraphic,
+  },
+  "business-administration": {
+    icon: Briefcase,
+    iconBg: "bg-[#F97316]",
+    graphic: DiagonalHatchGraphic,
+  },
+  "international-relations": {
+    icon: Globe2,
+    iconBg: "bg-[#EF4444]",
+    graphic: StipplingDashesGraphic,
+  },
+};
 
 export function FeaturedMajorsGrid() {
-  const { language } = useLanguage();
+  const { t, getLocalized } = useLanguage();
 
-  const majors: MajorCardItem[] = [
-    {
-      id: "software-engineering",
-      slug: "software-engineering",
-      icon: Code2,
-      iconBg: "bg-[#8B5CF6]", // Xbox style purple
-      tag: "RIASEC: IRE",
-      categoryEn: "Information Technology",
-      categoryKm: "បច្ចេកវិទ្យាព័ត៌មាន",
-      titleEn: "Software Engineering",
-      titleKm: "វិស្វកម្មកម្មវិធី",
-      metaEn: "B.S. • $500 – $2,500/mo",
-      metaKm: "បរិញ្ញាបត្រ • $500 – $2,500",
-      locationEn: "Phnom Penh • 4 Years",
-      locationKm: "រាជធានីភ្នំពេញ • ៤ ឆ្នាំ",
-      graphic: ContourWaveGraphic,
+  const { data: majorsData, isLoading } = useQuery({
+    queryKey: ["featured-majors-landing"],
+    queryFn: async () => {
+      return apiFetch<any[]>("/majors");
     },
-    {
-      id: "data-science-ai",
-      slug: "data-science-ai",
-      icon: BrainCircuit,
-      iconBg: "bg-[#0284C7]", // Apple style sky blue
-      tag: "RIASEC: IRC",
-      categoryEn: "Artificial Intelligence",
-      categoryKm: "បញ្ញាសិប្បនិម្មិត & AI",
-      titleEn: "Data Science & AI",
-      titleKm: "វិទ្យាសាស្ត្រទិន្នន័យ & AI",
-      metaEn: "High-Growth • $600 – $3,000/mo",
-      metaKm: "តម្រូវការខ្ពស់ • $600 – $3,000",
-      locationEn: "Phnom Penh • 4 Years",
-      locationKm: "រាជធានីភ្នំពេញ • ៤ ឆ្នាំ",
-      graphic: ParticleDotWaveGraphic,
-    },
-    {
-      id: "civil-engineering",
-      slug: "civil-engineering",
-      icon: Building2,
-      iconBg: "bg-[#EAB308]", // Yellow Dot style gold
-      tag: "RIASEC: RIC",
-      categoryEn: "Engineering & Architecture",
-      categoryKm: "វិស្វកម្ម & ស្ថាបត្យកម្ម",
-      titleEn: "Civil Engineering",
-      titleKm: "វិស្វកម្មសំណង់ស៊ីវិល",
-      metaEn: "National CTI • $450 – $2,200/mo",
-      metaKm: "វិស្វករ CTI • $450 – $2,200",
-      locationEn: "Phnom Penh • 5 Years",
-      locationKm: "រាជធានីភ្នំពេញ • ៥ ឆ្នាំ",
-      graphic: ChevronBeamsGraphic,
-    },
-    {
-      id: "banking-finance",
-      slug: "banking-finance",
-      icon: Coins,
-      iconBg: "bg-[#22C55E]", // Play style emerald green
-      tag: "RIASEC: CEI",
-      categoryEn: "Banking & Finance",
-      categoryKm: "ធនាគារ & ហិរញ្ញវត្ថុ",
-      titleEn: "Banking & Finance",
-      titleKm: "ធនាគារ & ហិរញ្ញវត្ថុ",
-      metaEn: "FinTech • $450 – $2,200/mo",
-      metaKm: "ទីផ្សារទុន • $450 – $2,200",
-      locationEn: "Phnom Penh • 4 Years",
-      locationKm: "រាជធានីភ្នំពេញ • ៤ ឆ្នាំ",
-      graphic: HalftoneClusterGraphic,
-    },
-    {
-      id: "business-administration",
-      slug: "business-administration",
-      icon: Briefcase,
-      iconBg: "bg-[#F97316]", // UMO style amber-orange
-      tag: "RIASEC: ECS",
-      categoryEn: "Business & Management",
-      categoryKm: "ពាណិជ្ជកម្ម & ការគ្រប់គ្រង",
-      titleEn: "Business Administration",
-      titleKm: "រដ្ឋបាលពាណិជ្ជកម្ម",
-      metaEn: "Leadership • $400 – $2,000/mo",
-      metaKm: "ភាពជាអ្នកដឹកនាំ • $400 – $2,000",
-      locationEn: "Phnom Penh • 4 Years",
-      locationKm: "រាជធានីភ្នំពេញ • ៤ ឆ្នាំ",
-      graphic: DiagonalHatchGraphic,
-    },
-    {
-      id: "international-relations",
-      slug: "international-relations",
-      icon: Globe2,
-      iconBg: "bg-[#EF4444]", // TikTok style coral red
-      tag: "RIASEC: SAE",
-      categoryEn: "Global Affairs & Policy",
-      categoryKm: "ការទូត & កិច្ចការអន្តរជាតិ",
-      titleEn: "International Relations",
-      titleKm: "ទំនាក់ទំនងអន្តរជាតិ",
-      metaEn: "Diplomacy • $400 – $1,800/mo",
-      metaKm: "កិច្ចការបរទេស • $400 – $1,800",
-      locationEn: "Phnom Penh • 4 Years",
-      locationKm: "រាជធានីភ្នំពេញ • ៤ ឆ្នាំ",
-      graphic: StipplingDashesGraphic,
-    },
-  ];
+  });
+
+  const majors = useMemo(() => {
+    return (majorsData || []).slice(0, 6);
+  }, [majorsData]);
 
   return (
     <section
@@ -607,23 +544,15 @@ export function FeaturedMajorsGrid() {
           <div className="space-y-2.5 max-w-xl">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold">
               <Compass className="w-3.5 h-3.5 text-emerald-600" />
-              <span>
-                {language === "km"
-                  ? "ជំនាញសិក្សាឆ្នើមនៅកម្ពុជា"
-                  : "Verified Academic Pathways"}
-              </span>
+              <span>{t("featuredMajors.badge")}</span>
             </div>
 
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#111965] tracking-tight">
-              {language === "km"
-                ? "ជំនាញសាកលវិទ្យាល័យដែលពេញនិយម"
-                : "Explore University Majors"}
+              {t("featuredMajors.title")}
             </h2>
 
             <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
-              {language === "km"
-                ? "ស្វែងយល់ពីមុខវិជ្ជាសិក្សា ជំនាញដែលត្រូវការ និងឱកាសការងារជាក់ស្តែងនៅកម្ពុជា"
-                : "Discover curricula, foundational skills, and verified career opportunities in Cambodia."}
+              {t("featuredMajors.subtitle")}
             </p>
           </div>
 
@@ -631,66 +560,94 @@ export function FeaturedMajorsGrid() {
             href="/majors"
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-[#111965] bg-white hover:bg-slate-50 border border-[#E6E8F0] shadow-2xs hover:shadow-sm transition-all duration-200 self-start sm:self-auto hover:translate-x-0.5"
           >
-            <span>{language === "km" ? "មើលជំនាញទាំងអស់" : "View All Majors"}</span>
+            <span>{t("featuredMajors.viewAll")}</span>
             <ArrowRight className="w-4 h-4 text-[#F69D0D]" />
           </Link>
         </div>
 
-        {/* ===================================================================
-            2 ROWS x 3 COLUMNS GRID OF CRISP WHITE CARDS
-            (Matching the exact spacing, typography and graphic size from reference)
-            =================================================================== */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {majors.map((m) => {
-            const GraphicComponent = m.graphic;
-            const IconComponent = m.icon;
-
-            return (
-              <Link
-                key={m.id}
-                href={`/majors/${m.slug}`}
-                className="group relative rounded-[20px] bg-white hover:bg-slate-50/70 border border-[#E6E8F0] hover:border-slate-300 p-7 sm:p-8 flex flex-col justify-between overflow-hidden shadow-[0_8px_24px_rgba(17,25,101,0.04)] hover:shadow-[0_16px_36px_rgba(17,25,101,0.08)] transition-all duration-300 ease-out hover:-translate-y-1.5 min-h-[300px] sm:min-h-[320px] aspect-[1/0.95] cursor-pointer"
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div
+                key={i}
+                className="rounded-[20px] bg-white border border-[#E6E8F0] p-7 min-h-[300px] animate-pulse flex flex-col justify-between"
               >
-                {/* Top Row: Icon Badge (Left) & Tag/Date (Right) */}
-                <div className="flex items-center justify-between z-10 relative">
-                  <div
-                    className={`w-12 h-12 rounded-[14px] ${m.iconBg} flex items-center justify-center text-white shadow-md transition-transform duration-300 group-hover:scale-108`}
-                  >
-                    <IconComponent className="w-6 h-6" />
-                  </div>
-                  <span className="text-xs text-[#68708A] font-mono tracking-wider font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200/60">
-                    {m.tag}
-                  </span>
+                <div className="w-12 h-12 rounded-[14px] bg-slate-100" />
+                <div className="space-y-3">
+                  <div className="w-24 h-4 bg-slate-100 rounded" />
+                  <div className="w-48 h-6 bg-slate-200 rounded" />
+                  <div className="w-32 h-4 bg-slate-100 rounded" />
                 </div>
+                <div className="w-20 h-4 bg-slate-100 rounded" />
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* 2 ROWS x 3 COLUMNS GRID OF CRISP WHITE CARDS */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {majors.map((m: any) => {
+              const visual = MAJOR_VISUAL_MAP[m.slug] || {
+                icon: Code2,
+                iconBg: "bg-[#8B5CF6]",
+                graphic: ContourWaveGraphic,
+              };
+              const GraphicComponent = visual.graphic;
+              const IconComponent = visual.icon;
+              const tag = m.riasec_primary && m.riasec_secondary
+                ? `RIASEC: ${m.riasec_primary}${m.riasec_secondary}`
+                : "RIASEC";
+              const categoryLabel = t(`categories.${m.category}`, m.category);
+              const title = getLocalized(m.name);
+              const campuses = `${m.universities_count || 0} ${t("featuredMajors.campuses")}`;
 
-                {/* Middle Area: Clean Category Subtitle, Major Title & Degree */}
-                <div className="z-10 relative space-y-1.5 my-auto pt-5 max-w-[62%]">
-                  <div className="text-xs font-semibold uppercase tracking-wider text-[#68708A]">
-                    {language === "km" ? m.categoryKm : m.categoryEn}
+              return (
+                <Link
+                  key={m.id}
+                  href={`/majors/${m.slug}`}
+                  className="group relative rounded-[20px] bg-white hover:bg-slate-50/70 border border-[#E6E8F0] hover:border-slate-300 p-7 sm:p-8 flex flex-col justify-between overflow-hidden shadow-[0_8px_24px_rgba(17,25,101,0.04)] hover:shadow-[0_16px_36px_rgba(17,25,101,0.08)] transition-all duration-300 ease-out hover:-translate-y-1.5 min-h-[300px] sm:min-h-[320px] aspect-[1/0.95] cursor-pointer"
+                >
+                  {/* Top Row: Icon Badge (Left) & Tag (Right) */}
+                  <div className="flex items-center justify-between z-10 relative">
+                    <div
+                      className={`w-12 h-12 rounded-[14px] ${visual.iconBg} flex items-center justify-center text-white shadow-md transition-transform duration-300 group-hover:scale-108`}
+                    >
+                      <IconComponent className="w-6 h-6" />
+                    </div>
+                    <span className="text-xs text-[#68708A] font-mono tracking-wider font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200/60">
+                      {tag}
+                    </span>
                   </div>
-                  <h3 className="text-xl sm:text-[22px] font-extrabold text-[#111965] tracking-tight leading-snug group-hover:text-[#0284C7] transition-colors duration-200">
-                    {language === "km" ? m.titleKm : m.titleEn}
-                  </h3>
-                  <div className="text-xs sm:text-sm text-[#68708A] font-medium pt-0.5">
-                    {language === "km" ? m.metaKm : m.metaEn}
+
+                  {/* Middle Area: Clean Category Subtitle, Major Title & Degree */}
+                  <div className="z-10 relative space-y-1.5 my-auto pt-5 max-w-[62%]">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-[#68708A]">
+                      {categoryLabel}
+                    </div>
+                    <h3 className="text-xl sm:text-[22px] font-extrabold text-[#111965] tracking-tight leading-snug group-hover:text-[#0284C7] transition-colors duration-200">
+                      {title}
+                    </h3>
+                    <div className="text-xs sm:text-sm text-[#68708A] font-medium pt-0.5">
+                      {t("featuredMajors.bachelor")} {m.is_stem ? "• STEM" : ""}
+                    </div>
                   </div>
-                </div>
 
-                {/* Bottom Row: Location / University Info */}
-                <div className="z-10 relative pt-4 border-t border-slate-100 flex items-center justify-between max-w-[62%]">
-                  <span className="text-xs text-[#68708A] font-medium">
-                    {language === "km" ? m.locationKm : m.locationEn}
-                  </span>
-                </div>
+                  {/* Bottom Row: Campuses / University Info */}
+                  <div className="z-10 relative pt-4 border-t border-slate-100 flex items-center justify-between max-w-[62%]">
+                    <span className="text-xs text-[#68708A] font-medium">
+                      {campuses}
+                    </span>
+                  </div>
 
-                {/* Large Corner Graphic Pattern with Continuous Animation */}
-                <div className="absolute bottom-0 right-0 w-[55%] h-[58%] pointer-events-none overflow-hidden rounded-br-[20px]">
-                  <GraphicComponent />
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+                  {/* Large Corner Graphic Pattern with Continuous Animation */}
+                  <div className="absolute bottom-0 right-0 w-[55%] h-[58%] pointer-events-none overflow-hidden rounded-br-[20px]">
+                    <GraphicComponent />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );

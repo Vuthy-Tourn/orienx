@@ -6,23 +6,20 @@ import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import {
+  Building2,
   Search,
-  Filter,
-  GraduationCap,
   MapPin,
-  DollarSign,
+  ExternalLink,
   ShieldCheck,
-  ArrowRight,
-  Plus,
-  Check,
   Scale,
+  Check,
+  Plus,
+  ArrowRight,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 
 export default function UniversitiesPage() {
-  const { language, getLocalized } = useLanguage();
+  const { t, getLocalized } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [provinceFilter, setProvinceFilter] = useState("");
@@ -44,7 +41,7 @@ export default function UniversitiesPage() {
       setSelectedForCompare(selectedForCompare.filter((s) => s !== slug));
     } else {
       if (selectedForCompare.length >= 4) {
-        alert(language === "km" ? "អ្នកអាចប្រៀបធៀបបានអតិបរមា ៤ សាកលវិទ្យាល័យ" : "You can compare up to 4 universities at a time");
+        alert(t("universitiesDirectory.compareAlert"));
         return;
       }
       setSelectedForCompare([...selectedForCompare, slug]);
@@ -58,15 +55,13 @@ export default function UniversitiesPage() {
         <div className="space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>{language === "km" ? "ព័ត៌មានផ្ទៀងផ្ទាត់ផ្លូវការ" : "Official Verified Information"}</span>
+            <span>{t("universitiesDirectory.badge")}</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
-            {language === "km" ? "សាកលវិទ្យាល័យនៅកម្ពុជា" : "Cambodian Universities Directory"}
+            {t("universitiesDirectory.title")}
           </h1>
           <p className="text-sm text-[#68708A] max-w-2xl">
-            {language === "km"
-              ? "ស្វែងរកសាកលវិទ្យាល័យរដ្ឋ និងឯកជន ពិនិត្យតម្លៃសិក្សាជាក់ស្តែងដែលត្រូវបានផ្ទៀងផ្ទាត់ និងប្រៀបធៀបកម្មវិធីសិក្សា។"
-              : "Explore verified public state and private universities in Cambodia with verified tuition fee schedules."}
+            {t("universitiesDirectory.subtitle")}
           </p>
         </div>
 
@@ -78,7 +73,7 @@ export default function UniversitiesPage() {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={language === "km" ? "ស្វែងរកតាមឈ្មោះសាកលវិទ្យាល័យ ឬអក្សរកាត់ (RUPP, ITC...)" : "Search by name or acronym (RUPP, ITC...)"}
+              placeholder={t("universitiesDirectory.searchPlaceholder")}
               className="w-full pl-10 pr-4 py-2 rounded-xl text-sm border border-[#E6E8F0] focus:outline-hidden focus:border-[#111965]"
             />
           </div>
@@ -89,9 +84,9 @@ export default function UniversitiesPage() {
               onChange={(e) => setTypeFilter(e.target.value)}
               className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] bg-white focus:outline-hidden focus:border-[#111965]"
             >
-              <option value="">{language === "km" ? "គ្រប់ប្រភេទគ្រឹះស្ថាន" : "All University Types"}</option>
-              <option value="PUBLIC">{language === "km" ? "សាកលវិទ្យាល័យរដ្ឋ (Public)" : "Public State University"}</option>
-              <option value="PRIVATE">{language === "km" ? "សាកលវិទ្យាល័យឯកជន (Private)" : "Private University"}</option>
+              <option value="">{t("universitiesDirectory.allTypes")}</option>
+              <option value="PUBLIC">{t("universitiesDirectory.publicType")}</option>
+              <option value="PRIVATE">{t("universitiesDirectory.privateType")}</option>
             </select>
           </div>
 
@@ -101,7 +96,7 @@ export default function UniversitiesPage() {
               onChange={(e) => setProvinceFilter(e.target.value)}
               className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] bg-white focus:outline-hidden focus:border-[#111965]"
             >
-              <option value="">{language === "km" ? "គ្រប់រាជធានី/ខេត្ត" : "All Provinces"}</option>
+              <option value="">{t("universitiesDirectory.allProvinces")}</option>
               <option value="Phnom Penh">Phnom Penh (រាជធានីភ្នំពេញ)</option>
               <option value="Battambang">Battambang (បាត់ដំបង)</option>
               <option value="Siem Reap">Siem Reap (សៀមរាប)</option>
@@ -116,7 +111,7 @@ export default function UniversitiesPage() {
               <Scale className="w-5 h-5 text-[#F7CE4D]" />
               <div className="text-xs">
                 <span className="font-bold text-[#F7CE4D]">{selectedForCompare.length}</span>
-                <span> {language === "km" ? "សាកលវិទ្យាល័យត្រូវបានជ្រើសរើស" : "universities selected"}</span>
+                <span> {t("universitiesDirectory.selectedNotice")}</span>
               </div>
             </div>
 
@@ -125,13 +120,13 @@ export default function UniversitiesPage() {
                 onClick={() => setSelectedForCompare([])}
                 className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white"
               >
-                {language === "km" ? "លុបចោល" : "Clear"}
+                {t("universitiesDirectory.clear")}
               </button>
               <Link
                 href={`/universities/compare?ids=${selectedForCompare.join(",")}`}
                 className="px-4 py-1.5 rounded-lg text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-2xs"
               >
-                {language === "km" ? "ប្រៀបធៀបឥឡូវនេះ" : "Compare Now"}
+                {t("universitiesDirectory.compareNow")}
               </Link>
             </div>
           </div>
@@ -163,6 +158,11 @@ export default function UniversitiesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {universities.map((uni: any) => {
               const isSelected = selectedForCompare.includes(uni.slug);
+              const typeLabel =
+                uni.university_type === "PUBLIC"
+                  ? t("universitiesDirectory.publicType")
+                  : t("universitiesDirectory.privateType");
+
               return (
                 <div
                   key={uni.id}
@@ -177,7 +177,7 @@ export default function UniversitiesPage() {
                             : "bg-purple-50 text-purple-800 border border-purple-200"
                         }`}
                       >
-                        {uni.university_type === "PUBLIC" ? (language === "km" ? "សាកលវិទ្យាល័យរដ្ឋ" : "Public State") : (language === "km" ? "សាកលវិទ្យាល័យឯកជន" : "Private")}
+                        {typeLabel}
                       </span>
 
                       <button
@@ -189,7 +189,7 @@ export default function UniversitiesPage() {
                         }`}
                       >
                         {isSelected ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
-                        <span>{isSelected ? (language === "km" ? "បានជ្រើស" : "Selected") : (language === "km" ? "ប្រៀបធៀប" : "Compare")}</span>
+                        <span>{isSelected ? t("universitiesDirectory.selected") : t("universitiesDirectory.compare")}</span>
                       </button>
                     </div>
 
@@ -204,18 +204,18 @@ export default function UniversitiesPage() {
 
                     <div className="p-3 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1">
                       <div className="text-[10px] text-[#68708A] uppercase font-bold">
-                        {language === "km" ? "តម្លៃសិក្សាប្រចាំឆ្នាំ (ផ្ទៀងផ្ទាត់)" : "Annual Tuition Range"}
+                        {t("universitiesDirectory.tuitionTitle")}
                       </div>
                       <div className="text-sm font-extrabold text-[#111965]">
                         {uni.tuition_range_min_usd !== null
                           ? `$${Math.round(uni.tuition_range_min_usd)} – $${Math.round(uni.tuition_range_max_usd || uni.tuition_range_min_usd)} / yr`
-                          : (language === "km" ? "ព័ត៌មានមិនទាន់មាន" : "Information not available")}
+                          : t("universitiesDirectory.tuitionPending")}
                       </div>
                     </div>
 
                     <div className="flex items-center gap-1.5 text-xs text-[#68708A]">
                       <MapPin className="w-3.5 h-3.5 text-[#111965]" />
-                      <span>{uni.province}</span>
+                      <span>{getLocalized(uni.province) || uni.province}</span>
                     </div>
 
                     <p className="text-xs text-[#68708A] line-clamp-2 leading-relaxed">
@@ -225,13 +225,13 @@ export default function UniversitiesPage() {
 
                   <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-between">
                     <span className="text-xs font-medium text-[#68708A]">
-                      {uni.majors_count} {language === "km" ? "ជំនាញសិក្សា" : "Programs"}
+                      {uni.majors_count} {t("universitiesDirectory.programs")}
                     </span>
                     <Link
                       href={`/universities/${uni.slug}`}
                       className="inline-flex items-center gap-1 text-xs font-bold text-[#111965] hover:text-[#1E277A]"
                     >
-                      <span>{language === "km" ? "មើលព័ត៌មានលម្អិត" : "View Details"}</span>
+                      <span>{t("universitiesDirectory.viewDetails")}</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
@@ -241,11 +241,10 @@ export default function UniversitiesPage() {
           </div>
         ) : (
           <div className="py-20 text-center text-sm text-[#68708A]">
-            {language === "km" ? "រកមិនឃើញសាកលវិទ្យាល័យដែលត្រូវនឹងការស្វែងរករបស់អ្នកទេ។" : "No universities found matching your filter."}
+            {t("universitiesDirectory.notFound")}
           </div>
         )}
       </div>
     </div>
   );
 }
-

@@ -16,10 +16,11 @@ import {
   BookmarkCheck,
   Building,
   CheckCircle2,
+  ArrowRight,
 } from "lucide-react";
 
 export default function ScholarshipsPage() {
-  const { language, getLocalized } = useLanguage();
+  const { t, getLocalized } = useLanguage();
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState("");
@@ -44,7 +45,7 @@ export default function ScholarshipsPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["scholarships"] });
-      alert(language === "km" ? "បានរក្សាទុកក្នុងផ្ទាំងតាមដានអាហារូបករណ៍របស់អ្នក!" : "Saved to your scholarship tracker!");
+      alert(t("scholarshipsPage.savedAlert"));
     },
   });
 
@@ -54,15 +55,13 @@ export default function ScholarshipsPage() {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>{language === "km" ? "អាហារូបករណ៍ផ្លូវការដែលបានផ្ទៀងផ្ទាត់" : "Verified Official Scholarships"}</span>
+            <span>{t("scholarshipsPage.verifiedBadge")}</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
-            {language === "km" ? "ស្វែងរកអាហារូបករណ៍សាកលវិទ្យាល័យ" : "University Scholarship Discovery"}
+            {t("scholarshipsPage.title")}
           </h1>
           <p className="text-sm text-[#68708A] max-w-2xl">
-            {language === "km"
-              ? "ស្វែងរកអាហារូបករណ៍រដ្ឋ MoEYS និងអាហារូបករណ៍ពីសាកលវិទ្យាល័យដៃគូ ពិនិត្យលក្ខខណ្ឌ និងតាមដានកាលបរិច្ឆេទផុតកំណត់។"
-              : "Find verified state scholarships and merit-based grants for Cambodian students with official application links."}
+            {t("scholarshipsPage.subtitle")}
           </p>
         </div>
 
@@ -74,7 +73,7 @@ export default function ScholarshipsPage() {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={language === "km" ? "ស្វែងរកអាហារូបករណ៍ (ក្រសួងអប់រំ, AUPP, Paragon...)" : "Search by keyword or provider..."}
+              placeholder={t("scholarshipsPage.searchPlaceholder")}
               className="w-full pl-10 pr-4 py-2 rounded-xl text-sm border border-[#E6E8F0] focus:outline-hidden focus:border-[#111965]"
             />
           </div>
@@ -85,9 +84,9 @@ export default function ScholarshipsPage() {
               onChange={(e) => setCoverageFilter(e.target.value)}
               className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] bg-white focus:outline-hidden focus:border-[#111965]"
             >
-              <option value="">{language === "km" ? "គ្រប់កម្រិតជំនួយ" : "All Coverage Types"}</option>
-              <option value="FULL_TUITION">{language === "km" ? "ពេញលេញ ១០០% (Full Tuition)" : "100% Full Tuition"}</option>
-              <option value="PARTIAL_TUITION">{language === "km" ? "មួយផ្នែក ២៥% - ៥០% (Partial)" : "Partial Tuition"}</option>
+              <option value="">{t("scholarshipsPage.allCoverage")}</option>
+              <option value="FULL_TUITION">{t("scholarshipsPage.fullTuition")}</option>
+              <option value="PARTIAL_TUITION">{t("scholarshipsPage.partialTuition")}</option>
             </select>
           </div>
         </div>
@@ -95,82 +94,100 @@ export default function ScholarshipsPage() {
         {/* Scholarships List */}
         {isLoading ? (
           <div className="py-20 text-center text-sm text-[#68708A]">
-            {language === "km" ? "កំពុងទាញយកទិន្នន័យអាហារូបករណ៍..." : "Loading scholarships..."}
+            {t("scholarshipsPage.loading")}
           </div>
         ) : scholarships && scholarships.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {scholarships.map((s: any) => (
-              <div
-                key={s.id}
-                className="rounded-2xl bg-white border border-[#E6E8F0] p-6 shadow-2xs hover:shadow-md transition-all duration-200 flex flex-col justify-between space-y-5"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FFF9E6] text-[#111965] border border-[#F7CE4D]">
-                      {s.coverage_percentage ? `${s.coverage_percentage}% Coverage` : s.coverage_type}
-                    </span>
-                    <span className="flex items-center gap-1.5 text-xs text-[#68708A]">
-                      <Calendar className="w-3.5 h-3.5 text-amber-600" />
-                      <span>Deadline: {s.application_deadline || "Rolling"}</span>
-                    </span>
-                  </div>
+            {scholarships.map((s: any) => {
+              const criteria = getLocalized(s.eligibility_criteria) || s.eligibility_criteria?.en || [];
+              const criteriaArray = Array.isArray(criteria) ? criteria : [];
 
-                  <div>
-                    <span className="text-[11px] font-bold text-[#68708A] uppercase">
-                      {getLocalized(s.provider)}
-                    </span>
-                    <h3 className="text-base font-bold text-[#111965] leading-snug mt-0.5">
-                      {getLocalized(s.title)}
-                    </h3>
-                  </div>
-
-                  <p className="text-xs text-[#68708A] leading-relaxed line-clamp-3">
-                    {getLocalized(s.description)}
-                  </p>
-
-                  <div className="p-3 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] text-xs space-y-1">
-                    <div className="font-semibold text-[#111965]">
-                      {language === "km" ? "លក្ខខណ្ឌចម្បង:" : "Eligibility Criteria:"}
+              return (
+                <div
+                  key={s.id}
+                  className="rounded-2xl bg-white border border-[#E6E8F0] p-6 shadow-2xs hover:shadow-md transition-all duration-200 flex flex-col justify-between space-y-5"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FFF9E6] text-[#111965] border border-[#F7CE4D]">
+                        {s.coverage_percentage ? `${s.coverage_percentage}% Coverage` : s.coverage_type}
+                      </span>
+                      <span className="flex items-center gap-1.5 text-xs text-[#68708A]">
+                        <Calendar className="w-3.5 h-3.5 text-amber-600" />
+                        <span>Deadline: {s.application_deadline || "Rolling"}</span>
+                      </span>
                     </div>
-                    <div className="text-[#68708A]">
-                      {((language === "km" ? s.eligibility_criteria?.km : s.eligibility_criteria?.en) || s.eligibility_criteria?.en || []).slice(0, 2).join(" • ")}
+
+                    <div>
+                      <span className="text-[11px] font-bold text-[#68708A] uppercase">
+                        {getLocalized(s.provider)}
+                      </span>
+                      <Link href={`/scholarships/${s.slug}`} className="hover:underline">
+                        <h3 className="text-base font-bold text-[#111965] leading-snug mt-0.5 hover:text-[#0284C7] transition-colors">
+                          {getLocalized(s.title)}
+                        </h3>
+                      </Link>
+                    </div>
+
+                    <p className="text-xs text-[#68708A] leading-relaxed line-clamp-3">
+                      {getLocalized(s.description)}
+                    </p>
+
+                    {criteriaArray.length > 0 && (
+                      <div className="p-3 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] text-xs space-y-1">
+                        <div className="font-semibold text-[#111965]">
+                          {t("scholarshipsPage.eligibilityCriteria")}
+                        </div>
+                        <div className="text-[#68708A]">
+                          {criteriaArray.slice(0, 2).join(" • ")}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-between gap-3">
+                    {user && (
+                      <button
+                        onClick={() => toggleTrack({ id: s.id, status: "SAVED" })}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#111965] hover:underline"
+                      >
+                        <Bookmark className="w-3.5 h-3.5" />
+                        <span>{t("scholarshipsPage.trackScholarship")}</span>
+                      </button>
+                    )}
+
+                    <div className="flex items-center gap-2 ml-auto">
+                      <Link
+                        href={`/scholarships/${s.slug}`}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold text-[#111965] bg-slate-100 hover:bg-slate-200 transition-colors"
+                      >
+                        <span>{t("scholarshipsShowcase.viewDetails")}</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </Link>
+
+                      {s.official_url && (
+                        <a
+                          href={s.official_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs"
+                        >
+                          <span>{t("scholarshipsPage.officialLink")}</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
-
-                <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-between">
-                  {user && (
-                    <button
-                      onClick={() => toggleTrack({ id: s.id, status: "SAVED" })}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-[#111965] hover:underline"
-                    >
-                      <Bookmark className="w-3.5 h-3.5" />
-                      <span>{language === "km" ? "តាមដានអាហារូបករណ៍" : "Track Scholarship"}</span>
-                    </button>
-                  )}
-
-                  {s.official_url && (
-                    <a
-                      href={s.official_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors ml-auto shadow-2xs"
-                    >
-                      <span>{language === "km" ? "ដាក់ពាក្យផ្លូវការ" : "Official Link"}</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="py-20 text-center text-sm text-[#68708A]">
-            No scholarships found matching your criteria.
+            {t("scholarshipsPage.notFound")}
           </div>
         )}
       </div>
     </div>
   );
 }
-

@@ -23,7 +23,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 
 export default function RecommendationsPage() {
-  const { language, getLocalized } = useLanguage();
+  const { t, getLocalized } = useLanguage();
   const queryClient = useQueryClient();
   const [activeExplainId, setActiveExplainId] = useState<string | null>(null);
 
@@ -53,7 +53,7 @@ export default function RecommendationsPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-favorites"] });
-      alert(language === "km" ? "បានកែប្រែទំព័រដែលបានរក្សាទុក" : "Updated favorites");
+      alert(t("recommendationsPage.updatedFavorites"));
     },
   });
 
@@ -64,15 +64,13 @@ export default function RecommendationsPage() {
         <div className="space-y-1">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF9E6] text-[#111965] border border-[#F7CE4D] text-xs font-bold">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Explainable Major Recommendations</span>
+            <span>{t("recommendationsPage.badge")}</span>
           </div>
           <h1 className="text-xl sm:text-3xl font-extrabold text-[#111965]">
-            {language === "km" ? "អនុសាសន៍ជំនាញសាកលវិទ្យាល័យផ្ទាល់ខ្លួន" : "Your Personalized Major Matches"}
+            {t("recommendationsPage.title")}
           </h1>
           <p className="text-xs sm:text-sm text-[#68708A]">
-            {language === "km"
-              ? "ចំណាត់ថ្នាក់ជំនាញដោយផ្អែកលើការរួមបញ្ចូលគ្នានៃបុគ្គលិកលក្ខណៈ កូដ Holland និងចំណុចខ្លាំងនៃការសិក្សា។"
-              : "Ranked based on your RIASEC Holland code, personality preference dimensions, and academic prerequisites."}
+            {t("recommendationsPage.subtitle")}
           </p>
         </div>
 
@@ -82,7 +80,7 @@ export default function RecommendationsPage() {
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-white border border-[#E6E8F0] hover:bg-slate-50 transition-colors self-start shadow-2xs"
         >
           <RotateCcw className={`w-3.5 h-3.5 ${recomputing ? "animate-spin" : ""}`} />
-          <span>{recomputing ? "Recalculating..." : language === "km" ? "គណនាឡើងវិញ" : "Recalculate"}</span>
+          <span>{recomputing ? t("recommendationsPage.recalculating") : t("recommendationsPage.recalculate")}</span>
         </button>
       </div>
 
@@ -172,21 +170,21 @@ export default function RecommendationsPage() {
                   <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-3">
                     <div className="flex items-center gap-1.5 text-xs font-bold text-[#111965]">
                       <Info className="w-3.5 h-3.5 text-[#111965]" />
-                      <span>{language === "km" ? "ហេតុអ្វីជំនាញនេះត្រូវនឹងអ្នក?" : "Why This Major Fits Your Profile:"}</span>
+                      <span>{t("recommendationsPage.whyFits")}</span>
                     </div>
 
                     <p className="text-xs text-[#171A2C] font-medium leading-relaxed">
-                      {language === "km" ? exp?.fit_summary_km : exp?.fit_summary_en}
+                      {getLocalized({ km: exp?.fit_summary_km, en: exp?.fit_summary_en })}
                     </p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#68708A] pt-1">
                       <div className="flex items-start gap-2">
                         <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 mt-0.5 flex-shrink-0" />
-                        <span>{language === "km" ? exp?.riasec_reason_km : exp?.riasec_reason_en}</span>
+                        <span>{getLocalized({ km: exp?.riasec_reason_km, en: exp?.riasec_reason_en })}</span>
                       </div>
                       <div className="flex items-start gap-2">
                         <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 mt-0.5 flex-shrink-0" />
-                        <span>{language === "km" ? exp?.personality_reason_km : exp?.personality_reason_en}</span>
+                        <span>{getLocalized({ km: exp?.personality_reason_km, en: exp?.personality_reason_en })}</span>
                       </div>
                     </div>
 
@@ -194,7 +192,7 @@ export default function RecommendationsPage() {
                     {exp?.constraints_notes_en?.length > 0 && (
                       <div className="pt-2 border-t border-amber-200/60 flex items-start gap-2 text-xs text-amber-800">
                         <AlertCircle className="w-3.5 h-3.5 text-amber-600 mt-0.5 flex-shrink-0" />
-                        <span>{language === "km" ? exp?.constraints_notes_km?.[0] : exp?.constraints_notes_en?.[0]}</span>
+                        <span>{getLocalized({ km: exp?.constraints_notes_km?.[0], en: exp?.constraints_notes_en?.[0] })}</span>
                       </div>
                     )}
                   </div>
@@ -202,19 +200,19 @@ export default function RecommendationsPage() {
                   {/* Multi-attribute Score Breakdown Bar */}
                   <div className="grid grid-cols-4 gap-2 text-center text-xs">
                     <div className="p-2.5 rounded-xl bg-white border border-[#E6E8F0]">
-                      <div className="text-[10px] text-[#68708A] uppercase font-bold">RIASEC Fit</div>
+                      <div className="text-[10px] text-[#68708A] uppercase font-bold">{t("recommendationsPage.riasecFit")}</div>
                       <div className="text-xs font-extrabold text-[#111965] mt-0.5">{rec.riasec_match_score}%</div>
                     </div>
                     <div className="p-2.5 rounded-xl bg-white border border-[#E6E8F0]">
-                      <div className="text-[10px] text-[#68708A] uppercase font-bold">Academic Fit</div>
+                      <div className="text-[10px] text-[#68708A] uppercase font-bold">{t("recommendationsPage.academicFit")}</div>
                       <div className="text-xs font-extrabold text-[#111965] mt-0.5">{rec.academic_match_score}%</div>
                     </div>
                     <div className="p-2.5 rounded-xl bg-white border border-[#E6E8F0]">
-                      <div className="text-[10px] text-[#68708A] uppercase font-bold">Personality Fit</div>
+                      <div className="text-[10px] text-[#68708A] uppercase font-bold">{t("recommendationsPage.personalityFit")}</div>
                       <div className="text-xs font-extrabold text-[#111965] mt-0.5">{rec.personality_match_score}%</div>
                     </div>
                     <div className="p-2.5 rounded-xl bg-white border border-[#E6E8F0]">
-                      <div className="text-[10px] text-[#68708A] uppercase font-bold">Career Align</div>
+                      <div className="text-[10px] text-[#68708A] uppercase font-bold">{t("recommendationsPage.careerAlign")}</div>
                       <div className="text-xs font-extrabold text-[#111965] mt-0.5">{rec.career_match_score}%</div>
                     </div>
                   </div>
@@ -223,7 +221,7 @@ export default function RecommendationsPage() {
                   <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
                     <div className="flex items-center gap-1.5 text-[#68708A]">
                       <Building2 className="w-3.5 h-3.5 text-[#111965]" />
-                      <span>{exp?.universities_count || 0} Cambodian institutions offer this degree</span>
+                      <span>{exp?.universities_count || 0} {t("recommendationsPage.institutionsOffer")}</span>
                     </div>
 
                     <div className="flex items-center gap-2.5 w-full sm:w-auto">
@@ -231,7 +229,7 @@ export default function RecommendationsPage() {
                         href={`/majors/${major.slug}`}
                         className="inline-flex items-center justify-center gap-1 px-4 py-2 rounded-xl font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors w-full sm:w-auto shadow-2xs"
                       >
-                        <span>{language === "km" ? "ស្វែងយល់សាកលវិទ្យាល័យដែលបង្រៀន" : "Explore Curricula & Universities"}</span>
+                        <span>{t("recommendationsPage.exploreCurricula")}</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </Link>
                     </div>
@@ -245,16 +243,16 @@ export default function RecommendationsPage() {
         <div className="p-12 rounded-3xl bg-white border border-[#E6E8F0] text-center space-y-4">
           <Sparkles className="w-10 h-10 text-[#111965] mx-auto opacity-75" />
           <h3 className="text-base font-bold text-[#111965]">
-            {language === "km" ? "មិនទាន់មានអនុសាសន៍នៅឡើយទេ" : "No recommendations generated yet"}
+            {t("recommendationsPage.noRecsTitle")}
           </h3>
           <p className="text-xs text-[#68708A] max-w-md mx-auto">
-            Please complete your Personality Assessment and RIASEC Career Interest test to compute personalized rankings.
+            {t("recommendationsPage.noRecsSubtitle")}
           </p>
           <Link
             href="/dashboard/assessments/personality"
             className="inline-block px-5 py-2.5 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B]"
           >
-            Start Personality Test
+            {t("recommendationsPage.startTest")}
           </Link>
         </div>
       )}

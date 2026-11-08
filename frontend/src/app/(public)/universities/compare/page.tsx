@@ -1,31 +1,33 @@
 "use client";
 
-import React, { Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import React from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import {
-  Scale,
   ArrowLeft,
+  Scale,
   CheckCircle2,
-  MapPin,
-  DollarSign,
+  XCircle,
   ExternalLink,
-  Building2,
-  GraduationCap,
+  MapPin,
+  Building,
 } from "lucide-react";
 
-function CompareContent() {
-  const searchParams = useSearchParams();
-  const ids = searchParams.get("ids") || "rupp,itc,aupp";
+function UniversityCompareContent() {
   const router = useRouter();
-  const { language, getLocalized } = useLanguage();
+  const searchParams = useSearchParams();
+  const ids = searchParams.get("ids") || "";
+  const { t, getLocalized } = useLanguage();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["compare-universities", ids],
-    queryFn: async () => apiFetch<any>(`/universities/compare?ids=${ids}`),
+    queryKey: ["universities-compare", ids],
+    queryFn: async () => {
+      if (!ids) return { universities: [] };
+      return apiFetch<{ universities: any[] }>(`/universities/compare?ids=${ids}`);
+    },
     enabled: !!ids,
   });
 
@@ -40,35 +42,33 @@ function CompareContent() {
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#68708A] hover:text-[#111965] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>{language === "km" ? "ត្រឡប់ក្រោយ" : "Back to Directory"}</span>
+            <span>{t("universitiesCompare.back")}</span>
           </button>
           <div className="text-xs text-[#68708A]">
-            {language === "km" ? "ការប្រៀបធៀបដោយផ្អែកលើទិន្នន័យជាក់ស្តែង" : "Fact-based Institutional Comparison"}
+            {t("universitiesCompare.factBased")}
           </div>
         </div>
 
         <div className="space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-xs font-semibold border border-amber-200">
             <Scale className="w-3.5 h-3.5 text-amber-600" />
-            <span>{language === "km" ? "ឧបករណ៍ប្រៀបធៀបសាកលវិទ្យាល័យ" : "University Comparison Matrix"}</span>
+            <span>{t("universitiesCompare.badge")}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
-            {language === "km" ? "ប្រៀបធៀបសាកលវិទ្យាល័យនៅកម្ពុជា" : "Side-by-Side University Comparison"}
+            {t("universitiesCompare.title")}
           </h1>
           <p className="text-xs sm:text-sm text-[#68708A]">
-            {language === "km"
-              ? "ប្រៀបធៀបតម្លៃសិក្សា ទីតាំង កម្មវិធីបណ្តុះបណ្តាល និងបរិក្ខារសិក្សាជាក់ស្តែងដើម្បីជ្រើសរើសជម្រើសដ៏ល្អបំផុត។"
-              : "Compare verified tuition schedules, campus facilities, degree levels, and locations to find your optimal path."}
+            {t("universitiesCompare.subtitle")}
           </p>
         </div>
 
         {isLoading ? (
           <div className="py-20 text-center text-sm text-[#68708A]">
-            {language === "km" ? "កំពុងទាញយកទិន្នន័យប្រៀបធៀប..." : "Loading comparison table..."}
+            {t("universitiesCompare.loading")}
           </div>
         ) : error || universities.length === 0 ? (
           <div className="py-16 text-center text-sm text-rose-600">
-            Failed to load universities for comparison. Select at least 2 universities.
+            {t("universitiesCompare.failed")}
           </div>
         ) : (
           <div className="overflow-x-auto rounded-3xl border border-[#E6E8F0] bg-white shadow-xs">
@@ -76,7 +76,7 @@ function CompareContent() {
               <thead>
                 <tr className="border-b border-[#E6E8F0] bg-[#F5F6FA]">
                   <th className="p-5 text-xs font-bold text-[#68708A] uppercase tracking-wider w-1/4">
-                    {language === "km" ? "លក្ខខណ្ឌប្រៀបធៀប" : "Comparison Criteria"}
+                    {t("universitiesCompare.criteria")}
                   </th>
                   {universities.map((u: any) => (
                     <th key={u.id} className="p-5 text-left border-l border-[#E6E8F0] w-1/4">
@@ -90,7 +90,7 @@ function CompareContent() {
                         href={`/universities/${u.slug}`}
                         className="inline-block mt-2 text-xs font-semibold text-[#111965] hover:underline"
                       >
-                        {language === "km" ? "ទម្រង់ពេញលេញ →" : "View Full Profile →"}
+                        {t("universitiesCompare.viewProfile")}
                       </Link>
                     </th>
                   ))}
@@ -100,7 +100,7 @@ function CompareContent() {
                 {/* 1. Type */}
                 <tr>
                   <td className="p-5 font-bold text-[#171A2C] bg-[#FAFAFC]">
-                    {language === "km" ? "ប្រភេទគ្រឹះស្ថាន" : "Institution Type"}
+                    {t("universitiesCompare.institutionType")}
                   </td>
                   {universities.map((u: any) => (
                     <td key={u.id} className="p-5 border-l border-[#E6E8F0]">
@@ -111,7 +111,9 @@ function CompareContent() {
                             : "bg-purple-50 text-purple-800 border border-purple-200"
                         }`}
                       >
-                        {u.university_type === "PUBLIC" ? (language === "km" ? "សាកលវិទ្យាល័យរដ្ឋ" : "Public State") : (language === "km" ? "សាកលវិទ្យាល័យឯកជន" : "Private International")}
+                        {u.university_type === "PUBLIC"
+                          ? t("universitiesCompare.publicType")
+                          : t("universitiesCompare.privateType")}
                       </span>
                     </td>
                   ))}
@@ -120,18 +122,20 @@ function CompareContent() {
                 {/* 2. Annual Tuition */}
                 <tr>
                   <td className="p-5 font-bold text-[#171A2C] bg-[#FAFAFC]">
-                    {language === "km" ? "តម្លៃសិក្សាប្រចាំឆ្នាំ (ផ្ទៀងផ្ទាត់)" : "Annual Tuition Range"}
+                    {t("universitiesCompare.annualTuition")}
                   </td>
                   {universities.map((u: any) => (
                     <td key={u.id} className="p-5 border-l border-[#E6E8F0]">
                       <div className="font-extrabold text-[#111965] text-sm sm:text-base">
                         {u.tuition_range_min_usd !== null
-                          ? `$${Math.round(u.tuition_range_min_usd)} – $${Math.round(u.tuition_range_max_usd || u.tuition_range_min_usd)} / yr`
-                          : "Information not available"}
+                          ? `$${Math.round(u.tuition_range_min_usd)} – $${Math.round(
+                              u.tuition_range_max_usd || u.tuition_range_min_usd
+                            )} / yr`
+                          : t("universitiesCompare.tuitionNotAvailable")}
                       </div>
                       {u.is_tuition_verified && (
                         <div className="text-[11px] text-emerald-700 font-semibold mt-1">
-                          ✓ Verified Admissions Fee
+                          {t("universitiesCompare.verifiedFee")}
                         </div>
                       )}
                     </td>
@@ -141,13 +145,13 @@ function CompareContent() {
                 {/* 3. Location */}
                 <tr>
                   <td className="p-5 font-bold text-[#171A2C] bg-[#FAFAFC]">
-                    {language === "km" ? "ទីតាំង" : "Location"}
+                    {t("universitiesCompare.location")}
                   </td>
                   {universities.map((u: any) => (
                     <td key={u.id} className="p-5 border-l border-[#E6E8F0] text-[#171A2C]">
                       <div className="flex items-center gap-1.5 font-medium">
                         <MapPin className="w-3.5 h-3.5 text-[#111965]" />
-                        <span>{u.province}</span>
+                        <span>{getLocalized(u.province) || u.province}</span>
                       </div>
                     </td>
                   ))}
@@ -156,12 +160,12 @@ function CompareContent() {
                 {/* 4. Total Programs */}
                 <tr>
                   <td className="p-5 font-bold text-[#171A2C] bg-[#FAFAFC]">
-                    {language === "km" ? "ចំនួនជំនាញបណ្តុះបណ្តាល" : "Available Programs"}
+                    {t("universitiesCompare.availablePrograms")}
                   </td>
                   {universities.map((u: any) => (
                     <td key={u.id} className="p-5 border-l border-[#E6E8F0]">
                       <div className="font-bold text-[#111965]">
-                        {u.offerings?.length || u.majors_count} {language === "km" ? "ជំនាញសិក្សា" : "Programs"}
+                        {u.offerings?.length || u.majors_count} {t("universitiesCompare.programs")}
                       </div>
                       <div className="text-[11px] text-[#68708A] mt-1 space-y-0.5">
                         {u.offerings?.slice(0, 3).map((um: any) => (
@@ -175,30 +179,34 @@ function CompareContent() {
                 {/* 5. Admission Criteria */}
                 <tr>
                   <td className="p-5 font-bold text-[#171A2C] bg-[#FAFAFC]">
-                    {language === "km" ? "លក្ខខណ្ឌចូលរៀន" : "Admission Criteria"}
+                    {t("universitiesCompare.admissionCriteria")}
                   </td>
-                  {universities.map((u: any) => (
-                    <td key={u.id} className="p-5 border-l border-[#E6E8F0] text-xs text-[#68708A]">
-                      {u.admission_requirements ? (
-                        <ul className="space-y-1">
-                          {((language === "km" ? u.admission_requirements.km : u.admission_requirements.en) || u.admission_requirements.en || []).map((req: string, i: number) => (
-                            <li key={i} className="flex items-start gap-1.5">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 mt-0.5 flex-shrink-0" />
-                              <span>{req}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <span>BacII High School Exam Pass</span>
-                      )}
-                    </td>
-                  ))}
+                  {universities.map((u: any) => {
+                    const reqs = getLocalized(u.admission_requirements) || u.admission_requirements?.en || [];
+                    const reqList = Array.isArray(reqs) ? reqs : [];
+                    return (
+                      <td key={u.id} className="p-5 border-l border-[#E6E8F0] text-xs text-[#68708A]">
+                        {reqList.length > 0 ? (
+                          <ul className="space-y-1">
+                            {reqList.map((req: string, i: number) => (
+                              <li key={i} className="flex items-start gap-1.5">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 mt-0.5 flex-shrink-0" />
+                                <span>{req}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span>{t("universitiesCompare.admissionFallback")}</span>
+                        )}
+                      </td>
+                    );
+                  })}
                 </tr>
 
                 {/* 6. Official Link */}
                 <tr>
                   <td className="p-5 font-bold text-[#171A2C] bg-[#FAFAFC]">
-                    {language === "km" ? "គេហទំព័រផ្លូវការ" : "Official Portal"}
+                    {t("universitiesCompare.officialPortal")}
                   </td>
                   {universities.map((u: any) => (
                     <td key={u.id} className="p-5 border-l border-[#E6E8F0]">
@@ -229,14 +237,14 @@ function CompareContent() {
 
 export default function UniversityComparePage() {
   return (
-    <Suspense
+    <React.Suspense
       fallback={
-        <div className="min-h-screen bg-[#F5F6FA] flex items-center justify-center p-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#111965]"></div>
+        <div className="min-h-screen bg-[#F5F6FA] flex items-center justify-center text-sm text-[#68708A]">
+          Loading...
         </div>
       }
     >
-      <CompareContent />
-    </Suspense>
+      <UniversityCompareContent />
+    </React.Suspense>
   );
 }

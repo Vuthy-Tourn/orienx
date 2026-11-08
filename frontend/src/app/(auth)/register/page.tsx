@@ -6,12 +6,21 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { Logo } from "@/components/layout/logo";
-import { ArrowRight, Lock, Mail, User as UserIcon, MapPin, GraduationCap, AlertCircle } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  User as UserIcon,
+  MapPin,
+  GraduationCap,
+  ArrowRight,
+  AlertCircle,
+  Building,
+} from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
   const { register } = useAuth();
-  const { language } = useLanguage();
+  const { t } = useLanguage();
 
   const [fullNameEn, setFullNameEn] = useState("");
   const [fullNameKm, setFullNameKm] = useState("");
@@ -25,14 +34,14 @@ export default function RegisterPage() {
 
   const cambodianProvinces = [
     "Phnom Penh",
-    "Kandal",
-    "Siem Reap",
+    "Banteay Meanchey",
     "Battambang",
     "Kampong Cham",
     "Kampong Chhnang",
     "Kampong Speu",
     "Kampong Thom",
     "Kampot",
+    "Kandal",
     "Kep",
     "Koh Kong",
     "Kratie",
@@ -44,6 +53,7 @@ export default function RegisterPage() {
     "Prey Veng",
     "Pursat",
     "Ratanakiri",
+    "Siem Reap",
     "Stung Treng",
     "Svay Rieng",
     "Takeo",
@@ -60,16 +70,14 @@ export default function RegisterPage() {
         email,
         password,
         full_name_en: fullNameEn,
-        full_name_km: fullNameKm || fullNameEn,
+        full_name_km: fullNameKm || undefined,
         province,
         current_education_level: currentLevel,
-        high_school: highSchool || undefined,
-        graduation_year: 2026,
-        preferred_language: language,
+        high_school_name: highSchool || undefined,
       });
       router.push("/dashboard");
     } catch (err: any) {
-      setError(err?.message || "Registration failed. Please check inputs.");
+      setError(err?.message || "Registration failed. Please check your information.");
     } finally {
       setLoading(false);
     }
@@ -83,12 +91,10 @@ export default function RegisterPage() {
             <Logo showText={false} />
           </div>
           <h1 className="text-2xl font-extrabold text-[#111965]">
-            {language === "km" ? "បង្កើតគណនី OrienX ឥតគិតថ្លៃ" : "Create Your Free Account"}
+            {t("auth.registerTitle")}
           </h1>
           <p className="text-xs text-[#68708A]">
-            {language === "km"
-              ? "ចូលរួមជាមួយសិស្សានុសិស្សកម្ពុជារាប់ពាន់នាក់ដើម្បីស្វែងរកជំនាញដែលស័ក្តិសម"
-              : "Discover your direction with scientific assessments and verified programs"}
+            {t("auth.registerSubtitle")}
           </p>
         </div>
 
@@ -104,7 +110,7 @@ export default function RegisterPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div className="space-y-1">
                 <label className="text-xs font-bold text-[#171A2C]">
-                  {language === "km" ? "ឈ្មោះជាឡាតាំង (Full Name Latin)" : "Full Name (English)"}
+                  {t("auth.nameLatinLabel")}
                 </label>
                 <div className="relative">
                   <UserIcon className="w-4 h-4 text-[#68708A] absolute left-3 top-3" />
@@ -121,7 +127,7 @@ export default function RegisterPage() {
 
               <div className="space-y-1">
                 <label className="text-xs font-bold text-[#171A2C]">
-                  {language === "km" ? "ឈ្មោះជាភាសាខ្មែរ" : "Khmer Name (Optional)"}
+                  {t("auth.nameKmLabel")}
                 </label>
                 <input
                   type="text"
@@ -135,7 +141,7 @@ export default function RegisterPage() {
 
             <div className="space-y-1">
               <label className="text-xs font-bold text-[#171A2C]">
-                {language === "km" ? "អ៊ីមែល (Email)" : "Email Address"}
+                {t("auth.emailLabel")}
               </label>
               <div className="relative">
                 <Mail className="w-4 h-4 text-[#68708A] absolute left-3 top-3" />
@@ -152,7 +158,7 @@ export default function RegisterPage() {
 
             <div className="space-y-1">
               <label className="text-xs font-bold text-[#171A2C]">
-                {language === "km" ? "ពាក្យសម្ងាត់ (Password)" : "Password"}
+                {t("auth.passwordLabel")}
               </label>
               <div className="relative">
                 <Lock className="w-4 h-4 text-[#68708A] absolute left-3 top-3" />
@@ -171,7 +177,7 @@ export default function RegisterPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div className="space-y-1">
                 <label className="text-xs font-bold text-[#171A2C]">
-                  {language === "km" ? "រាជធានី/ខេត្ត (Province)" : "Province / City"}
+                  {t("auth.provinceLabel")}
                 </label>
                 <div className="relative">
                   <MapPin className="w-4 h-4 text-[#68708A] absolute left-3 top-3" />
@@ -191,7 +197,7 @@ export default function RegisterPage() {
 
               <div className="space-y-1">
                 <label className="text-xs font-bold text-[#171A2C]">
-                  {language === "km" ? "កម្រិតសិក្សាបច្ចុប្បន្ន" : "Current Education"}
+                  {t("auth.educationLabel")}
                 </label>
                 <div className="relative">
                   <GraduationCap className="w-4 h-4 text-[#68708A] absolute left-3 top-3" />
@@ -212,7 +218,7 @@ export default function RegisterPage() {
 
             <div className="space-y-1">
               <label className="text-xs font-bold text-[#171A2C]">
-                {language === "km" ? "ឈ្មោះវិទ្យាល័យ / សាលា (High School)" : "High School Name (Optional)"}
+                {t("auth.schoolLabel")}
               </label>
               <input
                 type="text"
@@ -229,10 +235,10 @@ export default function RegisterPage() {
               className="w-full py-3 rounded-xl font-bold text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-2xs transition-colors flex items-center justify-center gap-2 mt-2"
             >
               {loading ? (
-                <span>{language === "km" ? "កំពុងបង្កើតគណនី..." : "Creating Account..."}</span>
+                <span>{t("auth.creatingAccount")}</span>
               ) : (
                 <>
-                  <span>{language === "km" ? "ចុះឈ្មោះ និងចាប់ផ្តើម" : "Register & Start Journey"}</span>
+                  <span>{t("auth.registerButton")}</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
@@ -240,9 +246,9 @@ export default function RegisterPage() {
           </form>
 
           <div className="pt-4 border-t border-[#E6E8F0] text-center text-xs text-[#68708A]">
-            <span>{language === "km" ? "មានគណនីរួចហើយ?" : "Already have an account?"} </span>
+            <span>{t("auth.hasAccountPrompt")} </span>
             <Link href="/login" className="font-bold text-[#111965] hover:underline">
-              {language === "km" ? "ចូលគណនីនៅទីនេះ" : "Sign In"}
+              {t("auth.signInLink")}
             </Link>
           </div>
         </div>
@@ -250,4 +256,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-

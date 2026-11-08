@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 export default function FavoritesPage() {
-  const { language, getLocalized } = useLanguage();
+  const { t, getLocalized } = useLanguage();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<"majors" | "universities" | "careers" | "scholarships">("majors");
 
@@ -54,12 +54,10 @@ export default function FavoritesPage() {
     <div className="space-y-8 animate-in fade-in">
       <div className="space-y-1">
         <h1 className="text-xl sm:text-3xl font-extrabold text-[#111965]">
-          {language === "km" ? "ទំព័រ និងជំនាញដែលបានរក្សាទុក" : "Saved Bookmarks & Tracking"}
+          {t("favoritesPage.title")}
         </h1>
         <p className="text-xs sm:text-sm text-[#68708A]">
-          {language === "km"
-            ? "គ្រប់គ្រងជំនាញ សាកលវិទ្យាល័យ និងអាហារូបករណ៍ដែលអ្នកបានចំណាំទុក។"
-            : "Keep track of your favorite majors, universities, career pathways, and applications."}
+          {t("favoritesPage.subtitle")}
         </p>
       </div>
 
@@ -74,7 +72,7 @@ export default function FavoritesPage() {
           }`}
         >
           <Compass className="w-4 h-4" />
-          <span>Majors ({favorites?.majors?.length || 0})</span>
+          <span>{t("favoritesPage.tabMajors")} ({favorites?.majors?.length || 0})</span>
         </button>
 
         <button
@@ -86,7 +84,7 @@ export default function FavoritesPage() {
           }`}
         >
           <Building2 className="w-4 h-4" />
-          <span>Universities ({favorites?.universities?.length || 0})</span>
+          <span>{t("favoritesPage.tabUniversities")} ({favorites?.universities?.length || 0})</span>
         </button>
 
         <button
@@ -98,7 +96,7 @@ export default function FavoritesPage() {
           }`}
         >
           <Briefcase className="w-4 h-4" />
-          <span>Careers ({favorites?.careers?.length || 0})</span>
+          <span>{t("favoritesPage.tabCareers")} ({favorites?.careers?.length || 0})</span>
         </button>
 
         <button
@@ -110,12 +108,12 @@ export default function FavoritesPage() {
           }`}
         >
           <Award className="w-4 h-4" />
-          <span>Scholarships ({favorites?.scholarships?.length || 0})</span>
+          <span>{t("favoritesPage.tabScholarships")} ({favorites?.scholarships?.length || 0})</span>
         </button>
       </div>
 
       {isLoading ? (
-        <div className="py-20 text-center text-sm text-[#68708A]">Loading saved bookmarks...</div>
+        <div className="py-20 text-center text-sm text-[#68708A]">{t("favoritesPage.loading")}</div>
       ) : (
         <div>
           {/* Majors Tab */}
@@ -129,7 +127,7 @@ export default function FavoritesPage() {
                       className="p-5 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3 flex flex-col justify-between"
                     >
                       <div className="space-y-1">
-                        <span className="text-[10px] font-bold text-[#68708A] uppercase">{m.category}</span>
+                        <span className="text-[10px] font-bold text-[#68708A] uppercase">{t(`categories.${m.category}`, m.category)}</span>
                         <h4 className="text-base font-bold text-[#111965]">{getLocalized(m.name)}</h4>
                       </div>
                       <div className="flex items-center justify-between pt-2 border-t border-[#E6E8F0] text-xs">
@@ -137,10 +135,10 @@ export default function FavoritesPage() {
                           onClick={() => removeFavorite({ type: "major", id: m.id })}
                           className="text-rose-600 hover:underline font-semibold"
                         >
-                          Remove
+                          {t("favoritesPage.remove")}
                         </button>
                         <Link href={`/majors/${m.slug}`} className="font-bold text-[#111965] hover:underline">
-                          View Program →
+                          {t("favoritesPage.viewProgram")}
                         </Link>
                       </div>
                     </div>
@@ -148,7 +146,7 @@ export default function FavoritesPage() {
                 </div>
               ) : (
                 <div className="p-12 text-center text-xs text-[#68708A] bg-white rounded-2xl border border-[#E6E8F0]">
-                  No majors bookmarked yet. Explore majors and click the bookmark icon!
+                  {t("favoritesPage.noMajors")}
                 </div>
               )}
             </div>
@@ -173,10 +171,10 @@ export default function FavoritesPage() {
                           onClick={() => removeFavorite({ type: "university", id: u.id })}
                           className="text-rose-600 hover:underline font-semibold"
                         >
-                          Remove
+                          {t("favoritesPage.remove")}
                         </button>
                         <Link href={`/universities/${u.slug}`} className="font-bold text-[#111965] hover:underline">
-                          View University →
+                          {t("favoritesPage.viewUniversity")}
                         </Link>
                       </div>
                     </div>
@@ -184,7 +182,7 @@ export default function FavoritesPage() {
                 </div>
               ) : (
                 <div className="p-12 text-center text-xs text-[#68708A] bg-white rounded-2xl border border-[#E6E8F0]">
-                  No universities saved yet.
+                  {t("favoritesPage.noUniversities")}
                 </div>
               )}
             </div>
@@ -209,10 +207,10 @@ export default function FavoritesPage() {
                           onClick={() => removeFavorite({ type: "career", id: c.id })}
                           className="text-rose-600 hover:underline font-semibold"
                         >
-                          Remove
+                          {t("favoritesPage.remove")}
                         </button>
                         <Link href={`/careers/${c.slug}`} className="font-bold text-[#111965] hover:underline">
-                          View Career →
+                          {t("favoritesPage.viewCareer")}
                         </Link>
                       </div>
                     </div>
@@ -220,7 +218,7 @@ export default function FavoritesPage() {
                 </div>
               ) : (
                 <div className="p-12 text-center text-xs text-[#68708A] bg-white rounded-2xl border border-[#E6E8F0]">
-                  No careers saved yet.
+                  {t("favoritesPage.noCareers")}
                 </div>
               )}
             </div>
@@ -244,10 +242,10 @@ export default function FavoritesPage() {
                             onChange={(e) => updateScholarshipStatus({ id: s.id, status: e.target.value })}
                             className="text-[11px] font-bold px-2 py-1 rounded-lg border border-[#E6E8F0] bg-[#F5F6FA] text-[#111965]"
                           >
-                            <option value="SAVED">Saved</option>
-                            <option value="PLANNING_TO_APPLY">Planning to Apply</option>
-                            <option value="APPLIED">Applied</option>
-                            <option value="WON">Scholarship Awarded</option>
+                            <option value="SAVED">{t("favoritesPage.statusSaved")}</option>
+                            <option value="PLANNING_TO_APPLY">{t("favoritesPage.statusPlanning")}</option>
+                            <option value="APPLIED">{t("favoritesPage.statusApplied")}</option>
+                            <option value="WON">{t("favoritesPage.statusAwarded")}</option>
                           </select>
                         </div>
                         <h4 className="text-base font-bold text-[#111965]">{getLocalized(s.title)}</h4>
@@ -258,10 +256,10 @@ export default function FavoritesPage() {
                           onClick={() => removeFavorite({ type: "scholarship", id: s.id })}
                           className="text-rose-600 hover:underline font-semibold"
                         >
-                          Remove
+                          {t("favoritesPage.remove")}
                         </button>
                         <Link href={`/scholarships/${s.slug}`} className="font-bold text-[#111965] hover:underline">
-                          View Details →
+                          {t("favoritesPage.viewDetails")}
                         </Link>
                       </div>
                     </div>
@@ -269,7 +267,7 @@ export default function FavoritesPage() {
                 </div>
               ) : (
                 <div className="p-12 text-center text-xs text-[#68708A] bg-white rounded-2xl border border-[#E6E8F0]">
-                  No scholarships saved yet.
+                  {t("favoritesPage.noScholarships")}
                 </div>
               )}
             </div>

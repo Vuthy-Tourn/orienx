@@ -26,7 +26,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const router = useRouter();
   const { user, isLoading, logout } = useAuth();
-  const { language } = useLanguage();
+  const { t, getLocalized } = useLanguage();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F5F6FA] text-sm text-[#68708A]">
-        {language === "km" ? "កំពុងផ្ទៀងផ្ទាត់គណនី..." : "Authenticating session..."}
+        {t("dashboardLayout.authenticating")}
       </div>
     );
   }
@@ -50,43 +50,47 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const sidebarLinks = [
     {
       href: "/dashboard",
-      label: language === "km" ? "ផ្ទាំងសង្ខេប" : "Overview",
+      label: t("dashboardLayout.overview"),
       icon: LayoutDashboard,
     },
     {
       href: "/dashboard/assessments/personality",
-      label: language === "km" ? "តេស្តបុគ្គលិកលក្ខណៈ" : "Personality Assessment",
+      label: t("dashboardLayout.personality"),
       icon: BrainCircuit,
     },
     {
       href: "/dashboard/assessments/riasec",
-      label: language === "km" ? "តេស្តចំណាប់អារម្មណ៍ RIASEC" : "RIASEC Career Test",
+      label: t("dashboardLayout.riasec"),
       icon: Compass,
     },
     {
       href: "/dashboard/assessments/preferences",
-      label: language === "km" ? "ចំណូលចិត្តការសិក្សា" : "Academic Preferences",
+      label: t("dashboardLayout.preferences"),
       icon: Sliders,
     },
     {
       href: "/dashboard/recommendations",
-      label: language === "km" ? "អនុសាសន៍ជំនាញ" : "Major Recommendations",
+      label: t("dashboardLayout.recommendations"),
       icon: Sparkles,
       highlight: true,
     },
     {
       href: "/dashboard/favorites",
-      label: language === "km" ? "ទំព័រដែលបានរក្សាទុក" : "Saved Favorites",
+      label: t("dashboardLayout.favorites"),
       icon: Bookmark,
     },
     {
       href: "/dashboard/profile",
-      label: language === "km" ? "ការកំណត់គណនី" : "Profile & Settings",
+      label: t("dashboardLayout.profile"),
       icon: UserIcon,
     },
   ];
 
   const isAdmin = user?.roles?.some((r) => r === "ADMIN" || r === "SUPER_ADMIN");
+  const displayName =
+    getLocalized({ en: user.full_name_en, km: user.full_name_km }) ||
+    user.full_name_en ||
+    user.email;
 
   return (
     <div className="min-h-screen bg-[#F5F6FA] flex">
@@ -103,7 +107,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <div className="overflow-hidden">
             <div className="text-xs font-bold text-[#111965] truncate">
-              {language === "km" ? user.full_name_km || user.full_name_en : user.full_name_en || user.email}
+              {displayName}
             </div>
             <div className="text-[10px] text-[#68708A] truncate">
               {user.province || "Student"} • Grade 12
@@ -156,7 +160,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
           >
             <LogOut className="w-4 h-4" />
-            <span>{language === "km" ? "ចាកចេញពីគណនី" : "Sign Out"}</span>
+            <span>{t("dashboardLayout.logout")}</span>
           </button>
         </div>
       </aside>
@@ -217,7 +221,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 className="flex items-center gap-2 p-2 text-xs font-semibold text-rose-600 border-t border-[#E6E8F0]"
               >
                 <LogOut className="w-4 h-4" />
-                <span>Sign Out</span>
+                <span>{t("dashboardLayout.logout")}</span>
               </button>
             </div>
           </div>
@@ -231,4 +235,3 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     </div>
   );
 }
-

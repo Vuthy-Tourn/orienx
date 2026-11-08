@@ -21,7 +21,7 @@ import {
 
 export default function DashboardOverviewPage() {
   const { user } = useAuth();
-  const { language, getLocalized } = useLanguage();
+  const { t, getLocalized } = useLanguage();
 
   const { data: summary, isLoading } = useQuery({
     queryKey: ["dashboard-summary"],
@@ -36,6 +36,12 @@ export default function DashboardOverviewPage() {
   const status = summary?.assessments_status;
   const favorites = summary?.favorites_count;
 
+  const userName =
+    getLocalized({ en: user?.full_name_en, km: user?.full_name_km }) ||
+    user?.full_name_en ||
+    user?.email?.split("@")[0] ||
+    "";
+
   return (
     <div className="space-y-8">
       {/* Welcome Banner */}
@@ -43,14 +49,13 @@ export default function DashboardOverviewPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#F7CE4D] text-[#111965] uppercase tracking-wider">
-              {language === "km" ? "ផ្ទាំងតម្រង់ទិសផ្ទាល់ខ្លួន" : "Personalized Guidance Dashboard"}
+              {t("dashboardPage.badge")}
             </span>
             <h1 className="text-xl sm:text-3xl font-extrabold text-white">
-              {language === "km" ? "សួស្តី" : "Welcome back"},{" "}
-              {user?.full_name_km || user?.full_name_en || user?.email.split("@")[0]}! 👋
+              {t("dashboardPage.welcome")}, {userName}! 👋
             </h1>
             <p className="text-xs sm:text-sm text-slate-300">
-              {user?.province} • Grade 12 Graduate Candidate
+              {user?.province || "Phnom Penh"} • Grade 12 Graduate Candidate
             </p>
           </div>
 
@@ -58,7 +63,7 @@ export default function DashboardOverviewPage() {
             href="/dashboard/recommendations"
             className="px-5 py-2.5 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors self-start sm:self-auto shadow-2xs"
           >
-            {language === "km" ? "មើលអនុសាសន៍ជំនាញ" : "View Recommendations"}
+            {t("dashboardPage.viewRecommendations")}
           </Link>
         </div>
       </div>
@@ -68,12 +73,10 @@ export default function DashboardOverviewPage() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-base font-extrabold text-[#111965]">
-              {language === "km" ? "វឌ្ឍនភាពនៃការតម្រង់ទិសរបស់អ្នក" : "Your Guidance Milestone Progress"}
+              {t("dashboardPage.milestoneTitle")}
             </h2>
             <p className="text-xs text-[#68708A]">
-              {language === "km"
-                ? "បំពេញជំហានទាំង ៣ ដើម្បីទទួលបានអនុសាសន៍ជំនាញដែលសុក្រឹតបំផុត"
-                : "Complete all 3 assessments for the highest matching accuracy"}
+              {t("dashboardPage.milestoneSubtitle")}
             </p>
           </div>
           <span className="text-xs font-bold px-3 py-1 rounded-full bg-[#F0F2FA] text-[#111965]">
@@ -176,19 +179,17 @@ export default function DashboardOverviewPage() {
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <h2 className="text-lg font-extrabold text-[#111965]">
-              {language === "km" ? "ជំនាញដែលសមស្របបំផុតសម្រាប់អ្នក" : "Top Recommended Majors for You"}
+              {t("dashboardPage.topMajorsTitle")}
             </h2>
             <p className="text-xs text-[#68708A]">
-              {language === "km"
-                ? "ផ្អែកលើការវិភាគបុគ្គលិកលក្ខណៈ កូដ Holland និងចំណុចខ្លាំងនៃការសិក្សារបស់អ្នក"
-                : "Calculated with explainable rule-based scoring"}
+              {t("dashboardPage.topMajorsSubtitle")}
             </p>
           </div>
           <Link
             href="/dashboard/recommendations"
             className="text-xs font-bold text-[#111965] hover:underline"
           >
-            {language === "km" ? "មើលទាំងអស់ →" : "View All Recommendations →"}
+            {t("dashboardPage.viewAllRecs")}
           </Link>
         </div>
 
@@ -214,7 +215,7 @@ export default function DashboardOverviewPage() {
                   </h3>
 
                   <p className="text-xs text-[#68708A] line-clamp-2">
-                    {language === "km" ? rec.explanation?.fit_summary_km : rec.explanation?.fit_summary_en}
+                    {getLocalized({ en: rec.explanation?.fit_summary_en, km: rec.explanation?.fit_summary_km })}
                   </p>
                 </div>
 
@@ -236,16 +237,16 @@ export default function DashboardOverviewPage() {
           <div className="p-8 rounded-3xl bg-white border border-[#E6E8F0] text-center space-y-3">
             <Compass className="w-8 h-8 text-[#111965] mx-auto opacity-75" />
             <h3 className="text-sm font-bold text-[#111965]">
-              {language === "km" ? "មិនទាន់មានអនុសាសន៍នៅឡើយទេ" : "No recommendations generated yet"}
+              {t("dashboardPage.noRecsTitle")}
             </h3>
             <p className="text-xs text-[#68708A] max-w-md mx-auto">
-              Complete your Personality or RIASEC assessment to calculate personalized major recommendations.
+              {t("dashboardPage.noRecsSubtitle")}
             </p>
             <Link
               href="/dashboard/assessments/personality"
               className="inline-block px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B]"
             >
-              Start Personality Assessment
+              {t("dashboardPage.startPersonality")}
             </Link>
           </div>
         )}
@@ -295,4 +296,3 @@ export default function DashboardOverviewPage() {
     </div>
   );
 }
-

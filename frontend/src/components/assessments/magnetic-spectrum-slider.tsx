@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { ArchetypeGlyph } from "@/components/assessments/archetype-glyph";
 import { CheckCircle2, Sparkles, Compass } from "lucide-react";
+import { useLanguage } from "@/contexts/language-context";
 
 interface OptionData {
   id: string;
@@ -16,7 +17,7 @@ interface MagneticSpectrumSliderProps {
   optionB: OptionData;
   value: number | null; // 1 to 5 (1: Def A, 2: Lean A, 3: Pivot, 4: Lean B, 5: Def B)
   onChange: (value: number, selectedOptionId: string) => void;
-  language: "en" | "km";
+  language?: "en" | "km";
 }
 
 const TRAIT_METADATA: Record<
@@ -112,8 +113,8 @@ export function MagneticSpectrumSlider({
   optionB,
   value,
   onChange,
-  language,
 }: MagneticSpectrumSliderProps) {
+  const { t, getLocalized } = useLanguage();
   const [hoveredPos, setHoveredPos] = useState<number | null>(null);
 
   const activePos = hoveredPos ?? value ?? 3;
@@ -225,7 +226,7 @@ export function MagneticSpectrumSlider({
                   Trait {optionA.target_trait} Pole
                 </span>
                 <span className="block text-sm font-bold text-[#111965]">
-                  {language === "km" ? metaA.archetypeKm : metaA.archetypeEn}
+                  {getLocalized({ km: metaA.archetypeKm, en: metaA.archetypeEn })}
                 </span>
               </div>
             </div>
@@ -234,12 +235,12 @@ export function MagneticSpectrumSlider({
             {leftIntensity === "peak" && (
               <span className="px-3 py-1 rounded-full text-[11px] font-black bg-[#F7CE4D] text-[#111965] shadow-xs flex items-center gap-1 animate-in zoom-in-95">
                 <Sparkles className="w-3 h-3 text-[#111965]" />
-                <span>{language === "km" ? "១០០% ពេញលេញ" : "100% Dominant"}</span>
+                <span>{t("magneticSpectrum.dominant")}</span>
               </span>
             )}
             {leftIntensity === "lean" && (
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#F0F2FA] text-[#111965] border border-[#111965]/20">
-                <span>{language === "km" ? "៧៥% លំអៀង" : "75% Lean"}</span>
+                <span>{t("magneticSpectrum.lean")}</span>
               </span>
             )}
           </div>
@@ -247,14 +248,14 @@ export function MagneticSpectrumSlider({
           {/* Narrative Content */}
           <div className="z-10 pt-1">
             <p className="text-sm sm:text-base font-semibold text-[#171A2C] leading-relaxed">
-              {language === "km" ? optionA.label_km : optionA.label_en}
+              {getLocalized({ km: optionA.label_km, en: optionA.label_en })}
             </p>
           </div>
 
           {/* Click to Gravitate Hint */}
           <div className="z-10 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-[#68708A]">
             <span className="text-[11px] font-medium">
-              {language === "km" ? "ចុចដើម្បីទាញទៅជម្រើសនេះ" : "Click to pull slider here"}
+              {t("magneticSpectrum.clickToPull")}
             </span>
             <span className="text-xs font-bold text-[#111965]">Pole A ◄</span>
           </div>
@@ -304,7 +305,7 @@ export function MagneticSpectrumSlider({
                   Trait {optionB.target_trait} Pole
                 </span>
                 <span className="block text-sm font-bold text-[#111965]">
-                  {language === "km" ? metaB.archetypeKm : metaB.archetypeEn}
+                  {getLocalized({ km: metaB.archetypeKm, en: metaB.archetypeEn })}
                 </span>
               </div>
             </div>
@@ -313,12 +314,12 @@ export function MagneticSpectrumSlider({
             {rightIntensity === "peak" && (
               <span className="px-3 py-1 rounded-full text-[11px] font-black bg-[#F7CE4D] text-[#111965] shadow-xs flex items-center gap-1 animate-in zoom-in-95">
                 <Sparkles className="w-3 h-3 text-[#111965]" />
-                <span>{language === "km" ? "១០០% ពេញលេញ" : "100% Dominant"}</span>
+                <span>{t("magneticSpectrum.dominant")}</span>
               </span>
             )}
             {rightIntensity === "lean" && (
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#F0F2FA] text-[#111965] border border-[#111965]/20">
-                <span>{language === "km" ? "៧៥% លំអៀង" : "75% Lean"}</span>
+                <span>{t("magneticSpectrum.lean")}</span>
               </span>
             )}
           </div>
@@ -326,7 +327,7 @@ export function MagneticSpectrumSlider({
           {/* Narrative Content */}
           <div className="z-10 pt-1">
             <p className="text-sm sm:text-base font-semibold text-[#171A2C] leading-relaxed">
-              {language === "km" ? optionB.label_km : optionB.label_en}
+              {getLocalized({ km: optionB.label_km, en: optionB.label_en })}
             </p>
           </div>
 
@@ -334,7 +335,7 @@ export function MagneticSpectrumSlider({
           <div className="z-10 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-[#68708A]">
             <span className="text-xs font-bold text-[#111965]">► Pole B</span>
             <span className="text-[11px] font-medium">
-              {language === "km" ? "ចុចដើម្បីទាញទៅជម្រើសនេះ" : "Click to pull slider here"}
+              {t("magneticSpectrum.clickToPull")}
             </span>
           </div>
         </div>
@@ -348,14 +349,12 @@ export function MagneticSpectrumSlider({
           <div className="flex items-center gap-2">
             <Compass className="w-4 h-4 text-[#111965]" />
             <span className="font-extrabold text-[#111965] uppercase tracking-wider text-[11px]">
-              {language === "km" ? "រង្វាស់តុល្យភាពចំណង់ចំណូលចិត្ត" : "Magnetic Preference Spectrum"}
+              {t("magneticSpectrum.spectrumTitle")}
             </span>
           </div>
 
           <span className="text-[11px] font-bold text-[#68708A]">
-            {language === "km"
-              ? "ចុច ឬអូសទៅកាន់ចំណុចដែលត្រូវនឹងអ្នក"
-              : "Tap any anchor point to position your needle"}
+            {t("magneticSpectrum.tapAnchor")}
           </span>
         </div>
 
@@ -454,27 +453,21 @@ export function MagneticSpectrumSlider({
             <div>
               <span className="block text-xs font-extrabold text-[#111965]">
                 {isSelected
-                  ? language === "km"
-                    ? SNAP_STANCES[value - 1]?.labelKm
-                    : SNAP_STANCES[value - 1]?.labelEn
-                  : language === "km"
-                  ? "សូមកំណត់ទិសដៅរបស់អ្នក"
-                  : "Position your magnetic needle"}
+                  ? getLocalized({ km: SNAP_STANCES[value - 1]?.labelKm, en: SNAP_STANCES[value - 1]?.labelEn })
+                  : t("magneticSpectrum.positionNeedle")}
               </span>
               <span className="block text-[11px] text-[#68708A]">
                 {isSelected
                   ? value === 1
-                    ? `${language === "km" ? "ពេញចិត្តយ៉ាងខ្លាំងលើ" : "Strongly aligned with"} ${language === "km" ? optionA.label_km : optionA.label_en}`
+                    ? `${t("magneticSpectrum.stronglyAligned")} ${getLocalized({ km: optionA.label_km, en: optionA.label_en })}`
                     : value === 2
-                    ? `${language === "km" ? "មានទំនោរច្រើនទៅ" : "Moderate lean towards"} ${language === "km" ? optionA.label_km : optionA.label_en}`
+                    ? `${t("magneticSpectrum.moderateLean")} ${getLocalized({ km: optionA.label_km, en: optionA.label_en })}`
                     : value === 3
-                    ? `${language === "km" ? "មានអារម្មណ៍សមស្របទាំងសងខាងស្មើគ្នា" : "Balanced equally between both approaches"}`
+                    ? t("magneticSpectrum.balanced")
                     : value === 4
-                    ? `${language === "km" ? "មានទំនោរច្រើនទៅ" : "Moderate lean towards"} ${language === "km" ? optionB.label_km : optionB.label_en}`
-                    : `${language === "km" ? "ពេញចិត្តយ៉ាងខ្លាំងលើ" : "Strongly aligned with"} ${language === "km" ? optionB.label_km : optionB.label_en}`
-                  : language === "km"
-                  ? "ជ្រើសរើសចំណុចមួយក្នុងចំណោម ៥ ដើម្បីបន្តដំណើរការ"
-                  : "Tap on any card or slider point to choose your stance"}
+                    ? `${t("magneticSpectrum.moderateLean")} ${getLocalized({ km: optionB.label_km, en: optionB.label_en })}`
+                    : `${t("magneticSpectrum.stronglyAligned")} ${getLocalized({ km: optionB.label_km, en: optionB.label_en })}`
+                  : t("magneticSpectrum.choosePoint")}
               </span>
             </div>
           </div>

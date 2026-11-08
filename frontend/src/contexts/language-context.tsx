@@ -9,7 +9,7 @@ type Language = "km" | "en";
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (path: string) => string;
+  t: (path: string, fallback?: string) => string;
   getLocalized: (obj?: { en?: string; km?: string } | null) => string;
 }
 
@@ -32,7 +32,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("futera_lang", lang);
   };
 
-  const t = (path: string): string => {
+  const t = (path: string, fallbackText?: string): string => {
     const keys = path.split(".");
     let current: any = dictionaries[language];
     for (const k of keys) {
@@ -45,13 +45,13 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
           if (fallback && typeof fallback === "object" && fbK in fallback) {
             fallback = fallback[fbK];
           } else {
-            return path;
+            return fallbackText || path;
           }
         }
-        return typeof fallback === "string" ? fallback : path;
+        return typeof fallback === "string" ? fallback : (fallbackText || path);
       }
     }
-    return typeof current === "string" ? current : path;
+    return typeof current === "string" ? current : (fallbackText || path);
   };
 
   const getLocalized = (obj?: { en?: string; km?: string } | null): string => {

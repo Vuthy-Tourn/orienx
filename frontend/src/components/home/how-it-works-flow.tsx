@@ -15,7 +15,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export function HowItWorksFlow() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const primaryPathRef = useRef<SVGPathElement>(null);
@@ -422,11 +422,6 @@ export function HowItWorksFlow() {
       <div className="absolute top-0 right-0 w-[550px] h-[550px] bg-blue-500/[0.035] rounded-full blur-[130px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[550px] h-[550px] bg-amber-500/[0.035] rounded-full blur-[130px] pointer-events-none" />
 
-      {/* Large faint corner watermark: '362' style from Picture 1 */}
-      <div className="absolute top-6 right-8 lg:right-16 text-slate-200/40 font-black text-7xl lg:text-9xl tracking-tighter select-none pointer-events-none">
-        04
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* =====================================================================
             TOP HEADER: Styled exactly like Picture 1 (— category — + Bold Title)
@@ -435,7 +430,7 @@ export function HowItWorksFlow() {
           {/* Subtle Category Pill with Dashes */}
           <div className="inline-flex items-center gap-3 text-xs tracking-[0.25em] text-[#0284C7] font-bold uppercase">
             <span className="w-7 h-[1.5px] bg-[#0284C7]/40 rounded-full" />
-            <span>{language === "km" ? "ដំណើរការ ៤ ជំហាន" : "OrienX Pathway"}</span>
+            <span>{t("howItWorks.badge")}</span>
             <span className="w-7 h-[1.5px] bg-[#0284C7]/40 rounded-full" />
           </div>
 
@@ -629,7 +624,7 @@ export function HowItWorksFlow() {
                         href={step.href}
                         className="inline-flex items-center gap-1 text-[11.5px] font-bold text-[#0284C7] mt-3 transition-colors hover:text-[#2563EB]"
                       >
-                        <span>{language === "km" ? "ស្វែងយល់បន្ថែម" : "Learn More"}</span>
+                        <span>{t("howItWorks.learnMore")}</span>
                         <ChevronRight className="w-3.5 h-3.5" />
                       </Link>
                     </div>
@@ -692,7 +687,7 @@ export function HowItWorksFlow() {
                     href={step.href}
                     className="inline-flex items-center gap-1 text-xs font-bold text-[#0284C7] pt-1"
                   >
-                    <span>{language === "km" ? "ស្វែងយល់បន្ថែម" : "Learn More"}</span>
+                    <span>{t("howItWorks.learnMore")}</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>

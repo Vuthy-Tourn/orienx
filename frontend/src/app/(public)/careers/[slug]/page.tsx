@@ -20,7 +20,7 @@ export default function CareerDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
   const router = useRouter();
-  const { language, getLocalized } = useLanguage();
+  const { t, getLocalized } = useLanguage();
 
   const { data: career, isLoading, error } = useQuery({
     queryKey: ["career", slug],
@@ -31,7 +31,7 @@ export default function CareerDetailPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-sm text-[#68708A]">
-        {language === "km" ? "កំពុងទាញយកទិន្នន័យអាជីព..." : "Loading career details..."}
+        {t("careerDetail.loading")}
       </div>
     );
   }
@@ -58,7 +58,7 @@ export default function CareerDetailPage() {
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#68708A] hover:text-[#111965] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{language === "km" ? "ត្រឡប់ក្រោយ" : "Back to Careers"}</span>
+          <span>{t("careerDetail.back")}</span>
         </button>
 
         {/* Career Header */}
@@ -98,7 +98,7 @@ export default function CareerDetailPage() {
           <div className="p-6 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3">
             <h3 className="text-sm font-bold text-[#111965] flex items-center gap-2">
               <Briefcase className="w-4 h-4 text-[#111965]" />
-              <span>{language === "km" ? "ការទទួលខុសត្រូវក្នុងការងារ" : "Key Responsibilities"}</span>
+              <span>{t("careerDetail.responsibilities")}</span>
             </h3>
             <ul className="space-y-2 text-xs text-[#171A2C]">
               {career.responsibilities?.map((resp: string, i: number) => (
@@ -113,7 +113,7 @@ export default function CareerDetailPage() {
           <div className="p-6 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3">
             <h3 className="text-sm font-bold text-[#111965] flex items-center gap-2">
               <Compass className="w-4 h-4 text-[#111965]" />
-              <span>{language === "km" ? "ជំនាញបច្ចេកទេសដែលត្រូវការ" : "Required Core Skills"}</span>
+              <span>{t("careerDetail.requiredSkills")}</span>
             </h3>
             <ul className="space-y-2 text-xs text-[#171A2C]">
               {career.required_skills?.map((sk: string, i: number) => (
@@ -130,7 +130,7 @@ export default function CareerDetailPage() {
         <div className="p-6 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-4">
           <h3 className="text-base font-bold text-[#111965] flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-[#111965]" />
-            <span>{language === "km" ? "ជណ្តើរឡើងនៃអាជីព (Career Progression Ladder)" : "Career Progression Ladder"}</span>
+            <span>{t("careerDetail.progression")}</span>
           </h3>
           <div className="p-4 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] text-xs font-semibold text-[#111965]">
             {career.career_progression?.join(" → ")}
@@ -141,7 +141,7 @@ export default function CareerDetailPage() {
         {career.related_majors && career.related_majors.length > 0 && (
           <div className="space-y-4">
             <h2 className="text-xl font-extrabold text-[#111965]">
-              {language === "km" ? "ជំនាញសាកលវិទ្យាល័យដែលនាំទៅរកអាជីពនេះ" : "University Majors Leading to This Career"}
+              {t("careerDetail.leadingMajors")}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {career.related_majors.map((m: any) => (
@@ -151,7 +151,7 @@ export default function CareerDetailPage() {
                 >
                   <div className="space-y-1">
                     <span className="text-[10px] font-bold text-[#68708A] uppercase">
-                      {m.category}
+                      {t(`categories.${m.category}`, m.category)}
                     </span>
                     <h4 className="text-sm font-bold text-[#111965]">
                       {getLocalized(m.name)}
@@ -161,7 +161,7 @@ export default function CareerDetailPage() {
                     href={`/majors/${m.slug}`}
                     className="px-3 py-1.5 rounded-lg text-xs font-bold text-[#111965] bg-[#F0F2FA] hover:bg-[#E6E8F0]"
                   >
-                    {language === "km" ? "មើលជំនាញ" : "View Major"}
+                    {t("careerDetail.viewMajor")}
                   </Link>
                 </div>
               ))}
@@ -172,4 +172,3 @@ export default function CareerDetailPage() {
     </div>
   );
 }
-

@@ -1,22 +1,20 @@
 "use client";
 
 import React from "react";
-import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import {
-  Compass,
   ArrowLeft,
-  Building2,
-  GraduationCap,
-  Briefcase,
-  AlertTriangle,
-  CheckCircle2,
   BookOpen,
+  Compass,
+  CheckCircle2,
+  AlertTriangle,
+  Building2,
   DollarSign,
-  ChevronRight,
+  Briefcase,
   ShieldCheck,
 } from "lucide-react";
 
@@ -24,7 +22,7 @@ export default function MajorDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
   const router = useRouter();
-  const { language, getLocalized } = useLanguage();
+  const { t, getLocalized } = useLanguage();
 
   const { data: major, isLoading, error } = useQuery({
     queryKey: ["major", slug],
@@ -35,7 +33,7 @@ export default function MajorDetailPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-sm text-[#68708A]">
-        {language === "km" ? "កំពុងទាញយកទិន្នន័យជំនាញ..." : "Loading major details..."}
+        {t("majorDetail.loading")}
       </div>
     );
   }
@@ -62,7 +60,7 @@ export default function MajorDetailPage() {
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#68708A] hover:text-[#111965] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{language === "km" ? "ត្រឡប់ក្រោយ" : "Back to Majors"}</span>
+          <span>{t("majorDetail.back")}</span>
         </button>
 
         {/* Major Header */}
@@ -70,7 +68,7 @@ export default function MajorDetailPage() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F0F2FA] text-[#111965]">
-                {major.category}
+                {t(`categories.${major.category}`, major.category)}
               </span>
               {major.is_stem && (
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
@@ -106,7 +104,7 @@ export default function MajorDetailPage() {
           <div className="p-6 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3">
             <h3 className="text-sm font-bold text-[#111965] flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-[#111965]" />
-              <span>{language === "km" ? "មុខវិជ្ជាស្នូលដែលត្រូវរៀន" : "Core Subjects Studied"}</span>
+              <span>{t("majorDetail.coreSubjects")}</span>
             </h3>
             <ul className="space-y-2 text-xs text-[#171A2C]">
               {major.subjects_studied?.map((sub: string, i: number) => (
@@ -122,7 +120,7 @@ export default function MajorDetailPage() {
           <div className="p-6 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3">
             <h3 className="text-sm font-bold text-[#111965] flex items-center gap-2">
               <Compass className="w-4 h-4 text-[#111965]" />
-              <span>{language === "km" ? "ជំនាញមូលដ្ឋានដែលត្រូវការ" : "Required Skills"}</span>
+              <span>{t("majorDetail.requiredSkills")}</span>
             </h3>
             <ul className="space-y-2 text-xs text-[#171A2C]">
               {major.required_skills?.map((sk: string, i: number) => (
@@ -138,7 +136,7 @@ export default function MajorDetailPage() {
           <div className="p-6 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3">
             <h3 className="text-sm font-bold text-[#111965] flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-600" />
-              <span>{language === "km" ? "បញ្ហាប្រឈមដែលត្រូវដឹង" : "Potential Challenges"}</span>
+              <span>{t("majorDetail.challenges")}</span>
             </h3>
             <ul className="space-y-2 text-xs text-[#171A2C]">
               {major.potential_challenges?.map((ch: string, i: number) => (
@@ -155,10 +153,10 @@ export default function MajorDetailPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-extrabold text-[#111965]">
-              {language === "km" ? "សាកលវិទ្យាល័យនៅកម្ពុជាដែលបង្រៀនជំនាញនេះ" : "Cambodian Universities Offering This Major"}
+              {t("majorDetail.universitiesOffering")}
             </h2>
             <span className="text-xs font-semibold text-[#68708A]">
-              {major.universities?.length || 0} {language === "km" ? "សាកលវិទ្យាល័យ" : "Institutions"}
+              {major.universities?.length || 0} {t("majorDetail.institutionsCount")}
             </span>
           </div>
 
@@ -192,7 +190,7 @@ export default function MajorDetailPage() {
                     href={`/universities/${u.university_slug}`}
                     className="text-xs font-bold text-[#111965] hover:underline"
                   >
-                    {language === "km" ? "មើលទម្រង់សាកលវិទ្យាល័យ →" : "View University Profile →"}
+                    {t("majorDetail.viewUni")}
                   </Link>
                 </div>
               </div>
@@ -204,7 +202,7 @@ export default function MajorDetailPage() {
         {major.careers && major.careers.length > 0 && (
           <div className="space-y-4">
             <h2 className="text-xl font-extrabold text-[#111965]">
-              {language === "km" ? "ឱកាសការងារដែលពាក់ព័ន្ធ" : "Related Career Pathways"}
+              {t("majorDetail.relatedCareers")}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {major.careers.map((car: any) => (
@@ -229,7 +227,7 @@ export default function MajorDetailPage() {
                       href={`/careers/${car.slug}`}
                       className="text-xs font-bold text-[#111965] hover:underline"
                     >
-                      {language === "km" ? "ស្វែងយល់ពីអាជីពនេះ →" : "Explore Career →"}
+                      {t("majorDetail.exploreCareer")}
                     </Link>
                   </div>
                 </div>
@@ -241,4 +239,3 @@ export default function MajorDetailPage() {
     </div>
   );
 }
-

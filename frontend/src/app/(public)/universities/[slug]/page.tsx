@@ -1,22 +1,18 @@
 "use client";
 
 import React from "react";
-import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import {
-  GraduationCap,
+  ArrowLeft,
   MapPin,
-  Globe,
-  Mail,
-  Phone,
   ShieldCheck,
   CheckCircle2,
-  Calendar,
   Clock,
-  ArrowLeft,
+  GraduationCap,
   DollarSign,
   Building2,
   ExternalLink,
@@ -27,7 +23,7 @@ export default function UniversityDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
   const router = useRouter();
-  const { language, getLocalized } = useLanguage();
+  const { t, getLocalized } = useLanguage();
 
   const { data: uni, isLoading, error } = useQuery({
     queryKey: ["university", slug],
@@ -38,7 +34,7 @@ export default function UniversityDetailPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-sm text-[#68708A]">
-        {language === "km" ? "កំពុងទាញយកព័ត៌មានសាកលវិទ្យាល័យ..." : "Loading university details..."}
+        {t("universityDetail.loading")}
       </div>
     );
   }
@@ -58,6 +54,11 @@ export default function UniversityDetailPage() {
     );
   }
 
+  const reqs = getLocalized(uni.admission_requirements) || uni.admission_requirements?.en || [];
+  const reqList = Array.isArray(reqs) ? reqs : [];
+  const facs = getLocalized(uni.facilities) || uni.facilities?.en || [];
+  const facList = Array.isArray(facs) ? facs : [];
+
   return (
     <div className="min-h-screen bg-[#F5F6FA] py-8 lg:py-12">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -67,7 +68,7 @@ export default function UniversityDetailPage() {
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#68708A] hover:text-[#111965] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>{language === "km" ? "ត្រឡប់ក្រោយ" : "Back to Directory"}</span>
+          <span>{t("universityDetail.back")}</span>
         </button>
 
         {/* Institution Header Card */}
@@ -82,13 +83,15 @@ export default function UniversityDetailPage() {
                       : "bg-purple-50 text-purple-800 border border-purple-200"
                   }`}
                 >
-                  {uni.university_type === "PUBLIC" ? (language === "km" ? "សាកលវិទ្យាល័យរដ្ឋ" : "Public State University") : (language === "km" ? "សាកលវិទ្យាល័យឯកជន" : "Private International")}
+                  {uni.university_type === "PUBLIC"
+                    ? t("universityDetail.publicType")
+                    : t("universityDetail.privateType")}
                 </span>
 
                 {uni.is_tuition_verified && (
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
                     <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>{language === "km" ? "តម្លៃផ្ទៀងផ្ទាត់ផ្លូវការ" : "Verified Tuition"}</span>
+                    <span>{t("universityDetail.verifiedTuition")}</span>
                   </span>
                 )}
               </div>
@@ -108,7 +111,7 @@ export default function UniversityDetailPage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors self-start shadow-2xs"
               >
-                <span>{language === "km" ? "គេហទំព័រផ្លូវការ" : "Official Website"}</span>
+                <span>{t("universityDetail.officialWebsite")}</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             )}
@@ -122,28 +125,30 @@ export default function UniversityDetailPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
             <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0]">
               <div className="text-[10px] text-[#68708A] uppercase font-bold">
-                {language === "km" ? "តម្លៃសិក្សាប្រចាំឆ្នាំ (ផ្ទៀងផ្ទាត់)" : "Verified Annual Tuition"}
+                {t("universityDetail.annualTuition")}
               </div>
               <div className="text-base font-extrabold text-[#111965] mt-0.5">
                 {uni.tuition_range_min_usd !== null
-                  ? `$${Math.round(uni.tuition_range_min_usd)} – $${Math.round(uni.tuition_range_max_usd || uni.tuition_range_min_usd)} / yr`
+                  ? `$${Math.round(uni.tuition_range_min_usd)} – $${Math.round(
+                      uni.tuition_range_max_usd || uni.tuition_range_min_usd
+                    )} / yr`
                   : "Information not available"}
               </div>
             </div>
 
             <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0]">
               <div className="text-[10px] text-[#68708A] uppercase font-bold">
-                {language === "km" ? "ទីតាំង និងអាសយដ្ឋាន" : "Location"}
+                {t("universityDetail.location")}
               </div>
               <div className="text-sm font-semibold text-[#171A2C] mt-0.5 flex items-center gap-1">
                 <MapPin className="w-3.5 h-3.5 text-[#111965]" />
-                <span>{uni.province}</span>
+                <span>{getLocalized(uni.province) || uni.province}</span>
               </div>
             </div>
 
             <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0]">
               <div className="text-[10px] text-[#68708A] uppercase font-bold">
-                {language === "km" ? "ទំនាក់ទំនងចុះឈ្មោះ" : "Admissions Contact"}
+                {t("universityDetail.contact")}
               </div>
               <div className="text-xs font-medium text-[#171A2C] mt-0.5 space-y-0.5">
                 {uni.contact_phone && <div>📞 {uni.contact_phone}</div>}
@@ -157,10 +162,10 @@ export default function UniversityDetailPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-extrabold text-[#111965]">
-              {language === "km" ? "កម្មវិធីសិក្សា និងជំនាញដែលផ្តល់ការបង្រៀន" : "Available Programs & Curricula"}
+              {t("universityDetail.availablePrograms")}
             </h2>
             <span className="text-xs font-semibold text-[#68708A]">
-              {uni.offerings?.length || 0} {language === "km" ? "ជំនាញ" : "Programs"}
+              {uni.offerings?.length || 0} {t("universityDetail.programsCount")}
             </span>
           </div>
 
@@ -173,7 +178,7 @@ export default function UniversityDetailPage() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#F0F2FA] text-[#111965]">
-                      {um.major_category}
+                      {t(`categories.${um.major_category}`, um.major_category)}
                     </span>
                     <span className="text-xs font-bold text-emerald-700">
                       {um.tuition_annual_usd ? `$${Math.round(um.tuition_annual_usd)} / yr` : "Tuition N/A"}
@@ -202,7 +207,7 @@ export default function UniversityDetailPage() {
                     href={`/majors/${um.major_slug}`}
                     className="text-xs font-bold text-[#111965] hover:underline"
                   >
-                    {language === "km" ? "មើលព័ត៌មានលម្អិតនៃជំនាញនេះ →" : "View Major Overview & Careers →"}
+                    {t("universityDetail.viewMajor")}
                   </Link>
                 </div>
               </div>
@@ -216,11 +221,11 @@ export default function UniversityDetailPage() {
           <div className="p-6 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3">
             <h3 className="text-base font-bold text-[#111965] flex items-center gap-2">
               <GraduationCap className="w-4 h-4 text-[#111965]" />
-              <span>{language === "km" ? "លក្ខខណ្ឌនៃការចុះឈ្មោះចូលរៀន" : "Admission Requirements"}</span>
+              <span>{t("universityDetail.admissionRequirements")}</span>
             </h3>
-            {uni.admission_requirements ? (
+            {reqList.length > 0 ? (
               <ul className="space-y-2 text-xs text-[#171A2C]">
-                {((language === "km" ? uni.admission_requirements.km : uni.admission_requirements.en) || uni.admission_requirements.en || []).map((req: string, i: number) => (
+                {reqList.map((req: string, i: number) => (
                   <li key={i} className="flex items-start gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 mt-0.5 flex-shrink-0" />
                     <span>{req}</span>
@@ -236,11 +241,11 @@ export default function UniversityDetailPage() {
           <div className="p-6 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3">
             <h3 className="text-base font-bold text-[#111965] flex items-center gap-2">
               <Building2 className="w-4 h-4 text-[#111965]" />
-              <span>{language === "km" ? "បរិក្ខារ និងមន្ទីរពិសោធន៍សិក្សា" : "Campus Facilities & Labs"}</span>
+              <span>{t("universityDetail.facilities")}</span>
             </h3>
-            {uni.facilities ? (
+            {facList.length > 0 ? (
               <ul className="space-y-2 text-xs text-[#171A2C]">
-                {((language === "km" ? uni.facilities.km : uni.facilities.en) || uni.facilities.en || []).map((fac: string, i: number) => (
+                {facList.map((fac: string, i: number) => (
                   <li key={i} className="flex items-start gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 mt-0.5 flex-shrink-0" />
                     <span>{fac}</span>
@@ -256,4 +261,3 @@ export default function UniversityDetailPage() {
     </div>
   );
 }
-
