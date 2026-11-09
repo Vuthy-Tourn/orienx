@@ -109,11 +109,11 @@ export function Footer() {
       {/* Cambodian University Campuses Landmark Skyline (Full-Width Panorama) */}
       <div className="w-full relative overflow-hidden select-none bg-[#111965] -mb-1">
         <Image
-          src="/images/cambodia-campuses-skyline-clean.webp"
+          src="/images/cambodia-campuses-skyline-v2.webp"
           alt="Cambodian University Campuses - RUPP, Western University, CADT Innovation Center, ITC"
           width={2048}
-          height={480}
-          priority={false}
+          height={1024}
+          priority={true}
           className="w-full h-auto object-cover object-bottom"
         />
       </div>
