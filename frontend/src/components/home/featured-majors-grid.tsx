@@ -62,6 +62,8 @@ function ContourWaveGraphic() {
             strokeLinecap="round"
             opacity={p.o}
             style={{
+              transformBox: "fill-box",
+              transformOrigin: "center",
               animation: `contourBreathe 4.5s ease-in-out infinite alternate`,
               animationDelay: `${(i * 0.18).toFixed(2)}s`,
             }}
@@ -138,6 +140,8 @@ function ParticleDotWaveGraphic() {
             opacity={s.o}
             suppressHydrationWarning
             style={{
+              transformBox: "fill-box",
+              transformOrigin: "center",
               animation: `particleWaveGlow 3.5s ease-in-out infinite alternate`,
               animationDelay: `${s.delay}s`,
             }}
@@ -147,6 +151,13 @@ function ParticleDotWaveGraphic() {
     </div>
   );
 }
+
+const CHEVRON_PATHS = [
+  { d: "M 35 240 L 175 100 L 240 165", delay: 0 },
+  { d: "M 72 240 L 175 137 L 240 202", delay: 0.2 },
+  { d: "M 110 240 L 175 175 L 235 240", delay: 0.4 },
+  { d: "M 148 240 L 175 213 L 202 240", delay: 0.6 },
+];
 
 /**
  * 3. Civil Engineering: Architectural Geometric Chevron Beams
@@ -167,31 +178,22 @@ function ChevronBeamsGraphic() {
             <stop offset="100%" stopColor="#F59E0B" />
           </linearGradient>
         </defs>
-        <g style={{ animation: `chevronPulse 4s ease-in-out infinite alternate` }}>
-          <path
-            d="M 35 240 L 175 100 L 240 165"
-            stroke="url(#chevronShine)"
-            strokeWidth="11"
-            strokeLinecap="square"
-          />
-          <path
-            d="M 72 240 L 175 137 L 240 202"
-            stroke="url(#chevronShine)"
-            strokeWidth="11"
-            strokeLinecap="square"
-          />
-          <path
-            d="M 110 240 L 175 175 L 235 240"
-            stroke="url(#chevronShine)"
-            strokeWidth="11"
-            strokeLinecap="square"
-          />
-          <path
-            d="M 148 240 L 175 213 L 202 240"
-            stroke="url(#chevronShine)"
-            strokeWidth="11"
-            strokeLinecap="square"
-          />
+        <g>
+          {CHEVRON_PATHS.map((p, i) => (
+            <path
+              key={i}
+              d={p.d}
+              stroke="url(#chevronShine)"
+              strokeWidth="11"
+              strokeLinecap="square"
+              style={{
+                transformBox: "fill-box",
+                transformOrigin: "center",
+                animation: `chevronBeamPulse 3.2s ease-in-out infinite alternate`,
+                animationDelay: `${p.delay}s`,
+              }}
+            />
+          ))}
         </g>
       </svg>
     </div>
@@ -253,6 +255,8 @@ function HalftoneClusterGraphic() {
             opacity={d.o}
             suppressHydrationWarning
             style={{
+              transformBox: "fill-box",
+              transformOrigin: "center",
               animation: `halftoneTwinkle 3.6s ease-in-out infinite alternate`,
               animationDelay: `${d.delay}s`,
             }}
@@ -292,7 +296,11 @@ function DiagonalHatchGraphic() {
         </defs>
         <g
           clipPath="url(#hatchOvalClip)"
-          style={{ animation: `hatchBreath 3.8s ease-in-out infinite alternate` }}
+          style={{
+            transformBox: "fill-box",
+            transformOrigin: "center",
+            animation: `hatchFloatPulse 3.8s ease-in-out infinite alternate`,
+          }}
         >
           {Array.from({ length: 24 }).map((_, i) => {
             const offset = i * 15 - 90;
@@ -308,8 +316,10 @@ function DiagonalHatchGraphic() {
                 strokeLinecap="round"
                 opacity={0.92}
                 style={{
-                  animation: `hatchLineShimmer 3s ease-in-out infinite alternate`,
-                  animationDelay: `${((i * 0.1) % 2.5).toFixed(2)}s`,
+                  transformBox: "fill-box",
+                  transformOrigin: "center",
+                  animation: `hatchStripeWave 2.8s ease-in-out infinite alternate`,
+                  animationDelay: `${((i * 0.12) % 2.4).toFixed(2)}s`,
                 }}
               />
             );
@@ -370,6 +380,8 @@ function StipplingDashesGraphic() {
             strokeLinecap="round"
             opacity={d.o}
             style={{
+              transformBox: "fill-box",
+              transformOrigin: "center",
               animation: `dashFloatDance 3.6s ease-in-out infinite alternate`,
               animationDelay: `${((i * 0.14) % 3.0).toFixed(2)}s`,
             }}
@@ -444,92 +456,103 @@ export function FeaturedMajorsGrid() {
       className="py-18 lg:py-24 bg-[#FAFBFD] text-[#111965] border-b border-[#E6E8F0] relative overflow-hidden select-none"
     >
       {/* Dynamic Keyframe Animations for all 6 patterns */}
-      <style jsx global>{`
+      <style>{`
         @keyframes contourBreathe {
           0% {
             transform: translateY(0px) scale(1);
-            opacity: 0.85;
+            opacity: 0.75;
+          }
+          50% {
+            transform: translateY(-6px) scale(1.03);
+            opacity: 1;
           }
           100% {
-            transform: translateY(-5px) scale(1.02);
-            opacity: 1;
+            transform: translateY(0px) scale(1);
+            opacity: 0.75;
           }
         }
         @keyframes particleWaveGlow {
           0% {
-            opacity: 0.35;
-            transform: scale(0.9);
+            opacity: 0.3;
+            transform: scale(0.75);
           }
           50% {
             opacity: 1;
-            transform: scale(1.22);
+            transform: scale(1.28);
           }
           100% {
-            opacity: 0.45;
-            transform: scale(0.95);
+            opacity: 0.35;
+            transform: scale(0.8);
           }
         }
-        @keyframes chevronPulse {
+        @keyframes chevronBeamPulse {
           0% {
-            opacity: 0.85;
-            transform: translateY(0px);
+            transform: translateY(0px) scale(1);
+            opacity: 0.7;
           }
           50% {
+            transform: translateY(-7px) scale(1.04);
             opacity: 1;
-            transform: translateY(-3px);
           }
           100% {
-            opacity: 0.85;
-            transform: translateY(0px);
+            transform: translateY(0px) scale(1);
+            opacity: 0.7;
           }
         }
         @keyframes halftoneTwinkle {
           0% {
-            opacity: 0.4;
-            transform: scale(0.88);
+            opacity: 0.25;
+            transform: scale(0.7);
           }
           50% {
             opacity: 1;
-            transform: scale(1.18);
+            transform: scale(1.3);
+          }
+          100% {
+            opacity: 0.35;
+            transform: scale(0.75);
+          }
+        }
+        @keyframes hatchFloatPulse {
+          0% {
+            transform: translateY(0px) scale(0.97);
+            opacity: 0.85;
+          }
+          50% {
+            transform: translateY(-6px) scale(1.03);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(0px) scale(0.97);
+            opacity: 0.85;
+          }
+        }
+        @keyframes hatchStripeWave {
+          0% {
+            opacity: 0.45;
+            transform: scaleY(0.9);
+          }
+          50% {
+            opacity: 1;
+            transform: scaleY(1.06);
           }
           100% {
             opacity: 0.45;
-            transform: scale(0.92);
-          }
-        }
-        @keyframes hatchBreath {
-          0% {
-            opacity: 0.88;
-            transform: translateY(0px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(-4px);
-          }
-        }
-        @keyframes hatchLineShimmer {
-          0% {
-            opacity: 0.75;
-          }
-          50% {
-            opacity: 1;
-          }
-          100% {
-            opacity: 0.8;
+            transform: scaleY(0.9);
           }
         }
         @keyframes dashFloatDance {
           0% {
-            transform: translateY(0px) rotate(0deg);
-            opacity: 0.75;
+            transform: translateY(0px) scale(0.85);
+            opacity: 0.5;
           }
           50% {
-            transform: translateY(-3px) rotate(3deg);
+            transform: translateY(-8px) scale(1.15) rotate(5deg);
             opacity: 1;
           }
           100% {
-            transform: translateY(0px) rotate(0deg);
-            opacity: 0.75;
+            transform: translateY(0px) scale(0.85);
+            opacity: 0.5;
           }
         }
       `}</style>
@@ -605,7 +628,7 @@ export function FeaturedMajorsGrid() {
                 <Link
                   key={m.id}
                   href={`/majors/${m.slug}`}
-                  className="group relative rounded-[20px] bg-white hover:bg-slate-50/70 border border-[#E6E8F0] hover:border-slate-300 p-7 sm:p-8 flex flex-col justify-between overflow-hidden shadow-[0_8px_24px_rgba(17,25,101,0.04)] hover:shadow-[0_16px_36px_rgba(17,25,101,0.08)] transition-all duration-300 ease-out hover:-translate-y-1.5 min-h-[300px] sm:min-h-[320px] aspect-[1/0.95] cursor-pointer"
+                  className="group relative rounded-[20px] bg-white hover:bg-slate-50/70 border border-[#E6E8F0] hover:border-slate-300 p-6 sm:p-7 flex flex-col justify-between overflow-hidden shadow-[0_8px_24px_rgba(17,25,101,0.04)] hover:shadow-[0_16px_36px_rgba(17,25,101,0.08)] transition-all duration-300 ease-out hover:-translate-y-1.5 min-h-[310px] sm:min-h-[330px] h-full cursor-pointer"
                 >
                   {/* Top Row: Icon Badge (Left) & Tag (Right) */}
                   <div className="flex items-center justify-between z-10 relative">
@@ -620,11 +643,11 @@ export function FeaturedMajorsGrid() {
                   </div>
 
                   {/* Middle Area: Clean Category Subtitle, Major Title & Degree */}
-                  <div className="z-10 relative space-y-1.5 my-auto pt-5 max-w-[62%]">
+                  <div className="z-10 relative space-y-1.5 my-auto py-3 max-w-[70%] sm:max-w-[72%]">
                     <div className="text-xs font-semibold uppercase tracking-wider text-[#68708A]">
                       {categoryLabel}
                     </div>
-                    <h3 className="text-xl sm:text-[22px] font-extrabold text-[#111965] tracking-tight leading-snug group-hover:text-[#0284C7] transition-colors duration-200">
+                    <h3 className="text-lg sm:text-[21px] font-extrabold text-[#111965] tracking-tight leading-snug group-hover:text-[#0284C7] transition-colors duration-200">
                       {title}
                     </h3>
                     <div className="text-xs sm:text-sm text-[#68708A] font-medium pt-0.5">
@@ -633,14 +656,14 @@ export function FeaturedMajorsGrid() {
                   </div>
 
                   {/* Bottom Row: Campuses / University Info */}
-                  <div className="z-10 relative pt-4 border-t border-slate-100 flex items-center justify-between max-w-[62%]">
+                  <div className="z-10 relative pt-3.5 border-t border-slate-100 flex items-center justify-between max-w-[70%] sm:max-w-[72%]">
                     <span className="text-xs text-[#68708A] font-medium">
                       {campuses}
                     </span>
                   </div>
 
                   {/* Large Corner Graphic Pattern with Continuous Animation */}
-                  <div className="absolute bottom-0 right-0 w-[55%] h-[58%] pointer-events-none overflow-hidden rounded-br-[20px]">
+                  <div className="absolute bottom-0 right-0 w-[48%] h-[50%] sm:w-[46%] sm:h-[48%] pointer-events-none overflow-hidden rounded-br-[20px]">
                     <GraphicComponent />
                   </div>
                 </Link>
