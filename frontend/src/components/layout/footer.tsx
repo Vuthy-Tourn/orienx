@@ -107,19 +107,20 @@ export function Footer() {
       </div>
 
       {/* Cambodian University Campuses Landmark Skyline (Full-Width Panorama) */}
-      <div className="w-full relative overflow-hidden select-none bg-[#111965] -mb-1">
+      <div className="w-full relative overflow-hidden select-none bg-[#111965]">
         <Image
-          src="/images/cambodia-campuses-skyline-v2.webp"
+          src="/images/cambodia-campuses-skyline-clean.webp"
           alt="Cambodian University Campuses - RUPP, Western University, CADT Innovation Center, ITC"
           width={2048}
-          height={1024}
+          height={594}
           priority={true}
+          unoptimized={true}
           className="w-full h-auto object-cover object-bottom"
         />
       </div>
 
       {/* Bottom Copyright Bar */}
-      <div className="bg-[#0D144F] border-t border-white/10">
+      <div className="bg-[#0D144F]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
           <p>© {new Date().getFullYear()} OrienX Platform. Discover Your Direction. Shape Your Future.</p>
           <div className="flex items-center gap-6">
