@@ -16,7 +16,9 @@ export function Footer() {
     pathname?.startsWith("/login/") ||
     pathname?.startsWith("/register/") ||
     pathname?.startsWith("/forgot-password/") ||
-    pathname?.startsWith("/auth");
+    pathname?.startsWith("/auth") ||
+    pathname?.startsWith("/dashboard") ||
+    pathname?.startsWith("/admin");
 
   if (isAuthPage) {
     return null;
