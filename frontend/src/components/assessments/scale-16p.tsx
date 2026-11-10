@@ -425,124 +425,138 @@ export function Scale16p({
 }
 
 /**
- * 7 Expressive Emoticons matching the reference card row:
- * 1. Strongly Agree (Sky Blue): Big happy laughing open mouth
- * 2. Agree (Mint): Warm friendly smile
- * 3. Slightly Agree (Lime): Polite gentle smile
- * 4. Neutral (Yellow): Calm straight line
- * 5. Slightly Disagree (Orange): Slight downturned frown
- * 6. Disagree (Coral): Downturned sad frown
- * 7. Strongly Disagree (Crimson): Wide open distressed mouth
+ * 7 Expressive Tara Mascot Faces (Futera's Official Platform Buddy):
+ * 1. Strongly Agree (Sky Blue): Joyful laughing eyes, big happy smile, rosy cheeks & sparkle star
+ * 2. Agree (Mint): Warm cheerful shining eyes, open curved smile & rosy cheeks
+ * 3. Slightly Agree (Lime): Polite gentle smile, bright calm eyes & rosy cheeks
+ * 4. Neutral (Yellow): Calm straight mouth, attentive observant eyes & soft blush
+ * 5. Slightly Disagree (Orange): Tara's iconic grumpy side-eye glance, tilted pout & soft blush
+ * 6. Disagree (Coral): Sad drooping eyebrows, downturned mouth & gentle blush
+ * 7. Strongly Disagree (Crimson): Distressed eyebrows, open weeping mouth & teardrops streaming down rosy cheeks
  */
 function renderEmotionFace(level: number, isSelected: boolean, themeColor: string) {
-  // When selected: crisp white strokes/fills; When idle: high-contrast dark theme color
+  // When selected: crisp white strokes/fills on top of vibrant gradient background; When idle: themeColor
   const stroke = isSelected ? "#FFFFFF" : themeColor;
   const fill = isSelected ? "#FFFFFF" : themeColor;
+  const highlight = isSelected ? themeColor : "#FFFFFF";
+  const blushFill = isSelected ? "#FFFFFF" : themeColor;
+  const blushOpacity = isSelected ? 0.38 : 0.26;
+
+  // Common rosy cheeks present on all Tara faces for signature mascot cuteness
+  const rosyCheeks = (
+    <>
+      <ellipse cx="27" cy="52" rx="8" ry="5" fill={blushFill} fillOpacity={blushOpacity} />
+      <ellipse cx="73" cy="52" rx="8" ry="5" fill={blushFill} fillOpacity={blushOpacity} />
+    </>
+  );
 
   switch (level) {
     case 1:
-      // Level 1: Two round eyes + big open happy smile
+      // Level 1: Strongly Agree (Sky Blue) - Laughing eyes, open joyful mouth, sparkle star
       return (
-        <svg viewBox="0 0 28 28" fill="none" className="w-6 h-6 sm:w-7 sm:h-7">
-          <circle cx="8.5" cy="10" r="2.2" fill={fill} />
-          <circle cx="19.5" cy="10" r="2.2" fill={fill} />
+        <svg viewBox="0 0 100 100" fill="none" className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10">
+          {rosyCheeks}
+          {/* Laughing curved eye arches */}
+          <path d="M 26 42 C 31 31, 41 31, 46 42" stroke={stroke} strokeWidth="4.5" strokeLinecap="round" />
+          <path d="M 54 42 C 59 31, 69 31, 74 42" stroke={stroke} strokeWidth="4.5" strokeLinecap="round" />
           {/* Big happy open mouth */}
-          <path
-            d="M8 14.5 H20 C19.5 21 8.5 21 8 14.5 Z"
-            fill={fill}
-          />
+          <path d="M 38 52 Q 50 72 62 52 Z" fill={fill} stroke={stroke} strokeWidth="2.5" />
+          {/* Sparkle star at top right */}
+          <path d="M 82 18 Q 82 23 87 23 Q 82 23 82 28 Q 82 23 77 23 Q 82 23 82 18 Z" fill={fill} />
         </svg>
       );
 
     case 2:
-      // Level 2: Two round eyes + cheerful curved smile
+      // Level 2: Agree (Mint) - Cheerful round shining eyes, warm open smile
       return (
-        <svg viewBox="0 0 28 28" fill="none" className="w-6 h-6 sm:w-7 sm:h-7">
-          <circle cx="8.5" cy="10.5" r="2.2" fill={fill} />
-          <circle cx="19.5" cy="10.5" r="2.2" fill={fill} />
-          <path
-            d="M8.5 15 C10.5 20.5 17.5 20.5 19.5 15"
-            stroke={stroke}
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
+        <svg viewBox="0 0 100 100" fill="none" className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10">
+          {rosyCheeks}
+          <ellipse cx="34" cy="42" rx="6.8" ry="8.6" fill={fill} />
+          <circle cx="31.5" cy="38.5" r="2.5" fill={highlight} />
+          <ellipse cx="66" cy="42" rx="6.8" ry="8.6" fill={fill} />
+          <circle cx="63.5" cy="38.5" r="2.5" fill={highlight} />
+          <path d="M 39 53 Q 50 67 61 53" stroke={stroke} strokeWidth="4" strokeLinecap="round" />
         </svg>
       );
 
     case 3:
-      // Level 3: Two round eyes + gentle polite smile
+      // Level 3: Slightly Agree (Lime) - Bright calm eyes, gentle friendly smile
       return (
-        <svg viewBox="0 0 28 28" fill="none" className="w-6 h-6 sm:w-7 sm:h-7">
-          <circle cx="8.5" cy="10.5" r="2" fill={fill} />
-          <circle cx="19.5" cy="10.5" r="2" fill={fill} />
-          <path
-            d="M9.5 16 C11.5 19.5 16.5 19.5 18.5 16"
-            stroke={stroke}
-            strokeWidth="2.3"
-            strokeLinecap="round"
-          />
+        <svg viewBox="0 0 100 100" fill="none" className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10">
+          {rosyCheeks}
+          <ellipse cx="34" cy="43" rx="6.2" ry="7.8" fill={fill} />
+          <circle cx="32" cy="40" r="2.2" fill={highlight} />
+          <ellipse cx="66" cy="43" rx="6.2" ry="7.8" fill={fill} />
+          <circle cx="64" cy="40" r="2.2" fill={highlight} />
+          <path d="M 40 55 Q 50 64 60 55" stroke={stroke} strokeWidth="3.6" strokeLinecap="round" />
         </svg>
       );
 
     case 4:
-      // Level 4: Two round eyes + straight calm line
+      // Level 4: Neutral (Yellow) - Observant eyes, calm straight mouth line
       return (
-        <svg viewBox="0 0 28 28" fill="none" className="w-6 h-6 sm:w-7 sm:h-7">
-          <circle cx="8.5" cy="11" r="2.2" fill={fill} />
-          <circle cx="19.5" cy="11" r="2.2" fill={fill} />
-          <line
-            x1="8.5"
-            y1="17"
-            x2="19.5"
-            y2="17"
-            stroke={stroke}
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
+        <svg viewBox="0 0 100 100" fill="none" className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10">
+          {rosyCheeks}
+          <ellipse cx="34" cy="43" rx="6" ry="7.5" fill={fill} />
+          <circle cx="32" cy="40.5" r="2" fill={highlight} />
+          <ellipse cx="66" cy="43" rx="6.2" ry="7.5" fill={fill} />
+          <circle cx="64" cy="40.5" r="2" fill={highlight} />
+          <line x1="41" y1="57" x2="59" y2="57" stroke={stroke} strokeWidth="3.8" strokeLinecap="round" />
         </svg>
       );
 
     case 5:
-      // Level 5: Two round eyes + slight downturned frown
+      // Level 5: Slightly Disagree (Orange) - Tara's iconic grumpy side-eye & doubtful tilted pout
       return (
-        <svg viewBox="0 0 28 28" fill="none" className="w-6 h-6 sm:w-7 sm:h-7">
-          <circle cx="8.5" cy="11" r="2" fill={fill} />
-          <circle cx="19.5" cy="11" r="2" fill={fill} />
-          <path
-            d="M9.5 18 C11.5 15.5 16.5 15.5 18.5 18"
-            stroke={stroke}
-            strokeWidth="2.4"
-            strokeLinecap="round"
-          />
+        <svg viewBox="0 0 100 100" fill="none" className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10">
+          {rosyCheeks}
+          {/* Eyebrows */}
+          <path d="M 28 32 Q 35 31 41 33" stroke={stroke} strokeWidth="3" strokeLinecap="round" />
+          <path d="M 59 33 Q 65 31 72 32" stroke={stroke} strokeWidth="3" strokeLinecap="round" />
+          {/* Half-lidded side-glancing eyes */}
+          <path d="M 27 42 Q 34 39 42 42 C 42 50, 27 50, 27 42 Z" fill={fill} />
+          <circle cx="31" cy="44.5" r="2" fill={highlight} />
+          <path d="M 58 42 Q 66 39 73 42 C 73 50, 58 50, 58 42 Z" fill={fill} />
+          <circle cx="62" cy="44.5" r="2" fill={highlight} />
+          {/* Slightly tilted pout */}
+          <path d="M 41 58 Q 48 55 56 57" stroke={stroke} strokeWidth="3.6" strokeLinecap="round" />
         </svg>
       );
 
     case 6:
-      // Level 6: Two round eyes + clear sad frown
+      // Level 6: Disagree (Coral) - Sad drooping eyebrows, downturned mouth
       return (
-        <svg viewBox="0 0 28 28" fill="none" className="w-6 h-6 sm:w-7 sm:h-7">
-          <circle cx="8.5" cy="11" r="2.2" fill={fill} />
-          <circle cx="19.5" cy="11" r="2.2" fill={fill} />
-          <path
-            d="M8.5 19.5 C10.5 14.5 17.5 14.5 19.5 19.5"
-            stroke={stroke}
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
+        <svg viewBox="0 0 100 100" fill="none" className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10">
+          {rosyCheeks}
+          {/* Sad drooping eyebrows */}
+          <path d="M 27 31 C 32 34, 38 37, 42 38" stroke={stroke} strokeWidth="3.2" strokeLinecap="round" />
+          <path d="M 73 31 C 68 34, 62 37, 58 38" stroke={stroke} strokeWidth="3.2" strokeLinecap="round" />
+          <ellipse cx="34" cy="45" rx="6.2" ry="7.6" fill={fill} />
+          <circle cx="32" cy="42.5" r="2" fill={highlight} />
+          <ellipse cx="66" cy="45" rx="6.2" ry="7.6" fill={fill} />
+          <circle cx="64" cy="42.5" r="2" fill={highlight} />
+          {/* Downturned sad mouth */}
+          <path d="M 40 61 Q 50 53 60 61" stroke={stroke} strokeWidth="3.8" strokeLinecap="round" />
         </svg>
       );
 
     case 7:
-      // Level 7: Two round eyes + wide open distressed / upset mouth
+      // Level 7: Strongly Disagree (Crimson) - Distressed weeping face with teardrops streaming down
       return (
-        <svg viewBox="0 0 28 28" fill="none" className="w-6 h-6 sm:w-7 sm:h-7">
-          <circle cx="8.5" cy="10" r="2.2" fill={fill} />
-          <circle cx="19.5" cy="10" r="2.2" fill={fill} />
-          {/* Distressed open frown mouth */}
-          <path
-            d="M8.5 20.5 C8.5 14.5 19.5 14.5 19.5 20.5 C17.5 21.5 10.5 21.5 8.5 20.5 Z"
-            fill={fill}
-          />
+        <svg viewBox="0 0 100 100" fill="none" className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10">
+          {rosyCheeks}
+          {/* Distressed furrowed eyebrows */}
+          <path d="M 26 30 C 32 34, 38 38, 42 40" stroke={stroke} strokeWidth="3.4" strokeLinecap="round" />
+          <path d="M 74 30 C 68 34, 62 38, 58 40" stroke={stroke} strokeWidth="3.4" strokeLinecap="round" />
+          <ellipse cx="34" cy="44" rx="6.5" ry="7.8" fill={fill} />
+          <circle cx="32" cy="41.5" r="2" fill={highlight} />
+          <ellipse cx="66" cy="44" rx="6.5" ry="7.8" fill={fill} />
+          <circle cx="64" cy="41.5" r="2" fill={highlight} />
+          {/* Open crying mouth */}
+          <path d="M 39 65 Q 50 54 61 65 Z" fill={fill} stroke={stroke} strokeWidth="2.4" />
+          {/* Teardrops streaming down cheeks */}
+          <path d="M 25 50 C 25 45, 30 45, 30 50 C 30 55, 25 55, 25 50 Z" fill={fill} />
+          <path d="M 70 50 C 70 45, 75 45, 75 50 C 75 55, 70 55, 70 50 Z" fill={fill} />
         </svg>
       );
 
