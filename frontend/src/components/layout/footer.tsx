@@ -1,9 +1,26 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Logo } from "@/components/layout/logo";
 
 export function Footer() {
+  const pathname = usePathname();
+
+  const isAuthPage =
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/forgot-password" ||
+    pathname?.startsWith("/login/") ||
+    pathname?.startsWith("/register/") ||
+    pathname?.startsWith("/forgot-password/") ||
+    pathname?.startsWith("/auth");
+
+  if (isAuthPage) {
+    return null;
+  }
   return (
     <footer className="bg-[#111965] text-white border-t border-[#1E277A]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">

@@ -31,8 +31,6 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const isHomePage = pathname === "/";
-
   React.useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 60);
@@ -42,6 +40,20 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const isHomePage = pathname === "/";
+  const isAuthPage =
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/forgot-password" ||
+    pathname?.startsWith("/login/") ||
+    pathname?.startsWith("/register/") ||
+    pathname?.startsWith("/forgot-password/") ||
+    pathname?.startsWith("/auth");
+
+  if (isAuthPage) {
+    return null;
+  }
 
   const navLinks = [
     { href: "/majors", label: t("nav.majors"), icon: Compass },
