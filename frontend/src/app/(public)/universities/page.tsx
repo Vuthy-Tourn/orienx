@@ -23,11 +23,16 @@ import {
   CheckCircle2,
   Building,
   Landmark,
+  Calculator,
+  Compass,
+  Award,
+  Layers,
+  ChevronRight,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DotPattern } from "@/components/magicui/dot-pattern";
 import { BorderBeam } from "@/components/magicui/border-beam";
-import { formatUSD } from "@/lib/utils";
+import { Dialog } from "@/components/ui/dialog";
 
 // Cambodian university campus photos mapping
 const UNIVERSITY_IMAGES: Record<string, string> = {
@@ -46,6 +51,11 @@ export default function UniversitiesPage() {
   const [provinceFilter, setProvinceFilter] = useState("");
   const [sortBy, setSortBy] = useState<"default" | "tuition_asc" | "majors_desc">("default");
   const [selectedForCompare, setSelectedForCompare] = useState<string[]>([]);
+  const [currency, setCurrency] = useState<"USD" | "KHR">("USD");
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+
+  // Estimator track state
+  const [estimatorType, setEstimatorType] = useState<"PUBLIC" | "PRIVATE">("PUBLIC");
 
   const { data: universities, isLoading, error } = useQuery({
     queryKey: ["universities", searchTerm, typeFilter, provinceFilter],
@@ -85,6 +95,12 @@ export default function UniversitiesPage() {
     return list;
   }, [universities, sortBy]);
 
+  // Selected universities for quick comparison modal
+  const comparedUniversities = useMemo(() => {
+    if (!universities || selectedForCompare.length === 0) return [];
+    return universities.filter((u) => selectedForCompare.includes(u.slug));
+  }, [universities, selectedForCompare]);
+
   const hasActiveFilters = Boolean(searchTerm || typeFilter || provinceFilter);
 
   const resetFilters = () => {
@@ -93,41 +109,138 @@ export default function UniversitiesPage() {
     setProvinceFilter("");
   };
 
+  // Convert USD to KHR (1 USD = 4,100 KHR)
+  const formatMoney = (usdVal?: number | null) => {
+    if (usdVal === undefined || usdVal === null) return "Pending";
+    if (currency === "KHR") {
+      const khrVal = Math.round(usdVal * 4100);
+      return `${(khrVal / 1000000).toFixed(1)}M KHR`;
+    }
+    return `$${Math.round(usdVal)}`;
+  };
+
   return (
-    <div className="min-h-screen bg-[#F5F6FA] pb-24">
-      {/* Hero Section with Magic UI DotPattern */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-10 pb-12">
+    <div className="min-h-screen bg-[#F5F6FA] pb-28">
+      {/* Hero Section with Interactive Tuition Estimator */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-12 pb-14">
         <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-35" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
               <span>{t("universitiesDirectory.badge")}</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#111965] tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-5xl font-black text-[#111965] tracking-tight leading-tight">
               {t("universitiesDirectory.title")}
             </h1>
 
             <p className="text-sm sm:text-base text-[#68708A] leading-relaxed max-w-2xl">
               {t("universitiesDirectory.subtitle")}
             </p>
+          </div>
 
-            {/* Quick Stat Highlights without emojis */}
-            <div className="pt-2 flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-[#171A2C] font-semibold shadow-2xs">
-                <Building2 className="w-3.5 h-3.5 text-[#111965]" />
-                <span>{universities?.length || 6} Accredited Campuses</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-emerald-800 font-semibold shadow-2xs">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                <span>100% Verified Tuition Fees</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-[#171A2C] font-semibold shadow-2xs">
-                <Scale className="w-3.5 h-3.5 text-[#F7CE4D]" />
-                <span>Compare up to 4 Side-by-Side</span>
-              </span>
+          {/* Interactive 4-Year Tuition Investment Estimator */}
+          <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E6E8F0] pb-3">
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-xl bg-blue-50 text-[#111965]">
+                  <Calculator className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-[#111965]">
+                    4-Year Degree Tuition Investment Estimator
+                  </h3>
+                  <p className="text-xs text-[#68708A]">
+                    Official fee ranges cross-referenced with Cambodian university registries
+                  </p>
+                </div>
+              </div>
+
+              {/* Currency Toggle */}
+              <div className="flex items-center gap-1 self-start sm:self-auto bg-slate-100 p-1 rounded-xl text-xs font-bold">
+                <button
+                  type="button"
+                  onClick={() => setCurrency("USD")}
+                  className={`px-3 py-1 rounded-lg transition-all ${
+                    currency === "USD" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
+                  }`}
+                >
+                  USD ($)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrency("KHR")}
+                  className={`px-3 py-1 rounded-lg transition-all ${
+                    currency === "KHR" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
+                  }`}
+                >
+                  KHR (៛)
+                </button>
+              </div>
+            </div>
+
+            {/* Estimator Controls & Results */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <button
+                type="button"
+                onClick={() => setEstimatorType("PUBLIC")}
+                className={`p-4 rounded-2xl border text-left transition-all ${
+                  estimatorType === "PUBLIC"
+                    ? "bg-[#111965] text-white border-[#111965] shadow-sm"
+                    : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold opacity-80 uppercase tracking-wider">Public State Degree</span>
+                  <Landmark className="w-4 h-4 text-blue-400" />
+                </div>
+                <div className="text-xl font-black mt-2">
+                  {currency === "USD" ? "$1,000 – $3,600" : "4.1M – 14.8M KHR"}
+                </div>
+                <div className="text-[11px] opacity-75 mt-1">Total 4-Year Tuition (RUPP, ITC Techno, NUM)</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setEstimatorType("PRIVATE")}
+                className={`p-4 rounded-2xl border text-left transition-all ${
+                  estimatorType === "PRIVATE"
+                    ? "bg-[#111965] text-white border-[#111965] shadow-sm"
+                    : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold opacity-80 uppercase tracking-wider">Private University Degree</span>
+                  <Building2 className="w-4 h-4 text-purple-400" />
+                </div>
+                <div className="text-xl font-black mt-2">
+                  {currency === "USD" ? "$6,000 – $24,000" : "24.6M – 98.4M KHR"}
+                </div>
+                <div className="text-[11px] opacity-75 mt-1">Total 4-Year Tuition (AUPP, Paragon, CADT)</div>
+              </button>
+
+              <div className="p-4 rounded-2xl bg-[#F0F2FA]/70 border border-[#E6E8F0] flex flex-col justify-between">
+                <div>
+                  <div className="text-[11px] font-bold text-[#68708A] uppercase tracking-wider">
+                    Scholarship Offset Potential
+                  </div>
+                  <div className="text-base font-black text-emerald-700 mt-1">
+                    Up to 100% Full-Ride
+                  </div>
+                  <p className="text-xs text-[#68708A] mt-1 leading-snug">
+                    Over 500+ MoEYS and partner corporate grants available annually.
+                  </p>
+                </div>
+                <Link
+                  href="/scholarships"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#111965] hover:underline mt-2"
+                >
+                  <span>Explore Available Scholarships</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -365,7 +478,7 @@ export default function UniversitiesPage() {
                         </div>
                         <div className="text-base font-extrabold text-[#111965]">
                           {uni.tuition_range_min_usd !== null
-                            ? `$${Math.round(uni.tuition_range_min_usd)} – $${Math.round(uni.tuition_range_max_usd || uni.tuition_range_min_usd)} / yr`
+                            ? `${formatMoney(uni.tuition_range_min_usd)} – ${formatMoney(uni.tuition_range_max_usd || uni.tuition_range_min_usd)} / yr`
                             : t("universitiesDirectory.tuitionPending")}
                         </div>
                       </div>
@@ -440,22 +553,106 @@ export default function UniversitiesPage() {
 
             <div className="flex items-center gap-2">
               <button
+                type="button"
                 onClick={() => setSelectedForCompare([])}
                 className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white transition-colors"
               >
                 {t("universitiesDirectory.clear")}
               </button>
+
+              <button
+                type="button"
+                onClick={() => setIsCompareModalOpen(true)}
+                className="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-white/20 hover:bg-white/30 transition-colors"
+              >
+                Quick Preview
+              </button>
+
               <Link
                 href={`/universities/compare?ids=${selectedForCompare.join(",")}`}
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all shadow-md"
               >
-                <span>{t("universitiesDirectory.compareNow")}</span>
+                <span>Full Comparison</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
         )}
       </div>
+
+      {/* Quick Comparison Modal Dialog */}
+      {isCompareModalOpen && (
+        <Dialog open={isCompareModalOpen} onOpenChange={setIsCompareModalOpen}>
+          <div className="space-y-5">
+            <div className="flex items-start justify-between border-b border-[#E6E8F0] pb-3">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-[#68708A]">
+                  Direct Comparison
+                </span>
+                <h3 className="text-xl font-black text-[#111965] mt-0.5">
+                  Side-by-Side Institutional Analysis
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsCompareModalOpen(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Matrix comparison table */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {comparedUniversities.map((uni) => (
+                <div key={uni.id} className="p-3.5 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-2">
+                  <div className="font-mono text-[10px] font-bold text-[#68708A] uppercase">
+                    {getLocalized(uni.acronym) || uni.slug.toUpperCase()}
+                  </div>
+                  <div className="text-xs font-bold text-[#111965] line-clamp-1">
+                    {getLocalized(uni.name)}
+                  </div>
+                  <div className="pt-1 text-[11px] space-y-1 text-[#68708A]">
+                    <div>
+                      <span className="font-bold text-[#171A2C]">Type: </span>
+                      <span>{uni.university_type === "PUBLIC" ? "Public" : "Private"}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold text-[#171A2C]">Tuition: </span>
+                      <span>${Math.round(uni.tuition_range_min_usd || 0)} - ${Math.round(uni.tuition_range_max_usd || 0)}/yr</span>
+                    </div>
+                    <div>
+                      <span className="font-bold text-[#171A2C]">Programs: </span>
+                      <span>{uni.majors_count || 0}</span>
+                    </div>
+                  </div>
+                  <Link
+                    href={`/universities/${uni.slug}`}
+                    className="block pt-2 text-[11px] font-bold text-[#111965] hover:underline"
+                  >
+                    View Campus Profile →
+                  </Link>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between pt-3 border-t border-[#E6E8F0]">
+              <button
+                onClick={() => setSelectedForCompare([])}
+                className="text-xs font-semibold text-rose-600 hover:underline"
+              >
+                Clear Selected
+              </button>
+              <Link
+                href={`/universities/compare?ids=${selectedForCompare.join(",")}`}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors"
+              >
+                <span>Open Dedicated Comparison Matrix</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </Dialog>
+      )}
     </div>
   );
 }

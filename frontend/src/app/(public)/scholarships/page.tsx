@@ -14,17 +14,19 @@ import {
   ExternalLink,
   ShieldCheck,
   Bookmark,
-  BookmarkCheck,
   Building,
   CheckCircle2,
   ArrowRight,
   Sparkles,
   GraduationCap,
   X,
-  FileText,
   Clock,
   Layers,
   Percent,
+  Check,
+  Sliders,
+  DollarSign,
+  FileCheck,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DotPattern } from "@/components/magicui/dot-pattern";
@@ -44,6 +46,10 @@ export default function ScholarshipsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [coverageFilter, setCoverageFilter] = useState("");
 
+  // Interactive "Do I Qualify?" criteria state
+  const [targetBaciiGrade, setTargetBaciiGrade] = useState<string>("ALL");
+  const [targetStudyField, setTargetStudyField] = useState<string>("ALL");
+
   const { data: scholarships, isLoading } = useQuery({
     queryKey: ["scholarships", searchTerm, coverageFilter],
     queryFn: async () => {
@@ -54,7 +60,7 @@ export default function ScholarshipsPage() {
     },
   });
 
-  const { mutate: toggleTrack, isPending: isTracking } = useMutation({
+  const { mutate: toggleTrack } = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
       return apiFetch(`/scholarships/${id}/track`, {
         method: "PUT",
@@ -72,6 +78,8 @@ export default function ScholarshipsPage() {
   const resetFilters = () => {
     setSearchTerm("");
     setCoverageFilter("");
+    setTargetBaciiGrade("ALL");
+    setTargetStudyField("ALL");
   };
 
   // Flagship spotlight item
@@ -83,38 +91,107 @@ export default function ScholarshipsPage() {
   return (
     <div className="min-h-screen bg-[#F5F6FA] pb-24">
       {/* Hero Header with Magic UI DotPattern */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-10 pb-12">
+      <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-12 pb-14">
         <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-35" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
               <span>{t("scholarshipsPage.verifiedBadge")}</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#111965] tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-5xl font-black text-[#111965] tracking-tight leading-tight">
               {t("scholarshipsPage.title")}
             </h1>
 
             <p className="text-sm sm:text-base text-[#68708A] leading-relaxed max-w-2xl">
               {t("scholarshipsPage.subtitle")}
             </p>
+          </div>
 
-            {/* Quick Stat Highlights without emojis */}
-            <div className="pt-2 flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-[#171A2C] font-semibold shadow-2xs">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                <span>100% Full Tuition Opportunities</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-[#171A2C] font-semibold shadow-2xs">
-                <Building className="w-3.5 h-3.5 text-[#111965]" />
-                <span>MoEYS, CADT, AUPP, ITC & Partners</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-emerald-800 font-semibold shadow-2xs">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Verified Direct Application Portals</span>
-              </span>
+          {/* Interactive "Do I Qualify?" Scholarship Eligibility Radar */}
+          <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-4">
+            <div className="flex items-center gap-2 border-b border-[#E6E8F0] pb-3">
+              <div className="p-2 rounded-xl bg-amber-50 text-amber-800">
+                <FileCheck className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-[#111965]">
+                  Instant Eligibility Checker (Grade 12 BacII Qualifier)
+                </h3>
+                <p className="text-xs text-[#68708A]">
+                  Select your expected Grade 12 National Exam standing to preview verified funding
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+              {/* Grade Selection */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-[#68708A] uppercase tracking-wider">
+                  BacII Exam Grade
+                </label>
+                <div className="grid grid-cols-4 gap-1.5">
+                  {["ALL", "A", "B", "C"].map((grade) => (
+                    <button
+                      key={grade}
+                      type="button"
+                      onClick={() => setTargetBaciiGrade(grade)}
+                      className={`py-2 text-xs font-bold rounded-xl border transition-all ${
+                        targetBaciiGrade === grade
+                          ? "bg-[#111965] text-white border-[#111965] shadow-xs"
+                          : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
+                      }`}
+                    >
+                      {grade === "ALL" ? "Any" : `Grade ${grade}`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Study Field Selection */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-bold text-[#68708A] uppercase tracking-wider">
+                  Intended Field
+                </label>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {[
+                    { id: "ALL", label: "Any" },
+                    { id: "STEM", label: "STEM/Tech" },
+                    { id: "BIZ", label: "Business" },
+                  ].map((field) => (
+                    <button
+                      key={field.id}
+                      type="button"
+                      onClick={() => setTargetStudyField(field.id)}
+                      className={`py-2 text-xs font-bold rounded-xl border transition-all ${
+                        targetStudyField === field.id
+                          ? "bg-[#111965] text-white border-[#111965] shadow-xs"
+                          : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
+                      }`}
+                    >
+                      {field.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Live Eligibility Result Box */}
+              <div className="p-3.5 rounded-2xl bg-[#F0F2FA]/80 border border-[#E6E8F0] flex items-center justify-between">
+                <div>
+                  <div className="text-[10px] font-bold text-[#68708A] uppercase">
+                    Qualified Programs
+                  </div>
+                  <div className="text-sm font-black text-emerald-700">
+                    {targetBaciiGrade === "A" ? "100% Full Tuition + Stipend" : "Full & Partial Tuition Available"}
+                  </div>
+                  <div className="text-[11px] text-[#68708A]">CADT, MoEYS, AUPP, ITC</div>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                  <Check className="w-4 h-4" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -133,12 +210,12 @@ export default function ScholarshipsPage() {
 
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
               <div className="lg:col-span-8 space-y-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F7CE4D] text-[#111965] text-xs font-extrabold">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F7CE4D] text-[#111965] text-xs font-black">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>{t("scholarshipsPage.spotlight")}</span>
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+                <h2 className="text-2xl sm:text-3xl font-black text-white leading-tight">
                   {getLocalized(spotlightScholarship.title)}
                 </h2>
 
@@ -146,14 +223,20 @@ export default function ScholarshipsPage() {
                   {getLocalized(spotlightScholarship.description)}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-3 text-xs pt-1">
-                  <span className="px-3 py-1 rounded-lg bg-white/15 border border-white/20 font-bold text-[#F7CE4D]">
-                    100% Full Tuition + Monthly Stipend + Laptop
-                  </span>
-                  <span className="flex items-center gap-1.5 text-slate-300">
-                    <Calendar className="w-3.5 h-3.5 text-[#F7CE4D]" />
-                    <span>{t("scholarshipsPage.deadline")}: {spotlightScholarship.application_deadline || "Rolling"}</span>
-                  </span>
+                {/* Benefits Breakdown Pills */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-xs">
+                  <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 space-y-0.5">
+                    <span className="text-[10px] uppercase font-bold text-[#F7CE4D] block">Tuition Coverage</span>
+                    <span className="font-extrabold text-white">100% 4-Year Full-Ride</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 space-y-0.5">
+                    <span className="text-[10px] uppercase font-bold text-[#F7CE4D] block">Living Stipend</span>
+                    <span className="font-extrabold text-white">$120 / Month Allowance</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 space-y-0.5">
+                    <span className="text-[10px] uppercase font-bold text-[#F7CE4D] block">Hardware Grant</span>
+                    <span className="font-extrabold text-white">Free High-Spec Laptop</span>
+                  </div>
                 </div>
 
                 <div className="pt-2 flex flex-wrap items-center gap-3">

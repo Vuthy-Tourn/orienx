@@ -12,7 +12,6 @@ import {
   ArrowRight,
   Sparkles,
   Building2,
-  Filter,
   X,
   LayoutGrid,
   List,
@@ -22,12 +21,20 @@ import {
   Zap,
   FlaskConical,
   Layers,
-  ChevronDown,
   BookOpen,
+  Cpu,
+  BarChart3,
+  Globe,
+  SlidersHorizontal,
+  ChevronRight,
+  Clock,
+  Award,
+  Check,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DotPattern } from "@/components/magicui/dot-pattern";
 import { BorderBeam } from "@/components/magicui/border-beam";
+import { Dialog } from "@/components/ui/dialog";
 
 // Local image lookup for Cambodian majors
 const MAJOR_IMAGES: Record<string, string> = {
@@ -41,6 +48,54 @@ const MAJOR_IMAGES: Record<string, string> = {
   "digital-marketing": "/images/majors/digital-marketing.webp",
   "architecture": "/images/majors/architecture.webp",
   "law": "/images/majors/law.webp",
+};
+
+// Curriculum preview roadmap data for interactive modal
+const MAJOR_CURRICULUM_DATA: Record<string, {
+  years: { year: number; titleEn: string; titleKm: string; focus: string }[];
+  keySkills: string[];
+  sampleCareers: string[];
+}> = {
+  "software-engineering": {
+    years: [
+      { year: 1, titleEn: "Computer Science Foundations", titleKm: "មូលដ្ឋានគ្រឹះវិទ្យាសាស្ត្រកុំព្យូទ័រ", focus: "Python, C++, Discrete Math, Algorithms" },
+      { year: 2, titleEn: "Software Architecture & OOP", titleKm: "ស្ថាបត្យកម្មប្រព័ន្ធ និង OOP", focus: "Java, Data Structures, Relational Databases, Web Tech" },
+      { year: 3, titleEn: "Cloud Systems & DevOps", titleKm: "ប្រព័ន្ធក្លោដ និង DevOps", focus: "Distributed Systems, Microservices, CI/CD, Cybersecurity" },
+      { year: 4, titleEn: "Capstone & Industry Internship", titleKm: "គម្រោងបញ្ចប់ការសិក្សា និងកម្មសិក្សា", focus: "Full-Stack Production Capstone, Corporate Placement" },
+    ],
+    keySkills: ["System Design", "Cloud Computing", "Full-Stack Development", "Database Optimization"],
+    sampleCareers: ["Full-Stack Software Engineer", "Cloud Solutions Architect", "DevOps Engineer"],
+  },
+  "data-science-ai": {
+    years: [
+      { year: 1, titleEn: "Mathematics & Programming", titleKm: "គណិតវិទ្យា និងការសរសេរកូដ", focus: "Linear Algebra, Calculus, Python, Statistics" },
+      { year: 2, titleEn: "Data Mining & Databases", titleKm: "ការទាញយកទិន្នន័យ និងមូលដ្ឋានទិន្នន័យ", focus: "SQL, NoSQL, Data Visualization, Exploratory Analysis" },
+      { year: 3, titleEn: "Machine Learning & NLP", titleKm: "ការរៀនម៉ាស៊ីន និង NLP", focus: "Supervised Learning, Deep Neural Networks, PyTorch" },
+      { year: 4, titleEn: "AI Capstone & Applied Analytics", titleKm: "គម្រោង AI និងការវិភាគអនុវត្តជាក់ស្តែង", focus: "LLM Fine-Tuning, Predictive Modeling, Industry Thesis" },
+    ],
+    keySkills: ["Machine Learning", "Statistical Modeling", "Python/R", "Big Data Pipelines"],
+    sampleCareers: ["AI/ML Engineer", "Data Scientist", "Business Intelligence Lead"],
+  },
+  "banking-finance": {
+    years: [
+      { year: 1, titleEn: "Micro & Macro Economics", titleKm: "សេដ្ឋកិច្ចមីក្រូ និងម៉ាក្រូ", focus: "Financial Accounting, Economic Principles, Business Math" },
+      { year: 2, titleEn: "Corporate Finance & Banking Law", titleKm: "ហិរញ្ញវត្ថុសាជីវកម្ម និងច្បាប់ធនាគារ", focus: "Commercial Banking, Capital Markets, Valuation" },
+      { year: 3, titleEn: "Investment Analysis & FinTech", titleKm: "ការវិភាគការវិនិយោគ និង FinTech", focus: "Portfolio Management, Risk Modeling, Digital Banking" },
+      { year: 4, titleEn: "Applied Financial Practicum", titleKm: "ការអនុវត្តហិរញ្ញវត្ថុជាក់ស្តែង", focus: "Commercial Credit Evaluation, Banking Internship" },
+    ],
+    keySkills: ["Financial Modeling", "Risk Management", "Investment Valuation", "Regulatory Compliance"],
+    sampleCareers: ["Investment Banker", "Risk Analyst", "Financial Controller"],
+  },
+  "civil-engineering": {
+    years: [
+      { year: 1, titleEn: "Engineering Physics & Mechanics", titleKm: "រូបវិទ្យាវិស្វកម្ម និងមេកានិច", focus: "Statics, Calculus, Engineering Graphics, Chemistry" },
+      { year: 2, titleEn: "Structural Mechanics & Materials", titleKm: "មេកានិចសំណង់ និងសម្ភារ", focus: "Strength of Materials, Fluid Mechanics, Surveying" },
+      { year: 3, titleEn: "Reinforced Concrete & Geotechnical", titleKm: "បេតុងអាម៉េ និងភូគព្ភសាស្ត្រ", focus: "Foundation Engineering, Structural Analysis, CAD/BIM" },
+      { year: 4, titleEn: "Infrastructure Capstone", titleKm: "គម្រោងហេដ្ឋារចនាសម្ព័ន្ធ", focus: "Bridge & Highway Design, Project Management Internship" },
+    ],
+    keySkills: ["Structural Analysis", "AutoCAD / BIM", "Project Management", "Soil Mechanics"],
+    sampleCareers: ["Structural Engineer", "Project Construction Manager", "Site Supervisor"],
+  },
 };
 
 // Holland RIASEC display helpers without emojis
@@ -60,6 +115,7 @@ export default function MajorsPage() {
   const [stemOnly, setStemOnly] = useState(false);
   const [sortBy, setSortBy] = useState<"default" | "name" | "universities">("default");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [activePreviewMajor, setActivePreviewMajor] = useState<any | null>(null);
 
   const { data: categories } = useQuery({
     queryKey: ["major-categories"],
@@ -101,48 +157,206 @@ export default function MajorsPage() {
     setStemOnly(false);
   };
 
-  return (
-    <div className="min-h-screen bg-[#F5F6FA] pb-16">
-      {/* Hero Header with Magic UI DotPattern */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-10 pb-12">
-        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-35" />
+  // Featured flagship major (Software Engineering)
+  const flagshipMajor = useMemo(() => {
+    if (!majors || majors.length === 0) return null;
+    return majors.find((m) => m.slug === "software-engineering") || majors[0];
+  }, [majors]);
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+  return (
+    <div className="min-h-screen bg-[#F5F6FA] pb-24">
+      {/* Hero Section with Magic UI DotPattern */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-12 pb-14">
+        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-40" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
           <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#111965]/10 text-[#111965] text-xs font-bold border border-[#111965]/15">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#111965]/10 text-[#111965] text-xs font-bold border border-[#111965]/15">
               <Compass className="w-3.5 h-3.5 text-[#111965]" />
               <span>{t("majorsDirectory.badge")}</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#111965] tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-5xl font-black text-[#111965] tracking-tight leading-tight">
               {t("majorsDirectory.title")}
             </h1>
 
             <p className="text-sm sm:text-base text-[#68708A] leading-relaxed max-w-2xl">
               {t("majorsDirectory.subtitle")}
             </p>
+          </div>
 
-            {/* Quick Stat Highlights */}
-            <div className="pt-2 flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-[#171A2C] font-semibold shadow-2xs">
-                <GraduationCap className="w-3.5 h-3.5 text-[#111965]" />
-                <span>{majors?.length || 6}+ {t("majorsDirectory.showingResults")}</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-[#171A2C] font-semibold shadow-2xs">
-                <FlaskConical className="w-3.5 h-3.5 text-blue-700" />
-                <span>STEM & High-Growth Fields</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-[#171A2C] font-semibold shadow-2xs">
-                <Building2 className="w-3.5 h-3.5 text-[#111965]" />
-                <span>{t("majorsDirectory.institutionsCount")}</span>
-              </span>
-            </div>
+          {/* Interactive Category Barometer Cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+            <button
+              onClick={() => setSelectedCategory("")}
+              className={`p-3.5 rounded-2xl border text-left transition-all ${
+                !selectedCategory
+                  ? "bg-[#111965] text-white border-[#111965] shadow-sm"
+                  : "bg-white text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
+              }`}
+            >
+              <div className="text-[11px] font-semibold opacity-80 uppercase tracking-wider">All Fields</div>
+              <div className="text-lg font-black mt-0.5">{majors?.length || 6}+ Majors</div>
+              <div className="text-[11px] opacity-75 mt-0.5">Explore Complete Catalog</div>
+            </button>
+
+            <button
+              onClick={() => setSelectedCategory("Information Technology")}
+              className={`p-3.5 rounded-2xl border text-left transition-all ${
+                selectedCategory === "Information Technology"
+                  ? "bg-[#111965] text-white border-[#111965] shadow-sm"
+                  : "bg-white text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-semibold opacity-80 uppercase tracking-wider">Tech & AI</span>
+                <Cpu className="w-3.5 h-3.5 text-blue-500" />
+              </div>
+              <div className="text-lg font-black mt-0.5">IT & Software</div>
+              <div className="text-[11px] opacity-75 mt-0.5">4-Year Degree • High Demand</div>
+            </button>
+
+            <button
+              onClick={() => setSelectedCategory("Engineering")}
+              className={`p-3.5 rounded-2xl border text-left transition-all ${
+                selectedCategory === "Engineering"
+                  ? "bg-[#111965] text-white border-[#111965] shadow-sm"
+                  : "bg-white text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-semibold opacity-80 uppercase tracking-wider">Infrastructure</span>
+                <FlaskConical className="w-3.5 h-3.5 text-amber-500" />
+              </div>
+              <div className="text-lg font-black mt-0.5">Engineering</div>
+              <div className="text-[11px] opacity-75 mt-0.5">5-Year Diplôme d'Ingénieur / B.Eng</div>
+            </button>
+
+            <button
+              onClick={() => setSelectedCategory("Business & Economics")}
+              className={`p-3.5 rounded-2xl border text-left transition-all ${
+                selectedCategory === "Business & Economics"
+                  ? "bg-[#111965] text-white border-[#111965] shadow-sm"
+                  : "bg-white text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-semibold opacity-80 uppercase tracking-wider">Commerce</span>
+                <BarChart3 className="w-3.5 h-3.5 text-emerald-500" />
+              </div>
+              <div className="text-lg font-black mt-0.5">Finance & Banking</div>
+              <div className="text-[11px] opacity-75 mt-0.5">FinTech & Corporate Strategy</div>
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Main Content Area */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
+      {/* Main Container */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
+        {/* Asymmetrical Magazine-Style Flagship Spotlight Card */}
+        {flagshipMajor && !hasActiveFilters && (
+          <div className="relative rounded-3xl bg-white border border-[#E6E8F0] shadow-sm overflow-hidden p-6 sm:p-8">
+            <BorderBeam size={220} duration={14} delay={0} borderWidth={1.5} colorFrom="#F7CE4D" colorTo="#111965" />
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              {/* Left Column: Major Overview */}
+              <div className="lg:col-span-7 space-y-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-[#111965] text-white">
+                    Featured Curriculum
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-extrabold bg-amber-50 text-amber-900 border border-amber-200">
+                    <Sparkles className="w-3 h-3 text-amber-600" />
+                    <span>Top Choice in Cambodia</span>
+                  </span>
+                  <span className="text-xs font-mono text-[#68708A]">
+                    RIASEC: {flagshipMajor.riasec_primary}-{flagshipMajor.riasec_secondary}
+                  </span>
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl font-black text-[#111965] leading-snug">
+                  {getLocalized(flagshipMajor.name)}
+                </h2>
+
+                <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed line-clamp-3">
+                  {getLocalized(flagshipMajor.description)}
+                </p>
+
+                {/* 4-Year Academic Progression preview */}
+                <div className="pt-2">
+                  <div className="text-xs font-bold text-[#111965] uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5 text-[#111965]" />
+                    <span>4-Year Academic Milestone Pathway</span>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    <div className="p-2.5 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1">
+                      <div className="text-[10px] font-bold text-[#111965]">Year 1</div>
+                      <div className="text-[11px] font-semibold text-[#171A2C] leading-tight">Foundations</div>
+                      <div className="text-[10px] text-[#68708A]">Algorithms & OOP</div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1">
+                      <div className="text-[10px] font-bold text-[#111965]">Year 2</div>
+                      <div className="text-[11px] font-semibold text-[#171A2C] leading-tight">Architecture</div>
+                      <div className="text-[10px] text-[#68708A]">Databases & APIs</div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1">
+                      <div className="text-[10px] font-bold text-[#111965]">Year 3</div>
+                      <div className="text-[11px] font-semibold text-[#171A2C] leading-tight">Cloud & Systems</div>
+                      <div className="text-[10px] text-[#68708A]">DevOps & Security</div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1">
+                      <div className="text-[10px] font-bold text-[#111965]">Year 4</div>
+                      <div className="text-[11px] font-semibold text-[#171A2C] leading-tight">Capstone</div>
+                      <div className="text-[10px] text-[#68708A]">Internship Placement</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="pt-2 flex flex-wrap items-center gap-3">
+                  <button
+                    onClick={() => setActivePreviewMajor(flagshipMajor)}
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs"
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    <span>Quick Curriculum Breakdown</span>
+                  </button>
+
+                  <Link
+                    href={`/majors/${flagshipMajor.slug}`}
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-[#111965] bg-slate-100 hover:bg-slate-200 transition-colors"
+                  >
+                    <span>{t("majorsDirectory.details")}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right Column: Visual Artwork */}
+              <div className="lg:col-span-5 flex justify-center">
+                <div className="relative w-full h-64 sm:h-72 rounded-2xl overflow-hidden shadow-md border border-[#E6E8F0] bg-slate-100">
+                  <Image
+                    src={MAJOR_IMAGES[flagshipMajor.slug] || "/images/majors/software-engineering.webp"}
+                    alt={getLocalized(flagshipMajor.name) || "Major"}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 text-white space-y-1">
+                    <span className="text-[10px] uppercase font-bold text-[#F7CE4D] tracking-wider block">
+                      Accredited Cambodian Institutions
+                    </span>
+                    <div className="text-xs font-semibold text-white">
+                      RUPP, ITC, CADT, Paragon IU & AUPP
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Sticky Filter Toolbar */}
         <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E6E8F0] shadow-xs space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
@@ -282,19 +496,16 @@ export default function MajorsPage() {
           viewMode === "grid" ? (
             /* Modern Grid Layout */
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sortedMajors.map((m: any, index: number) => {
+              {sortedMajors.map((m: any) => {
                 const coverImage = MAJOR_IMAGES[m.slug] || "/images/majors/software-engineering.webp";
                 const priHolland = m.riasec_primary ? RIASEC_NAMES[m.riasec_primary] : null;
                 const secHolland = m.riasec_secondary ? RIASEC_NAMES[m.riasec_secondary] : null;
-                const isFirst = index === 0;
 
                 return (
                   <div
                     key={m.id}
-                    className="group relative rounded-2xl bg-white border border-[#E6E8F0] hover:border-[#111965]/30 overflow-hidden shadow-2xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                    className="group rounded-2xl bg-white border border-[#E6E8F0] hover:border-[#111965]/30 overflow-hidden shadow-2xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
                   >
-                    {isFirst && <BorderBeam size={180} duration={12} delay={0} borderWidth={1.5} />}
-
                     <div>
                       {/* Major Cover Thumbnail */}
                       <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
@@ -372,9 +583,14 @@ export default function MajorsPage() {
 
                     {/* Card Footer CTA */}
                     <div className="px-5 py-3.5 bg-slate-50/80 border-t border-[#E6E8F0] flex items-center justify-between">
-                      <span className="text-xs text-[#68708A] font-medium">
-                        Cambodia Curriculum
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setActivePreviewMajor(m)}
+                        className="text-xs font-bold text-[#111965] hover:underline flex items-center gap-1"
+                      >
+                        <BookOpen className="w-3.5 h-3.5" />
+                        <span>Curriculum</span>
+                      </button>
 
                       <Link
                         href={`/majors/${m.slug}`}
@@ -434,10 +650,13 @@ export default function MajorsPage() {
                     </div>
 
                     <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-0 border-[#E6E8F0]">
-                      <span className="text-xs font-semibold text-[#68708A] flex items-center gap-1">
-                        <Building2 className="w-3.5 h-3.5 text-[#111965]" />
-                        <span>{m.universities_count || 0} {t("majorsDirectory.institutions")}</span>
-                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setActivePreviewMajor(m)}
+                        className="text-xs font-bold text-[#111965] hover:underline"
+                      >
+                        Curriculum
+                      </button>
 
                       <Link
                         href={`/majors/${m.slug}`}
@@ -478,6 +697,81 @@ export default function MajorsPage() {
           </div>
         )}
       </div>
+
+      {/* Interactive Curriculum Preview Dialog / Modal */}
+      {activePreviewMajor && (
+        <Dialog open={!!activePreviewMajor} onOpenChange={(open) => !open && setActivePreviewMajor(null)}>
+          <div className="space-y-5">
+            <div className="flex items-start justify-between border-b border-[#E6E8F0] pb-4">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-[#68708A]">
+                  Academic Curriculum Overview
+                </span>
+                <h3 className="text-xl font-black text-[#111965] mt-1">
+                  {getLocalized(activePreviewMajor.name)}
+                </h3>
+              </div>
+              <button
+                onClick={() => setActivePreviewMajor(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Curriculum Roadmap */}
+            {MAJOR_CURRICULUM_DATA[activePreviewMajor.slug] ? (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {MAJOR_CURRICULUM_DATA[activePreviewMajor.slug].years.map((y) => (
+                    <div key={y.year} className="p-3.5 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-[#111965]">Year {y.year}</span>
+                        <span className="text-[10px] font-bold text-[#68708A]">Core Program</span>
+                      </div>
+                      <div className="text-xs font-bold text-[#171A2C]">
+                        {language === "km" ? y.titleKm : y.titleEn}
+                      </div>
+                      <div className="text-[11px] text-[#68708A]">{y.focus}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-blue-50/60 border border-blue-200/60 space-y-2">
+                  <div className="text-xs font-bold text-[#111965] flex items-center gap-1.5">
+                    <Zap className="w-3.5 h-3.5 text-blue-600" />
+                    <span>Key Competencies Upon Graduation:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {MAJOR_CURRICULUM_DATA[activePreviewMajor.slug].keySkills.map((s, idx) => (
+                      <span key={idx} className="px-2 py-0.5 rounded-md bg-white border border-blue-200 text-xs font-medium text-[#111965]">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="py-6 text-center text-xs text-[#68708A]">
+                Detailed syllabus information is being updated from the respective Cambodian university faculty catalogs.
+              </div>
+            )}
+
+            <div className="flex items-center justify-between pt-3 border-t border-[#E6E8F0]">
+              <span className="text-xs text-[#68708A]">
+                {activePreviewMajor.universities_count || 0} Universities Offering This Program
+              </span>
+              <Link
+                href={`/majors/${activePreviewMajor.slug}`}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors"
+              >
+                <span>View Full Major Profile</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </Dialog>
+      )}
     </div>
   );
 }
