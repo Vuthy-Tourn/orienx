@@ -56,13 +56,18 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 z-50 w-full transition-all duration-500 ease-in-out",
-        isHomePage && !scrolled
-          ? "-translate-y-full opacity-0 pointer-events-none"
-          : "translate-y-0 opacity-100",
-        scrolled
-          ? "bg-white/95 backdrop-blur-md border-b border-[#E6E8F0] shadow-xs"
-          : "bg-white/90 backdrop-blur-md border-b border-[#E6E8F0]/80"
+        "z-50 w-full transition-all duration-300 ease-in-out",
+        isHomePage
+          ? cn(
+              "fixed top-0",
+              !scrolled
+                ? "-translate-y-full opacity-0 pointer-events-none"
+                : "translate-y-0 opacity-100",
+              scrolled
+                ? "bg-white/95 backdrop-blur-md border-b border-[#E6E8F0] shadow-xs"
+                : "bg-white/90 backdrop-blur-md border-b border-[#E6E8F0]/80"
+            )
+          : "sticky top-0 bg-white/95 backdrop-blur-md border-b border-[#E6E8F0] shadow-xs"
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -78,10 +83,10 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-150 flex items-center gap-1.5",
+                  "px-3.5 py-1.5 rounded-xl text-sm font-medium transition-all duration-150 flex items-center gap-1.5",
                   isActive
-                    ? "bg-[#F0F2FA] text-[#111965] font-semibold"
-                    : "text-[#68708A] hover:text-[#171A2C] hover:bg-slate-50"
+                    ? "bg-[#F0F2FA] text-[#111965] font-bold border-2 border-[#111965] shadow-2xs"
+                    : "text-[#68708A] hover:text-[#171A2C] hover:bg-slate-50 border-2 border-transparent"
                 )}
               >
                 {item.icon && <item.icon className="w-4 h-4 opacity-75" />}

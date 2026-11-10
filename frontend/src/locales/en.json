@@ -170,7 +170,15 @@
     "eligibilityCriteria": "Eligibility Criteria:",
     "trackScholarship": "Track Scholarship",
     "officialLink": "Official Link",
-    "savedAlert": "Saved to your scholarship tracker!"
+    "savedAlert": "Saved to your scholarship tracker!",
+    "spotlight": "Featured Flagship Opportunity",
+    "applyNow": "Official Application Portal",
+    "deadline": "Application Deadline",
+    "eligibleMajors": "Target Institutions",
+    "viewGuidelines": "View Details & Criteria",
+    "tipsTitle": "How to Win a University Scholarship in Cambodia",
+    "tipsDesc": "Key preparation strategies for Cambodian high school graduates and university students.",
+    "resetFilters": "Reset Filters"
   },
   "scholarshipsShowcase": {
     "verifiedBenefit": "VERIFIED SCHOLARSHIP BENEFIT",
@@ -242,7 +250,20 @@
     "tuitionPending": "Information not available",
     "programs": "Programs",
     "viewDetails": "View Details",
-    "notFound": "No universities found matching your filter."
+    "notFound": "No universities found matching your filter.",
+    "viewCampus": "Explore University",
+    "verifiedTuition": "MoEYS Verified Fee Schedule",
+    "compareAdd": "Add to Compare",
+    "compareRemove": "Remove",
+    "compareMax": "Up to 4 Universities",
+    "filterPublic": "Public State Universities",
+    "filterPrivate": "Private Universities",
+    "filterAllTypes": "All Institution Types",
+    "resetFilters": "Reset Filters",
+    "verifiedBadgeShort": "MoEYS Verified",
+    "sortBy": "Sort By",
+    "sortLowestTuition": "Lowest Tuition",
+    "sortMostPrograms": "Most Programs"
   },
   "universitiesCompare": {
     "back": "Back to Directory",
@@ -291,7 +312,18 @@
     "allCategories": "All Categories",
     "institutions": "Institutions",
     "details": "Details",
-    "notFound": "No majors found matching your search."
+    "notFound": "No majors found matching your search.",
+    "stemBadge": "STEM Major",
+    "viewCurriculum": "View Curriculum & Details",
+    "filterStem": "STEM Majors Only",
+    "resetFilters": "Reset Filters",
+    "showingResults": "Showing curated majors",
+    "institutionsCount": "Partner Universities",
+    "hollandCode": "Holland Code",
+    "sortBy": "Sort By",
+    "sortAlphabetical": "Name (A-Z)",
+    "sortPopular": "Most Programs",
+    "activeFilters": "Active Filters"
   },
   "majorDetail": {
     "loading": "Loading major details...",
@@ -312,7 +344,14 @@
     "searchPlaceholder": "Search careers (Software, Finance, Civil...)",
     "allIndustries": "All Industries",
     "viewProfile": "View Profile",
-    "notFound": "No careers found matching your criteria."
+    "notFound": "No careers found matching your criteria.",
+    "explorePathway": "Explore Career Pathway",
+    "typicalSalary": "Estimated Salary (Cambodia)",
+    "highDemand": "High Market Demand",
+    "minEducation": "Min. Education",
+    "resetFilters": "Reset Filters",
+    "marketInsight": "Cambodia Job Market Insights",
+    "degreePathways": "Connected Degree Pathways"
   },
   "careerDetail": {
     "loading": "Loading career details...",
@@ -334,7 +373,25 @@
     "p3Title": "3. Explainable Rationale",
     "p3Desc": "We explain exactly why a program fits you rather than giving an unexplained score.",
     "commitment": "Ethical Guidance & Data Integrity Commitment",
-    "tryAssessments": "Experience the Assessments"
+    "tryAssessments": "Experience the Assessments",
+    "heroBadge": "Futera Mission & Methodology",
+    "heroTitle": "Empowering Cambodian Students to Shape Their Future",
+    "heroSubtitle": "Futera bridges high school graduation and higher education with scientific assessments, authentic tuition fees, and transparent career pathways.",
+    "statMajors": "Curated Academic Majors",
+    "statUniversities": "Verified Universities",
+    "statTuition": "Tuition Transparency",
+    "statScience": "RIASEC + 16P Framework",
+    "whyTitle": "Why Students & Parents Trust Futera",
+    "step1Title": "1. Self-Discovery Assessment",
+    "step1Desc": "A 10-minute Holland RIASEC and cognitive preference assessment localized for Cambodian context.",
+    "step2Title": "2. Verified University Matching",
+    "step2Desc": "Connect your strengths directly to accredited Cambodian university programs with transparent tuition fee schedules.",
+    "step3Title": "3. Confident Career Roadmap",
+    "step3Desc": "Understand Cambodian job market realities, salary benchmarks, and official scholarship deadlines.",
+    "ctaTitle": "Start Your Discovery Journey Today",
+    "ctaSubtitle": "Free, unbiased, and scientifically validated for every student in Cambodia.",
+    "startAssessment": "Start Career Assessment",
+    "exploreMajorsBtn": "Explore University Majors"
   },
   "auth": {
     "signInTitle": "Sign In to OrienX",

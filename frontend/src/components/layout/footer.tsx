@@ -100,7 +100,7 @@ export function Footer() {
               Assessment results reflect self-reported student preferences and are designed to broaden horizons, not definitively restrict opportunities. University tuition and admission requirements are sourced from official published portals.
             </p>
             <div className="text-xs text-slate-400">
-              Support: <span className="text-white">guidance@orienx.edu.kh</span>
+              Support: <span className="text-white">guidance@futera.edu.kh</span>
             </div>
           </div>
         </div>
@@ -109,7 +109,7 @@ export function Footer() {
       {/* Cambodian University Campuses Landmark Skyline (Full-Width Panorama) */}
       <div className="w-full relative overflow-hidden select-none bg-[#111965]">
         <Image
-          src="/images/cambodia-campuses-skyline-clean.webp"
+          src="/images/cambodia-campuses-skyline.webp"
           alt="Cambodian University Campuses - RUPP, Western University, CADT Innovation Center, ITC"
           width={2048}
           height={594}
@@ -122,7 +122,7 @@ export function Footer() {
       {/* Bottom Copyright Bar */}
       <div className="bg-[#0D144F]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© {new Date().getFullYear()} OrienX Platform. Discover Your Direction. Shape Your Future.</p>
+          <p>© {new Date().getFullYear()} Futera Platform. Discover Your Direction. Shape Your Future.</p>
           <div className="flex items-center gap-6">
             <Link href="/about" className="hover:text-white transition-colors">
               About Methodology
