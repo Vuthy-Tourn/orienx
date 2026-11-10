@@ -20,22 +20,26 @@ import {
   Layers,
   ChevronRight,
   Award,
+  Cpu,
+  BarChart3,
+  HardHat,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
+import { DotPattern } from "@/components/magicui/dot-pattern";
+import { BorderBeam } from "@/components/magicui/border-beam";
 
-// Realistic salary estimates for Cambodian market
+// Career metadata without emojis - uses Lucide icon components
 const CAREER_METADATA: Record<string, {
   salaryJunior: string;
   salarySenior: string;
-  iconEmoji: string;
+  iconName: "cpu" | "chart" | "construction";
   colorTheme: { bg: string; text: string; border: string };
   recommendedMajors: { en: string; km: string; slug: string }[];
 }> = {
   "software-engineer": {
     salaryJunior: "$450 – $900",
     salarySenior: "$1,500 – $3,000+",
-    iconEmoji: "💻",
+    iconName: "cpu",
     colorTheme: { bg: "bg-blue-50", text: "text-blue-900", border: "border-blue-200" },
     recommendedMajors: [
       { en: "Software Engineering", km: "វិស្វកម្មកម្មវិធី", slug: "software-engineering" },
@@ -45,7 +49,7 @@ const CAREER_METADATA: Record<string, {
   "financial-analyst": {
     salaryJunior: "$400 – $750",
     salarySenior: "$1,200 – $2,500+",
-    iconEmoji: "📊",
+    iconName: "chart",
     colorTheme: { bg: "bg-emerald-50", text: "text-emerald-900", border: "border-emerald-200" },
     recommendedMajors: [
       { en: "Banking & Finance", km: "ធនាគារ និងហិរញ្ញវត្ថុ", slug: "banking-finance" },
@@ -55,7 +59,7 @@ const CAREER_METADATA: Record<string, {
   "civil-engineer": {
     salaryJunior: "$350 – $700",
     salarySenior: "$1,100 – $2,200+",
-    iconEmoji: "🏗️",
+    iconName: "construction",
     colorTheme: { bg: "bg-amber-50", text: "text-amber-900", border: "border-amber-200" },
     recommendedMajors: [
       { en: "Civil Engineering", km: "វិស្វកម្មសំណង់ស៊ីវិល", slug: "civil-engineering" },
@@ -94,13 +98,26 @@ export default function CareersPage() {
     setIndustryFilter("");
   };
 
+  const renderIcon = (name: "cpu" | "chart" | "construction") => {
+    switch (name) {
+      case "cpu":
+        return <Cpu className="w-4 h-4 text-blue-600" />;
+      case "chart":
+        return <BarChart3 className="w-4 h-4 text-emerald-600" />;
+      case "construction":
+        return <HardHat className="w-4 h-4 text-amber-600" />;
+      default:
+        return <Briefcase className="w-4 h-4 text-[#111965]" />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F5F6FA] pb-24">
-      {/* Hero Header */}
+      {/* Hero Header with Magic UI DotPattern */}
       <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-10 pb-12">
-        <div className="absolute inset-0 bg-[radial-gradient(#111965_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.03] pointer-events-none" />
+        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-35" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#111965]/10 text-[#111965] text-xs font-bold border border-[#111965]/15">
               <Briefcase className="w-3.5 h-3.5 text-[#111965]" />
@@ -175,7 +192,7 @@ export default function CareersPage() {
             </div>
           </div>
 
-          {/* Quick Industry Filter Tabs */}
+          {/* Quick Industry Filter Tabs without emojis */}
           <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#E6E8F0]/80">
             <button
               onClick={() => setIndustryFilter("")}
@@ -189,33 +206,36 @@ export default function CareersPage() {
             </button>
             <button
               onClick={() => setIndustryFilter("Technology")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 industryFilter === "Technology"
                   ? "bg-[#111965] text-white shadow-xs"
                   : "bg-[#F5F6FA] text-[#68708A] hover:text-[#171A2C]"
               }`}
             >
-              💻 Technology
+              <Cpu className="w-3.5 h-3.5 text-blue-600" />
+              <span>Technology</span>
             </button>
             <button
               onClick={() => setIndustryFilter("Finance & Banking")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 industryFilter === "Finance & Banking"
                   ? "bg-[#111965] text-white shadow-xs"
                   : "bg-[#F5F6FA] text-[#68708A] hover:text-[#171A2C]"
               }`}
             >
-              📊 Finance & Banking
+              <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Finance & Banking</span>
             </button>
             <button
               onClick={() => setIndustryFilter("Engineering & Construction")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 industryFilter === "Engineering & Construction"
                   ? "bg-[#111965] text-white shadow-xs"
                   : "bg-[#F5F6FA] text-[#68708A] hover:text-[#171A2C]"
               }`}
             >
-              🏗️ Engineering & Construction
+              <HardHat className="w-3.5 h-3.5 text-amber-600" />
+              <span>Engineering & Construction</span>
             </button>
 
             {hasActiveFilters && (
@@ -248,31 +268,36 @@ export default function CareersPage() {
           </div>
         ) : careers && careers.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {careers.map((c: any) => {
+            {careers.map((c: any, index: number) => {
               const meta = CAREER_METADATA[c.slug] || {
                 salaryJunior: "$350 – $700",
                 salarySenior: "$1,000 – $2,000+",
-                iconEmoji: "💼",
+                iconName: "cpu" as const,
                 colorTheme: { bg: "bg-slate-50", text: "text-slate-900", border: "border-slate-200" },
                 recommendedMajors: [],
               };
+              const isFirst = index === 0;
 
               return (
                 <div
                   key={c.id}
-                  className="group rounded-2xl bg-white border border-[#E6E8F0] hover:border-[#111965]/30 p-6 shadow-2xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-5"
+                  className="group relative rounded-2xl bg-white border border-[#E6E8F0] hover:border-[#111965]/30 p-6 shadow-2xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-5"
                 >
+                  {isFirst && <BorderBeam size={180} duration={12} delay={1} borderWidth={1.5} />}
+
                   <div className="space-y-4">
                     {/* Top Industry & RIASEC Pill */}
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-lg">{meta.iconEmoji}</span>
+                        <div className="p-1 rounded-md bg-slate-100 text-[#111965]">
+                          {renderIcon(meta.iconName)}
+                        </div>
                         <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${meta.colorTheme.bg} ${meta.colorTheme.text} ${meta.colorTheme.border}`}>
                           {c.industry}
                         </span>
                       </div>
 
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                         <span>In-Demand</span>
                       </span>

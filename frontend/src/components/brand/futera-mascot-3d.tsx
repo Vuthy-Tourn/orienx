@@ -353,7 +353,7 @@ export function FuteraMascot3D({
       onClick={handleMascotClick}
       className={`relative inline-block cursor-pointer select-none filter drop-shadow-[0_10px_20px_rgba(247,206,77,0.3)] transition-transform hover:scale-106 active:scale-95 ${className}`}
       style={{ width: size, height: size }}
-      title="Click Tara to wave and celebrate! 🌟"
+      title="Click Tara to wave and celebrate"
     />
   );
 }

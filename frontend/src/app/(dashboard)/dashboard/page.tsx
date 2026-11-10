@@ -52,7 +52,7 @@ export default function DashboardOverviewPage() {
               {t("dashboardPage.badge")}
             </span>
             <h1 className="text-xl sm:text-3xl font-extrabold text-white">
-              {t("dashboardPage.welcome")}, {userName}! 👋
+              {t("dashboardPage.welcome")}, {userName}
             </h1>
             <p className="text-xs sm:text-sm text-slate-300">
               {user?.province || "Phnom Penh"} • Grade 12 Graduate Candidate

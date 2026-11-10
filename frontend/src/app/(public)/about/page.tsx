@@ -22,18 +22,19 @@ import {
   DollarSign,
   TrendingUp,
 } from "lucide-react";
-import { FuteraMascot } from "@/components/brand/futera-mascot";
+import { DotPattern } from "@/components/magicui/dot-pattern";
+import { BorderBeam } from "@/components/magicui/border-beam";
 
 export default function AboutPage() {
   const { t, language } = useLanguage();
 
   return (
     <div className="min-h-screen bg-[#F5F6FA] pb-24">
-      {/* Hero Section */}
+      {/* Hero Section with Magic UI DotPattern */}
       <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-12 pb-16">
-        <div className="absolute inset-0 bg-[radial-gradient(#111965_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.03] pointer-events-none" />
+        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-35" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-4">
@@ -71,9 +72,11 @@ export default function AboutPage() {
               </div>
             </div>
 
-            {/* Right Mascot & Welcome Card */}
+            {/* Right Mascot & Welcome Card with Magic UI BorderBeam */}
             <div className="lg:col-span-5 flex justify-center">
-              <div className="relative p-6 sm:p-8 rounded-3xl bg-white border border-[#E6E8F0] shadow-lg max-w-sm w-full space-y-4 text-center">
+              <div className="relative p-6 sm:p-8 rounded-3xl bg-white border border-[#E6E8F0] shadow-lg max-w-sm w-full space-y-4 text-center overflow-hidden">
+                <BorderBeam size={180} duration={12} delay={0} borderWidth={1.5} />
+
                 <div className="relative w-40 h-40 mx-auto">
                   <Image
                     src="/images/welcome-hd.webp"
@@ -86,7 +89,8 @@ export default function AboutPage() {
 
                 <div className="space-y-1">
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF9E6] text-[#111965] text-xs font-bold border border-[#F7CE4D]">
-                    <span>⭐ Tara (តារា)</span>
+                    <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
+                    <span>Tara (តារា)</span>
                     <span className="text-[#68708A]">• Futera Guide</span>
                   </div>
                   <h3 className="text-base font-bold text-[#111965]">

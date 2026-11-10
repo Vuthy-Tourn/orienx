@@ -12,6 +12,8 @@ import {
   ArrowRight,
   AlertCircle,
   Sparkles,
+  GraduationCap,
+  ShieldCheck,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -72,16 +74,18 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={fillDemoStudent}
-              className="px-2.5 py-1.5 rounded-lg bg-white border border-amber-200 text-amber-950 font-semibold hover:bg-amber-100/50 text-left transition-colors"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-amber-200 text-amber-950 font-semibold hover:bg-amber-100/50 text-left transition-colors"
             >
-              👩‍🎓 Demo Student
+              <GraduationCap className="w-3.5 h-3.5 text-amber-700" />
+              <span>Demo Student</span>
             </button>
             <button
               type="button"
               onClick={fillDemoAdmin}
-              className="px-2.5 py-1.5 rounded-lg bg-white border border-amber-200 text-amber-950 font-semibold hover:bg-amber-100/50 text-left transition-colors"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white border border-amber-200 text-amber-950 font-semibold hover:bg-amber-100/50 text-left transition-colors"
             >
-              🛡️ Demo Admin
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-700" />
+              <span>Demo Admin</span>
             </button>
           </div>
         </div>

@@ -16,6 +16,9 @@ import {
   DollarSign,
   Building2,
   ExternalLink,
+  Phone,
+  Mail,
+  Globe,
 } from "lucide-react";
 import { formatUSD } from "@/lib/utils";
 
@@ -150,9 +153,19 @@ export default function UniversityDetailPage() {
               <div className="text-[10px] text-[#68708A] uppercase font-bold">
                 {t("universityDetail.contact")}
               </div>
-              <div className="text-xs font-medium text-[#171A2C] mt-0.5 space-y-0.5">
-                {uni.contact_phone && <div>📞 {uni.contact_phone}</div>}
-                {uni.contact_email && <div>✉️ {uni.contact_email}</div>}
+              <div className="text-xs font-medium text-[#171A2C] mt-0.5 space-y-1">
+                {uni.contact_phone && (
+                  <div className="flex items-center gap-1.5">
+                    <Phone className="w-3.5 h-3.5 text-[#111965]" />
+                    <span>{uni.contact_phone}</span>
+                  </div>
+                )}
+                {uni.contact_email && (
+                  <div className="flex items-center gap-1.5">
+                    <Mail className="w-3.5 h-3.5 text-[#111965]" />
+                    <span>{uni.contact_email}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -198,7 +211,10 @@ export default function UniversityDetailPage() {
                       <Clock className="w-3.5 h-3.5" />
                       <span>{um.duration_years} Years</span>
                     </span>
-                    <span>🌐 {um.language_of_instruction}</span>
+                    <span className="flex items-center gap-1">
+                      <Globe className="w-3.5 h-3.5" />
+                      <span>{um.language_of_instruction}</span>
+                    </span>
                   </div>
                 </div>
 

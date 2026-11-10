@@ -210,14 +210,14 @@ export function FuteraMascotDynamic({
   // Contextual fallback speech if none provided
   const defaultSpeech =
     effectiveEmotion === "happy"
-      ? "យល់ស្រប! អស្ចារ្យណាស់! 🌟"
+      ? "យល់ស្រប! អស្ចារ្យណាស់!"
       : effectiveEmotion === "sad"
-      ? "មិនយល់ស្របទេ? ខ្ញុំយល់ហើយ... 🥺"
+      ? "មិនយល់ស្របទេ? ខ្ញុំយល់ហើយ..."
       : effectiveEmotion === "completed"
-      ? "អបអរសាទរ! អ្នកពិតជាអស្ចារ្យ! 🌟"
+      ? "អបអរសាទរ! អ្នកពិតជាអស្ចារ្យ!"
       : effectiveEmotion === "greeting"
-      ? "សួស្តី! ចាប់ផ្តើមសំណួរដំបូង! 👋"
-      : "តើអ្នកយល់យ៉ាងណាដែរ? 🤔";
+      ? "សួស្តី! ចាប់ផ្តើមសំណួរដំបូង!"
+      : "តើអ្នកយល់យ៉ាងណាដែរ?";
 
   const renderedSpeech = speechText ?? defaultSpeech;
 
@@ -276,7 +276,7 @@ export function FuteraMascotDynamic({
           perspective: 600,
         }}
         className="relative flex-shrink-0 cursor-pointer group"
-        title={effectiveEmotion === "sad" ? "Click to comfort Tara! 🥺" : "Click Tara to play! 🌟"}
+        title={effectiveEmotion === "sad" ? "Click to comfort Tara" : "Click Tara to play"}
       >
         {/* Soft Dynamic Contact Shadow beneath Tara */}
         <div

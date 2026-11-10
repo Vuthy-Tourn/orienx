@@ -22,8 +22,8 @@ export function MascotInteractiveHero() {
   // Conversational dialogues from Tara (rotating automatically)
   const greetings = [
     {
-      km: "សួស្តី! ខ្ញុំគឺ Tara 🌟 មកស្វែងរកជំនាញ និងសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុតសម្រាប់អ្នកទាំងអស់គ្នា!",
-      en: "Hey! I'm Tara 🌟 Let's find your dream major and verified university in Cambodia together!",
+      km: "សួស្តី! ខ្ញុំគឺ Tara មកស្វែងរកជំនាញ និងសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុតសម្រាប់អ្នកទាំងអស់គ្នា!",
+      en: "Hey! I'm Tara, let's find your dream major and verified university in Cambodia together!",
     },
     {
       km: "ខ្ញុំនឹងជួយវិភាគលើបុគ្គលិកលក្ខណៈ និងចំណូលចិត្ត RIASEC របស់អ្នក ដើម្បីរកជំនាញដែលត្រូវ 100%!",

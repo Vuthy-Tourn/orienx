@@ -24,8 +24,11 @@ import {
   FileText,
   Clock,
   Layers,
+  Percent,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { DotPattern } from "@/components/magicui/dot-pattern";
+import { BorderBeam } from "@/components/magicui/border-beam";
 
 // Map scholarship slugs to local poster assets
 const SCHOLARSHIP_POSTERS: Record<string, string> = {
@@ -79,11 +82,11 @@ export default function ScholarshipsPage() {
 
   return (
     <div className="min-h-screen bg-[#F5F6FA] pb-24">
-      {/* Hero Header */}
+      {/* Hero Header with Magic UI DotPattern */}
       <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-10 pb-12">
-        <div className="absolute inset-0 bg-[radial-gradient(#111965_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.03] pointer-events-none" />
+        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-35" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
@@ -98,7 +101,7 @@ export default function ScholarshipsPage() {
               {t("scholarshipsPage.subtitle")}
             </p>
 
-            {/* Quick Stat Highlights */}
+            {/* Quick Stat Highlights without emojis */}
             <div className="pt-2 flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-[#171A2C] font-semibold shadow-2xs">
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
@@ -119,9 +122,11 @@ export default function ScholarshipsPage() {
 
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
-        {/* Spotlight Flagship Banner */}
+        {/* Spotlight Flagship Banner with Magic UI BorderBeam */}
         {spotlightScholarship && !hasActiveFilters && (
-          <div className="rounded-3xl bg-gradient-to-br from-[#111965] via-[#1E277A] to-[#0A0F3D] text-white p-6 sm:p-8 shadow-xl relative overflow-hidden">
+          <div className="relative rounded-3xl bg-gradient-to-br from-[#111965] via-[#1E277A] to-[#0A0F3D] text-white p-6 sm:p-8 shadow-xl overflow-hidden">
+            <BorderBeam size={250} duration={14} delay={0} borderWidth={2} colorFrom="#F7CE4D" colorTo="#38BDF8" />
+
             <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none translate-x-12 translate-y-12">
               <Award className="w-96 h-96 text-white" />
             </div>
@@ -226,7 +231,7 @@ export default function ScholarshipsPage() {
             </div>
           </div>
 
-          {/* Quick Segmented Coverage Pills */}
+          {/* Quick Segmented Coverage Pills without emojis */}
           <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#E6E8F0]/80">
             <button
               onClick={() => setCoverageFilter("")}
@@ -240,23 +245,25 @@ export default function ScholarshipsPage() {
             </button>
             <button
               onClick={() => setCoverageFilter("FULL_TUITION")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 coverageFilter === "FULL_TUITION"
                   ? "bg-amber-500 text-[#111965] font-extrabold shadow-xs"
                   : "bg-amber-50 text-amber-900 hover:bg-amber-100"
               }`}
             >
-              ⭐ {t("scholarshipsPage.fullTuition")}
+              <Award className="w-3.5 h-3.5" />
+              <span>{t("scholarshipsPage.fullTuition")}</span>
             </button>
             <button
               onClick={() => setCoverageFilter("PARTIAL_TUITION")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 coverageFilter === "PARTIAL_TUITION"
                   ? "bg-[#111965] text-white shadow-xs"
                   : "bg-blue-50 text-blue-900 hover:bg-blue-100"
               }`}
             >
-              📊 {t("scholarshipsPage.partialTuition")}
+              <Percent className="w-3.5 h-3.5" />
+              <span>{t("scholarshipsPage.partialTuition")}</span>
             </button>
 
             {hasActiveFilters && (
@@ -301,16 +308,17 @@ export default function ScholarshipsPage() {
                   className="group rounded-2xl bg-white border border-[#E6E8F0] hover:border-[#111965]/30 p-6 shadow-2xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-5"
                 >
                   <div className="space-y-4">
-                    {/* Top Badges */}
+                    {/* Top Badges without emojis */}
                     <div className="flex items-center justify-between gap-2">
                       <span
-                        className={`px-3 py-1 rounded-lg text-xs font-extrabold ${
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-extrabold ${
                           isFull
                             ? "bg-[#FFF9E6] text-[#111965] border border-[#F7CE4D] shadow-2xs"
                             : "bg-blue-50 text-blue-900 border border-blue-200"
                         }`}
                       >
-                        {isFull ? "⭐ 100% Full Tuition" : `${s.coverage_percentage || 50}% Partial Coverage`}
+                        <Award className="w-3.5 h-3.5 text-amber-600" />
+                        <span>{isFull ? "100% Full Tuition" : `${s.coverage_percentage || 50}% Partial Coverage`}</span>
                       </span>
 
                       <span className="flex items-center gap-1.5 text-xs text-[#68708A] font-medium">

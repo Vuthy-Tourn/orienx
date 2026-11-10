@@ -33,8 +33,8 @@ const DIMENSION_TITLES: Record<
     code: "E vs I",
     nameEn: "Energy & Social Focus (Extraversion vs Introversion)",
     nameKm: "ថាមពល និងការប្រាស្រ័យទាក់ទង (Extraversion vs Introversion)",
-    tipEn: "Where do you naturally recharge your energy? 🌟",
-    tipKm: "តើអ្នកបញ្ចូលថាមពលដោយវិធីណា? 🌟",
+    tipEn: "Where do you naturally recharge your energy?",
+    tipKm: "តើអ្នកបញ្ចូលថាមពលដោយវិធីណា?",
   },
   SN: {
     code: "S vs N",
@@ -47,15 +47,15 @@ const DIMENSION_TITLES: Record<
     code: "T vs F",
     nameEn: "Decision Making (Thinking vs Feeling)",
     nameKm: "ការសម្រេចចិត្ត (Thinking vs Feeling)",
-    tipEn: "What guides your choices: logic or empathy? 💎🌸",
-    tipKm: "តើអ្វីដឹកនាំការសម្រេចចិត្ត៖ តក្កវិជ្ជា ឬអារម្មណ៍? 💎🌸",
+    tipEn: "What guides your choices: logic or empathy?",
+    tipKm: "តើអ្វីដឹកនាំការសម្រេចចិត្ត៖ តក្កវិជ្ជា ឬអារម្មណ៍?",
   },
   JP: {
     code: "J vs P",
     nameEn: "Lifestyle Structure (Judging vs Perceiving)",
     nameKm: "រចនាសម្ព័ន្ធជីវិត (Judging vs Perceiving)",
-    tipEn: "Do you prefer a clear plan or flexible freedom? 📋🌊",
-    tipKm: "តើអ្នកចូលចិត្តផែនការរៀបរយ ឬសេរីភាពបត់បែន? 📋🌊",
+    tipEn: "Do you prefer a clear plan or flexible freedom?",
+    tipKm: "តើអ្នកចូលចិត្តផែនការរៀបរយ ឬសេរីភាពបត់បែន?",
   },
 };
 

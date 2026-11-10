@@ -22,8 +22,11 @@ import {
   DollarSign,
   CheckCircle2,
   Building,
+  Landmark,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { DotPattern } from "@/components/magicui/dot-pattern";
+import { BorderBeam } from "@/components/magicui/border-beam";
 import { formatUSD } from "@/lib/utils";
 
 // Cambodian university campus photos mapping
@@ -33,7 +36,7 @@ const UNIVERSITY_IMAGES: Record<string, string> = {
   aupp: "/images/universities/aupp.jpg",
   paragoniu: "/images/universities/paragoniu.jpg",
   cadt: "/images/universities/cadt.jpg",
-  num: "/images/universities/rupp.jpg", // fallback high quality campus photo
+  num: "/images/universities/rupp.jpg",
 };
 
 export default function UniversitiesPage() {
@@ -92,11 +95,11 @@ export default function UniversitiesPage() {
 
   return (
     <div className="min-h-screen bg-[#F5F6FA] pb-24">
-      {/* Hero Section */}
+      {/* Hero Section with Magic UI DotPattern */}
       <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-10 pb-12">
-        <div className="absolute inset-0 bg-[radial-gradient(#111965_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.03] pointer-events-none" />
+        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-35" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
@@ -111,7 +114,7 @@ export default function UniversitiesPage() {
               {t("universitiesDirectory.subtitle")}
             </p>
 
-            {/* Quick Stat Highlights */}
+            {/* Quick Stat Highlights without emojis */}
             <div className="pt-2 flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-[#171A2C] font-semibold shadow-2xs">
                 <Building2 className="w-3.5 h-3.5 text-[#111965]" />
@@ -197,7 +200,7 @@ export default function UniversitiesPage() {
             </div>
           </div>
 
-          {/* Quick Segmented Types Pills */}
+          {/* Quick Segmented Types Pills without emojis */}
           <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#E6E8F0]/80">
             <button
               onClick={() => setTypeFilter("")}
@@ -211,23 +214,25 @@ export default function UniversitiesPage() {
             </button>
             <button
               onClick={() => setTypeFilter("PUBLIC")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 typeFilter === "PUBLIC"
                   ? "bg-blue-800 text-white shadow-xs"
                   : "bg-blue-50 text-blue-900 hover:bg-blue-100"
               }`}
             >
-              🏛️ {t("universitiesDirectory.publicType")}
+              <Landmark className="w-3.5 h-3.5" />
+              <span>{t("universitiesDirectory.publicType")}</span>
             </button>
             <button
               onClick={() => setTypeFilter("PRIVATE")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 typeFilter === "PRIVATE"
                   ? "bg-purple-800 text-white shadow-xs"
                   : "bg-purple-50 text-purple-900 hover:bg-purple-100"
               }`}
             >
-              🏢 {t("universitiesDirectory.privateType")}
+              <Building2 className="w-3.5 h-3.5" />
+              <span>{t("universitiesDirectory.privateType")}</span>
             </button>
 
             {hasActiveFilters && (
@@ -264,18 +269,21 @@ export default function UniversitiesPage() {
           </div>
         ) : sortedUniversities && sortedUniversities.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sortedUniversities.map((uni: any) => {
+            {sortedUniversities.map((uni: any, index: number) => {
               const isSelected = selectedForCompare.includes(uni.slug);
               const isPublic = uni.university_type === "PUBLIC";
               const coverImage = UNIVERSITY_IMAGES[uni.slug] || "/images/universities/rupp.jpg";
+              const isFeatured = index === 0;
 
               return (
                 <div
                   key={uni.id}
-                  className={`group rounded-2xl bg-white border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-lg hover:-translate-y-1 ${
+                  className={`group relative rounded-2xl bg-white border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-lg hover:-translate-y-1 ${
                     isSelected ? "border-[#111965] ring-2 ring-[#111965]/20" : "border-[#E6E8F0] hover:border-[#111965]/30"
                   }`}
                 >
+                  {isFeatured && <BorderBeam size={180} duration={12} delay={2} borderWidth={1.5} />}
+
                   <div>
                     {/* Campus Image Header */}
                     <div className="relative h-44 w-full bg-slate-100 overflow-hidden">

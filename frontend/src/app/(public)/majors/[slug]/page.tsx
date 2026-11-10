@@ -16,6 +16,7 @@ import {
   DollarSign,
   Briefcase,
   ShieldCheck,
+  MapPin,
 } from "lucide-react";
 
 export default function MajorDetailPage() {
@@ -180,8 +181,9 @@ export default function MajorDetailPage() {
                     {getLocalized(u.university_name)}
                   </h4>
 
-                  <div className="text-xs text-[#68708A]">
-                    📍 {u.province} • {u.duration_years} Years ({u.degree_level})
+                  <div className="text-xs text-[#68708A] flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-[#111965] shrink-0" />
+                    <span>{u.province} • {u.duration_years} Years ({u.degree_level})</span>
                   </div>
                 </div>
 

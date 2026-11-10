@@ -167,7 +167,7 @@ export function FuteraMascot({
                 : "text-[#F7CE4D] animate-ping opacity-75"
             }`}
           >
-            {isAngry ? "💢" : isSad ? "✧" : "✦"}
+            {isSad ? "✧" : "✦"}
           </span>
           <span
             className={`absolute bottom-6 -left-2 text-xs pointer-events-none transition-colors duration-200 ${
@@ -178,7 +178,7 @@ export function FuteraMascot({
                 : "text-[#F7CE4D] animate-pulse"
             }`}
           >
-            {isAngry ? "💢" : isSad ? "✧" : "✦"}
+            {isSad ? "✧" : "✦"}
           </span>
 
           {/* Glitch-Free Stacked Video Animations */}
@@ -245,7 +245,7 @@ export function FuteraMascot({
         onClick={handleMascotClick}
         className="relative cursor-pointer transition-transform duration-200 hover:scale-106 active:scale-95"
         style={{ width: widthPx, height: heightPx }}
-        title="Click Tara to play! 🌟"
+        title="Click Tara to play"
       >
         {/* Soft Golden Ground Light Aura */}
         <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3/4 h-5 bg-[#F7CE4D]/25 blur-md rounded-full pointer-events-none" />
@@ -260,7 +260,7 @@ export function FuteraMascot({
               : "text-[#F7CE4D] animate-ping opacity-75"
           }`}
         >
-          {isAngry ? "💢" : isSad ? "✧" : "✦"}
+          {isSad ? "✧" : "✦"}
         </span>
         <span
           className={`absolute bottom-8 -left-2 text-sm pointer-events-none transition-colors duration-200 ${
@@ -271,7 +271,7 @@ export function FuteraMascot({
               : "text-[#F7CE4D] animate-pulse"
           }`}
         >
-          {isAngry ? "💢" : isSad ? "✧" : "✦"}
+          {isSad ? "✧" : "✦"}
         </span>
 
         {/* Glitch-Free Stacked Video Animations */}

@@ -13,6 +13,7 @@ import {
   DollarSign,
   MapPin,
   BookOpen,
+  Check,
 } from "lucide-react";
 
 export default function AcademicPreferencesPage() {
@@ -196,7 +197,10 @@ export default function AcademicPreferencesPage() {
                       : "border-[#E6E8F0] bg-white text-[#171A2C] hover:border-slate-300"
                   }`}
                 >
-                  ✓ {act}
+                  <span className="flex items-center gap-1.5">
+                    {isSelected && <Check className="w-3.5 h-3.5 text-[#111965]" />}
+                    <span>{act}</span>
+                  </span>
                 </button>
               );
             })}

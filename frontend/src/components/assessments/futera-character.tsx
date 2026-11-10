@@ -63,7 +63,7 @@ export function FuteraBlobCharacter({
 function renderCharacterSvg(trait: TraitCode, isExcited: boolean) {
   switch (trait) {
     case "E":
-      // Sol ☀️: Golden Sun Flower Blob (Extraversion)
+      // Sol ️: Golden Sun Flower Blob (Extraversion)
       return (
         <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
           {/* Flower Petals */}
@@ -113,7 +113,7 @@ function renderCharacterSvg(trait: TraitCode, isExcited: boolean) {
       );
 
     case "I":
-      // Luna 🎧: Lavender Squircle with Headphones (Introversion)
+      // Luna : Lavender Squircle with Headphones (Introversion)
       return (
         <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
           {/* Headphone Headband */}
@@ -154,7 +154,7 @@ function renderCharacterSvg(trait: TraitCode, isExcited: boolean) {
       );
 
     case "S":
-      // Geo 🧱: Coral-Orange Rounded Hexagon (Sensing)
+      // Geo : Coral-Orange Rounded Hexagon (Sensing)
       return (
         <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
           {/* Rounded Hexagon Body */}
@@ -191,7 +191,7 @@ function renderCharacterSvg(trait: TraitCode, isExcited: boolean) {
       );
 
     case "N":
-      // Nova ☁️: Sky-Blue Dreamy Cloud with Sparkle Eyes (Intuition)
+      // Nova ️: Sky-Blue Dreamy Cloud with Sparkle Eyes (Intuition)
       return (
         <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
           {/* Cloud Silhouette */}
@@ -214,7 +214,7 @@ function renderCharacterSvg(trait: TraitCode, isExcited: boolean) {
       );
 
     case "T":
-      // Prism / Logic 💎: Mint Diamond Squircle with Glasses (Thinking)
+      // Prism / Logic : Mint Diamond Squircle with Glasses (Thinking)
       return (
         <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
           {/* Diamond Body */}
@@ -243,7 +243,7 @@ function renderCharacterSvg(trait: TraitCode, isExcited: boolean) {
       );
 
     case "F":
-      // Hearty / Bloom 🌸: Rosy-Pink 4-Petal Flower (Feeling)
+      // Hearty / Bloom : Rosy-Pink 4-Petal Flower (Feeling)
       return (
         <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
           {/* 4 Petals */}
@@ -273,7 +273,7 @@ function renderCharacterSvg(trait: TraitCode, isExcited: boolean) {
       );
 
     case "J":
-      // Checky 📋: Emerald Green Dome Arch with Star Antenna (Judging)
+      // Checky : Emerald Green Dome Arch with Star Antenna (Judging)
       return (
         <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
           {/* Antenna with Star Flag */}
@@ -308,7 +308,7 @@ function renderCharacterSvg(trait: TraitCode, isExcited: boolean) {
       );
 
     case "P":
-      // Wavey 🌊: Tangerine Jelly Triangle with Quirky Eyes (Perceiving)
+      // Wavey : Tangerine Jelly Triangle with Quirky Eyes (Perceiving)
       return (
         <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
           {/* Rounded Triangle / Jelly Silhouette */}

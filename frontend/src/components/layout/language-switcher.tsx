@@ -27,7 +27,7 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
             : "text-[#68708A] hover:text-[#171A2C]"
         )}
       >
-        <span>🇰🇭</span>
+        <span className="font-mono text-[10px] font-bold opacity-75">KH</span>
         <span>ខ្មែរ</span>
       </button>
       <button
@@ -39,8 +39,8 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
             : "text-[#68708A] hover:text-[#171A2C]"
         )}
       >
-        <span>🇬🇧</span>
-        <span>EN</span>
+        <span className="font-mono text-[10px] font-bold opacity-75">EN</span>
+        <span>English</span>
       </button>
     </div>
   );

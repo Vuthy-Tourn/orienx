@@ -20,9 +20,14 @@ import {
   GraduationCap,
   Briefcase,
   Zap,
+  FlaskConical,
+  Layers,
+  ChevronDown,
+  BookOpen,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
+import { DotPattern } from "@/components/magicui/dot-pattern";
+import { BorderBeam } from "@/components/magicui/border-beam";
 
 // Local image lookup for Cambodian majors
 const MAJOR_IMAGES: Record<string, string> = {
@@ -38,14 +43,14 @@ const MAJOR_IMAGES: Record<string, string> = {
   "law": "/images/majors/law.webp",
 };
 
-// Holland RIASEC display helpers
+// Holland RIASEC display helpers without emojis
 const RIASEC_NAMES: Record<string, { en: string; km: string; color: string }> = {
-  R: { en: "Realistic (Doer)", km: "ជាក់ស្តែង (អនុវត្ត)", color: "bg-amber-50 text-amber-900 border-amber-200" },
-  I: { en: "Investigative (Thinker)", km: "ស្រាវជ្រាវ (វិភាគ)", color: "bg-blue-50 text-blue-900 border-blue-200" },
-  A: { en: "Artistic (Creator)", km: "សិល្បៈ (ច្នៃប្រឌិត)", color: "bg-purple-50 text-purple-900 border-purple-200" },
-  S: { en: "Social (Helper)", km: "សង្គម (ជួយអ្នកដទៃ)", color: "bg-emerald-50 text-emerald-900 border-emerald-200" },
-  E: { en: "Enterprising (Persuader)", km: "សហគ្រិន (ដឹកនាំ)", color: "bg-orange-50 text-orange-900 border-orange-200" },
-  C: { en: "Conventional (Organizer)", km: "ការិយាល័យ (រៀបរយ)", color: "bg-slate-50 text-slate-800 border-slate-200" },
+  R: { en: "Realistic (Practical)", km: "ជាក់ស្តែង (អនុវត្ត)", color: "bg-amber-50 text-amber-900 border-amber-200" },
+  I: { en: "Investigative (Analytical)", km: "ស្រាវជ្រាវ (វិភាគ)", color: "bg-blue-50 text-blue-900 border-blue-200" },
+  A: { en: "Artistic (Creative)", km: "សិល្បៈ (ច្នៃប្រឌិត)", color: "bg-purple-50 text-purple-900 border-purple-200" },
+  S: { en: "Social (Supportive)", km: "សង្គម (ជួយអ្នកដទៃ)", color: "bg-emerald-50 text-emerald-900 border-emerald-200" },
+  E: { en: "Enterprising (Leadership)", km: "សហគ្រិន (ដឹកនាំ)", color: "bg-orange-50 text-orange-900 border-orange-200" },
+  C: { en: "Conventional (Organized)", km: "ការិយាល័យ (រៀបរយ)", color: "bg-slate-50 text-slate-800 border-slate-200" },
 };
 
 export default function MajorsPage() {
@@ -98,11 +103,11 @@ export default function MajorsPage() {
 
   return (
     <div className="min-h-screen bg-[#F5F6FA] pb-16">
-      {/* Hero Header */}
+      {/* Hero Header with Magic UI DotPattern */}
       <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-10 pb-12">
-        <div className="absolute inset-0 bg-[radial-gradient(#111965_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.03] pointer-events-none" />
+        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-35" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#111965]/10 text-[#111965] text-xs font-bold border border-[#111965]/15">
               <Compass className="w-3.5 h-3.5 text-[#111965]" />
@@ -124,7 +129,7 @@ export default function MajorsPage() {
                 <span>{majors?.length || 6}+ {t("majorsDirectory.showingResults")}</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-[#171A2C] font-semibold shadow-2xs">
-                <Zap className="w-3.5 h-3.5 text-amber-500" />
+                <FlaskConical className="w-3.5 h-3.5 text-blue-700" />
                 <span>STEM & High-Growth Fields</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-white border border-[#E6E8F0] text-[#171A2C] font-semibold shadow-2xs">
@@ -173,7 +178,7 @@ export default function MajorsPage() {
                     : "bg-[#F5F6FA]/60 border-[#E6E8F0] text-[#171A2C] hover:bg-slate-100"
                 }`}
               >
-                <span>🔬</span>
+                <FlaskConical className="w-3.5 h-3.5 text-blue-700" />
                 <span>{t("majorsDirectory.filterStem")}</span>
                 {stemOnly && <CheckCircle2 className="w-3.5 h-3.5 text-amber-600" />}
               </button>
@@ -277,16 +282,19 @@ export default function MajorsPage() {
           viewMode === "grid" ? (
             /* Modern Grid Layout */
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sortedMajors.map((m: any) => {
+              {sortedMajors.map((m: any, index: number) => {
                 const coverImage = MAJOR_IMAGES[m.slug] || "/images/majors/software-engineering.webp";
                 const priHolland = m.riasec_primary ? RIASEC_NAMES[m.riasec_primary] : null;
                 const secHolland = m.riasec_secondary ? RIASEC_NAMES[m.riasec_secondary] : null;
+                const isFirst = index === 0;
 
                 return (
                   <div
                     key={m.id}
-                    className="group rounded-2xl bg-white border border-[#E6E8F0] hover:border-[#111965]/30 overflow-hidden shadow-2xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                    className="group relative rounded-2xl bg-white border border-[#E6E8F0] hover:border-[#111965]/30 overflow-hidden shadow-2xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
                   >
+                    {isFirst && <BorderBeam size={180} duration={12} delay={0} borderWidth={1.5} />}
+
                     <div>
                       {/* Major Cover Thumbnail */}
                       <div className="relative h-44 w-full bg-slate-100 overflow-hidden">

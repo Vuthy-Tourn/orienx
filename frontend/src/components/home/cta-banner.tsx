@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Target,
   Star,
+  User,
 } from "lucide-react";
 
 export function CtaBanner() {
@@ -84,17 +85,17 @@ export function CtaBanner() {
               {/* Student Trust Proof Bar */}
               <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-white/10">
                 <div className="flex -space-x-2 shrink-0">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 border-2 border-[#111965] flex items-center justify-center text-xs shadow-xs">
-                    👩‍🎓
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 border-2 border-[#111965] flex items-center justify-center text-[10px] font-bold text-[#111965] shadow-xs">
+                    ST
                   </div>
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-400 to-sky-200 border-2 border-[#111965] flex items-center justify-center text-xs shadow-xs">
-                    👨‍🎓
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-400 to-sky-200 border-2 border-[#111965] flex items-center justify-center text-[10px] font-bold text-[#111965] shadow-xs">
+                    KH
                   </div>
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-emerald-400 to-teal-200 border-2 border-[#111965] flex items-center justify-center text-xs shadow-xs">
-                    👩‍💻
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-emerald-400 to-teal-200 border-2 border-[#111965] flex items-center justify-center text-[10px] font-bold text-[#111965] shadow-xs">
+                    TC
                   </div>
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-400 to-indigo-200 border-2 border-[#111965] flex items-center justify-center text-xs shadow-xs">
-                    👨‍🔬
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-400 to-indigo-200 border-2 border-[#111965] flex items-center justify-center text-[10px] font-bold text-[#111965] shadow-xs">
+                    ED
                   </div>
                 </div>
                 <div className="text-xs text-slate-300">
@@ -140,8 +141,8 @@ export function CtaBanner() {
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                   <p className="text-xs font-black whitespace-nowrap">
                     {language === "km"
-                      ? "តោះស្វែងរកអនាគតជាមួយគ្នា! 🌟"
-                      : "Let's discover your future together! 🌟"}
+                      ? "តោះស្វែងរកអនាគតជាមួយគ្នា!"
+                      : "Let's discover your future together!"}
                   </p>
                 </div>
                 {/* Downward Speech Tail pointing directly to Tara */}

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { ArchetypeGlyph } from "@/components/assessments/archetype-glyph";
-import { CheckCircle2, Sparkles, Compass } from "lucide-react";
+import { CheckCircle2, Sparkles, Compass, Check, HelpCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
 
 interface OptionData {
@@ -447,7 +447,7 @@ export function MagneticSpectrumSlider({
                 isSelected ? "bg-[#111965] text-[#F7CE4D]" : "bg-slate-200 text-slate-600"
               }`}
             >
-              {isSelected ? "✓" : "?"}
+              {isSelected ? <Check className="w-4 h-4 text-[#F7CE4D]" /> : <HelpCircle className="w-4 h-4 text-slate-500" />}
             </div>
 
             <div>
