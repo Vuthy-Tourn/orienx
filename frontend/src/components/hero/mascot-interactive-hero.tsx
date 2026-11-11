@@ -98,30 +98,36 @@ export function MascotInteractiveHero() {
   };
 
   return (
-    <section className="relative w-full min-h-[88vh] lg:min-h-[92vh] flex items-center bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white border-b border-white/10 overflow-hidden py-14 lg:py-20 select-none">
+    <section className="relative w-full min-h-[85vh] lg:min-h-[90vh] flex items-center bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white border-b border-white/10 overflow-hidden py-14 lg:py-20 select-none">
       {/* Subtle Radial Ambient Starlight Illumination */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[450px] bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(247,206,77,0.12),transparent_70%)] pointer-events-none" />
       <div className="absolute top-1/3 right-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[#1B6EF3]/12 blur-[140px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-1/6 w-[450px] h-[450px] rounded-full bg-[#F7CE4D]/10 blur-[120px] pointer-events-none" />
 
-      {/* Seamless Cambodian University Campuses Skyline Backdrop (Clearly visible like the About Us page!) */}
-      <div className="absolute inset-x-0 bottom-0 pointer-events-none select-none overflow-hidden opacity-25 sm:opacity-30 h-72 sm:h-80 lg:h-96 z-0">
+      {/* Seamless Cambodian University Campuses Skyline Backdrop with Gradient Feather Mask (No Hard Seam!) */}
+      <div
+        className="absolute inset-x-0 bottom-0 pointer-events-none select-none overflow-hidden h-[460px] sm:h-[520px] lg:h-[580px] z-0"
+        style={{
+          WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 45%, rgba(0,0,0,0) 100%)",
+          maskImage: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 45%, rgba(0,0,0,0) 100%)",
+        }}
+      >
         <Image
           src="/images/cambodia-campuses-skyline-seamless.webp"
           alt="Cambodian University Campuses Backdrop"
           fill
           unoptimized
           priority
-          className="object-cover object-bottom"
+          className="object-cover object-bottom opacity-20 sm:opacity-25"
         />
-        {/* Upward Gradient Fade matching About Us page: transparent center so buildings are clearly visible */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F36] via-transparent to-[#080D2B]/80" />
+        {/* Soft bottom-up blend to merge into stage bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0F36]/80 via-transparent to-transparent pointer-events-none" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* ===================================================================
-              LEFT COLUMN: PIC 2 (HARMONIZED TECHTEXT) + EDITORIAL HEADLINE + CTAS
+              LEFT COLUMN: PIC 2 (ORIENX TECHTEXT CENTERPIECE) + SUBTITLE + CTAS
               =================================================================== */}
           <div className="lg:col-span-6 xl:col-span-6 space-y-5 text-left">
             {/* Category / Verified Pill */}
@@ -130,11 +136,11 @@ export function MascotInteractiveHero() {
               <span>{t("universitiesSection.verifiedNotice")}</span>
             </div>
 
-            {/* PIC 2: Interactive TechText Wordmark (Sized gracefully so it acts as brand emblem, not a competing second header) */}
-            <div className="w-full max-w-[240px] sm:max-w-[280px] h-14 sm:h-16 -ml-1">
+            {/* PIC 2: Interactive TechText OrienX Wordmark (Single Bold Headline Piece) */}
+            <div className="w-full max-w-[340px] sm:max-w-[400px] h-20 sm:h-24 -ml-1">
               <TechText
                 text="OrienX"
-                fontSize={64}
+                fontSize={105}
                 fontWeight={800}
                 color="#FFFFFF"
                 accentColor="#F69D0D"
@@ -149,28 +155,8 @@ export function MascotInteractiveHero() {
               />
             </div>
 
-            {/* Main Editorial Headline with Futera Gold accent */}
-            <h1 className="text-2xl sm:text-4xl lg:text-[2.75rem] font-extrabold text-white tracking-tight leading-[1.2]">
-              {language === "km" ? (
-                <>
-                  អនាគតរបស់អ្នកចាប់ផ្តើមពីការ{" "}
-                  <span className="text-[#F7CE4D] drop-shadow-[0_2px_14px_rgba(247,206,77,0.35)]">
-                    ស្វែងយល់ពីខ្លួនឯង
-                  </span>
-                </>
-              ) : (
-                <>
-                  Your Future Starts With{" "}
-                  <span className="text-[#F7CE4D] drop-shadow-[0_2px_14px_rgba(247,206,77,0.35)]">
-                    Understanding Yourself
-                  </span>
-                  .
-                </>
-              )}
-            </h1>
-
             {/* Subtitle */}
-            <p className="text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed">
+            <p className="text-sm sm:text-base lg:text-lg text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
               {t("hero.subtitle")}
             </p>
 
