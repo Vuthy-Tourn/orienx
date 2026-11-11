@@ -179,11 +179,11 @@ export default function PublicPersonalityGuidePage() {
         <div className="absolute bottom-12 right-1/4 w-[450px] h-[250px] bg-[#E4AE3A]/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* LIVING BACKGROUND: 16 Vector Characters in Harmonious Floating Wave + Smooth Parallax */}
-        <div className="absolute inset-0 max-w-7xl mx-auto pointer-events-none select-none flex flex-col justify-between pt-12 pb-24 md:pb-28 px-4 md:px-8 z-0">
+        <div className="absolute inset-0 max-w-7xl mx-auto pointer-events-none select-none flex flex-col justify-between pt-6 sm:pt-12 pb-24 sm:pb-28 px-1 sm:px-4 md:px-8 z-0">
           {/* TOP ROW: 7 Characters (Analysts & Diplomats) */}
           <motion.div
             style={{ x: topRowX, y: topRowY }}
-            className="flex items-end justify-between px-2 will-change-transform"
+            className="flex items-end justify-between px-0.5 sm:px-2 will-change-transform"
           >
             {HERO_TOP_ARCHETYPES.map((arch, idx) => {
               const motionProps = getWaveProps(idx, false);
@@ -194,13 +194,13 @@ export default function PublicPersonalityGuidePage() {
                   transition={motionProps.transition}
                   className="flex items-center justify-center shrink-0"
                 >
-                  <div className="relative h-22 sm:h-26 lg:h-32 w-16 sm:w-20 lg:w-24 flex items-center justify-center">
+                  <div className="relative h-14 sm:h-22 lg:h-32 w-11 sm:w-16 lg:w-24 flex items-center justify-center">
                     <Image
                       src={`/images/personality-types/${arch.code.toLowerCase()}.svg`}
                       alt={arch.code}
                       width={100}
                       height={120}
-                      className="max-h-22 sm:max-h-26 lg:max-h-32 object-contain"
+                      className="max-h-14 sm:max-h-22 lg:max-h-32 w-auto object-contain"
                     />
                   </div>
                 </motion.div>
@@ -254,7 +254,7 @@ export default function PublicPersonalityGuidePage() {
           {/* BOTTOM ROW: 7 Characters (Sentinels & Explorers) */}
           <motion.div
             style={{ x: bottomRowX, y: bottomRowY }}
-            className="flex items-start justify-between px-2 will-change-transform"
+            className="flex items-start justify-between px-0.5 sm:px-2 will-change-transform"
           >
             {HERO_BOTTOM_ARCHETYPES.map((arch, idx) => {
               const motionProps = getWaveProps(idx, true);
@@ -265,13 +265,13 @@ export default function PublicPersonalityGuidePage() {
                   transition={motionProps.transition}
                   className="flex items-center justify-center shrink-0"
                 >
-                  <div className="relative h-22 sm:h-26 lg:h-32 w-16 sm:w-20 lg:w-24 flex items-center justify-center">
+                  <div className="relative h-14 sm:h-22 lg:h-32 w-11 sm:w-16 lg:w-24 flex items-center justify-center">
                     <Image
                       src={`/images/personality-types/${arch.code.toLowerCase()}.svg`}
                       alt={arch.code}
                       width={100}
                       height={120}
-                      className="max-h-22 sm:max-h-26 lg:max-h-32 object-contain"
+                      className="max-h-14 sm:max-h-22 lg:max-h-32 w-auto object-contain"
                     />
                   </div>
                 </motion.div>
@@ -281,13 +281,13 @@ export default function PublicPersonalityGuidePage() {
         </div>
 
         {/* FOREGROUND HERO CONTENT (Crisp, High-Contrast & Interactive) */}
-        <div className="max-w-2xl mx-auto text-center space-y-4 relative z-10 my-10 sm:my-14 lg:my-16 py-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 shadow-xs uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
+        <div className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 relative z-10 my-6 sm:my-14 lg:my-16 py-2 sm:py-4 px-2 sm:px-4">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 shadow-xs uppercase tracking-wider">
+            <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#F7CE4D]" />
             <span>NERIS & 16Personalities Standard</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight drop-shadow-md">
+          <h1 className="text-2xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight drop-shadow-md">
             {language === "km"
               ? "មគ្គុទ្ទេសក៍បុគ្គលិកលក្ខណៈទាំង ១៦"
               : "The 16 Personality Types Guide"}
@@ -306,10 +306,10 @@ export default function PublicPersonalityGuidePage() {
             })}
           </p>
 
-          <div className="pt-3">
+          <div className="pt-2 sm:pt-3">
             <Link
               href="/dashboard/assessments/personality"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl text-xs sm:text-sm font-black bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-2xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-2xl text-xs sm:text-sm font-black bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-2xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
             >
               <Compass className="w-4 h-4 text-[#111965]" />
               <span>
