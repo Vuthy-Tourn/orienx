@@ -3,7 +3,14 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, AnimatePresence } from "motion/react";
+import {
+  motion,
+  AnimatePresence,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  useMotionTemplate,
+} from "motion/react";
 import { useLanguage } from "@/contexts/language-context";
 import {
   ROLES_META,
@@ -59,11 +66,73 @@ const HERO_BOTTOM_ARCHETYPES = [
   { code: "ISFP", nameKm: "The Adventurer", role: "explorers", color: "#E4AE3A" },
 ];
 
+// Modern multi-axis Zero-G organic floating trajectories
+const getZeroGProps = (idx: number) => {
+  const yAmp = 7 + (idx % 4) * 2.2;
+  const xAmp = (idx % 2 === 0 ? 1 : -1) * (3.5 + (idx % 3) * 1.5);
+  const rotAmp = (idx % 2 === 0 ? 1 : -1) * (1.6 + (idx % 3) * 0.4);
+  const duration = 6.4 + (idx % 5) * 0.8;
+  const delay = (idx % 6) * 0.4;
+
+  return {
+    animate: {
+      y: [0, -yAmp, yAmp * 0.35, -(yAmp * 0.7), 0],
+      x: [0, xAmp, -(xAmp * 0.7), xAmp * 0.4, 0],
+      rotate: [0, rotAmp, -(rotAmp * 0.6), rotAmp * 0.3, 0],
+      scale: [1, 1.025, 0.992, 1.018, 1],
+    },
+    transition: {
+      duration,
+      repeat: Infinity,
+      ease: "easeInOut" as const,
+      delay,
+    },
+  };
+};
+
 export default function PublicPersonalityGuidePage() {
   const { t, getLocalized, language } = useLanguage();
   const [selectedRole, setSelectedRole] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeArchetypeCode, setActiveArchetypeCode] = useState<string | null>(null);
+
+  // Smooth Mouse Parallax Physics (GPU-accelerated, zero React re-render overhead)
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 28, stiffness: 85, mass: 0.6 };
+  const smoothMouseX = useSpring(mouseX, springConfig);
+  const smoothMouseY = useSpring(mouseY, springConfig);
+
+  // Layered depth transforms for top row, flanks, and bottom row
+  const topRowX = useTransform(smoothMouseX, [-0.5, 0.5], [-22, 22]);
+  const topRowY = useTransform(smoothMouseY, [-0.5, 0.5], [-16, 16]);
+
+  const bottomRowX = useTransform(smoothMouseX, [-0.5, 0.5], [20, -20]);
+  const bottomRowY = useTransform(smoothMouseY, [-0.5, 0.5], [16, -16]);
+
+  const leftFlankX = useTransform(smoothMouseX, [-0.5, 0.5], [-28, 14]);
+  const leftFlankY = useTransform(smoothMouseY, [-0.5, 0.5], [-12, 12]);
+
+  const rightFlankX = useTransform(smoothMouseX, [-0.5, 0.5], [-14, 28]);
+  const rightFlankY = useTransform(smoothMouseY, [-0.5, 0.5], [12, -12]);
+
+  // Spotlight coordinates in %
+  const spotlightX = useTransform(smoothMouseX, [-0.5, 0.5], [20, 80]);
+  const spotlightY = useTransform(smoothMouseY, [-0.5, 0.5], [20, 80]);
+
+  const handleHeroMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+
+  const handleHeroMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
 
   const filteredArchetypes = Object.entries(ARCHETYPE_META).filter(
     ([code, meta]) => {
@@ -95,115 +164,156 @@ export default function PublicPersonalityGuidePage() {
   return (
     <div className="min-h-screen bg-[#F8FAFD] text-[#111965] selection:bg-[#F7CE4D] selection:text-[#111965] pb-24">
       {/* 1. HERO SECTION WITH 16 ANIMATED VECTOR SVGS AS PURE BACKGROUND */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white pt-24 pb-32 md:pb-36 lg:pb-40 px-4 sm:px-6 lg:px-8 select-none">
+      <section
+        onMouseMove={handleHeroMouseMove}
+        onMouseLeave={handleHeroMouseLeave}
+        className="relative overflow-hidden bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white pt-24 pb-32 md:pb-36 lg:pb-40 px-4 sm:px-6 lg:px-8 select-none"
+      >
+        {/* Dynamic Cursor Spotlight Beam */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-700 opacity-75 z-0"
+          style={{
+            background: useMotionTemplate`radial-gradient(750px circle at ${spotlightX}% ${spotlightY}%, rgba(247, 206, 77, 0.12), rgba(136, 97, 154, 0.08) 42%, transparent 72%)`,
+          }}
+        />
+
+        {/* Futuristic Subtle Cosmic Grid Texture */}
+        <div className="absolute inset-0 pointer-events-none opacity-20 z-0 [background-image:radial-gradient(rgba(255,255,255,0.22)_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_at_center,black_45%,transparent_80%)]" />
+
         {/* Ambient Glow Orbs */}
         <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-[#88619A]/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-[#33A474]/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-12 left-1/4 w-[450px] h-[250px] bg-[#4298B4]/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-12 right-1/4 w-[450px] h-[250px] bg-[#E4AE3A]/15 rounded-full blur-3xl pointer-events-none" />
 
-        {/* LIVING BACKGROUND: 16 Vector Characters Floating in Organic Rhythm */}
+        {/* LIVING BACKGROUND: 16 Vector Characters in Multi-Axis Zero-G Drift + 3D Mouse Parallax */}
         <div className="absolute inset-0 max-w-7xl mx-auto pointer-events-none select-none flex flex-col justify-between pt-12 pb-24 md:pb-28 px-4 md:px-8 z-0">
-          {/* TOP ROW: 7 Characters (Analysts & Diplomats) */}
-          <div className="flex items-end justify-between px-2">
-            {HERO_TOP_ARCHETYPES.map((arch, idx) => (
-              <motion.div
-                key={arch.code}
-                animate={{ y: [0, -(6 + (idx % 4) * 2), 0] }}
-                transition={{
-                  duration: 4.4 + (idx % 3) * 0.7,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: (idx % 4) * 0.4,
-                }}
-                className="flex items-center justify-center shrink-0"
-              >
-                <div className="relative h-22 sm:h-26 lg:h-32 w-16 sm:w-20 lg:w-24 flex items-center justify-center">
-                  <Image
-                    src={`/images/personality-types/${arch.code.toLowerCase()}.svg`}
-                    alt={arch.code}
-                    width={100}
-                    height={120}
-                    className="max-h-22 sm:max-h-26 lg:max-h-32 object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {/* TOP ROW: 7 Characters (Analysts & Diplomats) with Parallax Spring */}
+          <motion.div
+            style={{ x: topRowX, y: topRowY }}
+            className="flex items-end justify-between px-2 will-change-transform"
+          >
+            {HERO_TOP_ARCHETYPES.map((arch, idx) => {
+              const motionProps = getZeroGProps(idx);
+              return (
+                <motion.div
+                  key={arch.code}
+                  animate={motionProps.animate}
+                  transition={motionProps.transition}
+                  className="flex items-center justify-center shrink-0"
+                >
+                  <div className="relative h-22 sm:h-26 lg:h-32 w-16 sm:w-20 lg:w-24 flex items-center justify-center">
+                    {/* Soft Role Aurora Glow */}
+                    <div
+                      className="absolute -bottom-2 inset-x-1 h-5 rounded-full blur-md opacity-35 pointer-events-none"
+                      style={{ background: arch.color }}
+                    />
+                    <Image
+                      src={`/images/personality-types/${arch.code.toLowerCase()}.svg`}
+                      alt={arch.code}
+                      width={100}
+                      height={120}
+                      className="max-h-22 sm:max-h-26 lg:max-h-32 object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
+                    />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
 
-          {/* MIDDLE FLANKS: Left ISTJ, Right INFP */}
+          {/* MIDDLE FLANKS: Left ISTJ, Right INFP with Custom Parallax Angles */}
           <div className="flex items-center justify-between px-2 my-2">
             {/* Left Flank: ISTJ */}
             <motion.div
-              animate={{ y: [0, -9, 0] }}
-              transition={{
-                duration: 5.2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.6,
-              }}
-              className="hidden sm:flex items-center justify-center pl-2 shrink-0"
+              style={{ x: leftFlankX, y: leftFlankY }}
+              className="hidden sm:flex items-center justify-center pl-2 shrink-0 will-change-transform"
             >
-              <div className="relative h-26 sm:h-30 lg:h-36 w-20 sm:w-24 lg:w-28 flex items-center justify-center">
-                <Image
-                  src={`/images/personality-types/${HERO_LEFT_ARCHETYPE.code.toLowerCase()}.svg`}
-                  alt={HERO_LEFT_ARCHETYPE.code}
-                  width={110}
-                  height={130}
-                  className="max-h-26 sm:max-h-30 lg:max-h-36 object-contain drop-shadow-[0_12px_24px_rgba(66,152,180,0.35)]"
-                />
-              </div>
+              {(() => {
+                const flankProps = getZeroGProps(7);
+                return (
+                  <motion.div
+                    animate={flankProps.animate}
+                    transition={flankProps.transition}
+                    className="relative h-26 sm:h-30 lg:h-36 w-20 sm:w-24 lg:w-28 flex items-center justify-center"
+                  >
+                    <div
+                      className="absolute -bottom-2 inset-x-2 h-6 rounded-full blur-md opacity-35 pointer-events-none"
+                      style={{ background: HERO_LEFT_ARCHETYPE.color }}
+                    />
+                    <Image
+                      src={`/images/personality-types/${HERO_LEFT_ARCHETYPE.code.toLowerCase()}.svg`}
+                      alt={HERO_LEFT_ARCHETYPE.code}
+                      width={110}
+                      height={130}
+                      className="max-h-26 sm:max-h-30 lg:max-h-36 object-contain drop-shadow-[0_12px_24px_rgba(66,152,180,0.35)]"
+                    />
+                  </motion.div>
+                );
+              })()}
             </motion.div>
 
             {/* Right Flank: INFP */}
             <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{
-                duration: 4.8,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 1.2,
-              }}
-              className="hidden sm:flex items-center justify-center pr-2 shrink-0"
+              style={{ x: rightFlankX, y: rightFlankY }}
+              className="hidden sm:flex items-center justify-center pr-2 shrink-0 will-change-transform"
             >
-              <div className="relative h-26 sm:h-30 lg:h-36 w-20 sm:w-24 lg:w-28 flex items-center justify-center">
-                <Image
-                  src={`/images/personality-types/${HERO_RIGHT_ARCHETYPE.code.toLowerCase()}.svg`}
-                  alt={HERO_RIGHT_ARCHETYPE.code}
-                  width={110}
-                  height={130}
-                  className="max-h-26 sm:max-h-30 lg:max-h-36 object-contain drop-shadow-[0_12px_24px_rgba(51,164,116,0.35)]"
-                />
-              </div>
+              {(() => {
+                const flankProps = getZeroGProps(8);
+                return (
+                  <motion.div
+                    animate={flankProps.animate}
+                    transition={flankProps.transition}
+                    className="relative h-26 sm:h-30 lg:h-36 w-20 sm:w-24 lg:w-28 flex items-center justify-center"
+                  >
+                    <div
+                      className="absolute -bottom-2 inset-x-2 h-6 rounded-full blur-md opacity-35 pointer-events-none"
+                      style={{ background: HERO_RIGHT_ARCHETYPE.color }}
+                    />
+                    <Image
+                      src={`/images/personality-types/${HERO_RIGHT_ARCHETYPE.code.toLowerCase()}.svg`}
+                      alt={HERO_RIGHT_ARCHETYPE.code}
+                      width={110}
+                      height={130}
+                      className="max-h-26 sm:max-h-30 lg:max-h-36 object-contain drop-shadow-[0_12px_24px_rgba(51,164,116,0.35)]"
+                    />
+                  </motion.div>
+                );
+              })()}
             </motion.div>
           </div>
 
-          {/* BOTTOM ROW: 7 Characters (Sentinels & Explorers) */}
-          <div className="flex items-start justify-between px-2">
-            {HERO_BOTTOM_ARCHETYPES.map((arch, idx) => (
-              <motion.div
-                key={arch.code}
-                animate={{ y: [0, -(5 + ((idx + 2) % 4) * 2), 0] }}
-                transition={{
-                  duration: 4.6 + (idx % 3) * 0.6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: ((idx + 2) % 5) * 0.35,
-                }}
-                className="flex items-center justify-center shrink-0"
-              >
-                <div className="relative h-22 sm:h-26 lg:h-32 w-16 sm:w-20 lg:w-24 flex items-center justify-center">
-                  <Image
-                    src={`/images/personality-types/${arch.code.toLowerCase()}.svg`}
-                    alt={arch.code}
-                    width={100}
-                    height={120}
-                    className="max-h-22 sm:max-h-26 lg:max-h-32 object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {/* BOTTOM ROW: 7 Characters (Sentinels & Explorers) with Opposing Parallax */}
+          <motion.div
+            style={{ x: bottomRowX, y: bottomRowY }}
+            className="flex items-start justify-between px-2 will-change-transform"
+          >
+            {HERO_BOTTOM_ARCHETYPES.map((arch, idx) => {
+              const motionProps = getZeroGProps(idx + 9);
+              return (
+                <motion.div
+                  key={arch.code}
+                  animate={motionProps.animate}
+                  transition={motionProps.transition}
+                  className="flex items-center justify-center shrink-0"
+                >
+                  <div className="relative h-22 sm:h-26 lg:h-32 w-16 sm:w-20 lg:w-24 flex items-center justify-center">
+                    {/* Soft Role Aurora Glow */}
+                    <div
+                      className="absolute -bottom-2 inset-x-1 h-5 rounded-full blur-md opacity-35 pointer-events-none"
+                      style={{ background: arch.color }}
+                    />
+                    <Image
+                      src={`/images/personality-types/${arch.code.toLowerCase()}.svg`}
+                      alt={arch.code}
+                      width={100}
+                      height={120}
+                      className="max-h-22 sm:max-h-26 lg:max-h-32 object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.35)]"
+                    />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
         </div>
 
         {/* FOREGROUND HERO CONTENT (Crisp, High-Contrast & Interactive) */}
