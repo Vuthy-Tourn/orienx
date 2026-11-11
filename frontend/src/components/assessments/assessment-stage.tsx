@@ -26,6 +26,16 @@ export interface AssessmentStepItem {
   dimensionCode?: string;
   dimensionNameKm: string;
   dimensionNameEn: string;
+  optionA?: {
+    labelKm: string;
+    labelEn: string;
+    trait?: string;
+  };
+  optionB?: {
+    labelKm: string;
+    labelEn: string;
+    trait?: string;
+  };
 }
 
 export interface AssessmentStageProps {
@@ -58,91 +68,105 @@ export interface AssessmentStageProps {
   onClearDraft?: () => void;
 }
 
-// 7-Point Likert Config (Personality / MBTI)
+// 7-Point Likert Config (Standard 16Personalities Agree Green -> Disagree Purple)
 const SCALE_STEPS_7 = [
   {
     level: 1,
-    faceIndex: 1,
+    sizeClass: "w-11 h-11 sm:w-13 sm:h-13",
+    borderClass: "border-[3px] sm:border-4",
+    checkSize: "w-6 h-6 sm:w-7 sm:h-7 stroke-[3]",
     labelEn: "Strongly Agree",
     labelKm: "យល់ស្របខ្លាំងបំផុត",
-    themeColor: "#0284C7",
-    gradientFrom: "#38BDF8",
-    gradientTo: "#0284C7",
-    idleBg: "bg-[#38BDF8]/15 hover:bg-[#38BDF8]/25",
-    idleBorder: "border-[#38BDF8]/70 hover:border-[#38BDF8]",
-    activeGlow: "shadow-[0_10px_28px_rgba(2,132,199,0.55)] ring-4 ring-sky-300/70",
+    side: "agree",
+    themeColor: "#33A474",
+    borderColor: "border-[#33A474]",
+    bgSelected: "bg-[#33A474]",
+    idleHover: "hover:bg-[#33A474]/15 hover:border-[#33A474]",
+    activeGlow: "shadow-[0_8px_24px_rgba(51,164,116,0.45)] ring-4 ring-[#33A474]/30",
   },
   {
     level: 2,
-    faceIndex: 2,
+    sizeClass: "w-9 h-9 sm:w-11 sm:h-11",
+    borderClass: "border-[2.5px] sm:border-[3px]",
+    checkSize: "w-5 h-5 sm:w-6 sm:h-6 stroke-[3]",
     labelEn: "Agree",
     labelKm: "យល់ស្រប",
-    themeColor: "#059669",
-    gradientFrom: "#34D399",
-    gradientTo: "#059669",
-    idleBg: "bg-[#34D399]/15 hover:bg-[#34D399]/25",
-    idleBorder: "border-[#34D399]/70 hover:border-[#34D399]",
-    activeGlow: "shadow-[0_10px_28px_rgba(5,150,105,0.55)] ring-4 ring-emerald-300/70",
+    side: "agree",
+    themeColor: "#33A474",
+    borderColor: "border-[#33A474]",
+    bgSelected: "bg-[#33A474]",
+    idleHover: "hover:bg-[#33A474]/15 hover:border-[#33A474]",
+    activeGlow: "shadow-[0_6px_20px_rgba(51,164,116,0.4)] ring-4 ring-[#33A474]/30",
   },
   {
     level: 3,
-    faceIndex: 3,
+    sizeClass: "w-7.5 h-7.5 sm:w-9 sm:h-9",
+    borderClass: "border-2 sm:border-[2.5px]",
+    checkSize: "w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]",
     labelEn: "Slightly Agree",
     labelKm: "យល់ស្របបន្តិច",
-    themeColor: "#65A30D",
-    gradientFrom: "#A3E635",
-    gradientTo: "#65A30D",
-    idleBg: "bg-[#A3E635]/15 hover:bg-[#A3E635]/25",
-    idleBorder: "border-[#84CC16]/70 hover:border-[#84CC16]",
-    activeGlow: "shadow-[0_10px_26px_rgba(101,163,13,0.55)] ring-4 ring-lime-300/70",
+    side: "agree",
+    themeColor: "#33A474",
+    borderColor: "border-[#33A474]",
+    bgSelected: "bg-[#33A474]",
+    idleHover: "hover:bg-[#33A474]/15 hover:border-[#33A474]",
+    activeGlow: "shadow-[0_4px_16px_rgba(51,164,116,0.35)] ring-4 ring-[#33A474]/25",
   },
   {
     level: 4,
-    faceIndex: 4,
+    sizeClass: "w-6 h-6 sm:w-7 sm:h-7",
+    borderClass: "border-2",
+    checkSize: "w-2 h-2 rounded-full bg-white",
     labelEn: "Neutral",
     labelKm: "កណ្តាល",
-    themeColor: "#D97706",
-    gradientFrom: "#FACC15",
-    gradientTo: "#D97706",
-    idleBg: "bg-[#FACC15]/20 hover:bg-[#FACC15]/30",
-    idleBorder: "border-[#FACC15]/80 hover:border-[#EAB308]",
-    activeGlow: "shadow-[0_10px_26px_rgba(217,119,6,0.55)] ring-4 ring-amber-300/70",
+    side: "neutral",
+    themeColor: "#94A3B8",
+    borderColor: "border-slate-300",
+    bgSelected: "bg-slate-400",
+    idleHover: "hover:bg-slate-100 hover:border-slate-400",
+    activeGlow: "shadow-[0_4px_12px_rgba(148,163,184,0.4)] ring-4 ring-slate-300/40",
   },
   {
     level: 5,
-    faceIndex: 5,
+    sizeClass: "w-7.5 h-7.5 sm:w-9 sm:h-9",
+    borderClass: "border-2 sm:border-[2.5px]",
+    checkSize: "w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]",
     labelEn: "Slightly Disagree",
     labelKm: "មិនសូវយល់ស្រប",
-    themeColor: "#EA580C",
-    gradientFrom: "#FB923C",
-    gradientTo: "#EA580C",
-    idleBg: "bg-[#FB923C]/15 hover:bg-[#FB923C]/25",
-    idleBorder: "border-[#FB923C]/70 hover:border-[#FB923C]",
-    activeGlow: "shadow-[0_10px_26px_rgba(234,88,12,0.55)] ring-4 ring-orange-300/70",
+    side: "disagree",
+    themeColor: "#88619A",
+    borderColor: "border-[#88619A]",
+    bgSelected: "bg-[#88619A]",
+    idleHover: "hover:bg-[#88619A]/15 hover:border-[#88619A]",
+    activeGlow: "shadow-[0_4px_16px_rgba(136,97,154,0.35)] ring-4 ring-[#88619A]/25",
   },
   {
     level: 6,
-    faceIndex: 6,
+    sizeClass: "w-9 h-9 sm:w-11 sm:h-11",
+    borderClass: "border-[2.5px] sm:border-[3px]",
+    checkSize: "w-5 h-5 sm:w-6 sm:h-6 stroke-[3]",
     labelEn: "Disagree",
     labelKm: "មិនយល់ស្រប",
-    themeColor: "#DC2626",
-    gradientFrom: "#F87171",
-    gradientTo: "#DC2626",
-    idleBg: "bg-[#F87171]/15 hover:bg-[#F87171]/25",
-    idleBorder: "border-[#F87171]/70 hover:border-[#F87171]",
-    activeGlow: "shadow-[0_10px_28px_rgba(220,38,38,0.55)] ring-4 ring-rose-300/70",
+    side: "disagree",
+    themeColor: "#88619A",
+    borderColor: "border-[#88619A]",
+    bgSelected: "bg-[#88619A]",
+    idleHover: "hover:bg-[#88619A]/15 hover:border-[#88619A]",
+    activeGlow: "shadow-[0_6px_20px_rgba(136,97,154,0.4)] ring-4 ring-[#88619A]/30",
   },
   {
     level: 7,
-    faceIndex: 7,
+    sizeClass: "w-11 h-11 sm:w-13 sm:h-13",
+    borderClass: "border-[3px] sm:border-4",
+    checkSize: "w-6 h-6 sm:w-7 sm:h-7 stroke-[3]",
     labelEn: "Strongly Disagree",
     labelKm: "មិនយល់ស្របទាល់តែសោះ",
-    themeColor: "#B91C1C",
-    gradientFrom: "#EF4444",
-    gradientTo: "#991B1B",
-    idleBg: "bg-[#EF4444]/15 hover:bg-[#EF4444]/25",
-    idleBorder: "border-[#EF4444]/70 hover:border-[#EF4444]",
-    activeGlow: "shadow-[0_10px_28px_rgba(185,28,28,0.55)] ring-4 ring-red-300/70",
+    side: "disagree",
+    themeColor: "#88619A",
+    borderColor: "border-[#88619A]",
+    bgSelected: "bg-[#88619A]",
+    idleHover: "hover:bg-[#88619A]/15 hover:border-[#88619A]",
+    activeGlow: "shadow-[0_8px_24px_rgba(136,97,154,0.45)] ring-4 ring-[#88619A]/30",
   },
 ];
 
@@ -485,148 +509,243 @@ export function AssessmentStage({
           <div className="max-w-xl mx-auto space-y-2 pt-2 pb-1">
             <h2 className="text-xl sm:text-2xl font-black text-[#111965] leading-snug">
               {getLocalized({
-                km: currentQ.statementKm || currentQ.promptKm,
-                en: currentQ.statementEn || currentQ.promptEn,
+                km: currentQ.promptKm,
+                en: currentQ.promptEn,
               })}
             </h2>
-            <p className="text-xs text-[#68708A]">
-              {getLocalized({ km: currentQ.promptKm, en: currentQ.promptEn })}
-            </p>
+            {currentQ.statementKm && currentQ.statementKm !== currentQ.promptKm && (
+              <p className="text-xs sm:text-sm font-semibold text-indigo-900 bg-indigo-50/70 inline-block px-3 py-1 rounded-xl border border-indigo-100">
+                {getLocalized({ km: currentQ.statementKm, en: currentQ.statementEn })}
+              </p>
+            )}
           </div>
 
           {/* Unified Scale Component */}
           <div className="w-full space-y-6 select-none py-1">
-            {/* Agree / Disagree Anchors */}
-            <div className="flex items-center justify-between px-2 sm:px-6">
-              <button
-                type="button"
-                className="flex items-center gap-2 group cursor-pointer transition-transform hover:scale-105 active:scale-95 select-none"
-                onClick={() => onAnswer(currentQ.id, steps[0].level)}
-              >
-                <span className="flex h-3 w-3 relative">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-60" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-[#0284C7]" />
-                </span>
-                <span className="text-sm sm:text-base font-black text-sky-800 tracking-tight">
-                  {getLocalized({ km: leftAnchorKm, en: leftAnchorEn })}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                className="flex items-center gap-2 group cursor-pointer transition-transform hover:scale-105 active:scale-95 select-none"
-                onClick={() => onAnswer(currentQ.id, steps[steps.length - 1].level)}
-              >
-                <span className="text-sm sm:text-base font-black text-rose-800 tracking-tight">
-                  {getLocalized({ km: rightAnchorKm, en: rightAnchorEn })}
-                </span>
-                <span className="flex h-3 w-3 relative">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-60" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-[#DC2626]" />
-                </span>
-              </button>
-            </div>
-
-            {/* Row of Uniform Emotion Face Cards */}
-            <div className="flex items-center justify-between max-w-xl mx-auto gap-2 sm:gap-3 px-2 sm:px-4">
-              {steps.map((step) => {
-                const isSelected = currentValue === step.level;
-                const isHovered = hovered === step.level;
-
-                return (
-                  <div key={step.level} className="flex-1 flex justify-center">
-                    <button
-                      type="button"
-                      onClick={() => onAnswer(currentQ.id, step.level)}
-                      onMouseEnter={() => setHovered(step.level)}
-                      onMouseLeave={() => setHovered(null)}
-                      style={{
-                        backgroundImage: isSelected
-                          ? `linear-gradient(135deg, ${step.gradientFrom}, ${step.gradientTo})`
-                          : undefined,
-                      }}
-                      className={`w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14 aspect-square rounded-2xl sm:rounded-[22px] border-2 sm:border-3 flex items-center justify-center transition-all duration-200 ease-out cursor-pointer select-none active:scale-92 ${
-                        isSelected
-                          ? `text-white border-white ${step.activeGlow} -translate-y-2 scale-110 shadow-xl z-10`
-                          : isHovered
-                          ? `${step.idleBg} ${step.idleBorder} -translate-y-1 scale-105 shadow-md z-0`
-                          : `${step.idleBg} ${step.idleBorder} shadow-2xs hover:shadow-sm z-0`
-                      }`}
-                      title={getLocalized({ km: step.labelKm, en: step.labelEn })}
-                      aria-label={getLocalized({ km: step.labelKm, en: step.labelEn })}
-                    >
-                      <div
-                        className={`transition-transform duration-200 ${
-                          isSelected ? "scale-110 drop-shadow-sm" : isHovered ? "scale-105" : ""
-                        }`}
-                      >
-                        {renderEmotionFace(step.faceIndex, isSelected, step.themeColor)}
-                      </div>
-
-                      {isSelected && (
-                        <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-90" />
-                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white shadow-xs" />
-                        </span>
-                      )}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Slider Rail */}
-            <div
-              ref={railRef}
-              className="relative max-w-xl mx-auto px-2 sm:px-4 pt-1.5 group outline-none"
-              tabIndex={0}
-            >
-              <div
-                ref={trackRef}
-                className="relative h-7 flex items-center cursor-pointer touch-none select-none py-2"
-                onPointerDown={handlePointerDown}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                onPointerCancel={handlePointerUp}
-                onPointerLeave={handlePointerLeave}
-              >
-                <div
-                  className="absolute h-2.5 sm:h-3 rounded-full shadow-[inset_0_1.5px_2px_rgba(0,0,0,0.15)] border border-black/5"
-                  style={{
-                    left: `calc(100% / ${totalSteps * 2} - 11px)`,
-                    right: `calc(100% / ${totalSteps * 2} - 11px)`,
-                    background:
-                      scaleType === "5-point"
-                        ? "linear-gradient(to right, #DC2626 0%, #F69649 25%, #FACC15 50%, #34D399 75%, #0284C7 100%)"
-                        : "linear-gradient(to right, #2787B9 0%, #6CAED7 20%, #C4A999 40%, #F69649 55%, #F87F4D 75%, #DC2626 100%)",
-                  }}
-                />
-
-                {/* Slider Knob */}
-                <div
-                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 pointer-events-none transition-all duration-150 ease-out z-20"
-                  style={{ left: `${thumbPercent}%` }}
-                >
-                  <div
-                    className={cn(
-                      "w-5.5 h-5.5 rounded-full bg-white flex items-center justify-center transition-all duration-150 shadow-md",
-                      isDragging ? "scale-115" : "scale-100",
-                      currentValue === null && !isDragging && "opacity-80"
-                    )}
-                    style={{
-                      boxShadow: isDragging
-                        ? `0 0 0 3px ${thumbStep.themeColor}40, 0 2px 6px rgba(0,0,0,0.22)`
-                        : "0 1px 3px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.08)",
-                    }}
+            {scaleType === "7-point" ? (
+              /* 16Personalities Official 7-Circle Scale */
+              <div className="max-w-xl mx-auto space-y-6">
+                {/* Agree / Disagree Anchors Header */}
+                <div className="flex items-start justify-between px-2 sm:px-4">
+                  <button
+                    type="button"
+                    className="flex flex-col items-start text-left group cursor-pointer transition-transform hover:scale-102 active:scale-98 select-none max-w-[45%]"
+                    onClick={() => onAnswer(currentQ.id, steps[0].level)}
                   >
-                    <div
-                      className="w-2.5 h-2.5 rounded-full transition-colors duration-150 shadow-inner"
-                      style={{ backgroundColor: thumbStep.themeColor }}
-                    />
-                  </div>
+                    <div className="inline-flex items-center gap-1.5 text-sm sm:text-base font-black text-[#33A474] tracking-tight">
+                      <span className="flex h-2.5 w-2.5 relative">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#33A474] opacity-60" />
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#33A474]" />
+                      </span>
+                      <span>{getLocalized({ km: leftAnchorKm, en: leftAnchorEn })}</span>
+                    </div>
+                    {currentQ.optionA && (
+                      <span className="text-[11px] font-medium text-[#4A5568] line-clamp-1 mt-0.5">
+                        {getLocalized({ km: currentQ.optionA.labelKm, en: currentQ.optionA.labelEn })}
+                      </span>
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="flex flex-col items-end text-right group cursor-pointer transition-transform hover:scale-102 active:scale-98 select-none max-w-[45%]"
+                    onClick={() => onAnswer(currentQ.id, steps[steps.length - 1].level)}
+                  >
+                    <div className="inline-flex items-center gap-1.5 text-sm sm:text-base font-black text-[#88619A] tracking-tight">
+                      <span>{getLocalized({ km: rightAnchorKm, en: rightAnchorEn })}</span>
+                      <span className="flex h-2.5 w-2.5 relative">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#88619A] opacity-60" />
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#88619A]" />
+                      </span>
+                    </div>
+                    {currentQ.optionB && (
+                      <span className="text-[11px] font-medium text-[#4A5568] line-clamp-1 mt-0.5">
+                        {getLocalized({ km: currentQ.optionB.labelKm, en: currentQ.optionB.labelEn })}
+                      </span>
+                    )}
+                  </button>
+                </div>
+
+                {/* 7 Circular Buttons with Connecting Center Line */}
+                <div className="relative flex items-center justify-between px-2 sm:px-4 py-3">
+                  {/* Subtle horizontal connecting line */}
+                  <div className="absolute left-6 right-6 sm:left-10 sm:right-10 top-1/2 -translate-y-1/2 h-[2.5px] bg-slate-200 rounded-full z-0 pointer-events-none" />
+
+                  {SCALE_STEPS_7.map((step) => {
+                    const isSelected = currentValue === step.level;
+                    const isHovered = hovered === step.level;
+                    const isNeutral = step.side === "neutral";
+
+                    return (
+                      <div key={step.level} className="z-10 relative flex items-center justify-center">
+                        <button
+                          type="button"
+                          onClick={() => onAnswer(currentQ.id, step.level)}
+                          onMouseEnter={() => setHovered(step.level)}
+                          onMouseLeave={() => setHovered(null)}
+                          className={cn(
+                            "rounded-full flex items-center justify-center transition-all duration-200 ease-out cursor-pointer select-none active:scale-90 bg-white",
+                            step.sizeClass,
+                            step.borderClass,
+                            isSelected
+                              ? cn(
+                                  step.bgSelected,
+                                  step.borderColor,
+                                  "text-white shadow-lg -translate-y-1 scale-110",
+                                  step.activeGlow
+                                )
+                              : isHovered
+                              ? cn(step.borderColor, step.idleHover, "-translate-y-0.5 scale-105 shadow-sm")
+                              : cn(step.borderColor, "shadow-2xs")
+                          )}
+                          title={getLocalized({ km: step.labelKm, en: step.labelEn })}
+                          aria-label={getLocalized({ km: step.labelKm, en: step.labelEn })}
+                        >
+                          {isSelected && !isNeutral && (
+                            <Check className={cn("text-white drop-shadow-xs", step.checkSize)} />
+                          )}
+                          {isSelected && isNeutral && (
+                            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-white shadow-xs" />
+                          )}
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
-            </div>
+            ) : (
+              /* 5-Point RIASEC Experience with Cards and Slider Rail */
+              <>
+                <div className="flex items-center justify-between px-2 sm:px-6">
+                  <button
+                    type="button"
+                    className="flex items-center gap-2 group cursor-pointer transition-transform hover:scale-105 active:scale-95 select-none"
+                    onClick={() => onAnswer(currentQ.id, steps[0].level)}
+                  >
+                    <span className="flex h-3 w-3 relative">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-60" />
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-[#0284C7]" />
+                    </span>
+                    <span className="text-sm sm:text-base font-black text-sky-800 tracking-tight">
+                      {getLocalized({ km: leftAnchorKm, en: leftAnchorEn })}
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="flex items-center gap-2 group cursor-pointer transition-transform hover:scale-105 active:scale-95 select-none"
+                    onClick={() => onAnswer(currentQ.id, steps[steps.length - 1].level)}
+                  >
+                    <span className="text-sm sm:text-base font-black text-rose-800 tracking-tight">
+                      {getLocalized({ km: rightAnchorKm, en: rightAnchorEn })}
+                    </span>
+                    <span className="flex h-3 w-3 relative">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-60" />
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-[#DC2626]" />
+                    </span>
+                  </button>
+                </div>
+
+                {/* Row of Uniform Emotion Face Cards */}
+                <div className="flex items-center justify-between max-w-xl mx-auto gap-2 sm:gap-3 px-2 sm:px-4">
+                  {SCALE_STEPS_5.map((step) => {
+                    const isSelected = currentValue === step.level;
+                    const isHovered = hovered === step.level;
+
+                    return (
+                      <div key={step.level} className="flex-1 flex justify-center">
+                        <button
+                          type="button"
+                          onClick={() => onAnswer(currentQ.id, step.level)}
+                          onMouseEnter={() => setHovered(step.level)}
+                          onMouseLeave={() => setHovered(null)}
+                          style={{
+                            backgroundImage: isSelected
+                              ? `linear-gradient(135deg, ${step.gradientFrom}, ${step.gradientTo})`
+                              : undefined,
+                          }}
+                          className={`w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14 aspect-square rounded-2xl sm:rounded-[22px] border-2 sm:border-3 flex items-center justify-center transition-all duration-200 ease-out cursor-pointer select-none active:scale-92 ${
+                            isSelected
+                              ? `text-white border-white ${step.activeGlow} -translate-y-2 scale-110 shadow-xl z-10`
+                              : isHovered
+                              ? `${step.idleBg} ${step.idleBorder} -translate-y-1 scale-105 shadow-md z-0`
+                              : `${step.idleBg} ${step.idleBorder} shadow-2xs hover:shadow-sm z-0`
+                          }`}
+                          title={getLocalized({ km: step.labelKm, en: step.labelEn })}
+                          aria-label={getLocalized({ km: step.labelKm, en: step.labelEn })}
+                        >
+                          <div
+                            className={`transition-transform duration-200 ${
+                              isSelected ? "scale-110 drop-shadow-sm" : isHovered ? "scale-105" : ""
+                            }`}
+                          >
+                            {renderEmotionFace(step.faceIndex, isSelected, step.themeColor)}
+                          </div>
+
+                          {isSelected && (
+                            <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-90" />
+                              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white shadow-xs" />
+                            </span>
+                          )}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Slider Rail */}
+                <div
+                  ref={railRef}
+                  className="relative max-w-xl mx-auto px-2 sm:px-4 pt-1.5 group outline-none"
+                  tabIndex={0}
+                >
+                  <div
+                    ref={trackRef}
+                    className="relative h-7 flex items-center cursor-pointer touch-none select-none py-2"
+                    onPointerDown={handlePointerDown}
+                    onPointerMove={handlePointerMove}
+                    onPointerUp={handlePointerUp}
+                    onPointerCancel={handlePointerUp}
+                    onPointerLeave={handlePointerLeave}
+                  >
+                    <div
+                      className="absolute h-2.5 sm:h-3 rounded-full shadow-[inset_0_1.5px_2px_rgba(0,0,0,0.15)] border border-black/5"
+                      style={{
+                        left: `calc(100% / ${totalSteps * 2} - 11px)`,
+                        right: `calc(100% / ${totalSteps * 2} - 11px)`,
+                        background:
+                          "linear-gradient(to right, #DC2626 0%, #F69649 25%, #FACC15 50%, #34D399 75%, #0284C7 100%)",
+                      }}
+                    />
+
+                    {/* Slider Knob */}
+                    <div
+                      className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 pointer-events-none transition-all duration-150 ease-out z-20"
+                      style={{ left: `${thumbPercent}%` }}
+                    >
+                      <div
+                        className={cn(
+                          "w-5.5 h-5.5 rounded-full bg-white flex items-center justify-center transition-all duration-150 shadow-md",
+                          isDragging ? "scale-115" : "scale-100",
+                          currentValue === null && !isDragging && "opacity-80"
+                        )}
+                        style={{
+                          boxShadow: isDragging
+                            ? `0 0 0 3px ${thumbStep.themeColor}40, 0 2px 6px rgba(0,0,0,0.22)`
+                            : "0 1px 3px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.08)",
+                        }}
+                      >
+                        <div
+                          className="w-2.5 h-2.5 rounded-full transition-colors duration-150 shadow-inner"
+                          style={{ backgroundColor: thumbStep.themeColor }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* Helper Feedback Label */}
             <div className="h-8 flex items-center justify-center">

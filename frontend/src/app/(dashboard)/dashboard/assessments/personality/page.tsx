@@ -10,19 +10,15 @@ import { AssessmentStage, AssessmentStepItem } from "@/components/assessments/as
 import { AssessmentViewSwitcher } from "@/components/assessments/assessment-view-switcher";
 import {
   ArrowRight,
-  ArrowLeft,
   Sparkles,
   RotateCcw,
   Compass,
-  Award,
   Crown,
   CheckCircle2,
   GraduationCap,
   Brain,
-  Lightbulb,
   Target,
   Zap,
-  TrendingUp,
   Building2,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -41,66 +37,298 @@ const DIMENSION_TITLES: Record<
 > = {
   EI: {
     code: "E vs I",
-    nameEn: "Energy & Social Focus (Extraversion vs Introversion)",
-    nameKm: "ថាមពល និងការប្រាស្រ័យទាក់ទង (Extraversion vs Introversion)",
-    tipEn: "Where do you naturally recharge your energy?",
-    tipKm: "តើអ្នកបញ្ចូលថាមពលដោយវិធីណា?",
+    nameEn: "Mind: Extraversion (E) vs Introversion (I)",
+    nameKm: "ចិត្ត / ថាមពលសង្គម៖ Extraversion (E) vs Introversion (I)",
+    tipEn: "Where do you naturally recharge your mental energy?",
+    tipKm: "តើអ្នកបញ្ចូលថាមពលដោយវិធីណា ក្នុងក្រុម ឬដោយស្ងប់ស្ងាត់?",
   },
   SN: {
     code: "S vs N",
-    nameEn: "Information Processing (Sensing vs Intuition)",
-    nameKm: "ការទទួលព័ត៌មាន (Sensing vs Intuition)",
-    tipEn: "Do you focus on practical facts or big ideas?",
-    tipKm: "តើអ្នកផ្តោតលើការអនុវត្តជាក់ស្តែង ឬគំនិតច្នៃប្រឌិត?",
+    nameEn: "Energy: Sensing (S) vs Intuition (N)",
+    nameKm: "ការទទួលព័ត៌មាន៖ Sensing (S) vs Intuition (N)",
+    tipEn: "Do you focus on practical facts or imaginative big ideas?",
+    tipKm: "តើអ្នកផ្តោតលើការអនុវត្តជាក់ស្តែង ឬគំនិតច្នៃប្រឌិតអនាគត?",
   },
   TF: {
     code: "T vs F",
-    nameEn: "Decision Making (Thinking vs Feeling)",
-    nameKm: "ការសម្រេចចិត្ត (Thinking vs Feeling)",
-    tipEn: "What guides your choices: logic or empathy?",
-    tipKm: "តើអ្វីដឹកនាំការសម្រេចចិត្ត៖ តក្កវិជ្ជា ឬអារម្មណ៍?",
+    nameEn: "Nature: Thinking (T) vs Feeling (F)",
+    nameKm: "ការសម្រេចចិត្ត៖ Thinking (T) vs Feeling (F)",
+    tipEn: "What guides your choices: objective logic or human empathy?",
+    tipKm: "តើអ្វីដឹកនាំការសម្រេចចិត្ត៖ តក្កវិជ្ជាសុក្រឹត ឬអារម្មណ៍មនុស្ស?",
   },
   JP: {
     code: "J vs P",
-    nameEn: "Lifestyle Structure (Judging vs Perceiving)",
-    nameKm: "រចនាសម្ព័ន្ធជីវិត (Judging vs Perceiving)",
-    tipEn: "Do you prefer a clear plan or flexible freedom?",
-    tipKm: "តើអ្នកចូលចិត្តផែនការរៀបរយ ឬសេរីភាពបត់បែន?",
+    nameEn: "Tactics: Judging (J) vs Prospecting (P)",
+    nameKm: "យុទ្ធសាស្ត្រជីវិត៖ Judging (J) vs Prospecting (P)",
+    tipEn: "Do you prefer structured plans or flexible adaptability?",
+    tipKm: "តើអ្នកចូលចិត្តផែនការរៀបរយ ឬសេរីភាពបត់បែនតាមស្ថានភាព?",
   },
 };
 
-const ARCHETYPE_META: Record<
-  string,
+export interface RoleMeta {
+  id: "analysts" | "diplomats" | "sentinels" | "explorers";
+  nameEn: string;
+  nameKm: string;
+  color: string;
+  gradient: string;
+  badgeBg: string;
+  badgeText: string;
+  cardBorder: string;
+  descriptionEn: string;
+  descriptionKm: string;
+  types: string[];
+}
+
+export const ROLES_META: RoleMeta[] = [
   {
-    nameKm: string;
-    nameEn: string;
-    taglineKm: string;
-    taglineEn: string;
-  }
-> = {
-  ESTJ: {
-    nameKm: "The Executive • អ្នករៀបចំ និងដឹកនាំយុទ្ធសាស្ត្រ",
-    nameEn: "The Executive • Dedicated Organizer",
-    taglineKm: "អ្នកពូកែរៀបចំរចនាសម្ព័ន្ធ មានភាពជាអ្នកដឹកនាំជាក់ស្តែង និងការសម្រេចចិត្តប្រកបដោយការទទួលខុសត្រូវខ្ពស់។",
-    taglineEn: "Practical, organized, and focused on decisive execution with high reliability.",
+    id: "analysts",
+    nameEn: "Analysts",
+    nameKm: "អ្នកវិភាគ",
+    color: "#88619A",
+    gradient: "from-[#88619A] via-[#754E86] to-[#452755]",
+    badgeBg: "bg-[#88619A]/15 text-[#88619A] border-[#88619A]/30",
+    badgeText: "text-[#88619A]",
+    cardBorder: "border-[#88619A]/40 hover:border-[#88619A]",
+    descriptionEn: "Intuitive (N) & Thinking (T) • Known for strategic rationality and relentless intellectual curiosity.",
+    descriptionKm: "ប្រភេទ Intuitive (N) & Thinking (T) • ផ្តោតលើតក្កវិជ្ជា យុទ្ធសាស្ត្រច្បាស់ និងការស្រាវជ្រាវបញ្ញាឥតឈប់ឈរ។",
+    types: ["INTJ", "INTP", "ENTJ", "ENTP"],
+  },
+  {
+    id: "diplomats",
+    nameEn: "Diplomats",
+    nameKm: "អ្នកការទូត",
+    color: "#33A474",
+    gradient: "from-[#33A474] via-[#2A8F64] to-[#175A3E]",
+    badgeBg: "bg-[#33A474]/15 text-[#33A474] border-[#33A474]/30",
+    badgeText: "text-[#33A474]",
+    cardBorder: "border-[#33A474]/40 hover:border-[#33A474]",
+    descriptionEn: "Intuitive (N) & Feeling (F) • Known for deep empathy, inspiring idealism, and cooperative harmony.",
+    descriptionKm: "ប្រភេទ Intuitive (N) & Feeling (F) • ផ្តោតលើការយល់ចិត្តស៊ីជម្រៅ ឧត្តមគតិបំផុស និងសាមគ្គីភាពក្នុងសង្គម។",
+    types: ["INFJ", "INFP", "ENFJ", "ENFP"],
+  },
+  {
+    id: "sentinels",
+    nameEn: "Sentinels",
+    nameKm: "អ្នកការពារ និងរក្សាប្រព័ន្ធ",
+    color: "#4298B4",
+    gradient: "from-[#4298B4] via-[#35839C] to-[#1E5769]",
+    badgeBg: "bg-[#4298B4]/15 text-[#4298B4] border-[#4298B4]/30",
+    badgeText: "text-[#4298B4]",
+    cardBorder: "border-[#4298B4]/40 hover:border-[#4298B4]",
+    descriptionEn: "Observant (S) & Judging (J) • Known for practicality, meticulous order, reliability, and civic stability.",
+    descriptionKm: "ប្រភេទ Observant (S) & Judging (J) • ផ្តោតលើភាពជាក់ស្តែង របៀបរៀបរយ ទំនុកចិត្តខ្ពស់ និងស្ថិរភាព។",
+    types: ["ISTJ", "ISFJ", "ESTJ", "ESFJ"],
+  },
+  {
+    id: "explorers",
+    nameEn: "Explorers",
+    nameKm: "អ្នករុករក",
+    color: "#E4A43C",
+    gradient: "from-[#E4A43C] via-[#C98B29] to-[#8C5811]",
+    badgeBg: "bg-[#E4A43C]/15 text-[#E4A43C] border-[#E4A43C]/30",
+    badgeText: "text-[#E4A43C]",
+    cardBorder: "border-[#E4A43C]/40 hover:border-[#E4A43C]",
+    descriptionEn: "Observant (S) & Prospecting (P) • Known for spontaneity, versatile agility, and hands-on resourcefulness.",
+    descriptionKm: "ប្រភេទ Observant (S) & Prospecting (P) • ផ្តោតលើភាពបត់បែន ភាពស្វាហាប់ និងការដោះស្រាយបញ្ហាជាក់ស្តែងផ្ទាល់ដៃ។",
+    types: ["ISTP", "ISFP", "ESTP", "ESFP"],
+  },
+];
+
+export interface ArchetypeMetaItem {
+  role: "analysts" | "diplomats" | "sentinels" | "explorers";
+  roleNameEn: string;
+  roleNameKm: string;
+  roleColor: string;
+  gradient: string;
+  nameKm: string;
+  nameEn: string;
+  taglineKm: string;
+  taglineEn: string;
+}
+
+const ARCHETYPE_META: Record<string, ArchetypeMetaItem> = {
+  // --- 1. ANALYSTS (_NT_) --- Signature Color: Purple (#88619A)
+  INTJ: {
+    role: "analysts",
+    roleNameEn: "Analysts",
+    roleNameKm: "អ្នកវិភាគ",
+    roleColor: "#88619A",
+    gradient: "from-[#88619A] via-[#754E86] to-[#452755]",
+    nameKm: "The Architect • ស្ថាបត្យករយុទ្ធសាស្ត្រ",
+    nameEn: "The Architect • Strategic Thinker",
+    taglineKm: "អ្នកយុទ្ធសាស្ត្រស៊ីជម្រៅ ពោរពេញដោយការស្រមើស្រមៃ និងមានផែនការច្បាស់លាស់សម្រាប់គ្រប់រឿង។",
+    taglineEn: "Imaginative and strategic thinkers, with a plan for everything.",
+  },
+  INTP: {
+    role: "analysts",
+    roleNameEn: "Analysts",
+    roleNameKm: "អ្នកវិភាគ",
+    roleColor: "#88619A",
+    gradient: "from-[#88619A] via-[#754E86] to-[#452755]",
+    nameKm: "The Logician • អ្នកតក្កវិជ្ជានវានុវត្តន៍",
+    nameEn: "The Logician • Innovative Inventor",
+    taglineKm: "អ្នកច្នៃប្រឌិតនវានុវត្តន៍ ស្រេកឃ្លានចំណេះដឹង និងចូលចិត្តវិភាគប្រព័ន្ធស្មុគស្មាញ។",
+    taglineEn: "Innovative inventors with an unquenchable thirst for knowledge.",
   },
   ENTJ: {
+    role: "analysts",
+    roleNameEn: "Analysts",
+    roleNameKm: "អ្នកវិភាគ",
+    roleColor: "#88619A",
+    gradient: "from-[#88619A] via-[#754E86] to-[#452755]",
     nameKm: "The Commander • អ្នកដឹកនាំចក្ខុវិស័យ",
     nameEn: "The Commander • Bold Visionary",
-    taglineKm: "មានចក្ខុវិស័យទូលំទូលាយ ពូកែជំរុញ និងដឹកនាំក្រុមសម្រេចគោលដៅយុទ្ធសាស្ត្រធំៗ។",
-    taglineEn: "Bold, imaginative, and strong-willed leader finding a way or making one.",
+    taglineKm: "មានភាពជាអ្នកដឹកនាំក្លាហាន ចក្ខុវិស័យយុទ្ធសាស្ត្រច្បាស់ និងការសម្រេចចិត្តរហ័ស។",
+    taglineEn: "Bold, imaginative, and strong-willed leaders, finding a way or making one.",
   },
+  ENTP: {
+    role: "analysts",
+    roleNameEn: "Analysts",
+    roleNameKm: "អ្នកវិភាគ",
+    roleColor: "#88619A",
+    gradient: "from-[#88619A] via-[#754E86] to-[#452755]",
+    nameKm: "The Debater • អ្នកបង្កើតគំនិត និងដេញដោល",
+    nameEn: "The Debater • Curious Thinker",
+    taglineKm: "ឆ្លាតវៃ រហ័សរហួន ចូលចិត្តបញ្ហាប្រឈមបញ្ញា និងស្វែងរកគំនិតច្នៃប្រឌិតថ្មីៗ។",
+    taglineEn: "Smart and curious thinkers who cannot resist an intellectual challenge.",
+  },
+
+  // --- 2. DIPLOMATS (_NF_) --- Signature Color: Green (#33A474)
+  INFJ: {
+    role: "diplomats",
+    roleNameEn: "Diplomats",
+    roleNameKm: "អ្នកការទូត",
+    roleColor: "#33A474",
+    gradient: "from-[#33A474] via-[#2A8F64] to-[#175A3E]",
+    nameKm: "The Advocate • អ្នកតស៊ូមតិ និងទស្សនវិទូស្ងប់ស្ងាត់",
+    nameEn: "The Advocate • Inspiring Idealist",
+    taglineKm: "ស្ងប់ស្ងាត់តែមានឥទ្ធិពលបំផុសគំនិតខ្ពស់ ប្រកាន់ខ្ជាប់នូវគោលការណ៍គុណធម៌ និងឧត្តមគតិ។",
+    taglineEn: "Quiet and mystical, yet very inspiring and tireless idealists.",
+  },
+  INFP: {
+    role: "diplomats",
+    roleNameEn: "Diplomats",
+    roleNameKm: "អ្នកការទូត",
+    roleColor: "#33A474",
+    gradient: "from-[#33A474] via-[#2A8F64] to-[#175A3E]",
+    nameKm: "The Mediator • អ្នកផ្សះផ្សា និងឧត្តមគតិនិយម",
+    nameEn: "The Mediator • Poetic Altruist",
+    taglineKm: "ចិត្តល្អ សុភាពរាបសា មានគំនិតច្នៃប្រឌិតសិល្បៈ និងតែងតែចង់ជួយសង្គមឱ្យកាន់តែប្រសើរ។",
+    taglineEn: "Poetic, kind and altruistic people, always eager to help a good cause.",
+  },
+  ENFJ: {
+    role: "diplomats",
+    roleNameEn: "Diplomats",
+    roleNameKm: "អ្នកការទូត",
+    roleColor: "#33A474",
+    gradient: "from-[#33A474] via-[#2A8F64] to-[#175A3E]",
+    nameKm: "The Protagonist • អ្នកដឹកនាំលើកទឹកចិត្ត",
+    nameEn: "The Protagonist • Charismatic Leader",
+    taglineKm: "មានមន្តស្នេហ៍ក្នុងការប្រាស្រ័យទាក់ទង ពូកែលើកទឹកចិត្ត និងជំរុញឱ្យអ្នកដទៃអភិវឌ្ឍសមត្ថភាព។",
+    taglineEn: "Charismatic and inspiring leaders, able to mesmerize their listeners.",
+  },
+  ENFP: {
+    role: "diplomats",
+    roleNameEn: "Diplomats",
+    roleNameKm: "អ្នកការទូត",
+    roleColor: "#33A474",
+    gradient: "from-[#33A474] via-[#2A8F64] to-[#175A3E]",
+    nameKm: "The Campaigner • អ្នកចលនានវានុវត្តន៍ និងសេរីភាព",
+    nameEn: "The Campaigner • Creative Free Spirit",
+    taglineKm: "ស្វាហាប់ ច្នៃប្រឌិតខ្ពស់ មានភាពស្និទ្ធស្នាល និងតែងតែនាំមកនូវស្នាមញញឹមដល់មនុស្សជុំវិញ។",
+    taglineEn: "Enthusiastic, creative and sociable free spirits, who can always find a reason to smile.",
+  },
+
+  // --- 3. SENTINELS (_S_J) --- Signature Color: Blue (#4298B4)
   ISTJ: {
-    nameKm: "The Inspector • អ្នកអនុវត្តប្រព័ន្ធ និងវិន័យ",
-    nameEn: "The Inspector • Responsible Realist",
+    role: "sentinels",
+    roleNameEn: "Sentinels",
+    roleNameKm: "អ្នកការពារ និងរក្សាប្រព័ន្ធ",
+    roleColor: "#4298B4",
+    gradient: "from-[#4298B4] via-[#35839C] to-[#1E5769]",
+    nameKm: "The Logistician • អ្នកអនុវត្តប្រព័ន្ធ និងវិន័យ",
+    nameEn: "The Logistician • Responsible Realist",
     taglineKm: "ផ្តោតលើភាពជាក់លាក់ ការទទួលខុសត្រូវខ្ពស់ និងការប្រកាន់ខ្ជាប់នូវគោលការណ៍ត្រឹមត្រូវ។",
     taglineEn: "Practical and fact-minded individuals, whose reliability cannot be doubted.",
   },
-  INTJ: {
-    nameKm: "The Architect • អ្នកយុទ្ធសាស្ត្រស៊ីជម្រៅ",
-    nameEn: "The Architect • Strategic Thinker",
-    taglineKm: "ការគិតបែបវិភាគស៊ីជម្រៅ ស្វែងរកដំណោះស្រាយប្លែក និងប្រកបដោយប្រសិទ្ធភាពខ្ពស់។",
-    taglineEn: "Imaginative and strategic thinkers, with a plan for everything.",
+  ISFJ: {
+    role: "sentinels",
+    roleNameEn: "Sentinels",
+    roleNameKm: "អ្នកការពារ និងរក្សាប្រព័ន្ធ",
+    roleColor: "#4298B4",
+    gradient: "from-[#4298B4] via-[#35839C] to-[#1E5769]",
+    nameKm: "The Defender • អ្នកការពារ និងគាំទ្រយ៉ាងស្មោះស្ម័គ្រ",
+    nameEn: "The Defender • Dedicated Protector",
+    taglineKm: "មានចិត្តកក់ក្តៅ លះបង់ខ្ពស់ យកចិត្តទុកដាក់ និងតែងតែត្រៀមខ្លួនការពារជួយអ្នកដទៃ។",
+    taglineEn: "Very dedicated and warm protectors, always ready to defend their loved ones.",
+  },
+  ESTJ: {
+    role: "sentinels",
+    roleNameEn: "Sentinels",
+    roleNameKm: "អ្នកការពារ និងរក្សាប្រព័ន្ធ",
+    roleColor: "#4298B4",
+    gradient: "from-[#4298B4] via-[#35839C] to-[#1E5769]",
+    nameKm: "The Executive • អ្នករៀបចំ និងដឹកនាំយុទ្ធសាស្ត្រ",
+    nameEn: "The Executive • Dedicated Organizer",
+    taglineKm: "អ្នកពូកែរៀបចំរចនាសម្ព័ន្ធ មានភាពជាអ្នកដឹកនាំជាក់ស្តែង និងការសម្រេចចិត្តប្រកបដោយការទទួលខុសត្រូវខ្ពស់។",
+    taglineEn: "Excellent administrators, unsurpassed at managing things or people.",
+  },
+  ESFJ: {
+    role: "sentinels",
+    roleNameEn: "Sentinels",
+    roleNameKm: "អ្នកការពារ និងរក្សាប្រព័ន្ធ",
+    roleColor: "#4298B4",
+    gradient: "from-[#4298B4] via-[#35839C] to-[#1E5769]",
+    nameKm: "The Consul • អ្នកសម្របសម្រួល និងយកចិត្តទុកដាក់ខ្ពស់",
+    nameEn: "The Consul • Caring Provider",
+    taglineKm: "រួសរាយរាក់ទាក់ ចិត្តល្អ ពូកែបង្កើតទំនាក់ទំនង និងតែងតែចង់ជួយសម្របសម្រួលអ្នកដទៃ។",
+    taglineEn: "Extraordinarily caring, social and popular people, always eager to help.",
+  },
+
+  // --- 4. EXPLORERS (_S_P) --- Signature Color: Amber (#E4A43C)
+  ISTP: {
+    role: "explorers",
+    roleNameEn: "Explorers",
+    roleNameKm: "អ្នករុករក",
+    roleColor: "#E4A43C",
+    gradient: "from-[#E4A43C] via-[#C98B29] to-[#8C5811]",
+    nameKm: "The Virtuoso • អ្នកអនុវត្តបច្ចេកទេស និងពិសោធន៍ជាក់ស្តែង",
+    nameEn: "The Virtuoso • Practical Experimenter",
+    taglineKm: "ក្លាហាន ពូកែដោះស្រាយបញ្ហាបច្ចេកទេសជាក់ស្តែង និងជាអ្នកជំនាញឧបករណ៍ និងយន្តការ។",
+    taglineEn: "Bold and practical experimenters, masters of all kinds of tools.",
+  },
+  ISFP: {
+    role: "explorers",
+    roleNameEn: "Explorers",
+    roleNameKm: "អ្នករុករក",
+    roleColor: "#E4A43C",
+    gradient: "from-[#E4A43C] via-[#C98B29] to-[#8C5811]",
+    nameKm: "The Adventurer • អ្នកសិល្បៈច្នៃប្រឌិត",
+    nameEn: "The Adventurer • Artistic Explorer",
+    taglineKm: "មានភាពបត់បែនខ្ពស់ ស្រឡាញ់សិល្បៈ និងតែងតែត្រៀមខ្លួនស្វែងរកបទពិសោធន៍ថ្មីៗជានិច្ច។",
+    taglineEn: "Flexible and charming artists, always ready to explore and experience something new.",
+  },
+  ESTP: {
+    role: "explorers",
+    roleNameEn: "Explorers",
+    roleNameKm: "អ្នករុករក",
+    roleColor: "#E4A43C",
+    gradient: "from-[#E4A43C] via-[#C98B29] to-[#8C5811]",
+    nameKm: "The Entrepreneur • សហគ្រិនស្វាហាប់ និងរហ័សរហួន",
+    nameEn: "The Entrepreneur • Energetic Dynamo",
+    taglineKm: "ឆ្លាតវៃ ស្វាហាប់ សង្កេតបានរហ័ស និងរីករាយក្នុងការប្រថុយប្រជែងដោះស្រាយបញ្ហាភ្លាមៗ។",
+    taglineEn: "Smart, energetic and very perceptive people, who truly enjoy living on the edge.",
+  },
+  ESFP: {
+    role: "explorers",
+    roleNameEn: "Explorers",
+    roleNameKm: "អ្នករុករក",
+    roleColor: "#E4A43C",
+    gradient: "from-[#E4A43C] via-[#C98B29] to-[#8C5811]",
+    nameKm: "The Entertainer • អ្នកកម្សាន្ត និងបង្កើតភាពរស់រវើក",
+    nameEn: "The Entertainer • Spontaneous Performer",
+    taglineKm: "ស្វាហាប់ រស់រវើក ពោរពេញដោយភាពរីករាយ និងតែងតែធ្វើឱ្យបរិយាកាសជុំវិញមានភាពកក់ក្តៅ។",
+    taglineEn: "Spontaneous, energetic and enthusiastic people – life is never boring around them.",
   },
 };
 
@@ -109,6 +337,7 @@ export default function PersonalityAssessmentPage() {
   const queryClient = useQueryClient();
 
   const [activeTab, setActiveTab] = useState<"form" | "results">("form");
+  const [roleFilter, setRoleFilter] = useState<string>("all");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<
     Record<string, { scaleLevel: number; selectedOptionId: string }>
@@ -184,7 +413,7 @@ export default function PersonalityAssessmentPage() {
     }
   }, [latestResult]);
 
-  // 3. Submit mutation
+  // 4. Submit mutation
   const { mutate: submitAssessment, isPending: submitting } = useMutation({
     mutationFn: async (payload: Array<{ question_id: string; selected_option_id: string }>) => {
       return apiFetch("/assessments/personality/submit", {
@@ -273,25 +502,26 @@ export default function PersonalityAssessmentPage() {
   }
 
   // ========================================================
-  // RESULTS VIEW (Redesigned, Engaging & Consistent)
+  // RESULTS VIEW (16Personalities Gold Standard Experience)
   // ========================================================
   if (activeTab === "results" && latestResult) {
-    const pType = latestResult.personality_type || "ESTJ";
-    const arch = ARCHETYPE_META[pType] || {
-      nameKm: `${pType} • អ្នកដឹកនាំ និងរៀបចំ`,
-      nameEn: `${pType} • Profile Archetype`,
-      taglineKm: "អ្នកមានបុគ្គលិកលក្ខណៈពិសេសក្នុងការគិត និងការអនុវត្តការងារ។",
-      taglineEn: "A distinctive archetype combining analytical focus and practical action.",
-    };
+    const pType = latestResult.personality_type || "INTJ";
+    const arch = ARCHETYPE_META[pType] || ARCHETYPE_META["INTJ"];
 
     const traitsKm = latestResult.traits_summary_km || {};
-    const strengths = traitsKm.strengths || ["ភាពបត់បែនខ្ពស់", "ការផ្តោតលើគោលដៅ", "ការយកចិត្តទុកដាក់"];
-    const learningStyle = traitsKm.learning_style || "ការរៀនចម្រុះរវាងទ្រឹស្តី និងការអនុវត្តជាក់ស្តែង";
-    const bestFields = traitsKm.best_fields || ["ជំនាញពហុវិស័យ & STEM"];
+    const strengths = traitsKm.strengths || ["ការគិតបែបយុទ្ធសាស្ត្រ", "ការវិភាគស៊ីជម្រៅ", "ភាពស្មោះត្រង់នឹងគោលការណ៍"];
+    const learningStyle = traitsKm.learning_style || "ការរៀនតាមរយៈទ្រឹស្តីស៊ីជម្រៅ និងការអនុវត្តគម្រោងជាក់ស្តែង";
+    const bestFields = traitsKm.best_fields || ["វិស្វកម្មសូហ្វវែរ & STEM", "ស្ថាបត្យកម្មប្រព័ន្ធ", "ទិន្នន័យ និងបញ្ញាសិប្បនិម្មិត"];
+
+    // Dominant polarities
+    const isE = latestResult.extraversion_score >= 50;
+    const isN = latestResult.intuition_score >= 50;
+    const isT = latestResult.thinking_score >= 50;
+    const isJ = latestResult.judging_score >= 50;
 
     return (
-      <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in pb-16 select-none">
-        {/* Top Breadcrumb & Minimal Switcher */}
+      <div className="max-w-4xl mx-auto space-y-7 animate-in fade-in pb-16 select-none">
+        {/* Top Breadcrumb & Switcher */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E8F0] pb-4">
           <div>
             <div className="inline-flex items-center gap-2 text-xs font-bold text-[#68708A] mb-1">
@@ -309,7 +539,7 @@ export default function PersonalityAssessmentPage() {
             </h1>
           </div>
 
-          {/* View Switcher: Interactive Test vs Results */}
+          {/* View Switcher */}
           <AssessmentViewSwitcher
             activeTab={activeTab}
             onTabChange={setActiveTab}
@@ -320,32 +550,38 @@ export default function PersonalityAssessmentPage() {
           />
         </div>
 
-        {/* 1. CELEBRATION HERO BANNER */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#111965] via-[#161F7A] to-[#1E277A] text-white shadow-md relative overflow-hidden">
+        {/* 1. OFFICIAL 16PERSONALITIES HERO BANNER (Dynamic Role Gradient) */}
+        <div className={`p-6 sm:p-9 rounded-3xl bg-gradient-to-r ${arch.gradient} text-white shadow-xl relative overflow-hidden`}>
+          {/* Subtle background glow */}
+          <div className="absolute -top-16 -right-16 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10">
             <div className="space-y-3 max-w-xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-[#F7CE4D] text-[#111965] uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5 text-[#111965]" />
-                <span>{t("personalityAssessment.resultsBadge") || "លទ្ធផលបុគ្គលិកលក្ខណៈ"}</span>
+              {/* Role Badge */}
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-white/20 backdrop-blur-md text-white border border-white/25 uppercase tracking-wider shadow-2xs">
+                <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
+                <span>
+                  {arch.roleNameEn.toUpperCase()} • {arch.roleNameKm}
+                </span>
               </div>
 
               <div className="space-y-1">
-                <div className="text-4xl sm:text-6xl font-black text-[#F7CE4D] tracking-tight drop-shadow-sm">
+                <div className="text-4xl sm:text-6xl font-black text-[#F7CE4D] tracking-tight drop-shadow-md">
                   {pType}
                 </div>
-                <h2 className="text-lg sm:text-xl font-bold text-white leading-snug">
+                <h2 className="text-xl sm:text-2xl font-extrabold text-white leading-snug">
                   {getLocalized({ km: arch.nameKm, en: arch.nameEn })}
                 </h2>
               </div>
 
-              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed max-w-lg">
+              <p className="text-xs sm:text-sm text-white/90 leading-relaxed max-w-lg font-medium">
                 {getLocalized({ km: arch.taglineKm, en: arch.taglineEn })}
               </p>
 
-              <div className="pt-1">
+              <div className="pt-2 flex items-center gap-3">
                 <button
                   onClick={handleRetake}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer border border-white/10"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white/15 hover:bg-white/25 text-white transition-all cursor-pointer border border-white/20 backdrop-blur-sm"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   <span>{t("personalityAssessment.retake") || "ធ្វើតេស្តឡើងវិញ"}</span>
@@ -360,7 +596,7 @@ export default function PersonalityAssessmentPage() {
                 emotion="congratulation"
                 showSpeech={true}
                 size={195}
-                speechText={t("personalityAssessment.mascotCongrats") || "អបអរសាទរ! ទទួលបានលទ្ធផលហើយ!"}
+                speechText={t("personalityAssessment.mascotCongrats") || `អបអរសាទរ! អ្នកជាប្រភេទ ${pType}!`}
               />
             </div>
           </div>
@@ -430,129 +666,189 @@ export default function PersonalityAssessmentPage() {
           </div>
         </div>
 
-        {/* 3. 4 PREFERENCE DIMENSION BREAKDOWN (16Personalities Spectrum Rails) */}
+        {/* 3. 4 PREFERENCE DIMENSIONS SPECTRUM RAILS (16Personalities NERIS Standard) */}
         <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-6">
           <div className="space-y-1">
             <h3 className="text-base sm:text-lg font-black text-[#111965]">
               {t("personalityAssessment.dimensionBreakdown") || "ពិន្ទុវិមាត្រទាំង ៤ (The 4 Preference Dimensions)"}
             </h3>
             <p className="text-xs text-[#68708A]">
-              កម្រិតទំនោរចិត្តរវាងប៉ូលផ្ទុយគ្នានីមួយៗនៃការសម្រេចចិត្ត និងការប្រាស្រ័យទាក់ទង
+              កម្រិតទំនោរចិត្តរវាងប៉ូលផ្ទុយគ្នានីមួយៗនៃការទទួលព័ត៌មាន ការសម្រេចចិត្ត និងការប្រាស្រ័យទាក់ទង
             </p>
           </div>
 
-          <div className="space-y-5">
-            {/* Dimension 1: Extraversion vs Introversion */}
-            <div className="space-y-2 p-3.5 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0]/70">
+          <div className="space-y-4">
+            {/* Dimension 1: MIND (E vs I) */}
+            <div className="space-y-2.5 p-4 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0]/70">
               <div className="flex justify-between items-center text-xs">
-                <span className={`font-black flex items-center gap-1.5 ${latestResult.extraversion_score >= 50 ? "text-sky-700" : "text-[#68708A]"}`}>
-                  <span className="w-2 h-2 rounded-full bg-sky-500" />
-                  <span>Extraversion (E) — {latestResult.extraversion_score}%</span>
-                </span>
-                <span className={`font-black flex items-center gap-1.5 ${latestResult.introversion_score > 50 ? "text-indigo-700" : "text-[#68708A]"}`}>
-                  <span>Introversion (I) — {latestResult.introversion_score}%</span>
-                  <span className="w-2 h-2 rounded-full bg-indigo-500" />
+                <div>
+                  <span className="font-extrabold text-[#111965]">ចិត្ត និងថាមពលសង្គម (Mind)</span>
+                  <span className="text-[#68708A] ml-1.5 text-[11px]">— Extraverted vs Introverted</span>
+                </div>
+                <span
+                  className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white"
+                  style={{ backgroundColor: isE ? "#0284C7" : "#88619A" }}
+                >
+                  {isE ? "Extraverted (E)" : "Introverted (I)"} • {Math.max(latestResult.extraversion_score, latestResult.introversion_score)}%
                 </span>
               </div>
-              <div className="w-full h-3 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
-                <div
-                  style={{ width: `${latestResult.extraversion_score}%` }}
-                  className="bg-gradient-to-r from-sky-400 to-sky-600 rounded-l-full h-full"
-                />
-                <div
-                  style={{ width: `${latestResult.introversion_score}%` }}
-                  className="bg-gradient-to-r from-indigo-500 to-indigo-700 rounded-r-full h-full"
-                />
+
+              {/* Spectrum Rail */}
+              <div className="space-y-1">
+                <div className="flex justify-between text-[11px] font-bold">
+                  <span className={isE ? "text-[#0284C7]" : "text-slate-400"}>
+                    Extraverted (E) • {latestResult.extraversion_score}%
+                  </span>
+                  <span className={!isE ? "text-[#88619A]" : "text-slate-400"}>
+                    Introverted (I) • {latestResult.introversion_score}%
+                  </span>
+                </div>
+                <div className="w-full h-3 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
+                  <div
+                    style={{ width: `${latestResult.extraversion_score}%` }}
+                    className="bg-gradient-to-r from-sky-400 to-[#0284C7] rounded-l-full h-full transition-all duration-500"
+                  />
+                  <div
+                    style={{ width: `${latestResult.introversion_score}%` }}
+                    className="bg-gradient-to-r from-[#A855F7] to-[#88619A] rounded-r-full h-full transition-all duration-500"
+                  />
+                </div>
               </div>
-              <p className="text-[11px] text-[#68708A]">
-                {latestResult.extraversion_score >= 50
+
+              <p className="text-[11px] text-[#4A5568] leading-relaxed">
+                {isE
                   ? "អ្នកទទួលបានថាមពលពីការធ្វើការងារជាក្រុម ការពិភាក្សាផ្លាស់ប្តូរគំនិត និងបរិស្ថានសង្គមរស់រវើក។"
                   : "អ្នកបញ្ចូលថាមពលនៅកន្លែងស្ងប់ស្ងាត់ និងការផ្តោតអារម្មណ៍ស៊ីជម្រៅតែម្នាក់ឯង។"}
               </p>
             </div>
 
-            {/* Dimension 2: Sensing vs Intuition */}
-            <div className="space-y-2 p-3.5 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0]/70">
+            {/* Dimension 2: ENERGY (N vs S) */}
+            <div className="space-y-2.5 p-4 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0]/70">
               <div className="flex justify-between items-center text-xs">
-                <span className={`font-black flex items-center gap-1.5 ${latestResult.sensing_score >= 50 ? "text-emerald-700" : "text-[#68708A]"}`}>
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span>Sensing (S) — {latestResult.sensing_score}%</span>
-                </span>
-                <span className={`font-black flex items-center gap-1.5 ${latestResult.intuition_score > 50 ? "text-purple-700" : "text-[#68708A]"}`}>
-                  <span>Intuition (N) — {latestResult.intuition_score}%</span>
-                  <span className="w-2 h-2 rounded-full bg-purple-500" />
+                <div>
+                  <span className="font-extrabold text-[#111965]">ការទទួលព័ត៌មាន (Energy)</span>
+                  <span className="text-[#68708A] ml-1.5 text-[11px]">— Intuitive vs Observant</span>
+                </div>
+                <span
+                  className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white"
+                  style={{ backgroundColor: isN ? "#33A474" : "#4298B4" }}
+                >
+                  {isN ? "Intuitive (N)" : "Observant (S)"} • {Math.max(latestResult.intuition_score, latestResult.sensing_score)}%
                 </span>
               </div>
-              <div className="w-full h-3 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
-                <div
-                  style={{ width: `${latestResult.sensing_score}%` }}
-                  className="bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-l-full h-full"
-                />
-                <div
-                  style={{ width: `${latestResult.intuition_score}%` }}
-                  className="bg-gradient-to-r from-purple-500 to-purple-700 rounded-r-full h-full"
-                />
+
+              {/* Spectrum Rail */}
+              <div className="space-y-1">
+                <div className="flex justify-between text-[11px] font-bold">
+                  <span className={!isN ? "text-[#4298B4]" : "text-slate-400"}>
+                    Observant (S) • {latestResult.sensing_score}%
+                  </span>
+                  <span className={isN ? "text-[#33A474]" : "text-slate-400"}>
+                    Intuitive (N) • {latestResult.intuition_score}%
+                  </span>
+                </div>
+                <div className="w-full h-3 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
+                  <div
+                    style={{ width: `${latestResult.sensing_score}%` }}
+                    className="bg-gradient-to-r from-cyan-400 to-[#4298B4] rounded-l-full h-full transition-all duration-500"
+                  />
+                  <div
+                    style={{ width: `${latestResult.intuition_score}%` }}
+                    className="bg-gradient-to-r from-emerald-400 to-[#33A474] rounded-r-full h-full transition-all duration-500"
+                  />
+                </div>
               </div>
-              <p className="text-[11px] text-[#68708A]">
-                {latestResult.sensing_score >= 50
-                  ? "អ្នកផ្តោតលើទិន្នន័យជាក់ស្តែង ការអនុវត្តជាក់លាក់ និងបទពិសោធន៍ផ្ទាល់ដៃ។"
-                  : "អ្នកចាប់អារម្មណ៍លើគំនិតច្នៃប្រឌិតថ្មីៗ ចក្ខុវិស័យអនាគត និងទ្រឹស្តីទូលំទូលាយ។"}
+
+              <p className="text-[11px] text-[#4A5568] leading-relaxed">
+                {isN
+                  ? "អ្នកចាប់អារម្មណ៍លើគំនិតច្នៃប្រឌិតថ្មីៗ ចក្ខុវិស័យអនាគត ទ្រឹស្តីទូលំទូលាយ និងការស្រាវជ្រាវគំនិតប្លែកៗ។"
+                  : "អ្នកផ្តោតលើទិន្នន័យជាក់ស្តែង ការអនុវត្តជាក់លាក់ និងបទពិសោធន៍ផ្ទាល់ដៃដែលផ្តល់លទ្ធផលប្រាកដ។"}
               </p>
             </div>
 
-            {/* Dimension 3: Thinking vs Feeling */}
-            <div className="space-y-2 p-3.5 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0]/70">
+            {/* Dimension 3: NATURE (T vs F) */}
+            <div className="space-y-2.5 p-4 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0]/70">
               <div className="flex justify-between items-center text-xs">
-                <span className={`font-black flex items-center gap-1.5 ${latestResult.thinking_score >= 50 ? "text-amber-700" : "text-[#68708A]"}`}>
-                  <span className="w-2 h-2 rounded-full bg-amber-500" />
-                  <span>Thinking (T) — {latestResult.thinking_score}%</span>
-                </span>
-                <span className={`font-black flex items-center gap-1.5 ${latestResult.feeling_score > 50 ? "text-rose-700" : "text-[#68708A]"}`}>
-                  <span>Feeling (F) — {latestResult.feeling_score}%</span>
-                  <span className="w-2 h-2 rounded-full bg-rose-500" />
+                <div>
+                  <span className="font-extrabold text-[#111965]">ការសម្រេចចិត្ត (Nature)</span>
+                  <span className="text-[#68708A] ml-1.5 text-[11px]">— Thinking vs Feeling</span>
+                </div>
+                <span
+                  className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white"
+                  style={{ backgroundColor: isT ? "#88619A" : "#F43F5E" }}
+                >
+                  {isT ? "Thinking (T)" : "Feeling (F)"} • {Math.max(latestResult.thinking_score, latestResult.feeling_score)}%
                 </span>
               </div>
-              <div className="w-full h-3 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
-                <div
-                  style={{ width: `${latestResult.thinking_score}%` }}
-                  className="bg-gradient-to-r from-amber-400 to-amber-600 rounded-l-full h-full"
-                />
-                <div
-                  style={{ width: `${latestResult.feeling_score}%` }}
-                  className="bg-gradient-to-r from-rose-400 to-rose-600 rounded-r-full h-full"
-                />
+
+              {/* Spectrum Rail */}
+              <div className="space-y-1">
+                <div className="flex justify-between text-[11px] font-bold">
+                  <span className={isT ? "text-[#88619A]" : "text-slate-400"}>
+                    Thinking (T) • {latestResult.thinking_score}%
+                  </span>
+                  <span className={!isT ? "text-[#F43F5E]" : "text-slate-400"}>
+                    Feeling (F) • {latestResult.feeling_score}%
+                  </span>
+                </div>
+                <div className="w-full h-3 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
+                  <div
+                    style={{ width: `${latestResult.thinking_score}%` }}
+                    className="bg-gradient-to-r from-purple-400 to-[#88619A] rounded-l-full h-full transition-all duration-500"
+                  />
+                  <div
+                    style={{ width: `${latestResult.feeling_score}%` }}
+                    className="bg-gradient-to-r from-rose-400 to-[#F43F5E] rounded-r-full h-full transition-all duration-500"
+                  />
+                </div>
               </div>
-              <p className="text-[11px] text-[#68708A]">
-                {latestResult.thinking_score >= 50
-                  ? "អ្នកធ្វើការសម្រេចចិត្តដោយផ្អែកលើតក្កវិជ្ជា ការវិភាគមិនលំអៀង និងគោលការណ៍ត្រឹមត្រូវ។"
+
+              <p className="text-[11px] text-[#4A5568] leading-relaxed">
+                {isT
+                  ? "អ្នកធ្វើការសម្រេចចិត្តដោយផ្អែកលើតក្កវិជ្ជាសុក្រឹត ការវិភាគមិនលំអៀង និងគោលការណ៍យុត្តិធម៌។"
                   : "អ្នកផ្តល់អាទិភាពលើតម្លៃមនុស្ស ភាពសុខដុមរមនា និងផលប៉ះពាល់ដល់អារម្មណ៍អ្នកដទៃ។"}
               </p>
             </div>
 
-            {/* Dimension 4: Judging vs Perceiving */}
-            <div className="space-y-2 p-3.5 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0]/70">
+            {/* Dimension 4: TACTICS (J vs P) */}
+            <div className="space-y-2.5 p-4 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0]/70">
               <div className="flex justify-between items-center text-xs">
-                <span className={`font-black flex items-center gap-1.5 ${latestResult.judging_score >= 50 ? "text-teal-700" : "text-[#68708A]"}`}>
-                  <span className="w-2 h-2 rounded-full bg-teal-500" />
-                  <span>Judging (J) — {latestResult.judging_score}%</span>
-                </span>
-                <span className={`font-black flex items-center gap-1.5 ${latestResult.perceiving_score > 50 ? "text-pink-700" : "text-[#68708A]"}`}>
-                  <span>Perceiving (P) — {latestResult.perceiving_score}%</span>
-                  <span className="w-2 h-2 rounded-full bg-pink-500" />
+                <div>
+                  <span className="font-extrabold text-[#111965]">យុទ្ធសាស្ត្រជីវិត (Tactics)</span>
+                  <span className="text-[#68708A] ml-1.5 text-[11px]">— Judging vs Prospecting</span>
+                </div>
+                <span
+                  className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white"
+                  style={{ backgroundColor: isJ ? "#4298B4" : "#E4A43C" }}
+                >
+                  {isJ ? "Judging (J)" : "Prospecting (P)"} • {Math.max(latestResult.judging_score, latestResult.perceiving_score)}%
                 </span>
               </div>
-              <div className="w-full h-3 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
-                <div
-                  style={{ width: `${latestResult.judging_score}%` }}
-                  className="bg-gradient-to-r from-teal-400 to-teal-600 rounded-l-full h-full"
-                />
-                <div
-                  style={{ width: `${latestResult.perceiving_score}%` }}
-                  className="bg-gradient-to-r from-pink-400 to-pink-600 rounded-r-full h-full"
-                />
+
+              {/* Spectrum Rail */}
+              <div className="space-y-1">
+                <div className="flex justify-between text-[11px] font-bold">
+                  <span className={isJ ? "text-[#4298B4]" : "text-slate-400"}>
+                    Judging (J) • {latestResult.judging_score}%
+                  </span>
+                  <span className={!isJ ? "text-[#E4A43C]" : "text-slate-400"}>
+                    Prospecting (P) • {latestResult.perceiving_score}%
+                  </span>
+                </div>
+                <div className="w-full h-3 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
+                  <div
+                    style={{ width: `${latestResult.judging_score}%` }}
+                    className="bg-gradient-to-r from-teal-400 to-[#4298B4] rounded-l-full h-full transition-all duration-500"
+                  />
+                  <div
+                    style={{ width: `${latestResult.perceiving_score}%` }}
+                    className="bg-gradient-to-r from-amber-400 to-[#E4A43C] rounded-r-full h-full transition-all duration-500"
+                  />
+                </div>
               </div>
-              <p className="text-[11px] text-[#68708A]">
-                {latestResult.judging_score >= 50
+
+              <p className="text-[11px] text-[#4A5568] leading-relaxed">
+                {isJ
                   ? "អ្នកចូលចិត្តផែនការច្បាស់លាស់ កាលវិភាគរៀបរយ និងការសម្រេចកិច្ចការទាន់ពេលវេលា។"
                   : "អ្នកចូលចិត្តភាពបត់បែន រក្សាជម្រើសបើកទូលាយ និងអាចសម្របតាមស្ថានភាពផ្លាស់ប្តូរភ្លាមៗ។"}
               </p>
@@ -709,7 +1005,110 @@ export default function PersonalityAssessmentPage() {
           )}
         </div>
 
-        {/* 5. NEXT STEP CTA CARD */}
+        {/* 5. EXPLORE ALL 16 PERSONALITIES ACROSS 4 ROLES (16Personalities Gold Standard) */}
+        <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E6E8F0] pb-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-800 text-[10px] font-black uppercase tracking-wider border border-indigo-200">
+                <Compass className="w-3 h-3 text-indigo-600" />
+                <span>The 16 Personalities Framework</span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-[#111965]">
+                ស្វែងយល់ពីបុគ្គលិកលក្ខណៈទាំង ១៦ (All 16 Personality Types)
+              </h3>
+              <p className="text-xs text-[#68708A]">
+                បែងចែកជា ៤ ក្រុមតួនាទីធំៗ៖ អ្នកវិភាគ (Analysts), អ្នកការទូត (Diplomats), អ្នកការពារ (Sentinels), និងអ្នករុករក (Explorers)
+              </p>
+            </div>
+
+            {/* Filter Tabs */}
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+              {["all", "analysts", "diplomats", "sentinels", "explorers"].map((tab) => {
+                const isActive = roleFilter === tab;
+                const roleObj = ROLES_META.find((r) => r.id === tab);
+
+                return (
+                  <button
+                    key={tab}
+                    type="button"
+                    onClick={() => setRoleFilter(tab)}
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                      isActive
+                        ? "bg-[#111965] text-white shadow-2xs"
+                        : "bg-[#F0F2FA] text-[#68708A] hover:bg-[#E6E8F0] hover:text-[#111965]"
+                    }`}
+                  >
+                    {tab === "all" ? "All 16 Types" : roleObj?.nameEn || tab}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Archetypes Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            {Object.entries(ARCHETYPE_META)
+              .filter(([_, meta]) => roleFilter === "all" || meta.role === roleFilter)
+              .map(([code, meta]) => {
+                const isCurrentUser = code === pType;
+                const roleData = ROLES_META.find((r) => r.id === meta.role);
+
+                return (
+                  <div
+                    key={code}
+                    className={`p-4 rounded-2xl border transition-all flex flex-col justify-between space-y-2 relative ${
+                      isCurrentUser
+                        ? "bg-gradient-to-b from-amber-50/70 to-white border-amber-300 ring-2 ring-amber-400/50 shadow-md"
+                        : "bg-white border-[#E6E8F0] hover:border-slate-300 hover:shadow-2xs"
+                    }`}
+                  >
+                    {isCurrentUser && (
+                      <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full text-[9px] font-black bg-[#F7CE4D] text-[#111965] shadow-xs flex items-center gap-1">
+                        <Sparkles className="w-2.5 h-2.5 text-[#111965]" />
+                        <span>Your MBTI</span>
+                      </span>
+                    )}
+
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span
+                          className="text-lg font-black tracking-tight"
+                          style={{ color: meta.roleColor }}
+                        >
+                          {code}
+                        </span>
+                        <span
+                          className="px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase border"
+                          style={{
+                            backgroundColor: `${meta.roleColor}15`,
+                            color: meta.roleColor,
+                            borderColor: `${meta.roleColor}30`,
+                          }}
+                        >
+                          {roleData?.nameEn}
+                        </span>
+                      </div>
+
+                      <h5 className="text-xs font-black text-[#111965] leading-snug">
+                        {meta.nameKm.split("•")[1]?.trim() || meta.nameEn}
+                      </h5>
+
+                      <p className="text-[11px] text-[#68708A] line-clamp-2 leading-relaxed">
+                        {meta.taglineKm}
+                      </p>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] font-semibold text-slate-500">
+                      <span>{meta.roleNameKm}</span>
+                      <span className="font-mono text-[9px] opacity-75">{code}</span>
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+
+        {/* 6. NEXT STEP CTA CARD */}
         <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#F0F2FA] to-[#E8EBF8] border border-[#111965]/15 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
           <div className="space-y-1 text-center sm:text-left">
             <h4 className="text-sm sm:text-base font-extrabold text-[#111965]">
@@ -783,7 +1182,7 @@ export default function PersonalityAssessmentPage() {
             activeTab={activeTab}
             onTabChange={setActiveTab}
             questionsLabel={t("personalityAssessment.questionsTab") || "ធ្វើតេស្ត"}
-            profileLabel={`${latestResult?.personality_type || "ESTJ"} Profile`}
+            profileLabel={`${latestResult?.personality_type || "INTJ"} Profile`}
             profileIcon={Crown}
             hasResult={!!latestResult}
           />

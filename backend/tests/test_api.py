@@ -73,6 +73,17 @@ async def test_auth_and_assessments_flow(client):
     assert p_sub_res.status_code == 200
     p_result = p_sub_res.json()["data"]
     assert len(p_result["personality_type"]) == 4
+    assert "role" in p_result["traits_summary_en"]
+    assert "role_color" in p_result["traits_summary_en"]
+    assert "role" in p_result["traits_summary_km"]
+
+    # Verify recommendations are auto-generated immediately after MBTI submission
+    auto_rec_res = await client.get("/api/v1/recommendations/majors", headers=headers)
+    assert auto_rec_res.status_code == 200
+    auto_recs = auto_rec_res.json()["data"]
+    assert len(auto_recs) > 0
+    assert "offering_universities" in auto_recs[0]["major"]
+    assert len(auto_recs[0]["major"]["offering_universities"]) >= 1
 
     # 6. Fetch RIASEC Questions & Submit
     rq_res = await client.get("/api/v1/assessments/riasec/questions")
