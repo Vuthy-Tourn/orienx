@@ -448,13 +448,24 @@ export default function RiasecAssessmentPage() {
           </div>
         </div>
 
-        {/* 3. ALL 6 HOLLAND DIMENSION CARDS */}
-        <div className="space-y-3">
-          <h4 className="text-xs sm:text-sm font-black text-[#111965] uppercase tracking-wide px-1">
-            ពិន្ទុវិស័យទាំង ៦ លម្អិត (All 6 Career Categories)
-          </h4>
+        {/* 3. ALL 6 HOLLAND DIMENSION CARDS (Educational & Clear for Students) */}
+        <div className="space-y-3.5">
+          <div className="space-y-0.5 px-1">
+            <h4 className="text-xs sm:text-sm font-black text-[#111965] uppercase tracking-wide">
+              {getLocalized({
+                km: "ពិន្ទុវិស័យទាំង ៦ លម្អិត (All 6 Career Categories)",
+                en: "All 6 Holland Career Categories in Detail",
+              })}
+            </h4>
+            <p className="text-[11px] text-[#68708A]">
+              {getLocalized({
+                km: "ស្វែងយល់ពីអត្ថន័យនៃកូដនីមួយៗ និងកម្រិតចំណាប់អារម្មណ៍របស់អ្នកចំពោះវិស័យការងារទាំង ៦",
+                en: "Understand what each RIASEC dimension means and how strongly your interests align",
+              })}
+            </p>
+          </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
             {Object.entries(RIASEC_DIMENSIONS).map(([key, meta]) => {
               const IconComp = meta.icon;
               const score =
@@ -473,31 +484,59 @@ export default function RiasecAssessmentPage() {
               return (
                 <div
                   key={key}
-                  className="p-4 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-2 hover:border-slate-300 transition-colors"
+                  className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E6E8F0] shadow-xs space-y-3 hover:border-slate-300 transition-all flex flex-col justify-between"
                 >
-                  <div className="flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-1.5">
-                      <span
-                        className="w-5 h-5 rounded-md text-white font-black text-[10px] flex items-center justify-center"
-                        style={{ backgroundColor: meta.color }}
-                      >
-                        {key}
-                      </span>
-                      <span className="font-extrabold text-[#111965] text-xs">
-                        {meta.code}
+                  <div className="space-y-2">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2.5">
+                        <span
+                          className="w-8 h-8 rounded-xl text-white font-black text-xs flex items-center justify-center shrink-0 shadow-2xs"
+                          style={{ backgroundColor: meta.color }}
+                        >
+                          {key}
+                        </span>
+                        <div>
+                          <h5 className="font-black text-[#111965] text-xs leading-snug">
+                            {getLocalized({ km: meta.nameKm, en: meta.nameEn })}
+                          </h5>
+                          <span className="text-[10px] font-semibold text-[#68708A]">
+                            Holland Code ({key})
+                          </span>
+                        </div>
+                      </div>
+                      <span className="p-1.5 rounded-lg bg-slate-50 border border-slate-100 shrink-0">
+                        <IconComp className="w-4 h-4" style={{ color: meta.color }} />
                       </span>
                     </div>
-                    <IconComp className="w-3.5 h-3.5" style={{ color: meta.color }} />
+
+                    <div className="flex items-baseline justify-between pt-1">
+                      <div className="text-xl font-black text-[#111965] tracking-tight">{score}%</div>
+                      <span
+                        className="px-2 py-0.5 rounded-full text-[10px] font-extrabold"
+                        style={{
+                          backgroundColor: `${meta.color}15`,
+                          color: meta.color,
+                        }}
+                      >
+                        {score >= 80
+                          ? getLocalized({ km: "ត្រូវចិត្តខ្លាំង (High Fit)", en: "High Fit" })
+                          : score >= 50
+                          ? getLocalized({ km: "កម្រិតមធ្យម (Moderate)", en: "Moderate" })
+                          : getLocalized({ km: "កម្រិតទាប (Low)", en: "Low Interest" })}
+                      </span>
+                    </div>
+
+                    <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden p-0.5">
+                      <div
+                        style={{ width: `${score}%`, backgroundColor: meta.color }}
+                        className="h-full rounded-full transition-all duration-500"
+                      />
+                    </div>
                   </div>
 
-                  <div className="text-lg font-black text-[#111965]">{score}%</div>
-
-                  <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                    <div
-                      style={{ width: `${score}%`, backgroundColor: meta.color }}
-                      className="h-full rounded-full transition-all"
-                    />
-                  </div>
+                  <p className="text-[11px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-100">
+                    {getLocalized({ km: meta.descKm, en: meta.descEn })}
+                  </p>
                 </div>
               );
             })}
@@ -578,10 +617,10 @@ export default function RiasecAssessmentPage() {
         answers={ratings}
         onAnswer={(qId, level) => handleRatingChange(qId, level)}
         scaleType="5-point"
-        leftAnchorKm="មិនត្រូវទាល់តែសោះ"
-        leftAnchorEn="Strong Disconnect"
-        rightAnchorKm="ស្រឡាញ់ខ្លាំង"
-        rightAnchorEn="Peak Calling"
+        leftAnchorKm="មិនចូលចិត្តទាល់តែសោះ"
+        leftAnchorEn="Strong Dislike"
+        rightAnchorKm="ចូលចិត្តខ្លាំងបំផុត"
+        rightAnchorEn="Highly Enjoy"
         mascotSpeech={
           currentVal !== undefined && currentVal !== null
             ? currentVal === 5

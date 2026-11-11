@@ -123,11 +123,11 @@ export default function RecommendationsPage() {
               <span>AI Fit</span>
             </span>
             <span className="text-xs text-[#68708A]">
-              {t("recommendationsPage.breadcrumb") || "ផ្ទាំងគ្រប់គ្រង / អនុសាសន៍ផ្ទាល់ខ្លួន"}
+              {t("recommendationsPage.breadcrumb", "ផ្ទាំងគ្រប់គ្រង / អនុសាសន៍ផ្ទាល់ខ្លួន")}
             </span>
           </div>
           <h1 className="text-xl sm:text-2xl font-black text-[#111965] tracking-tight">
-            {t("recommendationsPage.title") || "អនុសាសន៍ជំនាញសាកលវិទ្យាល័យផ្ទាល់ខ្លួន"}
+            {t("recommendationsPage.title", "អនុសាសន៍ជំនាញសាកលវិទ្យាល័យផ្ទាល់ខ្លួន")}
           </h1>
         </div>
 
@@ -141,8 +141,8 @@ export default function RecommendationsPage() {
             <RotateCcw className={`w-3.5 h-3.5 ${recomputing ? "animate-spin" : ""}`} />
             <span>
               {recomputing
-                ? t("recommendationsPage.recalculating") || "កំពុងគណនា..."
-                : t("recommendationsPage.recalculate") || "គណនាឡើងវិញ"}
+                ? t("recommendationsPage.recalculating", "កំពុងគណនា...")
+                : t("recommendationsPage.recalculate", "គណនាឡើងវិញ")}
             </span>
           </button>
         </div>
@@ -164,7 +164,7 @@ export default function RecommendationsPage() {
             }`}
           >
             <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
-            <span>{t("recommendationsPage.tabTop3") || "សាកសមបំផុតទាំង ៣"}</span>
+            <span>{t("recommendationsPage.tabTop3", "សាកសមបំផុតទាំង ៣")}</span>
           </button>
           <button
             type="button"
@@ -176,7 +176,7 @@ export default function RecommendationsPage() {
             }`}
           >
             <Flame className="w-3.5 h-3.5 text-[#F7CE4D]" />
-            <span>{t("recommendationsPage.tabSuitable") || "សាកសម (>75%)"}</span>
+            <span>{t("recommendationsPage.tabSuitable", "សាកសម (>75%)")}</span>
           </button>
           <button
             type="button"
@@ -188,7 +188,7 @@ export default function RecommendationsPage() {
             }`}
           >
             <Zap className="w-3.5 h-3.5 text-sky-500" />
-            <span>{t("recommendationsPage.tabStem") || "STEM"}</span>
+            <span>{t("recommendationsPage.tabStem", "STEM")}</span>
           </button>
           <button
             type="button"
@@ -199,14 +199,14 @@ export default function RecommendationsPage() {
                 : "text-[#68708A] hover:text-[#111965]"
             }`}
           >
-            {t("recommendationsPage.tabAll") || "ទាំងអស់"} ({recommendations?.length || 0})
+            {t("recommendationsPage.tabAll", "ទាំងអស់")} ({recommendations?.length || 0})
           </button>
         </div>
 
         {/* View Mode Toggle: Grid vs List */}
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold text-[#68708A] hidden sm:inline">
-            {filteredRecs.length} {t("recommendationsPage.majorsCount") || "មុខជំនាញ"}
+            {filteredRecs.length} {t("recommendationsPage.majorsCount", "មុខជំនាញ")}
           </span>
 
           <div className="inline-flex items-center p-1 rounded-xl bg-[#F0F2FA] border border-[#E6E8F0]">
@@ -247,10 +247,10 @@ export default function RecommendationsPage() {
             </div>
             <div>
               <h2 className="text-sm sm:text-base font-black tracking-tight text-[#F7CE4D]">
-                {t("recommendationsPage.top3BannerTitle") || "ជំនាញសាកសមបំផុតទាំង ៣ សម្រាប់អ្នក"}
+                {t("recommendationsPage.top3BannerTitle", "ជំនាញសាកសមបំផុតទាំង ៣ សម្រាប់អ្នក")}
               </h2>
               <p className="text-xs text-white/80 line-clamp-1">
-                {t("recommendationsPage.top3BannerSubtitle") || "ជ្រើសរើស និងចាត់ថ្នាក់យ៉ាងយកចិត្តទុកដាក់ដោយ AI ផ្អែកលើបុគ្គលិកលក្ខណៈ ទំនោរការគិត និងចំណុចខ្លាំងនៃការសិក្សា។"}
+                {t("recommendationsPage.top3BannerSubtitle", "ជ្រើសរើស និងចាត់ថ្នាក់យ៉ាងយកចិត្តទុកដាក់ដោយ AI ផ្អែកលើបុគ្គលិកលក្ខណៈ ទំនោរការគិត និងចំណុចខ្លាំងនៃការសិក្សា។")}
               </p>
             </div>
           </div>
@@ -395,7 +395,7 @@ export default function RecommendationsPage() {
                       href={`/universities?major=${major.slug}`}
                       className="px-3 py-1.5 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors flex items-center gap-1 cursor-pointer whitespace-nowrap"
                     >
-                      <span>{t("recommendationsPage.universities") || "សាកលវិទ្យាល័យ"}</span>
+                      <span>{t("recommendationsPage.universities", "សាកលវិទ្យាល័យ")}</span>
                       <ArrowRight className="w-3 h-3" />
                     </Link>
                   </div>
@@ -502,11 +502,15 @@ export default function RecommendationsPage() {
                 </div>
 
                 {/* Offering Campuses / Universities Chips */}
-                {major.offering_universities && major.offering_universities.length > 0 && (
+                {major.offering_universities && major.offering_universities.length > 0 ? (
                   <div className="space-y-1.5 pt-1 border-t border-[#E6E8F0]/70">
-                    <div className="flex items-center justify-between text-[10px] font-bold text-[#68708A] uppercase">
-                      <span>{t("recommendationsPage.campuses") || "គ្រឹះស្ថានបណ្តុះបណ្តាល"}</span>
-                      <span>{major.offering_universities.length} {t("recommendationsPage.institutions") || "កន្លែង"}</span>
+                    <div className="flex items-center justify-between text-[10px] font-bold text-[#68708A]">
+                      <span className="tracking-wide">
+                        {t("recommendationsPage.campuses", "គ្រឹះស្ថានបណ្តុះបណ្តាល:")}
+                      </span>
+                      <span className="font-semibold text-slate-500">
+                        {major.offering_universities.length} {t("recommendationsPage.institutions", "កន្លែង")}
+                      </span>
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5">
                       {major.offering_universities.slice(0, 4).map((u: any) => (
@@ -532,6 +536,17 @@ export default function RecommendationsPage() {
                       )}
                     </div>
                   </div>
+                ) : (
+                  <div className="space-y-1.5 pt-1 border-t border-[#E6E8F0]/70">
+                    <div className="flex items-center justify-between text-[10px] font-bold text-[#68708A]">
+                      <span className="tracking-wide">
+                        {t("recommendationsPage.campuses", "គ្រឹះស្ថានបណ្តុះបណ្តាល:")}
+                      </span>
+                      <span className="text-[9px] text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/70 font-semibold">
+                        {t("personalityAssessment.verifyingInstitutions", "កំពុងផ្ទៀងផ្ទាត់")}
+                      </span>
+                    </div>
+                  </div>
                 )}
 
                 {/* 4. Footer: Campus Count & Action Buttons */}
@@ -539,7 +554,7 @@ export default function RecommendationsPage() {
                   <div className="flex items-center gap-1 text-[11px] font-bold text-[#68708A]">
                     <Building2 className="w-3.5 h-3.5 text-[#111965]" />
                     <span>
-                      {major.universities_count || exp?.universities_count || 0} {t("recommendationsPage.institutions") || "គ្រឹះស្ថាន"}
+                      {major.universities_count || exp?.universities_count || 0} {t("recommendationsPage.institutions", "គ្រឹះស្ថាន")}
                     </span>
                   </div>
 
@@ -548,14 +563,14 @@ export default function RecommendationsPage() {
                       href={`/majors/${major.slug}`}
                       className="text-[11px] font-bold text-[#68708A] hover:text-[#111965] transition-colors cursor-pointer"
                     >
-                      {t("recommendationsPage.details") || "ព័ត៌មានលម្អិត"}
+                      {t("recommendationsPage.details", "ព័ត៌មានលម្អិត")}
                     </Link>
 
                     <Link
                       href={`/universities?major=${major.slug}`}
                       className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl font-black text-[11px] text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs cursor-pointer whitespace-nowrap"
                     >
-                      <span>{t("recommendationsPage.universities") || "សាកលវិទ្យាល័យ"}</span>
+                      <span>{t("recommendationsPage.universities", "សាកលវិទ្យាល័យ")}</span>
                       <ArrowRight className="w-3 h-3" />
                     </Link>
                   </div>
@@ -569,17 +584,16 @@ export default function RecommendationsPage() {
         <div className="p-10 rounded-2xl bg-white border border-[#E6E8F0] text-center space-y-3 max-w-md mx-auto shadow-2xs">
           <Sparkles className="w-8 h-8 text-[#111965] mx-auto opacity-75" />
           <h3 className="text-base font-bold text-[#111965]">
-            {t("recommendationsPage.noRecsTitle") || "មិនទាន់មានអនុសាសន៍នៅឡើយទេ"}
+            {t("recommendationsPage.noRecsTitle", "មិនទាន់មានអនុសាសន៍នៅឡើយទេ")}
           </h3>
           <p className="text-xs text-[#68708A]">
-            {t("recommendationsPage.noRecsSubtitle") ||
-              "សូមបំពេញតេស្តដើម្បីទទួលបានអនុសាសន៍ជំនាញផ្ទាល់ខ្លួន។"}
+            {t("recommendationsPage.noRecsSubtitle", "សូមបំពេញតេស្តដើម្បីទទួលបានអនុសាសន៍ជំនាញផ្ទាល់ខ្លួន។")}
           </p>
           <Link
             href="/dashboard/assessments/personality"
             className="inline-block px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D]"
           >
-            {t("recommendationsPage.startTest") || "ចាប់ផ្តើមធ្វើតេស្ត"}
+            {t("recommendationsPage.startTest", "ចាប់ផ្តើមធ្វើតេស្ត")}
           </Link>
         </div>
       )}

@@ -72,8 +72,8 @@ export interface AssessmentStageProps {
 const SCALE_STEPS_7 = [
   {
     level: 1,
-    sizeClass: "w-11 h-11 sm:w-13 sm:h-13",
-    borderClass: "border-[3px] sm:border-4",
+    sizeClass: "w-12 h-12 sm:w-14 sm:h-14",
+    borderClass: "border-[2.5px] sm:border-[3px]",
     checkSize: "w-6 h-6 sm:w-7 sm:h-7 stroke-[3]",
     labelEn: "Strongly Agree",
     labelKm: "យល់ស្របខ្លាំងបំផុត",
@@ -81,13 +81,13 @@ const SCALE_STEPS_7 = [
     themeColor: "#33A474",
     borderColor: "border-[#33A474]",
     bgSelected: "bg-[#33A474]",
-    idleHover: "hover:bg-[#33A474]/15 hover:border-[#33A474]",
-    activeGlow: "shadow-[0_8px_24px_rgba(51,164,116,0.45)] ring-4 ring-[#33A474]/30",
+    idleHover: "hover:bg-[#33A474]/10 hover:border-[#33A474]",
+    activeGlow: "shadow-[0_8px_24px_rgba(51,164,116,0.4)] ring-8 ring-[#33A474]/20",
   },
   {
     level: 2,
-    sizeClass: "w-9 h-9 sm:w-11 sm:h-11",
-    borderClass: "border-[2.5px] sm:border-[3px]",
+    sizeClass: "w-10 h-10 sm:w-11 sm:h-11",
+    borderClass: "border-[2px] sm:border-[2.5px]",
     checkSize: "w-5 h-5 sm:w-6 sm:h-6 stroke-[3]",
     labelEn: "Agree",
     labelKm: "យល់ស្រប",
@@ -95,13 +95,13 @@ const SCALE_STEPS_7 = [
     themeColor: "#33A474",
     borderColor: "border-[#33A474]",
     bgSelected: "bg-[#33A474]",
-    idleHover: "hover:bg-[#33A474]/15 hover:border-[#33A474]",
-    activeGlow: "shadow-[0_6px_20px_rgba(51,164,116,0.4)] ring-4 ring-[#33A474]/30",
+    idleHover: "hover:bg-[#33A474]/10 hover:border-[#33A474]",
+    activeGlow: "shadow-[0_6px_20px_rgba(51,164,116,0.35)] ring-8 ring-[#33A474]/20",
   },
   {
     level: 3,
-    sizeClass: "w-7.5 h-7.5 sm:w-9 sm:h-9",
-    borderClass: "border-2 sm:border-[2.5px]",
+    sizeClass: "w-8 h-8 sm:w-9 sm:h-9",
+    borderClass: "border-[2px]",
     checkSize: "w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]",
     labelEn: "Slightly Agree",
     labelKm: "យល់ស្របបន្តិច",
@@ -109,13 +109,13 @@ const SCALE_STEPS_7 = [
     themeColor: "#33A474",
     borderColor: "border-[#33A474]",
     bgSelected: "bg-[#33A474]",
-    idleHover: "hover:bg-[#33A474]/15 hover:border-[#33A474]",
-    activeGlow: "shadow-[0_4px_16px_rgba(51,164,116,0.35)] ring-4 ring-[#33A474]/25",
+    idleHover: "hover:bg-[#33A474]/10 hover:border-[#33A474]",
+    activeGlow: "shadow-[0_4px_16px_rgba(51,164,116,0.3)] ring-6 ring-[#33A474]/20",
   },
   {
     level: 4,
     sizeClass: "w-6 h-6 sm:w-7 sm:h-7",
-    borderClass: "border-2",
+    borderClass: "border-[2px]",
     checkSize: "w-2 h-2 rounded-full bg-white",
     labelEn: "Neutral",
     labelKm: "កណ្តាល",
@@ -124,12 +124,12 @@ const SCALE_STEPS_7 = [
     borderColor: "border-slate-300",
     bgSelected: "bg-slate-400",
     idleHover: "hover:bg-slate-100 hover:border-slate-400",
-    activeGlow: "shadow-[0_4px_12px_rgba(148,163,184,0.4)] ring-4 ring-slate-300/40",
+    activeGlow: "shadow-[0_4px_12px_rgba(148,163,184,0.3)] ring-6 ring-slate-300/40",
   },
   {
     level: 5,
-    sizeClass: "w-7.5 h-7.5 sm:w-9 sm:h-9",
-    borderClass: "border-2 sm:border-[2.5px]",
+    sizeClass: "w-8 h-8 sm:w-9 sm:h-9",
+    borderClass: "border-[2px]",
     checkSize: "w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]",
     labelEn: "Slightly Disagree",
     labelKm: "មិនសូវយល់ស្រប",
@@ -137,13 +137,13 @@ const SCALE_STEPS_7 = [
     themeColor: "#88619A",
     borderColor: "border-[#88619A]",
     bgSelected: "bg-[#88619A]",
-    idleHover: "hover:bg-[#88619A]/15 hover:border-[#88619A]",
-    activeGlow: "shadow-[0_4px_16px_rgba(136,97,154,0.35)] ring-4 ring-[#88619A]/25",
+    idleHover: "hover:bg-[#88619A]/10 hover:border-[#88619A]",
+    activeGlow: "shadow-[0_4px_16px_rgba(136,97,154,0.3)] ring-6 ring-[#88619A]/20",
   },
   {
     level: 6,
-    sizeClass: "w-9 h-9 sm:w-11 sm:h-11",
-    borderClass: "border-[2.5px] sm:border-[3px]",
+    sizeClass: "w-10 h-10 sm:w-11 sm:h-11",
+    borderClass: "border-[2px] sm:border-[2.5px]",
     checkSize: "w-5 h-5 sm:w-6 sm:h-6 stroke-[3]",
     labelEn: "Disagree",
     labelKm: "មិនយល់ស្រប",
@@ -151,13 +151,13 @@ const SCALE_STEPS_7 = [
     themeColor: "#88619A",
     borderColor: "border-[#88619A]",
     bgSelected: "bg-[#88619A]",
-    idleHover: "hover:bg-[#88619A]/15 hover:border-[#88619A]",
-    activeGlow: "shadow-[0_6px_20px_rgba(136,97,154,0.4)] ring-4 ring-[#88619A]/30",
+    idleHover: "hover:bg-[#88619A]/10 hover:border-[#88619A]",
+    activeGlow: "shadow-[0_6px_20px_rgba(136,97,154,0.35)] ring-8 ring-[#88619A]/20",
   },
   {
     level: 7,
-    sizeClass: "w-11 h-11 sm:w-13 sm:h-13",
-    borderClass: "border-[3px] sm:border-4",
+    sizeClass: "w-12 h-12 sm:w-14 sm:h-14",
+    borderClass: "border-[2.5px] sm:border-[3px]",
     checkSize: "w-6 h-6 sm:w-7 sm:h-7 stroke-[3]",
     labelEn: "Strongly Disagree",
     labelKm: "មិនយល់ស្របទាល់តែសោះ",
@@ -165,37 +165,86 @@ const SCALE_STEPS_7 = [
     themeColor: "#88619A",
     borderColor: "border-[#88619A]",
     bgSelected: "bg-[#88619A]",
-    idleHover: "hover:bg-[#88619A]/15 hover:border-[#88619A]",
-    activeGlow: "shadow-[0_8px_24px_rgba(136,97,154,0.45)] ring-4 ring-[#88619A]/30",
+    idleHover: "hover:bg-[#88619A]/10 hover:border-[#88619A]",
+    activeGlow: "shadow-[0_8px_24px_rgba(136,97,154,0.4)] ring-8 ring-[#88619A]/20",
   },
 ];
 
-// 5-Point Likert Config (Career Fit / RIASEC)
-// Maps 1 to 5: 1 (Strong Disconnect) -> 5 (Peak Passion)
-const SCALE_STEPS_5 = [
+// 5-Point Agree-to-Disagree Config (Official 16Personalities standard: Left = Agree, Right = Disagree)
+export const AGREE_TO_DISAGREE_5 = [
+  {
+    level: 1,
+    faceIndex: 1, // Sparkle happy face
+    labelEn: "Strongly Agree",
+    labelKm: "យល់ស្របខ្លាំង",
+    themeColor: "#10B981",
+    idleBg: "bg-[#E6F9F0]",
+    idleBorder: "border-[#63D69E]",
+    activeGlow: "shadow-[0_8px_24px_rgba(16,185,129,0.35)] ring-4 ring-[#63D69E]/50",
+  },
+  {
+    level: 2,
+    faceIndex: 2, // Smile face
+    labelEn: "Agree",
+    labelKm: "យល់ស្រប",
+    themeColor: "#059669",
+    idleBg: "bg-[#ECFDF5]",
+    idleBorder: "border-[#A7F3D0]",
+    activeGlow: "shadow-[0_8px_24px_rgba(5,150,105,0.35)] ring-4 ring-[#A7F3D0]/50",
+  },
+  {
+    level: 3,
+    faceIndex: 4, // Neutral face
+    labelEn: "Neutral",
+    labelKm: "កណ្តាល / អព្យាក្រឹត",
+    themeColor: "#D97706",
+    idleBg: "bg-[#FEF9E7]",
+    idleBorder: "border-[#FFD043]",
+    activeGlow: "shadow-[0_8px_24px_rgba(217,119,6,0.35)] ring-4 ring-[#FFD043]/50",
+  },
+  {
+    level: 4,
+    faceIndex: 5, // Side-eye face
+    labelEn: "Disagree",
+    labelKm: "មិនសូវយល់ស្រប",
+    themeColor: "#F76808",
+    idleBg: "bg-[#FFF0E6]",
+    idleBorder: "border-[#FFA767]",
+    activeGlow: "shadow-[0_8px_24px_rgba(247,104,8,0.35)] ring-4 ring-[#FFA767]/50",
+  },
+  {
+    level: 5,
+    faceIndex: 7, // Angry chibi face
+    labelEn: "Strongly Disagree",
+    labelKm: "មិនយល់ស្របដាច់ខាត",
+    themeColor: "#E5484D",
+    idleBg: "bg-[#FFEBEF]",
+    idleBorder: "border-[#FF8A96]",
+    activeGlow: "shadow-[0_8px_24px_rgba(229,72,77,0.35)] ring-4 ring-[#FF8A96]/50",
+  },
+];
+
+// 5-Point Dislike-to-Enjoy Config (RIASEC Interest standard: Left = Dislike, Right = Highly Enjoy)
+export const DISLIKE_TO_ENJOY_5 = [
   {
     level: 1,
     faceIndex: 7,
-    labelEn: "Strongly Dislike",
-    labelKm: "មិនត្រូវទាល់តែសោះ",
-    themeColor: "#DC2626",
-    gradientFrom: "#F87171",
-    gradientTo: "#DC2626",
-    idleBg: "bg-[#F87171]/15 hover:bg-[#F87171]/25",
-    idleBorder: "border-[#F87171]/70 hover:border-[#F87171]",
-    activeGlow: "shadow-[0_10px_28px_rgba(220,38,38,0.55)] ring-4 ring-rose-300/70",
+    labelEn: "Dislike",
+    labelKm: "មិនចូលចិត្ត",
+    themeColor: "#E5484D",
+    idleBg: "bg-[#FFEBEF]",
+    idleBorder: "border-[#FF8A96]",
+    activeGlow: "shadow-[0_8px_24px_rgba(229,72,77,0.35)] ring-4 ring-[#FF8A96]/50",
   },
   {
     level: 2,
     faceIndex: 5,
-    labelEn: "Dislike",
+    labelEn: "Slight Dislike",
     labelKm: "មិនសូវចូលចិត្ត",
-    themeColor: "#EA580C",
-    gradientFrom: "#FB923C",
-    gradientTo: "#EA580C",
-    idleBg: "bg-[#FB923C]/15 hover:bg-[#FB923C]/25",
-    idleBorder: "border-[#FB923C]/70 hover:border-[#FB923C]",
-    activeGlow: "shadow-[0_10px_26px_rgba(234,88,12,0.55)] ring-4 ring-orange-300/70",
+    themeColor: "#F76808",
+    idleBg: "bg-[#FFF0E6]",
+    idleBorder: "border-[#FFA767]",
+    activeGlow: "shadow-[0_8px_24px_rgba(247,104,8,0.35)] ring-4 ring-[#FFA767]/50",
   },
   {
     level: 3,
@@ -203,37 +252,33 @@ const SCALE_STEPS_5 = [
     labelEn: "Neutral",
     labelKm: "កម្រិតមធ្យម / ធម្មតា",
     themeColor: "#D97706",
-    gradientFrom: "#FACC15",
-    gradientTo: "#D97706",
-    idleBg: "bg-[#FACC15]/20 hover:bg-[#FACC15]/30",
-    idleBorder: "border-[#FACC15]/80 hover:border-[#EAB308]",
-    activeGlow: "shadow-[0_10px_26px_rgba(217,119,6,0.55)] ring-4 ring-amber-300/70",
+    idleBg: "bg-[#FEF9E7]",
+    idleBorder: "border-[#FFD043]",
+    activeGlow: "shadow-[0_8px_24px_rgba(217,119,6,0.35)] ring-4 ring-[#FFD043]/50",
   },
   {
     level: 4,
     faceIndex: 2,
-    labelEn: "Like",
-    labelKm: "ចូលចិត្ត និងចាប់អារម្មណ៍",
-    themeColor: "#059669",
-    gradientFrom: "#34D399",
-    gradientTo: "#059669",
-    idleBg: "bg-[#34D399]/15 hover:bg-[#34D399]/25",
-    idleBorder: "border-[#34D399]/70 hover:border-[#34D399]",
-    activeGlow: "shadow-[0_10px_28px_rgba(5,150,105,0.55)] ring-4 ring-emerald-300/70",
+    labelEn: "Enjoy",
+    labelKm: "ចូលចិត្ត",
+    themeColor: "#10B981",
+    idleBg: "bg-[#E6F9F0]",
+    idleBorder: "border-[#63D69E]",
+    activeGlow: "shadow-[0_8px_24px_rgba(16,185,129,0.35)] ring-4 ring-[#63D69E]/50",
   },
   {
     level: 5,
     faceIndex: 1,
-    labelEn: "Love it!",
-    labelKm: "ស្រឡាញ់ខ្លាំង និងជាទេពកោសល្យ",
-    themeColor: "#0284C7",
-    gradientFrom: "#38BDF8",
-    gradientTo: "#0284C7",
-    idleBg: "bg-[#38BDF8]/15 hover:bg-[#38BDF8]/25",
-    idleBorder: "border-[#38BDF8]/70 hover:border-[#38BDF8]",
-    activeGlow: "shadow-[0_10px_28px_rgba(2,132,199,0.55)] ring-4 ring-sky-300/70",
+    labelEn: "Highly Enjoy",
+    labelKm: "ចូលចិត្តខ្លាំង",
+    themeColor: "#0EA5E9",
+    idleBg: "bg-[#E0F4FF]",
+    idleBorder: "border-[#64C6FF]",
+    activeGlow: "shadow-[0_8px_24px_rgba(14,165,233,0.35)] ring-4 ring-[#64C6FF]/50",
   },
 ];
+
+const SCALE_STEPS_5 = AGREE_TO_DISAGREE_5;
 
 export function AssessmentStage({
   breadcrumbText,
@@ -299,7 +344,9 @@ export function AssessmentStage({
     .filter((idx) => idx !== -1);
   const progressPercent = Math.round((answeredCount / totalCount) * 100);
 
-  const steps = scaleType === "5-point" ? SCALE_STEPS_5 : SCALE_STEPS_7;
+  const isAgreeToDisagree = leftAnchorEn?.toLowerCase().includes("agree");
+  const steps5 = isAgreeToDisagree ? AGREE_TO_DISAGREE_5 : DISLIKE_TO_ENJOY_5;
+  const steps = scaleType === "5-point" ? steps5 : SCALE_STEPS_7;
   const totalSteps = steps.length;
 
   const activeLevel = hovered ?? currentValue;
@@ -506,17 +553,19 @@ export function AssessmentStage({
         {/* Clean White Card */}
         <div className="p-6 sm:p-10 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-8 text-center relative overflow-hidden">
           {/* Main Statement Prompt */}
-          <div className="max-w-xl mx-auto space-y-2 pt-2 pb-1">
-            <h2 className="text-xl sm:text-2xl font-black text-[#111965] leading-snug">
+          <div className="max-w-xl mx-auto space-y-3 pt-2 pb-1 text-center">
+            <h2 className="text-xl sm:text-2xl font-black text-[#111965] leading-snug tracking-tight">
               {getLocalized({
                 km: currentQ.promptKm,
                 en: currentQ.promptEn,
               })}
             </h2>
             {currentQ.statementKm && currentQ.statementKm !== currentQ.promptKm && (
-              <p className="text-xs sm:text-sm font-semibold text-indigo-900 bg-indigo-50/70 inline-block px-3 py-1 rounded-xl border border-indigo-100">
-                {getLocalized({ km: currentQ.statementKm, en: currentQ.statementEn })}
-              </p>
+              <div className="pt-1">
+                <span className="inline-block px-5 py-2.5 rounded-2xl bg-[#EEF2FF] text-[#1E293B] font-bold text-xs sm:text-sm border border-[#E0E7FF] shadow-2xs">
+                  {getLocalized({ km: currentQ.statementKm, en: currentQ.statementEn })}
+                </span>
+              </div>
             )}
           </div>
 
@@ -525,51 +574,35 @@ export function AssessmentStage({
             {scaleType === "7-point" ? (
               /* 16Personalities Official 7-Circle Scale */
               <div className="max-w-xl mx-auto space-y-6">
-                {/* Agree / Disagree Anchors Header */}
-                <div className="flex items-start justify-between px-2 sm:px-4">
+                {/* Agree / Disagree Anchors Header (16Personalities Official Style) */}
+                <div className="flex items-center justify-between px-2 sm:px-6">
                   <button
                     type="button"
-                    className="flex flex-col items-start text-left group cursor-pointer transition-transform hover:scale-102 active:scale-98 select-none max-w-[45%]"
+                    className="flex items-center gap-2 group cursor-pointer transition-transform hover:scale-105 active:scale-95 select-none"
                     onClick={() => onAnswer(currentQ.id, steps[0].level)}
                   >
-                    <div className="inline-flex items-center gap-1.5 text-sm sm:text-base font-black text-[#33A474] tracking-tight">
-                      <span className="flex h-2.5 w-2.5 relative">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#33A474] opacity-60" />
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#33A474]" />
-                      </span>
-                      <span>{getLocalized({ km: leftAnchorKm, en: leftAnchorEn })}</span>
-                    </div>
-                    {currentQ.optionA && (
-                      <span className="text-[11px] font-medium text-[#4A5568] line-clamp-1 mt-0.5">
-                        {getLocalized({ km: currentQ.optionA.labelKm, en: currentQ.optionA.labelEn })}
-                      </span>
-                    )}
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#33A474] flex-shrink-0" />
+                    <span className="text-sm sm:text-base font-black text-[#33A474] tracking-tight">
+                      {getLocalized({ km: leftAnchorKm, en: leftAnchorEn })}
+                    </span>
                   </button>
 
                   <button
                     type="button"
-                    className="flex flex-col items-end text-right group cursor-pointer transition-transform hover:scale-102 active:scale-98 select-none max-w-[45%]"
+                    className="flex items-center gap-2 group cursor-pointer transition-transform hover:scale-105 active:scale-95 select-none"
                     onClick={() => onAnswer(currentQ.id, steps[steps.length - 1].level)}
                   >
-                    <div className="inline-flex items-center gap-1.5 text-sm sm:text-base font-black text-[#88619A] tracking-tight">
-                      <span>{getLocalized({ km: rightAnchorKm, en: rightAnchorEn })}</span>
-                      <span className="flex h-2.5 w-2.5 relative">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#88619A] opacity-60" />
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#88619A]" />
-                      </span>
-                    </div>
-                    {currentQ.optionB && (
-                      <span className="text-[11px] font-medium text-[#4A5568] line-clamp-1 mt-0.5">
-                        {getLocalized({ km: currentQ.optionB.labelKm, en: currentQ.optionB.labelEn })}
-                      </span>
-                    )}
+                    <span className="text-sm sm:text-base font-black text-[#88619A] tracking-tight">
+                      {getLocalized({ km: rightAnchorKm, en: rightAnchorEn })}
+                    </span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#88619A] flex-shrink-0" />
                   </button>
                 </div>
 
                 {/* 7 Circular Buttons with Connecting Center Line */}
-                <div className="relative flex items-center justify-between px-2 sm:px-4 py-3">
+                <div className="relative flex items-center justify-between px-2 sm:px-4 py-4">
                   {/* Subtle horizontal connecting line */}
-                  <div className="absolute left-6 right-6 sm:left-10 sm:right-10 top-1/2 -translate-y-1/2 h-[2.5px] bg-slate-200 rounded-full z-0 pointer-events-none" />
+                  <div className="absolute left-6 right-6 sm:left-10 sm:right-10 top-1/2 -translate-y-1/2 h-[2px] bg-slate-200 rounded-full z-0 pointer-events-none" />
 
                   {SCALE_STEPS_7.map((step) => {
                     const isSelected = currentValue === step.level;
@@ -584,18 +617,18 @@ export function AssessmentStage({
                           onMouseEnter={() => setHovered(step.level)}
                           onMouseLeave={() => setHovered(null)}
                           className={cn(
-                            "rounded-full flex items-center justify-center transition-all duration-200 ease-out cursor-pointer select-none active:scale-90 bg-white",
+                            "rounded-full flex items-center justify-center transition-all duration-200 ease-out cursor-pointer select-none active:scale-95 bg-white",
                             step.sizeClass,
                             step.borderClass,
                             isSelected
                               ? cn(
                                   step.bgSelected,
                                   step.borderColor,
-                                  "text-white shadow-lg -translate-y-1 scale-110",
+                                  "text-white shadow-md scale-105",
                                   step.activeGlow
                                 )
                               : isHovered
-                              ? cn(step.borderColor, step.idleHover, "-translate-y-0.5 scale-105 shadow-sm")
+                              ? cn(step.borderColor, step.idleHover, "scale-105 shadow-2xs")
                               : cn(step.borderColor, "shadow-2xs")
                           )}
                           title={getLocalized({ km: step.labelKm, en: step.labelEn })}
@@ -612,9 +645,17 @@ export function AssessmentStage({
                     );
                   })}
                 </div>
+
+                {/* Bottom Helper Instruction */}
+                <p className="text-xs text-[#8F95B2] font-medium text-center pt-1">
+                  {getLocalized({
+                    km: "សូមជ្រើសរើសជម្រើសដែលពិពណ៌នាអំពីអ្នកបានល្អបំផុត",
+                    en: "Please select the option that best describes you",
+                  })}
+                </p>
               </div>
             ) : (
-              /* 5-Point RIASEC Experience with Cards and Slider Rail */
+              /* 5-Point RIASEC & Personality Experience with Mascot Cards and Gradient Slider Rail */
               <>
                 <div className="flex items-center justify-between px-2 sm:px-6">
                   <button
@@ -622,11 +663,18 @@ export function AssessmentStage({
                     className="flex items-center gap-2 group cursor-pointer transition-transform hover:scale-105 active:scale-95 select-none"
                     onClick={() => onAnswer(currentQ.id, steps[0].level)}
                   >
-                    <span className="flex h-3 w-3 relative">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-60" />
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-[#0284C7]" />
-                    </span>
-                    <span className="text-sm sm:text-base font-black text-sky-800 tracking-tight">
+                    <span
+                      className={cn(
+                        "w-2.5 h-2.5 rounded-full flex-shrink-0",
+                        isAgreeToDisagree ? "bg-[#10B981]" : "bg-[#DC2626]"
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "text-sm sm:text-base font-black tracking-tight",
+                        isAgreeToDisagree ? "text-emerald-700" : "text-rose-700"
+                      )}
+                    >
                       {getLocalized({ km: leftAnchorKm, en: leftAnchorEn })}
                     </span>
                   </button>
@@ -636,19 +684,26 @@ export function AssessmentStage({
                     className="flex items-center gap-2 group cursor-pointer transition-transform hover:scale-105 active:scale-95 select-none"
                     onClick={() => onAnswer(currentQ.id, steps[steps.length - 1].level)}
                   >
-                    <span className="text-sm sm:text-base font-black text-rose-800 tracking-tight">
+                    <span
+                      className={cn(
+                        "text-sm sm:text-base font-black tracking-tight",
+                        isAgreeToDisagree ? "text-rose-700" : "text-sky-800"
+                      )}
+                    >
                       {getLocalized({ km: rightAnchorKm, en: rightAnchorEn })}
                     </span>
-                    <span className="flex h-3 w-3 relative">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-60" />
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-[#DC2626]" />
-                    </span>
+                    <span
+                      className={cn(
+                        "w-2.5 h-2.5 rounded-full flex-shrink-0",
+                        isAgreeToDisagree ? "bg-[#DC2626]" : "bg-[#0284C7]"
+                      )}
+                    />
                   </button>
                 </div>
 
                 {/* Row of Uniform Emotion Face Cards */}
                 <div className="flex items-center justify-between max-w-xl mx-auto gap-2 sm:gap-3 px-2 sm:px-4">
-                  {SCALE_STEPS_5.map((step) => {
+                  {steps5.map((step) => {
                     const isSelected = currentValue === step.level;
                     const isHovered = hovered === step.level;
 
@@ -659,35 +714,27 @@ export function AssessmentStage({
                           onClick={() => onAnswer(currentQ.id, step.level)}
                           onMouseEnter={() => setHovered(step.level)}
                           onMouseLeave={() => setHovered(null)}
-                          style={{
-                            backgroundImage: isSelected
-                              ? `linear-gradient(135deg, ${step.gradientFrom}, ${step.gradientTo})`
-                              : undefined,
-                          }}
-                          className={`w-11 h-11 sm:w-13 sm:h-13 md:w-14 md:h-14 aspect-square rounded-2xl sm:rounded-[22px] border-2 sm:border-3 flex items-center justify-center transition-all duration-200 ease-out cursor-pointer select-none active:scale-92 ${
+                          className={cn(
+                            "w-12 h-12 sm:w-14 sm:h-14 md:w-15 md:h-15 aspect-square rounded-2xl sm:rounded-[22px] border-2 sm:border-[2.5px] flex items-center justify-center transition-all duration-200 ease-out cursor-pointer select-none active:scale-95",
+                            step.idleBg,
+                            step.idleBorder,
                             isSelected
-                              ? `text-white border-white ${step.activeGlow} -translate-y-2 scale-110 shadow-xl z-10`
+                              ? cn(step.activeGlow, "-translate-y-1 scale-105 z-10")
                               : isHovered
-                              ? `${step.idleBg} ${step.idleBorder} -translate-y-1 scale-105 shadow-md z-0`
-                              : `${step.idleBg} ${step.idleBorder} shadow-2xs hover:shadow-sm z-0`
-                          }`}
+                              ? "-translate-y-0.5 scale-105 shadow-xs z-0"
+                              : "shadow-2xs z-0"
+                          )}
                           title={getLocalized({ km: step.labelKm, en: step.labelEn })}
                           aria-label={getLocalized({ km: step.labelKm, en: step.labelEn })}
                         >
                           <div
-                            className={`transition-transform duration-200 ${
-                              isSelected ? "scale-110 drop-shadow-sm" : isHovered ? "scale-105" : ""
-                            }`}
+                            className={cn(
+                              "transition-transform duration-200",
+                              isSelected ? "scale-105" : isHovered ? "scale-105" : ""
+                            )}
                           >
                             {renderEmotionFace(step.faceIndex, isSelected, step.themeColor)}
                           </div>
-
-                          {isSelected && (
-                            <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-90" />
-                              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white shadow-xs" />
-                            </span>
-                          )}
                         </button>
                       </div>
                     );
@@ -714,8 +761,9 @@ export function AssessmentStage({
                       style={{
                         left: `calc(100% / ${totalSteps * 2} - 11px)`,
                         right: `calc(100% / ${totalSteps * 2} - 11px)`,
-                        background:
-                          "linear-gradient(to right, #DC2626 0%, #F69649 25%, #FACC15 50%, #34D399 75%, #0284C7 100%)",
+                        background: isAgreeToDisagree
+                          ? "linear-gradient(to right, #10B981 0%, #34D399 25%, #FFD043 50%, #F76808 75%, #E5484D 100%)"
+                          : "linear-gradient(to right, #E5484D 0%, #F76808 25%, #FFD043 50%, #34D399 75%, #0091FF 100%)",
                       }}
                     />
 
@@ -726,14 +774,14 @@ export function AssessmentStage({
                     >
                       <div
                         className={cn(
-                          "w-5.5 h-5.5 rounded-full bg-white flex items-center justify-center transition-all duration-150 shadow-md",
-                          isDragging ? "scale-115" : "scale-100",
+                          "w-6 h-6 rounded-full bg-white flex items-center justify-center transition-all duration-150 shadow-md border border-slate-200/90",
+                          isDragging ? "scale-115 shadow-lg" : "scale-100",
                           currentValue === null && !isDragging && "opacity-80"
                         )}
                         style={{
                           boxShadow: isDragging
                             ? `0 0 0 3px ${thumbStep.themeColor}40, 0 2px 6px rgba(0,0,0,0.22)`
-                            : "0 1px 3px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.08)",
+                            : "0 1px 3px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06)",
                         }}
                       >
                         <div
@@ -744,14 +792,22 @@ export function AssessmentStage({
                     </div>
                   </div>
                 </div>
+
+                {/* Bottom Helper Instruction matching reference screenshot */}
+                <p className="text-xs sm:text-sm text-[#7C84A3] font-medium text-center pt-2 select-none">
+                  {getLocalized({
+                    km: "សូមជ្រើសរើសជម្រើសដែលពិពណ៌នាអំពីអ្នកបានល្អបំផុត",
+                    en: "Please select the option that best describes you",
+                  })}
+                </p>
               </>
             )}
 
-            {/* Helper Feedback Label */}
-            <div className="h-8 flex items-center justify-center">
+            {/* Helper Feedback Label (shows active emotion label when selected) */}
+            <div className="min-h-[28px] flex items-center justify-center">
               {currentStep ? (
                 <div
-                  className="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-extrabold shadow-xs border animate-in fade-in zoom-in-95 duration-150 transition-all"
+                  className="inline-flex items-center px-4 py-1 rounded-full text-xs font-extrabold shadow-2xs border animate-in fade-in zoom-in-95 duration-150 transition-all"
                   style={{
                     backgroundColor: "#FFFFFF",
                     borderColor: currentStep.themeColor,
@@ -760,11 +816,7 @@ export function AssessmentStage({
                 >
                   <span>{getLocalized({ km: currentStep.labelKm, en: currentStep.labelEn })}</span>
                 </div>
-              ) : (
-                <div className="inline-flex items-center text-xs font-semibold text-slate-400">
-                  <span>{t("assessmentStage.selectOptionPrompt") || "សូមជ្រើសរើសជម្រើសដែលត្រូវនឹងអ្នក"}</span>
-                </div>
-              )}
+              ) : null}
             </div>
           </div>
         </div>
@@ -876,11 +928,11 @@ export function AssessmentStage({
  * 7 Expressive Tara Mascot Faces:
  */
 function renderEmotionFace(faceIndex: number, isSelected: boolean, themeColor: string) {
-  const stroke = isSelected ? "#FFFFFF" : themeColor;
-  const fill = isSelected ? "#FFFFFF" : themeColor;
-  const highlight = isSelected ? themeColor : "#FFFFFF";
-  const blushFill = isSelected ? "#FFFFFF" : themeColor;
-  const blushOpacity = isSelected ? 0.38 : 0.26;
+  const stroke = themeColor;
+  const fill = themeColor;
+  const highlight = "#FFFFFF";
+  const blushFill = themeColor;
+  const blushOpacity = 0.25;
 
   const rosyCheeks = (
     <>
@@ -972,19 +1024,18 @@ function renderEmotionFace(faceIndex: number, isSelected: boolean, themeColor: s
       );
 
     case 7:
-      // Distressed weeping face with teardrops
+      // Cute angry/determined chibi face matching Pic 2
       return (
         <svg viewBox="0 0 100 100" fill="none" className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10">
           {rosyCheeks}
-          <path d="M 26 30 C 32 34, 38 38, 42 40" stroke={stroke} strokeWidth="3.4" strokeLinecap="round" />
-          <path d="M 74 30 C 68 34, 62 38, 58 40" stroke={stroke} strokeWidth="3.4" strokeLinecap="round" />
-          <ellipse cx="34" cy="44" rx="6.5" ry="7.8" fill={fill} />
-          <circle cx="32" cy="41.5" r="2" fill={highlight} />
-          <ellipse cx="66" cy="44" rx="6.5" ry="7.8" fill={fill} />
-          <circle cx="64" cy="41.5" r="2" fill={highlight} />
-          <path d="M 39 65 Q 50 54 61 65 Z" fill={fill} stroke={stroke} strokeWidth="2.4" />
-          <path d="M 25 50 C 25 45, 30 45, 30 50 C 30 55, 25 55, 25 50 Z" fill={fill} />
-          <path d="M 70 50 C 70 45, 75 45, 75 50 C 75 55, 70 55, 70 50 Z" fill={fill} />
+          {/* Angled furrowed angry eyebrows */}
+          <path d="M 23 34 L 43 42" stroke={stroke} strokeWidth="4.5" strokeLinecap="round" />
+          <path d="M 77 34 L 57 42" stroke={stroke} strokeWidth="4.5" strokeLinecap="round" />
+          {/* Cute angled angry eyes > < */}
+          <path d="M 28 47 L 38 43 L 34 53" stroke={stroke} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 72 47 L 62 43 L 66 53" stroke={stroke} strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Small determined pout / frown */}
+          <path d="M 43 63 L 50 56 L 57 63" stroke={stroke} strokeWidth="3.8" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       );
 

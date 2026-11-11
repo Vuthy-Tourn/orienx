@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
@@ -20,6 +21,7 @@ import {
   Target,
   Zap,
   Building2,
+  ChevronDown,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -336,7 +338,7 @@ export default function PersonalityAssessmentPage() {
   const { t, getLocalized } = useLanguage();
   const queryClient = useQueryClient();
 
-  const [activeTab, setActiveTab] = useState<"form" | "results">("form");
+  const [activeTab, setActiveTab] = useState<"form" | "results" | "guide">("form");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<
@@ -398,6 +400,16 @@ export default function PersonalityAssessmentPage() {
     enabled: activeTab === "results",
   });
 
+  // Sort recommendations by personality fit score for the Personality Results view
+  const personalityRecs = React.useMemo(() => {
+    if (!recommendations) return [];
+    return [...recommendations].sort((a, b) => {
+      const pDiff = (b.personality_match_score || 0) - (a.personality_match_score || 0);
+      if (Math.abs(pDiff) > 0.5) return pDiff;
+      return (b.match_score || 0) - (a.match_score || 0);
+    });
+  }, [recommendations]);
+
   useEffect(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem(DRAFT_STORAGE_KEY) : null;
     let hasDraft = false;
@@ -443,7 +455,10 @@ export default function PersonalityAssessmentPage() {
   const handleScaleChange = (question: any, scaleLevel: number) => {
     const optA = question.options[0];
     const optB = question.options[1];
-    const chosenOptionId = scaleLevel <= 3 ? optA?.id : scaleLevel >= 5 ? optB?.id : optA?.id;
+    // 5-point scale (Official 16Personalities direction: Left = Agree -> Right = Disagree)
+    // Level 1 (Strongly Agree), Level 2 (Agree), Level 3 (Neutral) -> Option A (Agree trait)
+    // Level 4 (Disagree), Level 5 (Strongly Disagree) -> Option B (Disagree trait)
+    const chosenOptionId = scaleLevel >= 4 ? optB?.id : optA?.id;
 
     setAnswers((prev) => ({
       ...prev,
@@ -485,8 +500,8 @@ export default function PersonalityAssessmentPage() {
     if (!questions) return;
     const prefill: Record<string, { scaleLevel: number; selectedOptionId: string }> = {};
     questions.forEach((q, idx) => {
-      const level = idx % 2 === 0 ? 1 : 6;
-      const optId = level <= 3 ? q.options[0]?.id : q.options[1]?.id;
+      const level = idx % 2 === 0 ? 1 : 5;
+      const optId = level >= 4 ? q.options[1]?.id : q.options[0]?.id;
       prefill[q.id] = { scaleLevel: level, selectedOptionId: optId };
     });
     setAnswers(prefill);
@@ -546,19 +561,21 @@ export default function PersonalityAssessmentPage() {
             questionsLabel={t("personalityAssessment.questionsTab") || "ធ្វើតេស្ត"}
             profileLabel={`${pType} Profile`}
             profileIcon={Crown}
+            guideLabel={t("personalityAssessment.guideTab") || "មគ្គុទ្ទេសក៍ទាំង ១៦"}
             hasResult={!!latestResult}
           />
         </div>
 
-        {/* 1. OFFICIAL 16PERSONALITIES HERO BANNER (Dynamic Role Gradient) */}
-        <div className={`p-6 sm:p-9 rounded-3xl bg-gradient-to-r ${arch.gradient} text-white shadow-xl relative overflow-hidden`}>
-          {/* Subtle background glow */}
-          <div className="absolute -top-16 -right-16 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        {/* 1. HERO BANNER — PLATFORM COLORS (Futera Deep Navy & Gold) */}
+        <div className="p-6 sm:p-9 rounded-3xl bg-gradient-to-r from-[#111965] via-[#1A2580] to-[#0D134E] text-white shadow-xl relative overflow-hidden border border-[#111965]/40">
+          {/* Ambient Platform Brand Glows */}
+          <div className="absolute -top-16 -right-16 w-72 h-72 bg-[#F7CE4D]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-16 -left-16 w-72 h-72 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10">
-            <div className="space-y-3 max-w-xl">
+            <div className="space-y-3.5 max-w-xl">
               {/* Role Badge */}
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-white/20 backdrop-blur-md text-white border border-white/25 uppercase tracking-wider shadow-2xs">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 uppercase tracking-wider shadow-2xs">
                 <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
                 <span>
                   {arch.roleNameEn.toUpperCase()} • {arch.roleNameKm}
@@ -581,31 +598,46 @@ export default function PersonalityAssessmentPage() {
               <div className="pt-2 flex items-center gap-3">
                 <button
                   onClick={handleRetake}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white/15 hover:bg-white/25 text-white transition-all cursor-pointer border border-white/20 backdrop-blur-sm"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/20 text-white transition-all cursor-pointer border border-white/20 backdrop-blur-sm shadow-2xs"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" />
+                  <RotateCcw className="w-3.5 h-3.5 text-[#F7CE4D]" />
                   <span>{t("personalityAssessment.retake") || "ធ្វើតេស្តឡើងវិញ"}</span>
                 </button>
               </div>
             </div>
 
-            {/* Celebrating Mascot Tara */}
-            <div className="flex-shrink-0 self-center sm:self-auto relative pt-4 sm:pt-0">
+            {/* MBTI Official Character Avatar + Celebrating Mascot Tara */}
+            <div className="flex items-center gap-4 sm:gap-6 flex-shrink-0 self-center sm:self-auto relative pt-4 sm:pt-0">
+              <div className="relative flex items-center justify-center">
+                {/* Soft ambient golden backlight behind character */}
+                <div className="absolute inset-0 bg-[#F7CE4D]/25 rounded-full blur-2xl transform scale-125 pointer-events-none" />
+                <Image
+                  src={`/images/personality-types/${pType.toLowerCase()}.svg`}
+                  alt={`${pType} Character`}
+                  width={150}
+                  height={190}
+                  className="relative z-10 w-28 h-36 sm:w-36 sm:h-46 object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.45)] transition-transform hover:scale-105"
+                  priority
+                />
+              </div>
               <FuteraMascot
                 variant="full-jumping"
                 emotion="congratulation"
                 showSpeech={true}
-                size={195}
-                speechText={t("personalityAssessment.mascotCongrats") || `អបអរសាទរ! អ្នកជាប្រភេទ ${pType}!`}
+                size={155}
+                speechText={getLocalized({
+                  km: `អបអរសាទរ! អ្នកជាប្រភេទ ${pType}! 🏆`,
+                  en: `Congratulations! You are ${pType}! 🏆`,
+                })}
               />
             </div>
           </div>
         </div>
 
-        {/* 2. THREE KEY INSIGHT CARDS (Strengths, Learning Style, Best Fields) */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        {/* 2. KEY INSIGHTS BENTO CONTAINER (Strengths, Learning Style, Best Fields) */}
+        <div className="rounded-3xl bg-white border border-[#E6E8F0] shadow-xs p-5 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-[#E6E8F0]">
           {/* Key Strengths */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-2.5">
+          <div className="space-y-2.5 md:pr-4">
             <div className="flex items-center gap-2 text-emerald-700">
               <span className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600">
                 <Target className="w-4 h-4" />
@@ -620,7 +652,7 @@ export default function PersonalityAssessmentPage() {
                   key={idx}
                   className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-50/80 text-emerald-800 border border-emerald-100"
                 >
-                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                  <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
                   <span>{s}</span>
                 </span>
               ))}
@@ -628,7 +660,7 @@ export default function PersonalityAssessmentPage() {
           </div>
 
           {/* Learning Style */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-2.5">
+          <div className="space-y-2.5 pt-5 md:pt-0 md:px-4">
             <div className="flex items-center gap-2 text-blue-700">
               <span className="p-1.5 rounded-lg bg-blue-50 text-blue-600">
                 <GraduationCap className="w-4 h-4" />
@@ -643,7 +675,7 @@ export default function PersonalityAssessmentPage() {
           </div>
 
           {/* Ideal Academic Fields */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-2.5">
+          <div className="space-y-2.5 pt-5 md:pt-0 md:pl-4">
             <div className="flex items-center gap-2 text-purple-700">
               <span className="p-1.5 rounded-lg bg-purple-50 text-purple-600">
                 <Brain className="w-4 h-4" />
@@ -658,7 +690,7 @@ export default function PersonalityAssessmentPage() {
                   key={idx}
                   className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-purple-50/80 text-purple-800 border border-purple-100"
                 >
-                  <Zap className="w-3 h-3 text-purple-600" />
+                  <Zap className="w-3 h-3 text-purple-600 shrink-0" />
                   <span>{f}</span>
                 </span>
               ))}
@@ -666,100 +698,113 @@ export default function PersonalityAssessmentPage() {
           </div>
         </div>
 
-        {/* 3. 4 PREFERENCE DIMENSIONS SPECTRUM RAILS (16Personalities NERIS Standard) */}
-        <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-6">
-          <div className="space-y-1">
-            <h3 className="text-base sm:text-lg font-black text-[#111965]">
-              {t("personalityAssessment.dimensionBreakdown") || "ពិន្ទុវិមាត្រទាំង ៤ (The 4 Preference Dimensions)"}
-            </h3>
-            <p className="text-xs text-[#68708A]">
-              កម្រិតទំនោរចិត្តរវាងប៉ូលផ្ទុយគ្នានីមួយៗនៃការទទួលព័ត៌មាន ការសម្រេចចិត្ត និងការប្រាស្រ័យទាក់ទង
-            </p>
+        {/* 3. THE 4 PREFERENCE DIMENSIONS (Clean 2x2 Grid) */}
+        <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E6E8F0] pb-4">
+            <div className="space-y-0.5">
+              <h3 className="text-base sm:text-lg font-black text-[#111965]">
+                {t("personalityAssessment.dimensionBreakdown") || "ពិន្ទុវិមាត្រទាំង ៤ (The 4 Preference Dimensions)"}
+              </h3>
+              <p className="text-xs text-[#68708A]">
+                កម្រិតទំនោរចិត្តរវាងប៉ូលផ្ទុយគ្នានីមួយៗនៃការទទួលព័ត៌មាន ការសម្រេចចិត្ត និងការប្រាស្រ័យទាក់ទង
+              </p>
+            </div>
+            <span className="text-[11px] font-bold text-[#68708A] bg-[#F0F2FA] px-2.5 py-1 rounded-lg self-start sm:self-auto">
+              NERIS Standard
+            </span>
           </div>
 
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Dimension 1: MIND (E vs I) */}
-            <div className="space-y-2.5 p-4 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0]/70">
-              <div className="flex justify-between items-center text-xs">
-                <div>
-                  <span className="font-extrabold text-[#111965]">ចិត្ត និងថាមពលសង្គម (Mind)</span>
-                  <span className="text-[#68708A] ml-1.5 text-[11px]">— Extraverted vs Introverted</span>
-                </div>
-                <span
-                  className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white"
-                  style={{ backgroundColor: isE ? "#0284C7" : "#88619A" }}
-                >
-                  {isE ? "Extraverted (E)" : "Introverted (I)"} • {Math.max(latestResult.extraversion_score, latestResult.introversion_score)}%
-                </span>
-              </div>
-
-              {/* Spectrum Rail */}
-              <div className="space-y-1">
-                <div className="flex justify-between text-[11px] font-bold">
-                  <span className={isE ? "text-[#0284C7]" : "text-slate-400"}>
-                    Extraverted (E) • {latestResult.extraversion_score}%
-                  </span>
-                  <span className={!isE ? "text-[#88619A]" : "text-slate-400"}>
-                    Introverted (I) • {latestResult.introversion_score}%
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0] hover:border-sky-300 transition-all flex flex-col justify-between space-y-3">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-extrabold text-[#111965]">
+                      ចិត្ត & ថាមពល (Mind)
+                    </h4>
+                    <p className="text-[11px] text-[#68708A]">Extraverted vs Introverted</p>
+                  </div>
+                  <span
+                    className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white shrink-0"
+                    style={{ backgroundColor: isE ? "#0284C7" : "#88619A" }}
+                  >
+                    {isE ? "Extraverted (E)" : "Introverted (I)"} • {Math.max(latestResult.extraversion_score, latestResult.introversion_score)}%
                   </span>
                 </div>
-                <div className="w-full h-3 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
-                  <div
-                    style={{ width: `${latestResult.extraversion_score}%` }}
-                    className="bg-gradient-to-r from-sky-400 to-[#0284C7] rounded-l-full h-full transition-all duration-500"
-                  />
-                  <div
-                    style={{ width: `${latestResult.introversion_score}%` }}
-                    className="bg-gradient-to-r from-[#A855F7] to-[#88619A] rounded-r-full h-full transition-all duration-500"
-                  />
+
+                {/* Spectrum Rail */}
+                <div className="space-y-1.5 pt-1">
+                  <div className="flex justify-between text-[11px] font-bold">
+                    <span className={isE ? "text-[#0284C7]" : "text-slate-400"}>
+                      Extraverted (E) • {latestResult.extraversion_score}%
+                    </span>
+                    <span className={!isE ? "text-[#88619A]" : "text-slate-400"}>
+                      Introverted (I) • {latestResult.introversion_score}%
+                    </span>
+                  </div>
+                  <div className="w-full h-2.5 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
+                    <div
+                      style={{ width: `${latestResult.extraversion_score}%` }}
+                      className="bg-gradient-to-r from-sky-400 to-[#0284C7] rounded-l-full h-full transition-all duration-500"
+                    />
+                    <div
+                      style={{ width: `${latestResult.introversion_score}%` }}
+                      className="bg-gradient-to-r from-[#A855F7] to-[#88619A] rounded-r-full h-full transition-all duration-500"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <p className="text-[11px] text-[#4A5568] leading-relaxed">
+              <p className="text-[11px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
                 {isE
                   ? "អ្នកទទួលបានថាមពលពីការធ្វើការងារជាក្រុម ការពិភាក្សាផ្លាស់ប្តូរគំនិត និងបរិស្ថានសង្គមរស់រវើក។"
                   : "អ្នកបញ្ចូលថាមពលនៅកន្លែងស្ងប់ស្ងាត់ និងការផ្តោតអារម្មណ៍ស៊ីជម្រៅតែម្នាក់ឯង។"}
               </p>
             </div>
 
-            {/* Dimension 2: ENERGY (N vs S) */}
-            <div className="space-y-2.5 p-4 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0]/70">
-              <div className="flex justify-between items-center text-xs">
-                <div>
-                  <span className="font-extrabold text-[#111965]">ការទទួលព័ត៌មាន (Energy)</span>
-                  <span className="text-[#68708A] ml-1.5 text-[11px]">— Intuitive vs Observant</span>
-                </div>
-                <span
-                  className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white"
-                  style={{ backgroundColor: isN ? "#33A474" : "#4298B4" }}
-                >
-                  {isN ? "Intuitive (N)" : "Observant (S)"} • {Math.max(latestResult.intuition_score, latestResult.sensing_score)}%
-                </span>
-              </div>
-
-              {/* Spectrum Rail */}
-              <div className="space-y-1">
-                <div className="flex justify-between text-[11px] font-bold">
-                  <span className={!isN ? "text-[#4298B4]" : "text-slate-400"}>
-                    Observant (S) • {latestResult.sensing_score}%
-                  </span>
-                  <span className={isN ? "text-[#33A474]" : "text-slate-400"}>
-                    Intuitive (N) • {latestResult.intuition_score}%
+            {/* Dimension 2: ENERGY (S vs N) */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0] hover:border-emerald-300 transition-all flex flex-col justify-between space-y-3">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-extrabold text-[#111965]">
+                      ការទទួលព័ត៌មាន (Energy)
+                    </h4>
+                    <p className="text-[11px] text-[#68708A]">Observant vs Intuitive</p>
+                  </div>
+                  <span
+                    className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white shrink-0"
+                    style={{ backgroundColor: !isN ? "#0284C7" : "#059669" }}
+                  >
+                    {!isN ? "Observant (S)" : "Intuitive (N)"} • {Math.max(latestResult.sensing_score, latestResult.intuition_score)}%
                   </span>
                 </div>
-                <div className="w-full h-3 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
-                  <div
-                    style={{ width: `${latestResult.sensing_score}%` }}
-                    className="bg-gradient-to-r from-cyan-400 to-[#4298B4] rounded-l-full h-full transition-all duration-500"
-                  />
-                  <div
-                    style={{ width: `${latestResult.intuition_score}%` }}
-                    className="bg-gradient-to-r from-emerald-400 to-[#33A474] rounded-r-full h-full transition-all duration-500"
-                  />
+
+                {/* Spectrum Rail */}
+                <div className="space-y-1.5 pt-1">
+                  <div className="flex justify-between text-[11px] font-bold">
+                    <span className={!isN ? "text-[#0284C7]" : "text-slate-400"}>
+                      Observant (S) • {latestResult.sensing_score}%
+                    </span>
+                    <span className={isN ? "text-[#059669]" : "text-slate-400"}>
+                      Intuitive (N) • {latestResult.intuition_score}%
+                    </span>
+                  </div>
+                  <div className="w-full h-2.5 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
+                    <div
+                      style={{ width: `${latestResult.sensing_score}%` }}
+                      className="bg-gradient-to-r from-sky-400 to-[#0284C7] rounded-l-full h-full transition-all duration-500"
+                    />
+                    <div
+                      style={{ width: `${latestResult.intuition_score}%` }}
+                      className="bg-gradient-to-r from-emerald-400 to-[#059669] rounded-r-full h-full transition-all duration-500"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <p className="text-[11px] text-[#4A5568] leading-relaxed">
+              <p className="text-[11px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
                 {isN
                   ? "អ្នកចាប់អារម្មណ៍លើគំនិតច្នៃប្រឌិតថ្មីៗ ចក្ខុវិស័យអនាគត ទ្រឹស្តីទូលំទូលាយ និងការស្រាវជ្រាវគំនិតប្លែកៗ។"
                   : "អ្នកផ្តោតលើទិន្នន័យជាក់ស្តែង ការអនុវត្តជាក់លាក់ និងបទពិសោធន៍ផ្ទាល់ដៃដែលផ្តល់លទ្ធផលប្រាកដ។"}
@@ -767,43 +812,47 @@ export default function PersonalityAssessmentPage() {
             </div>
 
             {/* Dimension 3: NATURE (T vs F) */}
-            <div className="space-y-2.5 p-4 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0]/70">
-              <div className="flex justify-between items-center text-xs">
-                <div>
-                  <span className="font-extrabold text-[#111965]">ការសម្រេចចិត្ត (Nature)</span>
-                  <span className="text-[#68708A] ml-1.5 text-[11px]">— Thinking vs Feeling</span>
-                </div>
-                <span
-                  className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white"
-                  style={{ backgroundColor: isT ? "#88619A" : "#F43F5E" }}
-                >
-                  {isT ? "Thinking (T)" : "Feeling (F)"} • {Math.max(latestResult.thinking_score, latestResult.feeling_score)}%
-                </span>
-              </div>
-
-              {/* Spectrum Rail */}
-              <div className="space-y-1">
-                <div className="flex justify-between text-[11px] font-bold">
-                  <span className={isT ? "text-[#88619A]" : "text-slate-400"}>
-                    Thinking (T) • {latestResult.thinking_score}%
-                  </span>
-                  <span className={!isT ? "text-[#F43F5E]" : "text-slate-400"}>
-                    Feeling (F) • {latestResult.feeling_score}%
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0] hover:border-indigo-300 transition-all flex flex-col justify-between space-y-3">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-extrabold text-[#111965]">
+                      ការសម្រេចចិត្ត (Nature)
+                    </h4>
+                    <p className="text-[11px] text-[#68708A]">Thinking vs Feeling</p>
+                  </div>
+                  <span
+                    className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white shrink-0"
+                    style={{ backgroundColor: isT ? "#4F46E5" : "#F43F5E" }}
+                  >
+                    {isT ? "Thinking (T)" : "Feeling (F)"} • {Math.max(latestResult.thinking_score, latestResult.feeling_score)}%
                   </span>
                 </div>
-                <div className="w-full h-3 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
-                  <div
-                    style={{ width: `${latestResult.thinking_score}%` }}
-                    className="bg-gradient-to-r from-purple-400 to-[#88619A] rounded-l-full h-full transition-all duration-500"
-                  />
-                  <div
-                    style={{ width: `${latestResult.feeling_score}%` }}
-                    className="bg-gradient-to-r from-rose-400 to-[#F43F5E] rounded-r-full h-full transition-all duration-500"
-                  />
+
+                {/* Spectrum Rail */}
+                <div className="space-y-1.5 pt-1">
+                  <div className="flex justify-between text-[11px] font-bold">
+                    <span className={isT ? "text-[#4F46E5]" : "text-slate-400"}>
+                      Thinking (T) • {latestResult.thinking_score}%
+                    </span>
+                    <span className={!isT ? "text-[#F43F5E]" : "text-slate-400"}>
+                      Feeling (F) • {latestResult.feeling_score}%
+                    </span>
+                  </div>
+                  <div className="w-full h-2.5 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
+                    <div
+                      style={{ width: `${latestResult.thinking_score}%` }}
+                      className="bg-gradient-to-r from-indigo-400 to-[#4F46E5] rounded-l-full h-full transition-all duration-500"
+                    />
+                    <div
+                      style={{ width: `${latestResult.feeling_score}%` }}
+                      className="bg-gradient-to-r from-rose-400 to-[#F43F5E] rounded-r-full h-full transition-all duration-500"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <p className="text-[11px] text-[#4A5568] leading-relaxed">
+              <p className="text-[11px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
                 {isT
                   ? "អ្នកធ្វើការសម្រេចចិត្តដោយផ្អែកលើតក្កវិជ្ជាសុក្រឹត ការវិភាគមិនលំអៀង និងគោលការណ៍យុត្តិធម៌។"
                   : "អ្នកផ្តល់អាទិភាពលើតម្លៃមនុស្ស ភាពសុខដុមរមនា និងផលប៉ះពាល់ដល់អារម្មណ៍អ្នកដទៃ។"}
@@ -811,43 +860,47 @@ export default function PersonalityAssessmentPage() {
             </div>
 
             {/* Dimension 4: TACTICS (J vs P) */}
-            <div className="space-y-2.5 p-4 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0]/70">
-              <div className="flex justify-between items-center text-xs">
-                <div>
-                  <span className="font-extrabold text-[#111965]">យុទ្ធសាស្ត្រជីវិត (Tactics)</span>
-                  <span className="text-[#68708A] ml-1.5 text-[11px]">— Judging vs Prospecting</span>
-                </div>
-                <span
-                  className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white"
-                  style={{ backgroundColor: isJ ? "#4298B4" : "#E4A43C" }}
-                >
-                  {isJ ? "Judging (J)" : "Prospecting (P)"} • {Math.max(latestResult.judging_score, latestResult.perceiving_score)}%
-                </span>
-              </div>
-
-              {/* Spectrum Rail */}
-              <div className="space-y-1">
-                <div className="flex justify-between text-[11px] font-bold">
-                  <span className={isJ ? "text-[#4298B4]" : "text-slate-400"}>
-                    Judging (J) • {latestResult.judging_score}%
-                  </span>
-                  <span className={!isJ ? "text-[#E4A43C]" : "text-slate-400"}>
-                    Prospecting (P) • {latestResult.perceiving_score}%
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#F8FAFD] border border-[#E6E8F0] hover:border-teal-300 transition-all flex flex-col justify-between space-y-3">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <h4 className="text-xs sm:text-sm font-extrabold text-[#111965]">
+                      យុទ្ធសាស្ត្រជីវិត (Tactics)
+                    </h4>
+                    <p className="text-[11px] text-[#68708A]">Judging vs Prospecting</p>
+                  </div>
+                  <span
+                    className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white shrink-0"
+                    style={{ backgroundColor: isJ ? "#0D9488" : "#E4A43C" }}
+                  >
+                    {isJ ? "Judging (J)" : "Prospecting (P)"} • {Math.max(latestResult.judging_score, latestResult.perceiving_score)}%
                   </span>
                 </div>
-                <div className="w-full h-3 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
-                  <div
-                    style={{ width: `${latestResult.judging_score}%` }}
-                    className="bg-gradient-to-r from-teal-400 to-[#4298B4] rounded-l-full h-full transition-all duration-500"
-                  />
-                  <div
-                    style={{ width: `${latestResult.perceiving_score}%` }}
-                    className="bg-gradient-to-r from-amber-400 to-[#E4A43C] rounded-r-full h-full transition-all duration-500"
-                  />
+
+                {/* Spectrum Rail */}
+                <div className="space-y-1.5 pt-1">
+                  <div className="flex justify-between text-[11px] font-bold">
+                    <span className={isJ ? "text-[#0D9488]" : "text-slate-400"}>
+                      Judging (J) • {latestResult.judging_score}%
+                    </span>
+                    <span className={!isJ ? "text-[#E4A43C]" : "text-slate-400"}>
+                      Prospecting (P) • {latestResult.perceiving_score}%
+                    </span>
+                  </div>
+                  <div className="w-full h-2.5 rounded-full bg-slate-200 flex overflow-hidden p-0.5 relative">
+                    <div
+                      style={{ width: `${latestResult.judging_score}%` }}
+                      className="bg-gradient-to-r from-teal-400 to-[#0D9488] rounded-l-full h-full transition-all duration-500"
+                    />
+                    <div
+                      style={{ width: `${latestResult.perceiving_score}%` }}
+                      className="bg-gradient-to-r from-amber-400 to-[#E4A43C] rounded-r-full h-full transition-all duration-500"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <p className="text-[11px] text-[#4A5568] leading-relaxed">
+              <p className="text-[11px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
                 {isJ
                   ? "អ្នកចូលចិត្តផែនការច្បាស់លាស់ កាលវិភាគរៀបរយ និងការសម្រេចកិច្ចការទាន់ពេលវេលា។"
                   : "អ្នកចូលចិត្តភាពបត់បែន រក្សាជម្រើសបើកទូលាយ និងអាចសម្របតាមស្ថានភាពផ្លាស់ប្តូរភ្លាមៗ។"}
@@ -862,13 +915,13 @@ export default function PersonalityAssessmentPage() {
             <div className="space-y-1">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-black uppercase tracking-wider border border-emerald-200">
                 <Sparkles className="w-3 h-3 text-emerald-600" />
-                <span>{t("personalityAssessment.mbtiMatchesBadge") || "អនុសាសន៍ AI ផ្អែកលើបុគ្គលិកលក្ខណៈ"}</span>
+                <span>{t("personalityAssessment.mbtiMatchesBadge", "អនុសាសន៍ AI ផ្អែកលើបុគ្គលិកលក្ខណៈ")}</span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-[#111965]">
-                {t("personalityAssessment.recommendedMajorsTitle") || `មុខជំនាញ និងសាកលវិទ្យាល័យដែលសាកសមនឹង ${pType}`}
+                {t("personalityAssessment.recommendedMajorsTitle", `មុខជំនាញ និងសាកលវិទ្យាល័យដែលសាកសមនឹង ${pType}`)}
               </h3>
               <p className="text-xs text-[#68708A]">
-                {t("personalityAssessment.recommendedMajorsSubtitle") || `ជំនាញ និងគ្រឹះស្ថានឧត្តមសិក្សាដែលត្រូវគ្នានឹងទម្រង់ការគិត និងការសម្រេចចិត្តបែប ${pType} របស់អ្នក`}
+                {t("personalityAssessment.recommendedMajorsSubtitle", `ជំនាញ និងគ្រឹះស្ថានឧត្តមសិក្សាដែលត្រូវគ្នានឹងទម្រង់ការគិត និងការសម្រេចចិត្តបែប ${pType} របស់អ្នក`)}
               </p>
             </div>
 
@@ -876,14 +929,14 @@ export default function PersonalityAssessmentPage() {
               href="/dashboard/recommendations"
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs self-start sm:self-auto cursor-pointer whitespace-nowrap"
             >
-              <span>{t("personalityAssessment.viewAllRecommendations") || "មើលអនុសាសន៍ទាំងអស់"}</span>
+              <span>{t("personalityAssessment.viewAllRecommendations", "មើលអនុសាសន៍ទាំងអស់")}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
           {loadingRecs ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {Array.from({ length: 2 }).map((_, i) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="p-4 rounded-2xl bg-white border border-[#E6E8F0] space-y-3">
                   <Skeleton className="h-5 w-3/4" />
                   <Skeleton className="h-4 w-1/2" />
@@ -891,37 +944,38 @@ export default function PersonalityAssessmentPage() {
                 </div>
               ))}
             </div>
-          ) : recommendations && recommendations.length > 0 ? (
+          ) : personalityRecs && personalityRecs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {recommendations.slice(0, 3).map((rec: any) => {
+              {personalityRecs.slice(0, 3).map((rec: any, idx: number) => {
                 const major = rec.major || {};
                 const exp = rec.explanation || {};
                 const unis = major.offering_universities || [];
+                const fitScore = Math.round(rec.personality_match_score || rec.match_score || 0);
 
                 return (
                   <div
-                    key={rec.id}
-                    className="p-4 sm:p-5 rounded-2xl border border-[#E6E8F0] bg-gradient-to-b from-white to-[#FAFBFD] hover:border-indigo-300 hover:shadow-xs transition-all flex flex-col justify-between space-y-3"
+                    key={rec.id || `rec-${idx}`}
+                    className="p-4 sm:p-5 rounded-2xl border border-[#E6E8F0] bg-gradient-to-b from-white to-[#FAFBFD] hover:border-indigo-300 hover:shadow-xs transition-all flex flex-col justify-between space-y-3.5"
                   >
-                    <div className="space-y-2">
+                    <div className="space-y-2.5">
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
-                          <span className="w-6 h-6 rounded-lg text-xs font-black bg-[#111965] text-[#F7CE4D] flex items-center justify-center">
-                            #{rec.rank_position}
+                          <span className="w-6 h-6 rounded-lg text-xs font-black bg-[#111965] text-[#F7CE4D] flex items-center justify-center shadow-2xs">
+                            #{idx + 1}
                           </span>
-                          <span className="text-[10px] font-bold text-[#68708A] uppercase">
+                          <span className="text-[10px] font-bold text-[#68708A] tracking-wide">
                             {major.category}
                           </span>
                           {major.is_stem && (
-                            <span className="px-1.5 py-0.2 rounded text-[9px] font-black bg-sky-50 text-sky-700 border border-sky-200">
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-black bg-sky-50 text-sky-700 border border-sky-200">
                               STEM
                             </span>
                           )}
                         </div>
 
                         <div className="flex items-center gap-1">
-                          <span className="px-2 py-0.5 rounded-full text-[11px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200">
-                            {rec.match_score}% Fit
+                          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
+                            {fitScore}% Fit
                           </span>
                         </div>
                       </div>
@@ -931,23 +985,33 @@ export default function PersonalityAssessmentPage() {
                       </h4>
 
                       {/* Rationale snippet */}
-                      <p className="text-[11px] text-[#4A5568] line-clamp-2 leading-relaxed bg-[#F8FAFD] p-2 rounded-xl border border-[#E6E8F0]/70">
+                      <p className="text-[11px] text-[#4A5568] line-clamp-2 leading-relaxed bg-[#F8FAFD] p-2.5 rounded-xl border border-[#E6E8F0]/70 min-h-[46px] flex items-center">
                         {getLocalized({ km: exp.personality_reason_km, en: exp.personality_reason_en }) ||
-                          getLocalized({ km: exp.fit_summary_km, en: exp.fit_summary_en })}
+                          getLocalized({ km: exp.fit_summary_km, en: exp.fit_summary_en }) ||
+                          getLocalized({
+                            km: `ទម្រង់បុគ្គលិកលក្ខណៈ ${pType} របស់អ្នកស័ក្តិសមយ៉ាងល្អជាមួយនឹងជំនាញ ${getLocalized(major.name)}។`,
+                            en: `Your ${pType} cognitive orientation aligns exceptionally well with ${getLocalized(major.name)}.`,
+                          })}
                       </p>
                     </div>
 
                     {/* Offering Universities */}
                     <div className="pt-2 border-t border-[#E6E8F0] space-y-2">
-                      <div className="text-[10px] font-bold text-[#68708A] uppercase flex items-center justify-between">
-                        <span>{t("personalityAssessment.offeringInstitutions") || "សាកលវិទ្យាល័យដែលបង្រៀន:"}</span>
-                        <span className="font-semibold text-slate-500">
-                          {unis.length} {t("recommendationsPage.institutions") || "កន្លែង"}
-                        </span>
+                      <div className="text-[11px] font-bold text-[#68708A] flex items-center justify-between gap-2">
+                        <span>{t("personalityAssessment.offeringInstitutions", "គ្រឹះស្ថានបណ្តុះបណ្តាល:")}</span>
+                        {unis.length > 0 ? (
+                          <span className="font-semibold text-slate-500">
+                            {unis.length} {t("recommendationsPage.institutions", "កន្លែង")}
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/70 font-medium">
+                            {t("personalityAssessment.verifyingInstitutions", "កំពុងផ្ទៀងផ្ទាត់")}
+                          </span>
+                        )}
                       </div>
 
                       {unis.length > 0 ? (
-                        <div className="flex flex-wrap items-center gap-1.5">
+                        <div className="flex flex-wrap items-center gap-1.5 min-h-[28px]">
                           {unis.slice(0, 3).map((u: any) => (
                             <Link
                               key={u.university_id}
@@ -966,30 +1030,31 @@ export default function PersonalityAssessmentPage() {
                           ))}
                           {unis.length > 3 && (
                             <span className="text-[10px] font-semibold text-[#68708A]">
-                              +{unis.length - 3} more
+                              +{unis.length - 3} {t("recommendationsPage.more", "ទៀត")}
                             </span>
                           )}
                         </div>
                       ) : (
-                        <div className="text-[11px] text-[#68708A] italic">
-                          សាកលវិទ្យាល័យកំពុងត្រូវបានផ្ទៀងផ្ទាត់
+                        <div className="text-[10px] text-[#68708A] bg-[#FAFBFD] px-2.5 py-1.5 rounded-lg border border-dashed border-[#E6E8F0] flex items-center gap-1.5">
+                          <Building2 className="w-3 h-3 text-[#68708A]/70 flex-shrink-0" />
+                          <span className="truncate">{t("personalityAssessment.verifyingCampusesDesc", "ទិន្នន័យគ្រឹះស្ថានកំពុងត្រូវបានប្រមូល និងផ្ទៀងផ្ទាត់")}</span>
                         </div>
                       )}
 
                       {/* Action Links */}
-                      <div className="pt-1 flex items-center justify-between gap-2">
+                      <div className="pt-2 flex items-center justify-between gap-2 border-t border-[#E6E8F0]/50">
                         <Link
                           href={`/majors/${major.slug}`}
-                          className="text-[11px] font-bold text-[#68708A] hover:text-[#111965] transition-colors"
+                          className="text-xs font-bold text-[#68708A] hover:text-[#111965] transition-colors"
                         >
-                          {t("recommendationsPage.details") || "ព័ត៌មានលម្អិត"}
+                          {t("recommendationsPage.details", "ព័ត៌មានលម្អិត")}
                         </Link>
 
                         <Link
                           href={`/universities?major=${major.slug}`}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs"
                         >
-                          <span>{t("recommendationsPage.universities") || "សាកលវិទ្យាល័យ"}</span>
+                          <span>{t("recommendationsPage.universities", "សាកលវិទ្យាល័យ")}</span>
                           <ArrowRight className="w-3 h-3" />
                         </Link>
                       </div>
@@ -1005,117 +1070,39 @@ export default function PersonalityAssessmentPage() {
           )}
         </div>
 
-        {/* 5. EXPLORE ALL 16 PERSONALITIES ACROSS 4 ROLES (16Personalities Gold Standard) */}
-        <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E6E8F0] pb-4">
-            <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-800 text-[10px] font-black uppercase tracking-wider border border-indigo-200">
-                <Compass className="w-3 h-3 text-indigo-600" />
-                <span>The 16 Personalities Framework</span>
-              </div>
-              <h3 className="text-base sm:text-lg font-black text-[#111965]">
-                ស្វែងយល់ពីបុគ្គលិកលក្ខណៈទាំង ១៦ (All 16 Personality Types)
-              </h3>
+        {/* 5. EXPLORE 16 PERSONALITIES QUICK-BANNER (Replaces heavy doc on personal result page) */}
+        <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-indigo-50/80 via-white to-purple-50/80 border border-indigo-100 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
+          <div className="flex items-center gap-3.5 text-center sm:text-left">
+            <div className="w-10 h-10 rounded-2xl bg-[#111965] text-white flex items-center justify-center shrink-0 shadow-xs">
+              <Compass className="w-5 h-5 text-[#F7CE4D]" />
+            </div>
+            <div className="space-y-0.5">
+              <h4 className="text-sm font-black text-[#111965]">
+                {t("personalityAssessment.exploreGuideTitle", "ចង់ស្វែងយល់ពីបុគ្គលិកលក្ខណៈទាំង ១៦ ផ្សេងទៀត?")}
+              </h4>
               <p className="text-xs text-[#68708A]">
-                បែងចែកជា ៤ ក្រុមតួនាទីធំៗ៖ អ្នកវិភាគ (Analysts), អ្នកការទូត (Diplomats), អ្នកការពារ (Sentinels), និងអ្នករុករក (Explorers)
+                {t("personalityAssessment.exploreGuideDesc", "ប្រៀបធៀបប្រភេទបុគ្គលិកលក្ខណៈទាំង ១៦ នៅក្នុងមគ្គុទ្ទេសក៍ពេញលេញ")}
               </p>
             </div>
-
-            {/* Filter Tabs */}
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
-              {["all", "analysts", "diplomats", "sentinels", "explorers"].map((tab) => {
-                const isActive = roleFilter === tab;
-                const roleObj = ROLES_META.find((r) => r.id === tab);
-
-                return (
-                  <button
-                    key={tab}
-                    type="button"
-                    onClick={() => setRoleFilter(tab)}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                      isActive
-                        ? "bg-[#111965] text-white shadow-2xs"
-                        : "bg-[#F0F2FA] text-[#68708A] hover:bg-[#E6E8F0] hover:text-[#111965]"
-                    }`}
-                  >
-                    {tab === "all" ? "All 16 Types" : roleObj?.nameEn || tab}
-                  </button>
-                );
-              })}
-            </div>
           </div>
-
-          {/* Archetypes Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-            {Object.entries(ARCHETYPE_META)
-              .filter(([_, meta]) => roleFilter === "all" || meta.role === roleFilter)
-              .map(([code, meta]) => {
-                const isCurrentUser = code === pType;
-                const roleData = ROLES_META.find((r) => r.id === meta.role);
-
-                return (
-                  <div
-                    key={code}
-                    className={`p-4 rounded-2xl border transition-all flex flex-col justify-between space-y-2 relative ${
-                      isCurrentUser
-                        ? "bg-gradient-to-b from-amber-50/70 to-white border-amber-300 ring-2 ring-amber-400/50 shadow-md"
-                        : "bg-white border-[#E6E8F0] hover:border-slate-300 hover:shadow-2xs"
-                    }`}
-                  >
-                    {isCurrentUser && (
-                      <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full text-[9px] font-black bg-[#F7CE4D] text-[#111965] shadow-xs flex items-center gap-1">
-                        <Sparkles className="w-2.5 h-2.5 text-[#111965]" />
-                        <span>Your MBTI</span>
-                      </span>
-                    )}
-
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between">
-                        <span
-                          className="text-lg font-black tracking-tight"
-                          style={{ color: meta.roleColor }}
-                        >
-                          {code}
-                        </span>
-                        <span
-                          className="px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase border"
-                          style={{
-                            backgroundColor: `${meta.roleColor}15`,
-                            color: meta.roleColor,
-                            borderColor: `${meta.roleColor}30`,
-                          }}
-                        >
-                          {roleData?.nameEn}
-                        </span>
-                      </div>
-
-                      <h5 className="text-xs font-black text-[#111965] leading-snug">
-                        {meta.nameKm.split("•")[1]?.trim() || meta.nameEn}
-                      </h5>
-
-                      <p className="text-[11px] text-[#68708A] line-clamp-2 leading-relaxed">
-                        {meta.taglineKm}
-                      </p>
-                    </div>
-
-                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] font-semibold text-slate-500">
-                      <span>{meta.roleNameKm}</span>
-                      <span className="font-mono text-[9px] opacity-75">{code}</span>
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
+          <button
+            type="button"
+            onClick={() => setActiveTab("guide")}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black bg-[#111965] hover:bg-[#1A2580] text-white shadow-2xs transition-all cursor-pointer whitespace-nowrap self-stretch sm:self-auto justify-center"
+          >
+            <span>{t("personalityAssessment.openGuideBtn", "បើកមគ្គុទ្ទេសក៍ទាំង ១៦")}</span>
+            <ArrowRight className="w-3.5 h-3.5 text-[#F7CE4D]" />
+          </button>
         </div>
 
         {/* 6. NEXT STEP CTA CARD */}
         <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#F0F2FA] to-[#E8EBF8] border border-[#111965]/15 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
           <div className="space-y-1 text-center sm:text-left">
             <h4 className="text-sm sm:text-base font-extrabold text-[#111965]">
-              ជំហានបន្ទាប់៖ ធ្វើតេស្តចំណាប់អារម្មណ៍អាជីព RIASEC
+              {t("personalityAssessment.nextStepTitle", "ជំហានបន្ទាប់៖ ធ្វើតេស្តចំណាប់អារម្មណ៍អាជីព RIASEC")}
             </h4>
             <p className="text-xs text-[#68708A]">
-              អនុសាសន៍ដំបូងផ្អែកលើបុគ្គលិកលក្ខណៈ {pType} របស់អ្នកបានគណនារួចរាល់! ធ្វើតេស្ត RIASEC ដើម្បីបង្កើនភាពសុក្រឹតបន្ថែមទៀត។
+              {t("personalityAssessment.nextStepDesc", `អនុសាសន៍ដំបូងផ្អែកលើបុគ្គលិកលក្ខណៈ ${pType} របស់អ្នកបានគណនារួចរាល់! ធ្វើតេស្ត RIASEC ដើម្បីបង្កើនភាពសុក្រឹតបន្ថែមទៀត។`)}
             </p>
           </div>
 
@@ -1124,16 +1111,192 @@ export default function PersonalityAssessmentPage() {
               href="/dashboard/recommendations"
               className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl font-bold text-xs text-[#111965] bg-white border border-[#E6E8F0] hover:bg-[#F0F2FA] shadow-2xs transition-colors cursor-pointer whitespace-nowrap"
             >
-              <span>{t("personalityAssessment.viewAllRecommendations") || "មើលអនុសាសន៍"}</span>
+              <span>{t("personalityAssessment.viewAllRecommendations", "មើលអនុសាសន៍")}</span>
             </Link>
             <Link
               href="/dashboard/assessments/riasec"
               className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-2xl font-black text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-xs transition-colors cursor-pointer whitespace-nowrap"
             >
-              <span>ធ្វើតេស្ត RIASEC</span>
+              <span>{t("personalityAssessment.takeRiasecTest", "ធ្វើតេស្ត RIASEC")}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ========================================================
+  // VIEW MODE: DEDICATED 16 PERSONALITIES FRAMEWORK GUIDE
+  // ========================================================
+  if (activeTab === "guide") {
+    return (
+      <div className="max-w-5xl mx-auto space-y-7 animate-in fade-in pb-16 select-none">
+        {/* Top Breadcrumb & Switcher */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E8F0] pb-4">
+          <div>
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-[#68708A] mb-1">
+              <Link href="/dashboard" className="hover:text-[#111965]">
+                {t("personalityAssessment.dashboard")}
+              </Link>
+              <span>/</span>
+              <span className="text-[#111965]">
+                {t("personalityAssessment.guideTab", "មគ្គុទ្ទេសក៍ទាំង ១៦")}
+              </span>
+            </div>
+
+            <h1 className="text-xl sm:text-2xl font-black text-[#111965] tracking-tight">
+              {getLocalized({
+                km: "មគ្គុទ្ទេសក៍បុគ្គលិកលក្ខណៈទាំង ១៦ (The 16 Personalities)",
+                en: "The 16 Personalities Framework & Archetypes",
+              })}
+            </h1>
+          </div>
+
+          {/* View Switcher */}
+          <AssessmentViewSwitcher
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            questionsLabel={t("personalityAssessment.questionsTab") || "ធ្វើតេស្ត"}
+            profileLabel={`${latestResult?.personality_type || "INTJ"} Profile`}
+            profileIcon={Crown}
+            guideLabel={t("personalityAssessment.guideTab") || "មគ្គុទ្ទេសក៍ទាំង ១៦"}
+            hasResult={!!latestResult}
+          />
+        </div>
+
+        {/* Guide Content Header Banner */}
+        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#111965] via-[#1A2580] to-[#0D134E] text-white shadow-xl relative overflow-hidden border border-[#111965]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-xl relative z-10">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 uppercase tracking-wider">
+              <Compass className="w-3.5 h-3.5 text-[#F7CE4D]" />
+              <span>NERIS Standard Archetypes</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-white">
+              {getLocalized({
+                km: "ស្វែងយល់ពីបុគ្គលិកលក្ខណៈទាំង ១៦ និងតួនាទីទាំង ៤",
+                en: "Explore All 16 Personalities Across 4 Role Groups",
+              })}
+            </h2>
+            <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
+              {getLocalized({
+                km: "បែងចែកជា ៤ ក្រុមតួនាទីធំៗ៖ អ្នកវិភាគ (Analysts), អ្នកការទូត (Diplomats), អ្នកការពារ (Sentinels), និងអ្នករុករក (Explorers)។",
+                en: "Divided into 4 major role groups: Analysts, Diplomats, Sentinels, and Explorers.",
+              })}
+            </p>
+          </div>
+
+          {latestResult && (
+            <button
+              type="button"
+              onClick={() => setActiveTab("results")}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-xs cursor-pointer transition-colors whitespace-nowrap self-start sm:self-auto"
+            >
+              <Crown className="w-4 h-4 text-[#111965]" />
+              <span>{getLocalized({ km: `ត្រឡប់ទៅលទ្ធផល ${latestResult.personality_type}`, en: `Back to My ${latestResult.personality_type} Result` })}</span>
+            </button>
+          )}
+        </div>
+
+        {/* Role Filters */}
+        <div className="flex items-center justify-between gap-3 overflow-x-auto no-scrollbar pb-1">
+          <div className="flex items-center gap-2">
+            {["all", "analysts", "diplomats", "sentinels", "explorers"].map((tab) => {
+              const isActive = roleFilter === tab;
+              const roleObj = ROLES_META.find((r) => r.id === tab);
+
+              return (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => setRoleFilter(tab)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+                    isActive
+                      ? "bg-[#111965] text-white shadow-2xs"
+                      : "bg-white text-[#68708A] hover:bg-[#E6E8F0] hover:text-[#111965] border border-[#E6E8F0]"
+                  }`}
+                >
+                  {tab === "all" ? "All 16 Types (ទាំងអស់)" : roleObj?.nameEn || tab}
+                </button>
+              );
+            })}
+          </div>
+          <span className="text-xs font-bold text-[#68708A] whitespace-nowrap hidden sm:inline">
+            16 Archetypes
+          </span>
+        </div>
+
+        {/* 16 Types Grid with Official Characters */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {Object.entries(ARCHETYPE_META)
+            .filter(([_, meta]) => roleFilter === "all" || meta.role === roleFilter)
+            .map(([code, meta]) => {
+              const isCurrentUser = code === latestResult?.personality_type;
+              const roleData = ROLES_META.find((r) => r.id === meta.role);
+
+              return (
+                <div
+                  key={code}
+                  className={`p-4 rounded-2xl border transition-all flex flex-col justify-between space-y-3 relative ${
+                    isCurrentUser
+                      ? "bg-gradient-to-b from-amber-50/70 to-white border-amber-300 ring-2 ring-amber-400/50 shadow-md"
+                      : "bg-white border-[#E6E8F0] hover:border-slate-300 hover:shadow-2xs"
+                  }`}
+                >
+                  {isCurrentUser && (
+                    <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full text-[9px] font-black bg-[#F7CE4D] text-[#111965] shadow-xs flex items-center gap-1 z-10">
+                      <Sparkles className="w-2.5 h-2.5 text-[#111965]" />
+                      <span>Your MBTI</span>
+                    </span>
+                  )}
+
+                  {/* Character Illustration */}
+                  <div className="w-full h-32 flex items-center justify-center p-2 bg-slate-50/80 rounded-xl border border-slate-100/80">
+                    <Image
+                      src={`/images/personality-types/${code.toLowerCase()}.svg`}
+                      alt={`${code} Character`}
+                      width={110}
+                      height={120}
+                      className="h-full w-auto object-contain drop-shadow-sm hover:scale-105 transition-transform"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="text-lg font-black tracking-tight"
+                        style={{ color: meta.roleColor }}
+                      >
+                        {code}
+                      </span>
+                      <span
+                        className="px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase border"
+                        style={{
+                          backgroundColor: `${meta.roleColor}15`,
+                          color: meta.roleColor,
+                          borderColor: `${meta.roleColor}30`,
+                        }}
+                      >
+                        {roleData?.nameEn}
+                      </span>
+                    </div>
+
+                    <h5 className="text-xs font-black text-[#111965] leading-snug">
+                      {meta.nameKm.split("•")[1]?.trim() || meta.nameEn}
+                    </h5>
+
+                    <p className="text-[11px] text-[#68708A] line-clamp-3 leading-relaxed">
+                      {meta.taglineKm}
+                    </p>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] font-semibold text-slate-500">
+                    <span>{meta.roleNameKm}</span>
+                    <span className="font-mono text-[9px] opacity-75">{code}</span>
+                  </div>
+                </div>
+              );
+            })}
         </div>
       </div>
     );
@@ -1157,15 +1320,13 @@ export default function PersonalityAssessmentPage() {
   const formattedQuestions: AssessmentStepItem[] = questions.map((q: any) => {
     const dimGroup = (q.dimension || q.category || "EI") as DimensionGroup;
     const dim = DIMENSION_TITLES[dimGroup];
-    const stEn = q.options?.[0]?.label_en || q.prompt_en?.replace(/^I\s+/i, "") || q.prompt_en || "";
-    const stKm = q.options?.[0]?.label_km || q.prompt_km || "";
 
     return {
       id: q.id,
       promptKm: q.prompt_km,
       promptEn: q.prompt_en,
-      statementKm: stKm,
-      statementEn: stEn,
+      statementKm: "",
+      statementEn: "",
       dimensionCode: dim?.code || dimGroup,
       dimensionNameKm: dim?.nameKm || dimGroup,
       dimensionNameEn: dim?.nameEn || dimGroup,
@@ -1184,6 +1345,7 @@ export default function PersonalityAssessmentPage() {
             questionsLabel={t("personalityAssessment.questionsTab") || "ធ្វើតេស្ត"}
             profileLabel={`${latestResult?.personality_type || "INTJ"} Profile`}
             profileIcon={Crown}
+            guideLabel={t("personalityAssessment.guideTab") || "មគ្គុទ្ទេសក៍ទាំង ១៦"}
             hasResult={!!latestResult}
           />
         }
@@ -1195,41 +1357,41 @@ export default function PersonalityAssessmentPage() {
           const targetQ = questions.find((q: any) => q.id === qId);
           if (targetQ) handleScaleChange(targetQ, level);
         }}
-        scaleType="7-point"
+        scaleType="5-point"
         leftAnchorKm="យល់ស្រប"
         leftAnchorEn="Agree"
         rightAnchorKm="មិនយល់ស្រប"
         rightAnchorEn="Disagree"
         mascotSpeech={
           currentAnswer?.scaleLevel !== undefined && currentAnswer?.scaleLevel !== null
-            ? currentAnswer.scaleLevel <= 2
+            ? currentAnswer.scaleLevel === 1
               ? getLocalized({
                   km: "យល់ស្របខ្លាំង! ច្បាស់លាស់ណាស់ 🚀✨",
                   en: "Strongly Agree! Crystal clear 🚀✨",
                 })
-              : currentAnswer.scaleLevel === 3
+              : currentAnswer.scaleLevel === 2
               ? getLocalized({
                   km: "យល់ស្រប! ត្រូវនឹងចិត្តអ្នក ✨",
                   en: "Agree! True to who you are ✨",
                 })
-              : currentAnswer.scaleLevel === 4
+              : currentAnswer.scaleLevel === 3
               ? getLocalized({
-                  km: "អព្យាក្រឹត! ថ្លឹងថ្លែងយ៉ាងម៉ត់ចត់ ⚖️",
+                  km: "កណ្តាល! ថ្លឹងថ្លែងយ៉ាងម៉ត់ចត់ ⚖️",
                   en: "Neutral! Balanced reflection ⚖️",
                 })
-              : currentAnswer.scaleLevel <= 6
+              : currentAnswer.scaleLevel === 4
               ? getLocalized({
                   km: "មិនសូវយល់ស្របទេ! យល់ច្បាស់ហើយ 💡",
                   en: "Disagree! Understood 💡",
                 })
               : getLocalized({
-                  km: "មិនយល់ស្របដាច់ខាត! ដឹងច្បាស់ពីខ្លួនឯង ⚡",
-                  en: "Strongly Disagree! Clear boundaries ⚡",
+                  km: "មិនយល់ស្របដាច់ខាត! ដឹងច្បាស់ពីខ្លួនឯង 🛑",
+                  en: "Strongly Disagree! Clear boundaries 🛑",
                 })
             : currentIndex === 0
             ? getLocalized({
-                km: "សួស្តី! តោះចាប់ផ្តើមសំណួរទី ១! 👋",
-                en: "Hello! Let's start Q1! 👋",
+                km: "សូមអានសំណើខាងក្រោម រួចជ្រើសរើសកម្រិតដែលត្រូវនឹងចិត្តអ្នក 🌟",
+                en: "Read the statement below and pick the option that describes you 🌟",
               })
             : currentIndex === Math.floor(questions.length / 2)
             ? getLocalized({
@@ -1242,8 +1404,8 @@ export default function PersonalityAssessmentPage() {
                 en: "Final question! Let's wrap this up 🚀",
               })
             : getLocalized({
-                km: `សំណួរទី ${currentIndex + 1} នៃ ${questions.length} • តើអ្នកយល់យ៉ាងណាដែរ? 🤔`,
-                en: `Q${currentIndex + 1} of ${questions.length} • What do you think? 🤔`,
+                km: `សំណួរទី ${currentIndex + 1}/${questions.length} • ជ្រើសរើសដោយស្មោះត្រង់ ✨`,
+                en: `Statement ${currentIndex + 1}/${questions.length} • Choose honestly ✨`,
               })
         }
         mascotScaleLevel={currentAnswer?.scaleLevel ?? null}

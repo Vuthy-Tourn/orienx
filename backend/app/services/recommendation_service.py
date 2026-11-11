@@ -63,10 +63,9 @@ class RecommendationService:
             w_c = 0.10
         else:
             # User completed Personality + RIASEC + Preferences:
-            # Balanced 4-pillar weighting: Personality (30%) + RIASEC (25%) + Academic (25%) + Career (20%)
-            # This ensures E vs I creates decisive shifts while respecting career aspirations and academic strengths!
-            w_p = 0.30
-            w_r = 0.25
+            # Balanced 4-pillar weighting:
+            w_p = 0.25
+            w_r = 0.30
             w_a = 0.25
             w_c = 0.20
 
@@ -128,29 +127,29 @@ class RecommendationService:
             # T vs F: Quantitative logic & mechanics vs interpersonal empathy & human diplomacy
             # J vs P: Structural compliance & deadlines vs flexible prototyping
             if slug == "software-engineering":
-                # Prefers Introversion (solo coding, quiet focus), Intuition/Sensing, Thinking, and J/P
+                # Prefers Introversion (solo coding), Intuition/Sensing, Thinking, and J/P
                 dim_score = (
                     (16.0 if is_e else 28.0)
-                    + (24.0 if is_n else 18.0)
+                    + (24.0 if is_n else 16.0)
                     + (24.0 if is_t else 8.0)
                     + (14.0 if is_j else 14.0)
                 )
                 if user_mbti in ["INTJ", "INTP", "ISTJ", "ENTP"]:
                     dim_score += 8.0
             elif slug == "data-science-ai":
-                # Strong Introversion (isolated data modeling), Intuition (theoretical algorithms), Thinking
+                # Prefers Introversion (isolated data modeling), Intuition (theoretical algorithms), Thinking
                 dim_score = (
                     (14.0 if is_e else 28.0)
-                    + (26.0 if is_n else 16.0)
+                    + (26.0 if is_n else 14.0)
                     + (24.0 if is_t else 8.0)
                     + (14.0 if is_j else 12.0)
                 )
                 if user_mbti in ["INTP", "INTJ", "ISTJ", "INFJ"]:
                     dim_score += 8.0
             elif slug == "business-administration":
-                # Strong Extraversion (public pitching, negotiation, active team management, stakeholder relations)
+                # Strong Extraversion (leadership, pitching, team management, stakeholder relations)
                 dim_score = (
-                    (36.0 if is_e else 12.0)
+                    (34.0 if is_e else 12.0)
                     + (18.0 if is_n else 20.0)
                     + (22.0 if is_t else 20.0)
                     + (16.0 if is_j else 12.0)
@@ -163,7 +162,7 @@ class RecommendationService:
                     (26.0 if is_e else 16.0)
                     + (24.0 if not is_n else 14.0)
                     + (24.0 if is_t else 8.0)
-                    + (18.0 if is_j else 12.0)
+                    + (16.0 if is_j else 12.0)
                 )
                 if user_mbti in ["ESTJ", "ISTJ", "ENTJ", "INTJ"]:
                     dim_score += 8.0
@@ -171,8 +170,8 @@ class RecommendationService:
                 # Balanced E/I, strongly Sensing (concrete physical structures, materials, surveying), Thinking, Judging
                 dim_score = (
                     (20.0 if is_e else 20.0)
-                    + (26.0 if not is_n else 14.0)
-                    + (24.0 if is_t else 8.0)
+                    + (24.0 if not is_n else 14.0)
+                    + (22.0 if is_t else 8.0)
                     + (16.0 if is_j else 12.0)
                 )
                 if user_mbti in ["ISTP", "ESTJ", "INTJ"]:
@@ -259,8 +258,17 @@ class RecommendationService:
                     notes_en.append(f"Standard tuition at available institutions exceeds your stated budget (${user_budget:.0f}/yr), but scholarship options exist.")
                     notes_km.append(f"តម្លៃសិក្សាជាទូទៅនៅសាកលវិទ្យាល័យអាចលើសពីថវិការបស់អ្នក (${user_budget:.0f}/ឆ្នាំ) ប៉ុន្តែមានជម្រើសអាហារូបករណ៍។")
 
+            # Direct personality affinity boost / dampener
+            affinity_bonus = 0.0
+            if is_direct_mbti:
+                affinity_bonus = 4.0
+            elif is_partial_mbti:
+                affinity_bonus = 2.0
+            elif s_personality < 60.0:
+                affinity_bonus = -4.0
+
             # Final composite score
-            raw_score = (w_p * s_personality) + (w_r * s_riasec) + (w_a * s_academic) + (w_c * s_career) - penalty
+            raw_score = (w_p * s_personality) + (w_r * s_riasec) + (w_a * s_academic) + (w_c * s_career) + affinity_bonus - penalty
             final_match = round(max(30.0, min(99.0, raw_score)), 1)
 
             # Build explainable rationale report tailored to assessment state

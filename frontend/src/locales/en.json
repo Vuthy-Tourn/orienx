@@ -522,6 +522,7 @@
     "universities": "Universities",
     "details": "Details",
     "institutions": "Institutions",
+    "more": "more",
     "campuses": "Offering Institutions",
     "top3BannerTitle": "Top 3 Recommended Majors for You",
     "top3BannerSubtitle": "Specially curated and ranked based on your personality type, cognitive orientation, and academic strengths."
@@ -582,7 +583,21 @@
     "complete": "Complete Assessment",
     "evaluating": "Evaluating...",
     "prefill": "Prefill",
-    "answerAllAlert": "Please answer all questions before submitting."
+    "answerAllAlert": "Please answer all questions before submitting.",
+    "mbtiMatchesBadge": "AI Recommendations Based on Personality",
+    "recommendedMajorsTitle": "Recommended Majors & Universities for Your Personality",
+    "recommendedMajorsSubtitle": "Academic majors and institutions aligned with your cognitive and decision-making style",
+    "viewAllRecommendations": "View All Recommendations",
+    "offeringInstitutions": "Offering Institutions:",
+    "verifyingInstitutions": "Pending verification",
+    "verifyingCampusesDesc": "Institution data is currently being verified and updated",
+    "guideTab": "16 Personalities Guide",
+    "exploreGuideTitle": "Want to Explore All 16 Personalities?",
+    "exploreGuideDesc": "Compare all 16 archetypes across Analysts, Diplomats, Sentinels, and Explorers in our full guide.",
+    "openGuideBtn": "Open 16 Personalities Guide",
+    "nextStepTitle": "Next Step: Take RIASEC Career Interest Assessment",
+    "nextStepDesc": "Your initial recommendations based on your personality are ready! Take the RIASEC assessment to fine-tune your results with career interests.",
+    "takeRiasecTest": "Take RIASEC Test"
   },
   "riasecAssessment": {
     "title": "RIASEC Career Interest Assessment",

@@ -602,71 +602,71 @@ async def seed():
         # -----------------------------------------------------------------
         # 8. ORIGINAL BILINGUAL PERSONALITY ASSESSMENT QUESTIONS
         # -----------------------------------------------------------------
-        # 12 original questions covering 4 dimensions: EI, SN, TF, JP
+        # 12 official 16Personalities standard statements covering 4 dimensions: EI, SN, TF, JP
         personality_q_data = [
-            # EI Questions
-            ("EI", "When working on a complex school project, you feel most energized when:",
-             "នៅពេលធ្វើកិច្ចការសាលាស្មុគស្មាញមួយ តើអ្នកមានកម្លាំងចិត្ត និងអារម្មណ៍ស្រស់ស្រាយបំផុតនៅពេលណា?", 1,
-             [("Collaborating, debating ideas, and brainstorming in a group", "ពិភាក្សាផ្លាស់ប្តូរគំនិត និងធ្វើការជាក្រុមជាមួយមិត្តភក្តិ", "E", 1.0),
-              ("Working independently in a quiet space where you can focus deeply", "ធ្វើការដោយស្ងប់ស្ងាត់តែម្នាក់ឯង ដើម្បីផ្តោតអារម្មណ៍ស៊ីជម្រៅ", "I", 1.0)]),
+            # EI Questions (Mind: Extraversion vs Introversion)
+            ("EI", "You feel energized after spending time with a large group of people or collaborating on team projects.",
+             "អ្នកមានកម្លាំងចិត្ត និងស្រស់ស្រាយក្រោយពេលចំណាយពេលជាមួយមនុស្សច្រើន ឬធ្វើការជាក្រុម។", 1,
+             [("Agree", "យល់ស្រប", "E", 1.0),
+              ("Disagree", "មិនយល់ស្រប", "I", 1.0)]),
             
-            ("EI", "After a long and busy week at school, how do you prefer to recharge your energy?",
-             "បន្ទាប់ពីការសិក្សាដ៏មមាញឹកពេញមួយសប្តាហ៍ តើអ្នកចូលចិត្តបញ្ចូលថាមពលឡើងវិញតាមវិធីណា?", 2,
-             [("Going out with a large circle of friends or attending social gatherings", "ចេញក្រៅដើរលេងជាមួយមិត្តភក្តិច្រើននាក់ ឬចូលរួមកម្មវិធីសង្គម", "E", 1.0),
-              ("Spending quiet time alone reading, gaming, or pursuing personal hobbies", "ចំណាយពេលស្ងប់ស្ងាត់ម្នាក់ឯង អានសៀវភៅ លេងហ្គេម ឬធ្វើអ្វីដែលខ្លួនចូលចិត្ត", "I", 1.0)]),
+            ("EI", "After a busy week, you prefer going out to social events rather than spending quiet time alone.",
+             "បន្ទាប់ពីសប្តាហ៍ដ៏មមាញឹក អ្នកចូលចិត្តចេញក្រៅជួបជុំមិត្តភក្តិ ជាជាងចំណាយពេលស្ងប់ស្ងាត់ម្នាក់ឯង។", 2,
+             [("Agree", "យល់ស្រប", "E", 1.0),
+              ("Disagree", "មិនយល់ស្រប", "I", 1.0)]),
 
-            ("EI", "In a new classroom or workshop environment, you typically:",
-             "នៅក្នុងបន្ទប់រៀនថ្មី ឬសិក្ខាសាលាដែលអ្នកមិនស្គាល់នរណា តើអ្នកតែងតែ:", 3,
-             [("Quickly initiate conversations and make new acquaintances comfortably", "ចាប់ផ្តើមជជែក និងបង្កើតមិត្តភក្តិថ្មីៗបានយ៉ាងរហ័ស", "E", 1.0),
-              ("Observe first and wait until others speak to you or form a smaller group", "អង្កេតសិន និងរង់ចាំរហូតទាល់តែមានអ្នកផ្សេងមកសន្ទនាជាមួយ", "I", 1.0)]),
+            ("EI", "In a new room or gathering, you comfortably initiate conversations and make new friends right away.",
+             "នៅកន្លែងថ្មី ឬកម្មវិធីជួបជុំ អ្នកតែងតែចាប់ផ្តើមជជែក និងបង្កើតមិត្តភក្តិថ្មីៗបានយ៉ាងងាយស្រួល។", 3,
+             [("Agree", "យល់ស្រប", "E", 1.0),
+              ("Disagree", "មិនយល់ស្រប", "I", 1.0)]),
 
-            # SN Questions
-            ("SN", "When learning a new topic, what captures your interest first?",
-             "នៅពេលចាប់ផ្តើមរៀនមេរៀនថ្មីមួយ តើអ្វីដែលទាក់ទាញចំណាប់អារម្មណ៍របស់អ្នកមុនគេ?", 4,
-             [("Concrete facts, real-world examples, and practical step-by-step applications", "ការពិតជាក់ស្តែង ឧទាហរណ៍ក្នុងជីវិត និងជំហានអនុវត្តជាក់ស្តែង", "S", 1.0),
-              ("Big-picture concepts, abstract possibilities, and future implications", "ទស្សនទានទូទៅ គំនិតអរូបី និងលទ្ធភាពដែលអាចកើតឡើងនៅអនាគត", "N", 1.0)]),
+            # SN Questions (Energy: Sensing vs Intuition)
+            ("SN", "You are more drawn to practical facts and real-world examples than to abstract theories and future possibilities.",
+             "អ្នកចាប់អារម្មណ៍លើការពិតជាក់ស្តែង និងឧទាហរណ៍ក្នុងជីវិត ជាជាងទ្រឹស្តីអរូបី និងការស្រមើស្រមៃ។", 4,
+             [("Agree", "យល់ស្រប", "S", 1.0),
+              ("Disagree", "មិនយល់ស្រប", "N", 1.0)]),
 
-            ("SN", "When solving an academic problem, you tend to rely more on:",
-             "នៅពេលដោះស្រាយលំហាត់ ឬបញ្ហាសិក្សា តើអ្នកច្រើនតែផ្អែកលើអ្វី?", 5,
-             [("Proven methods, established rules, and hands-on experience", "វិធីសាស្ត្រដែលធ្លាប់បានបញ្ជាក់ វិធានច្បាស់លាស់ និងបទពិសោធន៍កន្លងមក", "S", 1.0),
-              ("Intuitive inspiration, inventive patterns, and novel unproven angles", "ការយល់ដឹងដោយវិចារណញាណ គំរូថ្មីៗ និងមុំគិតប្លែកដែលមិនទាន់មានគេសាក", "N", 1.0)]),
+            ("SN", "When solving problems, you rely on proven methods and practical experience rather than untested novel ideas.",
+             "នៅពេលដោះស្រាយបញ្ហា អ្នកចូលចិត្តពឹងលើវិធីសាស្ត្រដែលធ្លាប់បានបញ្ជាក់ ជាជាងគំនិតថ្មីៗដែលមិនទាន់បានសាកល្បង។", 5,
+             [("Agree", "យល់ស្រប", "S", 1.0),
+              ("Disagree", "មិនយល់ស្រប", "N", 1.0)]),
 
-            ("SN", "How do you prefer instructions to be given for an assignment?",
-             "តើអ្នកចង់ឱ្យលោកគ្រូអ្នកគ្រូផ្តល់ការណែនាំលើកិច្ចការផ្ទះតាមបែបណា?", 6,
-             [("Specific, clear guidelines with exact milestones and criteria", "ការណែនាំលម្អិត ច្បាស់លាស់ ជាមួយលក្ខណៈវិនិច្ឆ័យជាក់លាក់", "S", 1.0),
-              ("Open-ended goals that allow you total creative freedom to explore", "គោលដៅទូលំទូលាយ ដែលទុកសេរីភាពឱ្យអ្នកច្នៃប្រឌិតតាមចិត្ត", "N", 1.0)]),
+            ("SN", "You prefer specific, step-by-step instructions with clear criteria rather than open-ended creative freedom.",
+             "អ្នកចូលចិត្តការណែនាំលម្អិតមួយជំហានៗដែលមានលក្ខណៈវិនិច្ឆ័យច្បាស់ ជាជាងការទុកសេរីភាពបើកទូលាយ។", 6,
+             [("Agree", "យល់ស្រប", "S", 1.0),
+              ("Disagree", "មិនយល់ស្រប", "N", 1.0)]),
 
-            # TF Questions
-            ("TF", "When making an important decision, your primary guide is:",
-             "នៅពេលធ្វើការសម្រេចចិត្តលើរឿងសំខាន់មួយ តើអ្វីជាត្រីវិស័យចម្បងរបស់អ្នក?", 7,
-             [("Objective logic, empirical evidence, and impartial pros and cons", "តក្កវិជ្ជាសុក្រឹត ភស្តុតាង និងការថ្លឹងថ្លែងគុណសម្បត្តិគុណវិបត្តិដោយមិនលម្អៀង", "T", 1.0),
-              ("Human values, personal empathy, and how the decision affects people's feelings", "គុណតម្លៃមនុស្សធម៌ ការយល់ចិត្ត និងផលប៉ះពាល់ដល់អារម្មណ៍អ្នកដទៃ", "F", 1.0)]),
+            # TF Questions (Nature: Thinking vs Feeling)
+            ("TF", "You prioritize objective logic and evidence over personal feelings when making important decisions.",
+             "អ្នកផ្តល់អាទិភាពលើតក្កវិជ្ជា និងភស្តុតាងជាក់ស្តែង ជាជាងអារម្មណ៍ផ្ទាល់ខ្លួន នៅពេលធ្វើការសម្រេចចិត្តសំខាន់ៗ។", 7,
+             [("Agree", "យល់ស្រប", "T", 1.0),
+              ("Disagree", "មិនយល់ស្រប", "F", 1.0)]),
 
-            ("TF", "If a teammate's work doesn't meet the standard, your natural reaction is to:",
-             "ប្រសិនបើសមាជិកក្រុមម្នាក់ធ្វើការមិនបានល្អតាមស្តង់ដារ តើប្រតិកម្មដំបូងរបស់អ្នកគឺ:", 8,
-             [("Directly point out the factual flaws so the team can fix the output", "ចង្អុលបង្ហាញកំហុសជាក់ស្តែងដោយត្រង់ៗ ដើម្បីឱ្យក្រុមអាចកែលម្អបានទាន់ពេល", "T", 1.0),
-              ("Provide encouragement first and gently frame feedback to avoid discouraging them", "លើកទឹកចិត្តជាមុនសិន រួចពន្យល់ដោយទន់ភ្លន់ដើម្បីកុំឱ្យបាក់ទឹកចិត្ត", "F", 1.0)]),
+            ("TF", "If someone makes a mistake, your instinct is to point out the factual flaws directly so they can be fixed.",
+             "ប្រសិនបើនរណាម្នាក់ធ្វើខុស អ្នកចូលចិត្តចង្អុលបង្ហាញកំហុសជាក់ស្តែងដោយត្រង់ៗ ដើម្បីកែលម្អបានទាន់ពេល។", 8,
+             [("Agree", "យល់ស្រប", "T", 1.0),
+              ("Disagree", "មិនយល់ស្រប", "F", 1.0)]),
 
-            ("TF", "What kind of praise feels more meaningful to you?",
-             "តើការសរសើរប្រភេទណាដែលមានន័យបំផុតសម្រាប់អ្នក?", 9,
-             [("'Your analysis was rigorous, flawless, and brilliantly reasoned.'", "«ការវិភាគរបស់អ្នកពិតជាមានលក្ខណៈវិទ្យាសាស្ត្រ សុក្រឹត និងឆ្លាតវៃណាស់។»", "T", 1.0),
-              ("'Your contribution brought everyone together and made a warm positive impact.'", "«ការចូលរួមចំណែករបស់អ្នកបានបង្កើតភាពកក់ក្តៅ និងមានឥទ្ធិពលវិជ្ជមានដល់អ្នកទាំងអស់គ្នា។»", "F", 1.0)]),
+            ("TF", "You value praise for rigorous reasoning and analytical excellence more than praise for warmth and harmony.",
+             "អ្នកឱ្យតម្លៃការសរសើរលើការវិភាគឆ្លាតវៃ និងសុក្រឹតភាព ច្រើនជាងការសរសើរលើភាពកក់ក្តៅ និងសាមគ្គីភាព។", 9,
+             [("Agree", "យល់ស្រប", "T", 1.0),
+              ("Disagree", "មិនយល់ស្រប", "F", 1.0)]),
 
-            # JP Questions
-            ("JP", "How do you organize your study schedule for exams?",
-             "តើអ្នករៀបចំកាលវិភាគសិក្សាសម្រាប់ការប្រឡងដោយរបៀបណា?", 10,
-             [("Plan a detailed revision calendar in advance and stick to the deadlines", "រៀបចំកាលវិភាគរំលឹកមេរៀនលម្អិតទុកជាមុន និងគោរពតាមពេលវេលាកំណត់", "J", 1.0),
-              ("Keep options flexible, adapt as mood strikes, and rely on last-minute energy bursts", "ទុកភាពបត់បែន ធ្វើតាមអារម្មណ៍ និងពឹងលើការខំប្រឹងខ្លាំងនៅពេលជិតដល់ថ្ងៃប្រឡង", "P", 1.0)]),
+            # JP Questions (Tactics: Judging vs Prospecting)
+            ("JP", "You like to plan a detailed schedule and stick closely to deadlines rather than keeping things open-ended.",
+             "អ្នកចូលចិត្តរៀបចំកាលវិភាគច្បាស់លាស់ និងគោរពតាមពេលវេលាកំណត់ ជាជាងទុកឱ្យអ្វីៗបត់បែនតាមអារម្មណ៍។", 10,
+             [("Agree", "យល់ស្រប", "J", 1.0),
+              ("Disagree", "មិនយល់ស្រប", "P", 1.0)]),
 
-            ("JP", "When planning a weekend trip or holiday with peers, you prefer to:",
-             "នៅពេលរៀបចំដំណើរកម្សាន្តចុងសប្តាហ៍ជាមួយមិត្តភក្តិ តើអ្នកចូលចិត្ត:", 11,
-             [("Have a structured itinerary, confirmed bookings, and clear checkpoints", "មានកម្មវិធីធ្វើដំណើរច្បាស់លាស់ កក់កន្លែងរួចរាល់ និងដឹងទីតាំងត្រូវទៅច្បាស់", "J", 1.0),
-              ("Keep the plan open and spontaneous, deciding things on the go", "ទុកឱ្យសេរី សម្រេចចិត្តភ្លាមៗតាមកាលៈទេសៈជាក់ស្តែងពេលកំពុងធ្វើដំណើរ", "P", 1.0)]),
+            ("JP", "You prefer to have a structured, organized plan before traveling or starting an activity rather than being spontaneous.",
+             "អ្នកចូលចិត្តមានផែនការរៀបរយជាមុនសម្រាប់ការដើរកម្សាន្ត ឬសកម្មភាពនានា ជាជាងធ្វើតាមការនឹកឃើញភ្លាមៗ។", 11,
+             [("Agree", "យល់ស្រប", "J", 1.0),
+              ("Disagree", "មិនយល់ស្រប", "P", 1.0)]),
 
-            ("JP", "You feel most comfortable when an assignment or project is:",
-             "តើអ្នកមានអារម្មណ៍ធូរស្រាល និងពេញចិត្តបំផុតនៅពេលណា?", 12,
-             [("Completely finished, finalized, and closed well ahead of deadline", "បានបញ្ចប់សព្វគ្រប់ ផ្ទៀងផ្ទាត់រួចរាល់ មុនថ្ងៃផុតកំណត់ជាច្រើនថ្ងៃ", "J", 1.0),
-              ("Still open for refinements and creative additions right until the last hour", "នៅតែអាចកែសម្រួល និងបន្ថែមគំនិតច្នៃប្រឌិតថ្មីៗរហូតដល់ម៉ោងចុងក្រោយ", "P", 1.0)])
+            ("JP", "You feel most at ease when tasks and assignments are completely finished well ahead of their deadline.",
+             "អ្នកមានអារម្មណ៍ធូរស្រាល និងស្ងប់ចិត្តបំផុត នៅពេលកិច្ចការត្រូវបានបញ្ចប់រួចរាល់មុនថ្ងៃកំណត់។", 12,
+             [("Agree", "យល់ស្រប", "J", 1.0),
+              ("Disagree", "មិនយល់ស្រប", "P", 1.0)])
         ]
 
         for dim, p_en, p_km, o_idx, options in personality_q_data:
