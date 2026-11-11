@@ -99,14 +99,10 @@ export default function PersonalityAssessmentPage() {
     enabled: activeTab === "results",
   });
 
-  // Sort recommendations by personality fit score for the Personality Results view
-  const personalityRecs = React.useMemo(() => {
+  // Unified single source of truth: Follows the holistic 4-pillar engine ranking
+  const unifiedRecs = React.useMemo(() => {
     if (!recommendations) return [];
-    return [...recommendations].sort((a, b) => {
-      const pDiff = (b.personality_match_score || 0) - (a.personality_match_score || 0);
-      if (Math.abs(pDiff) > 0.5) return pDiff;
-      return (b.match_score || 0) - (a.match_score || 0);
-    });
+    return [...recommendations].sort((a, b) => (b.match_score || 0) - (a.match_score || 0));
   }, [recommendations]);
 
   useEffect(() => {
@@ -617,18 +613,18 @@ export default function PersonalityAssessmentPage() {
             <div className="space-y-1">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-black uppercase tracking-wider border border-emerald-200">
                 <Sparkles className="w-3 h-3 text-emerald-600" />
-                <span>{getLocalized({ km: `អនុសាសន៍ផ្អែកលើបុគ្គលិកលក្ខណៈ ${pType}`, en: `${pType} Personality Matches` })}</span>
+                <span>{getLocalized({ km: "អនុសាសន៍ AI សុក្រឹតកម្រិតខ្ពស់ (៤ សសរស្តម្ភ)", en: "Verified AI Recommendations" })}</span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-[#111965]">
                 {getLocalized({
-                  km: `មុខជំនាញដែលត្រូវគ្នានឹងបុគ្គលិកលក្ខណៈ ${pType} របស់អ្នក`,
-                  en: `Top Recommended Majors for Your ${pType} Personality`,
+                  km: `មុខជំនាញសាកសមបំផុតសម្រាប់អ្នក និងភាពស៊ីសង្វាក់ជាមួយ ${pType}`,
+                  en: `Top Recommended Majors For You & Your ${pType} Edge`,
                 })}
               </h3>
               <p className="text-xs text-[#68708A]">
                 {getLocalized({
-                  km: `ជំនាញ និងគ្រឹះស្ថានឧត្តមសិក្សាដែលត្រូវគ្នានឹងទម្រង់ការគិត ការដឹកនាំ និងការសម្រេចចិត្តបែប ${pType} របស់អ្នក`,
-                  en: `Fields and institutions aligned with your ${pType} cognitive orientation and leadership style`,
+                  km: `ផ្ទៀងផ្ទាត់ដោយប្រព័ន្ធ ៤ សសរស្តម្ភ និងបង្ហាញពីចំណុចខ្លាំងនៃការដឹកនាំបែប ${pType} របស់អ្នកក្នុងជំនាញនីមួយៗ`,
+                  en: `Unified recommendations powered by your 4-pillar profile, showing how your ${pType} executive mindset gives you an edge`,
                 })}
               </p>
             </div>
@@ -637,7 +633,7 @@ export default function PersonalityAssessmentPage() {
               href="/dashboard/recommendations"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs self-start sm:self-auto cursor-pointer whitespace-nowrap"
             >
-              <span>{t("personalityAssessment.viewAllRecommendations", "មើលអនុសាសន៍សរុប")}</span>
+              <span>{t("personalityAssessment.viewAllRecommendations", "មើលអនុសាសន៍ពេញលេញ")}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -652,13 +648,13 @@ export default function PersonalityAssessmentPage() {
                 </div>
               ))}
             </div>
-          ) : personalityRecs && personalityRecs.length > 0 ? (
+          ) : unifiedRecs && unifiedRecs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {personalityRecs.slice(0, 3).map((rec: any, idx: number) => {
+              {unifiedRecs.slice(0, 3).map((rec: any, idx: number) => {
                 const major = rec.major || {};
                 const exp = rec.explanation || {};
                 const unis = major.offering_universities || [];
-                const fitScore = Math.round(rec.personality_match_score || rec.match_score || 0);
+                const fitScore = Math.round(rec.match_score || rec.personality_match_score || 0);
 
                 return (
                   <div
@@ -777,22 +773,22 @@ export default function PersonalityAssessmentPage() {
             </div>
           )}
 
-          {/* Holistic 4-Pillar Bridge Banner */}
+          {/* Holistic 4-Pillar Single Source of Truth Banner */}
           <div className="p-4 sm:p-5 rounded-2xl bg-[#F0F2FA] border border-[#D4DEF8] flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="space-y-1 text-center sm:text-left">
               <div className="inline-flex items-center gap-1.5 text-xs font-black text-[#111965]">
                 <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
                 <span>
                   {getLocalized({
-                    km: "ហេតុអ្វីបានជាទំព័រ Recommendations សរុបបង្ហាញលទ្ធផលទូលំទូលាយជាងនេះ?",
-                    en: "How do your Full Recommendations differ from MBTI alone?",
+                    km: "ប្រព័ន្ធគណនា AI ផ្អែកលើ ៤ សសរស្តម្ភរួមបញ្ចូលគ្នា (Single Source of Truth)",
+                    en: "Unified 4-Pillar Recommendation Engine (Single Source of Truth)",
                   })}
                 </span>
               </div>
               <p className="text-[11px] text-[#68708A] leading-relaxed max-w-2xl font-medium">
                 {getLocalized({
-                  km: `អនុសាសន៍ទាំង ៣ ខាងលើនេះ គឺស្រង់ចេញពីទម្រង់បុគ្គលិកលក្ខណៈ ${pType} របស់អ្នកសុទ្ធសាធ (ដូចជាការគ្រប់គ្រង ធនាគារ និងសំណង់)។ ចំណែកឯទំព័រ Recommendations សរុបវិញ ប្រព័ន្ធ AI បូកបញ្ចូល ៤ សសរស្តម្ភបន្ថែម៖ បុគ្គលិកលក្ខណៈ + ចំណាប់អារម្មណ៍ RIASEC + មុខវិជ្ជាពូកែ (Math, Coding) ដែលផ្តល់អនុសាសន៍ពេញលេញសម្រាប់អាជីពរបស់អ្នក។`,
-                  en: `The 3 majors above highlight fields directly matched to your ${pType} cognitive profile (such as Business, Banking & Civil Engineering). Your full Recommendations page integrates all 4 pillars—combining MBTI with your RIASEC interest code and strong school subjects (Math/Informatics)—to produce your all-round career matches.`,
+                  km: `ដើម្បីធានាបាននូវភាពសុក្រឹត និងអាចជឿទុកចិត្តបាន ១០០% ប្រព័ន្ធ AI របស់ Futera គណនាអនុសាសន៍ដោយបូកបញ្ចូល៖ បុគ្គលិកលក្ខណៈ ${pType} (២៥%) + ចំណាប់អារម្មណ៍ RIASEC (៣០%) + មុខវិជ្ជាពូកែ (២៥%) + ទីផ្សារការងារ (២០%)។ ដូច្នេះលទ្ធផលបង្ហាញនៅទីនេះ ផ្ទាំងគ្រប់គ្រង និងទំព័រ Recommendations គឺសុក្រឹត និងស៊ីសង្វាក់គ្នាទាំងស្រុង។`,
+                  en: `To ensure maximum real-world accuracy and 100% trust, Futera calculates all recommendations by fusing: ${pType} Personality (25%) + RIASEC Interests (30%) + School Grades (25%) + Market Demand (20%). The rankings shown here, on your Dashboard, and on your Recommendations page are 100% unified and consistent.`,
                 })}
               </p>
             </div>
@@ -801,7 +797,7 @@ export default function PersonalityAssessmentPage() {
               href="/dashboard/recommendations"
               className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#111965] hover:bg-[#1A2580] text-white shadow-2xs transition-colors shrink-0 whitespace-nowrap"
             >
-              <span>{getLocalized({ km: "ស្វែងយល់អនុសាសន៍សរុប (៤ សសរស្តម្ភ)", en: "Explore Full 4-Pillar Matches" })}</span>
+              <span>{getLocalized({ km: "មើលការវិភាគ ៤ សសរស្តម្ភលម្អិត", en: "View 4-Pillar Breakdown" })}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
