@@ -120,7 +120,7 @@ export default function DashboardOverviewPage() {
       score: "4.9",
       matchPercent: "96%",
       icon: Code2,
-      iconBg: "bg-blue-100 text-blue-600",
+      iconBg: "bg-[#F0F2FA] text-[#111965]",
     },
     {
       slug: "data-science-ai",
@@ -136,7 +136,7 @@ export default function DashboardOverviewPage() {
       score: "4.8",
       matchPercent: "92%",
       icon: Building2,
-      iconBg: "bg-indigo-100 text-indigo-600",
+      iconBg: "bg-[#FFF9E6] text-[#B45309]",
     },
     {
       slug: "business-administration",
@@ -162,10 +162,10 @@ export default function DashboardOverviewPage() {
           LEFT / CENTER MAIN COLUMN (Span 8 on XL)
       ======================================================== */}
       <div className="xl:col-span-8 space-y-6">
-        {/* 1. SCENIC HERO BANNER (Single Full-Width Backdrop — NO Cut-Off Clouds!) */}
-        <div className="relative rounded-[28px] overflow-hidden bg-gradient-to-r from-[#D7ECFD] via-[#E8F4FE] to-[#D5EBFD] border border-[#BFDBFE] p-7 sm:p-9 shadow-xs min-h-[225px] flex flex-col justify-between">
-          {/* Full-width Single Image Backdrop (Just like footer, single image spans edge-to-edge, NO repeating!) */}
-          <div className="absolute inset-0 pointer-events-none select-none overflow-hidden opacity-20">
+        {/* 1. SCENIC HERO BANNER (Futera Primary Navy + Secondary Gold Accent) */}
+        <div className="relative rounded-[28px] overflow-hidden bg-gradient-to-r from-[#0A0F3D] via-[#111965] to-[#1E277A] border border-[#111965]/40 p-7 sm:p-9 shadow-lg min-h-[225px] flex flex-col justify-between text-white">
+          {/* Full-width Single Image Backdrop */}
+          <div className="absolute inset-0 pointer-events-none select-none overflow-hidden opacity-10">
             <Image
               src="/images/cambodia-campuses-skyline-seamless.webp"
               alt="Cambodian Skyline Backdrop"
@@ -178,29 +178,29 @@ export default function DashboardOverviewPage() {
 
           {/* Top Row: School Badge cleanly on Left */}
           <div className="relative z-10 flex items-center justify-between">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 backdrop-blur-xs text-[#111965] font-bold text-xs border border-blue-100 shadow-2xs">
-              <School className="w-3.5 h-3.5 text-[#111965]" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[#F7CE4D] font-bold text-xs border border-white/20 shadow-2xs">
+              <School className="w-3.5 h-3.5 text-[#F7CE4D]" />
               <span>{highSchool} • Grade 12</span>
             </div>
           </div>
 
           {/* Middle / Bottom Content */}
           <div className="relative z-10 pt-4 space-y-2 max-w-sm sm:max-w-md">
-            <h1 className="text-2xl sm:text-4xl font-black text-[#111965] tracking-tight leading-tight">
+            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
               {greeting},<br />
-              <span className="text-[#1B6EF3]">{userName}!</span> 👋
+              <span className="text-[#F7CE4D]">{userName}!</span> 👋
             </h1>
-            <p className="text-xs sm:text-sm font-medium text-[#475569] leading-relaxed pt-0.5">
+            <p className="text-xs sm:text-sm font-medium text-slate-200 leading-relaxed pt-0.5">
               {t("dashboardPage.heroSubtitle")}
             </p>
 
             <div className="pt-3">
               <Link
                 href="/dashboard/recommendations"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-xs sm:text-sm text-white bg-[#1B6EF3] hover:bg-[#1557C0] shadow-md hover:shadow-lg transition-all active:scale-95 group cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-black text-xs sm:text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-md hover:shadow-lg transition-all active:scale-95 group cursor-pointer"
               >
                 <span>{t("dashboardPage.continueJourney")}</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 text-[#111965] group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>
@@ -229,7 +229,7 @@ export default function DashboardOverviewPage() {
           </div>
         </div>
 
-        {/* 2. "CONTINUE LEARNING" / ACTIVE PROGRESS CARD (Pic 1 Redesign) */}
+        {/* 2. "CONTINUE LEARNING" / ACTIVE PROGRESS CARD */}
         <div className="space-y-3">
           <div className="flex items-center justify-between px-1">
             <h2 className="text-base font-black text-[#111965] tracking-tight">
@@ -237,7 +237,7 @@ export default function DashboardOverviewPage() {
             </h2>
             <Link
               href="/dashboard/recommendations"
-              className="text-xs font-bold text-[#1B6EF3] hover:underline"
+              className="text-xs font-bold text-[#111965] hover:text-[#B45309] hover:underline"
             >
               {t("dashboardPage.seeAll")}
             </Link>
@@ -253,7 +253,7 @@ export default function DashboardOverviewPage() {
                   fill
                   className="object-cover"
                 />
-                <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-white/90 backdrop-blur-xs text-[9px] font-black text-[#1B6EF3] shadow-xs">
+                <div className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-[#111965] text-[9px] font-black text-[#F7CE4D] shadow-xs">
                   {topScore}% Match
                 </div>
               </div>
@@ -273,7 +273,7 @@ export default function DashboardOverviewPage() {
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-[#1B6EF3] transition-all duration-500"
+                      className="h-full rounded-full bg-gradient-to-r from-[#111965] via-[#1E277A] to-[#F7CE4D] transition-all duration-500"
                       style={{ width: `${topScore}%` }}
                     />
                   </div>
@@ -284,12 +284,12 @@ export default function DashboardOverviewPage() {
               </div>
             </div>
 
-            {/* Action Button: Vibrant Blue Pill */}
+            {/* Action Button: Primary Navy Pill with Gold Accent Icon */}
             <Link
               href="/dashboard/recommendations"
-              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-bold text-xs sm:text-sm text-white bg-[#1B6EF3] hover:bg-[#1557C0] shadow-xs hover:shadow-md transition-all active:scale-95 flex-shrink-0 w-full md:w-auto cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-bold text-xs sm:text-sm text-white bg-[#111965] hover:bg-[#1E277A] shadow-xs hover:shadow-md transition-all active:scale-95 flex-shrink-0 w-full md:w-auto cursor-pointer"
             >
-              <Play className="w-3.5 h-3.5 fill-white" />
+              <Play className="w-3.5 h-3.5 fill-[#F7CE4D] text-[#F7CE4D]" />
               <span>{t("dashboardPage.resume")}</span>
             </Link>
           </div>
@@ -376,7 +376,7 @@ export default function DashboardOverviewPage() {
           </div>
         </div>
 
-        {/* 4. "POPULAR MAJORS IN CAMBODIA" / CAPSULES (Matching Reference "Popular Languages") */}
+        {/* 4. "POPULAR MAJORS IN CAMBODIA" / CAPSULES */}
         <div className="space-y-3">
           <div className="flex items-center justify-between px-1">
             <h2 className="text-base font-black text-[#111965] tracking-tight">
@@ -384,7 +384,7 @@ export default function DashboardOverviewPage() {
             </h2>
             <Link
               href="/dashboard/recommendations"
-              className="text-xs font-bold text-[#1B6EF3] hover:underline"
+              className="text-xs font-bold text-[#111965] hover:text-[#B45309] hover:underline"
             >
               {t("dashboardPage.seeAll")}
             </Link>
@@ -397,9 +397,9 @@ export default function DashboardOverviewPage() {
                 <Link
                   key={major.slug}
                   href="/dashboard/recommendations"
-                  className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-[#1B6EF3] hover:shadow-xs transition-all flex items-center gap-3 group"
+                  className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-[#111965] hover:shadow-xs transition-all flex items-center gap-3 group"
                 >
-                  {/* Round Avatar Icon (Matching Reference Flag Avatar) */}
+                  {/* Round Avatar Icon */}
                   <div
                     className={cn(
                       "w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 shadow-2xs group-hover:scale-105 transition-transform",
@@ -411,7 +411,7 @@ export default function DashboardOverviewPage() {
 
                   {/* 2 Lines: Name on Top, Rating with Star on Bottom */}
                   <div className="overflow-hidden min-w-0">
-                    <div className="text-xs font-bold text-[#111965] truncate group-hover:text-[#1B6EF3] transition-colors">
+                    <div className="text-xs font-bold text-[#111965] truncate group-hover:text-[#B45309] transition-colors">
                       {major.name}
                     </div>
                     <div className="flex items-center gap-1 text-[11px] font-semibold text-[#64748B]">
@@ -448,7 +448,7 @@ export default function DashboardOverviewPage() {
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                 />
                 <path
-                  className="text-[#1B6EF3] transition-all duration-700"
+                  className="text-[#111965] transition-all duration-700"
                   strokeDasharray={`${progressPercent}, 100`}
                   strokeWidth="3.6"
                   strokeLinecap="round"
@@ -459,7 +459,7 @@ export default function DashboardOverviewPage() {
               </svg>
 
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <Target className="w-4 h-4 text-[#1B6EF3]" />
+                <Target className="w-4 h-4 text-[#F7CE4D]" />
                 <span className="text-[11px] font-black text-[#111965] leading-tight pt-0.5">
                   {progressPercent}%
                 </span>
@@ -479,17 +479,17 @@ export default function DashboardOverviewPage() {
             </div>
           </div>
 
-          {/* 3 Step Circles (Clean & Distinct) */}
+          {/* 3 Step Circles (Primary Navy & Secondary Gold) */}
           <div className="pt-2 border-t border-slate-100 flex items-center justify-around">
             {/* Step 1: MBTI */}
             <div className="flex flex-col items-center gap-1.5">
               <div
                 className={cn(
                   "w-7 h-7 rounded-full flex items-center justify-center transition-all",
-                  pDone ? "bg-[#1B6EF3] text-white shadow-xs" : "bg-slate-100 text-slate-400"
+                  pDone ? "bg-[#111965] text-[#F7CE4D] shadow-xs" : "bg-slate-100 text-slate-400"
                 )}
               >
-                {pDone ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <span className="text-[10px] font-bold">1</span>}
+                {pDone ? <Check className="w-3.5 h-3.5 stroke-[3] text-[#F7CE4D]" /> : <span className="text-[10px] font-bold">1</span>}
               </div>
               <span className="text-[10px] font-bold text-[#64748B]">MBTI</span>
             </div>
@@ -499,10 +499,10 @@ export default function DashboardOverviewPage() {
               <div
                 className={cn(
                   "w-7 h-7 rounded-full flex items-center justify-center transition-all",
-                  rDone ? "bg-[#1B6EF3] text-white shadow-xs" : "bg-slate-100 text-slate-400"
+                  rDone ? "bg-[#111965] text-[#F7CE4D] shadow-xs" : "bg-slate-100 text-slate-400"
                 )}
               >
-                {rDone ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <span className="text-[10px] font-bold">2</span>}
+                {rDone ? <Check className="w-3.5 h-3.5 stroke-[3] text-[#F7CE4D]" /> : <span className="text-[10px] font-bold">2</span>}
               </div>
               <span className="text-[10px] font-bold text-[#64748B]">RIASEC</span>
             </div>
@@ -512,10 +512,10 @@ export default function DashboardOverviewPage() {
               <div
                 className={cn(
                   "w-7 h-7 rounded-full flex items-center justify-center transition-all",
-                  prefDone ? "bg-[#1B6EF3] text-white shadow-xs" : "bg-slate-100 text-slate-400"
+                  prefDone ? "bg-[#111965] text-[#F7CE4D] shadow-xs" : "bg-slate-100 text-slate-400"
                 )}
               >
-                {prefDone ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <span className="text-[10px] font-bold">3</span>}
+                {prefDone ? <Check className="w-3.5 h-3.5 stroke-[3] text-[#F7CE4D]" /> : <span className="text-[10px] font-bold">3</span>}
               </div>
               <span className="text-[10px] font-bold text-[#64748B]">Prefs</span>
             </div>
@@ -530,7 +530,7 @@ export default function DashboardOverviewPage() {
             </h2>
             <Link
               href="/dashboard/recommendations"
-              className="text-[11px] font-bold text-[#1B6EF3] hover:underline"
+              className="text-[11px] font-bold text-[#111965] hover:text-[#B45309] hover:underline"
             >
               {t("dashboardPage.seeAll")}
             </Link>
@@ -558,7 +558,7 @@ export default function DashboardOverviewPage() {
                     className={cn(
                       "flex items-center gap-3 px-3 py-2 rounded-2xl transition-all group",
                       isTop
-                        ? "bg-[#EBF3FE] text-[#1B6EF3] font-black shadow-2xs"
+                        ? "bg-[#F0F2FA] text-[#111965] font-black shadow-2xs border border-[#111965]/10"
                         : "hover:bg-slate-50 text-[#171A2C]"
                     )}
                   >
@@ -567,11 +567,11 @@ export default function DashboardOverviewPage() {
                       className={cn(
                         "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black flex-shrink-0",
                         rank === 1
-                          ? "bg-amber-400 text-white"
+                          ? "bg-[#F7CE4D] text-[#111965]"
                           : rank === 2
-                          ? "bg-[#1B6EF3] text-white"
+                          ? "bg-[#111965] text-white"
                           : rank === 3
-                          ? "bg-amber-700 text-white"
+                          ? "bg-[#1E277A] text-white"
                           : "text-slate-400 bg-slate-100"
                       )}
                     >
@@ -584,7 +584,7 @@ export default function DashboardOverviewPage() {
                     </span>
 
                     {/* Name */}
-                    <div className="flex-1 truncate text-xs font-bold group-hover:text-[#1B6EF3] transition-colors">
+                    <div className="flex-1 truncate text-xs font-bold group-hover:text-[#111965] transition-colors">
                       {name}
                       {isTop && <span className="ml-1 text-xs">👑</span>}
                     </div>
@@ -611,19 +611,19 @@ export default function DashboardOverviewPage() {
           </div>
         </div>
 
-        {/* 3. SCHOLARSHIP MILESTONE CARD (Soft Blue/Cyan with Accent Gold) */}
+        {/* 3. SCHOLARSHIP MILESTONE CARD (Futera Primary & Secondary Gold Accent) */}
         <Link
           href="/dashboard/favorites"
-          className="block p-5 rounded-[26px] bg-gradient-to-br from-[#E0F2FE] via-[#EAF5FE] to-[#D5EBFD] border border-[#BAE6FD] hover:border-[#93C5FD] shadow-xs hover:shadow-md transition-all relative overflow-hidden space-y-3 group cursor-pointer"
+          className="block p-5 rounded-[26px] bg-gradient-to-br from-[#F0F2FA] via-[#FAFBFD] to-[#FFF9E6] border border-[#E6E8F0] hover:border-[#F7CE4D] shadow-xs hover:shadow-md transition-all relative overflow-hidden space-y-3 group cursor-pointer"
         >
           <div className="flex items-start gap-3">
             {/* Award Icon: Accent Gold badge */}
-            <div className="w-11 h-11 rounded-2xl bg-white text-[#D97706] flex items-center justify-center shadow-xs flex-shrink-0 group-hover:scale-105 transition-transform">
+            <div className="w-11 h-11 rounded-2xl bg-[#FFF9E6] border border-[#F7CE4D]/40 text-[#D97706] flex items-center justify-center shadow-xs flex-shrink-0 group-hover:scale-105 transition-transform">
               <Trophy className="w-6 h-6 text-[#F59E0B]" />
             </div>
 
             <div className="space-y-1 overflow-hidden">
-              <div className="text-xs font-black text-[#111965] leading-tight truncate group-hover:text-[#1B6EF3] transition-colors">
+              <div className="text-xs font-black text-[#111965] leading-tight truncate group-hover:text-[#B45309] transition-colors">
                 {featuredScholarship
                   ? getLocalized(featuredScholarship.title) || featuredScholarship.title?.en
                   : "Techo Digital Talent Scholarship"}
@@ -636,14 +636,14 @@ export default function DashboardOverviewPage() {
 
           {/* Progress Bar (Matching Reference Layout) */}
           <div className="space-y-1 pt-1">
-            <div className="flex items-center justify-between text-[10px] font-bold text-[#0284C7]">
+            <div className="flex items-center justify-between text-[10px] font-bold text-[#111965]">
               <span>Coverage Progress</span>
-              <span className="group-hover:translate-x-0.5 transition-transform">
+              <span className="text-[#B45309] font-black group-hover:translate-x-0.5 transition-transform">
                 View Saved &rarr;
               </span>
             </div>
-            <div className="h-2 rounded-full bg-white/70 overflow-hidden">
-              <div className="h-full rounded-full bg-[#1B6EF3] w-full" />
+            <div className="h-2 rounded-full bg-slate-200/80 overflow-hidden">
+              <div className="h-full rounded-full bg-gradient-to-r from-[#111965] to-[#F7CE4D] w-full" />
             </div>
           </div>
         </Link>

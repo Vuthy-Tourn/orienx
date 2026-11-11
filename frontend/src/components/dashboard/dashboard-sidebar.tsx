@@ -91,14 +91,14 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
             className={cn(
               "flex items-center gap-3.5 px-4 py-2.5 rounded-2xl text-xs font-bold transition-all duration-150",
               isActive
-                ? "bg-[#EBF3FE] text-[#1B6EF3] shadow-xs"
-                : "text-[#64748B] hover:text-[#0F172A] hover:bg-[#F8FAFC]"
+                ? "bg-[#111965] text-white shadow-xs font-black"
+                : "text-[#64748B] hover:text-[#111965] hover:bg-[#F0F2FA]"
             )}
           >
             <item.icon
               className={cn(
                 "w-4 h-4 flex-shrink-0",
-                isActive ? "text-[#1B6EF3]" : "text-[#94A3B8]"
+                isActive ? "text-[#F7CE4D]" : "text-[#94A3B8]"
               )}
             />
             <span className="truncate">{item.label}</span>
@@ -143,11 +143,11 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
             href="/dashboard/profile"
             className="flex items-center gap-3 overflow-hidden group flex-1 min-w-0"
           >
-            <div className="w-9 h-9 rounded-full bg-[#1B6EF3] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-xs ring-2 ring-sky-100 group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-full bg-[#111965] text-[#F7CE4D] flex items-center justify-center font-black text-xs flex-shrink-0 shadow-xs ring-2 ring-[#F0F2FA] group-hover:scale-105 transition-transform">
               {user.full_name_en?.charAt(0) || user.full_name_km?.charAt(0) || user.email.charAt(0).toUpperCase()}
             </div>
             <div className="overflow-hidden min-w-0">
-              <div className="text-xs font-bold text-[#0F172A] truncate group-hover:text-[#1B6EF3] transition-colors">
+              <div className="text-xs font-bold text-[#0F172A] truncate group-hover:text-[#111965] transition-colors">
                 {displayName}
               </div>
               <div className="text-[11px] text-[#94A3B8] truncate">

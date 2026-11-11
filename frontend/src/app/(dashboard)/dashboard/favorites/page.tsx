@@ -230,7 +230,7 @@ export default function FavoritesPage() {
                         {/* Card Body */}
                         <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
                           <div className="space-y-1.5">
-                            <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-[#1B6EF3] transition-colors leading-snug line-clamp-1">
+                            <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-[#B45309] transition-colors leading-snug line-clamp-1">
                               {formatName(m.name)}
                             </h3>
                             {m.description && (
@@ -359,7 +359,7 @@ export default function FavoritesPage() {
                         {/* Card Body */}
                         <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
                           <div className="space-y-1.5">
-                            <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-[#1B6EF3] transition-colors leading-snug line-clamp-1">
+                            <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-[#B45309] transition-colors leading-snug line-clamp-1">
                               {formatName(u.name)}
                             </h3>
                             {u.tuition_range_min_usd && (
@@ -451,7 +451,7 @@ export default function FavoritesPage() {
 
                         {/* Title & Metadata */}
                         <div className="space-y-1">
-                          <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-[#1B6EF3] transition-colors leading-snug">
+                          <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-[#B45309] transition-colors leading-snug">
                             {formatName(c.title)}
                           </h3>
                           <div className="text-xs text-[#68708A] font-mono flex items-center gap-2">
@@ -570,11 +570,11 @@ export default function FavoritesPage() {
 
                           {/* Title & Provider */}
                           <div className="space-y-1">
-                            <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-[#1B6EF3] transition-colors leading-snug">
+                            <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-[#B45309] transition-colors leading-snug">
                               {formatName(s.title)}
                             </h3>
                             {s.provider && (
-                              <div className="text-xs font-bold text-[#1B6EF3]">
+                              <div className="text-xs font-bold text-[#111965]">
                                 {formatName(s.provider)}
                               </div>
                             )}
