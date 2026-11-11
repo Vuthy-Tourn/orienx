@@ -506,169 +506,159 @@ export default function PublicPersonalityGuidePage() {
           </div>
         ) : (
           <motion.div
-            layout
+            key={selectedRole + (searchQuery ? `-${searchQuery}` : "")}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
             className="grid grid-cols-1 md:grid-cols-2 gap-6"
           >
-            <AnimatePresence mode="popLayout">
-              {filteredArchetypes.map(([code, meta]) => {
-                return (
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.22 }}
-                    key={code}
-                    onClick={() => setActiveArchetypeCode(code)}
-                    className="relative group rounded-3xl bg-white border border-slate-200/90 hover:border-slate-300 p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col sm:flex-row gap-5 cursor-pointer overflow-hidden"
+            {filteredArchetypes.map(([code, meta]) => {
+              return (
+                <div
+                  key={code}
+                  onClick={() => setActiveArchetypeCode(code)}
+                  className="relative group rounded-3xl bg-white border border-slate-200/90 hover:border-[#111965]/40 p-5 sm:p-6 transition-all duration-200 shadow-2xs hover:shadow-xs flex flex-col sm:flex-row gap-5 cursor-pointer overflow-hidden"
+                >
+                  {/* LEFT / TOP: Character Showcase Stage Pedestal */}
+                  <div
+                    className="relative w-full sm:w-44 md:w-48 shrink-0 rounded-2xl flex flex-col items-center justify-between p-3.5 overflow-hidden border border-slate-100 group-hover:border-slate-200 transition-colors"
+                    style={{
+                      background: `radial-gradient(circle at 50% 60%, ${meta.roleColor}14 0%, transparent 75%), #F8FAFD`,
+                    }}
                   >
-                    {/* Ambient Role Spotlight Glow (ReactBits style) */}
-                    <div
-                      className="absolute -top-20 -right-20 w-56 h-56 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                      style={{ backgroundColor: `${meta.roleColor}25` }}
-                    />
+                    {/* Ghost Watermark Monogram */}
+                    <span className="absolute top-2 right-2.5 text-base font-black tracking-widest text-slate-300/60 group-hover:text-slate-400 transition-colors select-none font-mono">
+                      {code}
+                    </span>
 
-                    {/* LEFT / TOP: Character Showcase Stage Pedestal */}
+                    {/* Role Pill */}
                     <div
-                      className="relative w-full sm:w-44 md:w-48 shrink-0 rounded-2xl flex flex-col items-center justify-between p-3.5 overflow-hidden border border-slate-100 group-hover:border-slate-200 transition-colors"
+                      className="self-start inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border shadow-2xs"
                       style={{
-                        background: `radial-gradient(circle at 50% 60%, ${meta.roleColor}18 0%, transparent 75%), #F8FAFD`,
+                        backgroundColor: `${meta.roleColor}14`,
+                        color: meta.roleColor,
+                        borderColor: `${meta.roleColor}30`,
                       }}
                     >
-                      {/* Ghost Watermark Monogram */}
-                      <span className="absolute top-2 right-2.5 text-base font-black tracking-widest text-slate-300/60 group-hover:text-slate-400 transition-colors select-none font-mono">
-                        {code}
-                      </span>
+                      <span
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{ backgroundColor: meta.roleColor }}
+                      />
+                      <span>{meta.roleNameEn}</span>
+                    </div>
 
-                      {/* Role Pill */}
-                      <div
-                        className="self-start inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border shadow-2xs"
-                        style={{
-                          backgroundColor: `${meta.roleColor}14`,
-                          color: meta.roleColor,
-                          borderColor: `${meta.roleColor}30`,
-                        }}
-                      >
+                    {/* Vector Character Image */}
+                    <div className="relative w-full h-32 sm:h-36 flex items-center justify-center my-1.5">
+                      <Image
+                        src={`/images/personality-types/${code.toLowerCase()}.svg`}
+                        alt={code}
+                        width={110}
+                        height={140}
+                        className="object-contain max-h-32 transition-transform duration-200 ease-out group-hover:scale-105"
+                      />
+                    </div>
+
+                    {/* 4-Letter Dichotomy Micro-Indicator */}
+                    <div className="flex items-center justify-center gap-1 w-full pt-1">
+                      {code.split("").map((letter, i) => (
                         <span
-                          className="w-1.5 h-1.5 rounded-full"
-                          style={{ backgroundColor: meta.roleColor }}
-                        />
-                        <span>{meta.roleNameEn}</span>
-                      </div>
-
-                      {/* Vector Character Image */}
-                      <div className="relative w-full h-32 sm:h-36 flex items-center justify-center my-1.5">
-                        <Image
-                          src={`/images/personality-types/${code.toLowerCase()}.svg`}
-                          alt={code}
-                          width={110}
-                          height={140}
-                          className="object-contain max-h-32 transition-all duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-1 drop-shadow-sm group-hover:drop-shadow-md"
-                        />
-                      </div>
-
-                      {/* 4-Letter Dichotomy Micro-Indicator */}
-                      <div className="flex items-center justify-center gap-1 w-full pt-1">
-                        {code.split("").map((letter, i) => (
-                          <span
-                            key={i}
-                            className="w-5 h-5 rounded-md text-[9px] font-black flex items-center justify-center bg-white text-[#111965] border border-slate-200 shadow-2xs"
-                          >
-                            {letter}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* RIGHT: Detailed Content, Full Strengths & Fields, Action CTAs */}
-                    <div className="flex-1 flex flex-col justify-between space-y-3.5 relative z-10 min-w-0">
-                      <div className="space-y-2">
-                        {/* Archetype Title & Tagline */}
-                        <div>
-                          <div className="flex items-center justify-between gap-2">
-                            <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-blue-900 transition-colors">
-                              {language === "km" ? meta.nameKm : meta.nameEn}
-                            </h3>
-                            <span className="text-[10px] font-bold text-[#68708A] bg-slate-100 px-2 py-0.5 rounded-md sm:hidden">
-                              {code}
-                            </span>
-                          </div>
-                          <p className="text-xs text-[#68708A] leading-relaxed pt-0.5 line-clamp-2">
-                            {getLocalized({ km: meta.taglineKm, en: meta.taglineEn })}
-                          </p>
-                        </div>
-
-                        {/* Key Strengths (Full text, No Truncation!) */}
-                        {meta.strengthsKm && (
-                          <div className="space-y-1 pt-1">
-                            <span className="text-[9px] font-black text-[#68708A] uppercase tracking-wider">
-                              {getLocalized({ km: "ចំណុចខ្លាំងចម្បង:", en: "Key Strengths:" })}
-                            </span>
-                            <div className="flex flex-wrap gap-1.5">
-                              {((language === "km" ? meta.strengthsKm : meta.strengthsEn) || meta.strengthsKm || [])
-                                .slice(0, 2)
-                                .map((s: string, idx: number) => (
-                                  <span
-                                    key={idx}
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-emerald-50 text-emerald-900 border border-emerald-100"
-                                  >
-                                    <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
-                                    <span>{s}</span>
-                                  </span>
-                                ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Best Academic Fields (Full text, No Truncation!) */}
-                        {meta.bestFieldsKm && (
-                          <div className="space-y-1 pt-0.5">
-                            <span className="text-[9px] font-black text-[#68708A] uppercase tracking-wider">
-                              {getLocalized({ km: "វិស័យសិក្សាសាកសម:", en: "Top Fields:" })}
-                            </span>
-                            <div className="flex flex-wrap gap-1.5">
-                              {((language === "km" ? meta.bestFieldsKm : meta.bestFieldsEn) || meta.bestFieldsKm || [])
-                                .slice(0, 2)
-                                .map((f: string, idx: number) => (
-                                  <span
-                                    key={idx}
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold border"
-                                    style={{
-                                      backgroundColor: `${meta.roleColor}0E`,
-                                      color: meta.roleColor,
-                                      borderColor: `${meta.roleColor}30`,
-                                    }}
-                                  >
-                                    <Zap className="w-3 h-3 shrink-0" />
-                                    <span>{f}</span>
-                                  </span>
-                                ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Card Footer: Interactive Actions */}
-                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
-                        <div className="inline-flex items-center gap-1 text-xs font-black text-[#111965] group-hover:text-blue-700 transition-colors">
-                          <span>{getLocalized({ km: "ស្វែងយល់លម្អិត", en: "Explore Profile" })}</span>
-                          <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-                        </div>
-
-                        <Link
-                          href="/dashboard/assessments/personality"
-                          onClick={(e) => e.stopPropagation()}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#111965] hover:bg-[#1A2580] text-white shadow-2xs transition-colors shrink-0"
+                          key={i}
+                          className="w-5 h-5 rounded-md text-[9px] font-black flex items-center justify-center bg-white text-[#111965] border border-slate-200 shadow-2xs"
                         >
-                          <span>{getLocalized({ km: "ធ្វើតេស្ត", en: "Take Test" })}</span>
-                          <Sparkles className="w-3 h-3 text-[#F7CE4D]" />
-                        </Link>
-                      </div>
+                          {letter}
+                        </span>
+                      ))}
                     </div>
-                  </motion.div>
-                );
-              })}
-            </AnimatePresence>
+                  </div>
+
+                  {/* RIGHT: Detailed Content, Full Strengths & Fields, Action CTAs */}
+                  <div className="flex-1 flex flex-col justify-between space-y-3.5 relative z-10 min-w-0">
+                    <div className="space-y-2">
+                      {/* Archetype Title & Tagline */}
+                      <div>
+                        <div className="flex items-center justify-between gap-2">
+                          <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-blue-900 transition-colors">
+                            {language === "km" ? meta.nameKm : meta.nameEn}
+                          </h3>
+                          <span className="text-[10px] font-bold text-[#68708A] bg-slate-100 px-2 py-0.5 rounded-md sm:hidden">
+                            {code}
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#68708A] leading-relaxed pt-0.5 line-clamp-2">
+                          {getLocalized({ km: meta.taglineKm, en: meta.taglineEn })}
+                        </p>
+                      </div>
+
+                      {/* Key Strengths (Full text, No Truncation!) */}
+                      {meta.strengthsKm && (
+                        <div className="space-y-1 pt-1">
+                          <span className="text-[9px] font-black text-[#68708A] uppercase tracking-wider">
+                            {getLocalized({ km: "ចំណុចខ្លាំងចម្បង:", en: "Key Strengths:" })}
+                          </span>
+                          <div className="flex flex-wrap gap-1.5">
+                            {((language === "km" ? meta.strengthsKm : meta.strengthsEn) || meta.strengthsKm || [])
+                              .slice(0, 2)
+                              .map((s: string, idx: number) => (
+                                <span
+                                  key={idx}
+                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-emerald-50 text-emerald-900 border border-emerald-100"
+                                >
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                                  <span>{s}</span>
+                                </span>
+                              ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Best Academic Fields (Full text, No Truncation!) */}
+                      {meta.bestFieldsKm && (
+                        <div className="space-y-1 pt-0.5">
+                          <span className="text-[9px] font-black text-[#68708A] uppercase tracking-wider">
+                            {getLocalized({ km: "វិស័យសិក្សាសាកសម:", en: "Top Fields:" })}
+                          </span>
+                          <div className="flex flex-wrap gap-1.5">
+                            {((language === "km" ? meta.bestFieldsKm : meta.bestFieldsEn) || meta.bestFieldsKm || [])
+                              .slice(0, 2)
+                              .map((f: string, idx: number) => (
+                                <span
+                                  key={idx}
+                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold border"
+                                  style={{
+                                    backgroundColor: `${meta.roleColor}0E`,
+                                    color: meta.roleColor,
+                                    borderColor: `${meta.roleColor}30`,
+                                  }}
+                                >
+                                  <Zap className="w-3 h-3 shrink-0" />
+                                  <span>{f}</span>
+                                </span>
+                              ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Card Footer: Interactive Actions */}
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                      <div className="inline-flex items-center gap-1 text-xs font-black text-[#111965] group-hover:text-blue-700 transition-colors">
+                        <span>{getLocalized({ km: "ស្វែងយល់លម្អិត", en: "Explore Profile" })}</span>
+                        <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                      </div>
+
+                      <Link
+                        href="/dashboard/assessments/personality"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#111965] hover:bg-[#1A2580] text-white shadow-2xs transition-colors shrink-0"
+                      >
+                        <span>{getLocalized({ km: "ធ្វើតេស្ត", en: "Take Test" })}</span>
+                        <Sparkles className="w-3 h-3 text-[#F7CE4D]" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </motion.div>
         )}
       </section>
