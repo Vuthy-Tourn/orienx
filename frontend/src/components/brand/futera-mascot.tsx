@@ -41,26 +41,16 @@ const VIDEO_EMOTIONS: Array<{
 ];
 
 const PLAYFUL_CHEERS = [
-  { km: "តោះលេងជាមួយគ្នា! ✨", en: "Let's play together! ✨" },
+  { km: "តោះលេងជាមួយគ្នា! ✨", en: "Let's do this together! ✨" },
   { km: "ឆ្លើយតាមចិត្តគិតណា! 💡", en: "Trust your intuition! 💡" },
-  { km: "អ្នកធ្វើបានល្អណាស់! 🌟", en: "You're doing awesome! 🌟" },
+  { km: "អ្នកធ្វើបានល្អណាស់! 🌟", en: "You're doing great! 🌟" },
   { km: "បន្តដំណើរទៅមុខទៀត! 🚀", en: "Keep moving forward! 🚀" },
-  { km: "ជិតដល់គោលដៅហើយ! 🎯", en: "Almost at your goal! 🎯" },
+  { km: "ជិតដល់គោលដៅហើយ! 🎯", en: "Almost there! 🎯" },
 ];
 
 /**
  * Futera Official Video Mascot: Tara (តារា / Little Star Buddy)
- * 1. 100% Video-driven directly converted from user's .mov files:
- *    - happy.webp: Joyful bouncy spring jump on sunny sky (Agree, 1-3)
- *    - think.webp: Calm thoughtful gaze (Neutral, 4)
- *    - sad.webp: Sympathetic drooping pout (Disagree, 5-6)
- *    - angry.webp: Determined stomping pout (Strongly Disagree, 7)
- *    - Congratulation.webp: High celebratory victory jump (Assessment finished)
- *    - click_on_it.webp: Interactive playful click animation (Interactive click reaction)
- * 2. Interactive Clicks: Click either Tara OR the message box to trigger lively cheers & jump!
- * 3. 100% Borderless & No Background: Clean 2px morphological erosion eliminates halo fringe.
- * 4. 100% Glitch-Free: All animations persistent in DOM with CSS opacity transitions.
- * 5. Modern Elevated Floating Speech Bubble: Organic breathing motion, color-reactive glow, and Tara AI badge.
+ * Clean Minimal White Speech Bubble — pure white, subtle slate border, crisp navy text, clean pointer tail.
  */
 export function FuteraMascot({
   className = "",
@@ -105,7 +95,7 @@ export function FuteraMascot({
     const nextAction: "happy" | "click_on_it" = Math.random() < 0.5 ? "click_on_it" : "happy";
     const randomCheer = PLAYFUL_CHEERS[Math.floor(Math.random() * PLAYFUL_CHEERS.length)];
     const cheerText = language === "km" ? randomCheer.km : randomCheer.en;
-    
+
     setClickAction(nextAction);
     setClickSpeech(cheerText);
 
@@ -125,7 +115,7 @@ export function FuteraMascot({
   // Default contextual speech text
   const defaultSpeech =
     resolvedId === "click_on_it"
-      ? (language === "km" ? "តោះលេងជាមួយគ្នា! ✨" : "Let's play together! ✨")
+      ? (language === "km" ? "តោះលេងជាមួយគ្នា! ✨" : "Let's do this together! ✨")
       : resolvedId === "happy"
       ? (language === "km" ? "យល់ស្រប! អស្ចារ្យណាស់! ✨" : "Agree! Awesome! ✨")
       : resolvedId === "angry"
@@ -133,78 +123,34 @@ export function FuteraMascot({
       : resolvedId === "sad"
       ? (language === "km" ? "មិនយល់ស្របទេ? ខ្ញុំយល់ហើយ... 💡" : "Disagree? I understand... 💡")
       : resolvedId === "congratulation"
-      ? (language === "km" ? "អបអរសាទរ! អ្នកពិតជាអស្ចារ្យ! 🏆" : "Congratulations! You're awesome! 🏆")
+      ? (language === "km" ? "អបអរសាទរ! ទទួលបានលទ្ធផលហើយ! 🏆" : "Congratulations! Results are ready! 🏆")
       : (language === "km" ? "តើអ្នកយល់យ៉ាងណាដែរ? 🤔" : "What do you think? 🤔");
 
   const renderedSpeech = clickSpeech || speechText || defaultSpeech;
   const isSad = resolvedId === "sad";
   const isAngry = resolvedId === "angry";
-  const isHappy = resolvedId === "happy" || resolvedId === "click_on_it" || resolvedId === "congratulation";
-
-  // Dynamic emotional color schemes for modern elevated speech bubble
-  const themeStyles = isAngry
-    ? {
-        border: "border-rose-400 dark:border-rose-500",
-        shadow: "shadow-[0_10px_25px_-5px_rgba(244,63,94,0.22)]",
-        badgeBg: "bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800",
-        dotColor: "bg-rose-500",
-        sparkle: "⚡",
-      }
-    : isSad
-    ? {
-        border: "border-indigo-400 dark:border-indigo-500",
-        shadow: "shadow-[0_10px_25px_-5px_rgba(99,102,241,0.22)]",
-        badgeBg: "bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800",
-        dotColor: "bg-indigo-500",
-        sparkle: "💭",
-      }
-    : isHappy
-    ? {
-        border: "border-emerald-400 dark:border-emerald-500",
-        shadow: "shadow-[0_10px_25px_-5px_rgba(16,185,129,0.22)]",
-        badgeBg: "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800",
-        dotColor: "bg-emerald-500",
-        sparkle: "✨",
-      }
-    : {
-        border: "border-[#F7CE4D] dark:border-[#F7CE4D]/80",
-        shadow: "shadow-[0_10px_25px_-5px_rgba(247,206,77,0.28)]",
-        badgeBg: "bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700/60",
-        dotColor: "bg-amber-500",
-        sparkle: "✦",
-      };
 
   if (variant === "peeking-right") {
     return (
       <div className={`relative flex items-center select-none ${className}`}>
-        {/* Dynamic Elevated Speech Bubble pointing toward Tara */}
+        {/* Clean Minimal White Speech Bubble pointing toward Tara */}
         {showSpeech && renderedSpeech && (
           <div
-            className="mr-1 sm:mr-2.5 animate-float-slow cursor-pointer group"
+            className="mr-1 sm:mr-2 cursor-pointer select-none transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
             onClick={handleMascotClick}
             title={language === "km" ? "ចុចដើម្បីលេងជាមួយ Tara!" : "Click to interact with Tara!"}
           >
             <div
               key={renderedSpeech}
-              className={`relative bg-white/95 dark:bg-[#1E293B] backdrop-blur-md px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl sm:rounded-3xl border-2 ${themeStyles.border} ${themeStyles.shadow} max-w-[200px] sm:max-w-[260px] text-right transition-all duration-200 group-hover:scale-103 group-active:scale-97 animate-in zoom-in-95 fade-in slide-in-from-right-3`}
+              className="relative bg-white dark:bg-[#1E293B] px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-slate-200/90 dark:border-slate-700 shadow-sm dark:shadow-md max-w-[200px] sm:max-w-[260px] text-right animate-in fade-in zoom-in-95 duration-200"
             >
-              {/* Cute Header Bar: Tara status pill + sparkle */}
-              <div className="flex items-center gap-1.5 mb-1 justify-end">
-                <span className={`w-1.5 h-1.5 rounded-full ${themeStyles.dotColor} animate-ping`} />
-                <span className={`px-1.5 py-0.2 rounded-md font-mono text-[9px] font-black uppercase tracking-wider ${themeStyles.badgeBg}`}>
-                  TARA AI
-                </span>
-                <span className="text-[10px] animate-pulse">{themeStyles.sparkle}</span>
-              </div>
-
-              {/* Main Speech Content */}
-              <p className="text-xs sm:text-[13px] font-black text-[#111965] dark:text-[#F8FAFC] leading-snug tracking-tight">
+              <p className="text-xs sm:text-[13px] font-bold text-[#111965] dark:text-[#F8FAFC] leading-snug">
                 {renderedSpeech}
               </p>
 
-              {/* Seamless Tail Pointing directly to Tara */}
+              {/* Clean Seamless Tail pointing directly to Tara */}
               <div
-                className={`absolute top-1/2 -right-1.5 -translate-y-1/2 w-3 h-3 rotate-45 bg-white dark:bg-[#1E293B] border-t-2 border-r-2 ${themeStyles.border} transition-colors`}
+                className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-3 h-3 rotate-45 bg-white dark:bg-[#1E293B] border-t border-r border-slate-200/90 dark:border-slate-700"
               />
             </div>
           </div>
@@ -273,34 +219,24 @@ export function FuteraMascot({
   // Full-jumping mascot (Results view / Hero)
   return (
     <div className={`relative inline-flex flex-col items-center select-none ${className}`}>
-      {/* Speech Bubble directly above Tara */}
+      {/* Clean Minimal White Speech Bubble directly above Tara */}
       {showSpeech && renderedSpeech && (
         <div
-          className="mb-2.5 z-20 animate-float-slow cursor-pointer group"
+          className="mb-2.5 cursor-pointer select-none transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]"
           onClick={handleMascotClick}
           title={language === "km" ? "ចុចដើម្បីលេងជាមួយ Tara!" : "Click to interact with Tara!"}
         >
           <div
             key={renderedSpeech}
-            className={`relative bg-white/95 dark:bg-[#1E293B] backdrop-blur-md px-4 sm:px-5 py-2.5 rounded-2xl sm:rounded-3xl border-2 ${themeStyles.border} ${themeStyles.shadow} whitespace-nowrap leading-tight text-center transition-all duration-200 group-hover:scale-103 group-active:scale-97 animate-in zoom-in-95 fade-in`}
+            className="relative bg-white dark:bg-[#1E293B] px-4 py-2 rounded-2xl border border-slate-200/90 dark:border-slate-700 shadow-sm dark:shadow-md whitespace-nowrap leading-tight text-center animate-in fade-in zoom-in-95 duration-200"
           >
-            {/* Header Bar */}
-            <div className="flex items-center gap-1.5 mb-1 justify-center">
-              <span className={`w-1.5 h-1.5 rounded-full ${themeStyles.dotColor} animate-ping`} />
-              <span className={`px-1.5 py-0.2 rounded-md font-mono text-[9px] font-black uppercase tracking-wider ${themeStyles.badgeBg}`}>
-                TARA AI
-              </span>
-              <span className="text-[10px] animate-pulse">{themeStyles.sparkle}</span>
-            </div>
-
-            {/* Main Speech Content */}
-            <p className="text-xs sm:text-sm font-black text-[#111965] dark:text-[#F8FAFC] leading-snug tracking-tight">
+            <p className="text-xs sm:text-sm font-bold text-[#111965] dark:text-[#F8FAFC] leading-snug">
               {renderedSpeech}
             </p>
 
-            {/* Seamless Tail pointing down */}
+            {/* Clean Tail pointing down */}
             <div
-              className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-white dark:bg-[#1E293B] border-r-2 border-b-2 ${themeStyles.border} transition-colors`}
+              className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-white dark:bg-[#1E293B] border-r border-b border-slate-200/90 dark:border-slate-700"
             />
           </div>
         </div>
