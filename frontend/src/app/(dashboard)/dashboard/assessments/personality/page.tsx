@@ -23,6 +23,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 import {
   DIMENSION_TITLES,
@@ -38,6 +39,7 @@ export default function PersonalityAssessmentPage() {
   const queryClient = useQueryClient();
 
   const [activeTab, setActiveTab] = useState<"form" | "results">("form");
+  const [recSortMode, setRecSortMode] = useState<"overall" | "mbti">("overall");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<
     Record<string, { scaleLevel: number; selectedOptionId: string }>
@@ -98,15 +100,19 @@ export default function PersonalityAssessmentPage() {
     enabled: activeTab === "results",
   });
 
-  // Sort recommendations by personality fit score for the Personality Results view
-  const personalityRecs = React.useMemo(() => {
+  // Unified recommendations: By default matches /dashboard/recommendations (holistic match_score)
+  // Can be toggled to pure MBTI affinity for comparative exploration
+  const displayedRecs = React.useMemo(() => {
     if (!recommendations) return [];
-    return [...recommendations].sort((a, b) => {
-      const pDiff = (b.personality_match_score || 0) - (a.personality_match_score || 0);
-      if (Math.abs(pDiff) > 0.5) return pDiff;
-      return (b.match_score || 0) - (a.match_score || 0);
-    });
-  }, [recommendations]);
+    if (recSortMode === "mbti") {
+      return [...recommendations].sort((a, b) => {
+        const pDiff = (b.personality_match_score || 0) - (a.personality_match_score || 0);
+        if (Math.abs(pDiff) > 0.5) return pDiff;
+        return (b.match_score || 0) - (a.match_score || 0);
+      });
+    }
+    return recommendations;
+  }, [recommendations, recSortMode]);
 
   useEffect(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem(DRAFT_STORAGE_KEY) : null;
@@ -612,27 +618,61 @@ export default function PersonalityAssessmentPage() {
 
         {/* 4. RECOMMENDED MAJORS & UNIVERSITIES FOR THIS MBTI */}
         <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E6E8F0] pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E8F0] pb-4">
             <div className="space-y-1">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-black uppercase tracking-wider border border-emerald-200">
                 <Sparkles className="w-3 h-3 text-emerald-600" />
-                <span>{t("personalityAssessment.mbtiMatchesBadge", "អនុសាសន៍ AI ផ្អែកលើបុគ្គលិកលក្ខណៈ")}</span>
+                <span>{t("personalityAssessment.mbtiMatchesBadge", "អនុសាសន៍ AI ផ្ទាល់ខ្លួន")}</span>
               </div>
               <h3 className="text-base sm:text-lg font-black text-[#111965]">
-                {t("personalityAssessment.recommendedMajorsTitle", `មុខជំនាញ និងសាកលវិទ្យាល័យដែលសាកសមនឹង ${pType}`)}
+                {t("personalityAssessment.recommendedMajorsTitle", "មុខជំនាញដែលសាកសមបំផុតសម្រាប់អ្នក")}
               </h3>
               <p className="text-xs text-[#68708A]">
-                {t("personalityAssessment.recommendedMajorsSubtitle", `ជំនាញ និងគ្រឹះស្ថានឧត្តមសិក្សាដែលត្រូវគ្នានឹងទម្រង់ការគិត និងការសម្រេចចិត្តបែប ${pType} របស់អ្នក`)}
+                {t("personalityAssessment.recommendedMajorsSubtitle", `រួមបញ្ចូលបុគ្គលិកលក្ខណៈ ${pType} ទំនោរអាជីព និងសមត្ថភាពសិក្សារបស់អ្នក`)}
               </p>
             </div>
 
-            <Link
-              href="/dashboard/recommendations"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs self-start sm:self-auto cursor-pointer whitespace-nowrap"
-            >
-              <span>{t("personalityAssessment.viewAllRecommendations", "មើលអនុសាសន៍ទាំងអស់")}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            <div className="flex flex-wrap items-center gap-2.5 self-start sm:self-auto">
+              {/* Sort Mode Toggle: Unified Overall Matches (default, 100% matches /dashboard/recommendations) vs Pure MBTI Alignment */}
+              <div className="inline-flex items-center p-1 rounded-xl bg-[#F0F2FA] border border-[#E6E8F0]">
+                <button
+                  type="button"
+                  onClick={() => setRecSortMode("overall")}
+                  className={cn(
+                    "px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5",
+                    recSortMode === "overall"
+                      ? "bg-[#111965] text-white shadow-2xs"
+                      : "text-[#68708A] hover:text-[#111965]"
+                  )}
+                  title="Matches your personalized recommendations and progress"
+                >
+                  <Sparkles className="w-3 h-3 text-[#F7CE4D]" />
+                  <span>{getLocalized({ km: "ផ្គូផ្គងសរុប (Top Matches)", en: "Top Matches" })}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRecSortMode("mbti")}
+                  className={cn(
+                    "px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5",
+                    recSortMode === "mbti"
+                      ? "bg-[#111965] text-white shadow-2xs"
+                      : "text-[#68708A] hover:text-[#111965]"
+                  )}
+                  title={`Sort strictly by ${pType} personality compatibility`}
+                >
+                  <Crown className="w-3 h-3 text-purple-400" />
+                  <span>{getLocalized({ km: `តាម ${pType} សុទ្ធ`, en: `Pure ${pType}` })}</span>
+                </button>
+              </div>
+
+              <Link
+                href="/dashboard/recommendations"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs cursor-pointer whitespace-nowrap"
+              >
+                <span>{t("personalityAssessment.viewAllRecommendations", "មើលអនុសាសន៍ទាំងអស់")}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
 
           {loadingRecs ? (
@@ -645,13 +685,19 @@ export default function PersonalityAssessmentPage() {
                 </div>
               ))}
             </div>
-          ) : personalityRecs && personalityRecs.length > 0 ? (
+          ) : displayedRecs && displayedRecs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {personalityRecs.slice(0, 3).map((rec: any, idx: number) => {
+              {displayedRecs.slice(0, 3).map((rec: any, idx: number) => {
                 const major = rec.major || {};
                 const exp = rec.explanation || {};
                 const unis = major.offering_universities || [];
-                const fitScore = Math.round(rec.personality_match_score || rec.match_score || 0);
+                const fitScore =
+                  rec.match_score != null
+                    ? Math.round(Number(rec.match_score))
+                    : Math.round(rec.personality_match_score || 0);
+                const mbtiScore = Math.round(
+                  rec.personality_match_score || exp.dimension_scores?.mbti || exp.mbti_fit || 0
+                );
 
                 return (
                   <div
@@ -674,10 +720,18 @@ export default function PersonalityAssessmentPage() {
                           )}
                         </div>
 
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
                           <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
                             {fitScore}% Fit
                           </span>
+                          {mbtiScore > 0 && (
+                            <span
+                              className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-50 text-purple-800 border border-purple-200"
+                              title={`${pType} Dimension Fit`}
+                            >
+                              MBTI {mbtiScore}%
+                            </span>
+                          )}
                         </div>
                       </div>
 
@@ -687,8 +741,8 @@ export default function PersonalityAssessmentPage() {
 
                       {/* Rationale snippet */}
                       <p className="text-[11px] text-[#4A5568] line-clamp-2 leading-relaxed bg-[#F8FAFD] p-2.5 rounded-xl border border-[#E6E8F0]/70 min-h-[46px] flex items-center">
-                        {getLocalized({ km: exp.personality_reason_km, en: exp.personality_reason_en }) ||
-                          getLocalized({ km: exp.fit_summary_km, en: exp.fit_summary_en }) ||
+                        {getLocalized({ km: exp.fit_summary_km, en: exp.fit_summary_en }) ||
+                          getLocalized({ km: exp.personality_reason_km, en: exp.personality_reason_en }) ||
                           getLocalized({
                             km: `ទម្រង់បុគ្គលិកលក្ខណៈ ${pType} របស់អ្នកស័ក្តិសមយ៉ាងល្អជាមួយនឹងជំនាញ ${getLocalized(major.name)}។`,
                             en: `Your ${pType} cognitive orientation aligns exceptionally well with ${getLocalized(major.name)}.`,
