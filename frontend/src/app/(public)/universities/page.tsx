@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
@@ -46,7 +46,10 @@ const UNIVERSITY_IMAGES: Record<string, string> = {
   num: "/images/universities/rupp.jpg",
 };
 
-export default function UniversitiesPage() {
+function UniversitiesContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const majorSlug = searchParams.get("major") || "";
   const { t, getLocalized, language } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
@@ -59,13 +62,21 @@ export default function UniversitiesPage() {
   // Estimator track state
   const [estimatorType, setEstimatorType] = useState<"PUBLIC" | "PRIVATE">("PUBLIC");
 
+  // Query major info if major filter is active
+  const { data: majorInfo } = useQuery({
+    queryKey: ["major-info", majorSlug],
+    queryFn: async () => apiFetch<any>(`/majors/${majorSlug}`),
+    enabled: !!majorSlug,
+  });
+
   const { data: universities, isLoading, error } = useQuery({
-    queryKey: ["universities", searchTerm, typeFilter, provinceFilter],
+    queryKey: ["universities", searchTerm, typeFilter, provinceFilter, majorSlug],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (searchTerm) params.append("q", searchTerm);
       if (typeFilter) params.append("university_type", typeFilter);
       if (provinceFilter) params.append("province", provinceFilter);
+      if (majorSlug) params.append("major", majorSlug);
       return apiFetch<any[]>(`/universities?${params.toString()}`);
     },
   });
@@ -103,12 +114,13 @@ export default function UniversitiesPage() {
     return universities.filter((u) => selectedForCompare.includes(u.slug));
   }, [universities, selectedForCompare]);
 
-  const hasActiveFilters = Boolean(searchTerm || typeFilter || provinceFilter);
+  const hasActiveFilters = Boolean(searchTerm || typeFilter || provinceFilter || majorSlug);
 
   const resetFilters = () => {
     setSearchTerm("");
     setTypeFilter("");
     setProvinceFilter("");
+    if (majorSlug) router.push("/universities");
   };
 
   // Convert USD to KHR (1 USD = 4,100 KHR)
@@ -250,6 +262,33 @@ export default function UniversitiesPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
+        {/* Active Major Filter Banner */}
+        {majorSlug && (
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 flex items-center justify-between gap-3 shadow-2xs">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-9 h-9 rounded-xl bg-[#111965] text-white flex items-center justify-center shrink-0">
+                <Sparkles className="w-4 h-4 text-[#F7CE4D]" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[10px] font-black uppercase tracking-wider text-blue-900">
+                  {t("universitiesDirectory.filteringByMajor") || "តម្រងតាមមុខជំនាញដែលបានណែនាំ (Filtered by Recommended Major)"}
+                </div>
+                <div className="text-sm sm:text-base font-black text-[#111965] truncate">
+                  {majorInfo ? getLocalized(majorInfo.name) : majorSlug}
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => router.push("/universities")}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-[#111965] hover:bg-slate-100 border border-blue-200 transition-colors shrink-0 cursor-pointer shadow-2xs"
+            >
+              <X className="w-3.5 h-3.5 text-rose-500" />
+              <span>{t("universitiesDirectory.clearMajorFilter") || "បង្ហាញទាំងអស់"}</span>
+            </button>
+          </div>
+        )}
+
         {/* Filter & Search Bar */}
         <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E6E8F0] shadow-xs space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
@@ -663,5 +702,20 @@ export default function UniversitiesPage() {
         </Dialog>
       )}
     </div>
+  );
+}
+
+export default function UniversitiesPage() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen bg-[#F5F6FA] flex items-center justify-center text-sm text-[#68708A]">
+          <div className="w-8 h-8 rounded-full border-3 border-[#111965] border-t-transparent animate-spin mr-3" />
+          <span>Loading universities...</span>
+        </div>
+      }
+    >
+      <UniversitiesContent />
+    </React.Suspense>
   );
 }

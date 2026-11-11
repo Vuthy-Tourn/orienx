@@ -34,6 +34,7 @@ from app.schemas.assessment import (
 )
 from app.schemas.common import ApiResponse
 from app.services.assessment_service import AssessmentService
+from app.services.recommendation_service import RecommendationService
 
 router = APIRouter()
 
@@ -105,6 +106,8 @@ async def submit_personality_assessment(
 
     # Calculate result
     result = await AssessmentService.calculate_personality(db, assessment.id, current_user.id)
+    # Automatically recalculate personalized recommendations based on new MBTI result
+    await RecommendationService.generate_recommendations(db, current_user.id)
     await db.commit()
 
     return ApiResponse(
@@ -215,6 +218,8 @@ async def submit_riasec_assessment(
     await db.flush()
 
     result = await AssessmentService.calculate_riasec(db, assessment.id, current_user.id)
+    # Automatically recalculate personalized recommendations based on new RIASEC result
+    await RecommendationService.generate_recommendations(db, current_user.id)
     await db.commit()
 
     return ApiResponse(
@@ -336,6 +341,8 @@ async def save_academic_preferences(
         pref.requires_scholarship = body.requires_scholarship
 
     await db.commit()
+    # Automatically recalculate personalized recommendations based on updated preferences
+    await RecommendationService.generate_recommendations(db, current_user.id)
     await db.refresh(pref)
 
     return ApiResponse(

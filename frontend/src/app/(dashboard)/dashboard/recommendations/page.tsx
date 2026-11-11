@@ -310,6 +310,26 @@ export default function RecommendationsPage() {
                       <h3 className="text-sm sm:text-base font-black text-[#111965] truncate leading-tight">
                         {getLocalized(major.name)}
                       </h3>
+                      {/* Offering Universities in List view */}
+                      {major.offering_universities && major.offering_universities.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1 pt-1">
+                          {major.offering_universities.slice(0, 3).map((u: any) => (
+                            <Link
+                              key={u.university_id}
+                              href={`/universities/${u.university_slug}`}
+                              className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
+                              title={getLocalized(u.university_name)}
+                            >
+                              <span>{getLocalized(u.university_acronym) || u.university_slug.toUpperCase()}</span>
+                            </Link>
+                          ))}
+                          {major.offering_universities.length > 3 && (
+                            <span className="text-[9px] text-[#68708A]">
+                              +{major.offering_universities.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -443,6 +463,39 @@ export default function RecommendationsPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Offering Campuses / Universities Chips */}
+                {major.offering_universities && major.offering_universities.length > 0 && (
+                  <div className="space-y-1.5 pt-1 border-t border-[#E6E8F0]/70">
+                    <div className="flex items-center justify-between text-[10px] font-bold text-[#68708A] uppercase">
+                      <span>{t("recommendationsPage.campuses") || "គ្រឹះស្ថានបណ្តុះបណ្តាល"}</span>
+                      <span>{major.offering_universities.length} {t("recommendationsPage.institutions") || "កន្លែង"}</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {major.offering_universities.slice(0, 4).map((u: any) => (
+                        <Link
+                          key={u.university_id}
+                          href={`/universities/${u.university_slug}`}
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
+                          title={getLocalized(u.university_name)}
+                        >
+                          <Building2 className="w-2.5 h-2.5 opacity-60" />
+                          <span>{getLocalized(u.university_acronym) || u.university_slug.toUpperCase()}</span>
+                          {u.tuition_annual_usd ? (
+                            <span className="text-[9px] opacity-75 font-normal">
+                              (${Math.round(u.tuition_annual_usd)})
+                            </span>
+                          ) : null}
+                        </Link>
+                      ))}
+                      {major.offering_universities.length > 4 && (
+                        <span className="text-[10px] text-[#68708A] font-semibold">
+                          +{major.offering_universities.length - 4}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {/* 4. Footer: Campus Count & Action Buttons */}
                 <div className="pt-2 border-t border-[#E6E8F0] flex items-center justify-between text-xs gap-2">

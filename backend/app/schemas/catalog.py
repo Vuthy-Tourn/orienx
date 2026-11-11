@@ -78,8 +78,9 @@ class MajorOfferingUniversityOut(BaseModel):
     province: str
     tuition_annual_usd: Optional[float] = None
     is_tuition_verified: bool
-    duration_years: float
-    degree_level: str
+    duration_years: float = 4.0
+    degree_level: str = "BACHELOR"
+    logo_url: Optional[str] = None
     
     model_config = ConfigDict(extra="ignore")
 
@@ -95,6 +96,7 @@ class MajorSummaryOut(BaseModel):
     personality_affinity: Optional[str] = None
     is_stem: bool
     universities_count: Optional[int] = 0
+    offering_universities: Optional[List[MajorOfferingUniversityOut]] = []
     
     model_config = ConfigDict(extra="ignore")
 

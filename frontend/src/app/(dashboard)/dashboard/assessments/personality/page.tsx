@@ -23,7 +23,9 @@ import {
   Target,
   Zap,
   TrendingUp,
+  Building2,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type DimensionGroup = "EI" | "SN" | "TF" | "JP";
 
@@ -158,6 +160,13 @@ export default function PersonalityAssessmentPage() {
   const { data: latestResult, isLoading: loadingLatest } = useQuery({
     queryKey: ["latest-personality"],
     queryFn: async () => apiFetch<any>("/assessments/personality/latest"),
+  });
+
+  // 3. Fetch recommended majors and universities for results view
+  const { data: recommendations, isLoading: loadingRecs } = useQuery({
+    queryKey: ["recommended-majors"],
+    queryFn: async () => apiFetch<any[]>("/recommendations/majors"),
+    enabled: activeTab === "results",
   });
 
   useEffect(() => {
@@ -551,23 +560,178 @@ export default function PersonalityAssessmentPage() {
           </div>
         </div>
 
-        {/* 4. NEXT STEP CTA CARD */}
+        {/* 4. RECOMMENDED MAJORS & UNIVERSITIES FOR THIS MBTI */}
+        <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E6E8F0] pb-4">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-black uppercase tracking-wider border border-emerald-200">
+                <Sparkles className="w-3 h-3 text-emerald-600" />
+                <span>{t("personalityAssessment.mbtiMatchesBadge") || "អនុសាសន៍ AI ផ្អែកលើបុគ្គលិកលក្ខណៈ"}</span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-[#111965]">
+                {t("personalityAssessment.recommendedMajorsTitle") || `មុខជំនាញ និងសាកលវិទ្យាល័យដែលសាកសមនឹង ${pType}`}
+              </h3>
+              <p className="text-xs text-[#68708A]">
+                {t("personalityAssessment.recommendedMajorsSubtitle") || `ជំនាញ និងគ្រឹះស្ថានឧត្តមសិក្សាដែលត្រូវគ្នានឹងទម្រង់ការគិត និងការសម្រេចចិត្តបែប ${pType} របស់អ្នក`}
+              </p>
+            </div>
+
+            <Link
+              href="/dashboard/recommendations"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs self-start sm:self-auto cursor-pointer whitespace-nowrap"
+            >
+              <span>{t("personalityAssessment.viewAllRecommendations") || "មើលអនុសាសន៍ទាំងអស់"}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {loadingRecs ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className="p-4 rounded-2xl bg-white border border-[#E6E8F0] space-y-3">
+                  <Skeleton className="h-5 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
+                  <Skeleton className="h-12 w-full rounded-xl" />
+                </div>
+              ))}
+            </div>
+          ) : recommendations && recommendations.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {recommendations.slice(0, 4).map((rec: any) => {
+                const major = rec.major || {};
+                const exp = rec.explanation || {};
+                const unis = major.offering_universities || [];
+
+                return (
+                  <div
+                    key={rec.id}
+                    className="p-4 sm:p-5 rounded-2xl border border-[#E6E8F0] bg-gradient-to-b from-white to-[#FAFBFD] hover:border-indigo-300 hover:shadow-xs transition-all flex flex-col justify-between space-y-3"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="w-6 h-6 rounded-lg text-xs font-black bg-[#111965] text-[#F7CE4D] flex items-center justify-center">
+                            #{rec.rank_position}
+                          </span>
+                          <span className="text-[10px] font-bold text-[#68708A] uppercase">
+                            {major.category}
+                          </span>
+                          {major.is_stem && (
+                            <span className="px-1.5 py-0.2 rounded text-[9px] font-black bg-sky-50 text-sky-700 border border-sky-200">
+                              STEM
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-1">
+                          <span className="px-2 py-0.5 rounded-full text-[11px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            {rec.match_score}% Fit
+                          </span>
+                        </div>
+                      </div>
+
+                      <h4 className="text-sm sm:text-base font-black text-[#111965] leading-snug">
+                        {getLocalized(major.name)}
+                      </h4>
+
+                      {/* Rationale snippet */}
+                      <p className="text-[11px] text-[#4A5568] line-clamp-2 leading-relaxed bg-[#F8FAFD] p-2 rounded-xl border border-[#E6E8F0]/70">
+                        {getLocalized({ km: exp.personality_reason_km, en: exp.personality_reason_en }) ||
+                          getLocalized({ km: exp.fit_summary_km, en: exp.fit_summary_en })}
+                      </p>
+                    </div>
+
+                    {/* Offering Universities */}
+                    <div className="pt-2 border-t border-[#E6E8F0] space-y-2">
+                      <div className="text-[10px] font-bold text-[#68708A] uppercase flex items-center justify-between">
+                        <span>{t("personalityAssessment.offeringInstitutions") || "សាកលវិទ្យាល័យដែលបង្រៀន:"}</span>
+                        <span className="font-semibold text-slate-500">
+                          {unis.length} {t("recommendationsPage.institutions") || "កន្លែង"}
+                        </span>
+                      </div>
+
+                      {unis.length > 0 ? (
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {unis.slice(0, 3).map((u: any) => (
+                            <Link
+                              key={u.university_id}
+                              href={`/universities/${u.university_slug}`}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
+                              title={getLocalized(u.university_name)}
+                            >
+                              <Building2 className="w-2.5 h-2.5 opacity-60" />
+                              <span>{getLocalized(u.university_acronym) || u.university_slug.toUpperCase()}</span>
+                              {u.tuition_annual_usd ? (
+                                <span className="text-[9px] opacity-75 font-normal">
+                                  (${Math.round(u.tuition_annual_usd)})
+                                </span>
+                              ) : null}
+                            </Link>
+                          ))}
+                          {unis.length > 3 && (
+                            <span className="text-[10px] font-semibold text-[#68708A]">
+                              +{unis.length - 3} more
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="text-[11px] text-[#68708A] italic">
+                          សាកលវិទ្យាល័យកំពុងត្រូវបានផ្ទៀងផ្ទាត់
+                        </div>
+                      )}
+
+                      {/* Action Links */}
+                      <div className="pt-1 flex items-center justify-between gap-2">
+                        <Link
+                          href={`/majors/${major.slug}`}
+                          className="text-[11px] font-bold text-[#68708A] hover:text-[#111965] transition-colors"
+                        >
+                          {t("recommendationsPage.details") || "ព័ត៌មានលម្អិត"}
+                        </Link>
+
+                        <Link
+                          href={`/universities?major=${major.slug}`}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors"
+                        >
+                          <span>{t("recommendationsPage.universities") || "សាកលវិទ្យាល័យ"}</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="p-4 rounded-xl bg-slate-50 text-center text-xs text-[#68708A]">
+              មិនទាន់មានអនុសាសន៍នៅឡើយទេ
+            </div>
+          )}
+        </div>
+
+        {/* 5. NEXT STEP CTA CARD */}
         <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#F0F2FA] to-[#E8EBF8] border border-[#111965]/15 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
           <div className="space-y-1 text-center sm:text-left">
             <h4 className="text-sm sm:text-base font-extrabold text-[#111965]">
               ជំហានបន្ទាប់៖ ធ្វើតេស្តចំណាប់អារម្មណ៍អាជីព RIASEC
             </h4>
             <p className="text-xs text-[#68708A]">
-              ស្វែងយល់វិស័យការងារដែលត្រូវនឹងបុគ្គលិកលក្ខណៈ {pType} របស់អ្នក ដើម្បីឱ្យ AI អាចផ្គូផ្គងជំនាញសាកលវិទ្យាល័យ។
+              អនុសាសន៍ដំបូងផ្អែកលើបុគ្គលិកលក្ខណៈ {pType} របស់អ្នកបានគណនារួចរាល់! ធ្វើតេស្ត RIASEC ដើម្បីបង្កើនភាពសុក្រឹតបន្ថែមទៀត។
             </p>
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0">
             <Link
+              href="/dashboard/recommendations"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-2xl font-bold text-xs text-[#111965] bg-white border border-[#E6E8F0] hover:bg-[#F0F2FA] shadow-2xs transition-colors cursor-pointer whitespace-nowrap"
+            >
+              <span>{t("personalityAssessment.viewAllRecommendations") || "មើលអនុសាសន៍"}</span>
+            </Link>
+            <Link
               href="/dashboard/assessments/riasec"
               className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-2xl font-black text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-xs transition-colors cursor-pointer whitespace-nowrap"
             >
-              <span>ធ្វើតេស្ត RIASEC ឥឡូវនេះ</span>
+              <span>ធ្វើតេស្ត RIASEC</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -592,7 +756,8 @@ export default function PersonalityAssessmentPage() {
 
   // Format questions for shared AssessmentStage component
   const formattedQuestions: AssessmentStepItem[] = questions.map((q: any) => {
-    const dim = DIMENSION_TITLES[(q.category as DimensionGroup) || "EI"];
+    const dimGroup = (q.dimension || q.category || "EI") as DimensionGroup;
+    const dim = DIMENSION_TITLES[dimGroup];
     const stEn = q.options?.[0]?.label_en || q.prompt_en?.replace(/^I\s+/i, "") || q.prompt_en || "";
     const stKm = q.options?.[0]?.label_km || q.prompt_km || "";
 
@@ -602,9 +767,9 @@ export default function PersonalityAssessmentPage() {
       promptEn: q.prompt_en,
       statementKm: stKm,
       statementEn: stEn,
-      dimensionCode: dim?.code || q.category,
-      dimensionNameKm: dim?.nameKm || q.category,
-      dimensionNameEn: dim?.nameEn || q.category,
+      dimensionCode: dim?.code || dimGroup,
+      dimensionNameKm: dim?.nameKm || dimGroup,
+      dimensionNameEn: dim?.nameEn || dimGroup,
     };
   });
 

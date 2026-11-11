@@ -36,10 +36,35 @@ class RecommendationService:
         res_rule = await session.execute(stmt_rule)
         rule = res_rule.scalar_one_or_none()
 
-        w_p = float(rule.weight_personality) if rule else 0.20
-        w_r = float(rule.weight_riasec) if rule else 0.35
-        w_a = float(rule.weight_academic_strengths) if rule else 0.30
-        w_c = float(rule.weight_career_alignment) if rule else 0.15
+        has_personality = personality is not None
+        has_riasec = riasec is not None
+        has_pref = pref is not None
+
+        # Dynamically scale weights based on which assessments the user has completed
+        # so that completing the MBTI test immediately produces high-impact, meaningful recommendations
+        if has_personality and not has_riasec and not has_pref:
+            # User took MBTI only: Let personality drive the recommendation score
+            w_p = 0.75
+            w_r = 0.15
+            w_a = 0.05
+            w_c = 0.05
+        elif has_personality and has_riasec and not has_pref:
+            # User took MBTI + RIASEC
+            w_p = 0.35
+            w_r = 0.45
+            w_a = 0.10
+            w_c = 0.10
+        elif not has_personality and has_riasec:
+            # User took RIASEC only
+            w_p = 0.15
+            w_r = 0.65
+            w_a = 0.10
+            w_c = 0.10
+        else:
+            w_p = float(rule.weight_personality) if rule else 0.20
+            w_r = float(rule.weight_riasec) if rule else 0.35
+            w_a = float(rule.weight_academic_strengths) if rule else 0.30
+            w_c = float(rule.weight_career_alignment) if rule else 0.15
 
         # 3. Fetch all majors with relationships
         stmt_majors = (
@@ -71,6 +96,14 @@ class RecommendationService:
         user_budget = float(pref.annual_tuition_budget_usd) if (pref and pref.annual_tuition_budget_usd) else None
 
         for major in majors:
+            # Extract localized names safely
+            if isinstance(major.name, dict):
+                major_name_en = major.name.get("en", "this field")
+                major_name_km = major.name.get("km", "ជំនាញនេះ")
+            else:
+                major_name_en = str(major.name)
+                major_name_km = str(major.name)
+
             # 1. RIASEC Score (35%)
             prim_score = r_scores.get(major.riasec_primary, 50.0)
             sec_score = r_scores.get(major.riasec_secondary, 50.0)
@@ -78,14 +111,19 @@ class RecommendationService:
 
             # 2. Personality Fit (20%)
             s_personality = 60.0
+            is_direct_mbti = False
+            is_partial_mbti = False
             if major.personality_affinity:
                 affinities = [a.strip() for a in major.personality_affinity.split(",")]
                 if user_mbti in affinities:
                     s_personality = 95.0
+                    is_direct_mbti = True
                 elif any(user_mbti[:2] in a for a in affinities): # e.g. "IN"
                     s_personality = 80.0
+                    is_partial_mbti = True
                 elif any(user_mbti[2:] in a for a in affinities): # e.g. "TJ"
                     s_personality = 75.0
+                    is_partial_mbti = True
 
             # 3. Academic Strengths Fit (30%)
             s_academic = 50.0
@@ -131,14 +169,35 @@ class RecommendationService:
             raw_score = (w_p * s_personality) + (w_r * s_riasec) + (w_a * s_academic) + (w_c * s_career) - penalty
             final_match = round(max(30.0, min(99.0, raw_score)), 1)
 
-            # Build explainable rationale report
+            # Build explainable rationale report tailored to assessment state
+            if is_direct_mbti:
+                personality_reason_en = f"Your {user_mbti} cognitive style directly aligns with {major_name_en}, perfectly suited for its strategic and problem-solving demands."
+                personality_reason_km = f"ទម្រង់បុគ្គលិកលក្ខណៈ {user_mbti} របស់អ្នកត្រូវគ្នាយ៉ាងល្អឥតខ្ចោះជាមួយមុខជំនាញ {major_name_km} ដែលត្រូវនឹងវិធីសាស្ត្រគិត និងការដោះស្រាយបញ្ហាជាក់ស្តែង។"
+            elif is_partial_mbti:
+                personality_reason_en = f"Your {user_mbti} profile shares strong cognitive synergies with the core analytical demands of {major_name_en}."
+                personality_reason_km = f"ទម្រង់ {user_mbti} របស់អ្នកមានចំណុចខ្លាំងស្របគ្នាខ្ពស់ជាមួយការទាមទារនៃការសិក្សា និងការអនុវត្តក្នុងផ្នែក {major_name_km}។"
+            else:
+                personality_reason_en = f"Your {user_mbti} perspective provides complementary strengths to succeed in {major_name_en}."
+                personality_reason_km = f"ទម្រង់បុគ្គលិកលក្ខណៈ {user_mbti} របស់អ្នកផ្តល់នូវទស្សនៈប្លែក និងសមត្ថភាពបត់បែនក្នុងការសិក្សាជំនាញ {major_name_km}។"
+
+            if riasec:
+                fit_summary_en = f"Strong alignment based on your Holland code ({riasec.holland_code}) and {user_mbti} cognitive style."
+                fit_summary_km = f"ត្រូវគ្នាយ៉ាងខ្លាំងជាមួយកូដចំណាប់អារម្មណ៍អាជីពរបស់អ្នក ({riasec.holland_code}) និងទម្រង់បុគ្គលិកលក្ខណៈ {user_mbti}។"
+                riasec_reason_en = f"Primary discipline aligns with your {major.riasec_primary} ({prim_score:.0f}%) and {major.riasec_secondary} ({sec_score:.0f}%) interest areas."
+                riasec_reason_km = f"ជំនាញនេះត្រូវគ្នានឹងវិស័យចំណាប់អារម្មណ៍ចម្បងរបស់អ្នកគឺ {major.riasec_primary} ({prim_score:.0f}%) និង {major.riasec_secondary} ({sec_score:.0f}%)។"
+            else:
+                fit_summary_en = f"Top-ranked recommendation based on your verified {user_mbti} personality profile."
+                fit_summary_km = f"អនុសាសន៍សាកសមផ្អែកលើលទ្ធផលធ្វើតេស្តបុគ្គលិកលក្ខណៈ {user_mbti} ផ្ទាល់ខ្លួនរបស់អ្នក។"
+                riasec_reason_en = f"Aligns with {major.riasec_primary} ({major.category}) interest focus. (Take RIASEC assessment to fine-tune)."
+                riasec_reason_km = f"ស្របនឹងចំណាប់អារម្មណ៍ចម្បងផ្នែក {major.riasec_primary} ក្នុងវិស័យ {major.category} (ធ្វើតេស្ត RIASEC ដើម្បីបង្កើនភាពសុក្រឹតបន្ថែម)។"
+
             explanation = {
-                "fit_summary_en": f"Strong alignment based on your Holland code ({riasec.holland_code if riasec else 'IRE'}) and affinity with analytical problem solving.",
-                "fit_summary_km": f"ត្រូវគ្នាយ៉ាងខ្លាំងជាមួយកូដចំណាប់អារម្មណ៍អាជីពរបស់អ្នក ({riasec.holland_code if riasec else 'IRE'}) និងការដោះស្រាយបញ្ហាជាក់ស្តែង។",
-                "riasec_reason_en": f"Primary discipline aligns with your {major.riasec_primary} ({prim_score:.0f}%) and {major.riasec_secondary} ({sec_score:.0f}%) interest areas.",
-                "riasec_reason_km": f"ជំនាញនេះត្រូវគ្នានឹងវិស័យចំណាប់អារម្មណ៍ចម្បងរបស់អ្នកគឺ {major.riasec_primary} ({prim_score:.0f}%) និង {major.riasec_secondary} ({sec_score:.0f}%)។",
-                "personality_reason_en": f"Your {user_mbti} cognitive style matches the independent design and methodical focus required in {major.name.get('en', 'this field')}.",
-                "personality_reason_km": f"ទម្រង់បុគ្គលិកលក្ខណៈ {user_mbti} របស់អ្នកត្រូវគ្នានឹងការរៀបចំផែនការ និងការគិតស៊ីជម្រៅក្នុងជំនាញនេះ។",
+                "fit_summary_en": fit_summary_en,
+                "fit_summary_km": fit_summary_km,
+                "riasec_reason_en": riasec_reason_en,
+                "riasec_reason_km": riasec_reason_km,
+                "personality_reason_en": personality_reason_en,
+                "personality_reason_km": personality_reason_km,
                 "universities_count": len(major.university_majors),
                 "careers_count": len(major.careers),
                 "constraints_notes_en": notes_en,

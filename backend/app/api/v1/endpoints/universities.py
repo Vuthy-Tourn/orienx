@@ -19,6 +19,7 @@ async def list_universities(
     province: Optional[str] = Query(None, description="Filter by Cambodian province"),
     university_type: Optional[str] = Query(None, description="PUBLIC or PRIVATE"),
     max_tuition: Optional[float] = Query(None, description="Maximum annual tuition USD"),
+    major: Optional[str] = Query(None, description="Filter by major slug"),
     page: int = Query(1, ge=1),
     limit: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db)
@@ -28,6 +29,14 @@ async def list_universities(
         .options(selectinload(University.university_majors))
         .where(University.is_verified == True)
     )
+
+    if major:
+        stmt = (
+            stmt.join(UniversityMajor, UniversityMajor.university_id == University.id)
+            .join(Major, UniversityMajor.major_id == Major.id)
+            .where(func.lower(Major.slug) == major.lower())
+            .distinct()
+        )
 
     if province:
         stmt = stmt.where(func.lower(University.province) == province.lower())

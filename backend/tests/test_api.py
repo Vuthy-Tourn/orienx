@@ -28,11 +28,18 @@ async def test_auth_and_assessments_flow(client):
     assert me_res.status_code == 200
     assert me_res.json()["data"]["email"] == "student@futera.edu.kh"
 
-    # 3. List universities
+    # 3. List universities and test major filter
     uni_res = await client.get("/api/v1/universities")
     assert uni_res.status_code == 200
     unis = uni_res.json()["data"]
     assert len(unis) >= 3
+
+    # Test filtering universities by major slug
+    uni_filtered_res = await client.get("/api/v1/universities?major=software-engineering")
+    assert uni_filtered_res.status_code == 200
+    filtered_unis = uni_filtered_res.json()["data"]
+    assert len(filtered_unis) >= 1
+    assert all("rupp" in u["slug"] or "itc" in u["slug"] or "aupp" in u["slug"] or "paragoniu" in u["slug"] for u in filtered_unis)
 
     # Check RUPP detail
     rupp_res = await client.get("/api/v1/universities/rupp")
@@ -122,6 +129,8 @@ async def test_auth_and_assessments_flow(client):
     assert top_major["match_score"] >= 75.0
     assert "riasec_reason_en" in top_major["explanation"]
     assert "riasec_reason_km" in top_major["explanation"]
+    assert "offering_universities" in top_major["major"]
+    assert len(top_major["major"]["offering_universities"]) >= 1
 
     # 9. Toggle Favorite for the top recommended major
     fav_res = await client.post(
