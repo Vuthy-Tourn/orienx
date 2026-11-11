@@ -75,45 +75,45 @@ export function Navbar() {
     {
       href: "/majors",
       label: t("nav.majors", "ស្វែងរកមុខជំនាញ"),
+      icon: Compass,
       descKm: "រុករកជំនាញសាកលវិទ្យាល័យ និងឱកាសការងារ",
       descEn: "Explore university majors & career outlooks",
-      icon: Compass,
     },
     {
       href: "/universities",
       label: t("nav.universities", "សាកលវិទ្យាល័យ"),
+      icon: GraduationCap,
       descKm: "ព័ត៌មានគ្រឹះស្ថានឧត្តមសិក្សា និងថ្លៃសិក្សា",
       descEn: "Institutions, campus life & tuition fees",
-      icon: GraduationCap,
     },
     {
       href: "/careers",
       label: t("nav.careers", "អាជីពការងារ"),
+      icon: Briefcase,
       descKm: "ទិដ្ឋភាពទីផ្សារការងារ និងកម្រិតប្រាក់បៀវត្ស",
       descEn: "Job market trends & salary projections",
-      icon: Briefcase,
     },
     {
       href: "/scholarships",
       label: t("nav.scholarships", "អាហារូបករណ៍"),
+      icon: Award,
       descKm: "ឱកាសអាហារូបករណ៍ក្នុង និងក្រៅប្រទេស",
       descEn: "Local & international grant opportunities",
-      icon: Award,
     },
     {
       href: "/personality",
       label: t("nav.personality", "បុគ្គលិកលក្ខណៈទាំង ១៦"),
-      descKm: "មគ្គុទ្ទេសក៍ចិត្តគំនិតទាំង ១៦ ប្រភេទស្តង់ដារ",
-      descEn: "NERIS & 16Personalities guide and matches",
       icon: Sparkles,
       highlight: true,
+      descKm: "មគ្គុទ្ទេសក៍ចិត្តគំនិតទាំង ១៦ ប្រភេទស្តង់ដារ",
+      descEn: "NERIS & 16Personalities guide and matches",
     },
     {
       href: "/about",
       label: t("nav.about", "អំពីយើង"),
+      icon: Info,
       descKm: "បេសកកម្មតម្រង់ទិសអប់រំ និងក្រុមការងារ",
       descEn: "Our guidance mission and values",
-      icon: Info,
     },
   ];
 
@@ -151,22 +151,8 @@ export function Navbar() {
                     : "text-[#5A6482] hover:text-[#111965] hover:bg-slate-100/70"
                 )}
               >
-                {item.icon && (
-                  <item.icon
-                    className={cn(
-                      "w-3.5 h-3.5 xl:w-4 xl:h-4 shrink-0 transition-colors",
-                      item.highlight
-                        ? "text-amber-500"
-                        : isActive
-                        ? "text-[#111965]"
-                        : "text-[#7B85A1]"
-                    )}
-                  />
-                )}
+
                 <span>{item.label}</span>
-                {item.highlight && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse hidden xl:inline-block" />
-                )}
               </Link>
             );
           })}

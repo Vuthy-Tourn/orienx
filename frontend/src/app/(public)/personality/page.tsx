@@ -36,6 +36,29 @@ import {
 import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
+const HERO_TOP_ARCHETYPES = [
+  { code: "ENTJ", nameKm: "The Commander", role: "analysts", color: "#88619A" },
+  { code: "ENTP", nameKm: "The Debater", role: "analysts", color: "#88619A" },
+  { code: "INTJ", nameKm: "The Architect", role: "analysts", color: "#88619A" },
+  { code: "INTP", nameKm: "The Logician", role: "analysts", color: "#88619A" },
+  { code: "ENFJ", nameKm: "The Protagonist", role: "diplomats", color: "#33A474" },
+  { code: "ENFP", nameKm: "The Campaigner", role: "diplomats", color: "#33A474" },
+  { code: "INFJ", nameKm: "The Advocate", role: "diplomats", color: "#33A474" },
+];
+
+const HERO_LEFT_ARCHETYPE = { code: "ISTJ", nameKm: "The Logistician", role: "sentinels", color: "#4298B4" };
+const HERO_RIGHT_ARCHETYPE = { code: "INFP", nameKm: "The Mediator", role: "diplomats", color: "#33A474" };
+
+const HERO_BOTTOM_ARCHETYPES = [
+  { code: "ESTJ", nameKm: "The Executive", role: "sentinels", color: "#4298B4" },
+  { code: "ESFJ", nameKm: "The Consul", role: "sentinels", color: "#4298B4" },
+  { code: "ISFJ", nameKm: "The Defender", role: "sentinels", color: "#4298B4" },
+  { code: "ESTP", nameKm: "The Entrepreneur", role: "explorers", color: "#E4AE3A" },
+  { code: "ESFP", nameKm: "The Entertainer", role: "explorers", color: "#E4AE3A" },
+  { code: "ISTP", nameKm: "The Virtuoso", role: "explorers", color: "#E4AE3A" },
+  { code: "ISFP", nameKm: "The Adventurer", role: "explorers", color: "#E4AE3A" },
+];
+
 export default function PublicPersonalityGuidePage() {
   const { t, getLocalized, language } = useLanguage();
   const [selectedRole, setSelectedRole] = useState<string>("all");
@@ -71,60 +94,169 @@ export default function PublicPersonalityGuidePage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFD] text-[#111965] selection:bg-[#F7CE4D] selection:text-[#111965] pb-24">
-      {/* 1. HERO SECTION WITH ALL 16 CHARACTERS FRAME */}
-      <section className="pt-24 pb-4 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto rounded-3xl overflow-hidden relative border border-slate-200/90 shadow-xl bg-[#EDEDED] aspect-[1024/646] min-h-[460px] md:min-h-[540px] lg:min-h-[620px] flex items-center justify-center">
-          {/* Background Image of all 16 official characters framing the perimeter */}
-          <Image
-            src="/images/16-personalities-hero-frame.jpg"
-            alt="All 16 MBTI Personality Archetypes"
-            fill
-            priority
-            className="object-cover md:object-contain pointer-events-none select-none opacity-40 md:opacity-100 transition-opacity"
-          />
+      {/* 1. HERO SECTION WITH 16 CRISP VECTOR SVGS & AMBIENT NAVY STAGE */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#090E2E] via-[#111965] to-[#0D1445] text-white pt-24 pb-20 px-4 sm:px-6 lg:px-8 select-none">
+        {/* Ambient Glow Orbs */}
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-[#88619A]/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-[#33A474]/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
 
-          {/* Center Content Island (Golden Ratio Safe Box) */}
-          <div className="relative z-10 w-[90%] sm:w-[72%] md:w-[50%] max-w-lg text-center flex flex-col items-center justify-center space-y-2 sm:space-y-3 p-4 sm:p-5 rounded-2xl bg-white/80 md:bg-transparent backdrop-blur-xs md:backdrop-blur-none border border-white/60 md:border-transparent shadow-xs md:shadow-none">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-black bg-[#111965] text-[#F7CE4D] shadow-xs uppercase tracking-wider">
-              <Sparkles className="w-3 h-3 text-[#F7CE4D]" />
-              <span>16Personalities & NERIS Standard</span>
-            </div>
-
-            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-[#111965] tracking-tight leading-tight">
-              {getLocalized({
-                km: "មគ្គុទ្ទេសក៍បុគ្គលិកលក្ខណៈទាំង ១៦",
-                en: "The 16 Personality Types Guide",
-              })}
-            </h1>
-
-            <p className="text-[11px] sm:text-xs text-[#334155] line-clamp-2 font-medium leading-relaxed max-w-sm">
-              {getLocalized({
-                km: "ស្វែងយល់ពីទម្រង់ចិត្តគំនិត ទេពកោសល្យពីកំណើត របៀបសិក្សា និងមុខជំនាញសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុតសម្រាប់បុគ្គលិកលក្ខណៈនីមួយៗ។",
-                en: "Explore cognitive strengths, natural tendencies, and ideal Cambodian university majors across all 16 official personality archetypes.",
-              })}
-            </p>
-
-            <div className="pt-1">
-              <Link
-                href="/dashboard/assessments/personality"
-                className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-black bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+        <div className="max-w-6xl mx-auto flex flex-col justify-between min-h-[580px] lg:min-h-[620px] relative z-10 space-y-6">
+          {/* TOP ROW: 7 Characters (Analysts & Diplomats) */}
+          <div className="flex items-center justify-between gap-2 px-2 overflow-x-auto no-scrollbar">
+            {HERO_TOP_ARCHETYPES.map((arch) => (
+              <button
+                key={arch.code}
+                type="button"
+                onClick={() => setActiveArchetypeCode(arch.code)}
+                className="flex flex-col items-center group cursor-pointer transition-transform duration-300 hover:scale-115 shrink-0"
+                title={`Explore ${arch.code}`}
               >
-                <Compass className="w-4 h-4 text-[#111965]" />
-                <span>
-                  {getLocalized({
-                    km: "ធ្វើតេស្តបុគ្គលិកលក្ខណៈ (ឥតគិតថ្លៃ)",
-                    en: "Take Free Personality Assessment",
-                  })}
+                <div className="relative h-24 md:h-28 w-20 md:w-24 flex items-center justify-center">
+                  <Image
+                    src={`/images/personality-types/${arch.code.toLowerCase()}.svg`}
+                    alt={arch.code}
+                    width={100}
+                    height={120}
+                    className="max-h-24 md:max-h-28 object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)] transition-all duration-300 group-hover:drop-shadow-[0_12px_24px_rgba(247,206,77,0.4)]"
+                  />
+                </div>
+                <span
+                  className="text-[10px] font-black tracking-wider transition-opacity opacity-80 group-hover:opacity-100"
+                  style={{ color: arch.color }}
+                >
+                  {arch.code}
                 </span>
-                <ArrowRight className="w-4 h-4 text-[#111965]" />
-              </Link>
+              </button>
+            ))}
+          </div>
+
+          {/* MIDDLE ROW: ISTJ (Left), Center Headline Island, INFP (Right) */}
+          <div className="flex items-center justify-between gap-4 my-2">
+            {/* Left Character: ISTJ */}
+            <button
+              type="button"
+              onClick={() => setActiveArchetypeCode(HERO_LEFT_ARCHETYPE.code)}
+              className="hidden lg:flex flex-col items-center group cursor-pointer transition-transform duration-300 hover:scale-115 pl-2 shrink-0"
+              title={`Explore ${HERO_LEFT_ARCHETYPE.code}`}
+            >
+              <div className="relative h-28 md:h-32 w-24 md:w-28 flex items-center justify-center">
+                <Image
+                  src={`/images/personality-types/${HERO_LEFT_ARCHETYPE.code.toLowerCase()}.svg`}
+                  alt={HERO_LEFT_ARCHETYPE.code}
+                  width={110}
+                  height={130}
+                  className="max-h-28 md:max-h-32 object-contain drop-shadow-[0_8px_16px_rgba(66,152,180,0.35)] transition-all duration-300 group-hover:drop-shadow-[0_12px_24px_rgba(247,206,77,0.4)]"
+                />
+              </div>
+              <span
+                className="text-[10px] font-black tracking-wider transition-opacity opacity-80 group-hover:opacity-100"
+                style={{ color: HERO_LEFT_ARCHETYPE.color }}
+              >
+                {HERO_LEFT_ARCHETYPE.code}
+              </span>
+            </button>
+
+            {/* Center Content Island */}
+            <div className="max-w-xl mx-auto text-center space-y-3.5 px-4 py-2">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 shadow-xs uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
+                <span>NERIS & 16Personalities Standard</span>
+              </div>
+
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                {getLocalized({
+                  km: "មគ្គុទ្ទេសក៍បុគ្គលិកលក្ខណៈទាំង ១៦",
+                  en: "The 16 Personality Types Guide",
+                })}
+              </h1>
+
+              <p className="text-xs sm:text-sm text-slate-300 font-bold">
+                The 16 Personality Types Guide
+              </p>
+
+              <p className="text-xs sm:text-sm text-slate-200/90 max-w-md mx-auto font-medium leading-relaxed">
+                {getLocalized({
+                  km: "ស្វែងយល់ពីទម្រង់ចិត្តគំនិត ទេពកោសល្យពីកំណើត របៀបសិក្សា និងមុខជំនាញសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុតសម្រាប់បុគ្គលិកលក្ខណៈនីមួយៗ។",
+                  en: "Explore cognitive strengths, natural tendencies, learning styles, and ideal university majors across all 16 official personality archetypes.",
+                })}
+              </p>
+
+              <div className="pt-2">
+                <Link
+                  href="/dashboard/assessments/personality"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-black bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                >
+                  <Compass className="w-4 h-4 text-[#111965]" />
+                  <span>
+                    {getLocalized({
+                      km: "ធ្វើតេស្តបុគ្គលិកលក្ខណៈរបស់អ្នក (ឥតគិតថ្លៃ)",
+                      en: "Take Free Personality Assessment",
+                    })}
+                  </span>
+                  <ArrowRight className="w-4 h-4 text-[#111965]" />
+                </Link>
+              </div>
             </div>
+
+            {/* Right Character: INFP */}
+            <button
+              type="button"
+              onClick={() => setActiveArchetypeCode(HERO_RIGHT_ARCHETYPE.code)}
+              className="hidden lg:flex flex-col items-center group cursor-pointer transition-transform duration-300 hover:scale-115 pr-2 shrink-0"
+              title={`Explore ${HERO_RIGHT_ARCHETYPE.code}`}
+            >
+              <div className="relative h-28 md:h-32 w-24 md:w-28 flex items-center justify-center">
+                <Image
+                  src={`/images/personality-types/${HERO_RIGHT_ARCHETYPE.code.toLowerCase()}.svg`}
+                  alt={HERO_RIGHT_ARCHETYPE.code}
+                  width={110}
+                  height={130}
+                  className="max-h-28 md:max-h-32 object-contain drop-shadow-[0_8px_16px_rgba(51,164,116,0.35)] transition-all duration-300 group-hover:drop-shadow-[0_12px_24px_rgba(247,206,77,0.4)]"
+                />
+              </div>
+              <span
+                className="text-[10px] font-black tracking-wider transition-opacity opacity-80 group-hover:opacity-100"
+                style={{ color: HERO_RIGHT_ARCHETYPE.color }}
+              >
+                {HERO_RIGHT_ARCHETYPE.code}
+              </span>
+            </button>
+          </div>
+
+          {/* BOTTOM ROW: 7 Characters (Sentinels & Explorers) */}
+          <div className="flex items-center justify-between gap-2 px-2 overflow-x-auto no-scrollbar">
+            {HERO_BOTTOM_ARCHETYPES.map((arch) => (
+              <button
+                key={arch.code}
+                type="button"
+                onClick={() => setActiveArchetypeCode(arch.code)}
+                className="flex flex-col items-center group cursor-pointer transition-transform duration-300 hover:scale-115 shrink-0"
+                title={`Explore ${arch.code}`}
+              >
+                <div className="relative h-24 md:h-28 w-20 md:w-24 flex items-center justify-center">
+                  <Image
+                    src={`/images/personality-types/${arch.code.toLowerCase()}.svg`}
+                    alt={arch.code}
+                    width={100}
+                    height={120}
+                    className="max-h-24 md:max-h-28 object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.35)] transition-all duration-300 group-hover:drop-shadow-[0_12px_24px_rgba(247,206,77,0.4)]"
+                  />
+                </div>
+                <span
+                  className="text-[10px] font-black tracking-wider transition-opacity opacity-80 group-hover:opacity-100"
+                  style={{ color: arch.color }}
+                >
+                  {arch.code}
+                </span>
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
       {/* 2. THE 4 ROLE GROUPS BANNER */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 relative z-20">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {ROLES_META.map((role) => (
             <button
