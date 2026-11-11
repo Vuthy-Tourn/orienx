@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
-import { FuteraMascot } from "@/components/brand/futera-mascot";
 import { AssessmentStage, AssessmentStepItem } from "@/components/assessments/assessment-stage";
 import { AssessmentViewSwitcher } from "@/components/assessments/assessment-view-switcher";
 import {
@@ -304,30 +303,34 @@ export default function PersonalityAssessmentPage() {
               </div>
             </div>
 
-            {/* MBTI Official Character Avatar + Celebrating Mascot Tara */}
-            <div className="flex items-center gap-4 sm:gap-6 flex-shrink-0 self-center sm:self-auto relative pt-4 sm:pt-0">
-              <div className="relative flex items-center justify-center">
-                {/* Soft ambient golden backlight behind character */}
-                <div className="absolute inset-0 bg-[#F7CE4D]/25 rounded-full blur-2xl transform scale-125 pointer-events-none" />
+            {/* Single Official MBTI Character Showcase */}
+            <div className="flex flex-col items-center sm:items-end flex-shrink-0 self-center sm:self-auto relative pt-4 sm:pt-0">
+              {/* Glassmorphic Congratulations Badge */}
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-white/15 backdrop-blur-md text-white border border-white/20 shadow-xs mb-2">
+                <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
+                <span>
+                  {getLocalized({
+                    km: `អបអរសាទរ! លទ្ធផលរបស់អ្នកគឺ ${pType}`,
+                    en: `Congratulations! You are ${pType}`,
+                  })}
+                </span>
+              </div>
+
+              {/* Character Illustration with Role-Themed Ambient Glow */}
+              <div className="relative flex items-center justify-center p-2">
+                <div
+                  className="absolute inset-0 rounded-full blur-3xl opacity-35 transform scale-125 pointer-events-none"
+                  style={{ backgroundColor: arch.roleColor || "#F7CE4D" }}
+                />
                 <Image
                   src={`/images/personality-types/${pType.toLowerCase()}.svg`}
                   alt={`${pType} Character`}
-                  width={150}
-                  height={190}
-                  className="relative z-10 w-28 h-36 sm:w-36 sm:h-46 object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.45)] transition-transform hover:scale-105"
+                  width={180}
+                  height={230}
+                  className="relative z-10 w-32 h-44 sm:w-44 sm:h-56 object-contain drop-shadow-[0_16px_32px_rgba(0,0,0,0.5)] transition-transform duration-300 hover:scale-105"
                   priority
                 />
               </div>
-              <FuteraMascot
-                variant="full-jumping"
-                emotion="congratulation"
-                showSpeech={true}
-                size={155}
-                speechText={getLocalized({
-                  km: `អបអរសាទរ! អ្នកជាប្រភេទ ${pType}! 🏆`,
-                  en: `Congratulations! You are ${pType}! 🏆`,
-                })}
-              />
             </div>
           </div>
         </div>
