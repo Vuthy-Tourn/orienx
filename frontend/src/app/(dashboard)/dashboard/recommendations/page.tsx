@@ -18,13 +18,13 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
 
-type FilterTab = "all" | "top" | "stem";
+type FilterTab = "top3" | "suitable" | "stem" | "all";
 type ViewMode = "grid" | "list";
 
 export default function RecommendationsPage() {
   const { t, getLocalized } = useLanguage();
   const queryClient = useQueryClient();
-  const [filterTab, setFilterTab] = useState<FilterTab>("all");
+  const [filterTab, setFilterTab] = useState<FilterTab>("top3");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
 
@@ -95,11 +95,14 @@ export default function RecommendationsPage() {
     },
   });
 
-  // Filter recommendations based on tab
+  // Filter recommendations based on tab: Defaults to Top 3 Matches!
   const filteredRecs = useMemo(() => {
     if (!recommendations) return [];
-    if (filterTab === "top") {
-      return recommendations.filter((r) => r.match_score >= 90);
+    if (filterTab === "top3") {
+      return recommendations.slice(0, 3);
+    }
+    if (filterTab === "suitable") {
+      return recommendations.filter((r) => r.match_score >= 75);
     }
     if (filterTab === "stem") {
       return recommendations.filter((r) => r.major?.is_stem);
@@ -153,38 +156,50 @@ export default function RecommendationsPage() {
         <div className="inline-flex items-center p-1 rounded-xl bg-[#F0F2FA] border border-[#E6E8F0]">
           <button
             type="button"
-            onClick={() => setFilterTab("all")}
-            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              filterTab === "all"
-                ? "bg-[#111965] text-white shadow-2xs"
+            onClick={() => setFilterTab("top3")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer ${
+              filterTab === "top3"
+                ? "bg-[#111965] text-[#F7CE4D] shadow-xs"
                 : "text-[#68708A] hover:text-[#111965]"
             }`}
           >
-            {t("recommendationsPage.tabAll") || "ទាំងអស់"} ({recommendations?.length || 0})
+            <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
+            <span>{t("recommendationsPage.tabTop3") || "សាកសមបំផុតទាំង ៣"}</span>
           </button>
           <button
             type="button"
-            onClick={() => setFilterTab("top")}
-            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
-              filterTab === "top"
-                ? "bg-[#111965] text-white shadow-2xs"
+            onClick={() => setFilterTab("suitable")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+              filterTab === "suitable"
+                ? "bg-[#111965] text-white shadow-xs"
                 : "text-[#68708A] hover:text-[#111965]"
             }`}
           >
-            <Flame className="w-3 h-3 text-[#F7CE4D]" />
-            <span>{t("recommendationsPage.tabHighFit") || "សាកសមខ្ពស់ (>90%)"}</span>
+            <Flame className="w-3.5 h-3.5 text-[#F7CE4D]" />
+            <span>{t("recommendationsPage.tabSuitable") || "សាកសម (>75%)"}</span>
           </button>
           <button
             type="button"
             onClick={() => setFilterTab("stem")}
-            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               filterTab === "stem"
-                ? "bg-[#111965] text-white shadow-2xs"
+                ? "bg-[#111965] text-white shadow-xs"
                 : "text-[#68708A] hover:text-[#111965]"
             }`}
           >
-            <Zap className="w-3 h-3 text-sky-500" />
+            <Zap className="w-3.5 h-3.5 text-sky-500" />
             <span>{t("recommendationsPage.tabStem") || "STEM"}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilterTab("all")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              filterTab === "all"
+                ? "bg-[#111965] text-white shadow-xs"
+                : "text-[#68708A] hover:text-[#111965]"
+            }`}
+          >
+            {t("recommendationsPage.tabAll") || "ទាំងអស់"} ({recommendations?.length || 0})
           </button>
         </div>
 
@@ -222,6 +237,28 @@ export default function RecommendationsPage() {
           </div>
         </div>
       </div>
+
+      {/* Top 3 Curated Highlights Banner */}
+      {filterTab === "top3" && !isLoading && filteredRecs.length > 0 && (
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-[#111965] via-[#17227d] to-[#111965] text-white flex items-center justify-between gap-3 shadow-xs border border-[#111965]/20 animate-in fade-in duration-300">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center flex-shrink-0 text-[#F7CE4D]">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-sm sm:text-base font-black tracking-tight text-[#F7CE4D]">
+                {t("recommendationsPage.top3BannerTitle") || "ជំនាញសាកសមបំផុតទាំង ៣ សម្រាប់អ្នក"}
+              </h2>
+              <p className="text-xs text-white/80 line-clamp-1">
+                {t("recommendationsPage.top3BannerSubtitle") || "ជ្រើសរើស និងចាត់ថ្នាក់យ៉ាងយកចិត្តទុកដាក់ដោយ AI ផ្អែកលើបុគ្គលិកលក្ខណៈ ទំនោរការគិត និងចំណុចខ្លាំងនៃការសិក្សា។"}
+              </p>
+            </div>
+          </div>
+          <span className="hidden md:inline-flex items-center px-2.5 py-1 rounded-full bg-white/10 text-[11px] font-bold text-white/90 border border-white/15 flex-shrink-0">
+            Top 3 Curated
+          </span>
+        </div>
+      )}
 
       {/* ========================================================
           RECOMMENDATION CARDS (Compact 2-Column Grid / List)

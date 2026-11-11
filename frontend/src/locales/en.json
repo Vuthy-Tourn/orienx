@@ -514,12 +514,17 @@
     "updatedFavorites": "Updated favorites",
     "breadcrumb": "Dashboard / Personalized Recommendations",
     "tabAll": "All",
+    "tabTop3": "Top 3 Matches",
+    "tabSuitable": "Suitable (>75%)",
     "tabHighFit": "High Match (>90%)",
     "tabStem": "STEM",
     "majorsCount": "Majors",
     "universities": "Universities",
     "details": "Details",
-    "institutions": "Institutions"
+    "institutions": "Institutions",
+    "campuses": "Offering Institutions",
+    "top3BannerTitle": "Top 3 Recommended Majors for You",
+    "top3BannerSubtitle": "Specially curated and ranked based on your personality type, cognitive orientation, and academic strengths."
   },
   "profileSettings": {
     "title": "Student Profile & Account Settings",

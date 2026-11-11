@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   BrainCircuit,
   Compass,
+  Sliders,
   Sparkles,
   Bookmark,
   ShieldCheck,
@@ -48,6 +49,11 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
       href: "/dashboard/assessments/riasec",
       label: t("dashboardLayout.practiceFit"),
       icon: Compass,
+    },
+    {
+      href: "/dashboard/assessments/preferences",
+      label: t("dashboardLayout.preferences") || "Academic Preferences",
+      icon: Sliders,
     },
     {
       href: "/dashboard/recommendations",

@@ -892,8 +892,8 @@ export default function PersonalityAssessmentPage() {
               ))}
             </div>
           ) : recommendations && recommendations.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {recommendations.slice(0, 4).map((rec: any) => {
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {recommendations.slice(0, 3).map((rec: any) => {
                 const major = rec.major || {};
                 const exp = rec.explanation || {};
                 const unis = major.offering_universities || [];

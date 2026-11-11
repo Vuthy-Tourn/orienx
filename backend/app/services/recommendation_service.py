@@ -41,17 +41,18 @@ class RecommendationService:
         has_pref = pref is not None
 
         # Dynamically scale weights based on which assessments the user has completed
-        # so that completing the MBTI test immediately produces high-impact, meaningful recommendations
+        # Give Personality high weight (40%) so that MBTI cognitive orientation (Extraversion vs Introversion, etc.)
+        # meaningfully differentiates recommendations and drives dynamic ranking shifts!
         if has_personality and not has_riasec and not has_pref:
             # User took MBTI only: Let personality drive the recommendation score
-            w_p = 0.75
-            w_r = 0.15
+            w_p = 0.80
+            w_r = 0.10
             w_a = 0.05
             w_c = 0.05
         elif has_personality and has_riasec and not has_pref:
             # User took MBTI + RIASEC
-            w_p = 0.35
-            w_r = 0.45
+            w_p = 0.45
+            w_r = 0.35
             w_a = 0.10
             w_c = 0.10
         elif not has_personality and has_riasec:
@@ -61,10 +62,13 @@ class RecommendationService:
             w_a = 0.10
             w_c = 0.10
         else:
-            w_p = float(rule.weight_personality) if rule else 0.20
-            w_r = float(rule.weight_riasec) if rule else 0.35
-            w_a = float(rule.weight_academic_strengths) if rule else 0.30
-            w_c = float(rule.weight_career_alignment) if rule else 0.15
+            # User completed Personality + RIASEC + Preferences:
+            # Balanced 4-pillar weighting: Personality (30%) + RIASEC (25%) + Academic (25%) + Career (20%)
+            # This ensures E vs I creates decisive shifts while respecting career aspirations and academic strengths!
+            w_p = 0.30
+            w_r = 0.25
+            w_a = 0.25
+            w_c = 0.20
 
         # 3. Fetch all majors with relationships
         stmt_majors = (
@@ -90,8 +94,14 @@ class RecommendationService:
         }
 
         user_mbti = personality.personality_type if personality else "INTJ"
+        is_e = (personality.extraversion_score >= 50.0) if personality else (user_mbti.startswith("E"))
+        is_n = (personality.intuition_score >= 50.0) if personality else ("N" in user_mbti)
+        is_t = (personality.thinking_score >= 50.0) if personality else ("T" in user_mbti)
+        is_j = (personality.judging_score >= 50.0) if personality else (user_mbti.endswith("J"))
+
         user_strong_subjects = [s.lower() for s in (pref.strongest_subjects if pref else [])]
         user_fav_subjects = [s.lower() for s in (pref.favorite_subjects if pref else [])]
+        user_enjoyed_activities = [a.lower() for a in (pref.enjoyed_activities if pref else [])]
         user_career_interests = [c.lower() for c in (pref.career_interest_areas if pref else [])]
         user_budget = float(pref.annual_tuition_budget_usd) if (pref and pref.annual_tuition_budget_usd) else None
 
@@ -104,42 +114,126 @@ class RecommendationService:
                 major_name_en = str(major.name)
                 major_name_km = str(major.name)
 
-            # 1. RIASEC Score (35%)
+            slug = major.slug
+
+            # 1. RIASEC Score (25%)
             prim_score = r_scores.get(major.riasec_primary, 50.0)
             sec_score = r_scores.get(major.riasec_secondary, 50.0)
             s_riasec = round(0.70 * prim_score + 0.30 * sec_score, 2)
 
-            # 2. Personality Fit (20%)
-            s_personality = 60.0
-            is_direct_mbti = False
-            is_partial_mbti = False
-            if major.personality_affinity:
-                affinities = [a.strip() for a in major.personality_affinity.split(",")]
-                if user_mbti in affinities:
-                    s_personality = 95.0
-                    is_direct_mbti = True
-                elif any(user_mbti[:2] in a for a in affinities): # e.g. "IN"
-                    s_personality = 80.0
-                    is_partial_mbti = True
-                elif any(user_mbti[2:] in a for a in affinities): # e.g. "TJ"
-                    s_personality = 75.0
-                    is_partial_mbti = True
+            # 2. Personality Fit (40%)
+            # Multi-dimensional cognitive alignment:
+            # E vs I: Group leadership & client dynamics vs deep solitary autonomous focus
+            # N vs S: Abstract theories & AI architecture vs physical materials, accounting & regulations
+            # T vs F: Quantitative logic & mechanics vs interpersonal empathy & human diplomacy
+            # J vs P: Structural compliance & deadlines vs flexible prototyping
+            if slug == "software-engineering":
+                # Prefers Introversion (solo coding, quiet focus), Intuition/Sensing, Thinking, and J/P
+                dim_score = (
+                    (16.0 if is_e else 28.0)
+                    + (24.0 if is_n else 18.0)
+                    + (24.0 if is_t else 8.0)
+                    + (14.0 if is_j else 14.0)
+                )
+                if user_mbti in ["INTJ", "INTP", "ISTJ", "ENTP"]:
+                    dim_score += 8.0
+            elif slug == "data-science-ai":
+                # Strong Introversion (isolated data modeling), Intuition (theoretical algorithms), Thinking
+                dim_score = (
+                    (14.0 if is_e else 28.0)
+                    + (26.0 if is_n else 16.0)
+                    + (24.0 if is_t else 8.0)
+                    + (14.0 if is_j else 12.0)
+                )
+                if user_mbti in ["INTP", "INTJ", "ISTJ", "INFJ"]:
+                    dim_score += 8.0
+            elif slug == "business-administration":
+                # Strong Extraversion (public pitching, negotiation, active team management, stakeholder relations)
+                dim_score = (
+                    (36.0 if is_e else 12.0)
+                    + (18.0 if is_n else 20.0)
+                    + (22.0 if is_t else 20.0)
+                    + (16.0 if is_j else 12.0)
+                )
+                if user_mbti in ["ENTJ", "ESTJ", "ENFJ", "ESFJ", "ENTP"]:
+                    dim_score += 8.0
+            elif slug == "banking-finance":
+                # Favors Extraversion (corporate banking/client deals), Sensing (financial accounting/audit), Thinking, Judging
+                dim_score = (
+                    (26.0 if is_e else 16.0)
+                    + (24.0 if not is_n else 14.0)
+                    + (24.0 if is_t else 8.0)
+                    + (18.0 if is_j else 12.0)
+                )
+                if user_mbti in ["ESTJ", "ISTJ", "ENTJ", "INTJ"]:
+                    dim_score += 8.0
+            elif slug == "civil-engineering":
+                # Balanced E/I, strongly Sensing (concrete physical structures, materials, surveying), Thinking, Judging
+                dim_score = (
+                    (20.0 if is_e else 20.0)
+                    + (26.0 if not is_n else 14.0)
+                    + (24.0 if is_t else 8.0)
+                    + (16.0 if is_j else 12.0)
+                )
+                if user_mbti in ["ISTP", "ESTJ", "INTJ"]:
+                    dim_score += 8.0
+            elif slug == "international-relations":
+                # Strong Extraversion (diplomacy, cross-cultural relations, delegations) and Intuition
+                dim_score = (
+                    (36.0 if is_e else 10.0)
+                    + (24.0 if is_n else 12.0)
+                    + (14.0 if is_t else 24.0)
+                    + (16.0 if is_j else 16.0)
+                )
+                if user_mbti in ["ENFJ", "ENTJ", "INFJ", "INFP", "ENTP"]:
+                    dim_score += 8.0
+            else:
+                dim_score = 65.0
+                if major.personality_affinity and user_mbti in major.personality_affinity:
+                    dim_score = 90.0
 
-            # 3. Academic Strengths Fit (30%)
+            s_personality = round(min(100.0, max(35.0, dim_score)), 1)
+            is_direct_mbti = bool(major.personality_affinity and user_mbti in major.personality_affinity)
+            is_partial_mbti = s_personality >= 80.0
+
+            # 3. Academic Strengths Fit (25%)
             s_academic = 50.0
             major_skills = [str(sk).lower() for sk in (major.required_skills or [])]
             match_points = 0
+            all_user_interests = user_strong_subjects + user_fav_subjects + user_enjoyed_activities
+
             for subj in user_strong_subjects + user_fav_subjects:
                 if any(subj in sk or sk in subj for sk in major_skills):
-                    match_points += 20
+                    match_points += 15
                 if "math" in subj and (major.is_stem or "business" in major.category.lower()):
-                    match_points += 15
+                    match_points += 10
                 if "physics" in subj and major.is_stem:
-                    match_points += 15
+                    match_points += 10
+
+            # Domain activity & informatics alignment
+            for term in all_user_interests:
+                if any(t in term for t in ["code", "coding", "software", "program", "informatic", "comput"]):
+                    if slug in ["software-engineering", "data-science-ai"]:
+                        match_points += 20
+                if any(t in term for t in ["data", "ai", "artificial intelligence", "machine learning"]):
+                    if slug == "data-science-ai":
+                        match_points += 20
+                if any(t in term for t in ["finance", "bank", "account", "invest"]):
+                    if slug == "banking-finance":
+                        match_points += 20
+                if any(t in term for t in ["business", "management", "entrepreneur", "market"]):
+                    if slug == "business-administration":
+                        match_points += 20
+                if any(t in term for t in ["construct", "civil", "structure", "build"]):
+                    if slug == "civil-engineering":
+                        match_points += 20
+                if any(t in term for t in ["diplomacy", "international", "politic", "relation"]):
+                    if slug == "international-relations":
+                        match_points += 20
 
             s_academic = min(100.0, max(45.0, 50.0 + match_points))
 
-            # 4. Career Goal Alignment (15%)
+            # 4. Career Goal Alignment (20%)
             s_career = 50.0
             for car in major.careers:
                 ind = car.industry.lower()
@@ -170,11 +264,17 @@ class RecommendationService:
             final_match = round(max(30.0, min(99.0, raw_score)), 1)
 
             # Build explainable rationale report tailored to assessment state
-            if is_direct_mbti:
-                personality_reason_en = f"Your {user_mbti} cognitive style directly aligns with {major_name_en}, perfectly suited for its strategic and problem-solving demands."
+            if is_e and slug in ["business-administration", "banking-finance", "international-relations"]:
+                personality_reason_en = f"As an Extravert ({user_mbti}), your active leadership, interpersonal persuasion, and collaborative dynamism make you an exceptional fit for {major_name_en}."
+                personality_reason_km = f"ក្នុងនាមជាបុគ្គល Extravert ({user_mbti}) ភាពជាអ្នកដឹកនាំ ភាពស្វាហាប់ក្នុងការប្រាស្រ័យទាក់ទង និងការចរចាជាក្រុមត្រូវគ្នាយ៉ាងល្អឥតខ្ចោះជាមួយ {major_name_km}។"
+            elif not is_e and slug in ["software-engineering", "data-science-ai"]:
+                personality_reason_en = f"As an Introvert ({user_mbti}), your capacity for deep autonomous focus, systematic logic, and quiet problem-solving is ideal for {major_name_en}."
+                personality_reason_km = f"ក្នុងនាមជាបុគ្គល Introvert ({user_mbti}) សមត្ថភាពក្នុងការផ្តោតអារម្មណ៍ស៊ីជម្រៅតែម្នាក់ឯង តក្កវិជ្ជា និងការដោះស្រាយបញ្ហាស្មុគស្មាញត្រូវគ្នាយ៉ាងល្អបំផុតជាមួយ {major_name_km}។"
+            elif is_direct_mbti:
+                personality_reason_en = f"Your {user_mbti} cognitive style directly aligns with {major_name_en}, perfectly suited for its analytical and practical demands."
                 personality_reason_km = f"ទម្រង់បុគ្គលិកលក្ខណៈ {user_mbti} របស់អ្នកត្រូវគ្នាយ៉ាងល្អឥតខ្ចោះជាមួយមុខជំនាញ {major_name_km} ដែលត្រូវនឹងវិធីសាស្ត្រគិត និងការដោះស្រាយបញ្ហាជាក់ស្តែង។"
             elif is_partial_mbti:
-                personality_reason_en = f"Your {user_mbti} profile shares strong cognitive synergies with the core analytical demands of {major_name_en}."
+                personality_reason_en = f"Your {user_mbti} profile shares strong cognitive synergies with the core demands of {major_name_en}."
                 personality_reason_km = f"ទម្រង់ {user_mbti} របស់អ្នកមានចំណុចខ្លាំងស្របគ្នាខ្ពស់ជាមួយការទាមទារនៃការសិក្សា និងការអនុវត្តក្នុងផ្នែក {major_name_km}។"
             else:
                 personality_reason_en = f"Your {user_mbti} perspective provides complementary strengths to succeed in {major_name_en}."
