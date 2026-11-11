@@ -18,6 +18,7 @@ import {
   ShieldCheck,
   MapPin,
 } from "lucide-react";
+import { BookmarkButton } from "@/components/ui/bookmark-button";
 
 export default function MajorDetailPage() {
   const params = useParams();
@@ -66,32 +67,44 @@ export default function MajorDetailPage() {
 
         {/* Major Header */}
         <div className="rounded-3xl bg-white border border-[#E6E8F0] p-6 sm:p-8 shadow-xs space-y-5">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F0F2FA] text-[#111965]">
-                {t(`categories.${major.category}`, major.category)}
-              </span>
-              {major.is_stem && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                  STEM Discipline
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F0F2FA] text-[#111965]">
+                  {t(`categories.${major.category}`, major.category)}
                 </span>
-              )}
-            </div>
+                {major.is_stem && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                    STEM Discipline
+                  </span>
+                )}
+              </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111965] leading-snug">
-              {getLocalized(major.name)}
-            </h1>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111965] leading-snug">
+                {getLocalized(major.name)}
+              </h1>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-[#68708A] pt-1">
-              <span>
-                <strong className="text-[#111965]">Primary RIASEC:</strong> {major.riasec_primary} (Secondary: {major.riasec_secondary})
-              </span>
-              {major.personality_affinity && (
+              <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-[#68708A] pt-1">
                 <span>
-                  • <strong className="text-[#111965]">Personality Affinity:</strong> {major.personality_affinity}
+                  <strong className="text-[#111965]">Primary RIASEC:</strong> {major.riasec_primary} (Secondary: {major.riasec_secondary})
                 </span>
-              )}
+                {major.personality_affinity && (
+                  <span>
+                    • <strong className="text-[#111965]">Personality Affinity:</strong> {major.personality_affinity}
+                  </span>
+                )}
+              </div>
             </div>
+
+            <BookmarkButton
+              entityType="major"
+              entityId={major.id}
+              variant="pill"
+              size="md"
+              showText
+              textActive="បានរក្សាទុក (Saved)"
+              textInactive="រក្សាទុកមុខជំនាញ"
+            />
           </div>
 
           <p className="text-sm text-[#171A2C] leading-relaxed">

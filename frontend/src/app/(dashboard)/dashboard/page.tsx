@@ -32,7 +32,7 @@ import { cn } from "@/lib/utils";
 
 export default function DashboardOverviewPage() {
   const { user } = useAuth();
-  const { language, getLocalized } = useLanguage();
+  const { t, language, getLocalized } = useLanguage();
   const [taraCheer, setTaraCheer] = useState(false);
 
   // 1. REAL Student Dashboard Summary
@@ -74,16 +74,16 @@ export default function DashboardOverviewPage() {
     user?.email?.split("@")[0] ||
     "Student";
 
-  const highSchool = profile?.high_school || "Hun Sen Bak Touk High School";
+  const highSchool = profile?.high_school || t("dashboardPage.schoolFallback", "Hun Sen Bak Touk High School");
 
   // Dynamic greeting based on current local hour
   const currentHour = new Date().getHours();
   const greeting =
     currentHour < 12
-      ? "Good morning"
+      ? t("dashboardPage.goodMorning")
       : currentHour < 18
-      ? "Good afternoon"
-      : "Good evening";
+      ? t("dashboardPage.goodAfternoon")
+      : t("dashboardPage.goodEvening");
 
   // Interactive cheer trigger when user clicks Tara
   const handleTaraClick = () => {
@@ -191,7 +191,7 @@ export default function DashboardOverviewPage() {
               <span className="text-[#1B6EF3]">{userName}!</span> 👋
             </h1>
             <p className="text-xs sm:text-sm font-medium text-[#475569] leading-relaxed pt-0.5">
-              One assessment closer to your dream university &amp; career!
+              {t("dashboardPage.heroSubtitle")}
             </p>
 
             <div className="pt-3">
@@ -199,7 +199,7 @@ export default function DashboardOverviewPage() {
                 href="/dashboard/recommendations"
                 className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-xs sm:text-sm text-white bg-[#1B6EF3] hover:bg-[#1557C0] shadow-md hover:shadow-lg transition-all active:scale-95 group cursor-pointer"
               >
-                <span>Continue Journey</span>
+                <span>{t("dashboardPage.continueJourney")}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
@@ -208,7 +208,7 @@ export default function DashboardOverviewPage() {
           {/* Mascot Stage on Right (Tara Mascot with Clean Placement) */}
           <div
             onClick={handleTaraClick}
-            title="Tap Tara to cheer!"
+            title={t("dashboardPage.tapTaraCheer")}
             className="absolute right-4 sm:right-8 md:right-12 bottom-0 z-10 cursor-pointer group select-none flex flex-col items-center"
           >
             <div
@@ -233,13 +233,13 @@ export default function DashboardOverviewPage() {
         <div className="space-y-3">
           <div className="flex items-center justify-between px-1">
             <h2 className="text-base font-black text-[#111965] tracking-tight">
-              Continue Learning
+              {t("dashboardPage.continueLearning")}
             </h2>
             <Link
               href="/dashboard/recommendations"
               className="text-xs font-bold text-[#1B6EF3] hover:underline"
             >
-              See All
+              {t("dashboardPage.seeAll")}
             </Link>
           </div>
 
@@ -265,7 +265,7 @@ export default function DashboardOverviewPage() {
                     {topMajorName}
                   </h3>
                   <p className="text-xs text-[#64748B] truncate">
-                    Unit 1 • Recommended Major • Verified University Matches
+                    {t("dashboardPage.unit1Desc")}
                   </p>
                 </div>
 
@@ -286,11 +286,11 @@ export default function DashboardOverviewPage() {
 
             {/* Action Button: Vibrant Blue Pill */}
             <Link
-              href={topRec ? `/majors/${topRec.major.slug}` : "/dashboard/recommendations"}
+              href="/dashboard/recommendations"
               className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-bold text-xs sm:text-sm text-white bg-[#1B6EF3] hover:bg-[#1557C0] shadow-xs hover:shadow-md transition-all active:scale-95 flex-shrink-0 w-full md:w-auto cursor-pointer"
             >
               <Play className="w-3.5 h-3.5 fill-white" />
-              <span>Resume</span>
+              <span>{t("dashboardPage.resume")}</span>
             </Link>
           </div>
         </div>
@@ -298,7 +298,7 @@ export default function DashboardOverviewPage() {
         {/* 3. "BUILD YOUR SKILLS" / 4 CLEAN PASTEL TILES */}
         <div className="space-y-3">
           <h2 className="text-base font-black text-[#111965] tracking-tight px-1">
-            Build Your Skills
+            {t("dashboardPage.buildSkills")}
           </h2>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
@@ -312,7 +312,7 @@ export default function DashboardOverviewPage() {
               </div>
               <div className="overflow-hidden">
                 <div className="text-xs font-black text-[#1E1B4B] truncate">
-                  Personality
+                  {t("dashboardPage.skillsPersonality")}
                 </div>
                 <div className="text-[11px] text-[#6B21A8] font-semibold truncate">
                   {status?.personality_type ? `${status.personality_type} Type` : "12 Questions"}
@@ -330,7 +330,7 @@ export default function DashboardOverviewPage() {
               </div>
               <div className="overflow-hidden">
                 <div className="text-xs font-black text-[#4C0519] truncate">
-                  Career Match
+                  {t("dashboardPage.skillsCareer")}
                 </div>
                 <div className="text-[11px] text-[#9F1239] font-semibold truncate">
                   {status?.holland_code ? `Code: ${status.holland_code}` : "18 Questions"}
@@ -348,7 +348,7 @@ export default function DashboardOverviewPage() {
               </div>
               <div className="overflow-hidden">
                 <div className="text-xs font-black text-[#052E16] truncate">
-                  Preferences
+                  {t("dashboardPage.skillsPreferences")}
                 </div>
                 <div className="text-[11px] text-[#166534] font-semibold truncate">
                   Phnom Penh
@@ -366,13 +366,62 @@ export default function DashboardOverviewPage() {
               </div>
               <div className="overflow-hidden">
                 <div className="text-xs font-black text-[#451A03] truncate">
-                  AI Fit Scores
+                  {t("dashboardPage.skillsAiFit")}
                 </div>
                 <div className="text-[11px] text-[#92400E] font-semibold truncate">
                   {recommendations?.length || 6} Matches
                 </div>
               </div>
             </Link>
+          </div>
+        </div>
+
+        {/* 4. "POPULAR MAJORS IN CAMBODIA" / CAPSULES (Matching Reference "Popular Languages") */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <h2 className="text-base font-black text-[#111965] tracking-tight">
+              {t("dashboardPage.popularMajorsTitle")}
+            </h2>
+            <Link
+              href="/dashboard/recommendations"
+              className="text-xs font-bold text-[#1B6EF3] hover:underline"
+            >
+              {t("dashboardPage.seeAll")}
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {popularMajorCapsules.slice(0, 4).map((major) => {
+              const IconComponent = major.icon;
+              return (
+                <Link
+                  key={major.slug}
+                  href="/dashboard/recommendations"
+                  className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-[#1B6EF3] hover:shadow-xs transition-all flex items-center gap-3 group"
+                >
+                  {/* Round Avatar Icon (Matching Reference Flag Avatar) */}
+                  <div
+                    className={cn(
+                      "w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 shadow-2xs group-hover:scale-105 transition-transform",
+                      major.iconBg
+                    )}
+                  >
+                    <IconComponent className="w-4 h-4" />
+                  </div>
+
+                  {/* 2 Lines: Name on Top, Rating with Star on Bottom */}
+                  <div className="overflow-hidden min-w-0">
+                    <div className="text-xs font-bold text-[#111965] truncate group-hover:text-[#1B6EF3] transition-colors">
+                      {major.name}
+                    </div>
+                    <div className="flex items-center gap-1 text-[11px] font-semibold text-[#64748B]">
+                      <span>{major.score}</span>
+                      <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -384,7 +433,7 @@ export default function DashboardOverviewPage() {
         {/* 1. "YOUR DAILY GOAL" / GUIDANCE PROGRESS WIDGET */}
         <div className="p-6 rounded-[28px] bg-white border border-slate-200 shadow-2xs space-y-5">
           <h2 className="text-sm font-black text-[#111965] tracking-tight">
-            Your Guidance Goal
+            {t("dashboardPage.guidanceGoal")}
           </h2>
 
           <div className="flex items-center gap-5">
@@ -420,12 +469,12 @@ export default function DashboardOverviewPage() {
             {/* Streak Subtitle */}
             <div className="space-y-1">
               <div className="text-xs font-black text-[#111965]">
-                {completedCount === 3 ? "Great job!" : "Keep Going!"}
+                {completedCount === 3 ? t("dashboardPage.greatJob") : t("dashboardPage.keepGoing")}
               </div>
               <p className="text-[11px] text-[#64748B] leading-relaxed">
                 {completedCount === 3
-                  ? "All 3 assessments completed! Your matches are fully calibrated."
-                  : "Complete all 3 assessments to unlock university admission cutoffs."}
+                  ? t("dashboardPage.allCompletedDesc")
+                  : t("dashboardPage.completeAllDesc")}
               </p>
             </div>
           </div>
@@ -477,13 +526,13 @@ export default function DashboardOverviewPage() {
         <div className="p-6 rounded-[28px] bg-white border border-slate-200 shadow-2xs space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-black text-[#111965] tracking-tight">
-              Top Major Matches
+              {t("dashboardPage.topMajorMatches")}
             </h2>
             <Link
               href="/dashboard/recommendations"
               className="text-[11px] font-bold text-[#1B6EF3] hover:underline"
             >
-              See All
+              {t("dashboardPage.seeAll")}
             </Link>
           </div>
 
@@ -505,7 +554,7 @@ export default function DashboardOverviewPage() {
                 return (
                   <Link
                     key={rec.id || idx}
-                    href={`/majors/${rec.major?.slug}`}
+                    href="/dashboard/recommendations"
                     className={cn(
                       "flex items-center gap-3 px-3 py-2 rounded-2xl transition-all group",
                       isTop
@@ -563,15 +612,18 @@ export default function DashboardOverviewPage() {
         </div>
 
         {/* 3. SCHOLARSHIP MILESTONE CARD (Soft Blue/Cyan with Accent Gold) */}
-        <div className="p-5 rounded-[26px] bg-gradient-to-br from-[#E0F2FE] via-[#EAF5FE] to-[#D5EBFD] border border-[#BAE6FD] shadow-xs relative overflow-hidden space-y-3">
+        <Link
+          href="/dashboard/favorites"
+          className="block p-5 rounded-[26px] bg-gradient-to-br from-[#E0F2FE] via-[#EAF5FE] to-[#D5EBFD] border border-[#BAE6FD] hover:border-[#93C5FD] shadow-xs hover:shadow-md transition-all relative overflow-hidden space-y-3 group cursor-pointer"
+        >
           <div className="flex items-start gap-3">
             {/* Award Icon: Accent Gold badge */}
-            <div className="w-11 h-11 rounded-2xl bg-white text-[#D97706] flex items-center justify-center shadow-xs flex-shrink-0">
+            <div className="w-11 h-11 rounded-2xl bg-white text-[#D97706] flex items-center justify-center shadow-xs flex-shrink-0 group-hover:scale-105 transition-transform">
               <Trophy className="w-6 h-6 text-[#F59E0B]" />
             </div>
 
             <div className="space-y-1 overflow-hidden">
-              <div className="text-xs font-black text-[#111965] leading-tight truncate">
+              <div className="text-xs font-black text-[#111965] leading-tight truncate group-hover:text-[#1B6EF3] transition-colors">
                 {featuredScholarship
                   ? getLocalized(featuredScholarship.title) || featuredScholarship.title?.en
                   : "Techo Digital Talent Scholarship"}
@@ -586,13 +638,15 @@ export default function DashboardOverviewPage() {
           <div className="space-y-1 pt-1">
             <div className="flex items-center justify-between text-[10px] font-bold text-[#0284C7]">
               <span>Coverage Progress</span>
-              <span>3 / 3 Completed</span>
+              <span className="group-hover:translate-x-0.5 transition-transform">
+                View Saved &rarr;
+              </span>
             </div>
             <div className="h-2 rounded-full bg-white/70 overflow-hidden">
               <div className="h-full rounded-full bg-[#1B6EF3] w-full" />
             </div>
           </div>
-        </div>
+        </Link>
       </div>
     </div>
   );

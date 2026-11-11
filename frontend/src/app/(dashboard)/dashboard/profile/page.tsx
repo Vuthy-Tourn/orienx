@@ -1,15 +1,21 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
-import { User as UserIcon, Save, CheckCircle2, MapPin, GraduationCap } from "lucide-react";
+import { SettingsPanel } from "@/components/settings/settings-panel";
+import { User as UserIcon, Save, CheckCircle2, Sliders, Palette, ShieldCheck } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function ProfileSettingsPage() {
   const { user, refreshUser } = useAuth();
   const { t } = useLanguage();
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get("tab") === "preferences" ? "preferences" : "profile";
+  const [activeTab, setActiveTab] = useState<"profile" | "preferences">(initialTab);
   const queryClient = useQueryClient();
 
   const [fullNameEn, setFullNameEn] = useState("");
@@ -62,9 +68,10 @@ export default function ProfileSettingsPage() {
   });
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in">
+    <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in pb-16 select-none">
+      {/* Page Header */}
       <div className="space-y-1">
-        <h1 className="text-xl sm:text-3xl font-extrabold text-[#111965]">
+        <h1 className="text-xl sm:text-3xl font-extrabold text-[#111965] tracking-tight">
           {t("profileSettings.title")}
         </h1>
         <p className="text-xs sm:text-sm text-[#68708A]">
@@ -72,102 +79,143 @@ export default function ProfileSettingsPage() {
         </p>
       </div>
 
-      <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-6">
-        {successMsg && (
-          <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>{t("profileSettings.successMsg")}</span>
-          </div>
-        )}
+      {/* Tabs: Profile Info vs Language & Theme */}
+      <div className="flex items-center gap-2 border-b border-[#E6E8F0] pb-2 text-xs font-bold">
+        <button
+          type="button"
+          onClick={() => setActiveTab("profile")}
+          className={cn(
+            "px-4 py-2 rounded-xl transition-all flex items-center gap-2 cursor-pointer",
+            activeTab === "profile"
+              ? "bg-[#111965] text-white shadow-xs"
+              : "text-[#68708A] hover:text-[#111965] hover:bg-slate-100"
+          )}
+        >
+          <UserIcon className="w-4 h-4" />
+          <span>{t("settings.tabProfile")}</span>
+        </button>
 
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.fullNameEn")}</label>
-              <input
-                type="text"
-                value={fullNameEn}
-                onChange={(e) => setFullNameEn(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] focus:outline-hidden focus:border-[#111965]"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.fullNameKm")}</label>
-              <input
-                type="text"
-                value={fullNameKm}
-                onChange={(e) => setFullNameKm(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] focus:outline-hidden focus:border-[#111965]"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.email")}</label>
-            <input
-              type="email"
-              disabled
-              value={user?.email || ""}
-              className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] bg-[#F5F6FA] text-slate-500 cursor-not-allowed"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.province")}</label>
-              <select
-                value={province}
-                onChange={(e) => setProvince(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] bg-white"
-              >
-                <option value="Phnom Penh">Phnom Penh</option>
-                <option value="Siem Reap">Siem Reap</option>
-                <option value="Battambang">Battambang</option>
-                <option value="Kandal">Kandal</option>
-                <option value="Kampong Cham">Kampong Cham</option>
-                <option value="Preah Sihanouk">Preah Sihanouk</option>
-              </select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.educationLevel")}</label>
-              <select
-                value={educationLevel}
-                onChange={(e) => setEducationLevel(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] bg-white"
-              >
-                <option value="GRADE_12">Grade 12 (ថ្នាក់ទី១២)</option>
-                <option value="GRADE_11">Grade 11 (ថ្នាក់ទី១១)</option>
-                <option value="HIGH_SCHOOL_GRADUATE">High School Graduate (ចប់បាក់ឌុប)</option>
-                <option value="UNIVERSITY_STUDENT">University Student (និស្សិត)</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="space-y-1">
-            <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.highSchool")}</label>
-            <input
-              type="text"
-              value={highSchool}
-              onChange={(e) => setHighSchool(e.target.value)}
-              placeholder={t("profileSettings.highSchoolPlaceholder")}
-              className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] focus:outline-hidden focus:border-[#111965]"
-            />
-          </div>
-        </div>
-
-        <div className="pt-4 border-t border-[#E6E8F0]">
-          <button
-            onClick={() => updateProfile()}
-            disabled={saving}
-            className="px-6 py-2.5 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-2xs flex items-center gap-2"
-          >
-            <Save className="w-4 h-4" />
-            <span>{saving ? t("profileSettings.saving") : t("profileSettings.saveBtn")}</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setActiveTab("preferences")}
+          className={cn(
+            "px-4 py-2 rounded-xl transition-all flex items-center gap-2 cursor-pointer",
+            activeTab === "preferences"
+              ? "bg-[#111965] text-white shadow-xs"
+              : "text-[#68708A] hover:text-[#111965] hover:bg-slate-100"
+          )}
+        >
+          <Palette className="w-4 h-4" />
+          <span>{t("settings.tabPreferences")}</span>
+        </button>
       </div>
+
+      {/* Tab 1: Profile Information */}
+      {activeTab === "profile" && (
+        <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-6 animate-in fade-in">
+          {successMsg && (
+            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>{t("profileSettings.successMsg")}</span>
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.fullNameEn")}</label>
+                <input
+                  type="text"
+                  value={fullNameEn}
+                  onChange={(e) => setFullNameEn(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] focus:outline-hidden focus:border-[#111965]"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.fullNameKm")}</label>
+                <input
+                  type="text"
+                  value={fullNameKm}
+                  onChange={(e) => setFullNameKm(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] focus:outline-hidden focus:border-[#111965]"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.email")}</label>
+              <input
+                type="email"
+                disabled
+                value={user?.email || ""}
+                className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] bg-[#F5F6FA] text-slate-500 cursor-not-allowed"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.province")}</label>
+                <select
+                  value={province}
+                  onChange={(e) => setProvince(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] bg-white"
+                >
+                  <option value="Phnom Penh">Phnom Penh</option>
+                  <option value="Siem Reap">Siem Reap</option>
+                  <option value="Battambang">Battambang</option>
+                  <option value="Kandal">Kandal</option>
+                  <option value="Kampong Cham">Kampong Cham</option>
+                  <option value="Preah Sihanouk">Preah Sihanouk</option>
+                </select>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.educationLevel")}</label>
+                <select
+                  value={educationLevel}
+                  onChange={(e) => setEducationLevel(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] bg-white"
+                >
+                  <option value="GRADE_12">Grade 12 (ថ្នាក់ទី១២)</option>
+                  <option value="GRADE_11">Grade 11 (ថ្នាក់ទី១១)</option>
+                  <option value="HIGH_SCHOOL_GRADUATE">High School Graduate (ចប់បាក់ឌុប)</option>
+                  <option value="UNIVERSITY_STUDENT">University Student (និស្សិត)</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.highSchool")}</label>
+              <input
+                type="text"
+                value={highSchool}
+                onChange={(e) => setHighSchool(e.target.value)}
+                placeholder={t("profileSettings.highSchoolPlaceholder")}
+                className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] focus:outline-hidden focus:border-[#111965]"
+              />
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-[#E6E8F0]">
+            <button
+              onClick={() => updateProfile()}
+              disabled={saving}
+              className="px-6 py-2.5 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-2xs flex items-center gap-2 cursor-pointer"
+            >
+              <Save className="w-4 h-4" />
+              <span>{saving ? t("profileSettings.saving") : t("profileSettings.saveBtn")}</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 2: Language & Theme Settings */}
+      {activeTab === "preferences" && (
+        <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-6 animate-in fade-in">
+          <SettingsPanel />
+        </div>
+      )}
     </div>
   );
 }

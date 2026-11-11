@@ -2,6 +2,15 @@
 
 import React, { useState } from "react";
 import { useLanguage } from "@/contexts/language-context";
+import {
+  X,
+  ThumbsDown,
+  Minus,
+  ThumbsUp,
+  Sparkles,
+  Check,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ResonanceGaugeProps {
   value?: number; // 1 to 5
@@ -12,206 +21,161 @@ interface ResonanceGaugeProps {
 const RESONANCE_STEPS = [
   {
     level: 1,
-    glyph: "⊘",
-    labelEn: "Strong Disconnect",
-    labelKm: "មិនត្រូវនឹងខ្ញុំទាល់តែសោះ",
+    icon: ThumbsDown,
+    labelEn: "Strongly Dislike",
+    labelKm: "មិនត្រូវទាល់តែសោះ",
     descEn: "Completely outside my natural interests",
-    descKm: "មិនស្របនឹងចំណូលចិត្តរបស់ខ្ញុំទាល់តែសោះ",
-    bars: 1,
-    color: "from-slate-400 to-rose-400",
-    activeBg: "bg-slate-700 text-white border-slate-700 shadow-slate-300",
+    descKm: "មិនស្របនឹងចំណូលចិត្តខ្ញុំទាល់តែសោះ",
+    idleText: "text-rose-500",
+    idleBg: "bg-rose-50",
+    idleBorder: "border-rose-100",
+    activeBg: "bg-gradient-to-br from-rose-500 to-rose-600 text-white border-rose-600 shadow-sm ring-2 ring-rose-200",
+    activeCard: "bg-rose-50/50 border-rose-300 ring-1 ring-rose-200",
+    badgeColor: "bg-rose-500 text-white",
   },
   {
     level: 2,
-    glyph: "❙❙",
-    labelEn: "Mild Reluctance",
+    icon: Minus,
+    labelEn: "Dislike",
     labelKm: "មិនសូវចូលចិត្ត",
-    descEn: "Would rather focus elsewhere",
-    descKm: "ចូលចិត្តចំណាយពេលលើកិច្ចការផ្សេងច្រើនជាង",
-    bars: 2,
-    color: "from-slate-400 to-slate-500",
-    activeBg: "bg-slate-600 text-white border-slate-600 shadow-slate-200",
+    descEn: "Would rather focus on other tasks",
+    descKm: "ចូលចិត្តចំណាយពេលលើកិច្ចការផ្សេងជាង",
+    idleText: "text-amber-500",
+    idleBg: "bg-amber-50",
+    idleBorder: "border-amber-100",
+    activeBg: "bg-gradient-to-br from-amber-500 to-amber-600 text-white border-amber-600 shadow-sm ring-2 ring-amber-200",
+    activeCard: "bg-amber-50/50 border-amber-300 ring-1 ring-amber-200",
+    badgeColor: "bg-amber-500 text-white",
   },
   {
     level: 3,
-    glyph: "◇",
-    labelEn: "Balanced Equilibrium",
-    labelKm: "កម្រិតមធ្យម / ធម្មតា",
+    icon: X,
+    isNeutral: true,
+    labelEn: "Neutral",
+    labelKm: "កម្រិតមធ្យម",
     descEn: "Open-minded, neither drawn nor opposed",
     descKm: "អាចធ្វើបានធម្មតា មិនសូវរើសអើង",
-    bars: 3,
-    color: "from-slate-300 to-indigo-300",
-    activeBg: "bg-[#1E277A] text-white border-[#1E277A] shadow-indigo-200",
+    idleText: "text-slate-500",
+    idleBg: "bg-slate-100",
+    idleBorder: "border-slate-200",
+    activeBg: "bg-gradient-to-br from-slate-600 to-slate-700 text-white border-slate-700 shadow-sm ring-2 ring-slate-200",
+    activeCard: "bg-slate-100/60 border-slate-300 ring-1 ring-slate-200",
+    badgeColor: "bg-slate-600 text-white",
   },
   {
     level: 4,
-    glyph: "❙❙❙❙",
-    labelEn: "Clear Affinity",
-    labelKm: "ចូលចិត្ត និងចាប់អារម្មណ៍",
-    descEn: "Brings strong energy and genuine engagement",
-    descKm: "មានចំណាប់អារម្មណ៍ខ្លាំង និងផ្តល់ថាមពលវិជ្ជមាន",
-    bars: 4,
-    color: "from-indigo-500 to-[#111965]",
-    activeBg: "bg-[#111965] text-white border-[#111965] shadow-blue-200",
+    icon: ThumbsUp,
+    labelEn: "Like",
+    labelKm: "ចូលចិត្ត",
+    descEn: "Brings energy and genuine interest",
+    descKm: "មានចំណាប់អារម្មណ៍ និងផ្តល់ថាមពល",
+    idleText: "text-emerald-500",
+    idleBg: "bg-emerald-50",
+    idleBorder: "border-emerald-100",
+    activeBg: "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white border-emerald-600 shadow-sm ring-2 ring-emerald-200",
+    activeCard: "bg-emerald-50/50 border-emerald-300 ring-1 ring-emerald-200",
+    badgeColor: "bg-emerald-500 text-white",
   },
   {
     level: 5,
-    glyph: "✦",
-    labelEn: "Peak Calling",
-    labelKm: "ស្រឡាញ់ខ្លាំង និងជាទេពកោសល្យ",
-    descEn: "Deep intrinsic passion — I naturally thrive here",
-    descKm: "ចំណង់ចំណូលចិត្តកំពូល និងត្រូវនឹងទេពកោសល្យពីកំណើត",
-    bars: 5,
-    color: "from-[#111965] to-[#F7CE4D]",
-    activeBg: "bg-[#111965] text-[#F7CE4D] border-[#F7CE4D] ring-4 ring-[#F7CE4D]/30 shadow-amber-200",
+    icon: Sparkles,
+    labelEn: "Love it!",
+    labelKm: "ស្រឡាញ់ខ្លាំង!",
+    descEn: "Deep intrinsic passion & strength",
+    descKm: "ចំណង់ចំណូលចិត្តកំពូល & ទេពកោសល្យ",
+    idleText: "text-[#1B6EF3]",
+    idleBg: "bg-[#EBF3FE]",
+    idleBorder: "border-blue-100",
+    activeBg: "bg-gradient-to-br from-[#1B6EF3] to-[#1557C0] text-white border-[#1B6EF3] shadow-md ring-2 ring-blue-300",
+    activeCard: "bg-[#EBF3FE]/70 border-[#1B6EF3] ring-1 ring-blue-200",
+    badgeColor: "bg-[#1B6EF3] text-white",
   },
 ];
 
 export function ResonanceGauge({ value, onChange }: ResonanceGaugeProps) {
-  const { t, getLocalized } = useLanguage();
+  const { getLocalized } = useLanguage();
   const [hovered, setHovered] = useState<number | null>(null);
-  const activeStep = RESONANCE_STEPS.find((s) => s.level === (hovered ?? value));
 
   return (
-    <div className="w-full space-y-3 pt-2">
-      {/* Precision Instrument Horizon Bar */}
-      <div className="relative py-3">
-        {/* Continuous Datum Line */}
-        <div className="absolute top-1/2 left-4 right-4 h-1 -translate-y-1/2 bg-slate-200 rounded-full overflow-hidden">
-          {/* Active Illuminated Beam */}
-          {value && (
-            <div
-              className={`h-full transition-all duration-300 rounded-full ${
-                value <= 2
-                  ? "bg-gradient-to-r from-rose-400 to-slate-300"
-                  : value === 3
-                  ? "bg-indigo-300"
-                  : "bg-gradient-to-r from-[#111965] to-[#F7CE4D]"
-              }`}
-              style={{
-                width: `${((value - 1) / 4) * 100}%`,
-              }}
-            />
-          )}
-        </div>
+    <div className="w-full pt-1">
+      {/* 5 Distinct Tactile Option Cards in a Clean Responsive Row */}
+      <div className="grid grid-cols-5 gap-1.5 sm:gap-3">
+        {RESONANCE_STEPS.map((step) => {
+          const isSelected = value === step.level;
+          const isHovered = hovered === step.level;
+          const IconComponent = step.icon;
 
-        {/* 5 Distinct Resonance Nodes */}
-        <div className="relative flex items-center justify-between z-10 px-1 sm:px-3">
-          {RESONANCE_STEPS.map((step) => {
-            const isSelected = value === step.level;
-            const isHovered = hovered === step.level;
+          return (
+            <button
+              key={step.level}
+              type="button"
+              onClick={() => onChange(step.level)}
+              onMouseEnter={() => setHovered(step.level)}
+              onMouseLeave={() => setHovered(null)}
+              className={cn(
+                "relative rounded-2xl p-2 sm:p-3 border transition-all duration-200 flex flex-col items-center justify-between text-center select-none cursor-pointer group min-h-[82px] sm:min-h-[96px]",
+                isSelected
+                  ? `${step.activeCard} shadow-xs scale-[1.02]`
+                  : isHovered
+                  ? "bg-white border-slate-300 shadow-xs -translate-y-0.5"
+                  : "bg-[#F8FAFC] border-slate-200/80 hover:bg-white"
+              )}
+            >
+              {/* Top: Icon Bubble with Level Number */}
+              <div
+                className={cn(
+                  "w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-200 relative flex-shrink-0",
+                  isSelected
+                    ? step.activeBg
+                    : cn(
+                        step.idleBg,
+                        step.idleText,
+                        "border",
+                        step.idleBorder,
+                        "group-hover:scale-110"
+                      )
+                )}
+              >
+                {step.isNeutral ? (
+                  <span className="text-xs sm:text-sm font-black leading-none">3</span>
+                ) : (
+                  <IconComponent className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
+                )}
 
-            return (
-              <div key={step.level} className="flex flex-col items-center group">
-                <button
-                  type="button"
-                  onClick={() => onChange(step.level)}
-                  onMouseEnter={() => setHovered(step.level)}
-                  onMouseLeave={() => setHovered(null)}
-                  className={`relative flex items-center justify-center transition-all duration-200 rounded-2xl border-2 ${
+                {/* Selected Checkmark Badge */}
+                {isSelected && (
+                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full bg-white text-[#111965] border border-slate-200 flex items-center justify-center shadow-xs">
+                    <Check className="w-2.5 h-2.5 stroke-[3]" />
+                  </span>
+                )}
+              </div>
+
+              {/* Bottom: Khmer Label & Level indicator */}
+              <div className="space-y-0.5 w-full pt-1.5">
+                <div
+                  className={cn(
+                    "text-[10px] sm:text-xs font-bold leading-tight truncate transition-colors",
                     isSelected
-                      ? `${step.activeBg} scale-110 shadow-lg`
-                      : isHovered
-                      ? "border-[#111965] bg-white text-[#111965] scale-105 shadow-md"
-                      : "border-slate-300 bg-white text-slate-500 hover:border-slate-400"
-                  } ${
-                    step.level === 5
-                      ? "w-11 h-11 sm:w-12 sm:h-12"
-                      : step.level === 1
-                      ? "w-10 h-10 sm:w-11 sm:h-11"
-                      : "w-9 h-9 sm:w-10 sm:h-10"
-                  }`}
-                  title={`${step.labelEn} (${step.level})`}
-                >
-                  {/* Custom Vector Glyphs */}
-                  {step.level === 5 ? (
-                    // The Futera Compass Star
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill={isSelected ? "#F7CE4D" : "currentColor"}
-                      className="w-5 h-5 transition-transform duration-300 group-hover:rotate-12"
-                    >
-                      <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" />
-                    </svg>
-                  ) : step.level === 3 ? (
-                    // Equilibrium Diamond Pivot
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill={isSelected ? "currentColor" : "none"}
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      className="w-4 h-4"
-                    >
-                      <rect x="12" y="2" width="14" height="14" transform="rotate(45 12 2)" rx="2" />
-                    </svg>
-                  ) : step.level === 1 ? (
-                    // Divergent Anchor
-                    <span className="text-sm font-black font-mono">⊘</span>
-                  ) : (
-                    // Tactile Resonance Equalizer Bars
-                    <div className="flex items-end gap-0.5 h-3.5">
-                      {Array.from({ length: step.bars }).map((_, barIdx) => (
-                        <div
-                          key={barIdx}
-                          style={{ height: `${((barIdx + 1) / step.bars) * 100}%` }}
-                          className={`w-1 rounded-full ${
-                            isSelected ? "bg-white" : "bg-slate-400 group-hover:bg-[#111965]"
-                          }`}
-                        />
-                      ))}
-                    </div>
+                      ? "text-[#111965] font-black"
+                      : "text-slate-600 group-hover:text-slate-900"
                   )}
-
-                  {/* Level indicator pill floating on top */}
-                  {isSelected && (
-                    <span className="absolute -top-2.5 px-1.5 py-0.2 rounded-full text-[9px] font-extrabold bg-[#F7CE4D] text-[#111965] border border-white shadow-2xs">
-                      {step.level}
-                    </span>
-                  )}
-                </button>
-
-                {/* Sub-label below node */}
-                <span
-                  className={`mt-2 text-[10px] font-bold transition-colors hidden sm:block ${
-                    isSelected ? "text-[#111965]" : "text-slate-400 group-hover:text-slate-600"
-                  }`}
                 >
                   {getLocalized({ km: step.labelKm, en: step.labelEn })}
-                </span>
+                </div>
+
+                <div
+                  className={cn(
+                    "text-[9px] font-semibold transition-colors hidden sm:block",
+                    isSelected ? "text-slate-500 font-bold" : "text-slate-400"
+                  )}
+                >
+                  Level {step.level}
+                </div>
               </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Dynamic Tactile Feedback Banner */}
-      <div
-        className={`px-3.5 py-2 rounded-xl text-xs transition-all flex items-center justify-between border ${
-          value
-            ? value === 5
-              ? "bg-[#FFF9E6] border-[#F7CE4D]/50 text-[#111965]"
-              : value === 1
-              ? "bg-slate-50 border-slate-200 text-slate-700"
-              : "bg-[#F0F2FA] border-[#111965]/15 text-[#111965]"
-            : "bg-slate-50 border-dashed border-slate-200 text-slate-400"
-        }`}
-      >
-        <div className="flex items-center gap-2 overflow-hidden">
-          <span className="font-bold text-xs flex-shrink-0">
-            {activeStep ? getLocalized({ km: activeStep.labelKm, en: activeStep.labelEn }) : t("resonanceGauge.selectStance")}
-          </span>
-          <span className="text-[11px] opacity-75 truncate hidden sm:inline">
-            — {activeStep ? getLocalized({ km: activeStep.descKm, en: activeStep.descEn }) : t("resonanceGauge.clickPoint")}
-          </span>
-        </div>
-
-        {value && (
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white shadow-2xs border border-slate-200 text-[#111965] flex-shrink-0">
-            Level {value} / 5
-          </span>
-        )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
 }
-

@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
@@ -29,6 +30,7 @@ import {
   FileCheck,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { BookmarkButton } from "@/components/ui/bookmark-button";
 import { DotPattern } from "@/components/magicui/dot-pattern";
 import { BorderBeam } from "@/components/magicui/border-beam";
 
@@ -40,6 +42,9 @@ const SCHOLARSHIP_POSTERS: Record<string, string> = {
 };
 
 export default function ScholarshipsPage() {
+  const pathname = usePathname();
+  const isDashboard = pathname?.startsWith("/dashboard");
+  const linkPrefix = isDashboard ? "/dashboard" : "";
   const { t, getLocalized, language } = useLanguage();
   const { user } = useAuth();
   const queryClient = useQueryClient();
@@ -252,7 +257,7 @@ export default function ScholarshipsPage() {
                     </a>
                   )}
                   <Link
-                    href={`/scholarships/${spotlightScholarship.slug}`}
+                    href={`${linkPrefix}/scholarships/${spotlightScholarship.slug}`}
                     className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-colors"
                   >
                     <span>{t("scholarshipsPage.viewGuidelines")}</span>
@@ -416,7 +421,7 @@ export default function ScholarshipsPage() {
                         <Building className="w-3.5 h-3.5 text-[#111965]" />
                         <span>{getLocalized(s.provider)}</span>
                       </div>
-                      <Link href={`/scholarships/${s.slug}`} className="hover:underline">
+                      <Link href={`${linkPrefix}/scholarships/${s.slug}`} className="hover:underline">
                         <h3 className="text-lg font-extrabold text-[#111965] group-hover:text-[#1E277A] transition-colors leading-snug mt-1">
                           {getLocalized(s.title)}
                         </h3>
@@ -456,22 +461,18 @@ export default function ScholarshipsPage() {
 
                   {/* Card Footer Actions */}
                   <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-between gap-2">
-                    {user ? (
-                      <button
-                        type="button"
-                        onClick={() => toggleTrack({ id: s.id, status: "SAVED" })}
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#111965] hover:text-[#1E277A] transition-colors"
-                      >
-                        <Bookmark className="w-3.5 h-3.5" />
-                        <span>{t("scholarshipsPage.trackScholarship")}</span>
-                      </button>
-                    ) : (
-                      <span className="text-xs text-[#68708A]">Official State & University Grant</span>
-                    )}
+                    <BookmarkButton
+                      entityType="scholarship"
+                      entityId={s.id}
+                      variant="ghost"
+                      showText
+                      textActive="បានរក្សាទុក (Saved)"
+                      textInactive={t("scholarshipsPage.trackScholarship") || "រក្សាទុក"}
+                    />
 
                     <div className="flex items-center gap-2">
                       <Link
-                        href={`/scholarships/${s.slug}`}
+                        href={`${linkPrefix}/scholarships/${s.slug}`}
                         className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold text-[#111965] bg-slate-100 hover:bg-slate-200 transition-colors"
                       >
                         <span>{t("scholarshipsPage.viewGuidelines")}</span>

@@ -1,37 +1,63 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import {
   Sparkles,
-  CheckCircle2,
-  Bookmark,
-  BookmarkCheck,
   Building2,
   ArrowRight,
   RotateCcw,
-  Info,
-  Scale,
-  DollarSign,
-  AlertCircle,
+  Flame,
+  Zap,
+  LayoutGrid,
+  List,
 } from "lucide-react";
-import { BorderBeam } from "@/components/magicui/border-beam";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
+import { BookmarkButton } from "@/components/ui/bookmark-button";
+
+type FilterTab = "all" | "top" | "stem";
+type ViewMode = "grid" | "list";
 
 export default function RecommendationsPage() {
   const { t, getLocalized } = useLanguage();
   const queryClient = useQueryClient();
-  const [activeExplainId, setActiveExplainId] = useState<string | null>(null);
+  const [filterTab, setFilterTab] = useState<FilterTab>("all");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
 
+  // 1. Fetch recommendations
   const { data: recommendations, isLoading, error } = useQuery({
     queryKey: ["recommended-majors"],
     queryFn: async () => apiFetch<any[]>("/recommendations/majors"),
   });
 
+  // 2. Fetch user favorites to track active bookmark states
+  const { data: favorites } = useQuery({
+    queryKey: ["user-favorites"],
+    queryFn: async () => {
+      try {
+        return await apiFetch<any>("/favorites");
+      } catch {
+        return { majors: [], universities: [], careers: [], scholarships: [] };
+      }
+    },
+  });
+
+  // Sync favorites to local state set
+  React.useEffect(() => {
+    if (favorites) {
+      const majorsList = favorites.majors || (Array.isArray(favorites) ? favorites : []);
+      const ids = new Set<string>(
+        majorsList.map((m: any) => m.id || m.entity_id)
+      );
+      setBookmarkedIds(ids);
+    }
+  }, [favorites]);
+
+  // 3. Recalculate recommendations mutation
   const { mutate: recomputeRecs, isPending: recomputing } = useMutation({
     mutationFn: async () => {
       return apiFetch("/recommendations/generate", {
@@ -41,9 +67,11 @@ export default function RecommendationsPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["recommended-majors"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
     },
   });
 
+  // 4. Toggle bookmark mutation
   const { mutate: toggleFav } = useMutation({
     mutationFn: async (majorId: string) => {
       return apiFetch("/favorites/toggle", {
@@ -51,90 +79,292 @@ export default function RecommendationsPage() {
         body: JSON.stringify({ entity_type: "major", entity_id: majorId }),
       });
     },
+    onMutate: (majorId: string) => {
+      setBookmarkedIds((prev) => {
+        const next = new Set(prev);
+        if (next.has(majorId)) {
+          next.delete(majorId);
+        } else {
+          next.add(majorId);
+        }
+        return next;
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-favorites"] });
-      alert(t("recommendationsPage.updatedFavorites"));
     },
   });
 
+  // Filter recommendations based on tab
+  const filteredRecs = useMemo(() => {
+    if (!recommendations) return [];
+    if (filterTab === "top") {
+      return recommendations.filter((r) => r.match_score >= 90);
+    }
+    if (filterTab === "stem") {
+      return recommendations.filter((r) => r.major?.is_stem);
+    }
+    return recommendations;
+  }, [recommendations, filterTab]);
+
   return (
-    <div className="space-y-8 animate-in fade-in">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF9E6] text-[#111965] border border-[#F7CE4D] text-xs font-bold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>{t("recommendationsPage.badge")}</span>
+    <div className="space-y-6 animate-in fade-in pb-16 select-none max-w-7xl mx-auto">
+      {/* ========================================================
+          PAGE HEADER (Compact & Elegant)
+          ======================================================== */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E8F0] pb-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#111965] text-[#F7CE4D] text-[10px] font-black uppercase tracking-wider">
+              <Sparkles className="w-3 h-3 text-[#F7CE4D]" />
+              <span>AI Fit</span>
+            </span>
+            <span className="text-xs text-[#68708A]">
+              {t("recommendationsPage.breadcrumb") || "ផ្ទាំងគ្រប់គ្រង / អនុសាសន៍ផ្ទាល់ខ្លួន"}
+            </span>
           </div>
-          <h1 className="text-xl sm:text-3xl font-extrabold text-[#111965]">
-            {t("recommendationsPage.title")}
+          <h1 className="text-xl sm:text-2xl font-black text-[#111965] tracking-tight">
+            {t("recommendationsPage.title") || "អនុសាសន៍ជំនាញសាកលវិទ្យាល័យផ្ទាល់ខ្លួន"}
           </h1>
-          <p className="text-xs sm:text-sm text-[#68708A]">
-            {t("recommendationsPage.subtitle")}
-          </p>
         </div>
 
-        <button
-          onClick={() => recomputeRecs()}
-          disabled={recomputing}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-white border border-[#E6E8F0] hover:bg-slate-50 transition-colors self-start shadow-2xs"
-        >
-          <RotateCcw className={`w-3.5 h-3.5 ${recomputing ? "animate-spin" : ""}`} />
-          <span>{recomputing ? t("recommendationsPage.recalculating") : t("recommendationsPage.recalculate")}</span>
-        </button>
+        {/* Action Controls */}
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <button
+            onClick={() => recomputeRecs()}
+            disabled={recomputing}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#111965] bg-white border border-[#E6E8F0] hover:bg-[#F0F2FA] transition-colors shadow-2xs disabled:opacity-50 cursor-pointer"
+          >
+            <RotateCcw className={`w-3.5 h-3.5 ${recomputing ? "animate-spin" : ""}`} />
+            <span>
+              {recomputing
+                ? t("recommendationsPage.recalculating") || "កំពុងគណនា..."
+                : t("recommendationsPage.recalculate") || "គណនាឡើងវិញ"}
+            </span>
+          </button>
+        </div>
       </div>
 
+      {/* ========================================================
+          TOOLBAR: FILTER TABS & VIEW TOGGLE
+          ======================================================== */}
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        {/* Filter Pills */}
+        <div className="inline-flex items-center p-1 rounded-xl bg-[#F0F2FA] border border-[#E6E8F0]">
+          <button
+            type="button"
+            onClick={() => setFilterTab("all")}
+            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              filterTab === "all"
+                ? "bg-[#111965] text-white shadow-2xs"
+                : "text-[#68708A] hover:text-[#111965]"
+            }`}
+          >
+            {t("recommendationsPage.tabAll") || "ទាំងអស់"} ({recommendations?.length || 0})
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilterTab("top")}
+            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
+              filterTab === "top"
+                ? "bg-[#111965] text-white shadow-2xs"
+                : "text-[#68708A] hover:text-[#111965]"
+            }`}
+          >
+            <Flame className="w-3 h-3 text-[#F7CE4D]" />
+            <span>{t("recommendationsPage.tabHighFit") || "សាកសមខ្ពស់ (>90%)"}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilterTab("stem")}
+            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
+              filterTab === "stem"
+                ? "bg-[#111965] text-white shadow-2xs"
+                : "text-[#68708A] hover:text-[#111965]"
+            }`}
+          >
+            <Zap className="w-3 h-3 text-sky-500" />
+            <span>{t("recommendationsPage.tabStem") || "STEM"}</span>
+          </button>
+        </div>
+
+        {/* View Mode Toggle: Grid vs List */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-[#68708A] hidden sm:inline">
+            {filteredRecs.length} {t("recommendationsPage.majorsCount") || "មុខជំនាញ"}
+          </span>
+
+          <div className="inline-flex items-center p-1 rounded-xl bg-[#F0F2FA] border border-[#E6E8F0]">
+            <button
+              type="button"
+              onClick={() => setViewMode("grid")}
+              className={`p-1 rounded-lg transition-colors cursor-pointer ${
+                viewMode === "grid"
+                  ? "bg-[#111965] text-white shadow-2xs"
+                  : "text-[#68708A] hover:text-[#111965]"
+              }`}
+              title="Grid View"
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("list")}
+              className={`p-1 rounded-lg transition-colors cursor-pointer ${
+                viewMode === "list"
+                  ? "bg-[#111965] text-white shadow-2xs"
+                  : "text-[#68708A] hover:text-[#111965]"
+              }`}
+              title="List View"
+            >
+              <List className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================
+          RECOMMENDATION CARDS (Compact 2-Column Grid / List)
+          ======================================================== */}
       {isLoading ? (
-        <div className="space-y-6">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] space-y-4 shadow-2xs">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="p-5 rounded-2xl bg-white border border-[#E6E8F0] space-y-3 shadow-2xs">
               <div className="flex justify-between items-center">
-                <div className="flex items-center gap-2.5">
-                  <Skeleton className="h-7 w-7 rounded-xl" />
-                  <Skeleton className="h-6 w-48" />
-                </div>
-                <Skeleton className="h-6 w-24 rounded-full" />
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-6 w-20 rounded-full" />
               </div>
-              <Skeleton className="h-24 w-full rounded-2xl" />
-              <div className="grid grid-cols-4 gap-2">
-                <Skeleton className="h-10 w-full rounded-xl" />
-                <Skeleton className="h-10 w-full rounded-xl" />
-                <Skeleton className="h-10 w-full rounded-xl" />
-                <Skeleton className="h-10 w-full rounded-xl" />
+              <Skeleton className="h-5 w-48" />
+              <Skeleton className="h-12 w-full rounded-xl" />
+              <div className="grid grid-cols-4 gap-1.5">
+                <Skeleton className="h-8 w-full rounded-lg" />
+                <Skeleton className="h-8 w-full rounded-lg" />
+                <Skeleton className="h-8 w-full rounded-lg" />
+                <Skeleton className="h-8 w-full rounded-lg" />
               </div>
             </div>
           ))}
         </div>
       ) : error ? (
-        <div className="py-16 text-center text-sm text-rose-600">
-          Failed to load recommendations. Please complete your assessments first.
+        <div className="p-8 rounded-2xl bg-white border border-rose-200 text-center space-y-2">
+          <p className="text-sm font-bold text-rose-600">
+            Failed to load recommendations. Please complete your assessments first.
+          </p>
+          <Link
+            href="/dashboard/assessments/personality"
+            className="inline-block px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#111965]"
+          >
+            Take Assessments
+          </Link>
         </div>
-      ) : recommendations && recommendations.length > 0 ? (
-        <div className="space-y-6">
-          {recommendations.map((rec: any) => {
-            const major = rec.major;
-            const exp = rec.explanation;
+      ) : filteredRecs && filteredRecs.length > 0 ? (
+        <div
+          className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 lg:grid-cols-2 gap-4"
+              : "flex flex-col space-y-3"
+          }
+        >
+          {filteredRecs.map((rec: any) => {
+            const major = rec.major || {};
+            const exp = rec.explanation || {};
             const isTopMatch = rec.rank_position === 1;
+            const isBookmarked = bookmarkedIds.has(rec.major_id);
 
+            // ==========================================
+            // COMPACT LIST VIEW ROW
+            // ==========================================
+            if (viewMode === "list") {
+              return (
+                <div
+                  key={rec.id}
+                  className={`p-3.5 sm:p-4 rounded-2xl border bg-white transition-all hover:border-slate-300 hover:shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3 ${
+                    isTopMatch
+                      ? "border-[#111965]/40 shadow-2xs ring-2 ring-[#111965]/5"
+                      : "border-[#E6E8F0]"
+                  }`}
+                >
+                  {/* Left: Rank & Title */}
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <span
+                      className={`w-7 h-7 rounded-lg text-xs font-black flex items-center justify-center flex-shrink-0 ${
+                        isTopMatch
+                          ? "bg-[#111965] text-[#F7CE4D]"
+                          : "bg-[#F0F2FA] text-[#111965]"
+                      }`}
+                    >
+                      #{rec.rank_position}
+                    </span>
+
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-[10px] font-bold text-[#68708A] uppercase">
+                          {major.category}
+                        </span>
+                        {major.is_stem && (
+                          <span className="px-1.5 py-0.2 rounded text-[9px] font-black bg-sky-50 text-sky-700 border border-sky-200">
+                            STEM
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-sm sm:text-base font-black text-[#111965] truncate leading-tight">
+                        {getLocalized(major.name)}
+                      </h3>
+                    </div>
+                  </div>
+
+                  {/* Middle: 4 Mini Scores */}
+                  <div className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
+                    <span className="px-2 py-1 rounded-lg text-[10px] font-black bg-blue-50 text-blue-800 border border-blue-100" title="RIASEC Fit">
+                      RIA: {rec.riasec_match_score}%
+                    </span>
+                    <span className="px-2 py-1 rounded-lg text-[10px] font-black bg-emerald-50 text-emerald-800 border border-emerald-100" title="Academic Fit">
+                      Acad: {rec.academic_match_score}%
+                    </span>
+                    <span className="px-2 py-1 rounded-lg text-[10px] font-black bg-purple-50 text-purple-800 border border-purple-100" title="Personality Fit">
+                      MBTI: {rec.personality_match_score}%
+                    </span>
+                  </div>
+
+                  {/* Right: Match Score Badge & Actions */}
+                  <div className="flex items-center gap-2 flex-shrink-0 justify-between md:justify-end">
+                    <span className="px-2.5 py-1 rounded-xl text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      {rec.match_score}% Fit
+                    </span>
+
+                    <BookmarkButton entityType="major" entityId={rec.major_id} />
+
+                    <Link
+                      href={`/universities?major=${major.slug}`}
+                      className="px-3 py-1.5 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                    >
+                      <span>{t("recommendationsPage.universities") || "សាកលវិទ្យាល័យ"}</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              );
+            }
+
+            // ==========================================
+            // COMPACT GRID CARD (Default View)
+            // ==========================================
             return (
               <div
                 key={rec.id}
-                className={`p-6 sm:p-7 rounded-3xl border transition-all relative overflow-hidden ${
+                className={`rounded-2xl border bg-white transition-all hover:border-slate-300 hover:shadow-xs p-4 sm:p-5 flex flex-col justify-between space-y-3.5 relative overflow-hidden ${
                   isTopMatch
-                    ? "bg-white border-2 border-[#111965] shadow-lg ring-4 ring-[#111965]/5"
-                    : "bg-white border-[#E6E8F0] shadow-2xs hover:border-slate-300"
+                    ? "border-[#111965]/40 shadow-xs ring-2 ring-[#111965]/5"
+                    : "border-[#E6E8F0]"
                 }`}
               >
-                {/* Border Beam on Top Ranked Major Match */}
-                {isTopMatch && (
-                  <BorderBeam size={240} duration={14} colorFrom="#F7CE4D" colorTo="#111965" />
-                )}
-                <div className="space-y-4">
-                  {/* Top Header Row */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div className="flex items-center gap-2.5">
+                {/* 1. Header: Rank, Major Name, Fit Badge */}
+                <div className="space-y-1.5">
+                  <div className="flex items-start justify-between gap-2.5">
+                    {/* Rank & Category */}
+                    <div className="flex items-center gap-2">
                       <span
-                        className={`w-7 h-7 rounded-xl font-black text-xs flex items-center justify-center ${
+                        className={`w-7 h-7 rounded-lg text-xs font-black flex items-center justify-center flex-shrink-0 ${
                           isTopMatch
                             ? "bg-[#111965] text-[#F7CE4D]"
                             : "bg-[#F0F2FA] text-[#111965]"
@@ -142,97 +372,102 @@ export default function RecommendationsPage() {
                       >
                         #{rec.rank_position}
                       </span>
-                      <div>
-                        <span className="text-[10px] font-bold text-[#68708A] uppercase tracking-wider">
-                          {major.category}
+                      <span className="text-[10px] font-bold text-[#68708A] uppercase tracking-wide truncate max-w-[150px]">
+                        {major.category}
+                      </span>
+                      {major.is_stem && (
+                        <span className="px-1.5 py-0.2 rounded text-[9px] font-black bg-sky-50 text-sky-700 border border-sky-200">
+                          STEM
                         </span>
-                        <h3 className="text-base sm:text-lg font-bold text-[#111965] leading-snug">
-                          {getLocalized(major.name)}
-                        </h3>
-                      </div>
+                      )}
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <div className="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                        {rec.match_score}% Match Fit
-                      </div>
-                      <button
-                        onClick={() => toggleFav(rec.major_id)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-[#111965] hover:bg-[#F0F2FA] transition-colors"
-                        title="Save to Favorites"
-                      >
-                        <Bookmark className="w-4 h-4" />
-                      </button>
+                    {/* Fit Score & Bookmark */}
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        {rec.match_score}% Fit
+                      </span>
+                      <BookmarkButton entityType="major" entityId={rec.major_id} />
                     </div>
                   </div>
 
-                  {/* Explainable Rationale Box */}
-                  <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-3">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-[#111965]">
-                      <Info className="w-3.5 h-3.5 text-[#111965]" />
-                      <span>{t("recommendationsPage.whyFits")}</span>
-                    </div>
+                  {/* Major Name */}
+                  <h3 className="text-base sm:text-lg font-black text-[#111965] leading-snug line-clamp-1">
+                    {getLocalized(major.name)}
+                  </h3>
+                </div>
 
-                    <p className="text-xs text-[#171A2C] font-medium leading-relaxed">
-                      {getLocalized({ km: exp?.fit_summary_km, en: exp?.fit_summary_en })}
-                    </p>
+                {/* 2. Concise AI Fit Summary (1 line) */}
+                <div className="p-2.5 rounded-xl bg-[#F8FAFD] border border-[#E6E8F0]/80 flex items-start gap-2 text-xs">
+                  <Sparkles className="w-3.5 h-3.5 text-[#111965] mt-0.5 flex-shrink-0" />
+                  <p className="line-clamp-2 text-[11px] sm:text-xs text-[#4A5568] leading-relaxed">
+                    {getLocalized({ km: exp?.fit_summary_km, en: exp?.fit_summary_en })}
+                  </p>
+                </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#68708A] pt-1">
-                      <div className="flex items-start gap-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 mt-0.5 flex-shrink-0" />
-                        <span>{getLocalized({ km: exp?.riasec_reason_km, en: exp?.riasec_reason_en })}</span>
-                      </div>
-                      <div className="flex items-start gap-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 mt-0.5 flex-shrink-0" />
-                        <span>{getLocalized({ km: exp?.personality_reason_km, en: exp?.personality_reason_en })}</span>
-                      </div>
+                {/* 3. 4 Compact Pillars (Mini Badges with Scores) */}
+                <div className="grid grid-cols-4 gap-1.5 text-center">
+                  <div className="p-1.5 rounded-lg bg-blue-50/60 border border-blue-100 space-y-0.5">
+                    <div className="text-[9px] font-bold text-blue-800 uppercase flex items-center justify-center gap-1">
+                      <span>RIASEC</span>
                     </div>
-
-                    {/* Constraint Alerts if any */}
-                    {exp?.constraints_notes_en?.length > 0 && (
-                      <div className="pt-2 border-t border-amber-200/60 flex items-start gap-2 text-xs text-amber-800">
-                        <AlertCircle className="w-3.5 h-3.5 text-amber-600 mt-0.5 flex-shrink-0" />
-                        <span>{getLocalized({ km: exp?.constraints_notes_km?.[0], en: exp?.constraints_notes_en?.[0] })}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Multi-attribute Score Breakdown Bar */}
-                  <div className="grid grid-cols-4 gap-2 text-center text-xs">
-                    <div className="p-2.5 rounded-xl bg-white border border-[#E6E8F0]">
-                      <div className="text-[10px] text-[#68708A] uppercase font-bold">{t("recommendationsPage.riasecFit")}</div>
-                      <div className="text-xs font-extrabold text-[#111965] mt-0.5">{rec.riasec_match_score}%</div>
-                    </div>
-                    <div className="p-2.5 rounded-xl bg-white border border-[#E6E8F0]">
-                      <div className="text-[10px] text-[#68708A] uppercase font-bold">{t("recommendationsPage.academicFit")}</div>
-                      <div className="text-xs font-extrabold text-[#111965] mt-0.5">{rec.academic_match_score}%</div>
-                    </div>
-                    <div className="p-2.5 rounded-xl bg-white border border-[#E6E8F0]">
-                      <div className="text-[10px] text-[#68708A] uppercase font-bold">{t("recommendationsPage.personalityFit")}</div>
-                      <div className="text-xs font-extrabold text-[#111965] mt-0.5">{rec.personality_match_score}%</div>
-                    </div>
-                    <div className="p-2.5 rounded-xl bg-white border border-[#E6E8F0]">
-                      <div className="text-[10px] text-[#68708A] uppercase font-bold">{t("recommendationsPage.careerAlign")}</div>
-                      <div className="text-xs font-extrabold text-[#111965] mt-0.5">{rec.career_match_score}%</div>
+                    <div className="text-xs font-black text-blue-900">
+                      {rec.riasec_match_score}%
                     </div>
                   </div>
 
-                  {/* Actions & Links */}
-                  <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-                    <div className="flex items-center gap-1.5 text-[#68708A]">
-                      <Building2 className="w-3.5 h-3.5 text-[#111965]" />
-                      <span>{exp?.universities_count || 0} {t("recommendationsPage.institutionsOffer")}</span>
+                  <div className="p-1.5 rounded-lg bg-emerald-50/60 border border-emerald-100 space-y-0.5">
+                    <div className="text-[9px] font-bold text-emerald-800 uppercase flex items-center justify-center gap-1">
+                      <span>{getLocalized({ km: "សិក្សា", en: "Acad" })}</span>
                     </div>
+                    <div className="text-xs font-black text-emerald-900">
+                      {rec.academic_match_score}%
+                    </div>
+                  </div>
 
-                    <div className="flex items-center gap-2.5 w-full sm:w-auto">
-                      <Link
-                        href={`/majors/${major.slug}`}
-                        className="inline-flex items-center justify-center gap-1 px-4 py-2 rounded-xl font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors w-full sm:w-auto shadow-2xs"
-                      >
-                        <span>{t("recommendationsPage.exploreCurricula")}</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
+                  <div className="p-1.5 rounded-lg bg-purple-50/60 border border-purple-100 space-y-0.5">
+                    <div className="text-[9px] font-bold text-purple-800 uppercase flex items-center justify-center gap-1">
+                      <span>{getLocalized({ km: "បុគ្គលិក", en: "MBTI" })}</span>
                     </div>
+                    <div className="text-xs font-black text-purple-900">
+                      {rec.personality_match_score}%
+                    </div>
+                  </div>
+
+                  <div className="p-1.5 rounded-lg bg-amber-50/60 border border-amber-100 space-y-0.5">
+                    <div className="text-[9px] font-bold text-amber-800 uppercase flex items-center justify-center gap-1">
+                      <span>{getLocalized({ km: "អាជីព", en: "Career" })}</span>
+                    </div>
+                    <div className="text-xs font-black text-amber-900">
+                      {rec.career_match_score}%
+                    </div>
+                  </div>
+                </div>
+
+                {/* 4. Footer: Campus Count & Action Buttons */}
+                <div className="pt-2 border-t border-[#E6E8F0] flex items-center justify-between text-xs gap-2">
+                  <div className="flex items-center gap-1 text-[11px] font-bold text-[#68708A]">
+                    <Building2 className="w-3.5 h-3.5 text-[#111965]" />
+                    <span>
+                      {major.universities_count || exp?.universities_count || 0} {t("recommendationsPage.institutions") || "គ្រឹះស្ថាន"}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/majors/${major.slug}`}
+                      className="text-[11px] font-bold text-[#68708A] hover:text-[#111965] transition-colors cursor-pointer"
+                    >
+                      {t("recommendationsPage.details") || "ព័ត៌មានលម្អិត"}
+                    </Link>
+
+                    <Link
+                      href={`/universities?major=${major.slug}`}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl font-black text-[11px] text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs cursor-pointer whitespace-nowrap"
+                    >
+                      <span>{t("recommendationsPage.universities") || "សាកលវិទ្យាល័យ"}</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -240,23 +475,24 @@ export default function RecommendationsPage() {
           })}
         </div>
       ) : (
-        <div className="p-12 rounded-3xl bg-white border border-[#E6E8F0] text-center space-y-4">
-          <Sparkles className="w-10 h-10 text-[#111965] mx-auto opacity-75" />
+        /* Empty State */
+        <div className="p-10 rounded-2xl bg-white border border-[#E6E8F0] text-center space-y-3 max-w-md mx-auto shadow-2xs">
+          <Sparkles className="w-8 h-8 text-[#111965] mx-auto opacity-75" />
           <h3 className="text-base font-bold text-[#111965]">
-            {t("recommendationsPage.noRecsTitle")}
+            {t("recommendationsPage.noRecsTitle") || "មិនទាន់មានអនុសាសន៍នៅឡើយទេ"}
           </h3>
-          <p className="text-xs text-[#68708A] max-w-md mx-auto">
-            {t("recommendationsPage.noRecsSubtitle")}
+          <p className="text-xs text-[#68708A]">
+            {t("recommendationsPage.noRecsSubtitle") ||
+              "សូមបំពេញតេស្តដើម្បីទទួលបានអនុសាសន៍ជំនាញផ្ទាល់ខ្លួន។"}
           </p>
           <Link
             href="/dashboard/assessments/personality"
-            className="inline-block px-5 py-2.5 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B]"
+            className="inline-block px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D]"
           >
-            {t("recommendationsPage.startTest")}
+            {t("recommendationsPage.startTest") || "ចាប់ផ្តើមធ្វើតេស្ត"}
           </Link>
         </div>
       )}
     </div>
   );
 }
-

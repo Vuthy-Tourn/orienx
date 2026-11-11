@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
@@ -33,6 +34,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { DotPattern } from "@/components/magicui/dot-pattern";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { Dialog } from "@/components/ui/dialog";
+import { BookmarkButton } from "@/components/ui/bookmark-button";
 
 // Cambodian university campus photos mapping
 const UNIVERSITY_IMAGES: Record<string, string> = {
@@ -423,19 +425,26 @@ export default function UniversitiesPage() {
                             : t("universitiesDirectory.privateType")}
                         </span>
 
-                        <button
-                          type="button"
-                          onClick={() => toggleCompare(uni.slug)}
-                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold shadow-xs transition-all ${
-                            isSelected
-                              ? "bg-[#F7CE4D] text-[#111965] ring-1 ring-[#111965]/20"
-                              : "bg-white/95 text-[#111965] hover:bg-white"
-                          }`}
-                          title="Add to comparison"
-                        >
-                          {isSelected ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
-                          <span>{isSelected ? t("universitiesDirectory.selected") : t("universitiesDirectory.compare")}</span>
-                        </button>
+                        <div className="flex items-center gap-1.5">
+                          <BookmarkButton
+                            entityType="university"
+                            entityId={uni.id}
+                            variant="overlay"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => toggleCompare(uni.slug)}
+                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold shadow-xs transition-all cursor-pointer ${
+                              isSelected
+                                ? "bg-[#F7CE4D] text-[#111965] ring-1 ring-[#111965]/20"
+                                : "bg-white/95 text-[#111965] hover:bg-white"
+                            }`}
+                            title="Add to comparison"
+                          >
+                            {isSelected ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
+                            <span>{isSelected ? t("universitiesDirectory.selected") : t("universitiesDirectory.compare")}</span>
+                          </button>
+                        </div>
                       </div>
 
                       {/* Verified & Acronym on Image Bottom */}

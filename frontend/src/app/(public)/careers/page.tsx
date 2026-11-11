@@ -30,6 +30,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { DotPattern } from "@/components/magicui/dot-pattern";
 import { BorderBeam } from "@/components/magicui/border-beam";
+import { BookmarkButton } from "@/components/ui/bookmark-button";
 
 // Career salary benchmarks by experience tier (Cambodian Market 2026)
 const SALARY_TIERS: Record<string, {
@@ -402,10 +403,13 @@ export default function CareersPage() {
                         </span>
                       </div>
 
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span>{meta.growthRate}</span>
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <span>{meta.growthRate}</span>
+                        </span>
+                        <BookmarkButton entityType="career" entityId={c.id} />
+                      </div>
                     </div>
 
                     {/* Career Title */}

@@ -20,6 +20,7 @@ import {
   Sparkles,
   FileText,
 } from "lucide-react";
+import { BookmarkButton } from "@/components/ui/bookmark-button";
 
 export default function ScholarshipDetailPage() {
   const params = useParams();
@@ -216,17 +217,15 @@ export default function ScholarshipDetailPage() {
                 </a>
               )}
 
-              {user && (
-                <button
-                  type="button"
-                  onClick={() => toggleTrack({ id: scholarship.id, status: "SAVED" })}
-                  disabled={isTracking}
-                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-[#111965] bg-white hover:bg-slate-50 border border-[#E6E8F0] shadow-2xs transition-colors cursor-pointer"
-                >
-                  <Bookmark className="w-4 h-4" />
-                  <span>{t("scholarshipDetail.track")}</span>
-                </button>
-              )}
+              <BookmarkButton
+                entityType="scholarship"
+                entityId={scholarship.id}
+                variant="pill"
+                size="md"
+                showText
+                textActive="បានរក្សាទុក (Saved)"
+                textInactive={t("scholarshipDetail.track") || "រក្សាទុកអាហារូបករណ៍"}
+              />
             </div>
 
             <Link

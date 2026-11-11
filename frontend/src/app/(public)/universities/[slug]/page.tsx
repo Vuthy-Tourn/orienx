@@ -21,6 +21,7 @@ import {
   Globe,
 } from "lucide-react";
 import { formatUSD } from "@/lib/utils";
+import { BookmarkButton } from "@/components/ui/bookmark-button";
 
 export default function UniversityDetailPage() {
   const params = useParams();
@@ -107,17 +108,29 @@ export default function UniversityDetailPage() {
               </div>
             </div>
 
-            {uni.website_url && (
-              <a
-                href={uni.website_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors self-start shadow-2xs"
-              >
-                <span>{t("universityDetail.officialWebsite")}</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            )}
+            <div className="flex items-center gap-2.5 self-start flex-wrap">
+              <BookmarkButton
+                entityType="university"
+                entityId={uni.id}
+                variant="pill"
+                size="md"
+                showText
+                textActive="បានរក្សាទុក (Saved)"
+                textInactive="រក្សាទុកសាកលវិទ្យាល័យ"
+              />
+
+              {uni.website_url && (
+                <a
+                  href={uni.website_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs cursor-pointer"
+                >
+                  <span>{t("universityDetail.officialWebsite")}</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
+            </div>
           </div>
 
           <p className="text-sm text-[#171A2C] leading-relaxed">

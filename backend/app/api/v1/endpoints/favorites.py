@@ -88,8 +88,14 @@ async def get_user_favorites(
             "slug": fu.university.slug,
             "name": fu.university.name,
             "acronym": fu.university.acronym,
+            "description": fu.university.description,
             "province": fu.university.province,
-            "university_type": fu.university.university_type
+            "university_type": fu.university.university_type,
+            "cover_image_url": fu.university.cover_image_url,
+            "logo_url": fu.university.logo_url,
+            "tuition_range_min_usd": float(fu.university.tuition_range_min_usd) if fu.university.tuition_range_min_usd else None,
+            "tuition_range_max_usd": float(fu.university.tuition_range_max_usd) if fu.university.tuition_range_max_usd else None,
+            "website_url": fu.university.website_url,
         }
         for fu in res_u.scalars().all() if fu.university
     ]
@@ -104,7 +110,11 @@ async def get_user_favorites(
             "slug": fm.major.slug,
             "name": fm.major.name,
             "category": fm.major.category,
-            "is_stem": fm.major.is_stem
+            "description": fm.major.description,
+            "is_stem": fm.major.is_stem,
+            "riasec_primary": fm.major.riasec_primary,
+            "riasec_secondary": fm.major.riasec_secondary,
+            "personality_affinity": fm.major.personality_affinity,
         }
         for fm in res_m.scalars().all() if fm.major
     ]
@@ -118,7 +128,10 @@ async def get_user_favorites(
             "id": str(fc.career.id),
             "slug": fc.career.slug,
             "title": fc.career.title,
-            "industry": fc.career.industry
+            "industry": fc.career.industry,
+            "description": fc.career.description,
+            "riasec_code": fc.career.riasec_code,
+            "education_level": fc.career.education_level,
         }
         for fc in res_c.scalars().all() if fc.career
     ]
@@ -133,9 +146,13 @@ async def get_user_favorites(
             "slug": fs.scholarship.slug,
             "title": fs.scholarship.title,
             "provider": fs.scholarship.provider,
+            "description": fs.scholarship.description,
             "coverage_type": fs.scholarship.coverage_type,
+            "coverage_percentage": fs.scholarship.coverage_percentage,
+            "country_or_institution": fs.scholarship.country_or_institution,
             "deadline": str(fs.scholarship.application_deadline) if fs.scholarship.application_deadline else None,
-            "status": fs.status
+            "official_url": fs.scholarship.official_url,
+            "status": fs.status,
         }
         for fs in res_s.scalars().all() if fs.scholarship
     ]

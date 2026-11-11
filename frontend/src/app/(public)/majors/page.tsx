@@ -32,6 +32,7 @@ import {
   Check,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { BookmarkButton } from "@/components/ui/bookmark-button";
 import { DotPattern } from "@/components/magicui/dot-pattern";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { Dialog } from "@/components/ui/dialog";
@@ -524,12 +525,19 @@ export default function MajorsPage() {
                             {t(`categories.${m.category}`, m.category)}
                           </span>
 
-                          {m.is_stem && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-extrabold bg-[#F7CE4D] text-[#111965] shadow-xs">
-                              <Sparkles className="w-3 h-3" />
-                              <span>STEM</span>
-                            </span>
-                          )}
+                          <div className="flex items-center gap-1.5">
+                            {m.is_stem && (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-extrabold bg-[#F7CE4D] text-[#111965] shadow-xs">
+                                <Sparkles className="w-3 h-3" />
+                                <span>STEM</span>
+                              </span>
+                            )}
+                            <BookmarkButton
+                              entityType="major"
+                              entityId={m.id}
+                              variant="overlay"
+                            />
+                          </div>
                         </div>
 
                         {/* Holland RIASEC indicator at bottom of image */}
@@ -650,6 +658,11 @@ export default function MajorsPage() {
                     </div>
 
                     <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-0 border-[#E6E8F0]">
+                      <BookmarkButton
+                        entityType="major"
+                        entityId={m.id}
+                      />
+
                       <button
                         type="button"
                         onClick={() => setActivePreviewMajor(m)}

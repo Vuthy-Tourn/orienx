@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Noto_Sans_Khmer } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/language-context";
+import { ThemeProvider } from "@/contexts/theme-context";
 import { AuthProvider } from "@/contexts/auth-context";
 import { QueryProvider } from "@/providers/query-provider";
 import { Navbar } from "@/components/layout/navbar";
@@ -46,13 +47,15 @@ export default function RootLayout({
     <html lang="km" className={`${plusJakarta.variable} ${notoSansKhmer.variable}`}>
       <body className="min-h-screen flex flex-col bg-[#F5F6FA] text-[#171A2C] selection:bg-[#F7CE4D] selection:text-[#111965]">
         <QueryProvider>
-          <LanguageProvider>
-            <AuthProvider>
-              <Navbar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </AuthProvider>
-          </LanguageProvider>
+          <ThemeProvider>
+            <LanguageProvider>
+              <AuthProvider>
+                <Navbar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </AuthProvider>
+            </LanguageProvider>
+          </ThemeProvider>
         </QueryProvider>
       </body>
     </html>

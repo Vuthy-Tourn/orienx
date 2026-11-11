@@ -15,6 +15,7 @@ import {
   GraduationCap,
   Building,
 } from "lucide-react";
+import { BookmarkButton } from "@/components/ui/bookmark-button";
 
 export default function CareerDetailPage() {
   const params = useParams();
@@ -63,29 +64,41 @@ export default function CareerDetailPage() {
 
         {/* Career Header */}
         <div className="rounded-3xl bg-white border border-[#E6E8F0] p-6 sm:p-8 shadow-xs space-y-5">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F0F2FA] text-[#111965]">
-                {career.industry}
-              </span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                In-Demand Growth
-              </span>
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F0F2FA] text-[#111965]">
+                  {career.industry}
+                </span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  In-Demand Growth
+                </span>
+              </div>
+
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111965] leading-snug">
+                {getLocalized(career.title)}
+              </h1>
+
+              <div className="flex items-center gap-4 text-xs font-medium text-[#68708A] pt-1">
+                <span>
+                  <strong className="text-[#111965]">Holland RIASEC Code:</strong> {career.riasec_code}
+                </span>
+                <span>•</span>
+                <span>
+                  <strong className="text-[#111965]">Minimum Education:</strong> {career.education_level}
+                </span>
+              </div>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111965] leading-snug">
-              {getLocalized(career.title)}
-            </h1>
-
-            <div className="flex items-center gap-4 text-xs font-medium text-[#68708A] pt-1">
-              <span>
-                <strong className="text-[#111965]">Holland RIASEC Code:</strong> {career.riasec_code}
-              </span>
-              <span>•</span>
-              <span>
-                <strong className="text-[#111965]">Minimum Education:</strong> {career.education_level}
-              </span>
-            </div>
+            <BookmarkButton
+              entityType="career"
+              entityId={career.id}
+              variant="pill"
+              size="md"
+              showText
+              textActive="បានរក្សាទុក (Saved)"
+              textInactive="រក្សាទុកអាជីព"
+            />
           </div>
 
           <p className="text-sm text-[#171A2C] leading-relaxed">
