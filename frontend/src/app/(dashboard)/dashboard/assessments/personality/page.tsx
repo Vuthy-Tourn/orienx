@@ -692,10 +692,10 @@ export default function PersonalityAssessmentPage() {
                         {getLocalized(major.name)}
                       </h4>
 
-                      {/* Rationale snippet */}
+                      {/* Personality-specific rationale snippet */}
                       <p className="text-[11px] text-[#4A5568] line-clamp-2 leading-relaxed bg-[#F8FAFD] p-2.5 rounded-xl border border-[#E6E8F0]/70 min-h-[46px] flex items-center">
-                        {getLocalized({ km: exp.fit_summary_km, en: exp.fit_summary_en }) ||
-                          getLocalized({ km: exp.personality_reason_km, en: exp.personality_reason_en }) ||
+                        {getLocalized({ km: exp.personality_reason_km, en: exp.personality_reason_en }) ||
+                          getLocalized({ km: exp.fit_summary_km, en: exp.fit_summary_en }) ||
                           getLocalized({
                             km: `ទម្រង់បុគ្គលិកលក្ខណៈ ${pType} របស់អ្នកស័ក្តិសមយ៉ាងល្អជាមួយនឹងជំនាញ ${getLocalized(major.name)}។`,
                             en: `Your ${pType} cognitive orientation aligns exceptionally well with ${getLocalized(major.name)}.`,
