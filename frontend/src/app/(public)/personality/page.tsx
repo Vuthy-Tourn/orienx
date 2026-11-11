@@ -71,52 +71,60 @@ export default function PublicPersonalityGuidePage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFD] text-[#111965] selection:bg-[#F7CE4D] selection:text-[#111965] pb-24">
-      {/* 1. HERO SECTION */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#111965] via-[#16217A] to-[#0D144F] text-white pt-28 pb-20 px-4 sm:px-6 lg:px-8">
-        {/* Ambient Glows */}
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-[#F7CE4D]/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 -right-24 w-96 h-96 bg-sky-500/15 rounded-full blur-3xl pointer-events-none" />
+      {/* 1. HERO SECTION WITH ALL 16 CHARACTERS FRAME */}
+      <section className="pt-24 pb-4 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto rounded-3xl overflow-hidden relative border border-slate-200/90 shadow-xl bg-[#EDEDED] aspect-[1024/646] min-h-[460px] md:min-h-[540px] lg:min-h-[620px] flex items-center justify-center">
+          {/* Background Image of all 16 official characters framing the perimeter */}
+          <Image
+            src="/images/16-personalities-hero-frame.jpg"
+            alt="All 16 MBTI Personality Archetypes"
+            fill
+            priority
+            className="object-cover md:object-contain pointer-events-none select-none opacity-40 md:opacity-100 transition-opacity"
+          />
 
-        <div className="max-w-6xl mx-auto space-y-6 text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 shadow-xs uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
-            <span>NERIS & 16Personalities Standard</span>
-          </div>
+          {/* Center Content Island (Golden Ratio Safe Box) */}
+          <div className="relative z-10 w-[90%] sm:w-[72%] md:w-[50%] max-w-lg text-center flex flex-col items-center justify-center space-y-2 sm:space-y-3 p-4 sm:p-5 rounded-2xl bg-white/80 md:bg-transparent backdrop-blur-xs md:backdrop-blur-none border border-white/60 md:border-transparent shadow-xs md:shadow-none">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-black bg-[#111965] text-[#F7CE4D] shadow-xs uppercase tracking-wider">
+              <Sparkles className="w-3 h-3 text-[#F7CE4D]" />
+              <span>16Personalities & NERIS Standard</span>
+            </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight max-w-4xl mx-auto">
-            {getLocalized({
-              km: "មគ្គុទ្ទេសក៍បុគ្គលិកលក្ខណៈទាំង ១៦",
-              en: "The 16 Personality Types Guide",
-            })}
-          </h1>
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-[#111965] tracking-tight leading-tight">
+              {getLocalized({
+                km: "មគ្គុទ្ទេសក៍បុគ្គលិកលក្ខណៈទាំង ១៦",
+                en: "The 16 Personality Types Guide",
+              })}
+            </h1>
 
-          <p className="text-sm sm:text-base lg:text-lg text-slate-200 max-w-2xl mx-auto font-medium leading-relaxed">
-            {getLocalized({
-              km: "ស្វែងយល់ពីទម្រង់ចិត្តគំនិត ទេពកោសល្យពីកំណើត របៀបសិក្សា និងមុខជំនាញសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុតសម្រាប់បុគ្គលិកលក្ខណៈនីមួយៗ។",
-              en: "Explore cognitive strengths, natural tendencies, learning styles, and ideal university majors across all 16 official personality archetypes.",
-            })}
-          </p>
+            <p className="text-[11px] sm:text-xs text-[#334155] line-clamp-2 font-medium leading-relaxed max-w-sm">
+              {getLocalized({
+                km: "ស្វែងយល់ពីទម្រង់ចិត្តគំនិត ទេពកោសល្យពីកំណើត របៀបសិក្សា និងមុខជំនាញសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុតសម្រាប់បុគ្គលិកលក្ខណៈនីមួយៗ។",
+                en: "Explore cognitive strengths, natural tendencies, and ideal Cambodian university majors across all 16 official personality archetypes.",
+              })}
+            </p>
 
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/dashboard/assessments/personality"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-lg transition-all hover:scale-105 active:scale-95 cursor-pointer"
-            >
-              <Compass className="w-4 h-4 text-[#111965]" />
-              <span>
-                {getLocalized({
-                  km: "ធ្វើតេស្តបុគ្គលិកលក្ខណៈរបស់អ្នក (ឥតគិតថ្លៃ)",
-                  en: "Take Free Personality Assessment",
-                })}
-              </span>
-              <ArrowRight className="w-4 h-4 text-[#111965]" />
-            </Link>
+            <div className="pt-1">
+              <Link
+                href="/dashboard/assessments/personality"
+                className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-black bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+              >
+                <Compass className="w-4 h-4 text-[#111965]" />
+                <span>
+                  {getLocalized({
+                    km: "ធ្វើតេស្តបុគ្គលិកលក្ខណៈ (ឥតគិតថ្លៃ)",
+                    en: "Take Free Personality Assessment",
+                  })}
+                </span>
+                <ArrowRight className="w-4 h-4 text-[#111965]" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* 2. THE 4 ROLE GROUPS BANNER */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 relative z-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {ROLES_META.map((role) => (
             <button
