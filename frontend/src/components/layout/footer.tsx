@@ -73,6 +73,11 @@ export function Footer() {
                   Scholarship Finder
                 </Link>
               </li>
+              <li>
+                <Link href="/personality" className="hover:text-white transition-colors">
+                  16 Personalities Guide
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -25,321 +25,20 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-type DimensionGroup = "EI" | "SN" | "TF" | "JP";
-
-const DIMENSION_TITLES: Record<
+import {
+  DIMENSION_TITLES,
+  ROLES_META,
+  ARCHETYPE_META,
   DimensionGroup,
-  {
-    code: string;
-    nameEn: string;
-    nameKm: string;
-    tipEn: string;
-    tipKm: string;
-  }
-> = {
-  EI: {
-    code: "E vs I",
-    nameEn: "Mind: Extraversion (E) vs Introversion (I)",
-    nameKm: "ចិត្ត / ថាមពលសង្គម៖ Extraversion (E) vs Introversion (I)",
-    tipEn: "Where do you naturally recharge your mental energy?",
-    tipKm: "តើអ្នកបញ្ចូលថាមពលដោយវិធីណា ក្នុងក្រុម ឬដោយស្ងប់ស្ងាត់?",
-  },
-  SN: {
-    code: "S vs N",
-    nameEn: "Energy: Sensing (S) vs Intuition (N)",
-    nameKm: "ការទទួលព័ត៌មាន៖ Sensing (S) vs Intuition (N)",
-    tipEn: "Do you focus on practical facts or imaginative big ideas?",
-    tipKm: "តើអ្នកផ្តោតលើការអនុវត្តជាក់ស្តែង ឬគំនិតច្នៃប្រឌិតអនាគត?",
-  },
-  TF: {
-    code: "T vs F",
-    nameEn: "Nature: Thinking (T) vs Feeling (F)",
-    nameKm: "ការសម្រេចចិត្ត៖ Thinking (T) vs Feeling (F)",
-    tipEn: "What guides your choices: objective logic or human empathy?",
-    tipKm: "តើអ្វីដឹកនាំការសម្រេចចិត្ត៖ តក្កវិជ្ជាសុក្រឹត ឬអារម្មណ៍មនុស្ស?",
-  },
-  JP: {
-    code: "J vs P",
-    nameEn: "Tactics: Judging (J) vs Prospecting (P)",
-    nameKm: "យុទ្ធសាស្ត្រជីវិត៖ Judging (J) vs Prospecting (P)",
-    tipEn: "Do you prefer structured plans or flexible adaptability?",
-    tipKm: "តើអ្នកចូលចិត្តផែនការរៀបរយ ឬសេរីភាពបត់បែនតាមស្ថានភាព?",
-  },
-};
-
-export interface RoleMeta {
-  id: "analysts" | "diplomats" | "sentinels" | "explorers";
-  nameEn: string;
-  nameKm: string;
-  color: string;
-  gradient: string;
-  badgeBg: string;
-  badgeText: string;
-  cardBorder: string;
-  descriptionEn: string;
-  descriptionKm: string;
-  types: string[];
-}
-
-export const ROLES_META: RoleMeta[] = [
-  {
-    id: "analysts",
-    nameEn: "Analysts",
-    nameKm: "អ្នកវិភាគ",
-    color: "#88619A",
-    gradient: "from-[#88619A] via-[#754E86] to-[#452755]",
-    badgeBg: "bg-[#88619A]/15 text-[#88619A] border-[#88619A]/30",
-    badgeText: "text-[#88619A]",
-    cardBorder: "border-[#88619A]/40 hover:border-[#88619A]",
-    descriptionEn: "Intuitive (N) & Thinking (T) • Known for strategic rationality and relentless intellectual curiosity.",
-    descriptionKm: "ប្រភេទ Intuitive (N) & Thinking (T) • ផ្តោតលើតក្កវិជ្ជា យុទ្ធសាស្ត្រច្បាស់ និងការស្រាវជ្រាវបញ្ញាឥតឈប់ឈរ។",
-    types: ["INTJ", "INTP", "ENTJ", "ENTP"],
-  },
-  {
-    id: "diplomats",
-    nameEn: "Diplomats",
-    nameKm: "អ្នកការទូត",
-    color: "#33A474",
-    gradient: "from-[#33A474] via-[#2A8F64] to-[#175A3E]",
-    badgeBg: "bg-[#33A474]/15 text-[#33A474] border-[#33A474]/30",
-    badgeText: "text-[#33A474]",
-    cardBorder: "border-[#33A474]/40 hover:border-[#33A474]",
-    descriptionEn: "Intuitive (N) & Feeling (F) • Known for deep empathy, inspiring idealism, and cooperative harmony.",
-    descriptionKm: "ប្រភេទ Intuitive (N) & Feeling (F) • ផ្តោតលើការយល់ចិត្តស៊ីជម្រៅ ឧត្តមគតិបំផុស និងសាមគ្គីភាពក្នុងសង្គម។",
-    types: ["INFJ", "INFP", "ENFJ", "ENFP"],
-  },
-  {
-    id: "sentinels",
-    nameEn: "Sentinels",
-    nameKm: "អ្នកការពារ និងរក្សាប្រព័ន្ធ",
-    color: "#4298B4",
-    gradient: "from-[#4298B4] via-[#35839C] to-[#1E5769]",
-    badgeBg: "bg-[#4298B4]/15 text-[#4298B4] border-[#4298B4]/30",
-    badgeText: "text-[#4298B4]",
-    cardBorder: "border-[#4298B4]/40 hover:border-[#4298B4]",
-    descriptionEn: "Observant (S) & Judging (J) • Known for practicality, meticulous order, reliability, and civic stability.",
-    descriptionKm: "ប្រភេទ Observant (S) & Judging (J) • ផ្តោតលើភាពជាក់ស្តែង របៀបរៀបរយ ទំនុកចិត្តខ្ពស់ និងស្ថិរភាព។",
-    types: ["ISTJ", "ISFJ", "ESTJ", "ESFJ"],
-  },
-  {
-    id: "explorers",
-    nameEn: "Explorers",
-    nameKm: "អ្នករុករក",
-    color: "#E4A43C",
-    gradient: "from-[#E4A43C] via-[#C98B29] to-[#8C5811]",
-    badgeBg: "bg-[#E4A43C]/15 text-[#E4A43C] border-[#E4A43C]/30",
-    badgeText: "text-[#E4A43C]",
-    cardBorder: "border-[#E4A43C]/40 hover:border-[#E4A43C]",
-    descriptionEn: "Observant (S) & Prospecting (P) • Known for spontaneity, versatile agility, and hands-on resourcefulness.",
-    descriptionKm: "ប្រភេទ Observant (S) & Prospecting (P) • ផ្តោតលើភាពបត់បែន ភាពស្វាហាប់ និងការដោះស្រាយបញ្ហាជាក់ស្តែងផ្ទាល់ដៃ។",
-    types: ["ISTP", "ISFP", "ESTP", "ESFP"],
-  },
-];
-
-export interface ArchetypeMetaItem {
-  role: "analysts" | "diplomats" | "sentinels" | "explorers";
-  roleNameEn: string;
-  roleNameKm: string;
-  roleColor: string;
-  gradient: string;
-  nameKm: string;
-  nameEn: string;
-  taglineKm: string;
-  taglineEn: string;
-}
-
-const ARCHETYPE_META: Record<string, ArchetypeMetaItem> = {
-  // --- 1. ANALYSTS (_NT_) --- Signature Color: Purple (#88619A)
-  INTJ: {
-    role: "analysts",
-    roleNameEn: "Analysts",
-    roleNameKm: "អ្នកវិភាគ",
-    roleColor: "#88619A",
-    gradient: "from-[#88619A] via-[#754E86] to-[#452755]",
-    nameKm: "The Architect • ស្ថាបត្យករយុទ្ធសាស្ត្រ",
-    nameEn: "The Architect • Strategic Thinker",
-    taglineKm: "អ្នកយុទ្ធសាស្ត្រស៊ីជម្រៅ ពោរពេញដោយការស្រមើស្រមៃ និងមានផែនការច្បាស់លាស់សម្រាប់គ្រប់រឿង។",
-    taglineEn: "Imaginative and strategic thinkers, with a plan for everything.",
-  },
-  INTP: {
-    role: "analysts",
-    roleNameEn: "Analysts",
-    roleNameKm: "អ្នកវិភាគ",
-    roleColor: "#88619A",
-    gradient: "from-[#88619A] via-[#754E86] to-[#452755]",
-    nameKm: "The Logician • អ្នកតក្កវិជ្ជានវានុវត្តន៍",
-    nameEn: "The Logician • Innovative Inventor",
-    taglineKm: "អ្នកច្នៃប្រឌិតនវានុវត្តន៍ ស្រេកឃ្លានចំណេះដឹង និងចូលចិត្តវិភាគប្រព័ន្ធស្មុគស្មាញ។",
-    taglineEn: "Innovative inventors with an unquenchable thirst for knowledge.",
-  },
-  ENTJ: {
-    role: "analysts",
-    roleNameEn: "Analysts",
-    roleNameKm: "អ្នកវិភាគ",
-    roleColor: "#88619A",
-    gradient: "from-[#88619A] via-[#754E86] to-[#452755]",
-    nameKm: "The Commander • អ្នកដឹកនាំចក្ខុវិស័យ",
-    nameEn: "The Commander • Bold Visionary",
-    taglineKm: "មានភាពជាអ្នកដឹកនាំក្លាហាន ចក្ខុវិស័យយុទ្ធសាស្ត្រច្បាស់ និងការសម្រេចចិត្តរហ័ស។",
-    taglineEn: "Bold, imaginative, and strong-willed leaders, finding a way or making one.",
-  },
-  ENTP: {
-    role: "analysts",
-    roleNameEn: "Analysts",
-    roleNameKm: "អ្នកវិភាគ",
-    roleColor: "#88619A",
-    gradient: "from-[#88619A] via-[#754E86] to-[#452755]",
-    nameKm: "The Debater • អ្នកបង្កើតគំនិត និងដេញដោល",
-    nameEn: "The Debater • Curious Thinker",
-    taglineKm: "ឆ្លាតវៃ រហ័សរហួន ចូលចិត្តបញ្ហាប្រឈមបញ្ញា និងស្វែងរកគំនិតច្នៃប្រឌិតថ្មីៗ។",
-    taglineEn: "Smart and curious thinkers who cannot resist an intellectual challenge.",
-  },
-
-  // --- 2. DIPLOMATS (_NF_) --- Signature Color: Green (#33A474)
-  INFJ: {
-    role: "diplomats",
-    roleNameEn: "Diplomats",
-    roleNameKm: "អ្នកការទូត",
-    roleColor: "#33A474",
-    gradient: "from-[#33A474] via-[#2A8F64] to-[#175A3E]",
-    nameKm: "The Advocate • អ្នកតស៊ូមតិ និងទស្សនវិទូស្ងប់ស្ងាត់",
-    nameEn: "The Advocate • Inspiring Idealist",
-    taglineKm: "ស្ងប់ស្ងាត់តែមានឥទ្ធិពលបំផុសគំនិតខ្ពស់ ប្រកាន់ខ្ជាប់នូវគោលការណ៍គុណធម៌ និងឧត្តមគតិ។",
-    taglineEn: "Quiet and mystical, yet very inspiring and tireless idealists.",
-  },
-  INFP: {
-    role: "diplomats",
-    roleNameEn: "Diplomats",
-    roleNameKm: "អ្នកការទូត",
-    roleColor: "#33A474",
-    gradient: "from-[#33A474] via-[#2A8F64] to-[#175A3E]",
-    nameKm: "The Mediator • អ្នកផ្សះផ្សា និងឧត្តមគតិនិយម",
-    nameEn: "The Mediator • Poetic Altruist",
-    taglineKm: "ចិត្តល្អ សុភាពរាបសា មានគំនិតច្នៃប្រឌិតសិល្បៈ និងតែងតែចង់ជួយសង្គមឱ្យកាន់តែប្រសើរ។",
-    taglineEn: "Poetic, kind and altruistic people, always eager to help a good cause.",
-  },
-  ENFJ: {
-    role: "diplomats",
-    roleNameEn: "Diplomats",
-    roleNameKm: "អ្នកការទូត",
-    roleColor: "#33A474",
-    gradient: "from-[#33A474] via-[#2A8F64] to-[#175A3E]",
-    nameKm: "The Protagonist • អ្នកដឹកនាំលើកទឹកចិត្ត",
-    nameEn: "The Protagonist • Charismatic Leader",
-    taglineKm: "មានមន្តស្នេហ៍ក្នុងការប្រាស្រ័យទាក់ទង ពូកែលើកទឹកចិត្ត និងជំរុញឱ្យអ្នកដទៃអភិវឌ្ឍសមត្ថភាព។",
-    taglineEn: "Charismatic and inspiring leaders, able to mesmerize their listeners.",
-  },
-  ENFP: {
-    role: "diplomats",
-    roleNameEn: "Diplomats",
-    roleNameKm: "អ្នកការទូត",
-    roleColor: "#33A474",
-    gradient: "from-[#33A474] via-[#2A8F64] to-[#175A3E]",
-    nameKm: "The Campaigner • អ្នកចលនានវានុវត្តន៍ និងសេរីភាព",
-    nameEn: "The Campaigner • Creative Free Spirit",
-    taglineKm: "ស្វាហាប់ ច្នៃប្រឌិតខ្ពស់ មានភាពស្និទ្ធស្នាល និងតែងតែនាំមកនូវស្នាមញញឹមដល់មនុស្សជុំវិញ។",
-    taglineEn: "Enthusiastic, creative and sociable free spirits, who can always find a reason to smile.",
-  },
-
-  // --- 3. SENTINELS (_S_J) --- Signature Color: Blue (#4298B4)
-  ISTJ: {
-    role: "sentinels",
-    roleNameEn: "Sentinels",
-    roleNameKm: "អ្នកការពារ និងរក្សាប្រព័ន្ធ",
-    roleColor: "#4298B4",
-    gradient: "from-[#4298B4] via-[#35839C] to-[#1E5769]",
-    nameKm: "The Logistician • អ្នកអនុវត្តប្រព័ន្ធ និងវិន័យ",
-    nameEn: "The Logistician • Responsible Realist",
-    taglineKm: "ផ្តោតលើភាពជាក់លាក់ ការទទួលខុសត្រូវខ្ពស់ និងការប្រកាន់ខ្ជាប់នូវគោលការណ៍ត្រឹមត្រូវ។",
-    taglineEn: "Practical and fact-minded individuals, whose reliability cannot be doubted.",
-  },
-  ISFJ: {
-    role: "sentinels",
-    roleNameEn: "Sentinels",
-    roleNameKm: "អ្នកការពារ និងរក្សាប្រព័ន្ធ",
-    roleColor: "#4298B4",
-    gradient: "from-[#4298B4] via-[#35839C] to-[#1E5769]",
-    nameKm: "The Defender • អ្នកការពារ និងគាំទ្រយ៉ាងស្មោះស្ម័គ្រ",
-    nameEn: "The Defender • Dedicated Protector",
-    taglineKm: "មានចិត្តកក់ក្តៅ លះបង់ខ្ពស់ យកចិត្តទុកដាក់ និងតែងតែត្រៀមខ្លួនការពារជួយអ្នកដទៃ។",
-    taglineEn: "Very dedicated and warm protectors, always ready to defend their loved ones.",
-  },
-  ESTJ: {
-    role: "sentinels",
-    roleNameEn: "Sentinels",
-    roleNameKm: "អ្នកការពារ និងរក្សាប្រព័ន្ធ",
-    roleColor: "#4298B4",
-    gradient: "from-[#4298B4] via-[#35839C] to-[#1E5769]",
-    nameKm: "The Executive • អ្នករៀបចំ និងដឹកនាំយុទ្ធសាស្ត្រ",
-    nameEn: "The Executive • Dedicated Organizer",
-    taglineKm: "អ្នកពូកែរៀបចំរចនាសម្ព័ន្ធ មានភាពជាអ្នកដឹកនាំជាក់ស្តែង និងការសម្រេចចិត្តប្រកបដោយការទទួលខុសត្រូវខ្ពស់។",
-    taglineEn: "Excellent administrators, unsurpassed at managing things or people.",
-  },
-  ESFJ: {
-    role: "sentinels",
-    roleNameEn: "Sentinels",
-    roleNameKm: "អ្នកការពារ និងរក្សាប្រព័ន្ធ",
-    roleColor: "#4298B4",
-    gradient: "from-[#4298B4] via-[#35839C] to-[#1E5769]",
-    nameKm: "The Consul • អ្នកសម្របសម្រួល និងយកចិត្តទុកដាក់ខ្ពស់",
-    nameEn: "The Consul • Caring Provider",
-    taglineKm: "រួសរាយរាក់ទាក់ ចិត្តល្អ ពូកែបង្កើតទំនាក់ទំនង និងតែងតែចង់ជួយសម្របសម្រួលអ្នកដទៃ។",
-    taglineEn: "Extraordinarily caring, social and popular people, always eager to help.",
-  },
-
-  // --- 4. EXPLORERS (_S_P) --- Signature Color: Amber (#E4A43C)
-  ISTP: {
-    role: "explorers",
-    roleNameEn: "Explorers",
-    roleNameKm: "អ្នករុករក",
-    roleColor: "#E4A43C",
-    gradient: "from-[#E4A43C] via-[#C98B29] to-[#8C5811]",
-    nameKm: "The Virtuoso • អ្នកអនុវត្តបច្ចេកទេស និងពិសោធន៍ជាក់ស្តែង",
-    nameEn: "The Virtuoso • Practical Experimenter",
-    taglineKm: "ក្លាហាន ពូកែដោះស្រាយបញ្ហាបច្ចេកទេសជាក់ស្តែង និងជាអ្នកជំនាញឧបករណ៍ និងយន្តការ។",
-    taglineEn: "Bold and practical experimenters, masters of all kinds of tools.",
-  },
-  ISFP: {
-    role: "explorers",
-    roleNameEn: "Explorers",
-    roleNameKm: "អ្នករុករក",
-    roleColor: "#E4A43C",
-    gradient: "from-[#E4A43C] via-[#C98B29] to-[#8C5811]",
-    nameKm: "The Adventurer • អ្នកសិល្បៈច្នៃប្រឌិត",
-    nameEn: "The Adventurer • Artistic Explorer",
-    taglineKm: "មានភាពបត់បែនខ្ពស់ ស្រឡាញ់សិល្បៈ និងតែងតែត្រៀមខ្លួនស្វែងរកបទពិសោធន៍ថ្មីៗជានិច្ច។",
-    taglineEn: "Flexible and charming artists, always ready to explore and experience something new.",
-  },
-  ESTP: {
-    role: "explorers",
-    roleNameEn: "Explorers",
-    roleNameKm: "អ្នករុករក",
-    roleColor: "#E4A43C",
-    gradient: "from-[#E4A43C] via-[#C98B29] to-[#8C5811]",
-    nameKm: "The Entrepreneur • សហគ្រិនស្វាហាប់ និងរហ័សរហួន",
-    nameEn: "The Entrepreneur • Energetic Dynamo",
-    taglineKm: "ឆ្លាតវៃ ស្វាហាប់ សង្កេតបានរហ័ស និងរីករាយក្នុងការប្រថុយប្រជែងដោះស្រាយបញ្ហាភ្លាមៗ។",
-    taglineEn: "Smart, energetic and very perceptive people, who truly enjoy living on the edge.",
-  },
-  ESFP: {
-    role: "explorers",
-    roleNameEn: "Explorers",
-    roleNameKm: "អ្នករុករក",
-    roleColor: "#E4A43C",
-    gradient: "from-[#E4A43C] via-[#C98B29] to-[#8C5811]",
-    nameKm: "The Entertainer • អ្នកកម្សាន្ត និងបង្កើតភាពរស់រវើក",
-    nameEn: "The Entertainer • Spontaneous Performer",
-    taglineKm: "ស្វាហាប់ រស់រវើក ពោរពេញដោយភាពរីករាយ និងតែងតែធ្វើឱ្យបរិយាកាសជុំវិញមានភាពកក់ក្តៅ។",
-    taglineEn: "Spontaneous, energetic and enthusiastic people – life is never boring around them.",
-  },
-};
+  RoleMeta,
+  ArchetypeMetaItem,
+} from "@/lib/personality-meta";
 
 export default function PersonalityAssessmentPage() {
   const { t, getLocalized } = useLanguage();
   const queryClient = useQueryClient();
 
-  const [activeTab, setActiveTab] = useState<"form" | "results" | "guide">("form");
-  const [roleFilter, setRoleFilter] = useState<string>("all");
+  const [activeTab, setActiveTab] = useState<"form" | "results">("form");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<
     Record<string, { scaleLevel: number; selectedOptionId: string }>
@@ -554,14 +253,13 @@ export default function PersonalityAssessmentPage() {
             </h1>
           </div>
 
-          {/* View Switcher */}
+          {/* View Switcher — Clean 2-State (Questions & Personal Profile) */}
           <AssessmentViewSwitcher
             activeTab={activeTab}
             onTabChange={setActiveTab}
             questionsLabel={t("personalityAssessment.questionsTab") || "ធ្វើតេស្ត"}
             profileLabel={`${pType} Profile`}
             profileIcon={Crown}
-            guideLabel={t("personalityAssessment.guideTab") || "មគ្គុទ្ទេសក៍ទាំង ១៦"}
             hasResult={!!latestResult}
           />
         </div>
@@ -1085,14 +783,13 @@ export default function PersonalityAssessmentPage() {
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => setActiveTab("guide")}
+          <Link
+            href="/personality"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black bg-[#111965] hover:bg-[#1A2580] text-white shadow-2xs transition-all cursor-pointer whitespace-nowrap self-stretch sm:self-auto justify-center"
           >
             <span>{t("personalityAssessment.openGuideBtn", "បើកមគ្គុទ្ទេសក៍ទាំង ១៦")}</span>
             <ArrowRight className="w-3.5 h-3.5 text-[#F7CE4D]" />
-          </button>
+          </Link>
         </div>
 
         {/* 6. NEXT STEP CTA CARD */}
@@ -1122,182 +819,7 @@ export default function PersonalityAssessmentPage() {
             </Link>
           </div>
         </div>
-      </div>
-    );
-  }
 
-  // ========================================================
-  // VIEW MODE: DEDICATED 16 PERSONALITIES FRAMEWORK GUIDE
-  // ========================================================
-  if (activeTab === "guide") {
-    return (
-      <div className="max-w-5xl mx-auto space-y-7 animate-in fade-in pb-16 select-none">
-        {/* Top Breadcrumb & Switcher */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E8F0] pb-4">
-          <div>
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-[#68708A] mb-1">
-              <Link href="/dashboard" className="hover:text-[#111965]">
-                {t("personalityAssessment.dashboard")}
-              </Link>
-              <span>/</span>
-              <span className="text-[#111965]">
-                {t("personalityAssessment.guideTab", "មគ្គុទ្ទេសក៍ទាំង ១៦")}
-              </span>
-            </div>
-
-            <h1 className="text-xl sm:text-2xl font-black text-[#111965] tracking-tight">
-              {getLocalized({
-                km: "មគ្គុទ្ទេសក៍បុគ្គលិកលក្ខណៈទាំង ១៦ (The 16 Personalities)",
-                en: "The 16 Personalities Framework & Archetypes",
-              })}
-            </h1>
-          </div>
-
-          {/* View Switcher */}
-          <AssessmentViewSwitcher
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-            questionsLabel={t("personalityAssessment.questionsTab") || "ធ្វើតេស្ត"}
-            profileLabel={`${latestResult?.personality_type || "INTJ"} Profile`}
-            profileIcon={Crown}
-            guideLabel={t("personalityAssessment.guideTab") || "មគ្គុទ្ទេសក៍ទាំង ១៦"}
-            hasResult={!!latestResult}
-          />
-        </div>
-
-        {/* Guide Content Header Banner */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#111965] via-[#1A2580] to-[#0D134E] text-white shadow-xl relative overflow-hidden border border-[#111965]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-          <div className="space-y-2 max-w-xl relative z-10">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 uppercase tracking-wider">
-              <Compass className="w-3.5 h-3.5 text-[#F7CE4D]" />
-              <span>NERIS Standard Archetypes</span>
-            </div>
-            <h2 className="text-xl sm:text-2xl font-black text-white">
-              {getLocalized({
-                km: "ស្វែងយល់ពីបុគ្គលិកលក្ខណៈទាំង ១៦ និងតួនាទីទាំង ៤",
-                en: "Explore All 16 Personalities Across 4 Role Groups",
-              })}
-            </h2>
-            <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
-              {getLocalized({
-                km: "បែងចែកជា ៤ ក្រុមតួនាទីធំៗ៖ អ្នកវិភាគ (Analysts), អ្នកការទូត (Diplomats), អ្នកការពារ (Sentinels), និងអ្នករុករក (Explorers)។",
-                en: "Divided into 4 major role groups: Analysts, Diplomats, Sentinels, and Explorers.",
-              })}
-            </p>
-          </div>
-
-          {latestResult && (
-            <button
-              type="button"
-              onClick={() => setActiveTab("results")}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-xs cursor-pointer transition-colors whitespace-nowrap self-start sm:self-auto"
-            >
-              <Crown className="w-4 h-4 text-[#111965]" />
-              <span>{getLocalized({ km: `ត្រឡប់ទៅលទ្ធផល ${latestResult.personality_type}`, en: `Back to My ${latestResult.personality_type} Result` })}</span>
-            </button>
-          )}
-        </div>
-
-        {/* Role Filters */}
-        <div className="flex items-center justify-between gap-3 overflow-x-auto no-scrollbar pb-1">
-          <div className="flex items-center gap-2">
-            {["all", "analysts", "diplomats", "sentinels", "explorers"].map((tab) => {
-              const isActive = roleFilter === tab;
-              const roleObj = ROLES_META.find((r) => r.id === tab);
-
-              return (
-                <button
-                  key={tab}
-                  type="button"
-                  onClick={() => setRoleFilter(tab)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
-                    isActive
-                      ? "bg-[#111965] text-white shadow-2xs"
-                      : "bg-white text-[#68708A] hover:bg-[#E6E8F0] hover:text-[#111965] border border-[#E6E8F0]"
-                  }`}
-                >
-                  {tab === "all" ? "All 16 Types (ទាំងអស់)" : roleObj?.nameEn || tab}
-                </button>
-              );
-            })}
-          </div>
-          <span className="text-xs font-bold text-[#68708A] whitespace-nowrap hidden sm:inline">
-            16 Archetypes
-          </span>
-        </div>
-
-        {/* 16 Types Grid with Official Characters */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {Object.entries(ARCHETYPE_META)
-            .filter(([_, meta]) => roleFilter === "all" || meta.role === roleFilter)
-            .map(([code, meta]) => {
-              const isCurrentUser = code === latestResult?.personality_type;
-              const roleData = ROLES_META.find((r) => r.id === meta.role);
-
-              return (
-                <div
-                  key={code}
-                  className={`p-4 rounded-2xl border transition-all flex flex-col justify-between space-y-3 relative ${
-                    isCurrentUser
-                      ? "bg-gradient-to-b from-amber-50/70 to-white border-amber-300 ring-2 ring-amber-400/50 shadow-md"
-                      : "bg-white border-[#E6E8F0] hover:border-slate-300 hover:shadow-2xs"
-                  }`}
-                >
-                  {isCurrentUser && (
-                    <span className="absolute -top-2.5 right-3 px-2 py-0.5 rounded-full text-[9px] font-black bg-[#F7CE4D] text-[#111965] shadow-xs flex items-center gap-1 z-10">
-                      <Sparkles className="w-2.5 h-2.5 text-[#111965]" />
-                      <span>Your MBTI</span>
-                    </span>
-                  )}
-
-                  {/* Character Illustration */}
-                  <div className="w-full h-32 flex items-center justify-center p-2 bg-slate-50/80 rounded-xl border border-slate-100/80">
-                    <Image
-                      src={`/images/personality-types/${code.toLowerCase()}.svg`}
-                      alt={`${code} Character`}
-                      width={110}
-                      height={120}
-                      className="h-full w-auto object-contain drop-shadow-sm hover:scale-105 transition-transform"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <span
-                        className="text-lg font-black tracking-tight"
-                        style={{ color: meta.roleColor }}
-                      >
-                        {code}
-                      </span>
-                      <span
-                        className="px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase border"
-                        style={{
-                          backgroundColor: `${meta.roleColor}15`,
-                          color: meta.roleColor,
-                          borderColor: `${meta.roleColor}30`,
-                        }}
-                      >
-                        {roleData?.nameEn}
-                      </span>
-                    </div>
-
-                    <h5 className="text-xs font-black text-[#111965] leading-snug">
-                      {meta.nameKm.split("•")[1]?.trim() || meta.nameEn}
-                    </h5>
-
-                    <p className="text-[11px] text-[#68708A] line-clamp-3 leading-relaxed">
-                      {meta.taglineKm}
-                    </p>
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] font-semibold text-slate-500">
-                    <span>{meta.roleNameKm}</span>
-                    <span className="font-mono text-[9px] opacity-75">{code}</span>
-                  </div>
-                </div>
-              );
-            })}
-        </div>
       </div>
     );
   }
@@ -1345,7 +867,6 @@ export default function PersonalityAssessmentPage() {
             questionsLabel={t("personalityAssessment.questionsTab") || "ធ្វើតេស្ត"}
             profileLabel={`${latestResult?.personality_type || "INTJ"} Profile`}
             profileIcon={Crown}
-            guideLabel={t("personalityAssessment.guideTab") || "មគ្គុទ្ទេសក៍ទាំង ១៦"}
             hasResult={!!latestResult}
           />
         }

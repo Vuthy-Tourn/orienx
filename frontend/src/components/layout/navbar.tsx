@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Briefcase,
   Award,
+  Sparkles,
   Menu,
   X,
   User as UserIcon,
@@ -62,6 +63,7 @@ export function Navbar() {
     { href: "/universities", label: t("nav.universities"), icon: GraduationCap },
     { href: "/careers", label: t("nav.careers"), icon: Briefcase },
     { href: "/scholarships", label: t("nav.scholarships"), icon: Award },
+    { href: "/personality", label: t("nav.personality", "បុគ្គលិកលក្ខណៈ"), icon: Sparkles },
     { href: "/about", label: t("nav.about") },
   ];
 
@@ -89,7 +91,7 @@ export function Navbar() {
         <Logo />
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+        <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5">
           {navLinks.map((item) => {
             const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
             return (
@@ -97,13 +99,13 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "px-3.5 py-1.5 rounded-xl text-sm font-medium transition-all duration-150 flex items-center gap-1.5",
+                  "px-2.5 xl:px-3.5 py-1.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap",
                   isActive
-                    ? "bg-[#F0F2FA] text-[#111965] font-bold border-2 border-[#111965] shadow-2xs"
-                    : "text-[#68708A] hover:text-[#171A2C] hover:bg-slate-50 border-2 border-transparent"
+                    ? "bg-[#111965]/10 text-[#111965] font-bold shadow-2xs"
+                    : "text-[#68708A] hover:text-[#111965] hover:bg-slate-100/70"
                 )}
               >
-                {item.icon && <item.icon className="w-4 h-4 opacity-75" />}
+                {item.icon && <item.icon className="w-3.5 h-3.5 xl:w-4 xl:h-4 opacity-75 shrink-0 hidden xl:inline-block" />}
                 <span>{item.label}</span>
               </Link>
             );
@@ -111,14 +113,14 @@ export function Navbar() {
         </nav>
 
         {/* Right Action Cluster */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-2 xl:gap-3">
           <LanguageSwitcher />
 
           {user ? (
             <div className="flex items-center gap-2">
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-sm font-semibold text-[#111965] bg-[#F0F2FA] hover:bg-[#E6E8F0] transition-colors"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs xl:text-sm font-semibold text-[#111965] bg-[#F0F2FA] hover:bg-[#E6E8F0] transition-colors whitespace-nowrap"
               >
                 <LayoutDashboard className="w-4 h-4" />
                 <span>{t("nav.dashboard")}</span>
@@ -127,7 +129,7 @@ export function Navbar() {
               {isAdmin && (
                 <Link
                   href="/admin"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition-colors whitespace-nowrap"
                 >
                   <ShieldCheck className="w-3.5 h-3.5" />
                   <span>Admin</span>
@@ -143,16 +145,16 @@ export function Navbar() {
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               <Link
                 href="/login"
-                className="px-3 py-1.5 rounded-lg text-sm font-semibold text-[#111965] hover:bg-slate-50 transition-colors"
+                className="px-3 py-1.5 rounded-lg text-xs xl:text-sm font-semibold text-[#111965] hover:bg-slate-50 transition-colors whitespace-nowrap"
               >
                 {t("nav.signIn")}
               </Link>
               <Link
                 href="/register"
-                className="px-4 py-1.5 rounded-lg text-sm font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-xs transition-colors"
+                className="px-3.5 xl:px-4 py-1.5 rounded-lg text-xs xl:text-sm font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-xs transition-colors whitespace-nowrap"
               >
                 {t("nav.getStarted")}
               </Link>
@@ -161,11 +163,12 @@ export function Navbar() {
         </div>
 
         {/* Mobile menu button */}
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <LanguageSwitcher />
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 rounded-lg text-slate-600 hover:bg-slate-100"
+            aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
