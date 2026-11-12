@@ -61,9 +61,9 @@ const SCIENTIFIC_PILLARS = [
     descKm: "ផ្អែកលើទ្រឹស្តីចិត្តវិទ្យាអាជីព ៦ វិមាត្ររបស់លោក John Holland ដែលឆ្លុះបញ្ចាំងពីចំណាប់អារម្មណ៍ពិតប្រាកដ និងការចូលចិត្តការងារប្រចាំថ្ងៃ ដើម្បីការពារកុំឱ្យផ្លាស់ប្តូរជំនាញពាក់កណ្តាលទី។",
     icon: Compass,
     color: "#D97706",
-    ctaEn: "Take RIASEC Test",
-    ctaKm: "ធ្វើតេស្ត RIASEC",
-    href: "/dashboard/assessments/riasec",
+    ctaEn: "Explore RIASEC Guide",
+    ctaKm: "ស្វែងយល់ពីតេស្ត RIASEC",
+    href: "/riasec",
     proofEn: "6 vocational dimensions • 30 localized question items",
     proofKm: "វិមាត្រ ៦ • ៣០ សំណួរជាក់ស្តែងក្នុងបរិបទកម្ពុជា",
   },
@@ -95,9 +95,9 @@ const SCIENTIFIC_PILLARS = [
     descKm: "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នារវាងថ្នាក់វិទ្យាសាស្ត្រពិត ឬវិទ្យាសាស្ត្រសង្គម ជាមួយលក្ខខណ្ឌតម្រូវជាកាតព្វកិច្ចនៃមុខវិជ្ជាស្នូលរបស់សាកលវិទ្យាល័យ (RUPP, ITC, CADT)។",
     icon: GraduationCap,
     color: "#059669",
-    ctaEn: "Check University Majors",
-    ctaKm: "ពិនិត្យជំនាញសាកលវិទ្យាល័យ",
-    href: "/majors",
+    ctaEn: "Check Stream Prerequisites",
+    ctaKm: "ផ្ទៀងផ្ទាត់លក្ខខណ្ឌបាក់ឌុប",
+    href: "/bacii",
     proofEn: "Cross-checked with RUPP, ITC Techno & CADT cutoffs",
     proofKm: "ផ្ទៀងផ្ទាត់ពិន្ទុកាត់ និងលក្ខខណ្ឌ RUPP, ITC និង CADT",
   },
@@ -724,6 +724,12 @@ export default function AboutPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
+              <Link
+                href="/assessments"
+                className="px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all text-center flex items-center justify-center gap-1.5"
+              >
+                <span>{language === "km" ? "មើលតេស្តទាំងអស់" : "View All Assessments"}</span>
+              </Link>
               <Link
                 href="/dashboard/assessments/riasec"
                 className="px-5 py-2.5 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#F5C430] transition-transform active:scale-95 text-center shadow-md flex items-center justify-center gap-1.5"

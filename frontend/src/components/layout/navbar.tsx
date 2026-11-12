@@ -95,7 +95,7 @@ export function Navbar() {
 
   const assessmentTests = [
     {
-      href: "/dashboard/assessments/riasec",
+      href: "/riasec",
       labelEn: "Holland RIASEC Test",
       labelKm: "តេស្តចំណាប់អារម្មណ៍ RIASEC",
       descEn: "Measure 6 vocational interest dimensions to discover matched careers",
@@ -121,7 +121,7 @@ export function Navbar() {
       tagClass: "bg-blue-50 text-blue-700 border-blue-200/80",
     },
     {
-      href: "/dashboard/assessments/preferences",
+      href: "/bacii",
       labelEn: "BACII Stream & Preferences",
       labelKm: "ចំណូលចិត្តមុខវិជ្ជា & សាកលវិទ្យាល័យ",
       descEn: "Verify Grade 12 stream fit and budget alignment for universities",
@@ -134,7 +134,7 @@ export function Navbar() {
       tagClass: "bg-emerald-50 text-emerald-700 border-emerald-200/80",
     },
     {
-      href: "/dashboard/recommendations",
+      href: "/assessments",
       labelEn: "AI Major & Career Matching Hub",
       labelKm: "លទ្ធផលផ្គូផ្គងជំនាញ & អាជីព",
       descEn: "Multi-factor recommendations powered by all 4 scientific pillars",
