@@ -24,8 +24,11 @@ import {
   BadgeCheck,
   Target,
   School,
-  Sparkle,
   ArrowLeftRight,
+  DollarSign,
+  Layers,
+  Scale,
+  Sparkle,
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -297,140 +300,6 @@ const SCIENTIFIC_PILLARS = [
   },
 ];
 
-// 5-Step Horizontal Journey Data (Pure Informational Cards)
-const FIVE_STEP_JOURNEY = [
-  {
-    step: "01",
-    taglineKm: "ការវាយតម្លៃបែបវិទ្យាសាស្ត្រត្រឹមតែ ១០ នាទី",
-    taglineEn: "A 10-minute validated vocational diagnostic",
-    titleKm: "១. ធ្វើតេស្តស្វែងយល់ពីខ្លួនឯង",
-    titleEn: "1. Self-Discovery Diagnostics",
-    descKm: "ធ្វើតេស្តចំណាប់អារម្មណ៍អាជីព Holland RIASEC ៣០ សំណួរ និងតេស្តបុគ្គលិកលក្ខណៈ 16P ដែលបង្កើតឡើងពិសេសសម្រាប់សិស្សានុសិស្សកម្ពុជា។",
-    descEn: "Complete the 30-item localized Holland RIASEC assessment and 16-personality cognitive test designed specifically for Cambodian students.",
-    color: "#D97706",
-    badgeBg: "bg-amber-500/15 text-amber-300 border-amber-500/30",
-    metrics: [
-      { labelEn: "Questions", labelKm: "សំណួរ", val: "30 Items" },
-      { labelEn: "Standard", labelKm: "ស្តង់ដារ", val: "RIASEC + 16P" },
-      { labelEn: "Cost", labelKm: "តម្លៃ", val: "100% Free" },
-    ],
-    highlightsEn: [
-      "John Holland's 6 vocational psychology dimensions",
-      "Cognitive temperament breakdown (Analysts, Diplomats, Sentinels, Explorers)",
-      "Instant multi-dimensional student profile report",
-    ],
-    highlightsKm: [
-      "ផ្អែកលើ ៦ វិមាត្រចិត្តវិទ្យាអាជីព John Holland",
-      "វិភាគមុខងារនៃការគិត ៤ ក្រុមធំៗ (Analysts, Diplomats, Sentinels, Explorers)",
-      "ទទួលបានរបាយការណ៍លទ្ធផលបុគ្គលិកលក្ខណៈភ្លាមៗ",
-    ],
-  },
-  {
-    step: "02",
-    taglineKm: "គណនាបែបគណិតវិទ្យាដោយតម្លាភាព",
-    taglineEn: "Multi-factor mathematical alignment",
-    titleKm: "២. វិធីសាស្ត្រផ្គូផ្គង ៤ សសរស្ដម្ភ",
-    titleEn: "2. 4-Pillar Algorithmic Matching",
-    descKm: "ក្បួនដោះស្រាយផ្គូផ្គងចំណាប់អារម្មណ៍ (៣០%) កម្មវិធីសិក្សាវិទ្យាល័យ (២៥%) បុគ្គលិកលក្ខណៈ (២៥%) និងតម្រូវការទីផ្សារការងារ (២០%)។",
-    descEn: "Our engine integrates your interests (30%), BACII track (25%), cognitive style (25%), and real Cambodian labor demand (20%).",
-    color: "#2563EB",
-    badgeBg: "bg-blue-500/15 text-blue-300 border-blue-500/30",
-    metrics: [
-      { labelEn: "Pillars", labelKm: "សសរស្ដម្ភ", val: "4 Dimensions" },
-      { labelEn: "Track Match", labelKm: "កម្មវិធីវិទ្យាល័យ", val: "Science / Social" },
-      { labelEn: "Algorithm", labelKm: "ក្បួនដោះស្រាយ", val: "Mathematical Fit" },
-    ],
-    highlightsEn: [
-      "Transparent fit percentage scores (no unexplainable black-box guessing)",
-      "BACII Science vs. Social stream prerequisite compatibility check",
-      "Granular match rationales detailing why each major fits you",
-    ],
-    highlightsKm: [
-      "ពិន្ទុភាគរយត្រូវគ្នាយ៉ាងច្បាស់លាស់ ដោយគ្មានការទស្សន៍ទាយស្មានៗ",
-      "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នានៃថ្នាក់វិទ្យាសាស្ត្រពិត និងវិទ្យាសាស្ត្រសង្គម",
-      "ពន្យល់ពីមូលហេតុច្បាស់លាស់ដែលធ្វើឱ្យជំនាញនីមួយៗសមស្របជាមួយអ្នក",
-    ],
-  },
-  {
-    step: "03",
-    taglineKm: "ផ្ទៀងផ្ទាត់ផ្ទាល់ពីការិយាល័យចុះឈ្មោះ និង MoEYS",
-    taglineEn: "Directly verified against registrar fee schedules",
-    titleKm: "៣. ផ្ទៀងផ្ទាត់សាកលវិទ្យាល័យ និងតម្លៃសិក្សា",
-    titleEn: "3. Verified Campus & Tuition Benchmarks",
-    descKm: "ប្រៀបធៀបតម្លៃសិក្សា ៤ ឆ្នាំពេញ ហេដ្ឋារចនាសម្ព័ន្ធ និងលក្ខខណ្ឌចូលរៀនផ្លូវការនៅសាកលវិទ្យាល័យរដ្ឋ និងឯកជនកំពូលៗនៅកម្ពុជា។",
-    descEn: "Compare verified 4-year tuition schedules, campus facilities, and admission cutoff requirements across top public state and private institutions.",
-    color: "#059669",
-    badgeBg: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-    metrics: [
-      { labelEn: "Institutions", labelKm: "គ្រឹះស្ថានសិក្សា", val: "RUPP, ITC, CADT..." },
-      { labelEn: "Tuition Data", labelKm: "ទិន្នន័យតម្លៃ", val: "100% Accurate" },
-      { labelEn: "Source", labelKm: "ប្រភព", val: "MoEYS Verified" },
-    ],
-    highlightsEn: [
-      "RUPP, ITC (Techno), CADT, AUPP, Paragon IU, and NUM profiles",
-      "Transparent 4-year total investment without hidden charges",
-      "Certified laboratory facilities, faculties, and international accreditations",
-    ],
-    highlightsKm: [
-      "ព័ត៌មានលម្អិតនៃ RUPP, ITC (តិចណូ), CADT, AUPP, Paragon IU និង NUM",
-      "តម្លាភាពតម្លៃសិក្សា ៤ ឆ្នាំពេញ ដោយគ្មានការលាក់បាំង",
-      "ទិន្នន័យបន្ទប់ពិសោធន៍ សាស្ត្រាចារ្យ និងការទទួលស្គាល់កម្រិតអន្តរជាតិ",
-    ],
-  },
-  {
-    step: "04",
-    taglineKm: "មិនឱ្យនិស្សិតកម្ពុជាខកខានឱកាសអាហារូបករណ៍",
-    taglineEn: "Zero missed financial aid opportunities",
-    titleKm: "៤. តាមដានអាហារូបករណ៍ផ្លូវការ ១០០%",
-    titleEn: "4. Official Scholarship & Aid Tracker",
-    descKm: "ស្វែងរកអាហារូបករណ៍រដ្ឋ MoEYS អាហារូបករណ៍ CADT តេជោឌីជីថល និងជំនួយហិរញ្ញវត្ថុអន្តរជាតិ ១០០% ពេញលេញ។",
-    descEn: "Identify 100% full-ride state scholarships, CADT Techo Digital Talent awards, and verified institutional grants before deadlines expire.",
-    color: "#9333EA",
-    badgeBg: "bg-purple-500/15 text-purple-300 border-purple-500/30",
-    metrics: [
-      { labelEn: "Coverage", labelKm: "កម្រិតជំនួយ", val: "Up to 100%" },
-      { labelEn: "State Grants", labelKm: "អាហារូបករណ៍រដ្ឋ", val: "MoEYS / CADT" },
-      { labelEn: "Deadlines", labelKm: "កាលបរិច្ឆេទ", val: "Real-Time Tracking" },
-    ],
-    highlightsEn: [
-      "MoEYS national priority scholarship grade cutoffs & quotas",
-      "CADT Techo Digital Talent exam requirements and preparation guides",
-      "Eligibility criteria, documentation checklists, and application alerts",
-    ],
-    highlightsKm: [
-      "កូតា និងពិន្ទុកាត់នៃអាហារូបករណ៍រដ្ឋអាទិភាព MoEYS",
-      "លក្ខខណ្ឌប្រឡងអាហារូបករណ៍ទេពកោសល្យឌីជីថលតេជោ CADT",
-      "បញ្ជីឯកសារចាំបាច់ លក្ខខណ្ឌជ្រើសរើស និងការដាស់តឿនកាលបរិច្ឆេទ",
-    ],
-  },
-  {
-    step: "05",
-    taglineKm: "បញ្ចប់ការសិក្សាឆ្ពោះទៅកាន់ទីផ្សារការងារជាក់ស្តែង",
-    taglineEn: "Direct pathway to thriving employment",
-    titleKm: "៥. កំណត់ទិសដៅអាជីព និងការចុះឈ្មោះចូលរៀន",
-    titleEn: "5. Confident Career Roadmap & Enrollment",
-    descKm: "ស្វែងយល់ពីកម្រិតប្រាក់បៀវត្សរ៍ជាក់ស្តែងនៅកម្ពុជា និន្នាការរីកចម្រើន ៥ ឆ្នាំ និងការពិភាក្សាប្រកបដោយទំនុកចិត្តជាមួយគ្រួសារ។",
-    descEn: "Review Cambodian salary benchmarks, 5-year industry growth forecasts, and collaborate with parents and counselors to enroll with 100% confidence.",
-    color: "#EA580C",
-    badgeBg: "bg-orange-500/15 text-orange-300 border-orange-500/30",
-    metrics: [
-      { labelEn: "Salary Data", labelKm: "ប្រាក់បៀវត្សរ៍", val: "NEA Benchmarks" },
-      { labelEn: "Growth", labelKm: "កំណើន", val: "High Demand Sectors" },
-      { labelEn: "Enrollment", labelKm: "ការចុះឈ្មោះ", val: "100% Confident" },
-    ],
-    highlightsEn: [
-      "Cambodian National Employment Agency (NEA) career trajectory data",
-      "Entry to senior salary ranges for Software, Finance, Engineering, and Media",
-      "Counselor & parent shareable diagnostic summaries for unified decisions",
-    ],
-    highlightsKm: [
-      "ទិន្នន័យទីផ្សារការងារជាក់ស្តែងពីទីភ្នាក់ងារជាតិមុខរបរ និងការងារ (NEA)",
-      "កម្រិតប្រាក់បៀវត្សរ៍សម្រាប់វិស័យ Software, Finance, Engineering និង Media",
-      "របាយការណ៍សង្ខេបសម្រាប់ពិភាក្សាជាមួយឪពុកម្តាយ និងលោកគ្រូតម្រង់ទិស",
-    ],
-  },
-];
-
 // FAQ items
 const FAQ_ITEMS = [
   {
@@ -597,12 +466,11 @@ export default function AboutPage() {
         const track = horizontalTrackRef.current;
         if (!pinContainer || !track) return;
 
-        // Calculate exact horizontal travel distance
+        // Guaranteed full distance: tracks width minus window width plus generous margin so Card 05 is completely visible
         const getScrollDistance = () => {
           const trackWidth = track.scrollWidth;
           const viewportWidth = window.innerWidth;
-          // Travel entire track minus viewport width plus extra breathing margin
-          return Math.max(0, trackWidth - viewportWidth + 140);
+          return Math.max(0, trackWidth - viewportWidth + 240);
         };
 
         const horizontalTween = gsap.to(track, {
@@ -613,9 +481,9 @@ export default function AboutPage() {
         ScrollTrigger.create({
           trigger: pinContainer,
           start: "top top",
-          end: () => `+=${getScrollDistance()}`,
+          end: () => `+=${getScrollDistance() + 200}`,
           pin: true,
-          scrub: 1,
+          scrub: 1.2,
           animation: horizontalTween,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
@@ -1156,10 +1024,10 @@ export default function AboutPage() {
       {/* ========================================================= */}
       {/* 5. CINEMATIC PINNED HORIZONTAL SCROLL: 5-STEP JOURNEY */}
       {/* ========================================================= */}
-      {/* "Deep Navy Horizon": Pinned vertically while scrubbing horizontally to the left */}
+      {/* "Deep Navy Horizon": Full width pinned stage with bespoke asymmetric cards and guaranteed 100% full-travel scroll */}
       <section
         ref={pinContainerRef}
-        className="w-full relative my-20 lg:my-28 bg-gradient-to-b from-[#080D2B] via-[#0A0F3D] to-[#080D2B] text-white overflow-hidden py-14 lg:py-20 select-none"
+        className="w-full relative my-16 lg:my-24 bg-gradient-to-b from-[#080D2B] via-[#0A0F3D] to-[#080D2B] text-white overflow-hidden py-14 lg:py-20 select-none"
       >
         {/* Ambient Glow Atmosphere */}
         <div className="absolute inset-0 pointer-events-none opacity-20 [background-image:radial-gradient(rgba(255,255,255,0.2)_1px,transparent_1px)] [background-size:32px_32px]" />
@@ -1167,156 +1035,450 @@ export default function AboutPage() {
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#33A474]/10 rounded-full blur-3xl pointer-events-none" />
 
         {/* Feathered Top & Bottom Edge Seams (Zero hard cuts) */}
-        <div className="absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-[#F8FAFD] to-transparent pointer-events-none z-10 opacity-15" />
-        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#F8FAFD] to-transparent pointer-events-none z-10 opacity-15" />
+        <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-[#F8FAFD] to-transparent pointer-events-none z-10 opacity-15" />
+        <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#F8FAFD] to-transparent pointer-events-none z-10 opacity-15" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-20">
-          {/* Section Header with Live Step Counter & Progress Indicator */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-white/10">
-            <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-[#F7CE4D] text-xs font-black border border-white/15 uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
-                <span>
+        <div className="w-full space-y-8 relative z-20">
+          {/* Section Header with Live Step Counter & Progress Indicator (Aligned to 7xl Grid) */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-white/10">
+              <div className="space-y-3 max-w-2xl">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-[#F7CE4D] text-xs font-black border border-white/15 uppercase tracking-wider">
+                  <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
+                  <span>
+                    {language === "km"
+                      ? "មាគ៌ា ៥ ជំហានឆ្ពោះទៅកាន់ឧត្តមសិក្សា"
+                      : "5-Step Student Journey Pathway"}
+                  </span>
+                </div>
+                <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                  {t("aboutPage.whyTitle", "Why Students & Parents Trust Futera")}
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-300 font-medium">
                   {language === "km"
-                    ? "មាគ៌ា ៥ ជំហានឆ្ពោះទៅកាន់ឧត្តមសិក្សា"
-                    : "5-Step Student Journey Pathway"}
-                </span>
+                    ? "ពីការធ្វើតេស្តស្វែងយល់ពីខ្លួនឯង រហូតដល់ការទទួលបានអាហារូបករណ៍ និងការចុះឈ្មោះចូលរៀនដោយទំនុកចិត្ត។"
+                    : "From self-discovery assessment to scholarship discovery and confident university enrollment."}
+                </p>
               </div>
-              <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-                {t("aboutPage.whyTitle", "Why Students & Parents Trust Futera")}
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-300 font-medium">
-                {language === "km"
-                  ? "ពីការធ្វើតេស្តស្វែងយល់ពីខ្លួនឯង រហូតដល់ការទទួលបានអាហារូបករណ៍ និងការចុះឈ្មោះចូលរៀនដោយទំនុកចិត្ត។"
-                  : "From self-discovery assessment to scholarship discovery and confident university enrollment."}
-              </p>
+
+              {/* Desktop Dynamic Live Step Counter & Scroll Hint */}
+              <div className="hidden md:flex flex-col items-end gap-2.5 flex-shrink-0">
+                <div className="flex items-center gap-2 text-xs font-black text-slate-300">
+                  <ArrowLeftRight className="w-4 h-4 text-[#F7CE4D] animate-pulse" />
+                  <span className="text-[11px] text-slate-400">Scroll down to scrub horizontally</span>
+                </div>
+                <div className="px-4 py-2 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md shadow-lg flex items-center gap-3">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#F7CE4D] animate-ping" />
+                  <span
+                    ref={stepCounterRef}
+                    className="font-mono text-sm sm:text-base font-black text-white tracking-wider"
+                  >
+                    01 / 05 • 0%
+                  </span>
+                </div>
+              </div>
             </div>
 
-            {/* Desktop Dynamic Live Step Counter & Scroll Hint */}
-            <div className="hidden md:flex flex-col items-end gap-2.5 flex-shrink-0">
-              <div className="flex items-center gap-2 text-xs font-black text-slate-300">
-                <ArrowLeftRight className="w-4 h-4 text-[#F7CE4D] animate-pulse" />
-                <span className="text-[11px] text-slate-400">Scroll down to scrub horizontally</span>
-              </div>
-              <div className="px-4 py-2 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md shadow-lg flex items-center gap-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#F7CE4D] animate-ping" />
-                <span
-                  ref={stepCounterRef}
-                  className="font-mono text-sm sm:text-base font-black text-white tracking-wider"
-                >
-                  01 / 05 • 0%
-                </span>
-              </div>
+            {/* Desktop Horizontal Progress Bar Line */}
+            <div className="hidden md:block w-full h-1.5 bg-white/10 rounded-full overflow-hidden mt-4">
+              <div
+                ref={progressBarRef}
+                className="h-full w-full bg-gradient-to-r from-[#F7CE4D] via-[#FFE27D] to-[#F7CE4D] origin-left rounded-full transition-transform duration-75"
+                style={{ transform: "scaleX(0)" }}
+              />
             </div>
-          </div>
-
-          {/* Desktop Horizontal Progress Bar Line */}
-          <div className="hidden md:block w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-            <div
-              ref={progressBarRef}
-              className="h-full w-full bg-gradient-to-r from-[#F7CE4D] via-[#FFE27D] to-[#F7CE4D] origin-left rounded-full transition-transform duration-75"
-              style={{ transform: "scaleX(0)" }}
-            />
           </div>
 
           {/* ========================================================= */}
           {/* DESKTOP/TABLET: GSAP HORIZONTAL SCROLL TRACK */}
+          {/* Asymmetric bespoke cards with dynamic rhythm (NOT in a flat line) */}
           {/* ========================================================= */}
-          <div className="hidden md:block overflow-visible pt-4 pb-8">
+          <div className="hidden md:block overflow-visible pt-4 pb-6">
             <div
               ref={horizontalTrackRef}
-              className="flex gap-8 items-stretch will-change-transform"
+              className="flex items-center gap-10 will-change-transform pl-6 lg:pl-[max(2rem,calc((100vw-1280px)/2+2rem))] pr-[max(12rem,calc((100vw-1280px)/2+18rem))]"
               style={{ width: "max-content" }}
             >
-              {FIVE_STEP_JOURNEY.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="w-[500px] lg:w-[540px] flex-shrink-0 rounded-3xl p-8 bg-white/[0.07] backdrop-blur-2xl border border-white/15 hover:border-[#F7CE4D]/50 shadow-2xl flex flex-col justify-between space-y-6 transition-colors duration-200 group select-none relative overflow-hidden"
-                >
-                  {/* Subtle Card Header Gradient Pill */}
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-lg text-[#111965] shadow-lg group-hover:scale-105 transition-transform duration-200"
-                          style={{ backgroundColor: item.color }}
-                        >
-                          <span className="text-white font-black">{item.step}</span>
-                        </div>
-                        <div>
-                          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
-                            Milestone Stage {item.step}
-                          </span>
-                          <h3 className="text-xl font-black text-white tracking-tight">
-                            {language === "km" ? item.titleKm : item.titleEn}
-                          </h3>
-                        </div>
+              {/* CARD 01: Self-Discovery Diagnostics (Centered, Likert Scale Preview) */}
+              <div className="w-[520px] flex-shrink-0 rounded-3xl p-8 bg-white/[0.08] backdrop-blur-2xl border border-white/15 hover:border-amber-400/50 shadow-2xl flex flex-col justify-between space-y-5 select-none relative overflow-hidden group">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-black text-lg shadow-lg group-hover:scale-105 transition-transform duration-200">
+                        01
                       </div>
-
-                      <div
-                        className={`px-3 py-1 rounded-xl text-xs font-black border ${item.badgeBg}`}
-                      >
-                        {item.step === "01"
-                          ? "Diagnostic"
-                          : item.step === "02"
-                          ? "Algorithm"
-                          : item.step === "03"
-                          ? "Data"
-                          : item.step === "04"
-                          ? "Scholarship"
-                          : "Roadmap"}
+                      <div>
+                        <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest block">
+                          Milestone 01 • Self-Discovery
+                        </span>
+                        <h3 className="text-xl font-black text-white tracking-tight">
+                          {language === "km" ? "១. ធ្វើតេស្តស្វែងយល់ពីខ្លួនឯង" : "1. Self-Discovery Diagnostics"}
+                        </h3>
                       </div>
                     </div>
-
-                    <p className="text-xs text-[#F7CE4D] font-bold">
-                      {language === "km" ? item.taglineKm : item.taglineEn}
-                    </p>
-
-                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
-                      {language === "km" ? item.descKm : item.descEn}
-                    </p>
-                  </div>
-
-                  {/* Micro Metrics Row */}
-                  <div className="grid grid-cols-3 gap-2.5 pt-2">
-                    {item.metrics.map((m, mIdx) => (
-                      <div
-                        key={mIdx}
-                        className="p-3 rounded-2xl bg-white/5 border border-white/10 text-center space-y-1"
-                      >
-                        <div className="text-[10px] font-bold text-slate-400 truncate">
-                          {language === "km" ? m.labelKm : m.labelEn}
-                        </div>
-                        <div className="text-xs font-black text-white truncate">{m.val}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Highlights Bullet List */}
-                  <div className="pt-2 border-t border-white/10 space-y-2">
-                    <span className="text-[11px] font-black text-slate-300 uppercase tracking-wider block">
-                      {language === "km" ? "ចំណុចសំខាន់ៗនៃដំណាក់កាល" : "Stage Takeaways"}
+                    <span className="px-3 py-1 rounded-xl text-xs font-black bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                      Diagnostics
                     </span>
-                    <ul className="space-y-2 text-xs text-slate-300">
-                      {(language === "km" ? item.highlightsKm : item.highlightsEn).map(
-                        (h, hIdx) => (
-                          <li key={hIdx} className="flex items-start gap-2.5">
-                            <Check className="w-3.5 h-3.5 text-[#F7CE4D] flex-shrink-0 mt-0.5 stroke-[3]" />
-                            <span className="leading-snug">{h}</span>
-                          </li>
-                        )
-                      )}
-                    </ul>
+                  </div>
+
+                  <p className="text-xs text-amber-300 font-bold">
+                    {language === "km" ? "ការវាយតម្លៃបែបវិទ្យាសាស្ត្រត្រឹមតែ ១០ នាទី" : "A 10-minute validated vocational diagnostic"}
+                  </p>
+
+                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                    {language === "km"
+                      ? "ធ្វើតេស្តចំណាប់អារម្មណ៍អាជីព Holland RIASEC ៣០ សំណួរ និងតេស្តបុគ្គលិកលក្ខណៈ 16P ដែលបង្កើតឡើងពិសេសសម្រាប់សិស្សានុសិស្សកម្ពុជា។"
+                      : "Complete the 30-item localized Holland RIASEC assessment and 16-personality cognitive test designed specifically for Cambodian students."}
+                  </p>
+                </div>
+
+                {/* Bespoke Visual: Likert Scale & RIASEC Hexagram preview */}
+                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                  <div className="flex items-center justify-between text-[11px] font-bold text-slate-300">
+                    <span className="text-emerald-400">Strongly Agree</span>
+                    <span className="text-slate-400">Neutral</span>
+                    <span className="text-rose-400">Disagree</span>
+                  </div>
+                  <div className="flex items-center justify-between px-2">
+                    <span className="w-5 h-5 rounded-full bg-emerald-500 shadow-md ring-4 ring-emerald-500/20" />
+                    <span className="w-4 h-4 rounded-full bg-emerald-400/60" />
+                    <span className="w-3.5 h-3.5 rounded-full bg-white/30" />
+                    <span className="w-4 h-4 rounded-full bg-rose-400/60" />
+                    <span className="w-5 h-5 rounded-full bg-rose-500/40" />
+                  </div>
+                  <div className="flex items-center justify-center gap-1.5 pt-1 text-[10px] font-black tracking-wider text-slate-300 uppercase">
+                    <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">R</span>
+                    <span className="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300">I</span>
+                    <span className="px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">A</span>
+                    <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">S</span>
+                    <span className="px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-300">E</span>
+                    <span className="px-1.5 py-0.5 rounded bg-slate-500/20 text-slate-300">C</span>
                   </div>
                 </div>
-              ))}
+
+                {/* Takeaways */}
+                <ul className="space-y-1.5 text-xs text-slate-300 border-t border-white/10 pt-3">
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 stroke-[3]" />
+                    <span>{language === "km" ? "ផ្អែកលើ ៦ វិមាត្រចិត្តវិទ្យាអាជីព John Holland" : "John Holland's 6 vocational psychology dimensions"}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 stroke-[3]" />
+                    <span>{language === "km" ? "វិភាគមុខងារនៃការគិត ៤ ក្រុមធំៗ (16 Personalities)" : "Cognitive temperament breakdown (Analysts, Diplomats...)"}</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* CARD 02: 4-Pillar Algorithmic Matching (Elevated -translate-y-4, Weight Bars Matrix) */}
+              <div className="w-[490px] flex-shrink-0 -translate-y-3 rounded-3xl p-8 bg-white/[0.08] backdrop-blur-2xl border border-white/15 hover:border-blue-400/50 shadow-2xl flex flex-col justify-between space-y-5 select-none relative overflow-hidden group">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-lg shadow-lg group-hover:scale-105 transition-transform duration-200">
+                        02
+                      </div>
+                      <div>
+                        <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest block">
+                          Milestone 02 • The Formula
+                        </span>
+                        <h3 className="text-xl font-black text-white tracking-tight">
+                          {language === "km" ? "២. វិធីសាស្ត្រផ្គូផ្គង ៤ សសរស្ដម្ភ" : "2. 4-Pillar Algorithmic Matching"}
+                        </h3>
+                      </div>
+                    </div>
+                    <span className="px-3 py-1 rounded-xl text-xs font-black bg-blue-500/15 text-blue-300 border border-blue-500/30">
+                      Algorithm
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-blue-300 font-bold">
+                    {language === "km" ? "គណនាបែបគណិតវិទ្យាដោយតម្លាភាព" : "Multi-factor mathematical alignment"}
+                  </p>
+
+                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                    {language === "km"
+                      ? "ក្បួនដោះស្រាយផ្គូផ្គងចំណាប់អារម្មណ៍ (៣០%) កម្មវិធីសិក្សាវិទ្យាល័យ (២៥%) បុគ្គលិកលក្ខណៈ (២៥%) និងតម្រូវការទីផ្សារការងារ (២០%)។"
+                      : "Our engine integrates your interests (30%), BACII track (25%), cognitive style (25%), and real Cambodian labor demand (20%)."}
+                  </p>
+                </div>
+
+                {/* Bespoke Visual: 4-Weight Progress Bars */}
+                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2.5">
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[11px] font-bold">
+                      <span className="text-amber-300">Holland RIASEC Interests</span>
+                      <span className="text-white">30%</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <div className="w-[30%] h-full bg-amber-400 rounded-full" />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[11px] font-bold">
+                      <span className="text-emerald-300">BACII Science / Social Stream</span>
+                      <span className="text-white">25%</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <div className="w-[25%] h-full bg-emerald-400 rounded-full" />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[11px] font-bold">
+                      <span className="text-blue-300">16-Personality Cognitive Style</span>
+                      <span className="text-white">25%</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <div className="w-[25%] h-full bg-blue-400 rounded-full" />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[11px] font-bold">
+                      <span className="text-purple-300">Cambodian Labor Market (NEA)</span>
+                      <span className="text-white">20%</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <div className="w-[20%] h-full bg-purple-400 rounded-full" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Takeaways */}
+                <ul className="space-y-1.5 text-xs text-slate-300 border-t border-white/10 pt-3">
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-blue-400 flex-shrink-0 stroke-[3]" />
+                    <span>{language === "km" ? "ពិន្ទុភាគរយត្រូវគ្នាយ៉ាងច្បាស់លាស់ ដោយគ្មានការទស្សន៍ទាយ" : "Transparent fit percentage scores without black-box guessing"}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-blue-400 flex-shrink-0 stroke-[3]" />
+                    <span>{language === "km" ? "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នានៃថ្នាក់វិទ្យាសាស្ត្រពិត និងសង្គម" : "BACII Science vs. Social stream prerequisite check"}</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* CARD 03: Verified Campus & Tuition Benchmarks (Grounded translate-y-3, Campus Grid) */}
+              <div className="w-[540px] flex-shrink-0 translate-y-3 rounded-3xl p-8 bg-white/[0.08] backdrop-blur-2xl border border-white/15 hover:border-emerald-400/50 shadow-2xl flex flex-col justify-between space-y-5 select-none relative overflow-hidden group">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-black text-lg shadow-lg group-hover:scale-105 transition-transform duration-200">
+                        03
+                      </div>
+                      <div>
+                        <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest block">
+                          Milestone 03 • Data Integrity
+                        </span>
+                        <h3 className="text-xl font-black text-white tracking-tight">
+                          {language === "km" ? "៣. ផ្ទៀងផ្ទាត់សាកលវិទ្យាល័យ និងតម្លៃ" : "3. Verified Campus & Tuition"}
+                        </h3>
+                      </div>
+                    </div>
+                    <span className="px-3 py-1 rounded-xl text-xs font-black bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                      MoEYS Sourced
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-emerald-300 font-bold">
+                    {language === "km" ? "ផ្ទៀងផ្ទាត់ផ្ទាល់ពីការិយាល័យចុះឈ្មោះ និង MoEYS" : "Directly verified against registrar fee schedules"}
+                  </p>
+
+                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                    {language === "km"
+                      ? "ប្រៀបធៀបតម្លៃសិក្សា ៤ ឆ្នាំពេញ ហេដ្ឋារចនាសម្ព័ន្ធ និងលក្ខខណ្ឌចូលរៀនផ្លូវការនៅសាកលវិទ្យាល័យរដ្ឋ និងឯកជនកំពូលៗនៅកម្ពុជា។"
+                      : "Compare verified 4-year tuition schedules, campus facilities, and admission cutoff requirements across top public state and private institutions."}
+                  </p>
+                </div>
+
+                {/* Bespoke Visual: Cambodian Universities Grid */}
+                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                  <div className="grid grid-cols-3 gap-2 text-center text-xs font-black">
+                    <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white">
+                      RUPP
+                      <span className="text-[9px] block font-normal text-emerald-400">Public State</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white">
+                      ITC (Techno)
+                      <span className="text-[9px] block font-normal text-emerald-400">Engineering</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white">
+                      CADT
+                      <span className="text-[9px] block font-normal text-emerald-400">Digital Tech</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white">
+                      AUPP
+                      <span className="text-[9px] block font-normal text-blue-400">US Dual Degree</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white">
+                      Paragon IU
+                      <span className="text-[9px] block font-normal text-blue-400">International</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/5 border border-white/10 text-white">
+                      NUM
+                      <span className="text-[9px] block font-normal text-emerald-400">Business/Law</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] font-bold text-slate-300 pt-1">
+                    <span>Verified Range: $500/yr (Public)</span>
+                    <span className="text-emerald-400">100% Tuition Accuracy</span>
+                  </div>
+                </div>
+
+                {/* Takeaways */}
+                <ul className="space-y-1.5 text-xs text-slate-300 border-t border-white/10 pt-3">
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 stroke-[3]" />
+                    <span>{language === "km" ? "តម្លាភាពតម្លៃសិក្សា ៤ ឆ្នាំពេញ ដោយគ្មានការលាក់បាំង" : "Transparent 4-year total investment without hidden charges"}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 stroke-[3]" />
+                    <span>{language === "km" ? "ទិន្នន័យបន្ទប់ពិសោធន៍ និងការទទួលស្គាល់អន្តរជាតិ" : "Certified laboratory facilities and accreditations"}</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* CARD 04: Official Scholarship Tracker (Elevated -translate-y-4, Golden Holographic Pass) */}
+              <div className="w-[500px] flex-shrink-0 -translate-y-4 rounded-3xl p-8 bg-gradient-to-br from-purple-950/60 via-purple-900/40 to-[#080D2B] backdrop-blur-2xl border-2 border-[#F7CE4D]/50 hover:border-[#F7CE4D] shadow-2xl flex flex-col justify-between space-y-5 select-none relative overflow-hidden group">
+                <BorderBeam size={220} duration={8} delay={0} borderWidth={1.5} />
+
+                <div className="space-y-4 relative z-10">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-[#F7CE4D] text-[#111965] flex items-center justify-center font-black text-lg shadow-lg group-hover:scale-105 transition-transform duration-200">
+                        04
+                      </div>
+                      <div>
+                        <span className="text-[10px] font-black text-[#F7CE4D] uppercase tracking-widest block">
+                          Milestone 04 • Financial Aid
+                        </span>
+                        <h3 className="text-xl font-black text-white tracking-tight">
+                          {language === "km" ? "៤. តាមដានអាហារូបករណ៍ ១០០%" : "4. Official Scholarship Tracker"}
+                        </h3>
+                      </div>
+                    </div>
+                    <span className="px-3 py-1 rounded-xl text-xs font-black bg-[#F7CE4D]/20 text-[#F7CE4D] border border-[#F7CE4D]/40">
+                      100% Full-Ride
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-[#F7CE4D] font-bold">
+                    {language === "km" ? "មិនឱ្យនិស្សិតកម្ពុជាខកខានឱកាសអាហារូបករណ៍" : "Zero missed financial aid opportunities"}
+                  </p>
+
+                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                    {language === "km"
+                      ? "ស្វែងរកអាហារូបករណ៍រដ្ឋ MoEYS អាហារូបករណ៍ CADT តេជោឌីជីថល និងជំនួយហិរញ្ញវត្ថុអន្តរជាតិ ១០០% ពេញលេញ។"
+                      : "Identify 100% full-ride state scholarships, CADT Techo Digital Talent awards, and verified institutional grants before deadlines expire."}
+                  </p>
+                </div>
+
+                {/* Bespoke Visual: Golden Holographic Grant Pass */}
+                <div className="p-4 rounded-2xl bg-black/40 border border-[#F7CE4D]/30 space-y-2.5 relative z-10 shadow-inner">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-black text-[#F7CE4D] tracking-wider uppercase flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
+                      MoEYS & CADT Verified
+                    </span>
+                    <span className="text-[10px] font-bold text-slate-300">2026 Cohort</span>
+                  </div>
+                  <div className="text-sm font-black text-white">
+                    CADT Techo Digital Talent Scholarship
+                  </div>
+                  <div className="flex items-center gap-2 text-[11px] text-slate-300">
+                    <span className="px-2 py-0.5 rounded bg-white/10">100% Tuition</span>
+                    <span className="px-2 py-0.5 rounded bg-white/10">Monthly Stipend</span>
+                    <span className="px-2 py-0.5 rounded bg-white/10">Free Laptop</span>
+                  </div>
+                </div>
+
+                {/* Takeaways */}
+                <ul className="space-y-1.5 text-xs text-slate-300 border-t border-white/10 pt-3 relative z-10">
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-[#F7CE4D] flex-shrink-0 stroke-[3]" />
+                    <span>{language === "km" ? "កូតា និងពិន្ទុកាត់នៃអាហារូបករណ៍រដ្ឋអាទិភាព MoEYS" : "MoEYS national priority scholarship grade cutoffs & quotas"}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-[#F7CE4D] flex-shrink-0 stroke-[3]" />
+                    <span>{language === "km" ? "លក្ខខណ្ឌប្រឡងអាហារូបករណ៍ទេពកោសល្យឌីជីថល" : "CADT exam requirements & preparation guides"}</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* CARD 05: Confident Career Roadmap & Enrollment (Centered grand finale, Salary Benchmarks) */}
+              <div className="w-[540px] flex-shrink-0 translate-y-1 rounded-3xl p-8 bg-gradient-to-br from-orange-950/50 via-slate-900 to-[#080D2B] backdrop-blur-2xl border-2 border-orange-500/40 hover:border-orange-400 shadow-2xl flex flex-col justify-between space-y-5 select-none relative overflow-hidden group">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-orange-500 text-white flex items-center justify-center font-black text-lg shadow-lg group-hover:scale-105 transition-transform duration-200">
+                        05
+                      </div>
+                      <div>
+                        <span className="text-[10px] font-black text-orange-400 uppercase tracking-widest block">
+                          Milestone 05 • Career Roadmap
+                        </span>
+                        <h3 className="text-xl font-black text-white tracking-tight">
+                          {language === "km" ? "៥. កំណត់ទិសដៅអាជីព & ចុះឈ្មោះ" : "5. Confident Career & Enrollment"}
+                        </h3>
+                      </div>
+                    </div>
+                    <span className="px-3 py-1 rounded-xl text-xs font-black bg-orange-500/15 text-orange-300 border border-orange-500/30">
+                      Destination
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-orange-300 font-bold">
+                    {language === "km" ? "បញ្ចប់ការសិក្សាឆ្ពោះទៅកាន់ទីផ្សារការងារជាក់ស្តែង" : "Direct pathway to thriving employment"}
+                  </p>
+
+                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                    {language === "km"
+                      ? "ស្វែងយល់ពីកម្រិតប្រាក់បៀវត្សរ៍ជាក់ស្តែងនៅកម្ពុជា និន្នាការរីកចម្រើន ៥ ឆ្នាំ និងការពិភាក្សាប្រកបដោយទំនុកចិត្តជាមួយគ្រួសារ។"
+                      : "Review Cambodian salary benchmarks, 5-year industry growth forecasts, and collaborate with parents and counselors to enroll with 100% confidence."}
+                  </p>
+                </div>
+
+                {/* Bespoke Visual: Salary Progression Ladder */}
+                <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-2.5">
+                  <div className="flex items-center justify-between text-xs font-black text-white">
+                    <span>Cambodian Tech & Business Salaries</span>
+                    <span className="text-orange-400 font-bold">NEA Verified</span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+                      <span className="text-[10px] text-slate-400 block">Entry Grad</span>
+                      <span className="text-xs font-black text-white">$400 - $700</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+                      <span className="text-[10px] text-slate-400 block">3-5 Years</span>
+                      <span className="text-xs font-black text-orange-300">$800 - $1,500</span>
+                    </div>
+                    <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+                      <span className="text-[10px] text-slate-400 block">Senior Lead</span>
+                      <span className="text-xs font-black text-emerald-400">$1,800+</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Takeaways */}
+                <ul className="space-y-1.5 text-xs text-slate-300 border-t border-white/10 pt-3">
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-orange-400 flex-shrink-0 stroke-[3]" />
+                    <span>{language === "km" ? "ទិន្នន័យទីផ្សារការងារជាក់ស្តែងពីទីភ្នាក់ងារជាតិមុខរបរ និងការងារ" : "Cambodian NEA career trajectory and industry demand data"}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check className="w-3.5 h-3.5 text-orange-400 flex-shrink-0 stroke-[3]" />
+                    <span>{language === "km" ? "របាយការណ៍សង្ខេបសម្រាប់ពិភាក្សាជាមួយឪពុកម្តាយ និងលោកគ្រូ" : "Shareable counselor & parent report for confident decisions"}</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Trailing End Spacer (Guarantees Card 05 is fully in view with generous margin) */}
+              <div className="w-20 lg:w-32 flex-shrink-0" />
             </div>
           </div>
 
           {/* ========================================================= */}
           {/* MOBILE: FLUID TOUCH-SWIPE CAROUSEL (ZERO SCROLL TRAPPING) */}
           {/* ========================================================= */}
-          <div className="block md:hidden space-y-4">
+          <div className="block md:hidden space-y-4 px-4">
             <div
               className="overflow-x-auto snap-x snap-mandatory flex gap-4 pb-4 no-scrollbar px-1"
               onScroll={(e) => {
@@ -1325,48 +1487,110 @@ export default function AboutPage() {
                 setActiveMobileStep(Math.min(4, Math.max(0, index)));
               }}
             >
-              {FIVE_STEP_JOURNEY.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="w-[85vw] flex-shrink-0 snap-center rounded-3xl p-6 bg-white/[0.08] backdrop-blur-xl border border-white/15 shadow-xl space-y-4"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-base text-white shadow-md" style={{ backgroundColor: item.color }}>
-                      {item.step}
-                    </div>
-                    <span className={`px-2.5 py-0.5 rounded-lg text-[10px] font-black border ${item.badgeBg}`}>
-                      Stage {item.step}
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="text-base font-black text-white">
-                      {language === "km" ? item.titleKm : item.titleEn}
-                    </h3>
-                    <p className="text-[11px] text-[#F7CE4D] font-bold mt-0.5">
-                      {language === "km" ? item.taglineKm : item.taglineEn}
-                    </p>
-                  </div>
-
-                  <p className="text-xs text-slate-200 leading-relaxed">
-                    {language === "km" ? item.descKm : item.descEn}
-                  </p>
-
-                  <div className="grid grid-cols-3 gap-2 pt-1">
-                    {item.metrics.map((m, mIdx) => (
-                      <div key={mIdx} className="p-2 rounded-xl bg-white/5 border border-white/10 text-center">
-                        <div className="text-[9px] text-slate-400">{language === "km" ? m.labelKm : m.labelEn}</div>
-                        <div className="text-[11px] font-black text-white truncate">{m.val}</div>
-                      </div>
-                    ))}
-                  </div>
+              {/* Mobile Card 01 */}
+              <div className="w-[85vw] flex-shrink-0 snap-center rounded-3xl p-6 bg-white/[0.08] backdrop-blur-xl border border-white/15 shadow-xl space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center font-black text-white">01</div>
+                  <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-black bg-amber-500/15 text-amber-300 border border-amber-500/30">Diagnostics</span>
                 </div>
-              ))}
+                <div>
+                  <h3 className="text-base font-black text-white">{language === "km" ? "១. ធ្វើតេស្តស្វែងយល់ពីខ្លួនឯង" : "1. Self-Discovery Diagnostics"}</h3>
+                  <p className="text-[11px] text-amber-300 font-bold mt-0.5">{language === "km" ? "ការវាយតម្លៃត្រឹមតែ ១០ នាទី" : "10-minute diagnostic"}</p>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed">
+                  {language === "km" ? "ធ្វើតេស្តចំណាប់អារម្មណ៍អាជីព Holland RIASEC ៣០ សំណួរ និងតេស្តបុគ្គលិកលក្ខណៈ 16P។" : "Complete the 30-item RIASEC test and 16-personality cognitive assessment."}
+                </p>
+                <div className="grid grid-cols-3 gap-2 pt-1 text-center">
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Questions</div><div className="text-[11px] font-black text-white">30 Items</div></div>
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Standard</div><div className="text-[11px] font-black text-white">RIASEC+16P</div></div>
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Cost</div><div className="text-[11px] font-black text-white">100% Free</div></div>
+                </div>
+              </div>
+
+              {/* Mobile Card 02 */}
+              <div className="w-[85vw] flex-shrink-0 snap-center rounded-3xl p-6 bg-white/[0.08] backdrop-blur-xl border border-white/15 shadow-xl space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-white">02</div>
+                  <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-black bg-blue-500/15 text-blue-300 border border-blue-500/30">Algorithm</span>
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-white">{language === "km" ? "២. វិធីសាស្ត្រផ្គូផ្គង ៤ សសរស្ដម្ភ" : "2. 4-Pillar Algorithmic Matching"}</h3>
+                  <p className="text-[11px] text-blue-300 font-bold mt-0.5">{language === "km" ? "គណនាបែបគណិតវិទ្យា" : "Multi-factor formula"}</p>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed">
+                  {language === "km" ? "ផ្គូផ្គងចំណាប់អារម្មណ៍ (៣០%) កម្មវិធីវិទ្យាល័យ (២៥%) បុគ្គលិកលក្ខណៈ (២៥%) និងទីផ្សារការងារ (២០%)។" : "Balances interests (30%), BACII stream (25%), cognitive style (25%), and labor demand (20%)."}
+                </p>
+                <div className="grid grid-cols-3 gap-2 pt-1 text-center">
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Pillars</div><div className="text-[11px] font-black text-white">4 Pillars</div></div>
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Track</div><div className="text-[11px] font-black text-white">Sci / Soc</div></div>
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Precision</div><div className="text-[11px] font-black text-white">Direct Fit</div></div>
+                </div>
+              </div>
+
+              {/* Mobile Card 03 */}
+              <div className="w-[85vw] flex-shrink-0 snap-center rounded-3xl p-6 bg-white/[0.08] backdrop-blur-xl border border-white/15 shadow-xl space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center font-black text-white">03</div>
+                  <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-black bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">MoEYS Data</span>
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-white">{language === "km" ? "៣. ផ្ទៀងផ្ទាត់សាកលវិទ្យាល័យ" : "3. Verified Campus & Tuition"}</h3>
+                  <p className="text-[11px] text-emerald-300 font-bold mt-0.5">{language === "km" ? "តម្លៃសិក្សា ៤ ឆ្នាំពិតប្រាកដ" : "100% Tuition Accuracy"}</p>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed">
+                  {language === "km" ? "ប្រៀបធៀបតម្លៃសិក្សា ៤ ឆ្នាំពេញនៅ RUPP, ITC, CADT, AUPP, Paragon IU និង NUM។" : "Compare verified 4-year tuition across RUPP, ITC, CADT, AUPP, Paragon, NUM."}
+                </p>
+                <div className="grid grid-cols-3 gap-2 pt-1 text-center">
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Campuses</div><div className="text-[11px] font-black text-white">6 Curated</div></div>
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Hidden Fees</div><div className="text-[11px] font-black text-white">0% Hidden</div></div>
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Source</div><div className="text-[11px] font-black text-white">MoEYS Reg</div></div>
+                </div>
+              </div>
+
+              {/* Mobile Card 04 */}
+              <div className="w-[85vw] flex-shrink-0 snap-center rounded-3xl p-6 bg-purple-950/40 backdrop-blur-xl border border-[#F7CE4D]/40 shadow-xl space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-[#F7CE4D] text-[#111965] flex items-center justify-center font-black">04</div>
+                  <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-black bg-[#F7CE4D]/20 text-[#F7CE4D] border border-[#F7CE4D]/40">100% Grants</span>
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-white">{language === "km" ? "៤. តាមដានអាហារូបករណ៍" : "4. Scholarship Tracker"}</h3>
+                  <p className="text-[11px] text-[#F7CE4D] font-bold mt-0.5">{language === "km" ? "ឱកាសសិក្សាឥតគិតថ្លៃ ១០០%" : "Full-ride opportunities"}</p>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed">
+                  {language === "km" ? "តាមដានអាហារូបករណ៍រដ្ឋ MoEYS និងអាហារូបករណ៍ CADT តេជោឌីជីថលទាន់ពេល។" : "MoEYS national priority scholarships & CADT Techo Digital Talent awards."}
+                </p>
+                <div className="grid grid-cols-3 gap-2 pt-1 text-center">
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Full-Ride</div><div className="text-[11px] font-black text-white">100% Aid</div></div>
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">CADT</div><div className="text-[11px] font-black text-white">Techo Talent</div></div>
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Alerts</div><div className="text-[11px] font-black text-white">Deadlines</div></div>
+                </div>
+              </div>
+
+              {/* Mobile Card 05 */}
+              <div className="w-[85vw] flex-shrink-0 snap-center rounded-3xl p-6 bg-white/[0.08] backdrop-blur-xl border border-orange-500/30 shadow-xl space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center font-black text-white">05</div>
+                  <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-black bg-orange-500/15 text-orange-300 border border-orange-500/30">Career Roadmap</span>
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-white">{language === "km" ? "៥. កំណត់ទិសដៅអាជីព" : "5. Career Roadmap & Enrollment"}</h3>
+                  <p className="text-[11px] text-orange-300 font-bold mt-0.5">{language === "km" ? "ប្រាក់បៀវត្សរ៍ជាក់ស្តែងនៅកម្ពុជា" : "NEA salary benchmarks"}</p>
+                </div>
+                <p className="text-xs text-slate-200 leading-relaxed">
+                  {language === "km" ? "បញ្ចប់ការសិក្សាឆ្ពោះទៅកាន់ទីផ្សារការងារ និងចុះឈ្មោះដោយទំនុកចិត្ត។" : "Graduate directly into high-growth sectors with certified salary ranges."}
+                </p>
+                <div className="grid grid-cols-3 gap-2 pt-1 text-center">
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Salaries</div><div className="text-[11px] font-black text-white">$400-$1,800+</div></div>
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Growth</div><div className="text-[11px] font-black text-white">5-Year Data</div></div>
+                  <div className="p-2 rounded-xl bg-white/5 border border-white/10"><div className="text-[9px] text-slate-400">Report</div><div className="text-[11px] font-black text-white">Parent Ready</div></div>
+                </div>
+              </div>
             </div>
 
             {/* Mobile Carousel Indicator Dots */}
             <div className="flex items-center justify-center gap-2 pt-2">
-              {FIVE_STEP_JOURNEY.map((_, idx) => (
+              {[0, 1, 2, 3, 4].map((idx) => (
                 <div
                   key={idx}
                   className={`h-2 rounded-full transition-all duration-300 ${
