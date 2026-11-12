@@ -31,208 +31,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import ScrollStack, { ScrollStackItem } from "@/components/ui/scroll-stack";
-import Folder from "@/components/react-bits/folder";
-
-// =========================================================================
-// 6 Holland RIASEC Framework Reference Data (Localized)
-// =========================================================================
-const RIASEC_DEEP_DATA: Record<
-  string,
-  {
-    code: string;
-    nameEn: string;
-    nameKm: string;
-    roleEn: string;
-    roleKm: string;
-    taglineEn: string;
-    taglineKm: string;
-    icon: any;
-    themeColor: string;
-    badgeBg: string;
-    accentGlow: string;
-    borderActive: string;
-    strengths: { en: string; km: string }[];
-    sampleMajors: { name: string; slug: string }[];
-    sampleCareers: { en: string; km: string }[];
-  }
-> = {
-  R: {
-    code: "R",
-    nameEn: "Realistic",
-    nameKm: "ជាក់ស្តែង",
-    roleEn: "The Practical Builder",
-    roleKm: "អ្នកអនុវត្ត និងសាងសង់ជាក់ស្តែង",
-    taglineEn: "Hands-on problem solving with tools, infrastructure, mechanics, and physical systems.",
-    taglineKm: "ការដោះស្រាយបញ្ហាជាក់ស្តែងលើឧបករណ៍ រចនាសម្ព័ន្ធ មេកានិច និងប្រព័ន្ធរូបវន្ត។",
-    icon: HardHat,
-    themeColor: "#D97706",
-    badgeBg: "bg-amber-500/10 text-amber-600 border-amber-500/20",
-    accentGlow: "rgba(217, 119, 6, 0.15)",
-    borderActive: "border-amber-500",
-    strengths: [
-      { en: "Spatial Reasoning", km: "ការយល់ដឹងអំពីលំហ" },
-      { en: "Practical Troubleshooting", km: "ការដោះស្រាយបញ្ហាជាក់ស្តែង" },
-      { en: "Physical Precision", km: "ភាពច្បាស់លាស់នៃរូបវន្ត" },
-      { en: "Mechanical Aptitude", km: "ជំនាញមេកានិច និងវិស្វកម្ម" },
-    ],
-    sampleMajors: [
-      { name: "Civil Engineering", slug: "civil-engineering" },
-      { name: "Architecture", slug: "architecture" },
-      { name: "Information Technology", slug: "information-technology" },
-    ],
-    sampleCareers: [
-      { en: "Structural Civil Engineer", km: "វិស្វករសំណង់ស៊ីវិល" },
-      { en: "BIM Specialist", km: "អ្នកឯកទេសគំរូព័ត៌មានអគារ (BIM)" },
-      { en: "Network Infrastructure Lead", km: "ប្រធានគ្រប់គ្រងបណ្តាញហេដ្ឋារចនាសម្ព័ន្ធ" },
-    ],
-  },
-  I: {
-    code: "I",
-    nameEn: "Investigative",
-    nameKm: "ស្រាវជ្រាវ",
-    roleEn: "The Analytical Thinker",
-    roleKm: "អ្នកវិភាគ និងគិតស៊ីជម្រៅ",
-    taglineEn: "Intellectual inquiry, algorithmic modeling, data science, and scientific discovery.",
-    taglineKm: "ការស្រាវជ្រាវបែបបញ្ញា គំរូក្បួនដោះស្រាយ វិទ្យាសាស្ត្រទិន្នន័យ និងការស្វែងយល់វិទ្យាសាស្ត្រ។",
-    icon: BrainCircuit,
-    themeColor: "#2563EB",
-    badgeBg: "bg-blue-500/10 text-blue-600 border-blue-500/20",
-    accentGlow: "rgba(37, 99, 235, 0.15)",
-    borderActive: "border-blue-500",
-    strengths: [
-      { en: "Algorithmic Logic", km: "តក្កវិជ្ជាក្បួនដោះស្រាយ" },
-      { en: "Data Analysis & Modeling", km: "ការវិភាគ និងបង្កើតគំរូទិន្នន័យ" },
-      { en: "Complex Problem Decomposition", km: "ការបំបែកបញ្ហាស្មុគស្មាញ" },
-      { en: "Hypothesis Testing", km: "ការពិសោធន៍ និងតេស្តសម្មតិកម្ម" },
-    ],
-    sampleMajors: [
-      { name: "Software Engineering & Computer Science", slug: "software-engineering" },
-      { name: "Data Science & AI", slug: "data-science-ai" },
-      { name: "Cybersecurity", slug: "cybersecurity" },
-    ],
-    sampleCareers: [
-      { en: "Full-Stack Software Engineer", km: "វិស្វករកម្មវិធី Full-Stack" },
-      { en: "AI/ML Research Scientist", km: "អ្នកវិទ្យាសាស្ត្រស្រាវជ្រាវ AI/ML" },
-      { en: "Cyber Defense Analyst", km: "អ្នកវិភាគសន្តិសុខតាមប្រព័ន្ធអ៊ីនធឺណិត" },
-    ],
-  },
-  A: {
-    code: "A",
-    nameEn: "Artistic",
-    nameKm: "សិល្បៈ",
-    roleEn: "The Creative Innovator",
-    roleKm: "អ្នកច្នៃប្រឌិត និងការរចនា",
-    taglineEn: "Creative intuition, digital product experience, aesthetic composition, and visual storytelling.",
-    taglineKm: "ការច្នៃប្រឌិតសោភ័ណភាព បទពិសោធន៍ផលិតផលឌីជីថល UI/UX និងការរៀបចំរឿងរ៉ាវ។",
-    icon: Sparkles,
-    themeColor: "#9333EA",
-    badgeBg: "bg-purple-500/10 text-purple-600 border-purple-500/20",
-    accentGlow: "rgba(147, 51, 234, 0.15)",
-    borderActive: "border-purple-500",
-    strengths: [
-      { en: "Visual Aesthetics & UI/UX", km: "សោភ័ណភាពរូបភាព និង UI/UX" },
-      { en: "User Empathy & Experience", km: "ការយល់ចិត្តអ្នកប្រើប្រាស់" },
-      { en: "Conceptual Ideation", km: "ការបង្កើតគំនិតច្នៃប្រឌិតថ្មីៗ" },
-      { en: "Brand Storytelling", km: "ការនិទានរឿងម៉ាកសញ្ញា" },
-    ],
-    sampleMajors: [
-      { name: "Digital Marketing & Media", slug: "digital-marketing" },
-      { name: "Architecture & Urban Design", slug: "architecture" },
-    ],
-    sampleCareers: [
-      { en: "UI/UX Product Designer", km: "អ្នករចនាបទពិសោធន៍ផលិតផល UI/UX" },
-      { en: "Creative Brand Director", km: "នាយកច្នៃប្រឌិតម៉ាកសញ្ញា" },
-      { en: "Digital Multimedia Producer", km: "អ្នកផលិតប្រព័ន្ធផ្សព្វផ្សាយឌីជីថល" },
-    ],
-  },
-  S: {
-    code: "S",
-    nameEn: "Social",
-    nameKm: "សង្គម",
-    roleEn: "The Empathetic Helper",
-    roleKm: "អ្នកជួយ និងអភិវឌ្ឍមនុស្ស",
-    taglineEn: "Interpersonal communication, educational guidance, community development, and collaborative mentorship.",
-    taglineKm: "ទំនាក់ទំនងរវាងមនុស្ស ការអប់រំ ការអភិវឌ្ឍសហគមន៍ និងការតម្រង់ទិសប្រកបដោយការយល់ចិត្ត។",
-    icon: HeartHandshake,
-    themeColor: "#059669",
-    badgeBg: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20",
-    accentGlow: "rgba(5, 150, 105, 0.15)",
-    borderActive: "border-emerald-500",
-    strengths: [
-      { en: "Interpersonal Communication", km: "ទំនាក់ទំនងរវាងបុគ្គល" },
-      { en: "Active Listening & Empathy", km: "ការស្តាប់ និងការយល់ចិត្តយ៉ាងស៊ីជម្រៅ" },
-      { en: "Mentorship & Coaching", km: "ការបណ្តុះបណ្តាល និងតម្រង់ទិស" },
-      { en: "Community Engagement", km: "ការកសាង និងជំរុញសហគមន៍" },
-    ],
-    sampleMajors: [
-      { name: "International Relations", slug: "international-relations" },
-      { name: "Education & Psychology", slug: "social-sciences" },
-    ],
-    sampleCareers: [
-      { en: "Diplomatic Affairs Officer", km: "មន្ត្រីកិច្ចការការទូត" },
-      { en: "Educational Guidance Counselor", km: "ទីប្រឹក្សាតម្រង់ទិសការអប់រំ" },
-      { en: "NGO Program Development Lead", km: "ប្រធានអភិវឌ្ឍន៍កម្មវិធីអង្គការសង្គម" },
-    ],
-  },
-  E: {
-    code: "E",
-    nameEn: "Enterprising",
-    nameKm: "សហគ្រិន",
-    roleEn: "The Strategic Leader",
-    roleKm: "អ្នកដឹកនាំ និងយុទ្ធសាស្ត្រ",
-    taglineEn: "Organizational leadership, entrepreneurial venture building, high-stakes negotiation, and growth.",
-    taglineKm: "ការដឹកនាំស្ថាប័ន ការបង្កើតអាជីវកម្មថ្មីៗ ការចរចាពាណិជ្ជកម្ម និងការពង្រីកកំណើន។",
-    icon: Award,
-    themeColor: "#EA580C",
-    badgeBg: "bg-orange-500/10 text-orange-600 border-orange-500/20",
-    accentGlow: "rgba(234, 88, 12, 0.15)",
-    borderActive: "border-orange-500",
-    strengths: [
-      { en: "Strategic Persuasion", km: "ការបញ្ចុះបញ្ចូលបែបយុទ្ធសាស្ត្រ" },
-      { en: "Risk Calculation & Management", km: "ការគ្រប់គ្រង និងវាយតម្លៃហានិភ័យ" },
-      { en: "Executive Decision Making", km: "ការធ្វើសេចក្តីសម្រេចចិត្តថ្នាក់ដឹកនាំ" },
-      { en: "Venture Leadership", km: "ភាពជាអ្នកដឹកនាំអាជីវកម្ម" },
-    ],
-    sampleMajors: [
-      { name: "Business Administration & Management", slug: "business-administration" },
-      { name: "Banking & Finance", slug: "banking-finance" },
-    ],
-    sampleCareers: [
-      { en: "Tech Product Manager", km: "ប្រធានគ្រប់គ្រងផលិតផលបច្ចេកវិទ្យា" },
-      { en: "Management Consultant", km: "ទីប្រឹក្សាគ្រប់គ្រងយុទ្ធសាស្ត្រ" },
-      { en: "Startup Founder & CEO", km: "ស្ថាបនិក និងអគ្គនាយកអាជីវកម្ម" },
-    ],
-  },
-  C: {
-    code: "C",
-    nameEn: "Conventional",
-    nameKm: "ការិយាល័យ",
-    roleEn: "The Systems Organizer",
-    roleKm: "អ្នករៀបរយ និងប្រព័ន្ធទិន្នន័យ",
-    taglineEn: "Methodical accuracy, regulatory compliance, financial audit, and institutional data workflows.",
-    taglineKm: "ភាពត្រឹមត្រូវនៃទិន្នន័យ ការអនុលោមតាមច្បាប់ សវនកម្មហិរញ្ញវត្ថុ និងលំហូរការងាររៀបរយ។",
-    icon: FileCheck,
-    themeColor: "#475569",
-    badgeBg: "bg-slate-500/10 text-slate-600 border-slate-500/20",
-    accentGlow: "rgba(71, 85, 105, 0.15)",
-    borderActive: "border-slate-500",
-    strengths: [
-      { en: "Data Integrity & Precision", km: "ភាពត្រឹមត្រូវ និងសុចរិតភាពទិន្នន័យ" },
-      { en: "Quality Assurance & Compliance", km: "ការធានាគុណភាព និងការអនុលោមច្បាប់" },
-      { en: "Financial Workflow Rigor", km: "ភាពហ្មត់ចត់នៃលំហូរហិរញ្ញវត្ថុ" },
-      { en: "Systematic Organization", km: "ការរៀបចំប្រព័ន្ធច្បាស់លាស់" },
-    ],
-    sampleMajors: [
-      { name: "Banking & Finance", slug: "banking-finance" },
-      { name: "Law & Public Policy", slug: "law" },
-    ],
-    sampleCareers: [
-      { en: "Financial Compliance Auditor", km: "សវនករអនុលោមភាពហិរញ្ញវត្ថុ" },
-      { en: "Credit Risk Analyst", km: "អ្នកវិភាគហានិភ័យឥណទាន" },
-      { en: "Legal Policy Consultant", km: "ទីប្រឹក្សាគោលនយោបាយច្បាប់" },
-    ],
-  },
-};
 
 // Conversational Tara mascot advice tips
 const TARA_ADVICE_TIPS = [
@@ -250,137 +48,75 @@ const TARA_ADVICE_TIPS = [
   },
 ];
 
-// 4 Scientific Pillars with specific data, unique proof, and visual widgets
+// 4 Scientific Pillars (Clean, Focused Data with Direct Links to Dedicated Pages)
 const SCIENTIFIC_PILLARS = [
   {
     number: "01",
     weight: "30%",
     titleEn: "Holland RIASEC Vocational Interests",
     titleKm: "ចំណាប់អារម្មណ៍អាជីព Holland RIASEC",
-    descEn: "Anchored in John Holland's validated 6-dimensional vocational psychology, measuring how your authentic natural interests align with genuine day-to-day work tasks.",
-    descKm: "ផ្អែកលើទ្រឹស្តីចិត្តវិទ្យាអាជីព ៦ វិមាត្ររបស់លោក John Holland ដែលឆ្លុះបញ្ចាំងពីចំណាប់អារម្មណ៍ពិតប្រាកដ និងការចូលចិត្តការងារប្រចាំថ្ងៃ។",
+    categoryEn: "Vocational Psychology Standard",
+    categoryKm: "ចិត្តវិទ្យាវិជ្ជាជីវៈស្តង់ដារ",
+    descEn: "Anchored in John Holland validated 6-dimensional framework, measuring your authentic natural affinity for real day-to-day vocational tasks to prevent major dropouts.",
+    descKm: "ផ្អែកលើទ្រឹស្តីចិត្តវិទ្យាអាជីព ៦ វិមាត្ររបស់លោក John Holland ដែលឆ្លុះបញ្ចាំងពីចំណាប់អារម្មណ៍ពិតប្រាកដ និងការចូលចិត្តការងារប្រចាំថ្ងៃ ដើម្បីការពារកុំឱ្យផ្លាស់ប្តូរជំនាញពាក់កណ្តាលទី។",
     icon: Compass,
     color: "#D97706",
-    badgeBg: "bg-amber-50 text-amber-700 border-amber-200/80",
-    glowBorder: "hover:border-amber-400 hover:shadow-amber-500/10",
-    proofEn: "John Holland's 6 dimensions • 30 localized question items",
-    proofKm: "ទ្រឹស្តីចិត្តវិទ្យា ៦ វិមាត្រ • សំណួរ ៣០ សម្រិតសម្រាំងសម្រាប់កម្ពុជា",
-    folderLabelEn: "01 • Holland RIASEC",
-    folderLabelKm: "០១ • ចំណាប់អារម្មណ៍ RIASEC",
-    folderDocsEn: [
-      { title: "6 RIASEC Work Domains", description: "Realistic, Investigative, Artistic, Social, Enterprising, and Conventional." },
-      { title: "30 Localized Test Items", description: "Psychometric question battery built specifically for Cambodian students." },
-      { title: "Score Weight: 30%", description: "Foundation for vocational interest alignment to prevent major dropouts." }
-    ],
-    folderDocsKm: [
-      { title: "វិមាត្រការងារទាំង ៦ នៃ RIASEC", description: "Realistic, Investigative, Artistic, Social, Enterprising, Conventional។" },
-      { title: "សំណួរ ៣០ សម្រិតសម្រាំង", description: "កម្រងសំណួរស្រាវជ្រាវចិត្តវិទ្យាជាក់ស្តែងក្នុងបរិបទកម្ពុជា។" },
-      { title: "ទម្ងន់ពិន្ទុ ៣០%", description: "មូលដ្ឋានគ្រឹះកំណត់ចំណាប់អារម្មណ៍សិក្សា និងអាជីព។" }
-    ],
-    widgetType: "riasec-chips" as const,
-    chips: [
-      { code: "R", nameEn: "Realistic", nameKm: "ជាក់ស្តែង", bg: "bg-amber-50 text-amber-800 border-amber-200" },
-      { code: "I", nameEn: "Investigative", nameKm: "ស្រាវជ្រាវ", bg: "bg-indigo-50 text-indigo-800 border-indigo-200" },
-      { code: "A", nameEn: "Artistic", nameKm: "សិល្បៈ", bg: "bg-pink-50 text-pink-800 border-pink-200" },
-      { code: "S", nameEn: "Social", nameKm: "សង្គម", bg: "bg-emerald-50 text-emerald-800 border-emerald-200" },
-      { code: "E", nameEn: "Enterprising", nameKm: "សហគ្រិន", bg: "bg-blue-50 text-blue-800 border-blue-200" },
-      { code: "C", nameEn: "Conventional", nameKm: "ការិយាល័យ", bg: "bg-slate-50 text-slate-800 border-slate-200" },
-    ],
+    ctaEn: "Take RIASEC Test",
+    ctaKm: "ធ្វើតេស្ត RIASEC",
+    href: "/dashboard/assessments/riasec",
+    proofEn: "6 vocational dimensions • 30 localized question items",
+    proofKm: "វិមាត្រ ៦ • ៣០ សំណួរជាក់ស្តែងក្នុងបរិបទកម្ពុជា",
   },
   {
     number: "02",
     weight: "25%",
     titleEn: "16-Personality Cognitive Temperaments",
-    titleKm: "វិមាត្របុគ្គលិកលក្ខណៈ 16P & ការគិត",
-    descEn: "Evaluates Myers-Briggs cognitive functions to understand study endurance, stress resilience, and natural teamwork dynamics across analytical and creative fields.",
-    descKm: "វាយតម្លៃលើមុខងារនៃការគិត ៤ ក្រុមធំៗ ដើម្បីយល់ដឹងពីភាពធន់ក្នុងការសិក្សា របៀបដោះស្រាយបញ្ហា និងការសហការក្នុងក្រុមការងារ។",
-    icon: BrainCircuit,
+    titleKm: "បុគ្គលិកលក្ខណៈទាំង ១៦ & របៀបគិត",
+    categoryEn: "Myers-Briggs Cognitive Style",
+    categoryKm: "រចនាប័ទ្មនៃការគិត & ភាពធន់",
+    descEn: "Evaluates cognitive functions, study endurance, and stress resilience across 4 temperament archetypes (Analysts, Diplomats, Sentinels, Explorers).",
+    descKm: "វាយតម្លៃលើមុខងារនៃការគិត ៤ ក្រុមធំៗ (អ្នកវិភាគ, អ្នកការទូត, អ្នកការពារ, អ្នករុករក) ដើម្បីយល់ដឹងពីភាពធន់ក្នុងការសិក្សា និងការសហការក្នុងក្រុមការងារ។",
+    icon: Sparkles,
     color: "#2563EB",
-    badgeBg: "bg-blue-50 text-blue-700 border-blue-200/80",
-    glowBorder: "hover:border-blue-400 hover:shadow-blue-500/10",
-    proofEn: "4 cognitive temperament clusters • Myers-Briggs validated",
-    proofKm: "មុខងារនៃការគិត ៤ ក្រុមធំៗ • ផ្ទៀងផ្ទាត់តាមស្តង់ដារ Myers-Briggs",
-    folderLabelEn: "02 • 16-Personality",
-    folderLabelKm: "០២ • បុគ្គលិកលក្ខណៈ ១៦",
-    folderDocsEn: [
-      { title: "4 Cognitive Clusters", description: "Analysts (NT), Diplomats (NF), Sentinels (SJ), and Explorers (SP)." },
-      { title: "Study Endurance & Teams", description: "Evaluates cognitive stamina, burnout resistance, and collaboration." },
-      { title: "Score Weight: 25%", description: "Aligns university learning methodology with your natural mindset." }
-    ],
-    folderDocsKm: [
-      { title: "ក្រុមបុគ្គលិកលក្ខណៈ ៤ ធំៗ", description: "អ្នកវិភាគ (NT), អ្នកការទូត (NF), អ្នកការពារ (SJ), អ្នករុករក (SP)។" },
-      { title: "ភាពធន់ក្នុងការសិក្សា", description: "វាយតម្លៃលើភាពធន់នឹងសម្ពាធ និងការសហការក្នុងក្រុមការងារ។" },
-      { title: "ទម្ងន់ពិន្ទុ ២៥%", description: "កំណត់ភាពស័ក្តិសមជាមួយបរិយាកាស និងវិធីសាស្ត្ររៀន។" }
-    ],
-    widgetType: "16p-quadrants" as const,
-    quadrants: [
-      { nameEn: "Analysts", nameKm: "អ្នកវិភាគ", types: "INTJ • INTP • ENTJ • ENTP", tagColor: "bg-indigo-50 text-indigo-700 border-indigo-100" },
-      { nameEn: "Diplomats", nameKm: "អ្នកការទូត", types: "INFJ • INFP • ENFJ • ENFP", tagColor: "bg-emerald-50 text-emerald-700 border-emerald-100" },
-      { nameEn: "Sentinels", nameKm: "អ្នកការពារ", types: "ISTJ • ISFJ • ESTJ • ESFJ", tagColor: "bg-blue-50 text-blue-700 border-blue-100" },
-      { nameEn: "Explorers", nameKm: "អ្នករុករក", types: "ISTP • ISFP • ESTP • ESFP", tagColor: "bg-amber-50 text-amber-700 border-amber-100" },
-    ],
+    ctaEn: "Explore 16 Personalities",
+    ctaKm: "ស្វែងយល់បុគ្គលិកលក្ខណៈ",
+    href: "/personality",
+    proofEn: "4 cognitive temperament clusters • MBTI validated",
+    proofKm: "៤ ក្រុមចរិតលក្ខណៈ • ផ្ទៀងផ្ទាត់តាមស្តង់ដារ MBTI",
   },
   {
     number: "03",
     weight: "25%",
-    titleEn: "High School Academic Stream Alignment",
-    titleKm: "ភាពត្រូវគ្នានៃកម្មវិធីសិក្សាវិទ្យាល័យ",
-    descEn: "Cross-validates your Grade 12 BACII track (Science stream vs. Social stream) against mandatory prerequisite subjects for selective Cambodian university programs.",
-    descKm: "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នារវាងថ្នាក់វិទ្យាសាស្ត្រពិត ឬវិទ្យាសាស្ត្រសង្គម ជាមួយលក្ខខណ្ឌតម្រូវជាកាតព្វកិច្ចនៃមុខវិជ្ជាស្នូលរបស់សាកលវិទ្យាល័យ។",
+    titleEn: "BACII Academic Stream Alignment",
+    titleKm: "ភាពត្រូវគ្នានៃថ្នាក់បាក់ឌុប",
+    categoryEn: "MoEYS Entrance Prerequisites",
+    categoryKm: "លក្ខខណ្ឌតម្រូវសាកលវិទ្យាល័យ",
+    descEn: "Cross-validates your Grade 12 Science vs. Social stream against mandatory prerequisite subjects for selective Cambodian university programs.",
+    descKm: "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នារវាងថ្នាក់វិទ្យាសាស្ត្រពិត ឬវិទ្យាសាស្ត្រសង្គម ជាមួយលក្ខខណ្ឌតម្រូវជាកាតព្វកិច្ចនៃមុខវិជ្ជាស្នូលរបស់សាកលវិទ្យាល័យ (RUPP, ITC, CADT)។",
     icon: GraduationCap,
     color: "#059669",
-    badgeBg: "bg-emerald-50 text-emerald-700 border-emerald-200/80",
-    glowBorder: "hover:border-emerald-400 hover:shadow-emerald-500/10",
-    proofEn: "Cross-checked with RUPP, ITC Techno & CADT entrance cutoffs",
-    proofKm: "ផ្ទៀងផ្ទាត់ផ្ទាល់ជាមួយលក្ខខណ្ឌពិន្ទុ និងមុខវិជ្ជារបស់ RUPP, ITC និង CADT",
-    folderLabelEn: "03 • BACII Stream",
-    folderLabelKm: "០៣ • សញ្ញាបត្របាក់ឌុប",
-    folderDocsEn: [
-      { title: "Science vs Social Track", description: "Grade 12 national exam track alignment for Cambodian higher ed." },
-      { title: "Entrance Cutoff Matrix", description: "Prerequisite verification for RUPP, ITC Techno, CADT, and NUM." },
-      { title: "Score Weight: 25%", description: "Ensures mandatory prerequisite eligibility before admission." }
-    ],
-    folderDocsKm: [
-      { title: "ថ្នាក់វិទ្យាសាស្ត្រ ឬសង្គម", description: "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នានៃទិសដៅសិក្សាថ្នាក់ទី១២ ជាមួយជំនាញ។" },
-      { title: "លក្ខខណ្ឌចូលរៀនផ្លូវការ", description: "ផ្ទៀងផ្ទាត់ពិន្ទុកាត់ និងលក្ខខណ្ឌតម្រូវ RUPP, ITC និង CADT។" },
-      { title: "ទម្ងន់ពិន្ទុ ២៥%", description: "ការពារកុំឱ្យខុសលក្ខខណ្ឌចុះឈ្មោះចូលរៀនផ្លូវការ។" }
-    ],
-    widgetType: "stream-validator" as const,
-    streams: [
-      { labelEn: "Science Stream", labelKm: "ថ្នាក់វិទ្យាសាស្ត្រពិត", targetEn: "STEM, Tech, Medicine & Engineering", targetKm: "វិស្វកម្ម, បច្ចេកវិទ្យា, វិទ្យាសាស្ត្រសុខាភិបាល", badge: "Math + Physics" },
-      { labelEn: "Social Stream", labelKm: "ថ្នាក់វិទ្យាសាស្ត្រសង្គម", targetEn: "Law, Business, Humanities & Diplomacy", targetKm: "នីតិសាស្ត្រ, សេដ្ឋកិច្ច, ទំនាក់ទំនងអន្តរជាតិ", badge: "Literature + Social" },
-    ],
+    ctaEn: "Check University Majors",
+    ctaKm: "ពិនិត្យជំនាញសាកលវិទ្យាល័យ",
+    href: "/majors",
+    proofEn: "Cross-checked with RUPP, ITC Techno & CADT cutoffs",
+    proofKm: "ផ្ទៀងផ្ទាត់ពិន្ទុកាត់ និងលក្ខខណ្ឌ RUPP, ITC និង CADT",
   },
   {
     number: "04",
     weight: "20%",
     titleEn: "Cambodian Labor Market Reality",
-    titleKm: "តម្រូវការទីផ្សារការងារជាក់ស្តែងនៅកម្ពុជា",
-    descEn: "Incorporates data from the National Employment Agency (NEA) and tech/business growth trends to ensure your chosen major leads to viable, well-compensated employment.",
-    descKm: "រួមបញ្ចូលទិន្នន័យពីទីភ្នាក់ងារជាតិមុខរបរ និងការងារ (NEA) និងនិន្នាការរីកចម្រើននៃវិស័យបច្ចេកវិទ្យា និងធុរកិច្ច ដើម្បីធានាឱកាសការងារពិតប្រាកដ។",
+    titleKm: "ទីផ្សារការងារជាក់ស្តែងនៅកម្ពុជា",
+    categoryEn: "Official NEA Salary Data",
+    categoryKm: "ទិន្នន័យផ្លូវការពីទីភ្នាក់ងារជាតិមុខរបរ",
+    descEn: "Incorporates data from the National Employment Agency (NEA) and growth trends to ensure chosen majors lead to viable, well-compensated employment.",
+    descKm: "រួមបញ្ចូលទិន្នន័យពីទីភ្នាក់ងារជាតិមុខរបរ និងការងារ (NEA) និងកម្រិតប្រាក់ខែជាក់ស្តែង ($600–$2,400+) ដើម្បីធានាឱកាសការងារពិតប្រាកដ។",
     icon: TrendingUp,
     color: "#9333EA",
-    badgeBg: "bg-purple-50 text-purple-700 border-purple-200/80",
-    glowBorder: "hover:border-purple-400 hover:shadow-purple-500/10",
-    proofEn: "Official data from National Employment Agency (NEA) & MoEYS",
-    proofKm: "ទិន្នន័យផ្លូវការពីទីភ្នាក់ងារជាតិមុខរបរ និងការងារ (NEA) និង MoEYS",
-    folderLabelEn: "04 • NEA Market",
-    folderLabelKm: "០៤ • ទីផ្សារការងារ NEA",
-    folderDocsEn: [
-      { title: "NEA Salary Benchmarks", description: "Verified entry-level ($600) to senior compensation ($2,400+)." },
-      { title: "High-Growth Sectors", description: "Software, Cyber, Fintech, and Data Science demand tracking." },
-      { title: "Score Weight: 20%", description: "Prevents degree mismatch with Cambodian labor market reality." }
-    ],
-    folderDocsKm: [
-      { title: "ទិន្នន័យប្រាក់ខែជាក់ស្តែង NEA", description: "កម្រិតប្រាក់ខែផ្លូវការពី $600 (កម្រិតដំបូង) ដល់ $2,400+ (កម្រិតខ្ពស់)។" },
-      { title: "វិស័យកំណើនខ្ពស់", description: "តាមដានតម្រូវការផ្នែកបច្ចេកវិទ្យា ហិរញ្ញវត្ថុ និងវិស្វកម្ម។" },
-      { title: "ទម្ងន់ពិន្ទុ ២០%", description: "ធានាថាមុខជំនាញដែលរៀនមានទីផ្សារការងារពិតប្រាកដ។" }
-    ],
-    widgetType: "nea-market" as const,
-    marketData: [
-      { sectorEn: "High-Growth Sectors", sectorKm: "វិស័យកំណើនខ្ពស់", fields: "AI, Cyber, FinTech, Data Science", badge: "High Demand", salary: "$600 – $2,400+" },
-      { sectorEn: "Stable Demand Sectors", sectorKm: "វិស័យស្ថិរភាព", fields: "Corporate Law, Banking, Supply Chain", badge: "Steady ROI", salary: "$500 – $1,800+" },
-    ],
+    ctaEn: "Explore Career Salaries",
+    ctaKm: "ពិនិត្យប្រាក់ខែ និងទីផ្សារការងារ",
+    href: "/careers",
+    proofEn: "Official data from National Employment Agency (NEA)",
+    proofKm: "ទិន្នន័យផ្លូវការពីទីភ្នាក់ងារជាតិមុខរបរ និងការងារ (NEA)",
   },
 ];
 
@@ -414,16 +150,12 @@ const FAQ_ITEMS = [
 
 export default function AboutPage() {
   const { t, language } = useLanguage();
-  const [selectedRiasecCode, setSelectedRiasecCode] = useState<string>("I");
   const [taraTipIndex, setTaraTipIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [activePillarIdx, setActivePillarIdx] = useState(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mascotImgRef = useRef<HTMLDivElement>(null);
 
-  const activeRiasec = RIASEC_DEEP_DATA[selectedRiasecCode] || RIASEC_DEEP_DATA["I"];
-  const RiasecIcon = activeRiasec.icon;
 
   const cycleTaraTip = () => {
     setTaraTipIndex((prev) => (prev + 1) % TARA_ADVICE_TIPS.length);
@@ -522,41 +254,24 @@ export default function AboutPage() {
           "-=0.25"
         )
         .fromTo(
-          ".gsap-pillar-folder",
-          { y: 35, opacity: 0, scale: 0.96 },
+          ".gsap-pillar-card",
+          { y: 30, opacity: 0, scale: 0.98 },
           {
             y: 0,
             opacity: 1,
             scale: 1,
-            stagger: 0.12,
-            duration: 0.7,
-            ease: "back.out(1.4)",
+            stagger: 0.1,
+            duration: 0.6,
+            ease: "power2.out",
           },
           "-=0.3"
         )
         .fromTo(
-          ".gsap-pillar-inspector",
-          { y: 25, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
+          ".gsap-pillar-cta",
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" },
           "-=0.2"
         );
-
-      // 4. RIASEC Visualizer ScrollTrigger
-      gsap.fromTo(
-        ".gsap-riasec-showcase",
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.75,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: ".gsap-riasec-showcase",
-            start: "top 90%",
-            once: true,
-          },
-        }
-      );
 
       // 5. FAQ Section ScrollTrigger
       gsap.fromTo(
@@ -922,430 +637,103 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Interactive 4-Pillar Research Folders Showcase */}
-          <div className="space-y-6 max-w-6xl mx-auto">
-            {/* Quick Dossier Switcher Tabs */}
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              {SCIENTIFIC_PILLARS.map((p, idx) => {
-                const Icon = p.icon;
-                const isActive = activePillarIdx === idx;
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setActivePillarIdx(idx)}
-                    className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black transition-all duration-200 cursor-pointer ${
-                      isActive
-                        ? "shadow-md text-white scale-105"
-                        : "bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50"
-                    }`}
-                    style={isActive ? { backgroundColor: p.color } : {}}
-                  >
-                    <Icon className="w-3.5 h-3.5" />
-                    <span>{language === "km" ? p.folderLabelKm : p.folderLabelEn}</span>
-                    <span
-                      className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
-                        isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
-                      }`}
-                    >
-                      {p.weight}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* 4 Interactive Folders */}
-            <div className="gsap-pillars-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-              {SCIENTIFIC_PILLARS.map((p, idx) => {
-                const PillarIcon = p.icon;
-                const isSelected = activePillarIdx === idx;
-                return (
-                  <div
-                    key={idx}
-                    onClick={() => setActivePillarIdx(idx)}
-                    className={`gsap-pillar-folder relative flex flex-col justify-between p-5 rounded-3xl transition-all duration-300 cursor-pointer overflow-visible ${
-                      isSelected
-                        ? "bg-white shadow-xl ring-2 shadow-slate-200/80 scale-[1.02]"
-                        : "bg-white/70 hover:bg-white border border-slate-200/80 hover:shadow-md"
-                    }`}
-                    style={isSelected ? { borderColor: p.color } : {}}
-                  >
+          {/* Minimalist 4-Pillar Cards Grid */}
+          <div className="gsap-pillars-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto">
+            {SCIENTIFIC_PILLARS.map((p, idx) => {
+              const PillarIcon = p.icon;
+              return (
+                <div
+                  key={idx}
+                  className="gsap-pillar-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-5 group"
+                >
+                  <div className="space-y-4">
                     {/* Header Row */}
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="w-7 h-7 rounded-lg flex items-center justify-center text-white shadow-xs"
-                          style={{ backgroundColor: p.color }}
-                        >
-                          <PillarIcon className="w-3.5 h-3.5" />
-                        </div>
-                        <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
-                          Pillar {p.number}
-                        </span>
+                    <div className="flex items-center justify-between">
+                      <div
+                        className="w-10 h-10 rounded-2xl flex items-center justify-center font-black shadow-xs transition-transform group-hover:scale-105"
+                        style={{ backgroundColor: `${p.color}15`, color: p.color }}
+                      >
+                        <PillarIcon className="w-5 h-5" />
                       </div>
                       <span
-                        className="text-[11px] font-black px-2 py-0.5 rounded-full"
-                        style={{ backgroundColor: `${p.color}15`, color: p.color }}
+                        className="text-xs font-mono font-black px-2.5 py-0.5 rounded-full border"
+                        style={{
+                          backgroundColor: `${p.color}10`,
+                          color: p.color,
+                          borderColor: `${p.color}30`,
+                        }}
                       >
                         {p.weight}
                       </span>
                     </div>
 
-                    {/* Interactive 3D Folder Canvas */}
-                    <div className="py-4 my-2 flex items-center justify-center overflow-visible">
-                      <Folder
-                        items={language === "km" ? p.folderDocsKm : p.folderDocsEn}
-                        label={language === "km" ? p.folderLabelKm : p.folderLabelEn}
-                        color={p.color}
-                        size={1.12}
-                        defaultOpen={idx === 0}
-                        open={isSelected}
-                        onOpenChange={(open) => {
-                          if (open) setActivePillarIdx(idx);
-                        }}
-                        openOn="click"
-                        draggable={true}
-                        zoomOnClick={true}
-                        layout="spread"
-                        variant="solid"
-                      />
-                    </div>
-
-                    {/* Footer Info & Inspect Button */}
-                    <div className="mt-2 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                      <span className="text-xs font-black text-[#111965] line-clamp-1">
+                    {/* Title & Category */}
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+                        Pillar {p.number} • {language === "km" ? p.categoryKm : p.categoryEn}
+                      </span>
+                      <h3 className="text-base font-black text-[#111965] leading-snug">
                         {language === "km" ? p.titleKm : p.titleEn}
-                      </span>
-                      <span
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider flex-shrink-0"
-                        style={{
-                          backgroundColor: isSelected ? `${p.color}20` : "#f1f5f9",
-                          color: isSelected ? p.color : "#64748b",
-                        }}
-                      >
-                        {isSelected
-                          ? language === "km" ? "បើកឯកសារ" : "Open Dossier"
-                          : language === "km" ? "ពិនិត្យ" : "Inspect"}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Synchronized Active Dossier Deep-Dive Inspector */}
-            {(() => {
-              const activePillar = SCIENTIFIC_PILLARS[activePillarIdx] || SCIENTIFIC_PILLARS[0];
-              const ActiveIcon = activePillar.icon;
-              return (
-                <div
-                  className="gsap-pillar-inspector p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-6 transition-all duration-300"
-                  style={{ borderLeftWidth: "6px", borderLeftColor: activePillar.color }}
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-3.5">
-                      <div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md flex-shrink-0"
-                        style={{ backgroundColor: activePillar.color }}
-                      >
-                        <ActiveIcon className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span
-                            className="text-xs font-black uppercase tracking-wider px-2 py-0.5 rounded-md"
-                            style={{ backgroundColor: `${activePillar.color}15`, color: activePillar.color }}
-                          >
-                            Pillar {activePillar.number} • {activePillar.weight} Precision
-                          </span>
-                        </div>
-                        <h3 className="text-lg sm:text-xl font-black text-[#111965] tracking-tight mt-0.5">
-                          {language === "km" ? activePillar.titleKm : activePillar.titleEn}
-                        </h3>
-                      </div>
+                      </h3>
                     </div>
 
-                    <div className="flex items-center gap-2 self-start sm:self-auto text-xs font-bold text-slate-700 bg-slate-50 px-3.5 py-1.5 rounded-full border border-slate-200/80">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                      <span>{language === "km" ? activePillar.proofKm : activePillar.proofEn}</span>
-                    </div>
+                    {/* Concise Summary */}
+                    <p className="text-xs text-[#68708A] leading-relaxed font-medium">
+                      {language === "km" ? p.descKm : p.descEn}
+                    </p>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium max-w-4xl">
-                    {language === "km" ? activePillar.descKm : activePillar.descEn}
-                  </p>
-
-                  {/* Micro-Widgets Inside Active Dossier */}
-                  {activePillar.widgetType === "riasec-chips" && activePillar.chips && (
-                    <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3">
-                      <div className="flex items-center justify-between text-xs font-bold text-slate-600">
-                        <span>{language === "km" ? "វិមាត្រទាំង ៦ នៃ RIASEC ក្នុងបរិបទកម្ពុជា:" : "6 Core RIASEC Dimensions (Cambodian Context):"}</span>
-                        <span className="text-amber-700 font-mono text-[11px] font-bold">30 Localized Items</span>
-                      </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-                        {activePillar.chips.map((chip, i) => (
-                          <div
-                            key={i}
-                            className={`p-2 rounded-xl border text-center transition-transform hover:scale-105 cursor-default ${chip.bg}`}
-                          >
-                            <span className="font-mono text-sm font-black block">{chip.code}</span>
-                            <span className="text-xs font-bold truncate block">
-                              {language === "km" ? chip.nameKm : chip.nameEn}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+                  {/* Footer Action Link & Proof */}
+                  <div className="space-y-3 pt-3 border-t border-slate-100">
+                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span className="truncate">{language === "km" ? p.proofKm : p.proofEn}</span>
                     </div>
-                  )}
 
-                  {activePillar.widgetType === "16p-quadrants" && activePillar.quadrants && (
-                    <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3">
-                      <div className="flex items-center justify-between text-xs font-bold text-slate-600">
-                        <span>{language === "km" ? "ក្រុមបុគ្គលិកលក្ខណៈ ៤ ធំៗ & របៀបគិត:" : "4 Cognitive Clusters & Study Endurance:"}</span>
-                        <span className="text-blue-700 font-mono text-[11px] font-bold">16 Types</span>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-                        {activePillar.quadrants.map((quad, i) => (
-                          <div key={i} className={`p-2.5 rounded-xl border ${quad.tagColor}`}>
-                            <span className="text-xs font-black block">
-                              {language === "km" ? quad.nameKm : quad.nameEn}
-                            </span>
-                            <span className="text-[11px] text-slate-600 block truncate font-mono mt-0.5">
-                              {quad.types}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {activePillar.widgetType === "stream-validator" && activePillar.streams && (
-                    <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3">
-                      <div className="flex items-center justify-between text-xs font-bold text-slate-600">
-                        <span>{language === "km" ? "ការផ្ទៀងផ្ទាត់ថ្នាក់វិទ្យាល័យ និងពិន្ទុកាត់:" : "BACII Stream Prerequisites & Cambodian Campus Cutoffs:"}</span>
-                        <span className="text-emerald-700 font-mono text-[11px] font-bold">MoEYS Aligned</span>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {activePillar.streams.map((stream, i) => (
-                          <div key={i} className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-3 text-xs">
-                            <div>
-                              <span className="font-bold text-[#111965] block">
-                                {language === "km" ? stream.labelKm : stream.labelEn}
-                              </span>
-                              <span className="text-slate-500 text-[11px]">
-                                {language === "km" ? stream.targetKm : stream.targetEn}
-                              </span>
-                            </div>
-                            <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/70 flex-shrink-0">
-                              {stream.badge}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {activePillar.widgetType === "nea-market" && activePillar.marketData && (
-                    <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3">
-                      <div className="flex items-center justify-between text-xs font-bold text-slate-600">
-                        <span>{language === "km" ? "ទិន្នន័យទីផ្សារការងារផ្លូវការពី NEA:" : "National Employment Agency (NEA) Salary & Demand Benchmarks:"}</span>
-                        <span className="text-purple-700 font-mono text-[11px] font-bold">Verified NEA</span>
-                      </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {activePillar.marketData.map((data, i) => (
-                          <div key={i} className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-3 text-xs">
-                            <div>
-                              <span className="font-bold text-[#111965] block">
-                                {language === "km" ? data.sectorKm : data.sectorEn}
-                              </span>
-                              <span className="text-slate-500 text-[11px]">{data.fields}</span>
-                            </div>
-                            <span className="font-mono text-purple-700 font-black text-xs px-2.5 py-1 rounded-lg bg-purple-50 border border-purple-200/70 flex-shrink-0">
-                              {data.salary}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
-          </div>
-        </section>
-
-        {/* ========================================================= */}
-        {/* 4. INTERACTIVE HOLLAND RIASEC 6-DIMENSION VISUALIZER */}
-        {/* ========================================================= */}
-        <div className="gsap-riasec-showcase p-6 sm:p-10 rounded-3xl bg-white border border-slate-200/90 shadow-md space-y-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F0F2FA] text-[#111965] text-xs font-black">
-                <Compass className="w-3.5 h-3.5 text-[#111965]" />
-                <span>
-                  {language === "km"
-                    ? "ឧបករណ៍ស្វែងយល់វិមាត្រចិត្តវិទ្យាអាជីព"
-                    : "Interactive RIASEC Psychological Explorer"}
-                </span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-black text-[#111965] tracking-tight">
-                {language === "km"
-                  ? "ស្វែងយល់ពីវិមាត្រអាជីពទាំង ៦ នៃ Holland RIASEC"
-                  : "Explore the Holland RIASEC Vocational Dimensions"}
-              </h2>
-              <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
-                {language === "km"
-                  ? "ចុចលើវិមាត្រណាមួយដើម្បីពិនិត្យមើលចំណុចខ្លាំង ជំនាញសិក្សានៅកម្ពុជាដែលត្រូវគ្នា និងអាជីពការងារគោលដៅ៖"
-                  : "Click any of the 6 core vocational work styles to inspect its cognitive profile, matching Cambodian majors, and career outcomes:"}
-              </p>
-            </div>
-
-            <Link
-              href="/dashboard/assessments/personality"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-xs hover:shadow-md transition-all duration-200 self-start md:self-auto cursor-pointer"
-            >
-              <span>{language === "km" ? "ធ្វើតេស្តស្វែងយល់ពីខ្លួនឯង" : "Take Free Assessment"}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          {/* 6 RIASEC Segmented Selector Dock */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            {Object.entries(RIASEC_DEEP_DATA).map(([code, info]) => {
-              const isSelected = selectedRiasecCode === code;
-              return (
-                <button
-                  key={code}
-                  type="button"
-                  onClick={() => setSelectedRiasecCode(code)}
-                  className={`relative p-4 rounded-2xl border text-left transition-all duration-200 cursor-pointer overflow-hidden ${
-                    isSelected
-                      ? "bg-[#111965] text-white border-[#111965] shadow-lg ring-2 ring-[#111965]/20 scale-[1.02]"
-                      : "bg-[#F8FAFD] text-[#171A2C] border-slate-200/80 hover:border-slate-300 hover:bg-slate-50"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span
-                      className={`text-xs font-black tracking-wider uppercase px-2.5 py-0.5 rounded-lg ${
-                        isSelected
-                          ? "bg-white/20 text-[#F7CE4D]"
-                          : "bg-white text-slate-700 border border-slate-200"
-                      }`}
+                    <Link
+                      href={p.href}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold transition-all group-hover:translate-x-1"
+                      style={{ color: p.color }}
                     >
-                      {code}
-                    </span>
-                    <span
-                      className="w-2.5 h-2.5 rounded-full"
-                      style={{ background: info.themeColor }}
-                    />
+                      <span>{language === "km" ? p.ctaKm : p.ctaEn}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
                   </div>
-
-                  <div className="text-sm font-black mt-2.5 truncate">
-                    {language === "km" ? info.nameKm : info.nameEn}
-                  </div>
-                  <div
-                    className={`text-[10px] mt-0.5 line-clamp-1 ${
-                      isSelected ? "text-slate-300" : "text-[#68708A]"
-                    }`}
-                  >
-                    {language === "km" ? info.roleKm : info.roleEn}
-                  </div>
-                </button>
+                </div>
               );
             })}
           </div>
 
-          {/* Active Dimension Details Card (Elevated Showcase) */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-[#F8FAFD] border-2 border-slate-200 space-y-6 relative overflow-hidden transition-all duration-300">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div
-                  className="w-14 h-14 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shadow-xs flex-shrink-0"
-                  style={{ color: activeRiasec.themeColor }}
-                >
-                  <RiasecIcon className="w-7 h-7" />
-                </div>
-                <div>
-                  <span className="text-[10px] font-black text-[#68708A] uppercase tracking-wider block">
-                    RIASEC Profile • Dimension Code {selectedRiasecCode}
-                  </span>
-                  <h3 className="text-xl sm:text-2xl font-black text-[#111965]">
-                    {language === "km"
-                      ? `${activeRiasec.nameKm} (${activeRiasec.roleKm})`
-                      : `${activeRiasec.nameEn} (${activeRiasec.roleEn})`}
-                  </h3>
-                </div>
+          {/* Minimalist Diagnostic CTA Banner */}
+          <div className="gsap-pillar-cta max-w-4xl mx-auto p-6 sm:p-7 rounded-3xl bg-linear-to-r from-[#111965] to-[#1A2580] text-white shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+            <div className="space-y-1.5 max-w-xl">
+              <div className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-[#F7CE4D] uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>{language === "km" ? "តេស្តវិទ្យាសាស្ត្រឥតគិតថ្លៃ" : "Free Scientific Assessment"}</span>
               </div>
-
-              <div
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold border ${activeRiasec.badgeBg} self-start sm:self-auto`}
-              >
-                <BadgeCheck className="w-4 h-4" />
-                <span>Vocational Psychology Standard</span>
-              </div>
+              <h3 className="text-lg sm:text-xl font-black text-white tracking-tight">
+                {language === "km"
+                  ? "ត្រៀមខ្លួនស្វែងរកជំនាញដែលស័ក្តិសមបំផុតហើយឬនៅ?"
+                  : "Ready to Discover Your Authentic Academic Fit?"}
+              </h3>
+              <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                {language === "km"
+                  ? "ចំណាយពេលត្រឹមតែ ១០ នាទី ដើម្បីធ្វើតេស្តស្វែងយល់ពីខ្លួនឯង និងទទួលបានការណែនាំជំនាញសាកលវិទ្យាល័យដែលត្រូវនឹងអ្នក ១០០%។"
+                  : "Take our 10-minute validated diagnostic to uncover your RIASEC vocational profile and matched Cambodian university majors."}
+              </p>
             </div>
 
-            <p className="text-xs sm:text-sm text-[#171A2C] font-semibold leading-relaxed bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
-              {language === "km" ? activeRiasec.taglineKm : activeRiasec.taglineEn}
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
-              {/* 1. Core Cognitive Strengths */}
-              <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-2.5">
-                <span className="text-[11px] font-black text-[#111965] uppercase tracking-wider block">
-                  {language === "km" ? "ចំណុចខ្លាំងនៃការគិតស្នូល" : "Core Cognitive Strengths"}
-                </span>
-                <ul className="space-y-1.5 text-xs text-[#171A2C]">
-                  {activeRiasec.strengths.map((str, idx) => (
-                    <li key={idx} className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 stroke-[3]" />
-                      <span className="font-medium">
-                        {language === "km" ? str.km : str.en}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* 2. Aligned Cambodian Majors */}
-              <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-2.5">
-                <span className="text-[11px] font-black text-[#111965] uppercase tracking-wider block">
-                  {language === "km" ? "ជំនាញសិក្សានៅកម្ពុជាដែលត្រូវគ្នា" : "Aligned Cambodian Majors"}
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {activeRiasec.sampleMajors.map((m) => (
-                    <Link
-                      key={m.slug}
-                      href={`/majors/${m.slug}`}
-                      className="px-3 py-1.5 rounded-xl bg-[#F0F2FA] text-xs font-bold text-[#111965] hover:bg-[#E2E6F5] hover:translate-x-0.5 transition-all duration-150 inline-flex items-center gap-1 shadow-2xs"
-                    >
-                      <span>{m.name}</span>
-                      <ArrowRight className="w-3 h-3 text-[#111965]" />
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* 3. Target Career Roles */}
-              <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-2.5">
-                <span className="text-[11px] font-black text-[#111965] uppercase tracking-wider block">
-                  {language === "km" ? "អាជីពការងារគោលដៅ" : "Target Career Roles"}
-                </span>
-                <ul className="space-y-1.5 text-xs text-[#171A2C]">
-                  {activeRiasec.sampleCareers.map((car, idx) => (
-                    <li key={idx} className="flex items-center gap-2">
-                      <Briefcase className="w-3.5 h-3.5 text-[#B45309] flex-shrink-0" />
-                      <span className="font-medium">
-                        {language === "km" ? car.km : car.en}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
+              <Link
+                href="/dashboard/assessments/riasec"
+                className="px-5 py-2.5 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#F5C430] transition-transform active:scale-95 text-center shadow-md flex items-center justify-center gap-1.5"
+              >
+                <span>{language === "km" ? "ចាប់ផ្តើមធ្វើតេស្ត" : "Start Free Assessment"}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
           </div>
-        </div>
+        </section>
       </div>
 
       {/* ========================================================= */}

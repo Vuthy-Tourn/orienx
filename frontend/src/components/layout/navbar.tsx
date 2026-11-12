@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
@@ -20,7 +20,11 @@ import {
   LogOut,
   ShieldCheck,
   ChevronRight,
+  ChevronDown,
   Info,
+  BrainCircuit,
+  ArrowRight,
+  CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -30,16 +34,34 @@ export function Navbar() {
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [assessmentsOpen, setAssessmentsOpen] = useState(false);
+  const [mobileAssessmentsOpen, setMobileAssessmentsOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Auto-close mobile menu on route change
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setAssessmentsOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setAssessmentsOpen(false);
+    }, 150);
+  };
+
+  // Auto-close menus on route change
   useEffect(() => {
     setMobileMenuOpen(false);
+    setAssessmentsOpen(false);
   }, [pathname]);
 
   // Handle escape key to close menu
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMobileMenuOpen(false);
+      if (e.key === "Escape") {
+        setMobileMenuOpen(false);
+        setAssessmentsOpen(false);
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -71,6 +93,61 @@ export function Navbar() {
     return null;
   }
 
+  const assessmentTests = [
+    {
+      href: "/dashboard/assessments/riasec",
+      labelEn: "Holland RIASEC Test",
+      labelKm: "តេស្តចំណាប់អារម្មណ៍ RIASEC",
+      descEn: "Measure 6 vocational interest dimensions to discover matched careers",
+      descKm: "វាស់វែងចំណាប់អារម្មណ៍ការងារ ៦ វិមាត្រដើម្បីស្វែងរកជំនាញត្រូវគ្នា",
+      badgeEn: "30 Questions",
+      badgeKm: "៣០ សំណួរ",
+      icon: Compass,
+      color: "#D97706",
+      bgClass: "bg-amber-500",
+      tagClass: "bg-amber-50 text-amber-700 border-amber-200/80",
+    },
+    {
+      href: "/personality",
+      labelEn: "16 Personalities (MBTI)",
+      labelKm: "បុគ្គលិកលក្ខណៈទាំង ១៦",
+      descEn: "Explore cognitive style, study endurance, and career archetypes",
+      descKm: "ស្វែងយល់ពីចរិតលក្ខណៈ របៀបគិត និងការងារត្រូវគ្នានៅកម្ពុជា",
+      badgeEn: "16 Types",
+      badgeKm: "១៦ ប្រភេទ",
+      icon: Sparkles,
+      color: "#2563EB",
+      bgClass: "bg-blue-600",
+      tagClass: "bg-blue-50 text-blue-700 border-blue-200/80",
+    },
+    {
+      href: "/dashboard/assessments/preferences",
+      labelEn: "BACII Stream & Preferences",
+      labelKm: "ចំណូលចិត្តមុខវិជ្ជា & សាកលវិទ្យាល័យ",
+      descEn: "Verify Grade 12 stream fit and budget alignment for universities",
+      descKm: "ផ្ទៀងផ្ទាត់ថ្នាក់វិទ្យាសាស្ត្រ ឬសង្គម និងថវិកាសិក្សា",
+      badgeEn: "Prerequisites",
+      badgeKm: "លក្ខខណ្ឌសិក្សា",
+      icon: GraduationCap,
+      color: "#059669",
+      bgClass: "bg-emerald-600",
+      tagClass: "bg-emerald-50 text-emerald-700 border-emerald-200/80",
+    },
+    {
+      href: "/dashboard/recommendations",
+      labelEn: "AI Major & Career Matching Hub",
+      labelKm: "លទ្ធផលផ្គូផ្គងជំនាញ & អាជីព",
+      descEn: "Multi-factor recommendations powered by all 4 scientific pillars",
+      descKm: "ការវិភាគរួមបញ្ចូលគ្នានៃតេស្តទាំងអស់ដើម្បីផ្ដល់អនុសាសន៍ ១០០%",
+      badgeEn: "100% Precision",
+      badgeKm: "រូបមន្ត ១០០%",
+      icon: BrainCircuit,
+      color: "#9333EA",
+      bgClass: "bg-purple-600",
+      tagClass: "bg-purple-50 text-purple-700 border-purple-200/80",
+    },
+  ];
+
   const navLinks = [
     {
       href: "/majors",
@@ -101,12 +178,13 @@ export function Navbar() {
       descEn: "Local & international grant opportunities",
     },
     {
-      href: "/personality",
-      label: t("nav.personality", "បុគ្គលិកលក្ខណៈទាំង ១៦"),
+      isDropdown: true,
+      label: language === "km" ? "តេស្តវាយតម្លៃ" : "Assessments",
       icon: Sparkles,
       highlight: true,
-      descKm: "មគ្គុទ្ទេសក៍ចិត្តគំនិតទាំង ១៦ ប្រភេទស្តង់ដារ",
-      descEn: "NERIS & 16Personalities guide and matches",
+      descKm: "តេស្តស្វែងយល់ពីខ្លួនឯង RIASEC, 16P និងបាក់ឌុប",
+      descEn: "RIASEC, 16-Personality & Academic diagnostic tests",
+      subItems: assessmentTests,
     },
     {
       href: "/about",
@@ -136,14 +214,147 @@ export function Navbar() {
 
         {/* Desktop Navigation Links */}
         <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-          {navLinks.map((item) => {
+          {navLinks.map((item, idx) => {
+            if (item.isDropdown && item.subItems) {
+              const isAnySubActive = item.subItems.some(
+                (sub) =>
+                  pathname === sub.href ||
+                  (sub.href !== "/" && pathname?.startsWith(sub.href))
+              );
+              return (
+                <div
+                  key="assessments-nav-item"
+                  className="relative"
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setAssessmentsOpen((prev) => !prev)}
+                    className={cn(
+                      "relative px-3 py-1.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap cursor-pointer",
+                      isAnySubActive || assessmentsOpen
+                        ? "bg-[#111965]/8 text-[#111965] font-bold shadow-2xs"
+                        : "text-[#5A6482] hover:text-[#111965] hover:bg-slate-100/70"
+                    )}
+                    aria-expanded={assessmentsOpen}
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                    <span>{item.label}</span>
+                    <ChevronDown
+                      className={cn(
+                        "w-3.5 h-3.5 transition-transform duration-200 text-slate-400",
+                        assessmentsOpen && "rotate-180 text-[#111965]"
+                      )}
+                    />
+                  </button>
+
+                  <AnimatePresence>
+                    {assessmentsOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                        transition={{ duration: 0.16, ease: "easeOut" }}
+                        className="absolute left-1/2 -translate-x-1/2 top-full pt-2.5 z-50 w-[420px]"
+                      >
+                        <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl p-3 space-y-1.5 backdrop-blur-md">
+                          <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
+                            <span className="text-[11px] font-black uppercase tracking-wider text-[#111965]">
+                              {language === "km"
+                                ? "តេស្តវាយតម្លៃលើផ្លាតហ្វម"
+                                : "Platform Diagnostic Tests"}
+                            </span>
+                            <span className="text-[10px] font-bold text-slate-400">
+                              {language === "km"
+                                ? "៤ ម៉ាស៊ីនវិទ្យាសាស្ត្រ"
+                                : "4 Scientific Engines"}
+                            </span>
+                          </div>
+
+                          <div className="space-y-1 pt-1">
+                            {item.subItems.map((test) => {
+                              const TestIcon = test.icon;
+                              const isSubActive =
+                                pathname === test.href ||
+                                (test.href !== "/" && pathname?.startsWith(test.href));
+                              return (
+                                <Link
+                                  key={test.href}
+                                  href={test.href}
+                                  onClick={() => setAssessmentsOpen(false)}
+                                  className={cn(
+                                    "flex items-start gap-3 p-2.5 rounded-xl transition-all duration-150 group",
+                                    isSubActive
+                                      ? "bg-slate-50 border border-slate-200"
+                                      : "hover:bg-slate-50 border border-transparent"
+                                  )}
+                                >
+                                  <div
+                                    className={cn(
+                                      "w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-2xs group-hover:scale-105 transition-transform",
+                                      test.bgClass
+                                    )}
+                                  >
+                                    <TestIcon className="w-4 h-4" />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center justify-between gap-2">
+                                      <span className="text-xs font-bold text-[#111965] group-hover:text-blue-600 transition-colors truncate">
+                                        {language === "km" ? test.labelKm : test.labelEn}
+                                      </span>
+                                      <span
+                                        className={cn(
+                                          "text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-md shrink-0 border",
+                                          test.tagClass
+                                        )}
+                                      >
+                                        {language === "km" ? test.badgeKm : test.badgeEn}
+                                      </span>
+                                    </div>
+                                    <p className="text-[11px] text-slate-500 leading-snug line-clamp-1 mt-0.5">
+                                      {language === "km" ? test.descKm : test.descEn}
+                                    </p>
+                                  </div>
+                                </Link>
+                              );
+                            })}
+                          </div>
+
+                          {/* Quick action footer */}
+                          <div className="pt-2 border-t border-slate-100 px-1">
+                            <Link
+                              href="/dashboard/assessments/riasec"
+                              onClick={() => setAssessmentsOpen(false)}
+                              className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-amber-50 hover:bg-amber-100/80 text-amber-900 border border-amber-200/70 transition-colors text-xs font-bold"
+                            >
+                              <div className="flex items-center gap-2">
+                                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                                <span>
+                                  {language === "km"
+                                    ? "ធ្វើតេស្តស្វែងយល់ពីខ្លួនឯងឥតគិតថ្លៃ"
+                                    : "Start Free Assessment"}
+                                </span>
+                              </div>
+                              <ArrowRight className="w-3.5 h-3.5 text-amber-700" />
+                            </Link>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            }
+
             const isActive =
-              pathname === item.href ||
-              (item.href !== "/" && pathname?.startsWith(item.href));
+              Boolean(item.href) &&
+              (pathname === item.href ||
+                (item.href !== "/" && pathname?.startsWith(item.href!)));
             return (
               <Link
-                key={item.href}
-                href={item.href}
+                key={item.href || idx}
+                href={item.href || "#"}
                 className={cn(
                   "relative px-3 py-1.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap",
                   isActive
@@ -151,7 +362,6 @@ export function Navbar() {
                     : "text-[#5A6482] hover:text-[#111965] hover:bg-slate-100/70"
                 )}
               >
-
                 <span>{item.label}</span>
               </Link>
             );
@@ -254,14 +464,116 @@ export function Navbar() {
               <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 space-y-4">
                 {/* Navigation Links List */}
                 <div className="space-y-1.5">
-                  {navLinks.map((item) => {
+                  {navLinks.map((item, idx) => {
+                    if (item.isDropdown && item.subItems) {
+                      const isAnySubActive = item.subItems.some(
+                        (sub) =>
+                          pathname === sub.href ||
+                          (sub.href !== "/" && pathname?.startsWith(sub.href))
+                      );
+                      return (
+                        <div
+                          key="mobile-assessments"
+                          className="rounded-2xl border border-slate-200/90 overflow-hidden bg-white"
+                        >
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setMobileAssessmentsOpen((prev) => !prev)
+                            }
+                            className={cn(
+                              "w-full flex items-center justify-between p-3 text-left font-bold text-sm transition-colors cursor-pointer",
+                              isAnySubActive
+                                ? "bg-[#111965]/8 text-[#111965]"
+                                : "text-[#171A2C] hover:bg-slate-50"
+                            )}
+                          >
+                            <div className="flex items-center gap-3.5">
+                              <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center shrink-0">
+                                <Sparkles className="w-5 h-5" />
+                              </div>
+                              <div>
+                                <div className="text-sm font-bold text-[#111965]">
+                                  {item.label}
+                                </div>
+                                <div className="text-[11px] text-[#68708A] font-normal line-clamp-1">
+                                  {language === "km"
+                                    ? item.descKm
+                                    : item.descEn}
+                                </div>
+                              </div>
+                            </div>
+                            <ChevronDown
+                              className={cn(
+                                "w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ml-2",
+                                mobileAssessmentsOpen && "rotate-180 text-[#111965]"
+                              )}
+                            />
+                          </button>
+
+                          {mobileAssessmentsOpen && (
+                            <div className="p-2 bg-slate-50/80 border-t border-slate-100 space-y-1.5">
+                              {item.subItems.map((test) => {
+                                const TestIcon = test.icon;
+                                const isSubActive =
+                                  pathname === test.href ||
+                                  (test.href !== "/" && pathname?.startsWith(test.href));
+                                return (
+                                  <Link
+                                    key={test.href}
+                                    href={test.href}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className={cn(
+                                      "flex items-center justify-between p-2.5 rounded-xl border transition-all",
+                                      isSubActive
+                                        ? "bg-white border-slate-300 shadow-2xs font-bold"
+                                        : "bg-white/80 border-slate-200/70 hover:bg-white"
+                                    )}
+                                  >
+                                    <div className="flex items-center gap-2.5">
+                                      <div
+                                        className={cn(
+                                          "w-7 h-7 rounded-lg flex items-center justify-center text-white shrink-0",
+                                          test.bgClass
+                                        )}
+                                      >
+                                        <TestIcon className="w-3.5 h-3.5" />
+                                      </div>
+                                      <div>
+                                        <span className="text-xs font-bold text-[#111965] block">
+                                          {language === "km"
+                                            ? test.labelKm
+                                            : test.labelEn}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <span
+                                      className={cn(
+                                        "text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md border",
+                                        test.tagClass
+                                      )}
+                                    >
+                                      {language === "km"
+                                        ? test.badgeKm
+                                        : test.badgeEn}
+                                    </span>
+                                  </Link>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }
+
                     const isActive =
-                      pathname === item.href ||
-                      (item.href !== "/" && pathname?.startsWith(item.href));
+                      Boolean(item.href) &&
+                      (pathname === item.href ||
+                        (item.href !== "/" && pathname?.startsWith(item.href!)));
                     return (
                       <Link
-                        key={item.href}
-                        href={item.href}
+                        key={item.href || idx}
+                        href={item.href || "#"}
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
                           "flex items-center justify-between p-3 rounded-2xl transition-all duration-150 min-h-[52px]",
