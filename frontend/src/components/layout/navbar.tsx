@@ -93,7 +93,8 @@ export function Navbar() {
     return null;
   }
 
-  const assessmentTests = [
+  // The three things a student actually *takes*. Each entry is an instrument.
+  const diagnosticTests = [
     {
       href: "/riasec",
       labelEn: "Holland RIASEC Test",
@@ -106,6 +107,7 @@ export function Navbar() {
       color: "#D97706",
       bgClass: "bg-amber-500",
       tagClass: "bg-amber-50 text-amber-700 border-amber-200/80",
+      isOutcome: false,
     },
     {
       href: "/personality",
@@ -119,6 +121,7 @@ export function Navbar() {
       color: "#2563EB",
       bgClass: "bg-blue-600",
       tagClass: "bg-blue-50 text-blue-700 border-blue-200/80",
+      isOutcome: false,
     },
     {
       href: "/bacii",
@@ -132,21 +135,29 @@ export function Navbar() {
       color: "#059669",
       bgClass: "bg-emerald-600",
       tagClass: "bg-emerald-50 text-emerald-700 border-emerald-200/80",
-    },
-    {
-      href: "/assessments",
-      labelEn: "AI Major & Career Matching Hub",
-      labelKm: "លទ្ធផលផ្គូផ្គងជំនាញ & អាជីព",
-      descEn: "Multi-factor recommendations powered by all 4 scientific pillars",
-      descKm: "ការវិភាគរួមបញ្ចូលគ្នានៃតេស្តទាំងអស់ដើម្បីផ្ដល់អនុសាសន៍ ១០០%",
-      badgeEn: "100% Precision",
-      badgeKm: "រូបមន្ត ១០០%",
-      icon: BrainCircuit,
-      color: "#9333EA",
-      bgClass: "bg-purple-600",
-      tagClass: "bg-purple-50 text-purple-700 border-purple-200/80",
+      isOutcome: false,
     },
   ];
+
+  // The Match Hub is the *output* of the three tests, not a fourth test.
+  // Signed-in students go straight to their ranked matches; everyone else
+  // lands on the explainer page, where the unlock condition is obvious.
+  const resultHub = {
+    href: user ? "/dashboard/recommendations" : "/assessments",
+    labelEn: "AI Major & Career Matching Hub",
+    labelKm: "លទ្ធផលផ្គូផ្គងជំនាញ & អាជីព",
+    descEn: "See your ranked major matches and why each one fits you",
+    descKm: "មើលលទ្ធផលផ្គូផ្គងជំនាញ និងហេតុផលដែលត្រូវនឹងអ្នក",
+    badgeEn: user ? "Your Report" : "After 3 Tests",
+    badgeKm: user ? "របាយការណ៍" : "ក្រោយតេស្ត ៣",
+    icon: BrainCircuit,
+    color: "#9333EA",
+    bgClass: "bg-purple-600",
+    tagClass: "bg-purple-50 text-purple-700 border-purple-200/80",
+    isOutcome: true,
+  };
+
+  const assessmentSubItems = [...diagnosticTests, resultHub];
 
   const navLinks = [
     {
@@ -184,7 +195,7 @@ export function Navbar() {
       highlight: true,
       descKm: "តេស្តស្វែងយល់ពីខ្លួនឯង RIASEC, 16P និងបាក់ឌុប",
       descEn: "RIASEC, 16-Personality & Academic diagnostic tests",
-      subItems: assessmentTests,
+      subItems: assessmentSubItems,
     },
     {
       href: "/about",
@@ -267,13 +278,15 @@ export function Navbar() {
                             </span>
                             <span className="text-[10px] font-bold text-slate-400">
                               {language === "km"
-                                ? "៤ ម៉ាស៊ីនវិទ្យាសាស្ត្រ"
-                                : "4 Scientific Engines"}
+                                ? "៣ តេស្ត • ១ លទ្ធផល"
+                                : "3 Tests · 1 Report"}
                             </span>
                           </div>
 
                           <div className="space-y-1 pt-1">
-                            {item.subItems.map((test) => {
+                            {item.subItems
+                              .filter((test) => !test.isOutcome)
+                              .map((test) => {
                               const TestIcon = test.icon;
                               const isSubActive =
                                 pathname === test.href ||
@@ -320,6 +333,79 @@ export function Navbar() {
                               );
                             })}
                           </div>
+
+                          {/* Outcome hub: visually separated so it never reads as a 4th test */}
+                          {item.subItems
+                            .filter((outcome) => outcome.isOutcome)
+                            .map((outcome) => {
+                              const OutcomeIcon = outcome.icon;
+                              const isOutcomeActive =
+                                pathname === outcome.href ||
+                                (outcome.href !== "/" &&
+                                  pathname?.startsWith(outcome.href));
+                              return (
+                                <div
+                                  key={outcome.href}
+                                  className="pt-1.5 mt-0.5 border-t border-slate-100"
+                                >
+                                  <div className="px-3 pt-2 pb-1.5 flex items-center justify-between gap-2">
+                                    <span className="text-[10px] font-black uppercase tracking-wider text-purple-700/80">
+                                      {language === "km"
+                                        ? "លទ្ធផលរបស់អ្នក"
+                                        : "Your Outcome"}
+                                    </span>
+                                    <span className="text-[10px] font-semibold text-slate-400 whitespace-nowrap">
+                                      {language === "km"
+                                        ? "តេស្ត ៣ + ទីផ្សារការងារ"
+                                        : "3 tests + job market"}
+                                    </span>
+                                  </div>
+                                  <Link
+                                    href={outcome.href}
+                                    onClick={() => setAssessmentsOpen(false)}
+                                    className={cn(
+                                      "flex items-start gap-3 p-2.5 rounded-xl border transition-all duration-150 group",
+                                      isOutcomeActive
+                                        ? "bg-purple-50 border-purple-300"
+                                        : "bg-purple-50/40 border-purple-100/80 hover:bg-purple-50 hover:border-purple-200"
+                                    )}
+                                  >
+                                    <div
+                                      className={cn(
+                                        "w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0 shadow-2xs group-hover:scale-105 transition-transform",
+                                        outcome.bgClass
+                                      )}
+                                    >
+                                      <OutcomeIcon className="w-4 h-4" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center justify-between gap-2">
+                                        <span className="text-xs font-bold text-[#111965] group-hover:text-purple-700 transition-colors truncate">
+                                          {language === "km"
+                                            ? outcome.labelKm
+                                            : outcome.labelEn}
+                                        </span>
+                                        <span
+                                          className={cn(
+                                            "text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-md shrink-0 border",
+                                            outcome.tagClass
+                                          )}
+                                        >
+                                          {language === "km"
+                                            ? outcome.badgeKm
+                                            : outcome.badgeEn}
+                                        </span>
+                                      </div>
+                                      <p className="text-[11px] text-slate-500 leading-snug line-clamp-1 mt-0.5">
+                                        {language === "km"
+                                          ? outcome.descKm
+                                          : outcome.descEn}
+                                      </p>
+                                    </div>
+                                  </Link>
+                                </div>
+                              );
+                            })}
 
                           {/* Quick action footer */}
                           <div className="pt-2 border-t border-slate-100 px-1">
@@ -513,7 +599,9 @@ export function Navbar() {
 
                           {mobileAssessmentsOpen && (
                             <div className="p-2 bg-slate-50/80 border-t border-slate-100 space-y-1.5">
-                              {item.subItems.map((test) => {
+                              {item.subItems
+                                .filter((test) => !test.isOutcome)
+                                .map((test) => {
                                 const TestIcon = test.icon;
                                 const isSubActive =
                                   pathname === test.href ||
@@ -560,6 +648,79 @@ export function Navbar() {
                                   </Link>
                                 );
                               })}
+
+                              {/* Outcome hub: separated from the tests it is built from */}
+                              {item.subItems
+                                .filter((outcome) => outcome.isOutcome)
+                                .map((outcome) => {
+                                  const OutcomeIcon = outcome.icon;
+                                  const isOutcomeActive =
+                                    pathname === outcome.href ||
+                                    (outcome.href !== "/" &&
+                                      pathname?.startsWith(outcome.href));
+                                  return (
+                                    <div
+                                      key={outcome.href}
+                                      className="pt-1.5 mt-1 border-t border-slate-200/80"
+                                    >
+                                      <div className="px-1 pt-2 pb-1.5 flex items-center justify-between gap-2">
+                                        <span className="text-[10px] font-black uppercase tracking-wider text-purple-700/80">
+                                          {language === "km"
+                                            ? "លទ្ធផលរបស់អ្នក"
+                                            : "Your Outcome"}
+                                        </span>
+                                        <span className="text-[10px] font-semibold text-slate-400 whitespace-nowrap">
+                                          {language === "km"
+                                            ? "តេស្ត ៣ + ទីផ្សារការងារ"
+                                            : "3 tests + job market"}
+                                        </span>
+                                      </div>
+                                      <Link
+                                        href={outcome.href}
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className={cn(
+                                          "flex items-center justify-between p-2.5 rounded-xl border transition-all",
+                                          isOutcomeActive
+                                            ? "bg-purple-50 border-purple-300 shadow-2xs"
+                                            : "bg-purple-50/50 border-purple-200/70 hover:bg-purple-50"
+                                        )}
+                                      >
+                                        <div className="flex items-center gap-2.5 min-w-0">
+                                          <div
+                                            className={cn(
+                                              "w-7 h-7 rounded-lg flex items-center justify-center text-white shrink-0",
+                                              outcome.bgClass
+                                            )}
+                                          >
+                                            <OutcomeIcon className="w-3.5 h-3.5" />
+                                          </div>
+                                          <div className="min-w-0">
+                                            <span className="text-xs font-bold text-[#111965] block truncate">
+                                              {language === "km"
+                                                ? outcome.labelKm
+                                                : outcome.labelEn}
+                                            </span>
+                                            <span className="text-[10px] text-slate-500 block leading-tight mt-0.5 line-clamp-1">
+                                              {language === "km"
+                                                ? outcome.descKm
+                                                : outcome.descEn}
+                                            </span>
+                                          </div>
+                                        </div>
+                                        <span
+                                          className={cn(
+                                            "text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md border shrink-0 ml-2",
+                                            outcome.tagClass
+                                          )}
+                                        >
+                                          {language === "km"
+                                            ? outcome.badgeKm
+                                            : outcome.badgeEn}
+                                        </span>
+                                      </Link>
+                                    </div>
+                                  );
+                                })}
                             </div>
                           )}
                         </div>

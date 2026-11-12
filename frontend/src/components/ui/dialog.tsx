@@ -12,19 +12,31 @@ interface DialogProps {
 }
 
 export function Dialog({ open, onOpenChange, children, className }: DialogProps) {
+  const surfaceRef = React.useRef<HTMLDivElement>(null);
+  const restoreFocusRef = React.useRef<HTMLElement | null>(null);
+  const onOpenChangeRef = React.useRef(onOpenChange);
+
+  React.useEffect(() => {
+    onOpenChangeRef.current = onOpenChange;
+  }, [onOpenChange]);
+
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onOpenChange(false);
+      if (e.key === "Escape") onOpenChangeRef.current(false);
     };
-    if (open) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-    }
+    if (!open) return;
+
+    restoreFocusRef.current = document.activeElement as HTMLElement | null;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+    surfaceRef.current?.focus();
+
     return () => {
       document.body.style.overflow = "unset";
       window.removeEventListener("keydown", handleKeyDown);
+      restoreFocusRef.current?.focus?.();
     };
-  }, [open, onOpenChange]);
+  }, [open]);
 
   if (!open) return null;
 
@@ -37,7 +49,13 @@ export function Dialog({ open, onOpenChange, children, className }: DialogProps)
       />
 
       {/* Dialog Surface */}
-      <div className={cn("relative z-50 w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-[#E6E8F0] animate-in zoom-in-95 duration-200", className)}>
+      <div
+        ref={surfaceRef}
+        role="dialog"
+        aria-modal="true"
+        tabIndex={-1}
+        className={cn("relative z-50 w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-[#E6E8F0] animate-in zoom-in-95 duration-200 focus:outline-none", className)}
+      >
         <button
           type="button"
           onClick={() => onOpenChange(false)}

@@ -70,7 +70,15 @@ async def list_majors(
             riasec_secondary=m.riasec_secondary,
             personality_affinity=m.personality_affinity,
             is_stem=m.is_stem,
-            universities_count=len(m.university_majors)
+            universities_count=len(m.university_majors),
+            min_tuition_usd=min(
+                (
+                    float(um.tuition_annual_usd)
+                    for um in m.university_majors
+                    if um.tuition_annual_usd is not None
+                ),
+                default=None,
+            ),
         )
         for m in paginated
     ]
@@ -143,6 +151,14 @@ async def get_major_detail(slug: str, db: AsyncSession = Depends(get_db)):
             personality_affinity=m.personality_affinity,
             is_stem=m.is_stem,
             universities_count=len(m.university_majors),
+            min_tuition_usd=min(
+                (
+                    float(um.tuition_annual_usd)
+                    for um in m.university_majors
+                    if um.tuition_annual_usd is not None
+                ),
+                default=None,
+            ),
             universities=unis_offering,
             careers=careers_related
         )

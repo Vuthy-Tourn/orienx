@@ -96,6 +96,7 @@ class MajorSummaryOut(BaseModel):
     personality_affinity: Optional[str] = None
     is_stem: bool
     universities_count: Optional[int] = 0
+    min_tuition_usd: Optional[float] = None
     offering_universities: Optional[List[MajorOfferingUniversityOut]] = []
     
     model_config = ConfigDict(extra="ignore")
