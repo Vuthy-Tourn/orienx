@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   motion,
   AnimatePresence,
@@ -125,6 +127,98 @@ export default function PublicPersonalityGuidePage() {
     mouseX.set(0);
     mouseY.set(0);
   };
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      // 1. Hero Content Stagger
+      gsap.fromTo(
+        ".gsap-mbti-hero-anim",
+        { opacity: 0, y: 25 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power3.out",
+        }
+      );
+
+      // 2. 4 Role Groups Cards
+      gsap.fromTo(
+        ".gsap-mbti-role-card",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gsap-mbti-roles-grid",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // 3. Section Header
+      gsap.fromTo(
+        ".gsap-mbti-section-header",
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gsap-mbti-section-header",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // 4. Archetype Grid Cards
+      gsap.fromTo(
+        ".gsap-mbti-archetype-card",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.55,
+          stagger: 0.05,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gsap-mbti-archetypes-grid",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // 5. CTA Banner
+      gsap.fromTo(
+        ".gsap-mbti-cta",
+        { opacity: 0, scale: 0.96, y: 30 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".gsap-mbti-cta",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   const filteredArchetypes = Object.entries(ARCHETYPE_META).filter(
     ([code, meta]) => {
@@ -282,31 +376,31 @@ export default function PublicPersonalityGuidePage() {
 
         {/* FOREGROUND HERO CONTENT (Crisp, High-Contrast & Interactive) */}
         <div className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 relative z-10 my-6 sm:my-14 lg:my-16 py-2 sm:py-4 px-2 sm:px-4">
-          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 shadow-xs uppercase tracking-wider">
+          <div className="gsap-mbti-hero-anim inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 shadow-xs uppercase tracking-wider">
             <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#F7CE4D]" />
             <span>NERIS & 16Personalities Standard</span>
           </div>
 
-          <h1 className="text-2xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight drop-shadow-md">
+          <h1 className="gsap-mbti-hero-anim text-2xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight drop-shadow-md">
             {language === "km"
               ? "មគ្គុទ្ទេសក៍បុគ្គលិកលក្ខណៈទាំង ១៦"
               : "The 16 Personality Types Guide"}
           </h1>
 
-          <p className="text-xs sm:text-sm lg:text-base text-slate-300 font-bold">
+          <p className="gsap-mbti-hero-anim text-xs sm:text-sm lg:text-base text-slate-300 font-bold">
             {language === "km"
               ? "The 16 Personality Types Guide"
               : "Discover Your Cognitive Strengths, Temperament & Ideal Majors"}
           </p>
 
-          <p className="text-xs sm:text-sm text-slate-200/95 max-w-lg mx-auto font-medium leading-relaxed drop-shadow-xs">
+          <p className="gsap-mbti-hero-anim text-xs sm:text-sm text-slate-200/95 max-w-lg mx-auto font-medium leading-relaxed drop-shadow-xs">
             {getLocalized({
               km: "ស្វែងយល់ពីទម្រង់ចិត្តគំនិត ទេពកោសល្យពីកំណើត របៀបសិក្សា និងមុខជំនាញសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុតសម្រាប់បុគ្គលិកលក្ខណៈនីមួយៗ។",
               en: "Explore cognitive strengths, natural tendencies, learning styles, and ideal university majors across all 16 official personality archetypes.",
             })}
           </p>
 
-          <div className="pt-2 sm:pt-3">
+          <div className="gsap-mbti-hero-anim pt-2 sm:pt-3">
             <Link
               href="/dashboard/assessments/personality"
               className="inline-flex items-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-2xl text-xs sm:text-sm font-black bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-2xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
@@ -326,13 +420,13 @@ export default function PublicPersonalityGuidePage() {
 
       {/* 2. THE 4 ROLE GROUPS BANNER */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 gsap-mbti-roles-grid">
           {ROLES_META.map((role) => (
             <button
               key={role.id}
               onClick={() => setSelectedRole(role.id === selectedRole ? "all" : role.id)}
               type="button"
-              className={`p-5 rounded-2xl text-left transition-all border shadow-sm cursor-pointer ${
+              className={`gsap-mbti-role-card p-5 rounded-2xl text-left transition-all border shadow-sm cursor-pointer ${
                 selectedRole === role.id
                   ? "bg-white ring-2 shadow-md"
                   : "bg-white hover:shadow hover:-translate-y-0.5"
@@ -366,7 +460,7 @@ export default function PublicPersonalityGuidePage() {
       {/* 3. INTERACTIVE 16 ARCHETYPES EXPLORER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 space-y-8">
         {/* Modern Header & Live Search */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5">
+        <div className="gsap-mbti-section-header flex flex-col md:flex-row md:items-end justify-between gap-5">
           <div className="space-y-1.5">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 border border-[#111965]/10 text-[#111965] text-xs font-black uppercase tracking-wider">
               <Compass className="w-3.5 h-3.5 text-[#111965]" />
@@ -510,14 +604,14 @@ export default function PublicPersonalityGuidePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            className="gsap-mbti-archetypes-grid grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             {filteredArchetypes.map(([code, meta]) => {
               return (
                 <div
                   key={code}
                   onClick={() => setActiveArchetypeCode(code)}
-                  className="relative group rounded-3xl bg-white border border-slate-200/90 hover:border-[#111965]/40 p-5 sm:p-6 transition-all duration-200 shadow-2xs hover:shadow-xs flex flex-col sm:flex-row gap-5 cursor-pointer overflow-hidden"
+                  className="gsap-mbti-archetype-card relative group rounded-3xl bg-white border border-slate-200/90 hover:border-[#111965]/40 p-5 sm:p-6 transition-all duration-200 shadow-2xs hover:shadow-xs flex flex-col sm:flex-row gap-5 cursor-pointer overflow-hidden"
                 >
                   {/* LEFT / TOP: Character Showcase Stage Pedestal */}
                   <div
@@ -665,7 +759,7 @@ export default function PublicPersonalityGuidePage() {
 
       {/* 4. BOTTOM CALL TO ACTION */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
-        <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#111965] via-[#1B277F] to-[#0E1552] text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-8 border border-[#111965]/40">
+        <div className="gsap-mbti-cta p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#111965] via-[#1B277F] to-[#0E1552] text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-8 border border-[#111965]/40">
           <div className="space-y-3 max-w-xl relative z-10">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-white/10 text-[#F7CE4D] border border-white/20">
               <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />

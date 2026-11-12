@@ -4,6 +4,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
@@ -57,6 +59,61 @@ export default function HomePage() {
 
   useEffect(() => {
     setMounted(true);
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".gsap-uni-header",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: "#featured-universities-section",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      gsap.fromTo(
+        ".gsap-uni-gallery",
+        { opacity: 0, scale: 0.96 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          delay: 0.15,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: "#featured-universities-section",
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      gsap.fromTo(
+        ".gsap-uni-spotlight",
+        { opacity: 0, y: 25 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          delay: 0.25,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: "#featured-universities-section",
+            start: "top 75%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    });
+
+    return () => ctx.revert();
   }, []);
 
   // Real Cambodian Universities fetched from backend API
@@ -150,7 +207,7 @@ export default function HomePage() {
         className="py-16 lg:py-24 bg-white border-b border-[#E6E8F0] overflow-hidden select-none"
       >
         {/* Section Header (Contained in Max-7XL grid) */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8">
+        <div className="gsap-uni-header max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div className="space-y-2">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
@@ -243,7 +300,7 @@ export default function HomePage() {
         ) : (
           <>
             {/* FULL-WIDTH 3D CIRCULAR GALLERY SHOWCASE */}
-            <div className="relative w-full h-[460px] sm:h-[500px] lg:h-[540px] my-1 overflow-hidden select-none group">
+            <div className="gsap-uni-gallery relative w-full h-[460px] sm:h-[500px] lg:h-[540px] my-1 overflow-hidden select-none group">
               {/* Animated studio spotlight backdrop */}
               <div className="absolute inset-0 bg-gradient-to-b from-slate-50/50 via-white to-slate-50/30 pointer-events-none" />
               <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[350px] sm:w-[500px] h-[300px] bg-blue-200/25 rounded-full blur-3xl pointer-events-none animate-pulse" />
@@ -313,7 +370,7 @@ export default function HomePage() {
             </div>
 
             {/* Active University Detailed Spotlight Card */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-3 sm:-mt-5 relative z-20">
+            <div className="gsap-uni-spotlight max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-3 sm:-mt-5 relative z-20">
               {activeUni && (
                 <div className="relative p-6 sm:p-8 rounded-2xl bg-white border border-[#E6E8F0] shadow-sm text-[#111965] transition-all duration-300">
                   {/* Visual Anchor Indicator pointing up to the 3D card */}

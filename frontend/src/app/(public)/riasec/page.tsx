@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/contexts/language-context";
 import {
   RIASEC_DIMENSIONS,
@@ -247,6 +250,95 @@ export default function RiasecPublicGuidePage() {
     ];
   }, [language]);
 
+  // Register GSAP ScrollTrigger animations
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      // Hero sequence
+      gsap.fromTo(
+        ".gsap-riasec-hero-anim",
+        { opacity: 0, y: 32 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.85,
+          stagger: 0.1,
+          ease: "power3.out",
+        }
+      );
+
+      gsap.fromTo(
+        ".gsap-riasec-radar-card",
+        { opacity: 0, scale: 0.95, y: 35 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 1.0,
+          delay: 0.2,
+          ease: "power3.out",
+        }
+      );
+
+      // Section 2: 6 RIASEC Dimension Cards
+      gsap.fromTo(
+        ".gsap-dimension-card",
+        { opacity: 0, y: 35 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gsap-dimensions-grid",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // Section 3: Archetypes
+      gsap.fromTo(
+        ".gsap-archetype-card",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.06,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gsap-archetypes-grid",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // Section 4: 4-Pillar AI Intelligence
+      gsap.fromTo(
+        ".gsap-pillar-card",
+        { opacity: 0, y: 25 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gsap-pillars-grid",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#F8FAFD] text-[#111965] selection:bg-[#F7CE4D] selection:text-[#111965] pb-24">
       {/* ========================================================
@@ -281,7 +373,7 @@ export default function RiasecPublicGuidePage() {
             {/* Left Column: Heading, Subtitle, Credibility Badges & CTAs */}
             <div className="lg:col-span-7 space-y-6 text-left">
               {/* Category / Verified Pill */}
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold border border-emerald-500/30 backdrop-blur-xs">
+              <div className="gsap-riasec-hero-anim inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold border border-emerald-500/30 backdrop-blur-xs">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
                 <span>
                   {language === "km"
@@ -292,7 +384,7 @@ export default function RiasecPublicGuidePage() {
 
               {/* Headline */}
               <div className="space-y-2">
-                <h1 className="text-3xl sm:text-5xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                <h1 className="gsap-riasec-hero-anim text-3xl sm:text-5xl lg:text-5xl font-black text-white tracking-tight leading-tight">
                   {language === "km" ? (
                     <>
                       ស្វែងរកកូដអាជីព <span className="text-[#F7CE4D]">Holland RIASEC</span> <br className="hidden sm:inline" />
@@ -305,7 +397,7 @@ export default function RiasecPublicGuidePage() {
                     </>
                   )}
                 </h1>
-                <p className="text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
+                <p className="gsap-riasec-hero-anim text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
                   {language === "km"
                     ? "ទ្រឹស្តី John Holland ជួយសិស្សស្វែងរកវិស័យការងារដែលត្រូវនឹងចំណង់ចំណូលចិត្តពិតប្រាកដ។ OrienX បានសម្រិតសម្រាំងសំណួរចំនួន ៣០ ស្របតាមបរិបទកម្ពុជា ដើម្បីផ្គូផ្គងជាមួយមុខជំនាញសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុត។"
                     : "The world's most validated vocational guidance framework. OrienX localizes 30 diagnostic activities for Cambodian higher education, computing your mathematical 3-letter Holland code and matching university pathways."}
@@ -313,7 +405,7 @@ export default function RiasecPublicGuidePage() {
               </div>
 
               {/* Action CTAs */}
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+              <div className="gsap-riasec-hero-anim pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
                 <Link
                   href="/dashboard/assessments/riasec"
                   className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-[0_4px_24px_rgba(247,206,77,0.3)] hover:shadow-[0_6px_28px_rgba(247,206,77,0.45)] transition-all active:scale-98 cursor-pointer"
@@ -333,7 +425,7 @@ export default function RiasecPublicGuidePage() {
               </div>
 
               {/* Trust & Localized Metrics */}
-              <div className="pt-4 border-t border-white/10 flex flex-wrap items-center gap-5 text-xs font-semibold text-slate-300">
+              <div className="gsap-riasec-hero-anim pt-4 border-t border-white/10 flex flex-wrap items-center gap-5 text-xs font-semibold text-slate-300">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
                   <span>{language === "km" ? "៣០ សំណួរជាក់ស្តែង" : "30 Localized Items"}</span>
@@ -354,7 +446,7 @@ export default function RiasecPublicGuidePage() {
             </div>
 
             {/* Right Column: Live Interactive Holland Radar Simulator Widget */}
-            <div className="lg:col-span-5">
+            <div className="gsap-riasec-radar-card lg:col-span-5">
               <div className="p-5 sm:p-6 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl space-y-4 text-white">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -476,13 +568,14 @@ export default function RiasecPublicGuidePage() {
         </div>
 
         {/* 6-Card Responsive Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="gsap-dimensions-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Object.entries(RIASEC_DIMENSIONS).map(([code, meta]) => {
             const IconComp = meta.icon;
             return (
-              <div
+              <motion.div
                 key={code}
-                className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs hover:border-slate-300 hover:shadow-md transition-all flex flex-col justify-between space-y-5"
+                whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
+                className="gsap-dimension-card p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs hover:border-slate-300 hover:shadow-xl transition-shadow flex flex-col justify-between space-y-5"
                 style={{ borderTopWidth: "4px", borderTopColor: meta.color }}
               >
                 <div className="space-y-4">
@@ -573,7 +666,7 @@ export default function RiasecPublicGuidePage() {
                     <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>
@@ -669,13 +762,13 @@ export default function RiasecPublicGuidePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="gsap-archetypes-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {POPULAR_HOLLAND_ARCHETYPES.map((item) => (
             <button
               key={item.code}
               type="button"
               onClick={() => setActiveArchetypeCode(item.code)}
-              className="p-6 rounded-3xl bg-white border border-[#E6E8F0] text-left space-y-3 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+              className="gsap-archetype-card p-6 rounded-3xl bg-white border border-[#E6E8F0] text-left space-y-3 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-3 w-full">
                 <div className="flex items-center justify-between">
@@ -738,8 +831,8 @@ export default function RiasecPublicGuidePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-5 rounded-2xl bg-[#F8FAFD] border-2 border-amber-300 shadow-2xs space-y-2">
+          <div className="gsap-pillars-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="gsap-pillar-card p-5 rounded-2xl bg-[#F8FAFD] border-2 border-amber-300 shadow-2xs space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full">
                   ៣០% ទម្ងន់ពិន្ទុ
@@ -756,7 +849,7 @@ export default function RiasecPublicGuidePage() {
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#F8FAFD] border border-slate-200 shadow-2xs space-y-2">
+            <div className="gsap-pillar-card p-5 rounded-2xl bg-[#F8FAFD] border border-slate-200 shadow-2xs space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black text-purple-800 bg-purple-100 px-2.5 py-0.5 rounded-full">
                   ២៥% ទម្ងន់ពិន្ទុ
@@ -773,7 +866,7 @@ export default function RiasecPublicGuidePage() {
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#F8FAFD] border border-slate-200 shadow-2xs space-y-2">
+            <div className="gsap-pillar-card p-5 rounded-2xl bg-[#F8FAFD] border border-slate-200 shadow-2xs space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black text-sky-800 bg-sky-100 px-2.5 py-0.5 rounded-full">
                   ២៥% ទម្ងន់ពិន្ទុ
@@ -790,7 +883,7 @@ export default function RiasecPublicGuidePage() {
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#F8FAFD] border border-slate-200 shadow-2xs space-y-2">
+            <div className="gsap-pillar-card p-5 rounded-2xl bg-[#F8FAFD] border border-slate-200 shadow-2xs space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
                   ២០% ទម្ងន់ពិន្ទុ

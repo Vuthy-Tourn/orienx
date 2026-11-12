@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/contexts/language-context";
 import { FaqSection, FaqItem } from "@/components/home/faq-section";
 import { CtaBanner } from "@/components/home/cta-banner";
@@ -286,6 +289,94 @@ export default function PublicAssessmentsHubPage() {
     ];
   }, [isKm]);
 
+  // Register GSAP ScrollTrigger animations
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      // Hero sequence
+      gsap.fromTo(
+        ".gsap-assess-hero-anim",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.85,
+          stagger: 0.1,
+          ease: "power3.out",
+        }
+      );
+
+      gsap.fromTo(
+        ".gsap-assess-visualizer-card",
+        { opacity: 0, scale: 0.95, y: 35 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 1.0,
+          delay: 0.2,
+          ease: "power3.out",
+        }
+      );
+
+      // Section 1: The 4 Diagnostic Engines
+      gsap.fromTo(
+        ".gsap-engine-card",
+        { opacity: 0, y: 35 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gsap-engines-grid",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // Section 2: 4-Step Student Journey
+      gsap.fromTo(
+        ".gsap-step-card",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gsap-steps-grid",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // Section 3: Comparison Matrix
+      gsap.fromTo(
+        ".gsap-compare-table",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gsap-compare-container",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#F8FAFD] text-[#111965] selection:bg-[#F7CE4D] selection:text-[#111965] pb-24">
       {/* =========================================================================
@@ -320,7 +411,7 @@ export default function PublicAssessmentsHubPage() {
             {/* Left Column: Heading, Subtitle, Precision Equation & CTAs */}
             <div className="lg:col-span-7 space-y-6 text-left">
               {/* Category / Verified Pill */}
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold border border-emerald-500/30 backdrop-blur-xs">
+              <div className="gsap-assess-hero-anim inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold border border-emerald-500/30 backdrop-blur-xs">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
                 <span>
                   {isKm
@@ -331,7 +422,7 @@ export default function PublicAssessmentsHubPage() {
 
               {/* Headline */}
               <div className="space-y-2">
-                <h1 className="text-3xl sm:text-5xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                <h1 className="gsap-assess-hero-anim text-3xl sm:text-5xl lg:text-5xl font-black text-white tracking-tight leading-tight">
                   {isKm ? (
                     <>
                       ប្រព័ន្ធតេស្តវាស់ស្ទង់សមត្ថភាព <br className="hidden sm:inline" />
@@ -344,7 +435,7 @@ export default function PublicAssessmentsHubPage() {
                     </>
                   )}
                 </h1>
-                <p className="text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
+                <p className="gsap-assess-hero-anim text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
                   {isKm
                     ? "ហេតុអ្វីបានជាសំណួរស្មានធម្មតាមិនអាចជួយអ្នកបាន? OrienX រួមបញ្ចូលទ្រឹស្តីចិត្តវិទ្យាអាជីព RIASEC បុគ្គលិកលក្ខណៈទាំង ១៦ ថ្នាក់បាក់ឌុបជាតិ និងទីផ្សារការងារកម្ពុជា ដើម្បីផ្តល់នូវការផ្គូផ្គងដែលត្រឹមត្រូវបំផុត ១០០%។"
                     : "Why generic 5-question online quizzes fail Cambodian students: OrienX integrates John Holland's vocational psychology, Myers-Briggs cognitive styles, Grade 12 BACII prerequisites, and official NEA labor data into a unified 100% precision formula."}
@@ -352,7 +443,7 @@ export default function PublicAssessmentsHubPage() {
               </div>
 
               {/* The 100% Equation Bar */}
-              <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 max-w-xl space-y-3 shadow-lg">
+              <div className="gsap-assess-hero-anim bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 max-w-xl space-y-3 shadow-lg">
                 <div className="flex items-center justify-between text-xs font-bold text-slate-300">
                   <span className="flex items-center gap-1.5 text-white">
                     <BarChart3 className="w-4 h-4 text-[#F7CE4D]" />
@@ -375,7 +466,7 @@ export default function PublicAssessmentsHubPage() {
               </div>
 
               {/* Action CTAs */}
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+              <div className="gsap-assess-hero-anim pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
                 <Link
                   href="/dashboard/assessments/riasec"
                   className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-[0_4px_24px_rgba(247,206,77,0.3)] hover:shadow-[0_6px_28px_rgba(247,206,77,0.45)] transition-all active:scale-98 cursor-pointer"
@@ -395,7 +486,7 @@ export default function PublicAssessmentsHubPage() {
               </div>
 
               {/* Trust & Localized Metrics */}
-              <div className="pt-4 border-t border-white/10 flex flex-wrap items-center gap-5 text-xs font-semibold text-slate-300">
+              <div className="gsap-assess-hero-anim pt-4 border-t border-white/10 flex flex-wrap items-center gap-5 text-xs font-semibold text-slate-300">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
                   <span>{isKm ? "៤ ម៉ាស៊ីនវិភាគពេញលេញ" : "4 Diagnostic Engines"}</span>
@@ -416,7 +507,7 @@ export default function PublicAssessmentsHubPage() {
             </div>
 
             {/* Right Column: Interactive Hero 4-Pillar Showcase Card */}
-            <div className="lg:col-span-5">
+            <div className="gsap-assess-visualizer-card lg:col-span-5">
               <div className="relative rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 p-5 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.35)] space-y-5">
                 {/* Card Header & Pillar Tabs */}
                 <div className="space-y-3 border-b border-white/15 pb-4">
@@ -531,13 +622,13 @@ export default function PublicAssessmentsHubPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="gsap-engines-grid grid grid-cols-1 lg:grid-cols-2 gap-8">
           {ENGINES.map((engine) => {
             const Icon = engine.icon;
             return (
               <div
                 key={engine.id}
-                className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between space-y-6 relative overflow-hidden group"
+                className="gsap-engine-card rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between space-y-6 relative overflow-hidden group"
               >
                 <div className="space-y-4">
                   {/* Header Row */}
@@ -632,8 +723,8 @@ export default function PublicAssessmentsHubPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 gsap-steps-grid">
+            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between gsap-step-card">
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-2xl bg-amber-500 text-white font-black flex items-center justify-center text-sm shadow-md shadow-amber-500/25">
                   1
@@ -652,7 +743,7 @@ export default function PublicAssessmentsHubPage() {
               </div>
             </div>
 
-            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between">
+            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between gsap-step-card">
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white font-black flex items-center justify-center text-sm shadow-md shadow-blue-600/25">
                   2
@@ -671,7 +762,7 @@ export default function PublicAssessmentsHubPage() {
               </div>
             </div>
 
-            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between">
+            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between gsap-step-card">
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white font-black flex items-center justify-center text-sm shadow-md shadow-emerald-600/25">
                   3
@@ -690,7 +781,7 @@ export default function PublicAssessmentsHubPage() {
               </div>
             </div>
 
-            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between">
+            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between gsap-step-card">
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-2xl bg-purple-600 text-white font-black flex items-center justify-center text-sm shadow-md shadow-purple-600/25">
                   4
@@ -704,7 +795,7 @@ export default function PublicAssessmentsHubPage() {
                     : "Receive transparent fit percentage scores, tuition schedules, and parent-shareable counselor PDF reports."}
                 </p>
               </div>
-              <div className="text-[11px] font-bold text-purple-800 bg-purple-50 border border-purple-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
+              <div className="text-[11px] font-bold text-purple-800 bg-purple-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 Instant • 100% Precision
               </div>
             </div>
@@ -713,9 +804,9 @@ export default function PublicAssessmentsHubPage() {
       </section>
 
       {/* =========================================================================
-          SECTION 3: COMPARISON MATRIX: FUTERA VS GENERIC QUIZZES
+          SECTION 3: COMPARISON MATRIX: ORIENX VS GENERIC QUIZZES
           ========================================================================= */}
-      <section className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <section className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 gsap-compare-container">
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200">
             <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
@@ -731,7 +822,7 @@ export default function PublicAssessmentsHubPage() {
           </p>
         </div>
 
-        <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-2xs">
+        <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-2xs gsap-compare-table">
           <table className="w-full text-left border-collapse min-w-[640px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-xs font-black uppercase tracking-wider text-slate-500">

@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/contexts/language-context";
 import { FaqSection, FaqItem } from "@/components/home/faq-section";
 import { CtaBanner } from "@/components/home/cta-banner";
@@ -500,6 +503,77 @@ export default function PublicBaciiGuidePage() {
     ];
   }, [isKm]);
 
+  // Register GSAP ScrollTrigger animations
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      // Hero sequence
+      gsap.fromTo(
+        ".gsap-bacii-hero-anim",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.85,
+          stagger: 0.1,
+          ease: "power3.out",
+        }
+      );
+
+      gsap.fromTo(
+        ".gsap-bacii-inspector-card",
+        { opacity: 0, scale: 0.95, y: 35 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 1.0,
+          delay: 0.2,
+          ease: "power3.out",
+        }
+      );
+
+      // Section 1: Prerequisite Matrix Cards
+      gsap.fromTo(
+        ".gsap-bacii-matrix-card",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gsap-bacii-matrix-grid",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // Section 2: Simulator & Benchmarks
+      gsap.fromTo(
+        ".gsap-bacii-honors-card",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gsap-bacii-honors-grid",
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#F8FAFD] text-[#111965] selection:bg-[#F7CE4D] selection:text-[#111965] pb-24">
       {/* =========================================================================
@@ -534,7 +608,7 @@ export default function PublicBaciiGuidePage() {
             {/* Left Column: Heading, Subtitle, Trust Badges & CTAs */}
             <div className="lg:col-span-7 space-y-6 text-left">
               {/* Category / Verified Pill */}
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold border border-emerald-500/30 backdrop-blur-xs">
+              <div className="gsap-bacii-hero-anim inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold border border-emerald-500/30 backdrop-blur-xs">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
                 <span>
                   {isKm
@@ -545,7 +619,7 @@ export default function PublicBaciiGuidePage() {
 
               {/* Headline */}
               <div className="space-y-2">
-                <h1 className="text-3xl sm:text-5xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                <h1 className="gsap-bacii-hero-anim text-3xl sm:text-5xl lg:text-5xl font-black text-white tracking-tight leading-tight">
                   {isKm ? (
                     <>
                       ផ្ទៀងផ្ទាត់ថ្នាក់បាក់ឌុប <br className="hidden sm:inline" />
@@ -558,7 +632,7 @@ export default function PublicBaciiGuidePage() {
                     </>
                   )}
                 </h1>
-                <p className="text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
+                <p className="gsap-bacii-hero-anim text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
                   {isKm
                     ? "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នារវាងថ្នាក់វិទ្យាសាស្ត្រពិត ឬវិទ្យាសាស្ត្រសង្គម មុខវិជ្ជាពូកែ និងកម្រិតថវិកាសិក្សា ជាមួយលក្ខខណ្ឌចូលរៀនផ្លូវការនៃសាកលវិទ្យាល័យជាង ៥០ នៅកម្ពុជា ដើម្បីជៀសវាងការជ្រើសរើសខុសជំនាញ។"
                     : "Cross-validate your Grade 12 National Exam track (Science vs. Social stream), strongest high school subjects, and tuition budget against official admission criteria across 50+ Cambodian universities to prevent costly major dropouts."}
@@ -566,7 +640,7 @@ export default function PublicBaciiGuidePage() {
               </div>
 
               {/* Action CTAs */}
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+              <div className="gsap-bacii-hero-anim pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
                 <Link
                   href="/dashboard/assessments/preferences"
                   className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-[0_4px_24px_rgba(247,206,77,0.3)] hover:shadow-[0_6px_28px_rgba(247,206,77,0.45)] transition-all active:scale-98 cursor-pointer"
@@ -586,7 +660,7 @@ export default function PublicBaciiGuidePage() {
               </div>
 
               {/* Trust & Localized Metrics */}
-              <div className="pt-4 border-t border-white/10 flex flex-wrap items-center gap-5 text-xs font-semibold text-slate-300">
+              <div className="gsap-bacii-hero-anim pt-4 border-t border-white/10 flex flex-wrap items-center gap-5 text-xs font-semibold text-slate-300">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
                   <span>{isKm ? "២ ថ្នាក់ (វិទ្យាសាស្ត្រ & សង្គម)" : "2 Tracks (Science & Social)"}</span>
@@ -607,7 +681,7 @@ export default function PublicBaciiGuidePage() {
             </div>
 
             {/* Right Column: Interactive Hero Stream Quick-Inspector Card */}
-            <div className="lg:col-span-5">
+            <div className="gsap-bacii-inspector-card lg:col-span-5">
               <div className="relative rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 p-5 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.35)] space-y-5">
                 {/* Card Header & Stream Switcher */}
                 <div className="flex items-center justify-between gap-2 border-b border-white/15 pb-4">
@@ -806,9 +880,9 @@ export default function PublicBaciiGuidePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="gsap-bacii-matrix-grid grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* SCIENCE STREAM CARD */}
-          <div className="rounded-3xl border-2 border-blue-200 bg-white p-6 sm:p-8 shadow-[0_10px_30px_rgba(37,99,235,0.06)] hover:shadow-[0_16px_40px_rgba(37,99,235,0.12)] transition-all relative overflow-hidden flex flex-col justify-between">
+          <div className="gsap-bacii-matrix-card rounded-3xl border-2 border-blue-200 bg-white p-6 sm:p-8 shadow-[0_10px_30px_rgba(37,99,235,0.06)] hover:shadow-[0_16px_40px_rgba(37,99,235,0.12)] transition-all relative overflow-hidden flex flex-col justify-between">
             <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-blue-100 to-transparent rounded-bl-full pointer-events-none" />
             <div className="relative space-y-6">
               <div className="flex items-start justify-between gap-4">
@@ -884,7 +958,7 @@ export default function PublicBaciiGuidePage() {
           </div>
 
           {/* SOCIAL SCIENCE STREAM CARD */}
-          <div className="rounded-3xl border-2 border-emerald-200 bg-white p-6 sm:p-8 shadow-[0_10px_30px_rgba(5,150,105,0.06)] hover:shadow-[0_16px_40px_rgba(5,150,105,0.12)] transition-all relative overflow-hidden flex flex-col justify-between">
+          <div className="gsap-bacii-matrix-card rounded-3xl border-2 border-emerald-200 bg-white p-6 sm:p-8 shadow-[0_10px_30px_rgba(5,150,105,0.06)] hover:shadow-[0_16px_40px_rgba(5,150,105,0.12)] transition-all relative overflow-hidden flex flex-col justify-between">
             <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-emerald-100 to-transparent rounded-bl-full pointer-events-none" />
             <div className="relative space-y-6">
               <div className="flex items-start justify-between gap-4">
@@ -1214,11 +1288,11 @@ export default function PublicBaciiGuidePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="gsap-bacii-honors-grid grid grid-cols-1 md:grid-cols-3 gap-6">
           {TUITION_BENCHMARKS.map((t, idx) => (
             <div
               key={idx}
-              className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-7 shadow-2xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between"
+              className="gsap-bacii-honors-card rounded-3xl border border-slate-200 bg-white p-6 sm:p-7 shadow-2xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <span className={`inline-block px-3 py-1 rounded-full text-xs font-black border ${t.tagBg}`}>
