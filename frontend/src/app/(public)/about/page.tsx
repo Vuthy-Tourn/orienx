@@ -24,6 +24,8 @@ import {
   BadgeCheck,
   Target,
   School,
+  Sparkle,
+  ArrowLeftRight,
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -295,6 +297,140 @@ const SCIENTIFIC_PILLARS = [
   },
 ];
 
+// 5-Step Horizontal Journey Data (Pure Informational Cards)
+const FIVE_STEP_JOURNEY = [
+  {
+    step: "01",
+    taglineKm: "ការវាយតម្លៃបែបវិទ្យាសាស្ត្រត្រឹមតែ ១០ នាទី",
+    taglineEn: "A 10-minute validated vocational diagnostic",
+    titleKm: "១. ធ្វើតេស្តស្វែងយល់ពីខ្លួនឯង",
+    titleEn: "1. Self-Discovery Diagnostics",
+    descKm: "ធ្វើតេស្តចំណាប់អារម្មណ៍អាជីព Holland RIASEC ៣០ សំណួរ និងតេស្តបុគ្គលិកលក្ខណៈ 16P ដែលបង្កើតឡើងពិសេសសម្រាប់សិស្សានុសិស្សកម្ពុជា។",
+    descEn: "Complete the 30-item localized Holland RIASEC assessment and 16-personality cognitive test designed specifically for Cambodian students.",
+    color: "#D97706",
+    badgeBg: "bg-amber-500/15 text-amber-300 border-amber-500/30",
+    metrics: [
+      { labelEn: "Questions", labelKm: "សំណួរ", val: "30 Items" },
+      { labelEn: "Standard", labelKm: "ស្តង់ដារ", val: "RIASEC + 16P" },
+      { labelEn: "Cost", labelKm: "តម្លៃ", val: "100% Free" },
+    ],
+    highlightsEn: [
+      "John Holland's 6 vocational psychology dimensions",
+      "Cognitive temperament breakdown (Analysts, Diplomats, Sentinels, Explorers)",
+      "Instant multi-dimensional student profile report",
+    ],
+    highlightsKm: [
+      "ផ្អែកលើ ៦ វិមាត្រចិត្តវិទ្យាអាជីព John Holland",
+      "វិភាគមុខងារនៃការគិត ៤ ក្រុមធំៗ (Analysts, Diplomats, Sentinels, Explorers)",
+      "ទទួលបានរបាយការណ៍លទ្ធផលបុគ្គលិកលក្ខណៈភ្លាមៗ",
+    ],
+  },
+  {
+    step: "02",
+    taglineKm: "គណនាបែបគណិតវិទ្យាដោយតម្លាភាព",
+    taglineEn: "Multi-factor mathematical alignment",
+    titleKm: "២. វិធីសាស្ត្រផ្គូផ្គង ៤ សសរស្ដម្ភ",
+    titleEn: "2. 4-Pillar Algorithmic Matching",
+    descKm: "ក្បួនដោះស្រាយផ្គូផ្គងចំណាប់អារម្មណ៍ (៣០%) កម្មវិធីសិក្សាវិទ្យាល័យ (២៥%) បុគ្គលិកលក្ខណៈ (២៥%) និងតម្រូវការទីផ្សារការងារ (២០%)។",
+    descEn: "Our engine integrates your interests (30%), BACII track (25%), cognitive style (25%), and real Cambodian labor demand (20%).",
+    color: "#2563EB",
+    badgeBg: "bg-blue-500/15 text-blue-300 border-blue-500/30",
+    metrics: [
+      { labelEn: "Pillars", labelKm: "សសរស្ដម្ភ", val: "4 Dimensions" },
+      { labelEn: "Track Match", labelKm: "កម្មវិធីវិទ្យាល័យ", val: "Science / Social" },
+      { labelEn: "Algorithm", labelKm: "ក្បួនដោះស្រាយ", val: "Mathematical Fit" },
+    ],
+    highlightsEn: [
+      "Transparent fit percentage scores (no unexplainable black-box guessing)",
+      "BACII Science vs. Social stream prerequisite compatibility check",
+      "Granular match rationales detailing why each major fits you",
+    ],
+    highlightsKm: [
+      "ពិន្ទុភាគរយត្រូវគ្នាយ៉ាងច្បាស់លាស់ ដោយគ្មានការទស្សន៍ទាយស្មានៗ",
+      "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នានៃថ្នាក់វិទ្យាសាស្ត្រពិត និងវិទ្យាសាស្ត្រសង្គម",
+      "ពន្យល់ពីមូលហេតុច្បាស់លាស់ដែលធ្វើឱ្យជំនាញនីមួយៗសមស្របជាមួយអ្នក",
+    ],
+  },
+  {
+    step: "03",
+    taglineKm: "ផ្ទៀងផ្ទាត់ផ្ទាល់ពីការិយាល័យចុះឈ្មោះ និង MoEYS",
+    taglineEn: "Directly verified against registrar fee schedules",
+    titleKm: "៣. ផ្ទៀងផ្ទាត់សាកលវិទ្យាល័យ និងតម្លៃសិក្សា",
+    titleEn: "3. Verified Campus & Tuition Benchmarks",
+    descKm: "ប្រៀបធៀបតម្លៃសិក្សា ៤ ឆ្នាំពេញ ហេដ្ឋារចនាសម្ព័ន្ធ និងលក្ខខណ្ឌចូលរៀនផ្លូវការនៅសាកលវិទ្យាល័យរដ្ឋ និងឯកជនកំពូលៗនៅកម្ពុជា។",
+    descEn: "Compare verified 4-year tuition schedules, campus facilities, and admission cutoff requirements across top public state and private institutions.",
+    color: "#059669",
+    badgeBg: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
+    metrics: [
+      { labelEn: "Institutions", labelKm: "គ្រឹះស្ថានសិក្សា", val: "RUPP, ITC, CADT..." },
+      { labelEn: "Tuition Data", labelKm: "ទិន្នន័យតម្លៃ", val: "100% Accurate" },
+      { labelEn: "Source", labelKm: "ប្រភព", val: "MoEYS Verified" },
+    ],
+    highlightsEn: [
+      "RUPP, ITC (Techno), CADT, AUPP, Paragon IU, and NUM profiles",
+      "Transparent 4-year total investment without hidden charges",
+      "Certified laboratory facilities, faculties, and international accreditations",
+    ],
+    highlightsKm: [
+      "ព័ត៌មានលម្អិតនៃ RUPP, ITC (តិចណូ), CADT, AUPP, Paragon IU និង NUM",
+      "តម្លាភាពតម្លៃសិក្សា ៤ ឆ្នាំពេញ ដោយគ្មានការលាក់បាំង",
+      "ទិន្នន័យបន្ទប់ពិសោធន៍ សាស្ត្រាចារ្យ និងការទទួលស្គាល់កម្រិតអន្តរជាតិ",
+    ],
+  },
+  {
+    step: "04",
+    taglineKm: "មិនឱ្យនិស្សិតកម្ពុជាខកខានឱកាសអាហារូបករណ៍",
+    taglineEn: "Zero missed financial aid opportunities",
+    titleKm: "៤. តាមដានអាហារូបករណ៍ផ្លូវការ ១០០%",
+    titleEn: "4. Official Scholarship & Aid Tracker",
+    descKm: "ស្វែងរកអាហារូបករណ៍រដ្ឋ MoEYS អាហារូបករណ៍ CADT តេជោឌីជីថល និងជំនួយហិរញ្ញវត្ថុអន្តរជាតិ ១០០% ពេញលេញ។",
+    descEn: "Identify 100% full-ride state scholarships, CADT Techo Digital Talent awards, and verified institutional grants before deadlines expire.",
+    color: "#9333EA",
+    badgeBg: "bg-purple-500/15 text-purple-300 border-purple-500/30",
+    metrics: [
+      { labelEn: "Coverage", labelKm: "កម្រិតជំនួយ", val: "Up to 100%" },
+      { labelEn: "State Grants", labelKm: "អាហារូបករណ៍រដ្ឋ", val: "MoEYS / CADT" },
+      { labelEn: "Deadlines", labelKm: "កាលបរិច្ឆេទ", val: "Real-Time Tracking" },
+    ],
+    highlightsEn: [
+      "MoEYS national priority scholarship grade cutoffs & quotas",
+      "CADT Techo Digital Talent exam requirements and preparation guides",
+      "Eligibility criteria, documentation checklists, and application alerts",
+    ],
+    highlightsKm: [
+      "កូតា និងពិន្ទុកាត់នៃអាហារូបករណ៍រដ្ឋអាទិភាព MoEYS",
+      "លក្ខខណ្ឌប្រឡងអាហារូបករណ៍ទេពកោសល្យឌីជីថលតេជោ CADT",
+      "បញ្ជីឯកសារចាំបាច់ លក្ខខណ្ឌជ្រើសរើស និងការដាស់តឿនកាលបរិច្ឆេទ",
+    ],
+  },
+  {
+    step: "05",
+    taglineKm: "បញ្ចប់ការសិក្សាឆ្ពោះទៅកាន់ទីផ្សារការងារជាក់ស្តែង",
+    taglineEn: "Direct pathway to thriving employment",
+    titleKm: "៥. កំណត់ទិសដៅអាជីព និងការចុះឈ្មោះចូលរៀន",
+    titleEn: "5. Confident Career Roadmap & Enrollment",
+    descKm: "ស្វែងយល់ពីកម្រិតប្រាក់បៀវត្សរ៍ជាក់ស្តែងនៅកម្ពុជា និន្នាការរីកចម្រើន ៥ ឆ្នាំ និងការពិភាក្សាប្រកបដោយទំនុកចិត្តជាមួយគ្រួសារ។",
+    descEn: "Review Cambodian salary benchmarks, 5-year industry growth forecasts, and collaborate with parents and counselors to enroll with 100% confidence.",
+    color: "#EA580C",
+    badgeBg: "bg-orange-500/15 text-orange-300 border-orange-500/30",
+    metrics: [
+      { labelEn: "Salary Data", labelKm: "ប្រាក់បៀវត្សរ៍", val: "NEA Benchmarks" },
+      { labelEn: "Growth", labelKm: "កំណើន", val: "High Demand Sectors" },
+      { labelEn: "Enrollment", labelKm: "ការចុះឈ្មោះ", val: "100% Confident" },
+    ],
+    highlightsEn: [
+      "Cambodian National Employment Agency (NEA) career trajectory data",
+      "Entry to senior salary ranges for Software, Finance, Engineering, and Media",
+      "Counselor & parent shareable diagnostic summaries for unified decisions",
+    ],
+    highlightsKm: [
+      "ទិន្នន័យទីផ្សារការងារជាក់ស្តែងពីទីភ្នាក់ងារជាតិមុខរបរ និងការងារ (NEA)",
+      "កម្រិតប្រាក់បៀវត្សរ៍សម្រាប់វិស័យ Software, Finance, Engineering និង Media",
+      "របាយការណ៍សង្ខេបសម្រាប់ពិភាក្សាជាមួយឪពុកម្តាយ និងលោកគ្រូតម្រង់ទិស",
+    ],
+  },
+];
+
 // FAQ items
 const FAQ_ITEMS = [
   {
@@ -328,9 +464,16 @@ export default function AboutPage() {
   const [selectedRiasecCode, setSelectedRiasecCode] = useState<string>("I");
   const [taraTipIndex, setTaraTipIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activeMobileStep, setActiveMobileStep] = useState(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mascotImgRef = useRef<HTMLDivElement>(null);
+
+  // Pinned Horizontal Track Refs
+  const pinContainerRef = useRef<HTMLDivElement>(null);
+  const horizontalTrackRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const stepCounterRef = useRef<HTMLSpanElement>(null);
 
   const activeRiasec = RIASEC_DEEP_DATA[selectedRiasecCode] || RIASEC_DEEP_DATA["I"];
   const RiasecIcon = activeRiasec.icon;
@@ -350,14 +493,14 @@ export default function AboutPage() {
     setOpenFaq((prev) => (prev === idx ? null : idx));
   };
 
-  // GSAP Orchestration with ScrollTrigger
+  // GSAP Orchestration with ScrollTrigger + Pinned Horizontal Scroll
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      // 1. Hero Elements Swift Stagger (Explicit fromTo to avoid React 19 StrictMode 0->0 capture)
+      // 1. Hero Elements Swift Stagger
       gsap.fromTo(
         ".gsap-hero-anim",
         { y: 22, opacity: 0 },
@@ -445,39 +588,53 @@ export default function AboutPage() {
         }
       );
 
-      // 5. 3-Step Pathway ScrollTrigger
-      gsap.fromTo(
-        ".gsap-step-card",
-        { y: 32, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.12,
-          duration: 0.65,
-          ease: "back.out(1.2)",
-          scrollTrigger: {
-            trigger: ".gsap-steps-grid",
-            start: "top 90%",
-            once: true,
-          },
-        }
-      );
+      // 5. PINNED HORIZONTAL SCROLL ON DESKTOP & TABLET (min-width: 768px)
+      // When the user scrolls vertically, this section pins in place and translates horizontally to the left until end!
+      const mm = gsap.matchMedia();
 
-      // Connecting line progress fill
-      gsap.fromTo(
-        ".gsap-pathway-line",
-        { scaleX: 0, transformOrigin: "left center" },
-        {
-          scaleX: 1,
-          duration: 1.1,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: ".gsap-steps-grid",
-            start: "top 90%",
-            once: true,
+      mm.add("(min-width: 768px)", () => {
+        const pinContainer = pinContainerRef.current;
+        const track = horizontalTrackRef.current;
+        if (!pinContainer || !track) return;
+
+        // Calculate exact horizontal travel distance
+        const getScrollDistance = () => {
+          const trackWidth = track.scrollWidth;
+          const viewportWidth = window.innerWidth;
+          // Travel entire track minus viewport width plus extra breathing margin
+          return Math.max(0, trackWidth - viewportWidth + 140);
+        };
+
+        const horizontalTween = gsap.to(track, {
+          x: () => -getScrollDistance(),
+          ease: "none",
+        });
+
+        ScrollTrigger.create({
+          trigger: pinContainer,
+          start: "top top",
+          end: () => `+=${getScrollDistance()}`,
+          pin: true,
+          scrub: 1,
+          animation: horizontalTween,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            // Update glowing gold progress bar
+            if (progressBarRef.current) {
+              progressBarRef.current.style.transform = `scaleX(${self.progress})`;
+            }
+            // Update live step counter (01 / 05 to 05 / 05)
+            if (stepCounterRef.current) {
+              const currentStep = Math.min(
+                5,
+                Math.max(1, Math.floor(self.progress * 4.99) + 1)
+              );
+              const pct = Math.round(self.progress * 100);
+              stepCounterRef.current.textContent = `0${currentStep} / 05 • ${pct}%`;
+            }
           },
-        }
-      );
+        });
+      });
 
       // 6. FAQ Section ScrollTrigger
       gsap.fromTo(
@@ -994,87 +1151,238 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* ========================================================= */}
-        {/* 5. STEP-BY-STEP PATHWAY ("HOW FUTERA WORKS FOR YOU") */}
-        {/* ========================================================= */}
-        <div className="p-8 sm:p-12 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F0F2FA] text-[#111965] text-xs font-black">
-              <Sparkles className="w-3.5 h-3.5 text-[#111965]" />
-              <span>{language === "km" ? "មាគ៌ា ៣ ជំហានច្បាស់លាស់" : "Step-by-Step Pathway"}</span>
+      {/* ========================================================= */}
+      {/* 5. CINEMATIC PINNED HORIZONTAL SCROLL: 5-STEP JOURNEY */}
+      {/* ========================================================= */}
+      {/* "Deep Navy Horizon": Pinned vertically while scrubbing horizontally to the left */}
+      <section
+        ref={pinContainerRef}
+        className="w-full relative my-20 lg:my-28 bg-gradient-to-b from-[#080D2B] via-[#0A0F3D] to-[#080D2B] text-white overflow-hidden py-14 lg:py-20 select-none"
+      >
+        {/* Ambient Glow Atmosphere */}
+        <div className="absolute inset-0 pointer-events-none opacity-20 [background-image:radial-gradient(rgba(255,255,255,0.2)_1px,transparent_1px)] [background-size:32px_32px]" />
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#F7CE4D]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#33A474]/10 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Feathered Top & Bottom Edge Seams (Zero hard cuts) */}
+        <div className="absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-[#F8FAFD] to-transparent pointer-events-none z-10 opacity-15" />
+        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#F8FAFD] to-transparent pointer-events-none z-10 opacity-15" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative z-20">
+          {/* Section Header with Live Step Counter & Progress Indicator */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-white/10">
+            <div className="space-y-3 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-[#F7CE4D] text-xs font-black border border-white/15 uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
+                <span>
+                  {language === "km"
+                    ? "មាគ៌ា ៥ ជំហានឆ្ពោះទៅកាន់ឧត្តមសិក្សា"
+                    : "5-Step Student Journey Pathway"}
+                </span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                {t("aboutPage.whyTitle", "Why Students & Parents Trust Futera")}
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-300 font-medium">
+                {language === "km"
+                  ? "ពីការធ្វើតេស្តស្វែងយល់ពីខ្លួនឯង រហូតដល់ការទទួលបានអាហារូបករណ៍ និងការចុះឈ្មោះចូលរៀនដោយទំនុកចិត្ត។"
+                  : "From self-discovery assessment to scholarship discovery and confident university enrollment."}
+              </p>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-[#111965] tracking-tight">
-              {t("aboutPage.whyTitle", "How Futera Works for You")}
-            </h2>
-            <p className="text-xs sm:text-sm text-[#68708A]">
-              {language === "km"
-                ? "ពីការស្វែងយល់ពីខ្លួនឯង រហូតដល់ការចុះឈ្មោះចូលរៀននៅសាកលវិទ្យាល័យដោយទំនុកចិត្ត។"
-                : "From authentic self-discovery to confident enrollment in your dream university program."}
-            </p>
+
+            {/* Desktop Dynamic Live Step Counter & Scroll Hint */}
+            <div className="hidden md:flex flex-col items-end gap-2.5 flex-shrink-0">
+              <div className="flex items-center gap-2 text-xs font-black text-slate-300">
+                <ArrowLeftRight className="w-4 h-4 text-[#F7CE4D] animate-pulse" />
+                <span className="text-[11px] text-slate-400">Scroll down to scrub horizontally</span>
+              </div>
+              <div className="px-4 py-2 rounded-2xl bg-white/10 border border-white/15 backdrop-blur-md shadow-lg flex items-center gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#F7CE4D] animate-ping" />
+                <span
+                  ref={stepCounterRef}
+                  className="font-mono text-sm sm:text-base font-black text-white tracking-wider"
+                >
+                  01 / 05 • 0%
+                </span>
+              </div>
+            </div>
           </div>
 
-          <div className="relative">
-            {/* Animated Connecting Line on Desktop */}
-            <div className="hidden md:block absolute top-12 left-16 right-16 h-1 bg-slate-100 z-0">
-              <div className="gsap-pathway-line h-full w-full bg-gradient-to-r from-[#111965] via-[#F7CE4D] to-[#111965]" />
+          {/* Desktop Horizontal Progress Bar Line */}
+          <div className="hidden md:block w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+            <div
+              ref={progressBarRef}
+              className="h-full w-full bg-gradient-to-r from-[#F7CE4D] via-[#FFE27D] to-[#F7CE4D] origin-left rounded-full transition-transform duration-75"
+              style={{ transform: "scaleX(0)" }}
+            />
+          </div>
+
+          {/* ========================================================= */}
+          {/* DESKTOP/TABLET: GSAP HORIZONTAL SCROLL TRACK */}
+          {/* ========================================================= */}
+          <div className="hidden md:block overflow-visible pt-4 pb-8">
+            <div
+              ref={horizontalTrackRef}
+              className="flex gap-8 items-stretch will-change-transform"
+              style={{ width: "max-content" }}
+            >
+              {FIVE_STEP_JOURNEY.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="w-[500px] lg:w-[540px] flex-shrink-0 rounded-3xl p-8 bg-white/[0.07] backdrop-blur-2xl border border-white/15 hover:border-[#F7CE4D]/50 shadow-2xl flex flex-col justify-between space-y-6 transition-colors duration-200 group select-none relative overflow-hidden"
+                >
+                  {/* Subtle Card Header Gradient Pill */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-lg text-[#111965] shadow-lg group-hover:scale-105 transition-transform duration-200"
+                          style={{ backgroundColor: item.color }}
+                        >
+                          <span className="text-white font-black">{item.step}</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">
+                            Milestone Stage {item.step}
+                          </span>
+                          <h3 className="text-xl font-black text-white tracking-tight">
+                            {language === "km" ? item.titleKm : item.titleEn}
+                          </h3>
+                        </div>
+                      </div>
+
+                      <div
+                        className={`px-3 py-1 rounded-xl text-xs font-black border ${item.badgeBg}`}
+                      >
+                        {item.step === "01"
+                          ? "Diagnostic"
+                          : item.step === "02"
+                          ? "Algorithm"
+                          : item.step === "03"
+                          ? "Data"
+                          : item.step === "04"
+                          ? "Scholarship"
+                          : "Roadmap"}
+                      </div>
+                    </div>
+
+                    <p className="text-xs text-[#F7CE4D] font-bold">
+                      {language === "km" ? item.taglineKm : item.taglineEn}
+                    </p>
+
+                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                      {language === "km" ? item.descKm : item.descEn}
+                    </p>
+                  </div>
+
+                  {/* Micro Metrics Row */}
+                  <div className="grid grid-cols-3 gap-2.5 pt-2">
+                    {item.metrics.map((m, mIdx) => (
+                      <div
+                        key={mIdx}
+                        className="p-3 rounded-2xl bg-white/5 border border-white/10 text-center space-y-1"
+                      >
+                        <div className="text-[10px] font-bold text-slate-400 truncate">
+                          {language === "km" ? m.labelKm : m.labelEn}
+                        </div>
+                        <div className="text-xs font-black text-white truncate">{m.val}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Highlights Bullet List */}
+                  <div className="pt-2 border-t border-white/10 space-y-2">
+                    <span className="text-[11px] font-black text-slate-300 uppercase tracking-wider block">
+                      {language === "km" ? "ចំណុចសំខាន់ៗនៃដំណាក់កាល" : "Stage Takeaways"}
+                    </span>
+                    <ul className="space-y-2 text-xs text-slate-300">
+                      {(language === "km" ? item.highlightsKm : item.highlightsEn).map(
+                        (h, hIdx) => (
+                          <li key={hIdx} className="flex items-start gap-2.5">
+                            <Check className="w-3.5 h-3.5 text-[#F7CE4D] flex-shrink-0 mt-0.5 stroke-[3]" />
+                            <span className="leading-snug">{h}</span>
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ========================================================= */}
+          {/* MOBILE: FLUID TOUCH-SWIPE CAROUSEL (ZERO SCROLL TRAPPING) */}
+          {/* ========================================================= */}
+          <div className="block md:hidden space-y-4">
+            <div
+              className="overflow-x-auto snap-x snap-mandatory flex gap-4 pb-4 no-scrollbar px-1"
+              onScroll={(e) => {
+                const el = e.currentTarget;
+                const index = Math.round(el.scrollLeft / (el.clientWidth * 0.85));
+                setActiveMobileStep(Math.min(4, Math.max(0, index)));
+              }}
+            >
+              {FIVE_STEP_JOURNEY.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="w-[85vw] flex-shrink-0 snap-center rounded-3xl p-6 bg-white/[0.08] backdrop-blur-xl border border-white/15 shadow-xl space-y-4"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-base text-white shadow-md" style={{ backgroundColor: item.color }}>
+                      {item.step}
+                    </div>
+                    <span className={`px-2.5 py-0.5 rounded-lg text-[10px] font-black border ${item.badgeBg}`}>
+                      Stage {item.step}
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-base font-black text-white">
+                      {language === "km" ? item.titleKm : item.titleEn}
+                    </h3>
+                    <p className="text-[11px] text-[#F7CE4D] font-bold mt-0.5">
+                      {language === "km" ? item.taglineKm : item.taglineEn}
+                    </p>
+                  </div>
+
+                  <p className="text-xs text-slate-200 leading-relaxed">
+                    {language === "km" ? item.descKm : item.descEn}
+                  </p>
+
+                  <div className="grid grid-cols-3 gap-2 pt-1">
+                    {item.metrics.map((m, mIdx) => (
+                      <div key={mIdx} className="p-2 rounded-xl bg-white/5 border border-white/10 text-center">
+                        <div className="text-[9px] text-slate-400">{language === "km" ? m.labelKm : m.labelEn}</div>
+                        <div className="text-[11px] font-black text-white truncate">{m.val}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
 
-            <div className="gsap-steps-grid grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-              {/* Step 1 */}
-              <div className="gsap-step-card p-6 sm:p-7 rounded-3xl bg-[#F8FAFD] border border-slate-200/80 shadow-2xs hover:shadow-lg transition-all duration-200 space-y-4 group">
-                <div className="w-12 h-12 rounded-2xl bg-[#111965] text-white flex items-center justify-center font-black text-sm shadow-md group-hover:scale-105 transition-transform duration-200">
-                  01
-                </div>
-                <h3 className="text-base sm:text-lg font-black text-[#111965]">
-                  {t("aboutPage.step1Title", "1. Self-Discovery Diagnostics")}
-                </h3>
-                <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
-                  {t(
-                    "aboutPage.step1Desc",
-                    "Complete the RIASEC interest assessment and 16-personality cognitive test designed specifically for Cambodian students."
-                  )}
-                </p>
-              </div>
-
-              {/* Step 2 */}
-              <div className="gsap-step-card p-6 sm:p-7 rounded-3xl bg-[#F8FAFD] border border-slate-200/80 shadow-2xs hover:shadow-lg transition-all duration-200 space-y-4 group">
-                <div className="w-12 h-12 rounded-2xl bg-[#111965] text-[#F7CE4D] flex items-center justify-center font-black text-sm shadow-md group-hover:scale-105 transition-transform duration-200">
-                  02
-                </div>
-                <h3 className="text-base sm:text-lg font-black text-[#111965]">
-                  {t("aboutPage.step2Title", "2. 4-Pillar Algorithmic Matching")}
-                </h3>
-                <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
-                  {t(
-                    "aboutPage.step2Desc",
-                    "Our engine integrates your interests (30%), academics (25%), cognitive style (25%), and Cambodian market demand (20%)."
-                  )}
-                </p>
-              </div>
-
-              {/* Step 3 */}
-              <div className="gsap-step-card p-6 sm:p-7 rounded-3xl bg-[#F8FAFD] border border-slate-200/80 shadow-2xs hover:shadow-lg transition-all duration-200 space-y-4 group">
-                <div className="w-12 h-12 rounded-2xl bg-[#111965] text-white flex items-center justify-center font-black text-sm shadow-md group-hover:scale-105 transition-transform duration-200">
-                  03
-                </div>
-                <h3 className="text-base sm:text-lg font-black text-[#111965]">
-                  {t("aboutPage.step3Title", "3. Verified University Enrollment")}
-                </h3>
-                <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
-                  {t(
-                    "aboutPage.step3Desc",
-                    "Compare verified 4-year tuition fees, admission requirements, and 100% full-tuition scholarship opportunities across Cambodia."
-                  )}
-                </p>
-              </div>
+            {/* Mobile Carousel Indicator Dots */}
+            <div className="flex items-center justify-center gap-2 pt-2">
+              {FIVE_STEP_JOURNEY.map((_, idx) => (
+                <div
+                  key={idx}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    activeMobileStep === idx ? "w-6 bg-[#F7CE4D]" : "w-2 bg-white/20"
+                  }`}
+                />
+              ))}
             </div>
           </div>
         </div>
+      </section>
 
-        {/* ========================================================= */}
-        {/* 6. METHODOLOGY & DATA INTEGRITY FAQ */}
-        {/* ========================================================= */}
+      {/* ========================================================= */}
+      {/* 6. METHODOLOGY & DATA INTEGRITY FAQ */}
+      {/* ========================================================= */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         <div className="gsap-faq-container space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <h3 className="text-2xl sm:text-3xl font-black text-[#111965] tracking-tight">
