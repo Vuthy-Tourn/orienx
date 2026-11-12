@@ -19,9 +19,12 @@ import {
   Phone,
   Mail,
   Globe,
+  WifiOff,
+  RefreshCw,
 } from "lucide-react";
 import { formatUSD } from "@/lib/utils";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function UniversityDetailPage() {
   const params = useParams();
@@ -29,31 +32,74 @@ export default function UniversityDetailPage() {
   const router = useRouter();
   const { t, getLocalized } = useLanguage();
 
-  const { data: uni, isLoading, error } = useQuery({
+  const {
+    data: uni,
+    isLoading,
+    error,
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey: ["university", slug],
     queryFn: async () => apiFetch<any>(`/universities/${slug}`),
     enabled: !!slug,
+    retry: 1,
   });
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-sm text-[#68708A]">
-        {t("universityDetail.loading")}
+      <div className="min-h-screen bg-[#F5F6FA] py-8 lg:py-12">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 animate-pulse">
+          <Skeleton className="h-6 w-32 rounded-lg" />
+          <div className="bg-white rounded-3xl p-8 border border-[#E6E8F0] space-y-6">
+            <div className="flex gap-4 items-center">
+              <Skeleton className="w-16 h-16 rounded-2xl" />
+              <div className="space-y-2 flex-1">
+                <Skeleton className="h-7 w-2/3 rounded-lg" />
+                <Skeleton className="h-4 w-1/3 rounded-md" />
+              </div>
+            </div>
+            <Skeleton className="h-20 w-full rounded-xl" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Skeleton className="h-16 w-full rounded-xl" />
+              <Skeleton className="h-16 w-full rounded-xl" />
+              <Skeleton className="h-16 w-full rounded-xl" />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error || !uni) {
     return (
-      <div className="min-h-screen max-w-3xl mx-auto px-4 py-20 text-center space-y-4">
-        <h2 className="text-xl font-bold text-[#111965]">University Not Found</h2>
-        <p className="text-sm text-[#68708A]">The requested university profile could not be loaded.</p>
-        <button
-          onClick={() => router.back()}
-          className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#111965]"
-        >
-          Go Back
-        </button>
+      <div className="min-h-screen bg-[#F5F6FA] flex items-center justify-center p-4">
+        <div className="rounded-3xl bg-white border border-rose-200/80 p-8 sm:p-12 text-center shadow-xs space-y-4 max-w-md w-full">
+          <div className="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto shadow-2xs">
+            <WifiOff className="w-7 h-7" />
+          </div>
+          <div className="space-y-1.5">
+            <h2 className="text-lg font-black text-[#111965]">University Not Found</h2>
+            <p className="text-xs sm:text-sm text-[#68708A]">
+              We couldn't load this university profile. Please check your connection or try again.
+            </p>
+          </div>
+          <div className="pt-2 flex items-center justify-center gap-3">
+            <button
+              onClick={() => refetch()}
+              disabled={isFetching}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all disabled:opacity-60 cursor-pointer"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isFetching ? "animate-spin" : ""}`} />
+              <span>Try Again</span>
+            </button>
+            <button
+              onClick={() => router.back()}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
+            >
+              Go Back
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

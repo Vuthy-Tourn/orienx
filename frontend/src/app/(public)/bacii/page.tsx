@@ -2,7 +2,10 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
+import { FaqSection, FaqItem } from "@/components/home/faq-section";
+import { CtaBanner } from "@/components/home/cta-banner";
 import {
   GraduationCap,
   Sparkles,
@@ -23,6 +26,16 @@ import {
   Filter,
   ShieldCheck,
   Zap,
+  Clock,
+  Compass,
+  FileText,
+  Binary,
+  Scale,
+  Microscope,
+  Lightbulb,
+  TrendingUp,
+  Coins,
+  ChevronDown,
 } from "lucide-react";
 
 // =========================================================================
@@ -224,6 +237,46 @@ const BACII_GRADE_TIERS = [
   },
 ];
 
+// Presets for the Interactive Simulator
+const SIMULATOR_PRESETS = [
+  {
+    id: "tech-lead",
+    labelEn: "Software & AI Engineer",
+    labelKm: "វិស្វករសូហ្វវែរ & AI",
+    stream: "science" as const,
+    subjects: ["math", "informatics", "physics"],
+    budget: 1500,
+    icon: "💻",
+  },
+  {
+    id: "doctor",
+    labelEn: "Doctor & Pharmacist",
+    labelKm: "វេជ្ជបណ្ឌិត & ឱសថការី",
+    stream: "science" as const,
+    subjects: ["biology", "chemistry", "math"],
+    budget: 2500,
+    icon: "🩺",
+  },
+  {
+    id: "lawyer-diplomat",
+    labelEn: "Corporate Lawyer & Diplomat",
+    labelKm: "មេធាវី & អ្នកការទូត",
+    stream: "social" as const,
+    subjects: ["khmer", "english", "history"],
+    budget: 800,
+    icon: "⚖️",
+  },
+  {
+    id: "fintech-banker",
+    labelEn: "FinTech & Investment",
+    labelKm: "ហិរញ្ញវត្ថុ & ធនាគារ FinTech",
+    stream: "social" as const,
+    subjects: ["economics", "math", "english"],
+    budget: 1200,
+    icon: "📈",
+  },
+];
+
 // =========================================================================
 // Main Component
 // =========================================================================
@@ -231,10 +284,20 @@ export default function PublicBaciiGuidePage() {
   const { language } = useLanguage();
   const isKm = language === "km";
 
+  // Hero Quick Preview State
+  const [heroStream, setHeroStream] = useState<"science" | "social">("science");
+
   // Interactive Stream Prerequisite Simulator state
   const [selectedStream, setSelectedStream] = useState<"science" | "social">("science");
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>(["math", "physics"]);
   const [selectedBudget, setSelectedBudget] = useState<number>(1000);
+
+  // Apply a quick preset to the simulator
+  const applyPreset = (preset: (typeof SIMULATOR_PRESETS)[0]) => {
+    setSelectedStream(preset.stream);
+    setSelectedSubjects(preset.subjects);
+    setSelectedBudget(preset.budget);
+  };
 
   // Toggle subject selection in simulator
   const toggleSubject = (id: string) => {
@@ -282,8 +345,8 @@ export default function PublicBaciiGuidePage() {
           majorKm: "វិស្វកម្មសូហ្វវែរ & វិទ្យាសាស្ត្រកុំព្យូទ័រ",
           slug: "software-engineering",
           fitLevel: "high",
-          fitReasonEn: "Perfect Science stream subject alignment for algorithm formulation and logic.",
-          fitReasonKm: "ត្រូវគ្នាល្អឥតខ្ចោះជាមួយថ្នាក់វិទ្យាសាស្ត្រសម្រាប់ការសរសេរកូដ និងតក្កវិជ្ជា។",
+          fitReasonEn: "Perfect Science stream subject alignment for algorithm formulation, software architecture, and logic.",
+          fitReasonKm: "ត្រូវគ្នាល្អឥតខ្ចោះជាមួយថ្នាក់វិទ្យាសាស្ត្រសម្រាប់ការសរសេរកូដ តក្កវិជ្ជា និងស្ថាបត្យកម្មប្រព័ន្ធ។",
           universitiesEn: "CADT, ITC, RUPP, Paragon IU",
           universitiesKm: "CADT, ITC, RUPP, Paragon IU",
           typicalFee: "$600 – $2,500/yr",
@@ -293,8 +356,8 @@ export default function PublicBaciiGuidePage() {
           majorKm: "វិទ្យាសាស្ត្រទិន្នន័យ & បញ្ញាសិប្បនិម្មិត",
           slug: "data-science-ai",
           fitLevel: "high",
-          fitReasonEn: "Advanced Math is mandatory for statistical data modeling and machine learning.",
-          fitReasonKm: "គណិតវិទ្យាកម្រិតខ្ពស់ជាកាតព្វកិច្ចសម្រាប់ការវិភាគទិន្នន័យ និង AI។",
+          fitReasonEn: "Advanced Math is mandatory for statistical data modeling, vector calculus, and machine learning algorithms.",
+          fitReasonKm: "គណិតវិទ្យាកម្រិតខ្ពស់ជាកាតព្វកិច្ចសម្រាប់ការវិភាគទិន្នន័យ គំរូស្ថិតិ និង AI។",
           universitiesEn: "CADT, Paragon IU",
           universitiesKm: "CADT, Paragon IU",
           typicalFee: "$1,200 – $2,800/yr",
@@ -307,7 +370,7 @@ export default function PublicBaciiGuidePage() {
           majorKm: "វិស្វកម្មសំណង់ស៊ីវិល",
           slug: "civil-engineering",
           fitLevel: "high",
-          fitReasonEn: "Requires strong Physics and Calculus for ITC Concours entrance.",
+          fitReasonEn: "Requires strong Physics and Calculus foundations for ITC Concours entrance.",
           fitReasonKm: "ទាមទាររូបវិទ្យា និងគណិតវិទ្យារឹងមាំសម្រាប់ការប្រឡងចូល ITC Techno។",
           universitiesEn: "ITC Techno, RUPP",
           universitiesKm: "វិទ្យាស្ថានតិចណូ (ITC), RUPP",
@@ -317,11 +380,11 @@ export default function PublicBaciiGuidePage() {
 
       if (hasBiology || hasChemistry) {
         matches.push({
-          majorEn: "General Medicine & Pharmacy",
-          majorKm: "វេជ្ជសាស្ត្រទូទៅ និងឱសថសាស្ត្រ",
+          majorEn: "General Medicine, Pharmacy & Dentistry",
+          majorKm: "វេជ្ជសាស្ត្រទូទៅ ឱសថសាស្ត្រ & ទន្តសាស្ត្រ",
           slug: "medicine",
           fitLevel: "high",
-          fitReasonEn: "High Biology & Chemistry scores mandatory for UHS entrance concours.",
+          fitReasonEn: "High Biology & Chemistry scores mandatory for UHS national medical entrance concours.",
           fitReasonKm: "ពិន្ទុជីវវិទ្យា និងគីមីវិទ្យាខ្ពស់ជាកាតព្វកិច្ចសម្រាប់ការប្រឡងចូលសាលាក្រហម (UHS)។",
           universitiesEn: "UHS, University of Puthisastra",
           universitiesKm: "សាកលវិទ្យាល័យវិទ្យាសាស្ត្រសុខាភិបាល (UHS), UP",
@@ -336,8 +399,8 @@ export default function PublicBaciiGuidePage() {
           majorKm: "នីតិសាស្ត្រ និងរដ្ឋបាលសាធារណៈ",
           slug: "law",
           fitLevel: "high",
-          fitReasonEn: "Deep textual comprehension and Khmer literature align with statutory law.",
-          fitReasonKm: "ការយល់ដឹងភាសាស៊ីជម្រៅ និងអក្សរសាស្ត្រត្រូវគ្នានឹងការសិក្សាច្បាប់។",
+          fitReasonEn: "Deep textual comprehension, ethics, and Khmer literature align with statutory law and constitutional analysis.",
+          fitReasonKm: "ការយល់ដឹងភាសាស៊ីជម្រៅ សីលធម៌ និងអក្សរសាស្ត្រត្រូវគ្នានឹងការសិក្សាច្បាប់ និងរដ្ឋបាលសាធារណៈ។",
           universitiesEn: "RULE (Royal Univ. of Law & Economics)",
           universitiesKm: "សាកលវិទ្យាល័យភូមិន្ទនីតិសាស្ត្រ និងវិទ្យាសាស្ត្រសេដ្ឋកិច្ច (RULE)",
           typicalFee: "$500 – $800/yr",
@@ -347,8 +410,8 @@ export default function PublicBaciiGuidePage() {
           majorKm: "ទំនាក់ទំនងអន្តរជាតិ & ការទូត",
           slug: "international-relations",
           fitLevel: "high",
-          fitReasonEn: "Geopolitics, history, and foreign language fluency fit diplomatic studies.",
-          fitReasonKm: "ភូមិសាស្ត្រនយោបាយ ប្រវត្តិវិទ្យា និងភាសាបរទេសត្រូវគ្នានឹងកិច្ចការទូត។",
+          fitReasonEn: "Geopolitics, world history, and foreign language fluency fit diplomatic service and policy analysis.",
+          fitReasonKm: "ភូមិសាស្ត្រនយោបាយ ប្រវត្តិវិទ្យា និងភាសាបរទេសត្រូវគ្នានឹងកិច្ចការទូត និងវិទ្យាសាស្ត្រនយោបាយ។",
           universitiesEn: "IISPP (RUPP), Paragon IU",
           universitiesKm: "វិទ្យាស្ថានសិក្សាអន្តរជាតិ (IISPP / RUPP), Paragon IU",
           typicalFee: "$750 – $2,500/yr",
@@ -357,13 +420,13 @@ export default function PublicBaciiGuidePage() {
 
       if (hasEconomics || hasEnglish || hasMath) {
         matches.push({
-          majorEn: "Banking, Finance & Accounting",
-          majorKm: "ធនាគារ ហិរញ្ញវត្ថុ & គណនេយ្យ",
+          majorEn: "Banking, Finance & FinTech",
+          majorKm: "ធនាគារ ហិរញ្ញវត្ថុ & បច្ចេកវិទ្យាហិរញ្ញវត្ថុ",
           slug: "banking-finance",
           fitLevel: "high",
-          fitReasonEn: "Direct alignment with Cambodian commercial banking and corporate accounting.",
-          fitReasonKm: "ត្រូវគ្នាដោយផ្ទាល់ជាមួយទីផ្សារធនាគារពាណិជ្ជកម្ម និងគណនេយ្យនៅកម្ពុជា។",
-          universitiesEn: "NUM, CamEd, RULE",
+          fitReasonEn: "Direct alignment with commercial banking, investment portfolios, and corporate accounting in Cambodia.",
+          fitReasonKm: "ត្រូវគ្នាដោយផ្ទាល់ជាមួយទីផ្សារធនាគារពាណិជ្ជកម្ម វិនិយោគ និងគណនេយ្យនៅកម្ពុជា។",
+          universitiesEn: "NUM, CamEd Business School, RULE",
           universitiesKm: "NUM, CamEd Business School, RULE",
           typicalFee: "$600 – $2,400/yr",
         });
@@ -371,125 +434,372 @@ export default function PublicBaciiGuidePage() {
 
       // Cross-stream warning note
       matches.push({
-        majorEn: "Computer Science (Bridging Track)",
+        majorEn: "Computer Science (Math Bridging Track)",
         majorKm: "វិទ្យាសាស្ត្រកុំព្យូទ័រ (វគ្គបំប៉នគណិតវិទ្យា)",
         slug: "software-engineering",
         fitLevel: "bridge-needed",
-        fitReasonEn: "Possible at select private universities, but requires supplementary math courses.",
-        fitReasonKm: "អាចចូលរៀនបាននៅសាកលវិទ្យាល័យឯកជនមួយចំនួន ប៉ុន្តែត្រូវរៀនបំប៉នគណិតវិទ្យាបន្ថែម។",
-        universitiesEn: "Select Private Universities",
-        universitiesKm: "សាកលវិទ្យាល័យឯកជនមួយចំនួន",
-        typicalFee: "$1,200 – $2,200/yr",
+        fitReasonEn: "Accessible at select private universities, but requires supplementary foundation-year math courses.",
+        fitReasonKm: "អាចចូលរៀនបាននៅសាកលវិទ្យាល័យឯកជនមួយចំនួន ប៉ុន្តែត្រូវរៀនបំប៉នគណិតវិទ្យាបន្ថែមនៅឆ្នាំទីមួយ។",
+        universitiesEn: "CADT (Foundation), Private Universities",
+        universitiesKm: "CADT (វគ្គត្រៀម), សាកលវិទ្យាល័យឯកជន",
+        typicalFee: "$1,200 – $2,500/yr",
       });
     }
 
     return matches;
   }, [selectedStream, selectedSubjects, selectedBudget]);
 
+  // Tailored BACII-specific FAQ items
+  const baciiFaqs = useMemo<FaqItem[]>(() => {
+    return [
+      {
+        id: "faq-social-to-tech",
+        question: isKm
+          ? "តើខ្ញុំអាចរៀនផ្នែក IT ឬវិទ្យាសាស្ត្រកុំព្យូទ័របានទេ ប្រសិនបើខ្ញុំរៀនថ្នាក់សង្គម?"
+          : "Can I study Computer Science or IT if I graduated from the Social Science Stream?",
+        answer: isKm
+          ? "អាចបាន! សាកលវិទ្យាល័យរដ្ឋដូចជា ITC និង RUPP ដេប៉ាតឺម៉ង់ IT តម្រូវឱ្យប្រឡងគណិតវិទ្យាវិទ្យាសាស្ត្រ ប៉ុន្តែសាកលវិទ្យាល័យឯកជន និងវិទ្យាស្ថានបច្ចេកវិទ្យាមួយចំនួន (ដូចជា CADT ក្នុងវគ្គត្រៀម ឬ Paragon IU) អនុញ្ញាតឱ្យសិស្សថ្នាក់សង្គមចូលរៀនបាន ដោយតម្រូវឱ្យរៀនវគ្គបំប៉នគណិតវិទ្យា និងមូលដ្ឋានកូដនៅឆ្នាំទីមួយ (Foundation Year)។"
+          : "Yes! While selective public institutions like ITC and CADT strictly test advanced calculus and physics in their competitive entrance concourses, several accredited universities accept Social Stream students with mandatory foundation-year bridging math classes.",
+      },
+      {
+        id: "faq-concours-meaning",
+        question: isKm
+          ? "តើអ្វីទៅជា 'ការប្រឡងប្រជែងចូលរៀន (Concourse)' ហើយសាកលវិទ្យាល័យណាខ្លះដែលតម្រូវ?"
+          : "What is an Entrance Concourse (ការប្រឡងប្រជែង) and which Cambodian universities require it?",
+        answer: isKm
+          ? "ការប្រឡងប្រជែង (Concours d'Entrée) គឺជាការប្រឡងជ្រើសរើសសមត្ថភាពបន្ថែមបន្ទាប់ពីជាប់បាក់ឌុប ដើម្បីចូលរៀននៅមហាវិទ្យាល័យរដ្ឋល្បីៗដែលមានការប្រកួតប្រជែងខ្ពស់ ដូចជា វិទ្យាស្ថានបច្ចេកវិទ្យាកម្ពុជា (ITC), សាកលវិទ្យាល័យវិទ្យាសាស្ត្រសុខាភិបាល (UHS), វិទ្យាស្ថានបច្ចេកវិទ្យាឌីជីថលកម្ពុជា (CADT), និងដេប៉ាតឺម៉ង់ព័ត៌មានវិទ្យា/ភាសាបរទេសនៅ RUPP។"
+          : "An Entrance Concourse is a competitive post-BACII examination required by top selective state and specialized institutions in Cambodia (such as ITC Techno, UHS Medical School, CADT Digital Talent, and RUPP CS/IFL). Admission is determined by exam ranking rather than high school grades alone.",
+      },
+      {
+        id: "faq-moeys-scholarships",
+        question: isKm
+          ? "តើអាហារូបករណ៍រដ្ឋ MoEYS ដំណើរការយ៉ាងដូចម្តេច ហើយនិទ្ទេសណាខ្លះមានសិទ្ធិ?"
+          : "How do MoEYS State Scholarships work and which BACII grades qualify?",
+        answer: isKm
+          ? "សិស្សនិទ្ទេស A ទទួលបានអាហារូបករណ៍រដ្ឋ ១០០% ដោយស្វ័យប្រវត្តិតាមការជ្រើសរើស។ សិស្សនិទ្ទេស B, C និង D អាចដាក់ពាក្យស្នើសុំកូតាអាហារូបករណ៍រដ្ឋតាមមុខវិជ្ជាអាទិភាព (STEM, កសិកម្ម, សេដ្ឋកិច្ច) និងកូតាអាទិភាពសម្រាប់សិស្សនារី និងសិស្សមកពីបណ្តាខេត្ត។"
+          : "Grade A students receive 100% full-ride MoEYS priority state scholarships automatically upon university selection. Grade B, C, and D students qualify for ministerial scholarship quotas across priority disciplines (STEM, Agriculture, Digital Economy) as well as provincial and female student quotas.",
+      },
+      {
+        id: "faq-budget-factoring",
+        question: isKm
+          ? "តើប្រព័ន្ធ OrienX ពិចារណាលើលទ្ធភាពហិរញ្ញវត្ថុគ្រួសារខ្ញុំយ៉ាងដូចម្តេច?"
+          : "How does OrienX factor in my family's financial situation?",
+        answer: isKm
+          ? "នៅក្នុងតេស្តចំណូលចិត្តសិក្សា អ្នកអាចកំណត់កម្រិតថវិកាប្រចាំឆ្នាំ ($៥០០ ដល់ $៥,០០០+)។ ប្រព័ន្ធ AI នឹងមិនណែនាំសាកលវិទ្យាល័យដែលលើសពីលទ្ធភាពរបស់អ្នកឡើយ លើកលែងតែកម្មវិធីនោះមានអាហារូបករណ៍ ១០០% ត្រូវគ្នានឹងនិទ្ទេសរបស់អ្នក។"
+          : "In the Academic Preferences assessment, you specify your annual tuition budget ($400 to $5,000+). Our matching algorithm will never recommend out-of-budget programs unless you qualify for 100% full-ride state scholarships (MoEYS or CADT).",
+      },
+      {
+        id: "faq-matching-weight",
+        question: isKm
+          ? "តើទម្ងន់នៃតេស្តចំណូលចិត្តសិក្សាមានប៉ុន្មានភាគរយក្នុងរូបមន្តផ្គូផ្គងរបស់ OrienX?"
+          : "What weight does this prerequisite test carry in OrienX's matching formula?",
+        answer: isKm
+          ? "តេស្តចំណូលចិត្ត និងថ្នាក់បាក់ឌុបមានទម្ងន់ ២៥% នៅក្នុងរូបមន្តវិទ្យាសាស្ត្រ ១០០% របស់ OrienX (៣០% RIASEC + ២៥% បុគ្គលិកលក្ខណៈ MBTI + ២៥% ថ្នាក់បាក់ឌុប និងមុខវិជ្ជាពូកែ + ២០% ទីផ្សារការងារ NEA)។"
+          : "The BACII Stream and Academic Preferences test represents 25% of OrienX's 4-Pillar Scientific Formula (30% RIASEC + 25% 16-Personality + 25% BACII Prerequisites + 20% Cambodian Labor Demand).",
+      },
+    ];
+  }, [isKm]);
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 selection:bg-[#F7CE4D]/30">
+    <div className="min-h-screen bg-[#F8FAFD] text-[#111965] selection:bg-[#F7CE4D] selection:text-[#111965] pb-24">
       {/* =========================================================================
-          HERO SECTION
+          HERO SECTION (SPLIT 2-COLUMN WITH SEAMLESS SKYLINE BACKDROP)
           ========================================================================= */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0e144a] via-[#111965] to-[#18237c] text-white pt-24 pb-20 md:pt-32 md:pb-28">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/15 via-transparent to-transparent pointer-events-none" />
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-[#F7CE4D]/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative w-full overflow-hidden bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white border-b border-white/10 py-12 sm:py-16 lg:py-20 select-none">
+        {/* Subtle Ambient Illumination */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(247,206,77,0.12),transparent_70%)] pointer-events-none" />
+        <div className="absolute top-1/4 right-1/6 w-[400px] h-[400px] rounded-full bg-[#1B6EF3]/12 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/4 left-1/6 w-[400px] h-[400px] rounded-full bg-[#F7CE4D]/10 blur-[120px] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl mx-auto text-center space-y-6">
-            {/* Super Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-semibold text-emerald-300 shadow-sm">
-              <GraduationCap className="w-4 h-4 text-emerald-400" />
-              <span>
-                {isKm
-                  ? "លក្ខខណ្ឌតម្រូវសាកលវិទ្យាល័យ & ថ្នាក់បាក់ឌុបជាតិ"
-                  : "MoEYS & University Prerequisite Validator"}
-              </span>
+        {/* Seamless Cambodian Campuses Skyline Backdrop */}
+        <div
+          className="absolute inset-x-0 bottom-0 pointer-events-none select-none overflow-hidden h-[380px] sm:h-[450px] lg:h-[500px] z-0"
+          style={{
+            WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 45%, rgba(0,0,0,0) 100%)",
+            maskImage: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 45%, rgba(0,0,0,0) 100%)",
+          }}
+        >
+          <Image
+            src="/images/cambodia-campuses-skyline-seamless.webp"
+            alt="Cambodian University Campuses Backdrop"
+            fill
+            unoptimized
+            priority
+            className="object-cover object-bottom opacity-15 sm:opacity-20"
+          />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Column: Heading, Subtitle, Trust Badges & CTAs */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              {/* Category / Verified Pill */}
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold border border-emerald-500/30 backdrop-blur-xs">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                <span>
+                  {isKm
+                    ? "ស្តង់ដារក្រសួងអប់រំ MoEYS & លក្ខខណ្ឌតម្រូវសាកលវិទ្យាល័យ"
+                    : "MoEYS Grade 12 National Exam & Higher Ed Prerequisite Engine"}
+                </span>
+              </div>
+
+              {/* Headline */}
+              <div className="space-y-2">
+                <h1 className="text-3xl sm:text-5xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                  {isKm ? (
+                    <>
+                      ផ្ទៀងផ្ទាត់ថ្នាក់បាក់ឌុប <br className="hidden sm:inline" />
+                      <span className="text-[#F7CE4D]">& លក្ខខណ្ឌតម្រូវសាកលវិទ្យាល័យ</span>
+                    </>
+                  ) : (
+                    <>
+                      Verify Your BACII Stream <br className="hidden sm:inline" />
+                      <span className="text-[#F7CE4D]">& University Prerequisites</span>
+                    </>
+                  )}
+                </h1>
+                <p className="text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
+                  {isKm
+                    ? "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នារវាងថ្នាក់វិទ្យាសាស្ត្រពិត ឬវិទ្យាសាស្ត្រសង្គម មុខវិជ្ជាពូកែ និងកម្រិតថវិកាសិក្សា ជាមួយលក្ខខណ្ឌចូលរៀនផ្លូវការនៃសាកលវិទ្យាល័យជាង ៥០ នៅកម្ពុជា ដើម្បីជៀសវាងការជ្រើសរើសខុសជំនាញ។"
+                    : "Cross-validate your Grade 12 National Exam track (Science vs. Social stream), strongest high school subjects, and tuition budget against official admission criteria across 50+ Cambodian universities to prevent costly major dropouts."}
+                </p>
+              </div>
+
+              {/* Action CTAs */}
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+                <Link
+                  href="/dashboard/assessments/preferences"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-[0_4px_24px_rgba(247,206,77,0.3)] hover:shadow-[0_6px_28px_rgba(247,206,77,0.45)] transition-all active:scale-98 cursor-pointer"
+                >
+                  <Sparkles className="w-4 h-4 text-[#111965]" />
+                  <span>{isKm ? "ចាប់ផ្តើមបំពេញចំណូលចិត្ត (៥ នាទី)" : "Start Preference Diagnostic (5 Mins)"}</span>
+                  <ArrowRight className="w-4 h-4 text-[#111965]" />
+                </Link>
+
+                <a
+                  href="#stream-comparison"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md shadow-sm transition-all text-center cursor-pointer"
+                >
+                  <Layers className="w-4 h-4 text-[#F7CE4D]" />
+                  <span>{isKm ? "ប្រៀបធៀបថ្នាក់ទាំងពីរ" : "Compare Streams"}</span>
+                </a>
+              </div>
+
+              {/* Trust & Localized Metrics */}
+              <div className="pt-4 border-t border-white/10 flex flex-wrap items-center gap-5 text-xs font-semibold text-slate-300">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
+                  <span>{isKm ? "២ ថ្នាក់ (វិទ្យាសាស្ត្រ & សង្គម)" : "2 Tracks (Science & Social)"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
+                  <span>{isKm ? "១០ មុខវិជ្ជាស្នូលបាក់ឌុប" : "10 Core Exam Subjects"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
+                  <span>{isKm ? "៥០+ សាកលវិទ្យាល័យកម្ពុជា" : "50+ Cambodian Institutions"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
+                  <span>{isKm ? "ឥតគិតថ្លៃ ១០០%" : "100% Free for Students"}</span>
+                </div>
+              </div>
             </div>
 
-            {/* Title */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-[1.15]">
-              {isKm ? (
-                <>
-                  ផ្ទៀងផ្ទាត់ថ្នាក់បាក់ឌុប <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F7CE4D] to-amber-300">
-                    & លក្ខខណ្ឌតម្រូវសាកលវិទ្យាល័យ
+            {/* Right Column: Interactive Hero Stream Quick-Inspector Card */}
+            <div className="lg:col-span-5">
+              <div className="relative rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 p-5 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.35)] space-y-5">
+                {/* Card Header & Stream Switcher */}
+                <div className="flex items-center justify-between gap-2 border-b border-white/15 pb-4">
+                  <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-slate-300">
+                    <Compass className="w-4 h-4 text-[#F7CE4D]" />
+                    <span>{isKm ? "មើលទិដ្ឋភាពថ្នាក់បាក់ឌុប" : "Quick Stream Inspector"}</span>
+                  </div>
+                  <div className="flex bg-black/30 p-1 rounded-xl border border-white/10">
+                    <button
+                      type="button"
+                      onClick={() => setHeroStream("science")}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        heroStream === "science"
+                          ? "bg-blue-600 text-white shadow-xs"
+                          : "text-slate-300 hover:text-white"
+                      }`}
+                    >
+                      {isKm ? "វិទ្យាសាស្ត្រ" : "Science"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setHeroStream("social")}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                        heroStream === "social"
+                          ? "bg-emerald-600 text-white shadow-xs"
+                          : "text-slate-300 hover:text-white"
+                      }`}
+                    >
+                      {isKm ? "សង្គម" : "Social"}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Dynamic Stream Content */}
+                {heroStream === "science" ? (
+                  <div className="space-y-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30 mb-1">
+                          STEM Track • ថ្នាក់វិទ្យាសាស្ត្រពិត
+                        </span>
+                        <h3 className="text-base sm:text-lg font-black text-white">
+                          {STREAM_PROFILES.science.nameEn}
+                        </h3>
+                      </div>
+                      <span className="text-2xl">🔬</span>
+                    </div>
+
+                    {/* Entrance Concourses */}
+                    <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
+                        <span>{isKm ? "ការប្រឡងប្រជែងចូលរៀនស្នូល" : "Major Competitive Entrance Concourses"}</span>
+                        <span className="text-[10px] text-blue-300 font-mono">MoEYS</span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-slate-200">
+                        <div className="flex items-center gap-1.5 truncate">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                          <span className="truncate">ITC Techno Concours</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 truncate">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                          <span className="truncate">CADT Techo Talent Exam</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 truncate">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                          <span className="truncate">UHS Medical Concours</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 truncate">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                          <span className="truncate">RUPP CS Entrance Test</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Top Majors Unlocked */}
+                    <div className="space-y-1.5">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-300">
+                        {isKm ? "ជំនាញបើកទូលាយដោយផ្ទាល់" : "Direct Unlocked Pathways"}
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-200 border border-blue-400/30 text-xs font-semibold">
+                          Software & AI
+                        </span>
+                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-200 border border-blue-400/30 text-xs font-semibold">
+                          Civil Engineering
+                        </span>
+                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-200 border border-blue-400/30 text-xs font-semibold">
+                          Medicine & Pharmacy
+                        </span>
+                        <span className="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-200 border border-blue-400/30 text-xs font-semibold">
+                          Robotics
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 mb-1">
+                          Humanities & Business • ថ្នាក់វិទ្យាសាស្ត្រសង្គម
+                        </span>
+                        <h3 className="text-base sm:text-lg font-black text-white">
+                          {STREAM_PROFILES.social.nameEn}
+                        </h3>
+                      </div>
+                      <span className="text-2xl">📚</span>
+                    </div>
+
+                    {/* Entrance Concourses */}
+                    <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
+                        <span>{isKm ? "ការប្រឡងប្រជែងចូលរៀនស្នូល" : "Major Competitive Entrance Concourses"}</span>
+                        <span className="text-[10px] text-emerald-300 font-mono">MoEYS</span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-slate-200">
+                        <div className="flex items-center gap-1.5 truncate">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                          <span className="truncate">RULE Law Concours</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 truncate">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                          <span className="truncate">IISPP International Relations</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 truncate">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                          <span className="truncate">DMC Media & Journalism</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 truncate">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                          <span className="truncate">NUM FinTech Track</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Top Majors Unlocked */}
+                    <div className="space-y-1.5">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-300">
+                        {isKm ? "ជំនាញបើកទូលាយដោយផ្ទាល់" : "Direct Unlocked Pathways"}
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-xs font-semibold">
+                          Law & Jurisprudence
+                        </span>
+                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-xs font-semibold">
+                          International Relations
+                        </span>
+                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-xs font-semibold">
+                          FinTech & Banking
+                        </span>
+                        <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 text-xs font-semibold">
+                          Digital Media
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Jump to Interactive Simulator below */}
+                <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
+                  <span className="text-slate-300 font-medium">
+                    {isKm ? "ចង់សាកល្បងមុខវិជ្ជាជាក់លាក់របស់អ្នក?" : "Want to test your exact subjects?"}
                   </span>
-                </>
-              ) : (
-                <>
-                  BACII High School Stream <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F7CE4D] to-amber-300">
-                    & University Prerequisite Validator
-                  </span>
-                </>
-              )}
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-200/90 leading-relaxed font-normal">
-              {isKm
-                ? "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នារវាងថ្នាក់វិទ្យាសាស្ត្រពិត ឬវិទ្យាសាស្ត្រសង្គម មុខវិជ្ជាពូកែ និងកម្រិតថវិកាសិក្សា ជាមួយលក្ខខណ្ឌចូលរៀនផ្លូវការនៃសាកលវិទ្យាល័យជាង ៥០ នៅកម្ពុជា ដើម្បីជៀសវាងការជ្រើសរើសខុសជំនាញ។"
-                : "Cross-validate your Grade 12 National Exam track (Science vs. Social stream), strongest subjects, and tuition budget against admission criteria across 50+ Cambodian universities to prevent costly major dropouts."}
-            </p>
-
-            {/* Key Metrics Pill Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 pb-2">
-              <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-3 text-center">
-                <div className="text-xl sm:text-2xl font-black text-[#F7CE4D]">2 Streams</div>
-                <div className="text-xs text-slate-300 mt-0.5">{isKm ? "វិទ្យាសាស្ត្រ & សង្គម" : "Science & Social"}</div>
+                  <a
+                    href="#live-simulator"
+                    className="text-[#F7CE4D] hover:underline font-bold inline-flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>{isKm ? "តេស្តក្នុងម៉ាស៊ីនពិសោធន៍" : "Try Simulator"}</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
-              <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-3 text-center">
-                <div className="text-xl sm:text-2xl font-black text-white">10 Subjects</div>
-                <div className="text-xs text-slate-300 mt-0.5">{isKm ? "មុខវិជ្ជាស្នូលវិភាគ" : "Core Subjects"}</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-3 text-center">
-                <div className="text-xl sm:text-2xl font-black text-emerald-400">50+ Univs</div>
-                <div className="text-xs text-slate-300 mt-0.5">{isKm ? "សាកលវិទ្យាល័យកម្ពុជា" : "Cambodian Inst."}</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-3 text-center">
-                <div className="text-xl sm:text-2xl font-black text-blue-400">MoEYS</div>
-                <div className="text-xs text-slate-300 mt-0.5">{isKm ? "ស្តង់ដារក្រសួងអប់រំ" : "Official Criteria"}</div>
-              </div>
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
-              <Link
-                href="/dashboard/assessments/preferences"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#F7CE4D] to-amber-400 text-[#111965] font-bold shadow-lg shadow-amber-400/20 hover:brightness-105 active:scale-[0.98] transition-all"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>{isKm ? "ចាប់ផ្តើមបំពេញចំណូលចិត្ត (៥ នាទី)" : "Start Preference Diagnostic (5 Mins)"}</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/majors"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium border border-white/20 transition-all"
-              >
-                <BookOpen className="w-4 h-4 text-slate-300" />
-                <span>{isKm ? "ស្វែងរកជំនាញសាកលវិទ្យាល័យ" : "Explore Cambodian Majors"}</span>
-              </Link>
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION 1: SCIENCE STREAM VS SOCIAL STREAM COMPARISON
+          SECTION 1: SCIENCE STREAM VS SOCIAL STREAM COMPARISON (BENTO SHOWCASE)
           ========================================================================= */}
-      <section className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="stream-comparison" className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
-            <Layers className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 border border-[#111965]/10 text-[11px] font-bold text-[#111965] tracking-wider uppercase">
+            <Layers className="w-3.5 h-3.5 text-[#F7CE4D]" />
             <span>{isKm ? "ការប្រៀបធៀបថ្នាក់បាក់ឌុបទាំងពីរ" : "High School Stream Comparison"}</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
             {isKm
               ? "ថ្នាក់វិទ្យាសាស្ត្រពិត ទល់នឹង ថ្នាក់វិទ្យាសាស្ត្រសង្គម"
               : "Science Stream vs. Social Science Stream"}
           </h2>
-          <p className="text-sm sm:text-base text-slate-600">
+          <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
             {isKm
               ? "ស្វែងយល់ពីភាពខុសគ្នានៃមុខវិជ្ជាស្នូល ការប្រឡងប្រជែងចូលរៀន និងឱកាសជំនាញដែលបើកទូលាយសម្រាប់ថ្នាក់នីមួយៗ។"
               : "Understand how your Grade 12 stream directly governs which university majors and competitive entrance exams you qualify for."}
@@ -498,23 +808,23 @@ export default function PublicBaciiGuidePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* SCIENCE STREAM CARD */}
-          <div className="rounded-2xl border-2 border-blue-200 bg-white p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full pointer-events-none" />
+          <div className="rounded-3xl border-2 border-blue-200 bg-white p-6 sm:p-8 shadow-[0_10px_30px_rgba(37,99,235,0.06)] hover:shadow-[0_16px_40px_rgba(37,99,235,0.12)] transition-all relative overflow-hidden flex flex-col justify-between">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-blue-100 to-transparent rounded-bl-full pointer-events-none" />
             <div className="relative space-y-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800 mb-2">
+                  <span className="inline-block px-3 py-1 rounded-full text-xs font-black bg-blue-100 text-blue-800 mb-2 border border-blue-200">
                     STEM Pathway • ថ្នាក់វិទ្យាសាស្ត្រពិត
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-extrabold text-[#111965]">
+                  <h3 className="text-xl sm:text-2xl font-black text-[#111965]">
                     {STREAM_PROFILES.science.nameEn}
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1 font-medium">
                     {isKm ? STREAM_PROFILES.science.shortDescKm : STREAM_PROFILES.science.shortDescEn}
                   </p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-blue-500/20">
-                  <GraduationCap className="w-6 h-6" />
+                <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/25">
+                  <Microscope className="w-7 h-7" />
                 </div>
               </div>
 
@@ -525,7 +835,7 @@ export default function PublicBaciiGuidePage() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {(isKm ? STREAM_PROFILES.science.coreSubjectsKm : STREAM_PROFILES.science.coreSubjectsEn).map((sub, idx) => (
-                    <span key={idx} className="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-800 text-xs font-semibold border border-blue-200/60">
+                    <span key={idx} className="px-3 py-1 rounded-xl bg-blue-50 text-blue-800 text-xs font-bold border border-blue-200">
                       {sub}
                     </span>
                   ))}
@@ -537,9 +847,9 @@ export default function PublicBaciiGuidePage() {
                 <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
                   {isKm ? "ការប្រឡងប្រជែងចូលរៀនស្នូល" : "Major Competitive Entrance Concourses"}
                 </div>
-                <ul className="space-y-1.5 text-xs sm:text-sm text-slate-700">
+                <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
                   {(isKm ? STREAM_PROFILES.science.keyEntranceExamsKm : STREAM_PROFILES.science.keyEntranceExamsEn).map((exam, idx) => (
-                    <li key={idx} className="flex items-center gap-2">
+                    <li key={idx} className="flex items-center gap-2 font-medium">
                       <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
                       <span>{exam}</span>
                     </li>
@@ -548,24 +858,24 @@ export default function PublicBaciiGuidePage() {
               </div>
 
               {/* Sample High-Fit Majors */}
-              <div className="space-y-2 pt-2 border-t border-slate-100">
+              <div className="space-y-2.5 pt-3 border-t border-slate-100">
                 <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
                   {isKm ? "ជំនាញសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុត" : "Direct University Majors Unlocked"}
                 </div>
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {STREAM_PROFILES.science.topMajors.map((m, idx) => (
                     <Link
                       key={idx}
                       href={`/majors/${m.slug}`}
-                      className="block p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50/60 border border-slate-200/80 hover:border-blue-300 transition-all group"
+                      className="p-3 rounded-2xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 transition-all group block"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs sm:text-sm font-semibold text-slate-800 group-hover:text-blue-700">
+                        <span className="text-xs font-bold text-slate-800 group-hover:text-blue-700 truncate pr-1">
                           {isKm ? m.nameKm : m.nameEn}
                         </span>
-                        <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
+                        <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all shrink-0" />
                       </div>
-                      <span className="text-[11px] text-slate-500 font-medium">Univ: {m.univ}</span>
+                      <span className="text-[10px] text-slate-500 font-semibold mt-0.5 block truncate">Univ: {m.univ}</span>
                     </Link>
                   ))}
                 </div>
@@ -574,23 +884,23 @@ export default function PublicBaciiGuidePage() {
           </div>
 
           {/* SOCIAL SCIENCE STREAM CARD */}
-          <div className="rounded-2xl border-2 border-emerald-200 bg-white p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-bl-full pointer-events-none" />
+          <div className="rounded-3xl border-2 border-emerald-200 bg-white p-6 sm:p-8 shadow-[0_10px_30px_rgba(5,150,105,0.06)] hover:shadow-[0_16px_40px_rgba(5,150,105,0.12)] transition-all relative overflow-hidden flex flex-col justify-between">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-emerald-100 to-transparent rounded-bl-full pointer-events-none" />
             <div className="relative space-y-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 mb-2">
+                  <span className="inline-block px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 mb-2 border border-emerald-200">
                     Humanities & Business • ថ្នាក់វិទ្យាសាស្ត្រសង្គម
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-extrabold text-[#111965]">
+                  <h3 className="text-xl sm:text-2xl font-black text-[#111965]">
                     {STREAM_PROFILES.social.nameEn}
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1 font-medium">
                     {isKm ? STREAM_PROFILES.social.shortDescKm : STREAM_PROFILES.social.shortDescEn}
                   </p>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/20">
-                  <BookOpen className="w-6 h-6" />
+                <div className="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/25">
+                  <Scale className="w-7 h-7" />
                 </div>
               </div>
 
@@ -601,7 +911,7 @@ export default function PublicBaciiGuidePage() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {(isKm ? STREAM_PROFILES.social.coreSubjectsKm : STREAM_PROFILES.social.coreSubjectsEn).map((sub, idx) => (
-                    <span key={idx} className="px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200/60">
+                    <span key={idx} className="px-3 py-1 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
                       {sub}
                     </span>
                   ))}
@@ -613,9 +923,9 @@ export default function PublicBaciiGuidePage() {
                 <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
                   {isKm ? "ការប្រឡងប្រជែងចូលរៀនស្នូល" : "Major Competitive Entrance Concourses"}
                 </div>
-                <ul className="space-y-1.5 text-xs sm:text-sm text-slate-700">
+                <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
                   {(isKm ? STREAM_PROFILES.social.keyEntranceExamsKm : STREAM_PROFILES.social.keyEntranceExamsEn).map((exam, idx) => (
-                    <li key={idx} className="flex items-center gap-2">
+                    <li key={idx} className="flex items-center gap-2 font-medium">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                       <span>{exam}</span>
                     </li>
@@ -624,28 +934,49 @@ export default function PublicBaciiGuidePage() {
               </div>
 
               {/* Sample High-Fit Majors */}
-              <div className="space-y-2 pt-2 border-t border-slate-100">
+              <div className="space-y-2.5 pt-3 border-t border-slate-100">
                 <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
                   {isKm ? "ជំនាញសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុត" : "Direct University Majors Unlocked"}
                 </div>
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {STREAM_PROFILES.social.topMajors.map((m, idx) => (
                     <Link
                       key={idx}
                       href={`/majors/${m.slug}`}
-                      className="block p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50/60 border border-slate-200/80 hover:border-emerald-300 transition-all group"
+                      className="p-3 rounded-2xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 transition-all group block"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs sm:text-sm font-semibold text-slate-800 group-hover:text-emerald-700">
+                        <span className="text-xs font-bold text-slate-800 group-hover:text-emerald-700 truncate pr-1">
                           {isKm ? m.nameKm : m.nameEn}
                         </span>
-                        <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+                        <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all shrink-0" />
                       </div>
-                      <span className="text-[11px] text-slate-500 font-medium">Univ: {m.univ}</span>
+                      <span className="text-[10px] text-slate-500 font-semibold mt-0.5 block truncate">Univ: {m.univ}</span>
                     </Link>
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* The Social to Tech Bridge Callout */}
+        <div className="mt-8 p-6 rounded-3xl bg-gradient-to-r from-blue-50 via-indigo-50 to-emerald-50 border border-indigo-200/80 shadow-2xs">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-[#111965] text-[#F7CE4D] flex items-center justify-center shrink-0 shadow-md">
+              <Lightbulb className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <h4 className="text-sm sm:text-base font-black text-[#111965]">
+                {isKm
+                  ? "តើអ្នករៀនថ្នាក់សង្គមអាចប្តូរមករៀនបច្ចេកវិទ្យា (IT & Software) បានទេ?"
+                  : "Can a Social Science Student Pivot to Computer Science in Cambodia?"}
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+                {isKm
+                  ? "បានយ៉ាងពិតប្រាកដ! សាកលវិទ្យាល័យឯកជន និងវិទ្យាស្ថានបច្ចេកវិទ្យាឈានមុខ (ដូចជា CADT និង Paragon IU) មានវគ្គបំប៉នគណិតវិទ្យា និងមូលដ្ឋានសរសេរកូដនៅឆ្នាំទីមួយ ដើម្បីជួយសិស្សថ្នាក់សង្គមដែលមានបំណងប្រាថ្នារៀន IT ទទួលបានជោគជ័យ។"
+                  : "Absolutely! Leading private universities and digital academies (such as CADT Foundation Year and Paragon IU) offer specialized bridging calculus and coding foundation classes to help motivated Social stream students excel in tech careers."}
+              </p>
             </div>
           </div>
         </div>
@@ -654,68 +985,86 @@ export default function PublicBaciiGuidePage() {
       {/* =========================================================================
           SECTION 2: INTERACTIVE PREREQUISITE SIMULATOR WIDGET
           ========================================================================= */}
-      <section className="py-16 bg-slate-100/70 border-y border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center space-y-3 mb-10">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-bold">
+      <section id="live-simulator" className="py-16 bg-white border-y border-[#E6E8F0]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="max-w-3xl mx-auto text-center space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-200">
               <Zap className="w-3.5 h-3.5 text-blue-600" />
               <span>{isKm ? "សាកល្បងផ្ទៀងផ្ទាត់ដោយផ្ទាល់" : "Live Prerequisite Simulator"}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
               {isKm
                 ? "ឧបករណ៍ពិសោធន៍លក្ខខណ្ឌតម្រូវសាកលវិទ្យាល័យ"
                 : "Test Your Stream & Subject Compatibility"}
             </h2>
-            <p className="text-sm sm:text-base text-slate-600">
+            <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
               {isKm
-                ? "ជ្រើសរើសថ្នាក់បាក់ឌុប និងមុខវិជ្ជាដែលអ្នកពូកែ ដើម្បីមើលជំនាញដែលត្រូវគ្នាភ្លាមៗ។"
-                : "Select your BACII stream and strongest high school subjects to see instantaneous admission compatibility."}
+                ? "ជ្រើសរើសថ្នាក់បាក់ឌុប មុខវិជ្ជាពូកែ និងថវិកាសិក្សា ដើម្បីមើលជំនាញសាកលវិទ្យាល័យដែលត្រូវគ្នានឹងលក្ខខណ្ឌភ្លាមៗ។"
+                : "Select your BACII stream, strongest subjects, and tuition budget to see instantaneous university admission compatibility."}
             </p>
+
+            {/* Quick Presets Bar */}
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+              <span className="text-xs text-slate-400 font-bold uppercase tracking-wider pr-1">
+                {isKm ? "ជម្រើសរហ័ស:" : "Quick Presets:"}
+              </span>
+              {SIMULATOR_PRESETS.map((preset) => (
+                <button
+                  key={preset.id}
+                  type="button"
+                  onClick={() => applyPreset(preset)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 transition-all hover:scale-102 cursor-pointer shadow-2xs"
+                >
+                  <span>{preset.icon}</span>
+                  <span>{isKm ? preset.labelKm : preset.labelEn}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* LEFT CONTROL PANEL (5 cols) */}
-            <div className="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
+            <div className="lg:col-span-5 bg-[#FAFBFD] rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-6">
               {/* Step 1: Stream Toggle */}
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center justify-between">
+                <label className="text-xs font-black uppercase tracking-wider text-slate-500 flex items-center justify-between">
                   <span>1. {isKm ? "ជ្រើសរើសថ្នាក់បាក់ឌុបរបស់អ្នក" : "Select Your BACII Track"}</span>
-                  <span className="text-[#2563EB] text-[11px] font-semibold">{selectedStream.toUpperCase()}</span>
+                  <span className="text-[#2563EB] text-[11px] font-bold">{selectedStream.toUpperCase()} STREAM</span>
                 </label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2.5">
                   <button
                     type="button"
                     onClick={() => setSelectedStream("science")}
-                    className={`py-3 px-3 rounded-xl border text-xs sm:text-sm font-bold flex flex-col items-center gap-1 transition-all ${
+                    className={`py-3.5 px-3 rounded-2xl border text-xs sm:text-sm font-black flex flex-col items-center gap-1 transition-all cursor-pointer ${
                       selectedStream === "science"
                         ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20"
-                        : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                        : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                     }`}
                   >
                     <span>🔬 {isKm ? "ថ្នាក់វិទ្យាសាស្ត្រ" : "Science Stream"}</span>
-                    <span className="text-[10px] font-normal opacity-85">STEM Track</span>
+                    <span className="text-[10px] font-semibold opacity-85">STEM Track</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setSelectedStream("social")}
-                    className={`py-3 px-3 rounded-xl border text-xs sm:text-sm font-bold flex flex-col items-center gap-1 transition-all ${
+                    className={`py-3.5 px-3 rounded-2xl border text-xs sm:text-sm font-black flex flex-col items-center gap-1 transition-all cursor-pointer ${
                       selectedStream === "social"
                         ? "bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-500/20"
-                        : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                        : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                     }`}
                   >
                     <span>📚 {isKm ? "ថ្នាក់សង្គម" : "Social Stream"}</span>
-                    <span className="text-[10px] font-normal opacity-85">Humanities Track</span>
+                    <span className="text-[10px] font-semibold opacity-85">Humanities Track</span>
                   </button>
                 </div>
               </div>
 
               {/* Step 2: Strongest Subjects */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-500">
+                <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-500">
                   <span>2. {isKm ? "ជ្រើសរើសមុខវិជ្ជាពូកែ (១ ដល់ ៤)" : "Select Strongest Subjects (1-4)"}</span>
-                  <span className="text-xs text-slate-400 font-normal">
-                    {selectedSubjects.length}/4
+                  <span className="text-xs text-blue-600 font-bold">
+                    {selectedSubjects.length}/4 {isKm ? "បានរើស" : "selected"}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -726,10 +1075,10 @@ export default function PublicBaciiGuidePage() {
                         key={sub.id}
                         type="button"
                         onClick={() => toggleSubject(sub.id)}
-                        className={`text-left p-2.5 rounded-xl border text-xs font-medium flex items-center justify-between transition-all ${
+                        className={`text-left p-2.5 rounded-xl border text-xs font-bold flex items-center justify-between transition-all cursor-pointer ${
                           isSelected
-                            ? "bg-[#111965] text-white border-[#111965] shadow-sm"
-                            : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                            ? "bg-[#111965] text-white border-[#111965] shadow-xs"
+                            : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                         }`}
                       >
                         <span className="truncate pr-1">{isKm ? sub.labelKm : sub.labelEn}</span>
@@ -741,10 +1090,10 @@ export default function PublicBaciiGuidePage() {
               </div>
 
               {/* Step 3: Tuition Budget Slider */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-500">
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-500">
                   <span>3. {isKm ? "ថវិកាសិក្សាប្រចាំឆ្នាំ (USD)" : "Annual Tuition Budget"}</span>
-                  <span className="text-sm font-extrabold text-[#111965]">${selectedBudget} / yr</span>
+                  <span className="text-base font-black text-[#111965]">${selectedBudget} / yr</span>
                 </div>
                 <input
                   type="range"
@@ -755,9 +1104,9 @@ export default function PublicBaciiGuidePage() {
                   onChange={(e) => setSelectedBudget(Number(e.target.value))}
                   className="w-full accent-[#111965] h-2 bg-slate-200 rounded-lg cursor-pointer"
                 />
-                <div className="flex justify-between text-[11px] text-slate-400 font-medium">
-                  <span>$400 (State State)</span>
-                  <span>$2,000 (Private)</span>
+                <div className="flex justify-between text-[11px] text-slate-500 font-bold">
+                  <span>$400 (State Univ)</span>
+                  <span>$1,500 (Digital Tech)</span>
                   <span>$5,000+ (Dual)</span>
                 </div>
               </div>
@@ -766,11 +1115,11 @@ export default function PublicBaciiGuidePage() {
               <div className="pt-2">
                 <Link
                   href="/dashboard/assessments/preferences"
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-[#111965] to-[#18237c] text-white text-xs sm:text-sm font-bold shadow-md hover:brightness-110 active:scale-[0.98] transition-all"
+                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-[#111965] hover:bg-[#1A2580] text-white text-xs sm:text-sm font-black shadow-md hover:shadow-lg transition-all active:scale-[0.98] cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-[#F7CE4D]" />
                   <span>{isKm ? "រក្សាទុក និងគណនាចំណូលចិត្តពេញលេញ" : "Lock in & Save Preferences"}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-4 h-4 text-[#F7CE4D]" />
                 </Link>
               </div>
             </div>
@@ -778,7 +1127,7 @@ export default function PublicBaciiGuidePage() {
             {/* RIGHT RESULTS PANEL (7 cols) */}
             <div className="lg:col-span-7 space-y-4">
               <div className="flex items-center justify-between">
-                <div className="text-sm font-bold text-[#111965] flex items-center gap-2">
+                <div className="text-sm font-black text-[#111965] flex items-center gap-2">
                   <GraduationCap className="w-4 h-4 text-blue-600" />
                   <span>
                     {isKm
@@ -786,16 +1135,16 @@ export default function PublicBaciiGuidePage() {
                       : `Admission-Compatible Majors (${simulatedMatches.length})`}
                   </span>
                 </div>
-                <span className="text-xs text-slate-500 font-medium">
+                <span className="text-xs font-bold text-slate-500">
                   {selectedStream === "science" ? "Science Stream Active" : "Social Stream Active"}
                 </span>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-3.5">
                 {simulatedMatches.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-blue-300 transition-all space-y-3"
+                    className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all space-y-3.5"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div>
@@ -804,36 +1153,37 @@ export default function PublicBaciiGuidePage() {
                             {isKm ? item.majorKm : item.majorEn}
                           </h4>
                           {item.fitLevel === "high" ? (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                              {isKm ? "ត្រូវគ្នា ១០០%" : "100% Eligible"}
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                              <Check className="w-3 h-3 text-emerald-600" />
+                              <span>{isKm ? "ត្រូវគ្នា ១០០%" : "100% Eligible"}</span>
                             </span>
                           ) : (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
-                              <AlertTriangle className="w-3 h-3" />
-                              {isKm ? "ទាមទាររៀនបំប៉ន" : "Bridge Math Needed"}
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                              <AlertTriangle className="w-3 h-3 text-amber-600" />
+                              <span>{isKm ? "ទាមទាររៀនបំប៉ន" : "Bridge Math Needed"}</span>
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-slate-600 mt-1">
+                        <p className="text-xs text-slate-600 mt-1 font-medium leading-relaxed">
                           {isKm ? item.fitReasonKm : item.fitReasonEn}
                         </p>
                       </div>
                       <Link
                         href={`/majors/${item.slug}`}
-                        className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-800 shrink-0 self-start sm:self-center"
+                        className="inline-flex items-center gap-1 text-xs font-black text-blue-600 hover:text-blue-800 shrink-0 self-start sm:self-center"
                       >
                         <span>{isKm ? "មើលលម្អិត" : "Details"}</span>
                         <ChevronRight className="w-3.5 h-3.5" />
                       </Link>
                     </div>
 
-                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs text-slate-500 font-medium">
-                      <div className="flex items-center gap-1.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-100 text-xs font-semibold">
+                      <div className="flex items-center gap-1.5 text-slate-600">
                         <School className="w-3.5 h-3.5 text-slate-400" />
                         <span>{isKm ? item.universitiesKm : item.universitiesEn}</span>
                       </div>
-                      <div className="flex items-center gap-1 text-slate-700 font-bold">
-                        <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
+                      <div className="flex items-center gap-1 text-emerald-700 font-black">
+                        <Coins className="w-3.5 h-3.5 text-emerald-600" />
                         <span>{item.typicalFee}</span>
                       </div>
                     </div>
@@ -850,14 +1200,14 @@ export default function PublicBaciiGuidePage() {
           ========================================================================= */}
       <section className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-bold border border-amber-200">
-            <DollarSign className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200">
+            <DollarSign className="w-3.5 h-3.5 text-amber-600" />
             <span>{isKm ? "តារាងតម្លៃសិក្សាជាក់ស្តែងនៅកម្ពុជា" : "Cambodian Tuition Benchmarks"}</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
             {isKm ? "តម្លាភាពតម្លៃសិក្សានៅសាកលវិទ្យាល័យ" : "Verified 4-Year Tuition Realities"}
           </h2>
-          <p className="text-sm sm:text-base text-slate-600">
+          <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
             {isKm
               ? "តម្លៃសិក្សានៅកម្ពុជាខុសគ្នាពី ៥០០ ដុល្លារ រហូតដល់ ៩,០០០ ដុល្លារក្នុងមួយឆ្នាំ។ ពិនិត្យថវិកាពិតប្រាកដមុននឹងសម្រេចចិត្តចុះឈ្មោះ។"
               : "Compare real annual tuition fees across public state, specialized technology, and international institutions before applying."}
@@ -868,26 +1218,25 @@ export default function PublicBaciiGuidePage() {
           {TUITION_BENCHMARKS.map((t, idx) => (
             <div
               key={idx}
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow space-y-5"
+              className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-7 shadow-2xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between"
             >
-              <div className="space-y-1">
-                <span className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${t.tagBg}`}>
+              <div className="space-y-3">
+                <span className={`inline-block px-3 py-1 rounded-full text-xs font-black border ${t.tagBg}`}>
                   {isKm ? t.tierKm : t.tierEn}
                 </span>
-                <div className="text-2xl font-black text-[#111965] pt-1">{t.rangeUsd}</div>
+                <div className="text-2xl sm:text-3xl font-black text-[#111965]">{t.rangeUsd}</div>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+                  {isKm ? t.descKm : t.descEn}
+                </p>
               </div>
 
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                {isKm ? t.descKm : t.descEn}
-              </p>
-
-              <div className="space-y-2 pt-2 border-t border-slate-100">
+              <div className="space-y-2 pt-3 border-t border-slate-100">
                 <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
                   {isKm ? "ស្ថាប័នតំណាង" : "Representative Institutions"}
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   {t.universities.map((u, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs text-slate-700 font-medium">
+                    <div key={i} className="flex items-center gap-2 text-xs text-slate-700 font-semibold">
                       <div className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0" />
                       <span>{u}</span>
                     </div>
@@ -902,17 +1251,17 @@ export default function PublicBaciiGuidePage() {
       {/* =========================================================================
           SECTION 4: MoEYS BACII GRADE CUTOFFS & PRIVILEGES
           ========================================================================= */}
-      <section className="py-16 bg-slate-100/70 border-y border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
+      <section className="py-16 bg-[#FAFBFD] border-y border-[#E6E8F0]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold border border-purple-200">
-              <Award className="w-3.5 h-3.5" />
+              <Award className="w-3.5 h-3.5 text-purple-600" />
               <span>{isKm ? "កម្រិតនិទ្ទេសបាក់ឌុប & អត្ថប្រយោជន៍" : "MoEYS Grade Cutoffs & Honors"}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
               {isKm ? "អត្ថប្រយោជន៍អាហារូបករណ៍តាមនិទ្ទេសបាក់ឌុប" : "What Your BACII Grade Unlocks"}
             </h2>
-            <p className="text-sm sm:text-base text-slate-600">
+            <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
               {isKm
                 ? "ស្វែងយល់ពីសិទ្ធិទទួលបានអាហារូបករណ៍រដ្ឋ ១០០% និងលក្ខខណ្ឌចូលរៀនតាមកម្រិតពិន្ទុជាក់ស្តែង។"
                 : "Official MoEYS state scholarship quotas and university entrance privileges corresponding to each BACII grade tier."}
@@ -923,20 +1272,20 @@ export default function PublicBaciiGuidePage() {
             {BACII_GRADE_TIERS.map((tier, idx) => (
               <div
                 key={idx}
-                className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm space-y-4 flex flex-col justify-between"
+                className="rounded-3xl border border-slate-200 bg-white p-6 shadow-2xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between"
               >
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className={`px-2.5 py-1 rounded-lg text-xs font-extrabold border ${tier.badgeColor}`}>
+                    <span className={`px-3 py-1 rounded-xl text-xs font-black border ${tier.badgeColor}`}>
                       {tier.grade}
                     </span>
-                    <span className="text-[11px] font-mono text-slate-500 font-semibold">{tier.scoreRange}</span>
+                    <span className="text-xs font-mono text-slate-500 font-bold">{tier.scoreRange}</span>
                   </div>
-                  <div className="pt-2">
-                    <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                  <div className="pt-2 space-y-2">
+                    <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
                       {isKm ? "អត្ថប្រយោជន៍ផ្លូវការ" : "Official Privileges"}
                     </div>
-                    <ul className="space-y-2 text-xs text-slate-700">
+                    <ul className="space-y-2 text-xs text-slate-700 font-medium">
                       {(isKm ? tier.privilegesKm : tier.privilegesEn).map((p, i) => (
                         <li key={i} className="flex items-start gap-1.5">
                           <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
@@ -950,7 +1299,7 @@ export default function PublicBaciiGuidePage() {
                 <div className="pt-3 border-t border-slate-100">
                   <Link
                     href="/scholarships"
-                    className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-800"
+                    className="inline-flex items-center gap-1 text-xs font-black text-blue-600 hover:text-blue-800"
                   >
                     <span>{isKm ? "ពិនិត្យអាហារូបករណ៍" : "View Scholarships"}</span>
                     <ChevronRight className="w-3 h-3" />
@@ -963,108 +1312,60 @@ export default function PublicBaciiGuidePage() {
       </section>
 
       {/* =========================================================================
-          SECTION 5: FREQUENTLY ASKED QUESTIONS
+          SECTION 5: FREQUENTLY ASKED QUESTIONS (SHARED HOME COMPONENT)
           ========================================================================= */}
-      <section className="py-16 md:py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center space-y-3 mb-12">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">
-            <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
-            <span>{isKm ? "សំណួរដែលសួរញឹកញាប់" : "Prerequisites FAQ"}</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
-            {isKm ? "ចម្ងល់អំពីថ្នាក់បាក់ឌុប និងសាកលវិទ្យាល័យ" : "Common Questions About BACII Streams"}
-          </h2>
-        </div>
-
-        <div className="space-y-4">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 space-y-2">
-            <h3 className="text-base font-bold text-[#111965]">
-              {isKm
-                ? "តើខ្ញុំអាចរៀនផ្នែក IT ឬវិទ្យាសាស្ត្រកុំព្យូទ័របានទេ ប្រសិនបើខ្ញុំរៀនថ្នាក់សង្គម?"
-                : "Can I study Computer Science or IT if I graduated from the Social Science Stream?"}
-            </h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              {isKm
-                ? "អាចបាន! សាកលវិទ្យាល័យរដ្ឋដូចជា ITC និង RUPP តម្រូវឱ្យប្រឡងគណិតវិទ្យាកម្រិតខ្ពស់ ប៉ុន្តែសាកលវិទ្យាល័យឯកជនជាច្រើនអនុញ្ញាតឱ្យសិស្សថ្នាក់សង្គមចុះឈ្មោះចូលរៀនបាន ដោយគ្រាន់តែតម្រូវឱ្យរៀនវគ្គបំប៉នគណិតវិទ្យា និងមូលដ្ឋានកូដនៅឆ្នាំទីមួយ។"
-                : "Yes! While public institutions like ITC and CADT strictly test advanced calculus and physics in their entrance concourses, several accredited private universities accept Social Stream students with mandatory foundation-year bridging math classes."}
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 space-y-2">
-            <h3 className="text-base font-bold text-[#111965]">
-              {isKm
-                ? "តើប្រព័ន្ធ Futera ពិចារណាលើលទ្ធភាពហិរញ្ញវត្ថុគ្រួសារខ្ញុំយ៉ាងដូចម្តេច?"
-                : "How does Futera factor in my family's financial situation?"}
-            </h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              {isKm
-                ? "នៅក្នុងតេស្តចំណូលចិត្តសិក្សា អ្នកអាចកំណត់កម្រិតថវិកាប្រចាំឆ្នាំ ($៥០០ ដល់ $៥,០០០+)។ ប្រព័ន្ធ AI នឹងមិនណែនាំសាកលវិទ្យាល័យដែលលើសពីលទ្ធភាពរបស់អ្នកឡើយ លើកលែងតែកម្មវិធីនោះមានអាហារូបករណ៍ ១០០% ត្រូវគ្នានឹងនិទ្ទេសរបស់អ្នក។"
-                : "In the Academic Preferences assessment, you specify your annual tuition budget ($400 to $5,000+). Our matching algorithm will never recommend out-of-budget programs unless you qualify for 100% full-ride state scholarships (MoEYS or CADT)."}
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 space-y-2">
-            <h3 className="text-base font-bold text-[#111965]">
-              {isKm
-                ? "តើទម្ងន់នៃតេស្តចំណូលចិត្តសិក្សាមានប៉ុន្មានភាគរយក្នុងរូបមន្តផ្គូផ្គង?"
-                : "What weight does this prerequisite test carry in the AI matching formula?"}
-            </h3>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              {isKm
-                ? "តេស្តចំណូលចិត្ត និងថ្នាក់បាក់ឌុបមានទម្ងន់ ២៥% នៅក្នុងរូបមន្តវិទ្យាសាស្ត្រ ១០០% របស់ Futera (៣០% RIASEC + ២៥% បុគ្គលិកលក្ខណៈ + ២៥% ថ្នាក់បាក់ឌុប + ២០% ទីផ្សារការងារ NEA)។"
-                : "The BACII Stream and Academic Preferences test represents 25% of Futera's 4-Pillar Scientific Formula (30% RIASEC + 25% 16-Personality + 25% BACII Prerequisites + 20% Cambodian Labor Demand)."}
-            </p>
-          </div>
-        </div>
-      </section>
+      <FaqSection
+        id="bacii-faq"
+        eyebrow={isKm ? "ការណែនាំ & សំណួរទាក់ទងនឹងបាក់ឌុប" : "BACII & Admission Guidance"}
+        title={isKm ? "សំណួរដែលសួរញឹកញាប់អំពីថ្នាក់បាក់ឌុប" : "Frequently Asked Questions About BACII"}
+        subtitle={
+          isKm
+            ? "ស្វែងយល់បន្ថែមអំពីភាពខុសគ្នានៃថ្នាក់បាក់ឌុប ការប្រឡងប្រជែងចូលរៀន និងអាហារូបករណ៍រដ្ឋ។"
+            : "Learn how high school streams govern university admissions, entrance exams, and MoEYS state scholarship quotas."
+        }
+        items={baciiFaqs}
+      />
 
       {/* =========================================================================
-          SECTION 6: BOTTOM CONVERSION CTA BANNER
+          SECTION 6: BOTTOM CONVERSION CTA BANNER (SHARED HOME COMPONENT)
           ========================================================================= */}
-      <section className="py-16 bg-[#111965] text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-600/20 via-transparent to-transparent pointer-events-none" />
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-semibold border border-white/10">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>{isKm ? "ផ្ទៀងផ្ទាត់ដោយឥតគិតថ្លៃ ១០០%" : "100% Free For All Cambodian Students"}</span>
-          </div>
-
-          <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-            {isKm ? (
-              <>
-                ផ្ទៀងផ្ទាត់លក្ខខណ្ឌសិក្សា និងថវិការបស់អ្នកឥឡូវនេះ
-              </>
-            ) : (
-              <>
-                Validate Your High School Stream & Budget Today
-              </>
-            )}
-          </h2>
-
-          <p className="text-sm sm:text-base text-slate-200 max-w-2xl mx-auto leading-relaxed">
-            {isKm
-              ? "ចំណាយពេលត្រឹមតែ ៥ នាទីដើម្បីកំណត់មុខវិជ្ជាពូកែ ថវិកាសិក្សា និងទីតាំង ដើម្បីឱ្យប្រព័ន្ធ AI ផ្គូផ្គងសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុត។"
-              : "Spend 5 minutes setting your strongest subjects, tuition budget, and campus location to unlock high-precision university recommendations."}
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <Link
-              href="/dashboard/assessments/preferences"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-[#F7CE4D] to-amber-400 text-[#111965] text-sm sm:text-base font-extrabold shadow-lg shadow-amber-400/20 hover:brightness-105 active:scale-[0.98] transition-all"
-            >
-              <Sparkles className="w-5 h-5" />
-              <span>{isKm ? "ចាប់ផ្តើមបំពេញចំណូលចិត្ត (៥ នាទី)" : "Start Preference Diagnostic (5 Mins)"}</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/assessments"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm sm:text-base font-medium border border-white/20 transition-all"
-            >
-              <span>{isKm ? "មើលតេស្តវាយតម្លៃទាំងអស់" : "View All Assessments"}</span>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CtaBanner
+        eyebrow={isKm ? "ឥតគិតថ្លៃ ១០០% សម្រាប់សិស្សវិទ្យាល័យ & និស្សិត" : "100% Free For All Cambodian Students"}
+        title={
+          isKm
+            ? "ត្រៀមខ្លួនផ្ទៀងផ្ទាត់ថ្នាក់បាក់ឌុប និងលក្ខខណ្ឌសាកលវិទ្យាល័យហើយឬនៅ?"
+            : "Ready to Validate Your High School Stream & Admission Path?"
+        }
+        subtitle={
+          isKm
+            ? "ចំណាយពេលត្រឹមតែ ៥ នាទីដើម្បីកំណត់មុខវិជ្ជាពូកែ ថវិកាសិក្សា និងទីតាំង ដើម្បីឱ្យប្រព័ន្ធ AI ផ្គូផ្គងសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុត។"
+            : "Spend only 5 minutes setting your strongest subjects, tuition budget, and campus preferences to unlock high-precision university recommendations."
+        }
+        primaryButtonText={isKm ? "ចាប់ផ្តើមបំពេញចំណូលចិត្ត (៥ នាទី)" : "Start Preference Diagnostic (5 Mins)"}
+        primaryButtonHref="/dashboard/assessments/preferences"
+        secondaryButtonText={isKm ? "មើលតេស្តវាយតម្លៃទាំងអស់" : "View All Assessments"}
+        secondaryButtonHref="/assessments"
+        mascotSpeech={isKm ? "តោះស្វែងរកសាកលវិទ្យាល័យដែលត្រូវនឹងថ្នាក់របស់អ្នក! 🎓" : "Let's find the best university for your stream! 🎓"}
+        badges={[
+          {
+            icon: <Clock className="w-4 h-4 text-[#F7CE4D] shrink-0" />,
+            label: isKm ? "តេស្តត្រឹម ៥ នាទី" : "5-Min Diagnostic",
+          },
+          {
+            icon: <Building2 className="w-4 h-4 text-emerald-400 shrink-0" />,
+            label: isKm ? "៥០+ សាកលវិទ្យាល័យកម្ពុជា" : "50+ Cambodian Univs",
+          },
+          {
+            icon: <ShieldCheck className="w-4 h-4 text-sky-400 shrink-0" />,
+            label: isKm ? "ស្តង់ដារក្រសួងអប់រំ MoEYS" : "MoEYS Criteria",
+          },
+        ]}
+        trustText={
+          isKm
+            ? "ផ្ទៀងផ្ទាត់តាមស្តង់ដារក្រសួងអប់រំ យុវជន និងកីឡា (MoEYS) និងទិន្នន័យថ្លៃសិក្សាផ្លូវការ"
+            : "Validated according to official MoEYS standards and verified tuition data"
+        }
+      />
     </div>
   );
 }

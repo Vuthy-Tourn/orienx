@@ -20,6 +20,8 @@ import {
   Award,
   CheckCircle2,
   Hand,
+  WifiOff,
+  RefreshCw,
 } from "lucide-react";
 
 // Official poster mappings for verified scholarships
@@ -49,9 +51,16 @@ export function ScholarshipsShowcase() {
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   // Fetch real verified scholarships directly from PostgreSQL backend API
-  const { data: rawScholarships, isLoading } = useQuery<ScholarshipApiItem[]>({
+  const {
+    data: rawScholarships,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useQuery<ScholarshipApiItem[]>({
     queryKey: ["scholarships-showcase"],
     queryFn: async () => apiFetch<ScholarshipApiItem[]>("/scholarships"),
+    retry: 1,
   });
 
   // Sort and prioritize featured scholarships (Techo -> AUPP -> MoEYS)
@@ -154,10 +163,32 @@ export function ScholarshipsShowcase() {
     return (
       <section className="py-16 lg:py-24 bg-[#F8F9FC] border-b border-[#E6E8F0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-[460px] flex items-center justify-center text-sm text-[#68708A]">
-            <div className="flex items-center gap-2">
-              <div className="w-5 h-5 border-2 border-[#111965] border-t-transparent rounded-full animate-spin" />
-              <span>{t("scholarshipsShowcase.loading")}</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            {/* Left Column Skeleton */}
+            <div className="lg:col-span-6 flex flex-col justify-between min-h-[420px] space-y-6">
+              <div className="space-y-4">
+                <div className="w-48 h-7 rounded-full bg-slate-200 animate-pulse" />
+                <div className="w-3/4 h-10 rounded-xl bg-slate-200 animate-pulse" />
+                <div className="w-full h-14 rounded-xl bg-slate-100 animate-pulse" />
+              </div>
+              <div className="rounded-2xl bg-white border border-[#E6E8F0] p-6 space-y-4 shadow-xs animate-pulse">
+                <div className="w-full h-12 rounded-xl bg-slate-100" />
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="w-full h-5 rounded-md bg-slate-100" />
+                  <div className="w-full h-5 rounded-md bg-slate-100" />
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="w-36 h-11 rounded-xl bg-slate-200 animate-pulse" />
+                <div className="w-32 h-11 rounded-xl bg-slate-100 animate-pulse" />
+              </div>
+            </div>
+            {/* Right Card Stack Skeleton */}
+            <div className="lg:col-span-6 flex items-center justify-center min-h-[420px]">
+              <div className="relative w-[340px] sm:w-[400px] h-[440px]">
+                <div className="absolute inset-0 rounded-3xl bg-slate-200/50 transform rotate-3 animate-pulse" />
+                <div className="absolute inset-0 rounded-3xl bg-slate-200 border border-slate-300 animate-pulse shadow-md" />
+              </div>
             </div>
           </div>
         </div>
@@ -165,8 +196,48 @@ export function ScholarshipsShowcase() {
     );
   }
 
-  if (!scholarships.length) {
-    return null;
+  if (isError || !scholarships.length) {
+    return (
+      <section className="py-16 lg:py-24 bg-[#F8F9FC] border-b border-[#E6E8F0]">
+        <div className="max-w-xl mx-auto px-4">
+          <div className="rounded-3xl bg-white border border-rose-200/80 p-8 sm:p-12 text-center shadow-sm space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto shadow-2xs">
+              <WifiOff className="w-7 h-7" />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="text-base sm:text-lg font-black text-[#111965]">
+                {language === "km"
+                  ? "មិនអាចទាញយកទិន្នន័យអាហារូបករណ៍បានឡើយ"
+                  : "Unable to Load Scholarships"}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#68708A] max-w-md mx-auto leading-relaxed">
+                {language === "km"
+                  ? "ប្រព័ន្ធមិនអាចភ្ជាប់ទៅកាន់ម៉ាស៊ីនបម្រើទិន្នន័យអាហារូបករណ៍បានទេ។ សូមពិនិត្យការតភ្ជាប់អ៊ីនធឺណិត ឬចុចព្យាយាមម្តងទៀត។"
+                  : "We couldn't connect to the scholarships directory server. Please check your internet connection or try again."}
+              </p>
+            </div>
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => refetch()}
+                disabled={isFetching}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] active:scale-95 transition-all shadow-xs cursor-pointer disabled:opacity-60"
+              >
+                <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
+                <span>{language === "km" ? "ព្យាយាមម្តងទៀត" : "Try Again"}</span>
+              </button>
+              <Link
+                href="/scholarships"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
+              >
+                <span>{language === "km" ? "មើលបញ្ជីអាហារូបករណ៍" : "Browse Scholarships"}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (

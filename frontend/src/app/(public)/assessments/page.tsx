@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
+import { FaqSection, FaqItem } from "@/components/home/faq-section";
+import { CtaBanner } from "@/components/home/cta-banner";
 import {
   Compass,
   Sparkles,
@@ -24,6 +27,13 @@ import {
   FileCheck,
   Share2,
   Users,
+  Clock,
+  Target,
+  Building2,
+  Coins,
+  Scale,
+  Microscope,
+  Lightbulb,
 } from "lucide-react";
 
 // =========================================================================
@@ -169,7 +179,7 @@ const ENGINES = [
 ];
 
 // =========================================================================
-// Comparison Table Data: Futera vs Generic Online Quizzes
+// Comparison Table Data: OrienX vs Generic Online Quizzes
 // =========================================================================
 const COMPARISON_ROWS = [
   {
@@ -221,110 +231,300 @@ export default function PublicAssessmentsHubPage() {
   const { language } = useLanguage();
   const isKm = language === "km";
 
+  // Hero Interactive Pillar Showcase State
+  const [activeHeroPillar, setActiveHeroPillar] = useState<number>(0);
+  const currentPillar = ENGINES[activeHeroPillar];
+
+  // Tailored Assessments FAQ items
+  const assessmentsFaqs = useMemo<FaqItem[]>(() => {
+    return [
+      {
+        id: "faq-free-access",
+        question: isKm
+          ? "តើតេស្តទាំង ៤ នេះឥតគិតថ្លៃ ១០០% សម្រាប់សិស្សកម្ពុជាឬទេ?"
+          : "Are all 4 diagnostic assessments 100% free for Cambodian students?",
+        answer: isKm
+          ? "ឥតគិតថ្លៃ ១០០%! សិស្សានុសិស្ស និងអាណាព្យាបាលកម្ពុជាទាំងអស់អាចធ្វើតេស្តទាំង ៤ (RIASEC, បុគ្គលិកលក្ខណៈទាំង ១៦, ថ្នាក់បាក់ឌុប និងទិន្នន័យទីផ្សារការងារ) ដោយសេរី ដោយគ្មានការគិតថ្លៃ ឬទាមទារបង់ប្រាក់ឡើយ។"
+          : "Yes, 100% free! Every Cambodian student and parent can complete all 4 assessments (Holland RIASEC, 16 Personalities, BACII Stream Validator, and Labor Market alignment) with zero fees, paywalls, or hidden charges.",
+      },
+      {
+        id: "faq-conflicting-results",
+        question: isKm
+          ? "ចុះប្រសិនបើតេស្ត RIASEC និងបុគ្គលិកលក្ខណៈផ្តល់លទ្ធផលមិនដូចគ្នា?"
+          : "What if my RIASEC score and 16-Personality suggest different fields?",
+        answer: isKm
+          ? "នេះជាចំណុចខ្លាំងនៃរូបមន្ត ៤ វិមាត្ររបស់ OrienX! តេស្ត RIASEC វាស់លើកិច្ចការ និងមុខវិជ្ជាដែលអ្នកចូលចិត្តធ្វើ ចំណែកតេស្តបុគ្គលិកលក្ខណៈវាស់លើរបៀបដែលអ្នកគិត ទំនាក់ទំនង និងដោះស្រាយសម្ពាធ។ ក្បួនដោះស្រាយ AI នឹងស្វែងរកចំណុចប្រសព្វ (ឧទាហរណ៍៖ ប្រសិនបើអ្នកចូលចិត្តបច្ចេកវិទ្យា តែចូលចិត្តទំនាក់ទំនងមនុស្ស ប្រព័ន្ធនឹងណែនាំ IT Product Management ឬ FinTech Consulting)។"
+          : "This is the core strength of OrienX's multi-pillar formula! RIASEC measures the concrete work tasks and academic subjects you naturally enjoy, while 16-Personalities measures how your brain processes information, collaborates in teams, and handles study stress. When they point in different directions, our algorithm resolves the overlap—for example, pairing a high tech interest (RIASEC) with high social extraversion (MBTI) to recommend hybrid careers like IT Product Management or FinTech Consulting.",
+      },
+      {
+        id: "faq-cambodia-matching-engine",
+        question: isKm
+          ? "តើ OrienX ភ្ជាប់ពិន្ទុតេស្តទៅកាន់សាកលវិទ្យាល័យកម្ពុជា និងទីផ្សារការងារដោយរបៀបណា?"
+          : "How does OrienX match my scores to Cambodian universities and real job market data?",
+        answer: isKm
+          ? "OrienX ផ្គូផ្គងកម្មវិធីសិក្សានៃសាកលវិទ្យាល័យជាង ៥០ នៅកម្ពុជា (ដូចជា ITC, RUPP, CADT, Paragon, RULE និង NUM) ជាមួយប្រព័ន្ធវិភាគ។ រាល់ការណែនាំសុទ្ធតែផ្ទៀងផ្ទាត់ជាមួយទិន្នន័យទីភ្នាក់ងារជាតិមុខរបរ និងការងារ (NEA) កម្រិតប្រាក់ខែជាក់ស្តែងនៅកម្ពុជា ($៦០០ ដល់ $២,៤០០+) និងតម្លៃសិក្សា ៤ ឆ្នាំពិតប្រាកដ។"
+          : "OrienX maps accredited degree curricula across 50+ Cambodian institutions (such as ITC, RUPP, CADT, Paragon, RULE, and NUM) to our diagnostic framework. Every recommendation cross-references official National Employment Agency (NEA) labor data, entry-to-senior Cambodian salary benchmarks ($600–$2,400+), and verified 4-year tuition fee realities.",
+      },
+      {
+        id: "faq-share-with-parents",
+        question: isKm
+          ? "តើខ្ញុំអាចទាញយករបាយការណ៍ចែករំលែកជាមួយឪពុកម្តាយ ឬលោកគ្រូអ្នកគ្រូបានទេ?"
+          : "Can I download and share my diagnostic report with my parents or high school counselor?",
+        answer: isKm
+          ? "បានយ៉ាងងាយស្រួល! នៅពេលអ្នកបញ្ចប់តេស្ត អ្នកអាចទាញយករបាយការណ៍វិភាគកម្រិតខ្ពស់ជាទម្រង់ PDF ដែលមានគំនូសតាងរ៉ាដា RIASEC បុគ្គលិកលក្ខណៈ ភាពត្រូវគ្នានឹងថ្នាក់បាក់ឌុប តម្លៃសិក្សា ៤ ឆ្នាំ និងប្រាក់ខែគោលដៅ ដើម្បីពិភាក្សាជាមួយឪពុកម្តាយប្រកបដោយទំនុកចិត្ត។"
+          : "Yes! Upon completing the diagnostic journey, you can export a comprehensive counselor-grade PDF report. It includes your Holland RIASEC radar profile, MBTI cognitive archetype, BACII stream eligibility, verified tuition budget schedules, and career salary outlooks, making family educational planning transparent and stress-free.",
+      },
+      {
+        id: "faq-total-duration",
+        question: isKm
+          ? "តើត្រូវចំណាយពេលប៉ុន្មានដើម្បីបញ្ចប់តេស្តទាំង ៤ នេះ?"
+          : "How long does it take to complete all 4 assessments?",
+        answer: isKm
+          ? "ដំណើរការវាយតម្លៃទាំងមូលចំណាយពេលសរុបប្រហែល ២៥ ទៅ ៣០ នាទីប៉ុណ្ណោះ៖ តេស្ត RIASEC (~១០ នាទី) បុគ្គលិកលក្ខណៈ (~១២ នាទី) និងចំណូលចិត្តថ្នាក់បាក់ឌុប (~៥ នាទី)។ អ្នកអាចធ្វើម្តងមួយៗតាមភាពងាយស្រួល ហើយប្រព័ន្ធនឹងរក្សាទុកវឌ្ឍនភាពរបស់អ្នកដោយស្វ័យប្រវត្តិ។"
+          : "The complete journey takes approximately 25 to 30 minutes in total: Holland RIASEC (~10 mins), 16 Personalities (~12 mins), and BACII Stream & Preferences (~5 mins). You can take them sequentially or one at a time—your progress is automatically saved to your OrienX student profile.",
+      },
+    ];
+  }, [isKm]);
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 selection:bg-[#F7CE4D]/30">
+    <div className="min-h-screen bg-[#F8FAFD] text-[#111965] selection:bg-[#F7CE4D] selection:text-[#111965] pb-24">
       {/* =========================================================================
-          HERO SECTION
+          HERO SECTION (SPLIT 2-COLUMN WITH SEAMLESS SKYLINE BACKDROP)
           ========================================================================= */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#0e144a] via-[#111965] to-[#18237c] text-white pt-24 pb-20 md:pt-32 md:pb-28">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/15 via-transparent to-transparent pointer-events-none" />
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-[#F7CE4D]/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative w-full overflow-hidden bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white border-b border-white/10 py-12 sm:py-16 lg:py-20 select-none">
+        {/* Subtle Ambient Illumination */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(247,206,77,0.12),transparent_70%)] pointer-events-none" />
+        <div className="absolute top-1/4 right-1/6 w-[400px] h-[400px] rounded-full bg-[#1B6EF3]/12 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/4 left-1/6 w-[400px] h-[400px] rounded-full bg-[#F7CE4D]/10 blur-[120px] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl mx-auto text-center space-y-6">
-            {/* Super Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-semibold text-[#F7CE4D] shadow-sm">
-              <Sparkles className="w-4 h-4 text-[#F7CE4D]" />
-              <span>
-                {isKm
-                  ? "ប្រព័ន្ធតេស្តវាយតម្លៃបែបវិទ្យាសាស្ត្រ ៤ វិមាត្រ"
-                  : "Futera Diagnostic Assessment Ecosystem"}
-              </span>
-            </div>
+        {/* Seamless Cambodian Campuses Skyline Backdrop */}
+        <div
+          className="absolute inset-x-0 bottom-0 pointer-events-none select-none overflow-hidden h-[380px] sm:h-[450px] lg:h-[500px] z-0"
+          style={{
+            WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 45%, rgba(0,0,0,0) 100%)",
+            maskImage: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 45%, rgba(0,0,0,0) 100%)",
+          }}
+        >
+          <Image
+            src="/images/cambodia-campuses-skyline-seamless.webp"
+            alt="Cambodian University Campuses Backdrop"
+            fill
+            unoptimized
+            priority
+            className="object-cover object-bottom opacity-15 sm:opacity-20"
+          />
+        </div>
 
-            {/* Title */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white leading-[1.15]">
-              {isKm ? (
-                <>
-                  ប្រព័ន្ធតេស្តវាស់ស្ទង់សមត្ថភាព <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F7CE4D] to-amber-300">
-                    & ផ្គូផ្គងជំនាញសាកលវិទ្យាល័យកម្ពុជា
-                  </span>
-                </>
-              ) : (
-                <>
-                  Scientific Self-Discovery <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F7CE4D] to-amber-300">
-                    & AI Major Matching Engine
-                  </span>
-                </>
-              )}
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-200/90 leading-relaxed font-normal">
-              {isKm
-                ? "ហេតុអ្វីបានជាសំណួរស្មានធម្មតាមិនអាចជួយអ្នកបាន? Futera រួមបញ្ចូលទ្រឹស្តីចិត្តវិទ្យាអាជីព RIASEC បុគ្គលិកលក្ខណៈទាំង ១៦ ថ្នាក់បាក់ឌុបជាតិ និងទីផ្សារការងារកម្ពុជា ដើម្បីផ្តល់នូវការផ្គូផ្គងដែលត្រឹមត្រូវបំផុត ១០០%។"
-                : "Why generic 5-question online quizzes fail Cambodian students: Futera integrates John Holland's vocational psychology, Myers-Briggs cognitive styles, Grade 12 BACII prerequisites, and official NEA labor data into a unified 100% precision formula."}
-            </p>
-
-            {/* The 100% Equation Bar */}
-            <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 max-w-2xl mx-auto space-y-3">
-              <div className="flex items-center justify-between text-xs font-bold text-slate-300">
-                <span className="flex items-center gap-1.5 text-white">
-                  <BarChart3 className="w-4 h-4 text-[#F7CE4D]" />
-                  <span>{isKm ? "រូបមន្តវិទ្យាសាស្ត្រ ១០០%" : "The 100% Scientific Precision Formula"}</span>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Column: Heading, Subtitle, Precision Equation & CTAs */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              {/* Category / Verified Pill */}
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold border border-emerald-500/30 backdrop-blur-xs">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+                <span>
+                  {isKm
+                    ? "ប្រព័ន្ធតេស្តវាយតម្លៃបែបវិទ្យាសាស្ត្រ ៤ វិមាត្រសម្រាប់សិស្សកម្ពុជា"
+                    : "Cambodia's 4-Pillar Scientific Guidance Ecosystem"}
                 </span>
-                <span className="text-[#F7CE4D] font-mono">30% + 25% + 25% + 20% = 100%</span>
               </div>
-              <div className="h-3.5 w-full bg-black/30 rounded-full overflow-hidden flex p-0.5 gap-0.5">
-                <div className="h-full bg-amber-500 rounded-l-full" style={{ width: "30%" }} title="30% RIASEC" />
-                <div className="h-full bg-blue-500" style={{ width: "25%" }} title="25% Personality" />
-                <div className="h-full bg-emerald-500" style={{ width: "25%" }} title="25% BACII Stream" />
-                <div className="h-full bg-purple-500 rounded-r-full" style={{ width: "20%" }} title="20% Labor Market" />
+
+              {/* Headline */}
+              <div className="space-y-2">
+                <h1 className="text-3xl sm:text-5xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                  {isKm ? (
+                    <>
+                      ប្រព័ន្ធតេស្តវាស់ស្ទង់សមត្ថភាព <br className="hidden sm:inline" />
+                      <span className="text-[#F7CE4D]">& ផ្គូផ្គងជំនាញសាកលវិទ្យាល័យ</span>
+                    </>
+                  ) : (
+                    <>
+                      Scientific Self-Discovery <br className="hidden sm:inline" />
+                      <span className="text-[#F7CE4D]">& AI Major Matching Engine</span>
+                    </>
+                  )}
+                </h1>
+                <p className="text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
+                  {isKm
+                    ? "ហេតុអ្វីបានជាសំណួរស្មានធម្មតាមិនអាចជួយអ្នកបាន? OrienX រួមបញ្ចូលទ្រឹស្តីចិត្តវិទ្យាអាជីព RIASEC បុគ្គលិកលក្ខណៈទាំង ១៦ ថ្នាក់បាក់ឌុបជាតិ និងទីផ្សារការងារកម្ពុជា ដើម្បីផ្តល់នូវការផ្គូផ្គងដែលត្រឹមត្រូវបំផុត ១០០%។"
+                    : "Why generic 5-question online quizzes fail Cambodian students: OrienX integrates John Holland's vocational psychology, Myers-Briggs cognitive styles, Grade 12 BACII prerequisites, and official NEA labor data into a unified 100% precision formula."}
+                </p>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-slate-300 pt-1">
-                <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" /> 30% RIASEC</span>
-                <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" /> 25% Personality</span>
-                <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" /> 25% BACII Stream</span>
-                <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-purple-500 shrink-0" /> 20% NEA Market</span>
+
+              {/* The 100% Equation Bar */}
+              <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 max-w-xl space-y-3 shadow-lg">
+                <div className="flex items-center justify-between text-xs font-bold text-slate-300">
+                  <span className="flex items-center gap-1.5 text-white">
+                    <BarChart3 className="w-4 h-4 text-[#F7CE4D]" />
+                    <span>{isKm ? "រូបមន្តវិទ្យាសាស្ត្រ ១០០%" : "The 100% Scientific Precision Formula"}</span>
+                  </span>
+                  <span className="text-[#F7CE4D] font-mono font-bold">30% + 25% + 25% + 20% = 100%</span>
+                </div>
+                <div className="h-3.5 w-full bg-black/40 rounded-full overflow-hidden flex p-0.5 gap-0.5 border border-white/10">
+                  <div className="h-full bg-amber-500 rounded-l-full" style={{ width: "30%" }} title="30% RIASEC" />
+                  <div className="h-full bg-blue-500" style={{ width: "25%" }} title="25% Personality" />
+                  <div className="h-full bg-emerald-500" style={{ width: "25%" }} title="25% BACII Stream" />
+                  <div className="h-full bg-purple-500 rounded-r-full" style={{ width: "20%" }} title="20% Labor Market" />
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-slate-300 pt-1 font-semibold">
+                  <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" /> 30% RIASEC</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" /> 25% Personality</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" /> 25% BACII Stream</span>
+                  <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-purple-500 shrink-0" /> 20% NEA Market</span>
+                </div>
+              </div>
+
+              {/* Action CTAs */}
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+                <Link
+                  href="/dashboard/assessments/riasec"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-[0_4px_24px_rgba(247,206,77,0.3)] hover:shadow-[0_6px_28px_rgba(247,206,77,0.45)] transition-all active:scale-98 cursor-pointer"
+                >
+                  <Sparkles className="w-4 h-4 text-[#111965]" />
+                  <span>{isKm ? "ចាប់ផ្តើមធ្វើតេស្តពេញលេញដោយឥតគិតថ្លៃ" : "Start Full Free Assessment"}</span>
+                  <ArrowRight className="w-4 h-4 text-[#111965]" />
+                </Link>
+
+                <a
+                  href="#engines"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md shadow-sm transition-all text-center cursor-pointer"
+                >
+                  <Zap className="w-4 h-4 text-[#F7CE4D]" />
+                  <span>{isKm ? "ស្វែងយល់ពីតេស្តទាំង ៤" : "Explore the 4 Engines"}</span>
+                </a>
+              </div>
+
+              {/* Trust & Localized Metrics */}
+              <div className="pt-4 border-t border-white/10 flex flex-wrap items-center gap-5 text-xs font-semibold text-slate-300">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
+                  <span>{isKm ? "៤ ម៉ាស៊ីនវិភាគពេញលេញ" : "4 Diagnostic Engines"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
+                  <span>{isKm ? "១២០+ ជំនាញសាកលវិទ្យាល័យ" : "120+ Cambodian Majors"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
+                  <span>{isKm ? "៥០+ គ្រឹះស្ថានឧត្តមសិក្សា" : "50+ Cambodian Universities"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
+                  <span>{isKm ? "ឥតគិតថ្លៃ ១០០%" : "100% Free for Students"}</span>
+                </div>
               </div>
             </div>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
-              <Link
-                href="/dashboard/assessments/riasec"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-gradient-to-r from-[#F7CE4D] to-amber-400 text-[#111965] font-extrabold shadow-lg shadow-amber-400/20 hover:brightness-105 active:scale-[0.98] transition-all"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>{isKm ? "ចាប់ផ្តើមធ្វើតេស្តពេញលេញដោយឥតគិតថ្លៃ" : "Start Full Free Assessment"}</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="#engines"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium border border-white/20 transition-all"
-              >
-                <span>{isKm ? "ស្វែងយល់ពីតេស្តទាំង ៤" : "Explore the 4 Engines"}</span>
-              </Link>
+            {/* Right Column: Interactive Hero 4-Pillar Showcase Card */}
+            <div className="lg:col-span-5">
+              <div className="relative rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 p-5 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.35)] space-y-5">
+                {/* Card Header & Pillar Tabs */}
+                <div className="space-y-3 border-b border-white/15 pb-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-slate-300">
+                      <Target className="w-4 h-4 text-[#F7CE4D]" />
+                      <span>{isKm ? "រុករកម៉ាស៊ីនវិភាគទាំង ៤" : "Live Pillar Inspector"}</span>
+                    </div>
+                    <span className="text-[11px] font-mono text-[#F7CE4D] font-bold">
+                      {currentPillar.weight} WEIGHT
+                    </span>
+                  </div>
+
+                  {/* 4 Mini Tabs */}
+                  <div className="grid grid-cols-4 gap-1 bg-black/30 p-1 rounded-xl border border-white/10 text-[11px] font-bold">
+                    {ENGINES.map((eng, idx) => (
+                      <button
+                        key={eng.id}
+                        type="button"
+                        onClick={() => setActiveHeroPillar(idx)}
+                        className={`py-1.5 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
+                          activeHeroPillar === idx
+                            ? "bg-white text-[#111965] shadow-xs font-black"
+                            : "text-slate-300 hover:text-white"
+                        }`}
+                      >
+                        {eng.id === "riasec"
+                          ? "RIASEC"
+                          : eng.id === "personality"
+                          ? "MBTI"
+                          : eng.id === "bacii"
+                          ? "BACII"
+                          : "Labor"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Dynamic Pillar Content */}
+                <div className="space-y-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/10 text-[#F7CE4D] border border-white/15 mb-1">
+                        Pillar {currentPillar.number} • {currentPillar.weight} Weight
+                      </span>
+                      <h3 className="text-base sm:text-lg font-black text-white">
+                        {isKm ? currentPillar.titleKm : currentPillar.titleEn}
+                      </h3>
+                      <p className="text-xs text-slate-300 mt-0.5 font-medium">
+                        {isKm ? currentPillar.taglineKm : currentPillar.taglineEn}
+                      </p>
+                    </div>
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-md text-white"
+                      style={{ backgroundColor: currentPillar.color }}
+                    >
+                      {React.createElement(currentPillar.icon, { className: "w-5 h-5" })}
+                    </div>
+                  </div>
+
+                  {/* Description Box */}
+                  <p className="text-xs text-slate-200 leading-relaxed font-normal bg-white/5 p-3 rounded-2xl border border-white/10">
+                    {isKm ? currentPillar.descKm : currentPillar.descEn}
+                  </p>
+
+                  {/* Features list */}
+                  <div className="space-y-1.5 text-xs text-slate-200">
+                    {(isKm ? currentPillar.featuresKm : currentPillar.featuresEn).map((feat, idx) => (
+                      <div key={idx} className="flex items-center gap-2">
+                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <span className="truncate">{feat}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Quick Card Action */}
+                  <div className="pt-2 flex items-center justify-between text-xs border-t border-white/10">
+                    <span className="text-slate-300 font-medium">
+                      {isKm ? currentPillar.metricsKm : currentPillar.metricsEn}
+                    </span>
+                    <Link
+                      href={currentPillar.primaryLink}
+                      className="text-[#F7CE4D] hover:underline font-bold inline-flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>{isKm ? currentPillar.linkTextKm : currentPillar.linkTextEn}</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION 1: THE 4 DIAGNOSTIC ENGINES CARDS
+          SECTION 1: THE 4 DIAGNOSTIC ENGINES CARDS (BENTO SHOWCASE)
           ========================================================================= */}
       <section id="engines" className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold border border-blue-200">
-            <Zap className="w-3.5 h-3.5" />
-            <span>{isKm ? "ម៉ាស៊ីនវិភាគទាំង ៤ របស់ Futera" : "The 4 Pillars of Precision Matching"}</span>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 border border-[#111965]/10 text-[11px] font-bold text-[#111965] tracking-wider uppercase">
+            <Zap className="w-3.5 h-3.5 text-[#F7CE4D]" />
+            <span>{isKm ? "ម៉ាស៊ីនវិភាគទាំង ៤ របស់ OrienX" : "The 4 Pillars of Precision Matching"}</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
             {isKm ? "តេស្តវិភាគលម្អិតសម្រាប់សិស្សកម្ពុជា" : "Dedicated Diagnostic Engines"}
           </h2>
-          <p className="text-sm sm:text-base text-slate-600">
+          <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
             {isKm
               ? "តេស្តនីមួយៗឆ្លុះបញ្ចាំងពីវិមាត្រសំខាន់ៗដែលចាំបាច់ក្នុងការជ្រើសរើសជំនាញសិក្សា។ ចុចលើតេស្តនីមួយៗដើម្បីស្វែងយល់លម្អិត។"
               : "Each test addresses a distinct diagnostic dimension to ensure a holistic, highly realistic academic and career trajectory."}
@@ -337,7 +537,7 @@ export default function PublicAssessmentsHubPage() {
             return (
               <div
                 key={engine.id}
-                className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between space-y-6 relative overflow-hidden group"
+                className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between space-y-6 relative overflow-hidden group"
               >
                 <div className="space-y-4">
                   {/* Header Row */}
@@ -347,41 +547,41 @@ export default function PublicAssessmentsHubPage() {
                         <span className="text-xs font-mono font-bold text-slate-400">
                           PILLAR {engine.number}
                         </span>
-                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${engine.badgeClass}`}>
+                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-black border ${engine.badgeClass}`}>
                           Weight: {engine.weight}
                         </span>
                       </div>
                       <h3 className="text-xl sm:text-2xl font-black text-[#111965] group-hover:text-blue-700 transition-colors">
                         {isKm ? engine.titleKm : engine.titleEn}
                       </h3>
-                      <p className="text-xs font-semibold text-slate-500">
+                      <p className="text-xs font-bold text-slate-500">
                         {isKm ? engine.taglineKm : engine.taglineEn}
                       </p>
                     </div>
 
                     <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-md text-white transition-transform group-hover:scale-105"
+                      className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-lg text-white transition-transform group-hover:scale-105"
                       style={{ backgroundColor: engine.color }}
                     >
-                      <Icon className="w-6 h-6" />
+                      <Icon className="w-7 h-7" />
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
                     {isKm ? engine.descKm : engine.descEn}
                   </p>
 
                   {/* Metrics Badge */}
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200">
                     <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
                     <span>{isKm ? engine.metricsKm : engine.metricsEn}</span>
                   </div>
 
                   {/* Key Features List */}
-                  <div className="space-y-2 pt-2 border-t border-slate-100">
+                  <div className="space-y-2 pt-3 border-t border-slate-100">
                     {(isKm ? engine.featuresKm : engine.featuresEn).map((feat, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-700">
+                      <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-700 font-medium">
                         <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                         <span>{feat}</span>
                       </div>
@@ -393,14 +593,14 @@ export default function PublicAssessmentsHubPage() {
                 <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-3">
                   <Link
                     href={engine.primaryLink}
-                    className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-800 text-xs sm:text-sm font-bold transition-all"
+                    className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 text-xs sm:text-sm font-bold transition-all cursor-pointer"
                   >
                     <span>{isKm ? engine.linkTextKm : engine.linkTextEn}</span>
                     <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
                   </Link>
                   <Link
                     href={engine.testLink}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-[#111965] hover:bg-[#18237c] text-white text-xs sm:text-sm font-bold shadow-sm transition-all"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-[#111965] hover:bg-[#18237c] text-white text-xs sm:text-sm font-black shadow-xs transition-all cursor-pointer whitespace-nowrap"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
                     <span>{isKm ? engine.startTextKm : engine.startTextEn}</span>
@@ -415,17 +615,17 @@ export default function PublicAssessmentsHubPage() {
       {/* =========================================================================
           SECTION 2: STEP-BY-STEP ASSESSMENT JOURNEY
           ========================================================================= */}
-      <section className="py-16 bg-slate-100/70 border-y border-slate-200/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
-              <Sliders className="w-3.5 h-3.5" />
+      <section className="py-16 bg-white border-y border-[#E6E8F0]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
+              <Sliders className="w-3.5 h-3.5 text-emerald-600" />
               <span>{isKm ? "ដំណើរការវាយតម្លៃជា ៤ ជំហាន" : "The 4-Step Student Journey"}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
-              {isKm ? "របៀបដែល Futera ដំណើរការ" : "How the Assessment Pathway Works"}
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
+              {isKm ? "របៀបដែល OrienX ដំណើរការ" : "How the Assessment Pathway Works"}
             </h2>
-            <p className="text-sm sm:text-base text-slate-600">
+            <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
               {isKm
                 ? "ចំណាយពេលត្រឹមតែ ២៥-៣០ នាទីដើម្បីទទួលបានផែនទីបង្ហាញផ្លូវសិក្សា និងអាជីពពេញលេញ។"
                 : "From authentic self-discovery to confident enrollment in your dream university program."}
@@ -433,70 +633,78 @@ export default function PublicAssessmentsHubPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-3 relative">
-              <div className="w-9 h-9 rounded-xl bg-amber-500 text-white font-extrabold flex items-center justify-center text-sm shadow-md shadow-amber-500/20">
-                1
+            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-amber-500 text-white font-black flex items-center justify-center text-sm shadow-md shadow-amber-500/25">
+                  1
+                </div>
+                <h3 className="text-base font-extrabold text-[#111965]">
+                  {isKm ? "១. តេស្ត RIASEC" : "1. Holland RIASEC"}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  {isKm
+                    ? "ឆ្លើយ ៣០ សំណួរជាក់ស្តែងដើម្បីស្វែងរកចំណាប់អារម្មណ៍ការងារពីធម្មជាតិ ៦ វិមាត្រ។"
+                    : "Complete 30 localized question items to measure your natural affinity for practical, analytical, or social tasks."}
+                </p>
               </div>
-              <h3 className="text-base font-extrabold text-[#111965]">
-                {isKm ? "១. តេស្ត RIASEC" : "1. Holland RIASEC"}
-              </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                {isKm
-                  ? "ឆ្លើយ ៣០ សំណួរជាក់ស្តែងដើម្បីស្វែងរកចំណាប់អារម្មណ៍ការងារពីធម្មជាតិ ៦ វិមាត្រ។"
-                  : "Complete 30 localized question items to measure your natural affinity for practical, analytical, or social tasks."}
-              </p>
-              <div className="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded-md inline-block">
+              <div className="text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 ~10 Mins • 30 Items
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-3 relative">
-              <div className="w-9 h-9 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-sm shadow-md shadow-blue-600/20">
-                2
+            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white font-black flex items-center justify-center text-sm shadow-md shadow-blue-600/25">
+                  2
+                </div>
+                <h3 className="text-base font-extrabold text-[#111965]">
+                  {isKm ? "២. តេស្តបុគ្គលិកលក្ខណៈ" : "2. 16 Personalities"}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  {isKm
+                    ? "ស្វែងយល់ពីរចនាប័ទ្មនៃការគិត ភាពធន់នឹងសម្ពាធ និងរបៀបធ្វើការងារជាក្រុម។"
+                    : "Explore your cognitive information style and study endurance across 4 temperament archetypes."}
+                </p>
               </div>
-              <h3 className="text-base font-extrabold text-[#111965]">
-                {isKm ? "២. តេស្តបុគ្គលិកលក្ខណៈ" : "2. 16 Personalities"}
-              </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                {isKm
-                  ? "ស្វែងយល់ពីរចនាប័ទ្មនៃការគិត ភាពធន់នឹងសម្ពាធ និងរបៀបធ្វើការងារជាក្រុម។"
-                  : "Explore your cognitive information style and study endurance across 4 temperament archetypes."}
-              </p>
-              <div className="text-[11px] font-semibold text-blue-700 bg-blue-50 px-2 py-1 rounded-md inline-block">
+              <div className="text-[11px] font-bold text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 ~12 Mins • 60 Items
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-3 relative">
-              <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white font-extrabold flex items-center justify-center text-sm shadow-md shadow-emerald-600/20">
-                3
+            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white font-black flex items-center justify-center text-sm shadow-md shadow-emerald-600/25">
+                  3
+                </div>
+                <h3 className="text-base font-extrabold text-[#111965]">
+                  {isKm ? "៣. ចំណូលចិត្ត & ថ្នាក់បាក់ឌុប" : "3. Academic Stream"}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  {isKm
+                    ? "កំណត់មុខវិជ្ជាពូកែ ថ្នាក់វិទ្យាសាស្ត្រ ឬសង្គម ថវិកាសិក្សា និងទីតាំងសាកលវិទ្យាល័យ។"
+                    : "Confirm Grade 12 Science vs. Social stream prerequisites, annual tuition budget, and campus location."}
+                </p>
               </div>
-              <h3 className="text-base font-extrabold text-[#111965]">
-                {isKm ? "៣. ចំណូលចិត្ត & ថ្នាក់បាក់ឌុប" : "3. Academic Stream"}
-              </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                {isKm
-                  ? "កំណត់មុខវិជ្ជាពូកែ ថ្នាក់វិទ្យាសាស្ត្រ ឬសង្គម ថវិកាសិក្សា និងទីតាំងសាកលវិទ្យាល័យ។"
-                  : "Confirm Grade 12 Science vs. Social stream prerequisites, annual tuition budget, and campus location."}
-              </p>
-              <div className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md inline-block">
+              <div className="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 ~5 Mins • 10 Criteria
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-3 relative">
-              <div className="w-9 h-9 rounded-xl bg-purple-600 text-white font-extrabold flex items-center justify-center text-sm shadow-md shadow-purple-600/20">
-                4
+            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-purple-600 text-white font-black flex items-center justify-center text-sm shadow-md shadow-purple-600/25">
+                  4
+                </div>
+                <h3 className="text-base font-extrabold text-[#111965]">
+                  {isKm ? "៤. លទ្ធផលផ្គូផ្គង AI" : "4. AI Recommendations"}
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  {isKm
+                    ? "ប្រព័ន្ធ AI បញ្ចូលទិន្នន័យទាំង ៤ វិមាត្រដើម្បីបង្កើតបញ្ជីជំនាញ និងសាកលវិទ្យាល័យស័ក្តិសម ១០០%។"
+                    : "Receive transparent fit percentage scores, tuition schedules, and parent-shareable counselor PDF reports."}
+                </p>
               </div>
-              <h3 className="text-base font-extrabold text-[#111965]">
-                {isKm ? "៤. លទ្ធផលផ្គូផ្គង AI" : "4. AI Recommendations"}
-              </h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                {isKm
-                  ? "ប្រព័ន្ធ AI បញ្ចូលទិន្នន័យទាំង ៤ វិមាត្រដើម្បីបង្កើតបញ្ជីជំនាញ និងសាកលវិទ្យាល័យស័ក្តិសម ១០០%។"
-                  : "Receive transparent fit percentage scores, tuition schedules, and parent-shareable counselor PDF reports."}
-              </p>
-              <div className="text-[11px] font-semibold text-purple-700 bg-purple-50 px-2 py-1 rounded-md inline-block">
+              <div className="text-[11px] font-bold text-purple-800 bg-purple-50 border border-purple-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 Instant • 100% Precision
               </div>
             </div>
@@ -507,51 +715,51 @@ export default function PublicAssessmentsHubPage() {
       {/* =========================================================================
           SECTION 3: COMPARISON MATRIX: FUTERA VS GENERIC QUIZZES
           ========================================================================= */}
-      <section className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold">
+      <section className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        <div className="text-center max-w-2xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200">
             <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
-            <span>{isKm ? "ភាពខុសគ្នាពីតេស្តទូទៅ" : "Futera vs. Generic Online Quizzes"}</span>
+            <span>{isKm ? "ភាពខុសគ្នាពីតេស្តទូទៅ" : "OrienX vs. Generic Online Quizzes"}</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
-            {isKm ? "ហេតុអ្វីសិស្ស និងអាណាព្យាបាលជឿទុកចិត្តលើ Futera" : "Why Futera Outperforms Generic Quizzes"}
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
+            {isKm ? "ហេតុអ្វីសិស្ស និងអាណាព្យាបាលជឿទុកចិត្តលើ OrienX" : "Why OrienX Outperforms Generic Quizzes"}
           </h2>
-          <p className="text-sm sm:text-base text-slate-600">
+          <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
             {isKm
               ? "ការប្រៀបធៀបរវាងការទាយបែបកម្សាន្ត និងការវិភាគបែបវិទ្យាសាស្ត្រក្នុងបរិបទកម្ពុជា។"
               : "See how multi-factor algorithmic rigor eliminates guesswork, major dropouts, and unrealistic university choices."}
           </p>
         </div>
 
-        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-2xs">
           <table className="w-full text-left border-collapse min-w-[640px]">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-500">
-                <th className="p-4 sm:p-5 w-1/4">{isKm ? "លក្ខណៈវិនិច្ឆ័យ" : "Criteria"}</th>
-                <th className="p-4 sm:p-5 w-5/12 bg-blue-50/70 text-[#111965]">
-                  <span className="flex items-center gap-1.5 font-extrabold text-blue-800">
+              <tr className="bg-slate-50 border-b border-slate-200 text-xs font-black uppercase tracking-wider text-slate-500">
+                <th className="p-5 w-1/4">{isKm ? "លក្ខណៈវិនិច្ឆ័យ" : "Criteria"}</th>
+                <th className="p-5 w-5/12 bg-blue-50/70 text-[#111965]">
+                  <span className="flex items-center gap-1.5 font-black text-blue-800">
                     <Sparkles className="w-4 h-4 text-[#F7CE4D]" />
-                    <span>Futera Assessment Ecosystem</span>
+                    <span>OrienX Assessment Ecosystem</span>
                   </span>
                 </th>
-                <th className="p-4 sm:p-5 w-1/3 text-slate-400">
+                <th className="p-5 w-1/3 text-slate-400">
                   {isKm ? "តេស្តអនឡាញទូទៅ" : "Generic Online Quizzes"}
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
+            <tbody className="divide-y divide-slate-100 text-xs sm:text-sm font-medium">
               {COMPARISON_ROWS.map((row, idx) => (
-                <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="p-4 sm:p-5 font-bold text-slate-800">
+                <tr key={idx} className="hover:bg-slate-50/60 transition-colors">
+                  <td className="p-5 font-bold text-slate-800">
                     {isKm ? row.featureKm : row.featureEn}
                   </td>
-                  <td className="p-4 sm:p-5 bg-blue-50/30 font-medium text-slate-800">
+                  <td className="p-5 bg-blue-50/30 text-slate-800">
                     <div className="flex items-start gap-2">
                       <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                       <span>{isKm ? row.futeraKm : row.futeraEn}</span>
                     </div>
                   </td>
-                  <td className="p-4 sm:p-5 text-slate-500">
+                  <td className="p-5 text-slate-500">
                     {isKm ? row.genericKm : row.genericEn}
                   </td>
                 </tr>
@@ -562,112 +770,60 @@ export default function PublicAssessmentsHubPage() {
       </section>
 
       {/* =========================================================================
-          SECTION 4: FAQ ACCORDION
+          SECTION 4: FAQ ACCORDION (SHARED HOME COMPONENT)
           ========================================================================= */}
-      <section className="py-16 bg-slate-100/70 border-t border-slate-200/80">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          <div className="text-center space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">
-              <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
-              <span>{isKm ? "ចម្ងល់ទូទៅអំពីតេស្ត" : "Assessments FAQ"}</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
-              {isKm ? "សំណួរដែលសិស្ស និងអាណាព្យាបាលសួរញឹកញាប់" : "Frequently Asked Questions"}
-            </h2>
-          </div>
-
-          <div className="space-y-4">
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 space-y-2">
-              <h3 className="text-base font-bold text-[#111965]">
-                {isKm
-                  ? "តើតេស្តទាំង ៤ នេះឥតគិតថ្លៃសម្រាប់សិស្សកម្ពុជាឬទេ?"
-                  : "Are all 4 assessments 100% free for Cambodian students?"}
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                {isKm
-                  ? "ឥតគិតថ្លៃ ១០០%! សិស្ស និងអាណាព្យាបាលអាចធ្វើតេស្តទាំងអស់ដោយសេរី និងទទួលបានលទ្ធផលផ្គូផ្គងជំនាញសាកលវិទ្យាល័យដោយមិនមានការទាមទារបង់ប្រាក់ឡើយ។"
-                  : "Yes, 100% free! All Cambodian students and parents can complete the assessments, review match percentages, and explore university tuition schedules with zero hidden charges."}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 space-y-2">
-              <h3 className="text-base font-bold text-[#111965]">
-                {isKm
-                  ? "ចុះប្រសិនបើតេស្ត RIASEC និងបុគ្គលិកលក្ខណៈផ្តល់លទ្ធផលមិនដូចគ្នា?"
-                  : "What if my RIASEC score and 16-Personality suggest different fields?"}
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                {isKm
-                  ? "នេះជាចំណុចពិសេសនៃរូបមន្ត Futera! តេស្ត RIASEC វាស់លើការងារដែលអ្នកចូលចិត្តធ្វើ (Tasks) ខណៈដែលតេស្តបុគ្គលិកលក្ខណៈវាស់លើរបៀបដែលអ្នកធ្វើការជាមួយមនុស្ស និងសម្ពាធ (Work Style)។ ក្បួនដោះស្រាយ AI នឹងស្វែងរកជំនាញដែលបំពេញតម្រូវការទាំងពីរក្នុងពេលតែមួយ (ឧទាហរណ៍៖ ប្រសិនបើចូលចិត្តបច្ចេកវិទ្យា តែចូលចិត្តនិយាយជាមួយមនុស្ស ប្រព័ន្ធនឹងណែនាំ IT Project Management ឬ FinTech Consulting)។"
-                  : "This is precisely why Futera uses multi-factor modeling! RIASEC measures the tasks you enjoy doing, while 16-Personalities measures how you collaborate, process information, and handle stress. Our algorithm resolves the overlap (e.g. high tech interest + high social extraversion points to IT Product Management or FinTech Client Consulting)."}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 space-y-2">
-              <h3 className="text-base font-bold text-[#111965]">
-                {isKm
-                  ? "តើខ្ញុំអាចទាញយករបាយការណ៍ចែករំលែកជាមួយឪពុកម្តាយបានទេ?"
-                  : "Can I download and share my report with my parents or school counselor?"}
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                {isKm
-                  ? "បាន! នៅពេលអ្នកបញ្ចប់តេស្តទាំង ៤ អ្នកអាចចុច 'ទាញយករបាយការណ៍ PDF' ដែលមានព័ត៌មានលម្អិតអំពីចំណុចខ្លាំង តម្លៃសិក្សា ៤ ឆ្នាំ និងឱកាសប្រាក់ខែជាក់ស្តែងនៅកម្ពុជា ដើម្បីពិភាក្សាជាមួយក្រុមគ្រួសារប្រកបដោយទំនុកចិត្ត។"
-                  : "Yes! Once you complete the diagnostic journey, you can export a comprehensive counselor PDF report with verified Cambodian tuition fee schedules, scholarship criteria, and salary forecasts to discuss with your parents."}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <FaqSection
+        id="assessments-faq"
+        eyebrow={isKm ? "ចម្ងល់ទូទៅអំពីតេស្តវាយតម្លៃ" : "Diagnostic Assessments FAQ"}
+        title={isKm ? "សំណួរដែលសិស្ស និងអាណាព្យាបាលសួរញឹកញាប់" : "Frequently Asked Questions"}
+        subtitle={
+          isKm
+            ? "ស្វែងយល់បន្ថែមអំពីវិធីសាស្ត្រវិទ្យាសាស្ត្រ ការរួមបញ្ចូលទិន្នន័យ និងរបៀបដែលការវាយតម្លៃជួយសិស្សជ្រើសរើសជំនាញ។"
+            : "Learn how the 4-pillar methodology eliminates guesswork, connects to Cambodian colleges, and secures your future."
+        }
+        items={assessmentsFaqs}
+      />
 
       {/* =========================================================================
-          SECTION 5: BOTTOM CONVERSION CTA BANNER
+          SECTION 5: BOTTOM CONVERSION CTA BANNER (SHARED HOME COMPONENT)
           ========================================================================= */}
-      <section className="py-16 bg-[#111965] text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-600/20 via-transparent to-transparent pointer-events-none" />
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-emerald-300 text-xs font-semibold border border-white/10">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span>{isKm ? "ស្វែងរកជំនាញក្នុងក្តីស្រមៃរបស់អ្នក" : "Find Your Dream Major in Cambodia"}</span>
-          </div>
-
-          <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-            {isKm ? (
-              <>
-                ត្រៀមខ្លួនស្វែងរកជំនាញ និងសាកលវិទ្យាល័យដែលត្រូវគ្នានឹងអ្នកហើយឬនៅ?
-              </>
-            ) : (
-              <>
-                Ready to Discover Your Ideal Cambodian University Major?
-              </>
-            )}
-          </h2>
-
-          <p className="text-sm sm:text-base text-slate-200 max-w-2xl mx-auto leading-relaxed">
-            {isKm
-              ? "ចាប់ផ្តើមធ្វើតេស្ត Holland RIASEC ជាជំហានដំបូង រួចបន្តទៅកាន់បុគ្គលិកលក្ខណៈទាំង ១៦ និងលក្ខខណ្ឌសិក្សា ដើម្បីទទួលបានលទ្ធផលផ្គូផ្គងភ្លាមៗ។"
-              : "Begin with the 10-minute Holland RIASEC assessment, followed by 16 Personalities and BACII stream validation for 100% precision matching."}
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <Link
-              href="/dashboard/assessments/riasec"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-[#F7CE4D] to-amber-400 text-[#111965] text-sm sm:text-base font-extrabold shadow-lg shadow-amber-400/20 hover:brightness-105 active:scale-[0.98] transition-all"
-            >
-              <Sparkles className="w-5 h-5" />
-              <span>{isKm ? "ចាប់ផ្តើមធ្វើតេស្ត RIASEC (១០ នាទី)" : "Start RIASEC Assessment (10 Mins)"}</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/majors"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white/10 hover:bg-white/15 text-white text-sm sm:text-base font-medium border border-white/20 transition-all"
-            >
-              <BookOpen className="w-4 h-4 text-slate-300" />
-              <span>{isKm ? "ស្វែងរកជំនាញសាកលវិទ្យាល័យ" : "Explore University Majors"}</span>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <CtaBanner
+        eyebrow={isKm ? "ឥតគិតថ្លៃ ១០០% សម្រាប់សិស្ស-និស្សិតកម្ពុជា" : "100% Free For All Cambodian Students"}
+        title={
+          isKm
+            ? "ត្រៀមខ្លួនស្វែងរកជំនាញ និងសាកលវិទ្យាល័យដែលត្រូវគ្នានឹងអ្នកហើយឬនៅ?"
+            : "Ready to Discover Your True Major & Career Path?"
+        }
+        subtitle={
+          isKm
+            ? "ចាប់ផ្តើមធ្វើតេស្ត Holland RIASEC ជាជំហានដំបូង រួចបន្តទៅកាន់បុគ្គលិកលក្ខណៈទាំង ១៦ និងលក្ខខណ្ឌសិក្សា ដើម្បីទទួលបានលទ្ធផលផ្គូផ្គងភ្លាមៗ។"
+            : "Begin with the 10-minute Holland RIASEC assessment, followed by 16 Personalities and BACII stream validation for 100% precision matching."
+        }
+        primaryButtonText={isKm ? "ចាប់ផ្តើមធ្វើតេស្ត RIASEC (១០ នាទី)" : "Start Free Assessment (10 Mins)"}
+        primaryButtonHref="/dashboard/assessments/riasec"
+        secondaryButtonText={isKm ? "ស្វែងរកជំនាញសាកលវិទ្យាល័យ" : "Explore University Majors"}
+        secondaryButtonHref="/majors"
+        mascotSpeech={isKm ? "តោះស្វែងរកអនាគតជាមួយគ្នា! 🚀" : "Let's discover your future! 🚀"}
+        badges={[
+          {
+            icon: <Clock className="w-4 h-4 text-[#F7CE4D] shrink-0" />,
+            label: isKm ? "ដំណើរការ ២៥-៣០ នាទី" : "25–30 Min Total Journey",
+          },
+          {
+            icon: <Target className="w-4 h-4 text-emerald-400 shrink-0" />,
+            label: isKm ? "រូបមន្តវិទ្យាសាស្ត្រ ៤ វិមាត្រ" : "4-Pillar Precision Formula",
+          },
+          {
+            icon: <GraduationCap className="w-4 h-4 text-sky-400 shrink-0" />,
+            label: isKm ? "ផ្គូផ្គង ១២០+ ជំនាញ" : "120+ Verified Majors",
+          },
+        ]}
+        trustText={
+          isKm
+            ? "ផ្អែកលើស្តង់ដារចិត្តវិទ្យា John Holland, MBTI, MoEYS និងទិន្នន័យទីផ្សារការងារ NEA"
+            : "Based on John Holland's standard, MBTI, MoEYS and NEA labor market data"
+        }
+      />
     </div>
   );
 }
-

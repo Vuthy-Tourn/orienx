@@ -90,7 +90,7 @@ export default function AdminDashboardPage() {
           <ShieldCheck className="w-12 h-12 text-rose-600 mx-auto" />
           <h2 className="text-xl font-bold text-[#111965]">Access Denied</h2>
           <p className="text-xs text-[#68708A]">
-            You require Administrator privileges to access the Futera Admin Panel. Please sign in as an admin.
+            You require Administrator privileges to access the OrienX Admin Panel. Please sign in as an admin.
           </p>
           <Link
             href="/login"
@@ -111,7 +111,7 @@ export default function AdminDashboardPage() {
           <div className="space-y-1">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Futera Platform Administration</span>
+              <span>OrienX Platform Administration</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111965]">
               Administrative Control & Analytics Panel

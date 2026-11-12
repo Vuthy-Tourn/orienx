@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
+import { FaqSection, FaqItem } from "@/components/home/faq-section";
+import { CtaBanner } from "@/components/home/cta-banner";
 import {
   Compass,
   CheckCircle2,
@@ -123,26 +125,26 @@ const SCIENTIFIC_PILLARS = [
 // FAQ items
 const FAQ_ITEMS = [
   {
-    qEn: "How does Futera ensure Cambodian university tuition fees are accurate?",
-    qKm: "តើ Futera ធានាភាពត្រឹមត្រូវនៃតម្លៃសិក្សានៅសាកលវិទ្យាល័យដោយរបៀបណា?",
+    qEn: "How does OrienX ensure Cambodian university tuition fees are accurate?",
+    qKm: "តើ OrienX ធានាភាពត្រឹមត្រូវនៃតម្លៃសិក្សានៅសាកលវិទ្យាល័យដោយរបៀបណា?",
     aEn: "We cross-reference every fee schedule directly with official published admission notices from the Ministry of Education, Youth and Sport (MoEYS) and university registrar offices (RUPP, ITC, CADT, AUPP, Paragon IU, and NUM). Any outdated figure is flagged as pending until re-verified.",
     aKm: "យើងផ្ទៀងផ្ទាត់កាលវិភាគតម្លៃសិក្សាទាំងអស់ដោយផ្ទាល់ជាមួយសេចក្តីជូនដំណឹងផ្លូវការរបស់ក្រសួងអប់រំ យុវជន និងកីឡា (MoEYS) និងការិយាល័យចុះឈ្មោះរបស់សាកលវិទ្យាល័យ (RUPP, ITC, CADT, AUPP, Paragon IU, និង NUM)។ ទិន្នន័យចាស់ៗត្រូវបានត្រួតពិនិត្យឡើងវិញជានិច្ច។",
   },
   {
-    qEn: "Does Futera accept payment to recommend specific universities?",
-    qKm: "តើ Futera ទទួលប្រាក់ដើម្បីណែនាំសាកលវិទ្យាល័យណាមួយជាពិសេសឬទេ?",
-    aEn: "No, never. Futera operates with strict editorial independence. We do not accept paid placements, sponsored rankings, or promotional sponsorships that influence student recommendations. Recommendations are 100% driven by scientific algorithm fit.",
-    aKm: "ដាច់ខាតមិនមានឡើយ! Futera ប្រកាន់ខ្ជាប់នូវភាពឯករាជ្យ និងក្រមសីលធម៌វិជ្ជាជីវៈខ្ពស់បំផុត។ យើងមិនទទួលប្រាក់ឧបត្ថម្ភដើម្បីតម្លើងចំណាត់ថ្នាក់សាកលវិទ្យាល័យណាមួយឡើយ។ ការណែនាំទាំងអស់កើតចេញពីការគណនាបែបវិទ្យាសាស្ត្រសុទ្ធសាធ។",
+    qEn: "Does OrienX accept payment to recommend specific universities?",
+    qKm: "តើ OrienX ទទួលប្រាក់ដើម្បីណែនាំសាកលវិទ្យាល័យណាមួយជាពិសេសឬទេ?",
+    aEn: "No, never. OrienX operates with strict editorial independence. We do not accept paid placements, sponsored rankings, or promotional sponsorships that influence student recommendations. Recommendations are 100% driven by scientific algorithm fit.",
+    aKm: "ដាច់ខាតមិនមានឡើយ! OrienX ប្រកាន់ខ្ជាប់នូវភាពឯករាជ្យ និងក្រមសីលធម៌វិជ្ជាជីវៈខ្ពស់បំផុត។ យើងមិនទទួលប្រាក់ឧបត្ថម្ភដើម្បីតម្លើងចំណាត់ថ្នាក់សាកលវិទ្យាល័យណាមួយឡើយ។ ការណែនាំទាំងអស់កើតចេញពីការគណនាបែបវិទ្យាសាស្ត្រសុទ្ធសាធ។",
   },
   {
-    qEn: "How can Grade 12 students, teachers, and parents use Futera together?",
-    qKm: "តើសិស្សានុសិស្ស លោកគ្រូអ្នកគ្រូ និងអាណាព្យាបាលអាចប្រើប្រាស់ Futera រួមគ្នាដូចម្តេច?",
-    aEn: "Futera generates clear, comprehensive diagnostic reports designed to be shared. We encourage students to sit down with high school counselors and parents to review major suitability, 4-year financial budgets, and scholarship opportunities collaboratively.",
-    aKm: "Futera បង្កើតរបាយការណ៍លទ្ធផលយ៉ាងច្បាស់លាស់សម្រាប់ចែករំលែក។ យើងលើកទឹកចិត្តឱ្យសិស្សពិភាក្សាជាមួយលោកគ្រូអ្នកគ្រូតម្រង់ទិស និងឪពុកម្តាយ ដើម្បីពិនិត្យមើលភាពត្រូវគ្នានៃជំនាញ ថវិកាសិក្សា ៤ ឆ្នាំ និងឱកាសអាហារូបករណ៍រួមគ្នា។",
+    qEn: "How can Grade 12 students, teachers, and parents use OrienX together?",
+    qKm: "តើសិស្សានុសិស្ស លោកគ្រូអ្នកគ្រូ និងអាណាព្យាបាលអាចប្រើប្រាស់ OrienX រួមគ្នាដូចម្តេច?",
+    aEn: "OrienX generates clear, comprehensive diagnostic reports designed to be shared. We encourage students to sit down with high school counselors and parents to review major suitability, 4-year financial budgets, and scholarship opportunities collaboratively.",
+    aKm: "OrienX បង្កើតរបាយការណ៍លទ្ធផលយ៉ាងច្បាស់លាស់សម្រាប់ចែករំលែក។ យើងលើកទឹកចិត្តឱ្យសិស្សពិភាក្សាជាមួយលោកគ្រូអ្នកគ្រូតម្រង់ទិស និងឪពុកម្តាយ ដើម្បីពិនិត្យមើលភាពត្រូវគ្នានៃជំនាញ ថវិកាសិក្សា ៤ ឆ្នាំ និងឱកាសអាហារូបករណ៍រួមគ្នា។",
   },
   {
-    qEn: "Is Futera completely free for Cambodian students?",
-    qKm: "តើសិស្សានុសិស្សកម្ពុជាអាចប្រើប្រាស់ Futera ដោយឥតគិតថ្លៃពិតប្រាកដមែនទេ?",
+    qEn: "Is OrienX completely free for Cambodian students?",
+    qKm: "តើសិស្សានុសិស្សកម្ពុជាអាចប្រើប្រាស់ OrienX ដោយឥតគិតថ្លៃពិតប្រាកដមែនទេ?",
     aEn: "Yes, 100% free. All core assessments, personalized recommendations, Cambodian major guides, and university tuition comparison dashboards are freely accessible to every student across all 25 provinces.",
     aKm: "បាទ/ចាស! ឥតគិតថ្លៃ ១០០%។ ការធ្វើតេស្តស្វែងយល់ពីខ្លួនឯង ការណែនាំជំនាញផ្ទាល់ខ្លួន មគ្គុទ្ទេសក៍ជំនាញសិក្សា និងការប្រៀបធៀបតម្លៃសិក្សាសាកលវិទ្យាល័យ គឺបើកចំហសម្រាប់សិស្សានុសិស្សទាំងអស់នៅគ្រប់ខេត្តក្រុងទូទាំងកម្ពុជា។",
   },
@@ -151,11 +153,17 @@ const FAQ_ITEMS = [
 export default function AboutPage() {
   const { t, language } = useLanguage();
   const [taraTipIndex, setTaraTipIndex] = useState(0);
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mascotImgRef = useRef<HTMLDivElement>(null);
 
+  const aboutFaqs = useMemo<FaqItem[]>(() => {
+    return FAQ_ITEMS.map((item, idx) => ({
+      id: `about-faq-${idx}`,
+      question: language === "km" ? item.qKm : item.qEn,
+      answer: language === "km" ? item.aKm : item.aEn,
+    }));
+  }, [language]);
 
   const cycleTaraTip = () => {
     setTaraTipIndex((prev) => (prev + 1) % TARA_ADVICE_TIPS.length);
@@ -166,10 +174,6 @@ export default function AboutPage() {
         { scale: 1, y: 0, duration: 0.45, ease: "back.out(2)" }
       );
     }
-  };
-
-  const toggleFaq = (idx: number) => {
-    setOpenFaq((prev) => (prev === idx ? null : idx));
   };
 
   // GSAP Orchestration with ScrollTrigger + Pinned Horizontal Scroll
@@ -382,7 +386,7 @@ export default function AboutPage() {
               <p className="gsap-hero-anim text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
                 {t(
                   "aboutPage.heroSubtitle",
-                  "Futera bridges high school graduation and higher education with scientific assessments, authentic tuition fees, and transparent career pathways."
+                  "OrienX bridges high school graduation and higher education with scientific assessments, authentic tuition fees, and transparent career pathways."
                 )}
               </p>
 
@@ -556,13 +560,13 @@ export default function AboutPage() {
             </div>
             <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#111965] tracking-tight">
               {language === "km"
-                ? "ហេតុអ្វីបានជា Futera អាចផ្គូផ្គងជំនាញសិក្សាបានត្រឹមត្រូវ?"
-                : "Why Generic Quizzes Fail — And How Futera Solves It"}
+                ? "ហេតុអ្វីបានជា OrienX អាចផ្គូផ្គងជំនាញសិក្សាបានត្រឹមត្រូវ?"
+                : "Why Generic Quizzes Fail — And How OrienX Solves It"}
             </h2>
             <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed max-w-2xl mx-auto font-medium">
               {language === "km"
-                ? "Futera មិនគ្រាន់តែសួរសំណួរទូទៅពីរបីហើយទស្សន៍ទាយនោះទេ។ យើងរួមបញ្ចូល ៤ វិមាត្រវិទ្យាសាស្ត្រផ្សេងៗគ្នា ដើម្បីគណនាភាពស័ក្តិសមបំផុតជាមួយបរិបទកម្ពុជា។"
-                : "Most online quizzes ask 5 generic questions and guess. Futera combines 4 distinct scientific dimensions to calculate your genuine academic and career fit with mathematical clarity."}
+                ? "OrienX មិនគ្រាន់តែសួរសំណួរទូទៅពីរបីហើយទស្សន៍ទាយនោះទេ។ យើងរួមបញ្ចូល ៤ វិមាត្រវិទ្យាសាស្ត្រផ្សេងៗគ្នា ដើម្បីគណនាភាពស័ក្តិសមបំផុតជាមួយបរិបទកម្ពុជា។"
+                : "Most online quizzes ask 5 generic questions and guess. OrienX combines 4 distinct scientific dimensions to calculate your genuine academic and career fit with mathematical clarity."}
             </p>
           </div>
 
@@ -755,7 +759,7 @@ export default function AboutPage() {
                 <span>{language === "km" ? "មាគ៌ា ៥ ជំហានច្បាស់លាស់" : "The 5-Step Pathway"}</span>
               </div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#111965] tracking-tight">
-                {t("aboutPage.whyTitle", "How Futera Works for You")}
+                {t("aboutPage.whyTitle", "How OrienX Works for You")}
               </h2>
               <p className="text-sm sm:text-base text-[#68708A] font-medium leading-relaxed">
                 {language === "km"
@@ -1246,94 +1250,66 @@ export default function AboutPage() {
       </section>
 
       {/* ========================================================= */}
-      {/* 6. METHODOLOGY & DATA INTEGRITY FAQ */}
+      {/* 6. METHODOLOGY & DATA INTEGRITY FAQ (SHARED COMPONENT)     */}
       {/* ========================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-        <div className="gsap-faq-container space-y-8">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <h3 className="text-2xl sm:text-3xl font-black text-[#111965] tracking-tight">
-              {language === "km"
-                ? "សំណួរញឹកញាប់អំពីទិន្នន័យ និងតម្លាភាព"
-                : "Data Authenticity & Ethical FAQ"}
-            </h3>
-            <p className="text-xs sm:text-sm text-[#68708A]">
-              {language === "km"
-                ? "តម្លាភាពពេញលេញអំពីរបៀបដែលយើងផ្ទៀងផ្ទាត់តម្លៃសិក្សានៅសាកលវិទ្យាល័យកម្ពុជា និងការណែនាំដោយមិនលម្អៀង។"
-                : "Full transparency on how we verify Cambodian university fees and ensure unbiased student guidance."}
-            </p>
-          </div>
+      <FaqSection
+        id="about-faq"
+        className="gsap-faq-container"
+        eyebrow={language === "km" ? "តម្លាភាពទិន្នន័យ & ក្រមសីលធម៌" : "Data Authenticity & Ethical FAQ"}
+        title={
+          language === "km"
+            ? "សំណួរញឹកញាប់អំពីទិន្នន័យ និងតម្លាភាព"
+            : "Data Authenticity & Ethical FAQ"
+        }
+        subtitle={
+          language === "km"
+            ? "តម្លាភាពពេញលេញអំពីរបៀបដែលយើងផ្ទៀងផ្ទាត់តម្លៃសិក្សានៅសាកលវិទ្យាល័យកម្ពុជា និងការណែនាំដោយមិនលម្អៀង។"
+            : "Full transparency on how we verify Cambodian university fees and ensure unbiased student guidance."
+        }
+        items={aboutFaqs}
+      />
 
-          <div className="space-y-3.5 max-w-3xl mx-auto">
-            {FAQ_ITEMS.map((faq, idx) => {
-              const isOpen = openFaq === idx;
-              return (
-                <div
-                  key={idx}
-                  className="rounded-2xl bg-white border border-slate-200/90 shadow-2xs overflow-hidden transition-all duration-200"
-                >
-                  <button
-                    type="button"
-                    onClick={() => toggleFaq(idx)}
-                    className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-xs sm:text-sm text-[#111965] cursor-pointer hover:bg-slate-50 transition-colors"
-                  >
-                    <span>{language === "km" ? faq.qKm : faq.qEn}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 text-slate-500 transition-transform duration-200 flex-shrink-0 ${
-                        isOpen ? "rotate-180 text-[#111965]" : ""
-                      }`}
-                    />
-                  </button>
-                  {isOpen && (
-                    <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-[#68708A] leading-relaxed border-t border-slate-100 bg-[#F8FAFD]">
-                      {language === "km" ? faq.aKm : faq.aEn}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ========================================================= */}
-        {/* 7. ETHICAL TRANSPARENCY & DATA INTEGRITY COMMITMENT */}
-        {/* ========================================================= */}
-        <div className="gsap-commitment-card p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#080D2B] via-[#0F1754] to-[#111965] text-white shadow-2xl space-y-6 border border-white/10 relative overflow-hidden">
-          <BorderBeam size={300} duration={12} delay={0} borderWidth={1.5} />
-
-          <div className="flex items-center gap-2 text-xs font-black text-[#F7CE4D] uppercase tracking-wider">
-            <HeartHandshake className="w-4 h-4 text-[#F7CE4D]" />
-            <span>Ethical Guidance Commitment</span>
-          </div>
-
-          <h3 className="text-xl sm:text-3xl font-black text-white tracking-tight">
-            {t("aboutPage.commitment", "Our Promise to Cambodian Students & Families")}
-          </h3>
-
-          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed max-w-3xl font-medium">
-            {language === "km"
-              ? "ការធ្វើតេស្តនៅលើ Futera ត្រូវបានរចនាឡើងដើម្បីជំរុញការស្វែងយល់ និងការពិចារណាដោយផ្អែកលើព័ត៌មានជាក់ស្តែង មិនមែនជាការបង្ខិតបង្ខំវាសនាជីវិតរបស់សិស្សឡើយ។ យើងលើកទឹកចិត្តយ៉ាងមុតមាំឱ្យសិស្សានុសិស្សយកលទ្ធផលណែនាំរបស់ Futera ទៅពិភាក្សាជាមួយលោកគ្រូអ្នកគ្រូវិទ្យាល័យ ទីប្រឹក្សាអាជីព និងសមាជិកគ្រួសារ ដើម្បីធ្វើការសម្រេចចិត្តរួមគ្នាប្រកបដោយទំនុកចិត្ត។"
-              : "Futera assessments represent self-reported preferences and are designed to inspire exploration and informed reflection, not to rigidly dictate a student's destiny. We strongly encourage students to discuss their Futera recommendations with high school teachers, university counselors, and family members to make confident, well-rounded decisions."}
-          </p>
-
-          <div className="pt-2 flex flex-wrap items-center gap-3.5">
-            <Link
-              href="/dashboard/assessments/personality"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl text-xs sm:text-sm font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-md hover:scale-105 active:scale-95 transition-transform duration-200 cursor-pointer"
-            >
-              <span>{t("aboutPage.tryAssessments", "Start Your Journey")}</span>
-              <ArrowRight className="w-4 h-4 text-[#111965]" />
-            </Link>
-
-            <Link
-              href="/universities"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-black text-white bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md active:scale-95 transition-colors duration-200 cursor-pointer"
-            >
-              <School className="w-4 h-4 text-[#F7CE4D]" />
-              <span>Explore Verified Universities</span>
-            </Link>
-          </div>
-        </div>
-      </div>
+      {/* ========================================================= */}
+      {/* 7. ETHICAL TRANSPARENCY & DATA INTEGRITY COMMITMENT BANNER */}
+      {/* ========================================================= */}
+      <CtaBanner
+        className="gsap-commitment-card"
+        eyebrow={language === "km" ? "ការប្តេជ្ញាចិត្តលើក្រមសីលធម៌ & តម្លាភាពទិន្នន័យ" : "Ethical Guidance & Data Integrity Commitment"}
+        title={
+          language === "km"
+            ? "ការសន្យារបស់យើងចំពោះសិស្ស និងក្រុមគ្រួសារកម្ពុជា"
+            : "Our Promise to Cambodian Students & Families"
+        }
+        subtitle={
+          language === "km"
+            ? "ការធ្វើតេស្តនៅលើ OrienX ត្រូវបានរចនាឡើងដើម្បីជំរុញការស្វែងយល់ និងការពិចារណាដោយផ្អែកលើព័ត៌មានជាក់ស្តែង មិនមែនជាការបង្ខិតបង្ខំវាសនាជីវិតរបស់សិស្សឡើយ។ យើងលើកទឹកចិត្តយ៉ាងមុតមាំឱ្យសិស្សានុសិស្សយកលទ្ធផលណែនាំរបស់ OrienX ទៅពិភាក្សាជាមួយលោកគ្រូអ្នកគ្រូវិទ្យាល័យ ទីប្រឹក្សាអាជីព និងសមាជិកគ្រួសារ ដើម្បីធ្វើការសម្រេចចិត្តរួមគ្នាប្រកបដោយទំនុកចិត្ត។"
+            : "OrienX assessments represent self-reported preferences and are designed to inspire exploration and informed reflection, not to rigidly dictate a student's destiny. We strongly encourage students to discuss their OrienX recommendations with high school teachers, university counselors, and family members to make confident, well-rounded decisions."
+        }
+        primaryButtonText={language === "km" ? "ចាប់ផ្តើមស្វែងយល់ពីខ្លួនឯង" : "Experience the Assessments"}
+        primaryButtonHref="/assessments"
+        secondaryButtonText={language === "km" ? "ស្វែងរកសាកលវិទ្យាល័យផ្ទៀងផ្ទាត់" : "Explore Verified Universities"}
+        secondaryButtonHref="/universities"
+        mascotSpeech={language === "km" ? "តម្លាភាព ១០០% សម្រាប់សិស្សខ្មែរ! 🤝" : "100% Unbiased guidance for you! 🤝"}
+        badges={[
+          {
+            icon: <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />,
+            label: language === "km" ? "គ្មានការលក់ចំណាត់ថ្នាក់" : "Zero Paid Promotions",
+          },
+          {
+            icon: <Building2 className="w-4 h-4 text-[#F7CE4D] shrink-0" />,
+            label: language === "km" ? "៥០+ សាកលវិទ្យាល័យផ្ទៀងផ្ទាត់" : "50+ Verified Universities",
+          },
+          {
+            icon: <HeartHandshake className="w-4 h-4 text-sky-400 shrink-0" />,
+            label: language === "km" ? "ឥតគិតថ្លៃ ១០០%" : "100% Free For Students",
+          },
+        ]}
+        trustText={
+          language === "km"
+            ? "ឯករាជ្យភាពវិជ្ជាជីវៈ ១០០% — ផ្ទៀងផ្ទាត់ដោយផ្ទាល់ជាមួយ MoEYS និងសាកលវិទ្យាល័យកម្ពុជា"
+            : "100% editorial independence — verified directly with MoEYS and Cambodian universities"
+        }
+      />
     </div>
   );
 }

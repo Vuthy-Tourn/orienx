@@ -197,8 +197,8 @@ export default function RiasecPublicGuidePage() {
             : "How does RIASEC differ from the MBTI Personality test?",
         answer:
           language === "km"
-            ? "MBTI វាស់ស្ទង់ទម្រង់ចិត្ត របៀបគិត និងរបៀបទំនាក់ទំនងសង្គមរបស់អ្នក។ ចំណែក RIASEC គឺជាស្តង់ដារចិត្តវិទ្យាអាជីព (Vocational Psychology) ដែលផ្តោតលើកិច្ចការជាក់ស្តែង និងបរិស្ថានការងារដែលផ្តល់ថាមពលដល់អ្នក។ នៅលើ Futera យើងរួមបញ្ចូលទាំងពីរ៖ MBTI បង្ហាញពីរបៀបដែលអ្នកធ្វើការ ចំណែក RIASEC បង្ហាញពីជំនាញសិក្សា និងអាជីពដែលអ្នកនឹងរីកចម្រើនខ្លាំងបំផុត។"
-            : "MBTI measures cognitive preferences and how you perceive the world, while RIASEC is a vocational psychology framework measuring what specific tasks, work environments, and academic activities energize you. Futera combines both: MBTI reveals how you think and communicate, while RIASEC identifies what university majors and careers naturally fit your strengths.",
+            ? "MBTI វាស់ស្ទង់ទម្រង់ចិត្ត របៀបគិត និងរបៀបទំនាក់ទំនងសង្គមរបស់អ្នក។ ចំណែក RIASEC គឺជាស្តង់ដារចិត្តវិទ្យាអាជីព (Vocational Psychology) ដែលផ្តោតលើកិច្ចការជាក់ស្តែង និងបរិស្ថានការងារដែលផ្តល់ថាមពលដល់អ្នក។ នៅលើ OrienX យើងរួមបញ្ចូលទាំងពីរ៖ MBTI បង្ហាញពីរបៀបដែលអ្នកធ្វើការ ចំណែក RIASEC បង្ហាញពីជំនាញសិក្សា និងអាជីពដែលអ្នកនឹងរីកចម្រើនខ្លាំងបំផុត។"
+            : "MBTI measures cognitive preferences and how you perceive the world, while RIASEC is a vocational psychology framework measuring what specific tasks, work environments, and academic activities energize you. OrienX combines both: MBTI reveals how you think and communicate, while RIASEC identifies what university majors and careers naturally fit your strengths.",
       },
       {
         id: "faq-holland-calc",
@@ -215,12 +215,12 @@ export default function RiasecPublicGuidePage() {
         id: "faq-cambodia-matching",
         question:
           language === "km"
-            ? "តើ Futera ភ្ជាប់កូដ Holland ទៅកាន់សាកលវិទ្យាល័យ និងជំនាញនៅកម្ពុជាដោយរបៀបណា?"
-            : "How does Futera match my Holland Code to Cambodian universities and majors?",
+            ? "តើ OrienX ភ្ជាប់កូដ Holland ទៅកាន់សាកលវិទ្យាល័យ និងជំនាញនៅកម្ពុជាដោយរបៀបណា?"
+            : "How does OrienX match my Holland Code to Cambodian universities and majors?",
         answer:
           language === "km"
             ? "កម្មវិធីសិក្សា និងមហាវិទ្យាល័យដែលទទួលស្គាល់នៅកម្ពុជា (ដូចជា ITC, RUPP, CADT, Paragon, AUPP, Norton និងជាង ៤០ គ្រឹះស្ថានផ្សេងទៀត) ត្រូវបានផ្គូផ្គងជាមួយកូដ Holland យ៉ាងម៉ត់ចត់។ ក្បួនដោះស្រាយនឹងផ្គូផ្គងកូដរបស់អ្នកជាមួយមុខវិជ្ជាពិតប្រាកដ លទ្ធផលការងារ និងតម្រូវការទីផ្សារការងារជាក់ស្តែងនៅកម្ពុជា។"
-            : "Futera maps accredited degree programs in Cambodia (at ITC, RUPP, CADT, Paragon, Norton, PUC, and 40+ institutions) to John Holland's occupational themes. When you complete the test, our algorithm compares your scores against real curriculum profiles, career outcomes, and current labor market demand in Cambodia.",
+            : "OrienX maps accredited degree programs in Cambodia (at ITC, RUPP, CADT, Paragon, Norton, PUC, and 40+ institutions) to John Holland's occupational themes. When you complete the test, our algorithm compares your scores against real curriculum profiles, career outcomes, and current labor market demand in Cambodia.",
       },
       {
         id: "faq-tied-scores",
@@ -241,8 +241,8 @@ export default function RiasecPublicGuidePage() {
             : "Can my RIASEC personality profile change over time?",
         answer:
           language === "km"
-            ? "ចំណូលចិត្តការងារស្នូលជាធម្មតាចាប់ផ្តើមមានស្ថិរភាពនៅអាយុចន្លោះពី ១៧ ដល់ ២៥ ឆ្នាំ។ ទោះជាយ៉ាងណា ការទទួលបានបទពិសោធន៍ថ្មីៗ ការរៀនជំនាញបច្ចេកវិទ្យា ឬការស្វែងយល់ពីវិស័យថ្មីៗអាចធ្វើឱ្យពិន្ទុវិមាត្ររងវិវត្តខ្លះៗ។ អ្នកអាចធ្វើតេស្តឡើងវិញបានគ្រប់ពេលនៅលើផ្ទាំងគ្រប់គ្រង Futera ដើម្បីតាមដានការរីកចម្រើនរបស់អ្នក។"
-            : "Core vocational interests generally stabilize during late high school and university (ages 17–25). However, as you gain practical project experience, learn technical skills, and explore new industries, secondary dimensions can evolve. You can retake the assessment anytime on your Futera dashboard to track your professional growth.",
+            ? "ចំណូលចិត្តការងារស្នូលជាធម្មតាចាប់ផ្តើមមានស្ថិរភាពនៅអាយុចន្លោះពី ១៧ ដល់ ២៥ ឆ្នាំ។ ទោះជាយ៉ាងណា ការទទួលបានបទពិសោធន៍ថ្មីៗ ការរៀនជំនាញបច្ចេកវិទ្យា ឬការស្វែងយល់ពីវិស័យថ្មីៗអាចធ្វើឱ្យពិន្ទុវិមាត្ររងវិវត្តខ្លះៗ។ អ្នកអាចធ្វើតេស្តឡើងវិញបានគ្រប់ពេលនៅលើផ្ទាំងគ្រប់គ្រង OrienX ដើម្បីតាមដានការរីកចម្រើនរបស់អ្នក។"
+            : "Core vocational interests generally stabilize during late high school and university (ages 17–25). However, as you gain practical project experience, learn technical skills, and explore new industries, secondary dimensions can evolve. You can retake the assessment anytime on your OrienX dashboard to track your professional growth.",
       },
     ];
   }, [language]);
@@ -307,8 +307,8 @@ export default function RiasecPublicGuidePage() {
                 </h1>
                 <p className="text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
                   {language === "km"
-                    ? "ទ្រឹស្តី John Holland ជួយសិស្សស្វែងរកវិស័យការងារដែលត្រូវនឹងចំណង់ចំណូលចិត្តពិតប្រាកដ។ Futera បានសម្រិតសម្រាំងសំណួរចំនួន ៣០ ស្របតាមបរិបទកម្ពុជា ដើម្បីផ្គូផ្គងជាមួយមុខជំនាញសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុត។"
-                    : "The world's most validated vocational guidance framework. Futera localizes 30 diagnostic activities for Cambodian higher education, computing your mathematical 3-letter Holland code and matching university pathways."}
+                    ? "ទ្រឹស្តី John Holland ជួយសិស្សស្វែងរកវិស័យការងារដែលត្រូវនឹងចំណង់ចំណូលចិត្តពិតប្រាកដ។ OrienX បានសម្រិតសម្រាំងសំណួរចំនួន ៣០ ស្របតាមបរិបទកម្ពុជា ដើម្បីផ្គូផ្គងជាមួយមុខជំនាញសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុត។"
+                    : "The world's most validated vocational guidance framework. OrienX localizes 30 diagnostic activities for Cambodian higher education, computing your mathematical 3-letter Holland code and matching university pathways."}
                 </p>
               </div>
 
@@ -724,17 +724,17 @@ export default function RiasecPublicGuidePage() {
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-black uppercase tracking-wider border border-emerald-200">
               <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Futera 4-Pillar AI Intelligence</span>
+              <span>OrienX 4-Pillar AI Intelligence</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-black text-[#111965] tracking-tight">
               {language === "km"
                 ? "របៀបដែល RIASEC ផ្សារភ្ជាប់ក្នុងប្រព័ន្ធ ៤ សសរស្តម្ភ"
-                : "How RIASEC Powers Futera's 4-Pillar Engine"}
+                : "How RIASEC Powers OrienX's 4-Pillar Engine"}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-medium">
               {language === "km"
-                ? "ដើម្បីធានាថាអនុសាសន៍មិនលំអៀង និងអាចជឿទុកចិត្តបាន ១០០% Futera មិនពឹងផ្អែកតែលើកត្តាមួយមុខនោះទេ។"
-                : "To ensure recommendations are 100% reliable, Futera calculates all university matches by synthesizing 4 holistic dimensions."}
+                ? "ដើម្បីធានាថាអនុសាសន៍មិនលំអៀង និងអាចជឿទុកចិត្តបាន ១០០% OrienX មិនពឹងផ្អែកតែលើកត្តាមួយមុខនោះទេ។"
+                : "To ensure recommendations are 100% reliable, OrienX calculates all university matches by synthesizing 4 holistic dimensions."}
             </p>
           </div>
 

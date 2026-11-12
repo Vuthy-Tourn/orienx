@@ -885,8 +885,8 @@ export default function RiasecAssessmentPage() {
               </div>
               <p className="text-[11px] text-[#68708A] leading-relaxed max-w-2xl font-medium">
                 {getLocalized({
-                  km: `ដើម្បីធានាបាននូវភាពសុក្រឹត និងអាចជឿទុកចិត្តបាន ១០០% ប្រព័ន្ធ AI របស់ Futera គណនាអនុសាសន៍ដោយបូកបញ្ចូល៖ ចំណាប់អារម្មណ៍ RIASEC ${hCode} (៣០%) + បុគ្គលិកលក្ខណៈ (២៥%) + មុខវិជ្ជាពូកែ (២៥%) + ទីផ្សារការងារ (២០%)។ ដូច្នេះលទ្ធផលបង្ហាញនៅទីនេះ ផ្ទាំងគ្រប់គ្រង និងទំព័រ Recommendations គឺសុក្រឹត និងស៊ីសង្វាក់គ្នាទាំងស្រុង។`,
-                  en: `To ensure maximum real-world accuracy and 100% trust, Futera calculates all recommendations by fusing: RIASEC Interests ${hCode} (30%) + MBTI Personality (25%) + School Grades (25%) + Market Demand (20%). The rankings shown here, on your Dashboard, and on your Recommendations page are 100% unified and consistent.`,
+                  km: `ដើម្បីធានាបាននូវភាពសុក្រឹត និងអាចជឿទុកចិត្តបាន ១០០% ប្រព័ន្ធ AI របស់ OrienX គណនាអនុសាសន៍ដោយបូកបញ្ចូល៖ ចំណាប់អារម្មណ៍ RIASEC ${hCode} (៣០%) + បុគ្គលិកលក្ខណៈ (២៥%) + មុខវិជ្ជាពូកែ (២៥%) + ទីផ្សារការងារ (២០%)។ ដូច្នេះលទ្ធផលបង្ហាញនៅទីនេះ ផ្ទាំងគ្រប់គ្រង និងទំព័រ Recommendations គឺសុក្រឹត និងស៊ីសង្វាក់គ្នាទាំងស្រុង។`,
+                  en: `To ensure maximum real-world accuracy and 100% trust, OrienX calculates all recommendations by fusing: RIASEC Interests ${hCode} (30%) + MBTI Personality (25%) + School Grades (25%) + Market Demand (20%). The rankings shown here, on your Dashboard, and on your Recommendations page are 100% unified and consistent.`,
                 })}
               </p>
             </div>

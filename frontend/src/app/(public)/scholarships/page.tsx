@@ -28,6 +28,8 @@ import {
   Sliders,
   DollarSign,
   FileCheck,
+  WifiOff,
+  RefreshCw,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
@@ -55,7 +57,13 @@ export default function ScholarshipsPage() {
   const [targetBaciiGrade, setTargetBaciiGrade] = useState<string>("ALL");
   const [targetStudyField, setTargetStudyField] = useState<string>("ALL");
 
-  const { data: scholarships, isLoading } = useQuery({
+  const {
+    data: scholarships,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey: ["scholarships", searchTerm, coverageFilter],
     queryFn: async () => {
       const params = new URLSearchParams();
@@ -63,6 +71,7 @@ export default function ScholarshipsPage() {
       if (coverageFilter) params.append("coverage_type", coverageFilter);
       return apiFetch<any[]>(`/scholarships?${params.toString()}`);
     },
+    retry: 1,
   });
 
   const { mutate: toggleTrack } = useMutation({
@@ -381,6 +390,33 @@ export default function ScholarshipsPage() {
                 <Skeleton className="h-10 w-full rounded-xl" />
               </div>
             ))}
+          </div>
+        ) : isError ? (
+          <div className="rounded-3xl bg-white border border-rose-200/80 p-8 sm:p-12 text-center shadow-xs space-y-4 max-w-xl mx-auto my-8">
+            <div className="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto shadow-2xs">
+              <WifiOff className="w-7 h-7" />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="text-base sm:text-lg font-black text-[#111965]">
+                {language === "km" ? "មិនអាចទាញយកទិន្នន័យអាហារូបករណ៍បានឡើយ" : "Unable to Load Scholarships"}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#68708A] max-w-md mx-auto leading-relaxed">
+                {language === "km"
+                  ? "ប្រព័ន្ធមិនអាចភ្ជាប់ទៅកាន់ម៉ាស៊ីនបម្រើទិន្នន័យបានទេ។ សូមពិនិត្យការតភ្ជាប់អ៊ីនធឺណិត ឬចុចព្យាយាមម្តងទៀត។"
+                  : "We couldn't connect to the scholarships directory server. Please check your internet connection or try again."}
+              </p>
+            </div>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => refetch()}
+                disabled={isFetching}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] active:scale-95 transition-all shadow-xs cursor-pointer disabled:opacity-60"
+              >
+                <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
+                <span>{language === "km" ? "ព្យាយាមម្តងទៀត" : "Try Again"}</span>
+              </button>
+            </div>
           </div>
         ) : scholarships && scholarships.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -14,6 +14,9 @@ import {
   Globe2,
   ArrowRight,
   Compass,
+  RefreshCw,
+  WifiOff,
+  AlertCircle,
 } from "lucide-react";
 
 /* ==========================================================================
@@ -437,13 +440,21 @@ const MAJOR_VISUAL_MAP: Record<
 };
 
 export function FeaturedMajorsGrid() {
-  const { t, getLocalized } = useLanguage();
+  const { t, getLocalized, language } = useLanguage();
 
-  const { data: majorsData, isLoading } = useQuery({
+  const {
+    data: majorsData,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey: ["featured-majors-landing"],
     queryFn: async () => {
       return apiFetch<any[]>("/majors");
     },
+    retry: 1,
   });
 
   const majors = useMemo(() => {
@@ -588,23 +599,63 @@ export function FeaturedMajorsGrid() {
           </Link>
         </div>
 
-        {/* Loading State */}
+        {/* Loading State with Skeletons */}
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
-                className="rounded-[20px] bg-white border border-[#E6E8F0] p-7 min-h-[300px] animate-pulse flex flex-col justify-between"
+                className="rounded-[20px] bg-white border border-[#E6E8F0] p-6 sm:p-7 min-h-[310px] sm:min-h-[330px] flex flex-col justify-between overflow-hidden shadow-2xs relative"
               >
-                <div className="w-12 h-12 rounded-[14px] bg-slate-100" />
-                <div className="space-y-3">
-                  <div className="w-24 h-4 bg-slate-100 rounded" />
-                  <div className="w-48 h-6 bg-slate-200 rounded" />
-                  <div className="w-32 h-4 bg-slate-100 rounded" />
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-[14px] bg-slate-200/80 animate-pulse" />
+                  <div className="w-20 h-5 rounded-full bg-slate-100 animate-pulse" />
                 </div>
-                <div className="w-20 h-4 bg-slate-100 rounded" />
+                <div className="space-y-2.5 my-auto py-3">
+                  <div className="w-24 h-3.5 bg-slate-100 rounded-md animate-pulse" />
+                  <div className="w-48 h-6 bg-slate-200/80 rounded-md animate-pulse" />
+                  <div className="w-32 h-4 bg-slate-100 rounded-md animate-pulse" />
+                </div>
+                <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between">
+                  <div className="w-28 h-4 bg-slate-100 rounded-md animate-pulse" />
+                </div>
               </div>
             ))}
+          </div>
+        ) : isError || !majors || majors.length === 0 ? (
+          /* Error / Failed to Fetch State */
+          <div className="rounded-3xl bg-white border border-rose-200/80 p-8 sm:p-12 text-center shadow-sm space-y-4 max-w-xl mx-auto my-4">
+            <div className="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto shadow-2xs">
+              <WifiOff className="w-7 h-7" />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="text-base sm:text-lg font-black text-[#111965]">
+                {language === "km" ? "មិនអាចទាញយកទិន្នន័យជំនាញសិក្សាបានឡើយ" : "Unable to Load University Majors"}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#68708A] max-w-md mx-auto leading-relaxed">
+                {language === "km"
+                  ? "ប្រព័ន្ធមិនអាចភ្ជាប់ទៅកាន់ម៉ាស៊ីនបម្រើទិន្នន័យ (API Server) បានទេ។ សូមពិនិត្យការតភ្ជាប់អ៊ីនធឺណិត ឬចុចព្យាយាមម្តងទៀត។"
+                  : "We couldn't connect to the academic directory server. Please check your internet connection or try again."}
+              </p>
+            </div>
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => refetch()}
+                disabled={isFetching}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] active:scale-95 transition-all shadow-xs cursor-pointer disabled:opacity-60"
+              >
+                <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
+                <span>{language === "km" ? "ព្យាយាមម្តងទៀត" : "Try Again"}</span>
+              </button>
+              <Link
+                href="/majors"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
+              >
+                <span>{language === "km" ? "មើលបញ្ជីជំនាញទាំងអស់" : "Browse All Majors"}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         ) : (
           /* 2 ROWS x 3 COLUMNS GRID OF CRISP WHITE CARDS */

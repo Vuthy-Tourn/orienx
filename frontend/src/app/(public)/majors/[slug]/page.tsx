@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -12,13 +11,12 @@ import {
   Compass,
   CheckCircle2,
   AlertTriangle,
-  Building2,
-  DollarSign,
-  Briefcase,
-  ShieldCheck,
   MapPin,
+  WifiOff,
+  RefreshCw,
 } from "lucide-react";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function MajorDetailPage() {
   const params = useParams();
@@ -26,30 +24,70 @@ export default function MajorDetailPage() {
   const router = useRouter();
   const { t, getLocalized } = useLanguage();
 
-  const { data: major, isLoading, error } = useQuery({
+  const {
+    data: major,
+    isLoading,
+    error,
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey: ["major", slug],
     queryFn: async () => apiFetch<any>(`/majors/${slug}`),
     enabled: !!slug,
+    retry: 1,
   });
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-sm text-[#68708A]">
-        {t("majorDetail.loading")}
+      <div className="min-h-screen bg-[#F5F6FA] py-8 lg:py-12">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 animate-pulse">
+          <Skeleton className="h-6 w-32 rounded-lg" />
+          <div className="bg-white rounded-3xl p-8 border border-[#E6E8F0] space-y-6">
+            <div className="space-y-3">
+              <Skeleton className="h-5 w-28 rounded-full" />
+              <Skeleton className="h-8 w-2/3 rounded-lg" />
+              <Skeleton className="h-16 w-full rounded-xl" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Skeleton className="h-28 w-full rounded-2xl" />
+              <Skeleton className="h-28 w-full rounded-2xl" />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error || !major) {
     return (
-      <div className="min-h-screen max-w-3xl mx-auto px-4 py-20 text-center space-y-4">
-        <h2 className="text-xl font-bold text-[#111965]">Major Not Found</h2>
-        <button
-          onClick={() => router.back()}
-          className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#111965]"
-        >
-          Go Back
-        </button>
+      <div className="min-h-screen bg-[#F5F6FA] flex items-center justify-center p-4">
+        <div className="rounded-3xl bg-white border border-rose-200/80 p-8 sm:p-12 text-center shadow-xs space-y-4 max-w-md w-full">
+          <div className="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto shadow-2xs">
+            <WifiOff className="w-7 h-7" />
+          </div>
+          <div className="space-y-1.5">
+            <h2 className="text-lg font-black text-[#111965]">Major Not Found</h2>
+            <p className="text-xs sm:text-sm text-[#68708A]">
+              We couldn't load this major's details. Please check your connection or try again.
+            </p>
+          </div>
+          <div className="pt-2 flex items-center justify-center gap-3">
+            <button
+              onClick={() => refetch()}
+              disabled={isFetching}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all disabled:opacity-60 cursor-pointer"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isFetching ? "animate-spin" : ""}`} />
+              <span>Try Again</span>
+            </button>
+            <button
+              onClick={() => router.back()}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
+            >
+              Go Back
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

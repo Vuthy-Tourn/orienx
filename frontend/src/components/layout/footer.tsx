@@ -47,8 +47,8 @@ export function Footer() {
             <Logo isLight={true} />
             <p className="text-slate-300 text-sm leading-relaxed max-w-sm">
               {getLocalized({
-                en: "Futera empowers Cambodian high school students, Grade 12 graduates, and young people to discover their true path through scientific career assessments, verified university programs, and transparent guidance.",
-                km: "Futera ជួយសិស្សវិទ្យាល័យកម្ពុជា សិស្សបញ្ចប់ថ្នាក់ទី១២ និងយុវជនស្វែងរកទិសដៅពិតប្រាកដតាមរយៈការវាយតម្លៃវិទ្យាសាស្ត្រ កម្មវិធីសាកលវិទ្យាល័យដែលបានផ្ទៀងផ្ទាត់ និងការណែនាំច្បាស់លាស់។",
+                en: "OrienX empowers Cambodian high school students, Grade 12 graduates, and young people to discover their true path through scientific career assessments, verified university programs, and transparent guidance.",
+                km: "OrienX ជួយសិស្សវិទ្យាល័យកម្ពុជា សិស្សបញ្ចប់ថ្នាក់ទី១២ និងយុវជនស្វែងរកទិសដៅពិតប្រាកដតាមរយៈការវាយតម្លៃវិទ្យាសាស្ត្រ កម្មវិធីសាកលវិទ្យាល័យដែលបានផ្ទៀងផ្ទាត់ និងការណែនាំច្បាស់លាស់។",
               })}
             </p>
             <div className="pt-2 flex items-center gap-3 text-xs text-slate-400">
@@ -155,8 +155,8 @@ export function Footer() {
             </p>
             <div className="pt-1 text-xs text-slate-400">
               {getLocalized({ en: "Support:", km: "ទំនាក់ទំនងគាំទ្រ:" })}{" "}
-              <a href="mailto:guidance@futera.edu.kh" className="text-[#F7CE4D] hover:underline font-bold">
-                guidance@futera.edu.kh
+              <a href="mailto:guidance@orienx.edu.kh" className="text-[#F7CE4D] hover:underline font-bold">
+                guidance@orienx.edu.kh
               </a>
             </div>
           </div>
@@ -166,7 +166,7 @@ export function Footer() {
       {/* Bottom Copyright Bar */}
       <div className="relative z-10 bg-[#060A24]/90 backdrop-blur-md border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© {new Date().getFullYear()} Futera Platform. Discover Your Direction. Shape Your Future.</p>
+          <p>© {new Date().getFullYear()} OrienX Platform. Discover Your Direction. Shape Your Future.</p>
           <div className="flex items-center gap-6">
             <Link href="/about" className="hover:text-white transition-colors">
               About Methodology

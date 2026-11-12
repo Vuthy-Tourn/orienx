@@ -14,7 +14,10 @@ import {
   ExternalLink,
   MapPin,
   Building,
+  WifiOff,
+  RefreshCw,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function UniversityCompareContent() {
   const router = useRouter();
@@ -22,13 +25,20 @@ function UniversityCompareContent() {
   const ids = searchParams.get("ids") || "";
   const { t, getLocalized } = useLanguage();
 
-  const { data, isLoading, error } = useQuery({
+  const {
+    data,
+    isLoading,
+    error,
+    refetch,
+    isFetching,
+  } = useQuery({
     queryKey: ["universities-compare", ids],
     queryFn: async () => {
       if (!ids) return { universities: [] };
       return apiFetch<{ universities: any[] }>(`/universities/compare?ids=${ids}`);
     },
     enabled: !!ids,
+    retry: 1,
   });
 
   const universities = data?.universities || [];
@@ -63,12 +73,46 @@ function UniversityCompareContent() {
         </div>
 
         {isLoading ? (
-          <div className="py-20 text-center text-sm text-[#68708A]">
-            {t("universitiesCompare.loading")}
+          <div className="rounded-3xl border border-[#E6E8F0] bg-white p-8 shadow-xs space-y-6">
+            <div className="grid grid-cols-4 gap-4 pb-4 border-b border-slate-100">
+              <Skeleton className="h-8 w-24" />
+              <Skeleton className="h-14 w-full rounded-xl" />
+              <Skeleton className="h-14 w-full rounded-xl" />
+              <Skeleton className="h-14 w-full rounded-xl" />
+            </div>
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="grid grid-cols-4 gap-4 py-2 border-b border-slate-100/60">
+                <Skeleton className="h-5 w-28" />
+                <Skeleton className="h-5 w-full" />
+                <Skeleton className="h-5 w-full" />
+                <Skeleton className="h-5 w-full" />
+              </div>
+            ))}
           </div>
         ) : error || universities.length === 0 ? (
-          <div className="py-16 text-center text-sm text-rose-600">
-            {t("universitiesCompare.failed")}
+          <div className="rounded-3xl bg-white border border-rose-200/80 p-8 sm:p-12 text-center shadow-xs space-y-4 max-w-xl mx-auto my-8">
+            <div className="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center mx-auto shadow-2xs">
+              <WifiOff className="w-7 h-7" />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="text-base sm:text-lg font-black text-[#111965]">
+                {t("universitiesCompare.failed")}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#68708A] max-w-md mx-auto leading-relaxed">
+                Could not retrieve comparison criteria. Please check connection and try again.
+              </p>
+            </div>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => refetch()}
+                disabled={isFetching}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] active:scale-95 transition-all shadow-xs cursor-pointer disabled:opacity-60"
+              >
+                <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
+                <span>Try Again</span>
+              </button>
+            </div>
           </div>
         ) : (
           <div className="overflow-x-auto rounded-3xl border border-[#E6E8F0] bg-white shadow-xs">
