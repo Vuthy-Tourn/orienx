@@ -31,6 +31,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import ScrollStack, { ScrollStackItem } from "@/components/ui/scroll-stack";
+import Folder from "@/components/react-bits/folder";
 
 // =========================================================================
 // 6 Holland RIASEC Framework Reference Data (Localized)
@@ -264,6 +265,18 @@ const SCIENTIFIC_PILLARS = [
     glowBorder: "hover:border-amber-400 hover:shadow-amber-500/10",
     proofEn: "John Holland's 6 dimensions • 30 localized question items",
     proofKm: "ទ្រឹស្តីចិត្តវិទ្យា ៦ វិមាត្រ • សំណួរ ៣០ សម្រិតសម្រាំងសម្រាប់កម្ពុជា",
+    folderLabelEn: "01 • Holland RIASEC",
+    folderLabelKm: "០១ • ចំណាប់អារម្មណ៍ RIASEC",
+    folderDocsEn: [
+      { title: "6 RIASEC Work Domains", description: "Realistic, Investigative, Artistic, Social, Enterprising, and Conventional." },
+      { title: "30 Localized Test Items", description: "Psychometric question battery built specifically for Cambodian students." },
+      { title: "Score Weight: 30%", description: "Foundation for vocational interest alignment to prevent major dropouts." }
+    ],
+    folderDocsKm: [
+      { title: "វិមាត្រការងារទាំង ៦ នៃ RIASEC", description: "Realistic, Investigative, Artistic, Social, Enterprising, Conventional។" },
+      { title: "សំណួរ ៣០ សម្រិតសម្រាំង", description: "កម្រងសំណួរស្រាវជ្រាវចិត្តវិទ្យាជាក់ស្តែងក្នុងបរិបទកម្ពុជា។" },
+      { title: "ទម្ងន់ពិន្ទុ ៣០%", description: "មូលដ្ឋានគ្រឹះកំណត់ចំណាប់អារម្មណ៍សិក្សា និងអាជីព។" }
+    ],
     widgetType: "riasec-chips" as const,
     chips: [
       { code: "R", nameEn: "Realistic", nameKm: "ជាក់ស្តែង", bg: "bg-amber-50 text-amber-800 border-amber-200" },
@@ -287,6 +300,18 @@ const SCIENTIFIC_PILLARS = [
     glowBorder: "hover:border-blue-400 hover:shadow-blue-500/10",
     proofEn: "4 cognitive temperament clusters • Myers-Briggs validated",
     proofKm: "មុខងារនៃការគិត ៤ ក្រុមធំៗ • ផ្ទៀងផ្ទាត់តាមស្តង់ដារ Myers-Briggs",
+    folderLabelEn: "02 • 16-Personality",
+    folderLabelKm: "០២ • បុគ្គលិកលក្ខណៈ ១៦",
+    folderDocsEn: [
+      { title: "4 Cognitive Clusters", description: "Analysts (NT), Diplomats (NF), Sentinels (SJ), and Explorers (SP)." },
+      { title: "Study Endurance & Teams", description: "Evaluates cognitive stamina, burnout resistance, and collaboration." },
+      { title: "Score Weight: 25%", description: "Aligns university learning methodology with your natural mindset." }
+    ],
+    folderDocsKm: [
+      { title: "ក្រុមបុគ្គលិកលក្ខណៈ ៤ ធំៗ", description: "អ្នកវិភាគ (NT), អ្នកការទូត (NF), អ្នកការពារ (SJ), អ្នករុករក (SP)។" },
+      { title: "ភាពធន់ក្នុងការសិក្សា", description: "វាយតម្លៃលើភាពធន់នឹងសម្ពាធ និងការសហការក្នុងក្រុមការងារ។" },
+      { title: "ទម្ងន់ពិន្ទុ ២៥%", description: "កំណត់ភាពស័ក្តិសមជាមួយបរិយាកាស និងវិធីសាស្ត្ររៀន។" }
+    ],
     widgetType: "16p-quadrants" as const,
     quadrants: [
       { nameEn: "Analysts", nameKm: "អ្នកវិភាគ", types: "INTJ • INTP • ENTJ • ENTP", tagColor: "bg-indigo-50 text-indigo-700 border-indigo-100" },
@@ -308,6 +333,18 @@ const SCIENTIFIC_PILLARS = [
     glowBorder: "hover:border-emerald-400 hover:shadow-emerald-500/10",
     proofEn: "Cross-checked with RUPP, ITC Techno & CADT entrance cutoffs",
     proofKm: "ផ្ទៀងផ្ទាត់ផ្ទាល់ជាមួយលក្ខខណ្ឌពិន្ទុ និងមុខវិជ្ជារបស់ RUPP, ITC និង CADT",
+    folderLabelEn: "03 • BACII Stream",
+    folderLabelKm: "០៣ • សញ្ញាបត្របាក់ឌុប",
+    folderDocsEn: [
+      { title: "Science vs Social Track", description: "Grade 12 national exam track alignment for Cambodian higher ed." },
+      { title: "Entrance Cutoff Matrix", description: "Prerequisite verification for RUPP, ITC Techno, CADT, and NUM." },
+      { title: "Score Weight: 25%", description: "Ensures mandatory prerequisite eligibility before admission." }
+    ],
+    folderDocsKm: [
+      { title: "ថ្នាក់វិទ្យាសាស្ត្រ ឬសង្គម", description: "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នានៃទិសដៅសិក្សាថ្នាក់ទី១២ ជាមួយជំនាញ។" },
+      { title: "លក្ខខណ្ឌចូលរៀនផ្លូវការ", description: "ផ្ទៀងផ្ទាត់ពិន្ទុកាត់ និងលក្ខខណ្ឌតម្រូវ RUPP, ITC និង CADT។" },
+      { title: "ទម្ងន់ពិន្ទុ ២៥%", description: "ការពារកុំឱ្យខុសលក្ខខណ្ឌចុះឈ្មោះចូលរៀនផ្លូវការ។" }
+    ],
     widgetType: "stream-validator" as const,
     streams: [
       { labelEn: "Science Stream", labelKm: "ថ្នាក់វិទ្យាសាស្ត្រពិត", targetEn: "STEM, Tech, Medicine & Engineering", targetKm: "វិស្វកម្ម, បច្ចេកវិទ្យា, វិទ្យាសាស្ត្រសុខាភិបាល", badge: "Math + Physics" },
@@ -327,6 +364,18 @@ const SCIENTIFIC_PILLARS = [
     glowBorder: "hover:border-purple-400 hover:shadow-purple-500/10",
     proofEn: "Official data from National Employment Agency (NEA) & MoEYS",
     proofKm: "ទិន្នន័យផ្លូវការពីទីភ្នាក់ងារជាតិមុខរបរ និងការងារ (NEA) និង MoEYS",
+    folderLabelEn: "04 • NEA Market",
+    folderLabelKm: "០៤ • ទីផ្សារការងារ NEA",
+    folderDocsEn: [
+      { title: "NEA Salary Benchmarks", description: "Verified entry-level ($600) to senior compensation ($2,400+)." },
+      { title: "High-Growth Sectors", description: "Software, Cyber, Fintech, and Data Science demand tracking." },
+      { title: "Score Weight: 20%", description: "Prevents degree mismatch with Cambodian labor market reality." }
+    ],
+    folderDocsKm: [
+      { title: "ទិន្នន័យប្រាក់ខែជាក់ស្តែង NEA", description: "កម្រិតប្រាក់ខែផ្លូវការពី $600 (កម្រិតដំបូង) ដល់ $2,400+ (កម្រិតខ្ពស់)។" },
+      { title: "វិស័យកំណើនខ្ពស់", description: "តាមដានតម្រូវការផ្នែកបច្ចេកវិទ្យា ហិរញ្ញវត្ថុ និងវិស្វកម្ម។" },
+      { title: "ទម្ងន់ពិន្ទុ ២០%", description: "ធានាថាមុខជំនាញដែលរៀនមានទីផ្សារការងារពិតប្រាកដ។" }
+    ],
     widgetType: "nea-market" as const,
     marketData: [
       { sectorEn: "High-Growth Sectors", sectorKm: "វិស័យកំណើនខ្ពស់", fields: "AI, Cyber, FinTech, Data Science", badge: "High Demand", salary: "$600 – $2,400+" },
@@ -368,6 +417,7 @@ export default function AboutPage() {
   const [selectedRiasecCode, setSelectedRiasecCode] = useState<string>("I");
   const [taraTipIndex, setTaraTipIndex] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activePillarIdx, setActivePillarIdx] = useState(0);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mascotImgRef = useRef<HTMLDivElement>(null);
@@ -472,8 +522,8 @@ export default function AboutPage() {
           "-=0.25"
         )
         .fromTo(
-          ".gsap-pillar-card",
-          { y: 40, opacity: 0, scale: 0.96 },
+          ".gsap-pillar-folder",
+          { y: 35, opacity: 0, scale: 0.96 },
           {
             y: 0,
             opacity: 1,
@@ -483,6 +533,12 @@ export default function AboutPage() {
             ease: "back.out(1.4)",
           },
           "-=0.3"
+        )
+        .fromTo(
+          ".gsap-pillar-inspector",
+          { y: 25, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
+          "-=0.2"
         );
 
       // 4. RIASEC Visualizer ScrollTrigger
@@ -866,149 +922,256 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* The 4 Rich Pillar Cards */}
-          <div className="gsap-pillars-grid grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {SCIENTIFIC_PILLARS.map((p, idx) => {
-              const PillarIcon = p.icon;
+          {/* Interactive 4-Pillar Research Folders Showcase */}
+          <div className="space-y-6 max-w-6xl mx-auto">
+            {/* Quick Dossier Switcher Tabs */}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {SCIENTIFIC_PILLARS.map((p, idx) => {
+                const Icon = p.icon;
+                const isActive = activePillarIdx === idx;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActivePillarIdx(idx)}
+                    className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black transition-all duration-200 cursor-pointer ${
+                      isActive
+                        ? "shadow-md text-white scale-105"
+                        : "bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50"
+                    }`}
+                    style={isActive ? { backgroundColor: p.color } : {}}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span>{language === "km" ? p.folderLabelKm : p.folderLabelEn}</span>
+                    <span
+                      className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+                        isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
+                      }`}
+                    >
+                      {p.weight}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* 4 Interactive Folders */}
+            <div className="gsap-pillars-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+              {SCIENTIFIC_PILLARS.map((p, idx) => {
+                const PillarIcon = p.icon;
+                const isSelected = activePillarIdx === idx;
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => setActivePillarIdx(idx)}
+                    className={`gsap-pillar-folder relative flex flex-col justify-between p-5 rounded-3xl transition-all duration-300 cursor-pointer overflow-visible ${
+                      isSelected
+                        ? "bg-white shadow-xl ring-2 shadow-slate-200/80 scale-[1.02]"
+                        : "bg-white/70 hover:bg-white border border-slate-200/80 hover:shadow-md"
+                    }`}
+                    style={isSelected ? { borderColor: p.color } : {}}
+                  >
+                    {/* Header Row */}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-7 h-7 rounded-lg flex items-center justify-center text-white shadow-xs"
+                          style={{ backgroundColor: p.color }}
+                        >
+                          <PillarIcon className="w-3.5 h-3.5" />
+                        </div>
+                        <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                          Pillar {p.number}
+                        </span>
+                      </div>
+                      <span
+                        className="text-[11px] font-black px-2 py-0.5 rounded-full"
+                        style={{ backgroundColor: `${p.color}15`, color: p.color }}
+                      >
+                        {p.weight}
+                      </span>
+                    </div>
+
+                    {/* Interactive 3D Folder Canvas */}
+                    <div className="py-4 my-2 flex items-center justify-center overflow-visible">
+                      <Folder
+                        items={language === "km" ? p.folderDocsKm : p.folderDocsEn}
+                        label={language === "km" ? p.folderLabelKm : p.folderLabelEn}
+                        color={p.color}
+                        size={1.12}
+                        defaultOpen={idx === 0}
+                        open={isSelected}
+                        onOpenChange={(open) => {
+                          if (open) setActivePillarIdx(idx);
+                        }}
+                        openOn="click"
+                        draggable={true}
+                        zoomOnClick={true}
+                        layout="spread"
+                        variant="solid"
+                      />
+                    </div>
+
+                    {/* Footer Info & Inspect Button */}
+                    <div className="mt-2 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                      <span className="text-xs font-black text-[#111965] line-clamp-1">
+                        {language === "km" ? p.titleKm : p.titleEn}
+                      </span>
+                      <span
+                        className="text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider flex-shrink-0"
+                        style={{
+                          backgroundColor: isSelected ? `${p.color}20` : "#f1f5f9",
+                          color: isSelected ? p.color : "#64748b",
+                        }}
+                      >
+                        {isSelected
+                          ? language === "km" ? "បើកឯកសារ" : "Open Dossier"
+                          : language === "km" ? "ពិនិត្យ" : "Inspect"}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Synchronized Active Dossier Deep-Dive Inspector */}
+            {(() => {
+              const activePillar = SCIENTIFIC_PILLARS[activePillarIdx] || SCIENTIFIC_PILLARS[0];
+              const ActiveIcon = activePillar.icon;
               return (
                 <div
-                  key={idx}
-                  className={`gsap-pillar-card p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-5 group ${p.glowBorder}`}
+                  className="gsap-pillar-inspector p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-6 transition-all duration-300"
+                  style={{ borderLeftWidth: "6px", borderLeftColor: activePillar.color }}
                 >
-                  <div className="space-y-4">
-                    {/* Header Row */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="w-12 h-12 rounded-2xl flex items-center justify-center font-black shadow-xs group-hover:scale-105 transition-transform duration-200"
-                          style={{ backgroundColor: `${p.color}15`, color: p.color }}
-                        >
-                          <PillarIcon className="w-6 h-6" />
-                        </div>
-                        <div>
-                          <span className="text-[11px] font-mono font-bold text-[#68708A] uppercase tracking-wider block">
-                            Pillar {p.number}
-                          </span>
-                          <h3 className="text-base sm:text-lg font-black text-[#111965] leading-snug">
-                            {language === "km" ? p.titleKm : p.titleEn}
-                          </h3>
-                        </div>
-                      </div>
-
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-3.5">
                       <div
-                        className={`px-3 py-1 rounded-xl text-xs font-black border flex-shrink-0 ${p.badgeBg}`}
+                        className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md flex-shrink-0"
+                        style={{ backgroundColor: activePillar.color }}
                       >
-                        Weight: {p.weight}
+                        <ActiveIcon className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="text-xs font-black uppercase tracking-wider px-2 py-0.5 rounded-md"
+                            style={{ backgroundColor: `${activePillar.color}15`, color: activePillar.color }}
+                          >
+                            Pillar {activePillar.number} • {activePillar.weight} Precision
+                          </span>
+                        </div>
+                        <h3 className="text-lg sm:text-xl font-black text-[#111965] tracking-tight mt-0.5">
+                          {language === "km" ? activePillar.titleKm : activePillar.titleEn}
+                        </h3>
                       </div>
                     </div>
 
-                    <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed font-medium">
-                      {language === "km" ? p.descKm : p.descEn}
-                    </p>
-
-                    {/* Interactive Micro-Widgets for Each Pillar */}
-                    {p.widgetType === "riasec-chips" && p.chips && (
-                      <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-200/70 space-y-2">
-                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500">
-                          <span>{language === "km" ? "វិមាត្រទាំង ៦ នៃ RIASEC:" : "6 Core RIASEC Traits:"}</span>
-                          <span className="text-amber-700 font-mono text-[10px]">30 Questions</span>
-                        </div>
-                        <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
-                          {p.chips.map((chip, i) => (
-                            <div
-                              key={i}
-                              className={`p-1.5 rounded-xl border text-center transition-transform hover:scale-105 cursor-default ${chip.bg}`}
-                            >
-                              <span className="font-mono text-xs font-black block">{chip.code}</span>
-                              <span className="text-[10px] font-bold truncate block">
-                                {language === "km" ? chip.nameKm : chip.nameEn}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {p.widgetType === "16p-quadrants" && p.quadrants && (
-                      <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-200/70 space-y-2">
-                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500">
-                          <span>{language === "km" ? "ក្រុមបុគ្គលិកលក្ខណៈ ៤ ធំៗ:" : "4 Cognitive Clusters:"}</span>
-                          <span className="text-blue-700 font-mono text-[10px]">16 Types</span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                          {p.quadrants.map((quad, i) => (
-                            <div key={i} className={`p-2 rounded-xl border ${quad.tagColor}`}>
-                              <span className="text-xs font-black block">
-                                {language === "km" ? quad.nameKm : quad.nameEn}
-                              </span>
-                              <span className="text-[10px] text-slate-500 block truncate font-mono">
-                                {quad.types}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {p.widgetType === "stream-validator" && p.streams && (
-                      <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-200/70 space-y-2">
-                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500">
-                          <span>{language === "km" ? "ការផ្ទៀងផ្ទាត់ថ្នាក់វិទ្យាល័យ:" : "BACII Stream Prereq:"}</span>
-                          <span className="text-emerald-700 font-mono text-[10px]">MoEYS Aligned</span>
-                        </div>
-                        <div className="space-y-1.5">
-                          {p.streams.map((stream, i) => (
-                            <div key={i} className="p-2 rounded-xl bg-white border border-slate-100 flex items-center justify-between text-[11px]">
-                              <div>
-                                <span className="font-bold text-[#111965] block">
-                                  {language === "km" ? stream.labelKm : stream.labelEn}
-                                </span>
-                                <span className="text-slate-500 text-[10px]">
-                                  {language === "km" ? stream.targetKm : stream.targetEn}
-                                </span>
-                              </div>
-                              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-                                {stream.badge}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {p.widgetType === "nea-market" && p.marketData && (
-                      <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-200/70 space-y-2">
-                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500">
-                          <span>{language === "km" ? "ទិន្នន័យទីផ្សារការងារ NEA:" : "NEA Salary Demand:"}</span>
-                          <span className="text-purple-700 font-mono text-[10px]">Verified NEA</span>
-                        </div>
-                        <div className="space-y-1.5">
-                          {p.marketData.map((data, i) => (
-                            <div key={i} className="p-2 rounded-xl bg-white border border-slate-100 flex items-center justify-between text-[11px]">
-                              <div>
-                                <span className="font-bold text-[#111965] block">
-                                  {language === "km" ? data.sectorKm : data.sectorEn}
-                                </span>
-                                <span className="text-slate-500 text-[10px]">{data.fields}</span>
-                              </div>
-                              <span className="font-mono text-purple-700 font-bold text-xs">
-                                {data.salary}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-2 self-start sm:self-auto text-xs font-bold text-slate-700 bg-slate-50 px-3.5 py-1.5 rounded-full border border-slate-200/80">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                      <span>{language === "km" ? activePillar.proofKm : activePillar.proofEn}</span>
+                    </div>
                   </div>
 
-                  {/* Distinctive Proof Point */}
-                  <div className="pt-3 border-t border-slate-100 flex items-center gap-2 text-xs font-bold text-[#111965]">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                    <span>{language === "km" ? p.proofKm : p.proofEn}</span>
-                  </div>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium max-w-4xl">
+                    {language === "km" ? activePillar.descKm : activePillar.descEn}
+                  </p>
+
+                  {/* Micro-Widgets Inside Active Dossier */}
+                  {activePillar.widgetType === "riasec-chips" && activePillar.chips && (
+                    <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3">
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-600">
+                        <span>{language === "km" ? "វិមាត្រទាំង ៦ នៃ RIASEC ក្នុងបរិបទកម្ពុជា:" : "6 Core RIASEC Dimensions (Cambodian Context):"}</span>
+                        <span className="text-amber-700 font-mono text-[11px] font-bold">30 Localized Items</span>
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+                        {activePillar.chips.map((chip, i) => (
+                          <div
+                            key={i}
+                            className={`p-2 rounded-xl border text-center transition-transform hover:scale-105 cursor-default ${chip.bg}`}
+                          >
+                            <span className="font-mono text-sm font-black block">{chip.code}</span>
+                            <span className="text-xs font-bold truncate block">
+                              {language === "km" ? chip.nameKm : chip.nameEn}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {activePillar.widgetType === "16p-quadrants" && activePillar.quadrants && (
+                    <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3">
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-600">
+                        <span>{language === "km" ? "ក្រុមបុគ្គលិកលក្ខណៈ ៤ ធំៗ & របៀបគិត:" : "4 Cognitive Clusters & Study Endurance:"}</span>
+                        <span className="text-blue-700 font-mono text-[11px] font-bold">16 Types</span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                        {activePillar.quadrants.map((quad, i) => (
+                          <div key={i} className={`p-2.5 rounded-xl border ${quad.tagColor}`}>
+                            <span className="text-xs font-black block">
+                              {language === "km" ? quad.nameKm : quad.nameEn}
+                            </span>
+                            <span className="text-[11px] text-slate-600 block truncate font-mono mt-0.5">
+                              {quad.types}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {activePillar.widgetType === "stream-validator" && activePillar.streams && (
+                    <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3">
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-600">
+                        <span>{language === "km" ? "ការផ្ទៀងផ្ទាត់ថ្នាក់វិទ្យាល័យ និងពិន្ទុកាត់:" : "BACII Stream Prerequisites & Cambodian Campus Cutoffs:"}</span>
+                        <span className="text-emerald-700 font-mono text-[11px] font-bold">MoEYS Aligned</span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {activePillar.streams.map((stream, i) => (
+                          <div key={i} className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-3 text-xs">
+                            <div>
+                              <span className="font-bold text-[#111965] block">
+                                {language === "km" ? stream.labelKm : stream.labelEn}
+                              </span>
+                              <span className="text-slate-500 text-[11px]">
+                                {language === "km" ? stream.targetKm : stream.targetEn}
+                              </span>
+                            </div>
+                            <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/70 flex-shrink-0">
+                              {stream.badge}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {activePillar.widgetType === "nea-market" && activePillar.marketData && (
+                    <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 space-y-3">
+                      <div className="flex items-center justify-between text-xs font-bold text-slate-600">
+                        <span>{language === "km" ? "ទិន្នន័យទីផ្សារការងារផ្លូវការពី NEA:" : "National Employment Agency (NEA) Salary & Demand Benchmarks:"}</span>
+                        <span className="text-purple-700 font-mono text-[11px] font-bold">Verified NEA</span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {activePillar.marketData.map((data, i) => (
+                          <div key={i} className="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between gap-3 text-xs">
+                            <div>
+                              <span className="font-bold text-[#111965] block">
+                                {language === "km" ? data.sectorKm : data.sectorEn}
+                              </span>
+                              <span className="text-slate-500 text-[11px]">{data.fields}</span>
+                            </div>
+                            <span className="font-mono text-purple-700 font-black text-xs px-2.5 py-1 rounded-lg bg-purple-50 border border-purple-200/70 flex-shrink-0">
+                              {data.salary}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
-            })}
+            })()}
           </div>
         </section>
 
