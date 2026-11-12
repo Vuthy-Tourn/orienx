@@ -5,17 +5,33 @@ import { useLanguage } from "@/contexts/language-context";
 import { ChevronDown, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface FaqItem {
-  id: number;
+export interface FaqItem {
+  id: number | string;
   question: string;
   answer: string;
 }
 
-export function FaqSection() {
+export interface FaqSectionProps {
+  id?: string;
+  items?: FaqItem[];
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  className?: string;
+}
+
+export function FaqSection({
+  id = "faq-section",
+  items,
+  eyebrow,
+  title,
+  subtitle,
+  className,
+}: FaqSectionProps = {}) {
   const { t } = useLanguage();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const faqs: FaqItem[] = [
+  const defaultFaqs: FaqItem[] = [
     {
       id: 1,
       question: t("homeFaq.q1"),
@@ -38,27 +54,32 @@ export function FaqSection() {
     },
   ];
 
+  const faqs = items && items.length > 0 ? items : defaultFaqs;
+  const resolvedEyebrow = eyebrow || t("homeFaq.eyebrow");
+  const resolvedTitle = title || t("homeFaq.title");
+  const resolvedSubtitle = subtitle || t("homeFaq.subtitle");
+
   const handleToggle = (index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
   };
 
   return (
     <section
-      id="faq-section"
-      className="py-16 lg:py-24 bg-white border-b border-[#E6E8F0] relative overflow-hidden select-none"
+      id={id}
+      className={cn("py-16 lg:py-24 bg-white border-b border-[#E6E8F0] relative overflow-hidden select-none", className)}
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         {/* Section Header */}
         <div className="text-center space-y-2.5 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 border border-[#111965]/10 text-[11px] font-bold text-[#111965] tracking-wider uppercase mb-1">
             <HelpCircle className="w-3.5 h-3.5 text-[#F7CE4D]" />
-            <span>{t("homeFaq.eyebrow")}</span>
+            <span>{resolvedEyebrow}</span>
           </div>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
-            {t("homeFaq.title")}
+            {resolvedTitle}
           </h2>
           <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
-            {t("homeFaq.subtitle")}
+            {resolvedSubtitle}
           </p>
         </div>
 

@@ -15,11 +15,81 @@ import {
   User,
 } from "lucide-react";
 
-export function CtaBanner() {
+import { cn } from "@/lib/utils";
+
+export interface CtaBadgeItem {
+  icon?: React.ReactNode;
+  label: string;
+}
+
+export interface CtaBannerProps {
+  id?: string;
+  className?: string;
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  primaryButtonText?: string;
+  primaryButtonHref?: string;
+  secondaryButtonText?: string;
+  secondaryButtonHref?: string;
+  mascotSpeech?: string;
+  badges?: CtaBadgeItem[];
+  trustText?: string;
+}
+
+export function CtaBanner({
+  id,
+  className,
+  eyebrow,
+  title,
+  subtitle,
+  primaryButtonText,
+  primaryButtonHref,
+  secondaryButtonText,
+  secondaryButtonHref,
+  mascotSpeech,
+  badges,
+  trustText,
+}: CtaBannerProps = {}) {
   const { t, language } = useLanguage();
 
+  const resolvedEyebrow =
+    eyebrow ||
+    (language === "km"
+      ? "ឥតគិតថ្លៃ ១០០% សម្រាប់សិស្សានុសិស្សកម្ពុជា"
+      : "100% Free For All Cambodian Students");
+
+  const resolvedTitle = title || t("homeCta.title");
+  const resolvedSubtitle = subtitle || t("homeCta.subtitle");
+  const resolvedPrimaryText = primaryButtonText || t("homeCta.button");
+  const resolvedPrimaryHref = primaryButtonHref || "/register";
+  const resolvedSecondaryText = secondaryButtonText || t("homeCta.exploreUnis");
+  const resolvedSecondaryHref = secondaryButtonHref || "/universities";
+  const resolvedMascotSpeech =
+    mascotSpeech ||
+    (language === "km"
+      ? "តោះស្វែងរកអនាគតជាមួយគ្នា!"
+      : "Let's discover your future together!");
+
+  const defaultBadges: CtaBadgeItem[] = [
+    {
+      icon: <Clock className="w-4 h-4 text-[#F7CE4D] shrink-0" />,
+      label: language === "km" ? "តេស្តត្រឹម ៥ នាទី" : "5-Min Assessment",
+    },
+    {
+      icon: <GraduationCap className="w-4 h-4 text-emerald-400 shrink-0" />,
+      label: language === "km" ? "៤០+ សាកលវិទ្យាល័យ" : "40+ Universities",
+    },
+    {
+      icon: <Target className="w-4 h-4 text-sky-400 shrink-0" />,
+      label: language === "km" ? "ជំនាញត្រូវសមត្ថភាព" : "Personalized Fit",
+    },
+  ];
+
+  const resolvedBadges = badges && badges.length > 0 ? badges : defaultBadges;
+
   return (
-    <section className="py-16 sm:py-24 bg-[#F8F9FC] border-b border-[#E6E8F0] relative overflow-hidden select-none">
+    <section className={cn("py-16 sm:py-24 bg-[#F8F9FC] border-b border-[#E6E8F0] relative overflow-hidden select-none", className)}>
       {/* Background Subtle Atmosphere */}
       <div className="absolute inset-0 bg-[radial-gradient(#111965_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.03] pointer-events-none" />
       <div className="absolute -top-32 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -43,43 +113,30 @@ export function CtaBanner() {
               {/* Category Eyebrow Pill */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F7CE4D]/15 border border-[#F7CE4D]/30 backdrop-blur-xs text-[#F7CE4D] text-xs font-bold tracking-wide">
                 <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D] fill-current" />
-                <span>
-                  {language === "km"
-                    ? "ឥតគិតថ្លៃ ១០០% សម្រាប់សិស្សានុសិស្សកម្ពុជា"
-                    : "100% Free For All Cambodian Students"}
-                </span>
+                <span>{resolvedEyebrow}</span>
               </div>
 
               {/* Main Headline */}
               <h2 className="text-2xl sm:text-4xl lg:text-[2.65rem] font-extrabold tracking-tight leading-[1.22] text-white">
-                {t("homeCta.title")}
+                {resolvedTitle}
               </h2>
 
               {/* Subtitle */}
               <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-xl">
-                {t("homeCta.subtitle")}
+                {resolvedSubtitle}
               </p>
 
               {/* Three Clean Value Chips */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
-                <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/[0.07] border border-white/10 backdrop-blur-xs text-xs text-slate-200 font-semibold">
-                  <Clock className="w-4 h-4 text-[#F7CE4D] shrink-0" />
-                  <span>
-                    {language === "km" ? "តេស្តត្រឹម ៥ នាទី" : "5-Min Assessment"}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/[0.07] border border-white/10 backdrop-blur-xs text-xs text-slate-200 font-semibold">
-                  <GraduationCap className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>
-                    {language === "km" ? "៤០+ សាកលវិទ្យាល័យ" : "40+ Universities"}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/[0.07] border border-white/10 backdrop-blur-xs text-xs text-slate-200 font-semibold">
-                  <Target className="w-4 h-4 text-sky-400 shrink-0" />
-                  <span>
-                    {language === "km" ? "ជំនាញត្រូវសមត្ថភាព" : "Personalized Fit"}
-                  </span>
-                </div>
+                {resolvedBadges.map((badge, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/[0.07] border border-white/10 backdrop-blur-xs text-xs text-slate-200 font-semibold"
+                  >
+                    {badge.icon}
+                    <span>{badge.label}</span>
+                  </div>
+                ))}
               </div>
 
               {/* Student Trust Proof Bar */}
@@ -99,10 +156,16 @@ export function CtaBanner() {
                   </div>
                 </div>
                 <div className="text-xs text-slate-300">
-                  <span className="font-extrabold text-white">10,000+</span>{" "}
-                  {language === "km"
-                    ? "សិស្សានុសិស្សបានស្វែងរកទិសដៅរួចរាល់"
-                    : "students already guided nationwide"}
+                  {trustText ? (
+                    <span>{trustText}</span>
+                  ) : (
+                    <>
+                      <span className="font-extrabold text-white">10,000+</span>{" "}
+                      {language === "km"
+                        ? "សិស្សានុសិស្សបានស្វែងរកទិសដៅរួចរាល់"
+                        : "students already guided nationwide"}
+                    </>
+                  )}
                 </div>
                 <div className="hidden sm:flex items-center gap-1 text-[#F7CE4D] text-xs font-bold pl-2 sm:border-l sm:border-white/15">
                   <Star className="w-3.5 h-3.5 fill-current" />
@@ -114,19 +177,19 @@ export function CtaBanner() {
               {/* Action Buttons Row */}
               <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                 <Link
-                  href="/register"
+                  href={resolvedPrimaryHref}
                   className="px-8 py-4 rounded-xl font-black text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#F3C432] shadow-[0_12px_28px_rgba(247,206,77,0.35)] hover:shadow-[0_16px_36px_rgba(247,206,77,0.45)] hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-2 group cursor-pointer"
                 >
-                  <span>{t("homeCta.button")}</span>
+                  <span>{resolvedPrimaryText}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
 
                 <Link
-                  href="/universities"
+                  href={resolvedSecondaryHref}
                   className="px-6 py-4 rounded-xl font-bold text-sm text-white bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/30 backdrop-blur-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <Compass className="w-4 h-4 text-[#F7CE4D]" />
-                  <span>{t("homeCta.exploreUnis")}</span>
+                  <span>{resolvedSecondaryText}</span>
                 </Link>
               </div>
             </div>
@@ -140,9 +203,7 @@ export function CtaBanner() {
                 <div className="relative rounded-2xl bg-white text-[#111965] shadow-xl px-4 py-2 border border-amber-200 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                   <p className="text-xs font-black whitespace-nowrap">
-                    {language === "km"
-                      ? "តោះស្វែងរកអនាគតជាមួយគ្នា!"
-                      : "Let's discover your future together!"}
+                    {resolvedMascotSpeech}
                   </p>
                 </div>
                 {/* Downward Speech Tail pointing directly to Tara */}
