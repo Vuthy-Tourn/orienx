@@ -249,7 +249,7 @@ const TARA_ADVICE_TIPS = [
   },
 ];
 
-// 4 Scientific Pillars
+// 4 Scientific Pillars with specific data, unique proof, and visual widgets
 const SCIENTIFIC_PILLARS = [
   {
     number: "01",
@@ -260,18 +260,40 @@ const SCIENTIFIC_PILLARS = [
     descKm: "ផ្អែកលើទ្រឹស្តីចិត្តវិទ្យាអាជីព ៦ វិមាត្ររបស់លោក John Holland ដែលឆ្លុះបញ្ចាំងពីចំណាប់អារម្មណ៍ពិតប្រាកដ និងការចូលចិត្តការងារប្រចាំថ្ងៃ។",
     icon: Compass,
     color: "#D97706",
-    badgeBg: "bg-amber-500/10 text-amber-700 border-amber-500/20",
+    badgeBg: "bg-amber-50 text-amber-700 border-amber-200/80",
+    glowBorder: "hover:border-amber-400 hover:shadow-amber-500/10",
+    proofEn: "John Holland's 6 dimensions • 30 localized question items",
+    proofKm: "ទ្រឹស្តីចិត្តវិទ្យា ៦ វិមាត្រ • សំណួរ ៣០ សម្រិតសម្រាំងសម្រាប់កម្ពុជា",
+    widgetType: "riasec-chips" as const,
+    chips: [
+      { code: "R", nameEn: "Realistic", nameKm: "ជាក់ស្តែង", bg: "bg-amber-50 text-amber-800 border-amber-200" },
+      { code: "I", nameEn: "Investigative", nameKm: "ស្រាវជ្រាវ", bg: "bg-indigo-50 text-indigo-800 border-indigo-200" },
+      { code: "A", nameEn: "Artistic", nameKm: "សិល្បៈ", bg: "bg-pink-50 text-pink-800 border-pink-200" },
+      { code: "S", nameEn: "Social", nameKm: "សង្គម", bg: "bg-emerald-50 text-emerald-800 border-emerald-200" },
+      { code: "E", nameEn: "Enterprising", nameKm: "សហគ្រិន", bg: "bg-blue-50 text-blue-800 border-blue-200" },
+      { code: "C", nameEn: "Conventional", nameKm: "ការិយាល័យ", bg: "bg-slate-50 text-slate-800 border-slate-200" },
+    ],
   },
   {
     number: "02",
     weight: "25%",
     titleEn: "16-Personality Cognitive Temperaments",
     titleKm: "វិមាត្របុគ្គលិកលក្ខណៈ 16P & ការគិត",
-    descEn: "Evaluates Myers-Briggs cognitive functions (Analysts, Diplomats, Sentinels, Explorers) to understand study endurance, stress resilience, and team dynamics.",
+    descEn: "Evaluates Myers-Briggs cognitive functions to understand study endurance, stress resilience, and natural teamwork dynamics across analytical and creative fields.",
     descKm: "វាយតម្លៃលើមុខងារនៃការគិត ៤ ក្រុមធំៗ ដើម្បីយល់ដឹងពីភាពធន់ក្នុងការសិក្សា របៀបដោះស្រាយបញ្ហា និងការសហការក្នុងក្រុមការងារ។",
     icon: BrainCircuit,
     color: "#2563EB",
-    badgeBg: "bg-blue-500/10 text-blue-700 border-blue-500/20",
+    badgeBg: "bg-blue-50 text-blue-700 border-blue-200/80",
+    glowBorder: "hover:border-blue-400 hover:shadow-blue-500/10",
+    proofEn: "4 cognitive temperament clusters • Myers-Briggs validated",
+    proofKm: "មុខងារនៃការគិត ៤ ក្រុមធំៗ • ផ្ទៀងផ្ទាត់តាមស្តង់ដារ Myers-Briggs",
+    widgetType: "16p-quadrants" as const,
+    quadrants: [
+      { nameEn: "Analysts", nameKm: "អ្នកវិភាគ", types: "INTJ • INTP • ENTJ • ENTP", tagColor: "bg-indigo-50 text-indigo-700 border-indigo-100" },
+      { nameEn: "Diplomats", nameKm: "អ្នកការទូត", types: "INFJ • INFP • ENFJ • ENFP", tagColor: "bg-emerald-50 text-emerald-700 border-emerald-100" },
+      { nameEn: "Sentinels", nameKm: "អ្នកការពារ", types: "ISTJ • ISFJ • ESTJ • ESFJ", tagColor: "bg-blue-50 text-blue-700 border-blue-100" },
+      { nameEn: "Explorers", nameKm: "អ្នករុករក", types: "ISTP • ISFP • ESTP • ESFP", tagColor: "bg-amber-50 text-amber-700 border-amber-100" },
+    ],
   },
   {
     number: "03",
@@ -282,7 +304,15 @@ const SCIENTIFIC_PILLARS = [
     descKm: "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នារវាងថ្នាក់វិទ្យាសាស្ត្រពិត ឬវិទ្យាសាស្ត្រសង្គម ជាមួយលក្ខខណ្ឌតម្រូវជាកាតព្វកិច្ចនៃមុខវិជ្ជាស្នូលរបស់សាកលវិទ្យាល័យ។",
     icon: GraduationCap,
     color: "#059669",
-    badgeBg: "bg-emerald-500/10 text-emerald-700 border-emerald-500/20",
+    badgeBg: "bg-emerald-50 text-emerald-700 border-emerald-200/80",
+    glowBorder: "hover:border-emerald-400 hover:shadow-emerald-500/10",
+    proofEn: "Cross-checked with RUPP, ITC Techno & CADT entrance cutoffs",
+    proofKm: "ផ្ទៀងផ្ទាត់ផ្ទាល់ជាមួយលក្ខខណ្ឌពិន្ទុ និងមុខវិជ្ជារបស់ RUPP, ITC និង CADT",
+    widgetType: "stream-validator" as const,
+    streams: [
+      { labelEn: "Science Stream", labelKm: "ថ្នាក់វិទ្យាសាស្ត្រពិត", targetEn: "STEM, Tech, Medicine & Engineering", targetKm: "វិស្វកម្ម, បច្ចេកវិទ្យា, វិទ្យាសាស្ត្រសុខាភិបាល", badge: "Math + Physics" },
+      { labelEn: "Social Stream", labelKm: "ថ្នាក់វិទ្យាសាស្ត្រសង្គម", targetEn: "Law, Business, Humanities & Diplomacy", targetKm: "នីតិសាស្ត្រ, សេដ្ឋកិច្ច, ទំនាក់ទំនងអន្តរជាតិ", badge: "Literature + Social" },
+    ],
   },
   {
     number: "04",
@@ -293,7 +323,15 @@ const SCIENTIFIC_PILLARS = [
     descKm: "រួមបញ្ចូលទិន្នន័យពីទីភ្នាក់ងារជាតិមុខរបរ និងការងារ (NEA) និងនិន្នាការរីកចម្រើននៃវិស័យបច្ចេកវិទ្យា និងធុរកិច្ច ដើម្បីធានាឱកាសការងារពិតប្រាកដ។",
     icon: TrendingUp,
     color: "#9333EA",
-    badgeBg: "bg-purple-500/10 text-purple-700 border-purple-500/20",
+    badgeBg: "bg-purple-50 text-purple-700 border-purple-200/80",
+    glowBorder: "hover:border-purple-400 hover:shadow-purple-500/10",
+    proofEn: "Official data from National Employment Agency (NEA) & MoEYS",
+    proofKm: "ទិន្នន័យផ្លូវការពីទីភ្នាក់ងារជាតិមុខរបរ និងការងារ (NEA) និង MoEYS",
+    widgetType: "nea-market" as const,
+    marketData: [
+      { sectorEn: "High-Growth Sectors", sectorKm: "វិស័យកំណើនខ្ពស់", fields: "AI, Cyber, FinTech, Data Science", badge: "High Demand", salary: "$600 – $2,400+" },
+      { sectorEn: "Stable Demand Sectors", sectorKm: "វិស័យស្ថិរភាព", fields: "Corporate Law, Banking, Supply Chain", badge: "Steady ROI", salary: "$500 – $1,800+" },
+    ],
   },
 ];
 
@@ -412,23 +450,40 @@ export default function AboutPage() {
         }
       );
 
-      // 3. 4-Pillar Scientific Cards ScrollTrigger
-      gsap.fromTo(
-        ".gsap-pillar-card",
-        { y: 35, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.1,
-          duration: 0.7,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: ".gsap-pillars-grid",
-            start: "top 90%",
-            once: true,
+      // 3. 4-Pillar Scientific Formula Bar + Staggered Cards Scroll Animation
+      const formulaTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".gsap-pillars-section",
+          start: "top 85%",
+          once: true,
+        },
+      });
+
+      formulaTimeline
+        .fromTo(
+          ".gsap-formula-bar",
+          { y: 24, opacity: 0, scale: 0.98 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }
+        )
+        .fromTo(
+          ".gsap-formula-seg",
+          { scaleX: 0, transformOrigin: "left center" },
+          { scaleX: 1, duration: 0.65, stagger: 0.1, ease: "power2.out" },
+          "-=0.25"
+        )
+        .fromTo(
+          ".gsap-pillar-card",
+          { y: 40, opacity: 0, scale: 0.96 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            stagger: 0.12,
+            duration: 0.7,
+            ease: "back.out(1.4)",
           },
-        }
-      );
+          "-=0.3"
+        );
 
       // 4. RIASEC Visualizer ScrollTrigger
       gsap.fromTo(
@@ -722,13 +777,13 @@ export default function AboutPage() {
         {/* ========================================================= */}
         {/* 3. THE 4-PILLAR SCIENTIFIC MATCHING ENGINE BREAKDOWN */}
         {/* ========================================================= */}
-        <div className="space-y-8">
+        <section className="gsap-pillars-section space-y-10">
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#111965]/10 text-[#111965] text-xs font-black uppercase tracking-wider">
               <Target className="w-3.5 h-3.5 text-[#111965]" />
               <span>{language === "km" ? "វិធីសាស្ត្រវិទ្យាសាស្ត្រ ៤ សសរស្ដម្ភ" : "The 4-Pillar Scientific Formula"}</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-[#111965] tracking-tight">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-[#111965] tracking-tight">
               {language === "km"
                 ? "ហេតុអ្វីបានជា Futera អាចផ្គូផ្គងជំនាញសិក្សាបានត្រឹមត្រូវ?"
                 : "Why Generic Quizzes Fail — And How Futera Solves It"}
@@ -740,56 +795,222 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="gsap-pillars-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Interactive 100% Mathematical Precision Formula Bar */}
+          <div className="gsap-formula-bar max-w-4xl mx-auto p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2 font-bold text-[#111965]">
+                <BrainCircuit className="w-4 h-4 text-[#111965]" />
+                <span className="text-sm font-black">
+                  {language === "km" ? "រូបមន្តផ្គូផ្គង ១០០% បែបវិទ្យាសាស្ត្រ" : "The 100% Scientific Equation"}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 font-mono text-xs font-black text-slate-500">
+                <span className="text-amber-600">30%</span> + <span className="text-blue-600">25%</span> + <span className="text-emerald-600">25%</span> + <span className="text-purple-600">20%</span> = <span className="text-[#111965] font-black">100% Precision</span>
+              </div>
+            </div>
+
+            {/* Multi-segment Animated Progress Track */}
+            <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden flex p-1 gap-1.5 shadow-inner">
+              <div
+                className="gsap-formula-seg h-full bg-amber-500 rounded-full relative group cursor-pointer transition-transform hover:scale-y-110"
+                style={{ flex: 30 }}
+              >
+                <div className="hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 -translate-x-1/2 bg-[#0A0F3D] text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-lg pointer-events-none whitespace-nowrap z-30">
+                  30% Holland RIASEC Interests
+                </div>
+              </div>
+              <div
+                className="gsap-formula-seg h-full bg-blue-600 rounded-full relative group cursor-pointer transition-transform hover:scale-y-110"
+                style={{ flex: 25 }}
+              >
+                <div className="hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 -translate-x-1/2 bg-[#0A0F3D] text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-lg pointer-events-none whitespace-nowrap z-30">
+                  25% 16-Personality Cognitive Style
+                </div>
+              </div>
+              <div
+                className="gsap-formula-seg h-full bg-emerald-500 rounded-full relative group cursor-pointer transition-transform hover:scale-y-110"
+                style={{ flex: 25 }}
+              >
+                <div className="hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 -translate-x-1/2 bg-[#0A0F3D] text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-lg pointer-events-none whitespace-nowrap z-30">
+                  25% BACII Stream Prerequisite
+                </div>
+              </div>
+              <div
+                className="gsap-formula-seg h-full bg-purple-600 rounded-full relative group cursor-pointer transition-transform hover:scale-y-110"
+                style={{ flex: 20 }}
+              >
+                <div className="hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 -translate-x-1/2 bg-[#0A0F3D] text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-lg pointer-events-none whitespace-nowrap z-30">
+                  20% Cambodian Labor Market (NEA)
+                </div>
+              </div>
+            </div>
+
+            {/* Legend Labels */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-bold">
+              <div className="flex items-center gap-1.5 text-slate-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 flex-shrink-0" />
+                <span>30% RIASEC</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-slate-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-600 flex-shrink-0" />
+                <span>25% 16-Personality</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-slate-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 flex-shrink-0" />
+                <span>25% BACII Stream</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-slate-700">
+                <span className="w-2.5 h-2.5 rounded-full bg-purple-600 flex-shrink-0" />
+                <span>20% NEA Market</span>
+              </div>
+            </div>
+          </div>
+
+          {/* The 4 Rich Pillar Cards */}
+          <div className="gsap-pillars-grid grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {SCIENTIFIC_PILLARS.map((p, idx) => {
               const PillarIcon = p.icon;
               return (
                 <div
                   key={idx}
-                  className="gsap-pillar-card p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-lg transition-all duration-200 space-y-4 group"
+                  className={`gsap-pillar-card p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-5 group ${p.glowBorder}`}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-12 h-12 rounded-2xl flex items-center justify-center font-black shadow-xs group-hover:scale-105 transition-transform duration-200"
-                        style={{ backgroundColor: `${p.color}15`, color: p.color }}
-                      >
-                        <PillarIcon className="w-6 h-6" />
+                  <div className="space-y-4">
+                    {/* Header Row */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="w-12 h-12 rounded-2xl flex items-center justify-center font-black shadow-xs group-hover:scale-105 transition-transform duration-200"
+                          style={{ backgroundColor: `${p.color}15`, color: p.color }}
+                        >
+                          <PillarIcon className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <span className="text-[11px] font-mono font-bold text-[#68708A] uppercase tracking-wider block">
+                            Pillar {p.number}
+                          </span>
+                          <h3 className="text-base sm:text-lg font-black text-[#111965] leading-snug">
+                            {language === "km" ? p.titleKm : p.titleEn}
+                          </h3>
+                        </div>
                       </div>
-                      <div>
-                        <span className="text-[11px] font-black text-[#68708A] uppercase tracking-wider block">
-                          Pillar {p.number}
-                        </span>
-                        <h3 className="text-base sm:text-lg font-black text-[#111965]">
-                          {language === "km" ? p.titleKm : p.titleEn}
-                        </h3>
+
+                      <div
+                        className={`px-3 py-1 rounded-xl text-xs font-black border flex-shrink-0 ${p.badgeBg}`}
+                      >
+                        Weight: {p.weight}
                       </div>
                     </div>
 
-                    <div
-                      className={`px-3 py-1 rounded-xl text-xs font-black border ${p.badgeBg}`}
-                    >
-                      Weight: {p.weight}
-                    </div>
+                    <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed font-medium">
+                      {language === "km" ? p.descKm : p.descEn}
+                    </p>
+
+                    {/* Interactive Micro-Widgets for Each Pillar */}
+                    {p.widgetType === "riasec-chips" && p.chips && (
+                      <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-200/70 space-y-2">
+                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500">
+                          <span>{language === "km" ? "វិមាត្រទាំង ៦ នៃ RIASEC:" : "6 Core RIASEC Traits:"}</span>
+                          <span className="text-amber-700 font-mono text-[10px]">30 Questions</span>
+                        </div>
+                        <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+                          {p.chips.map((chip, i) => (
+                            <div
+                              key={i}
+                              className={`p-1.5 rounded-xl border text-center transition-transform hover:scale-105 cursor-default ${chip.bg}`}
+                            >
+                              <span className="font-mono text-xs font-black block">{chip.code}</span>
+                              <span className="text-[10px] font-bold truncate block">
+                                {language === "km" ? chip.nameKm : chip.nameEn}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {p.widgetType === "16p-quadrants" && p.quadrants && (
+                      <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-200/70 space-y-2">
+                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500">
+                          <span>{language === "km" ? "ក្រុមបុគ្គលិកលក្ខណៈ ៤ ធំៗ:" : "4 Cognitive Clusters:"}</span>
+                          <span className="text-blue-700 font-mono text-[10px]">16 Types</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          {p.quadrants.map((quad, i) => (
+                            <div key={i} className={`p-2 rounded-xl border ${quad.tagColor}`}>
+                              <span className="text-xs font-black block">
+                                {language === "km" ? quad.nameKm : quad.nameEn}
+                              </span>
+                              <span className="text-[10px] text-slate-500 block truncate font-mono">
+                                {quad.types}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {p.widgetType === "stream-validator" && p.streams && (
+                      <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-200/70 space-y-2">
+                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500">
+                          <span>{language === "km" ? "ការផ្ទៀងផ្ទាត់ថ្នាក់វិទ្យាល័យ:" : "BACII Stream Prereq:"}</span>
+                          <span className="text-emerald-700 font-mono text-[10px]">MoEYS Aligned</span>
+                        </div>
+                        <div className="space-y-1.5">
+                          {p.streams.map((stream, i) => (
+                            <div key={i} className="p-2 rounded-xl bg-white border border-slate-100 flex items-center justify-between text-[11px]">
+                              <div>
+                                <span className="font-bold text-[#111965] block">
+                                  {language === "km" ? stream.labelKm : stream.labelEn}
+                                </span>
+                                <span className="text-slate-500 text-[10px]">
+                                  {language === "km" ? stream.targetKm : stream.targetEn}
+                                </span>
+                              </div>
+                              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                                {stream.badge}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {p.widgetType === "nea-market" && p.marketData && (
+                      <div className="p-3 rounded-2xl bg-slate-50/80 border border-slate-200/70 space-y-2">
+                        <div className="flex items-center justify-between text-[11px] font-bold text-slate-500">
+                          <span>{language === "km" ? "ទិន្នន័យទីផ្សារការងារ NEA:" : "NEA Salary Demand:"}</span>
+                          <span className="text-purple-700 font-mono text-[10px]">Verified NEA</span>
+                        </div>
+                        <div className="space-y-1.5">
+                          {p.marketData.map((data, i) => (
+                            <div key={i} className="p-2 rounded-xl bg-white border border-slate-100 flex items-center justify-between text-[11px]">
+                              <div>
+                                <span className="font-bold text-[#111965] block">
+                                  {language === "km" ? data.sectorKm : data.sectorEn}
+                                </span>
+                                <span className="text-slate-500 text-[10px]">{data.fields}</span>
+                              </div>
+                              <span className="font-mono text-purple-700 font-bold text-xs">
+                                {data.salary}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed font-medium">
-                    {language === "km" ? p.descKm : p.descEn}
-                  </p>
-
-                  <div className="pt-2 flex items-center gap-2 text-xs font-black text-[#111965]">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>
-                      {language === "km"
-                        ? "ផ្ទៀងផ្ទាត់សម្រាប់បរិបទនិស្សិតកម្ពុជា"
-                        : "Scientifically Validated for Cambodian Higher Ed"}
-                    </span>
+                  {/* Distinctive Proof Point */}
+                  <div className="pt-3 border-t border-slate-100 flex items-center gap-2 text-xs font-bold text-[#111965]">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                    <span>{language === "km" ? p.proofKm : p.proofEn}</span>
                   </div>
                 </div>
               );
             })}
           </div>
-        </div>
+        </section>
 
         {/* ========================================================= */}
         {/* 4. INTERACTIVE HOLLAND RIASEC 6-DIMENSION VISUALIZER */}
