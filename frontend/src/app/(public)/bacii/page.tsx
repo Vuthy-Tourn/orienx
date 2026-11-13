@@ -1407,7 +1407,7 @@ export default function PublicBaciiGuidePage() {
                   >
                     {/* shoulder: the tall left part of the top edge */}
                     <div
-                      className="absolute left-0 top-0 h-[92px] w-[calc(100%-100px)] rounded-tl-[28px] rounded-tr-[40px] bg-[var(--card)]"
+                      className="absolute left-0 top-0 h-[92px] w-[calc(100%-136px)] rounded-tl-[28px] rounded-tr-[40px] bg-[var(--card)]"
                       style={{
                         backgroundImage: `radial-gradient(140% 160% at 0% 0%, ${tier.accent}2B 0%, transparent 58%)`,
                       }}
@@ -1420,7 +1420,6 @@ export default function PublicBaciiGuidePage() {
                         }}
                       />
                     </div>
-
                     {/* body: starts at the ledge, under the whole width */}
                     <div className="absolute inset-x-0 bottom-0 top-[56px] rounded-[28px] bg-[var(--card)]" />
                   </div>

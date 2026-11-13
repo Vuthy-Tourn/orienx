@@ -166,10 +166,10 @@ function UniversitiesContent() {
                 </div>
                 <div>
                   <h3 className="text-sm font-black text-[#111965]">
-                    4-Year Degree Tuition Investment Estimator
+                    {language === "km" ? "ការប៉ាន់ស្មានថ្លៃសិក្សាបរិញ្ញាបត្រ ៤ ឆ្នាំ" : "4-Year Degree Tuition Investment Estimator"}
                   </h3>
                   <p className="text-xs text-[#68708A]">
-                    Official fee ranges cross-referenced with Cambodian university registries
+                    {language === "km" ? "ជួរថ្លៃសិក្សាផ្លូវការ ផ្ទៀងផ្ទាត់ជាមួយបញ្ជីសាកលវិទ្យាល័យកម្ពុជា" : "Official fee ranges cross-referenced with Cambodian university registries"}
                   </p>
                 </div>
               </div>
@@ -209,13 +209,13 @@ function UniversitiesContent() {
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[12px] font-bold opacity-80 uppercase tracking-wider">Public State Degree</span>
+                  <span className="text-[12px] font-bold opacity-80 uppercase tracking-wider">{language === "km" ? "សញ្ញាបត្រសាកលវិទ្យាល័យរដ្ឋ" : "Public State Degree"}</span>
                   <Landmark className="w-4 h-4 text-blue-400" />
                 </div>
                 <div className="text-xl font-black mt-2">
                   {currency === "USD" ? "$1,000 – $3,600" : "4.1M – 14.8M KHR"}
                 </div>
-                <div className="text-[12px] opacity-75 mt-1">Total 4-Year Tuition (RUPP, ITC Techno, NUM)</div>
+                <div className="text-[12px] opacity-75 mt-1">{language === "km" ? "ថ្លៃសិក្សាសរុប ៤ ឆ្នាំ (RUPP, ITC Techno, NUM)" : "Total 4-Year Tuition (RUPP, ITC Techno, NUM)"}</div>
               </button>
 
               <button
@@ -228,32 +228,32 @@ function UniversitiesContent() {
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[12px] font-bold opacity-80 uppercase tracking-wider">Private University Degree</span>
+                  <span className="text-[12px] font-bold opacity-80 uppercase tracking-wider">{language === "km" ? "សញ្ញាបត្រសាកលវិទ្យាល័យឯកជន" : "Private University Degree"}</span>
                   <Building2 className="w-4 h-4 text-purple-400" />
                 </div>
                 <div className="text-xl font-black mt-2">
                   {currency === "USD" ? "$6,000 – $24,000" : "24.6M – 98.4M KHR"}
                 </div>
-                <div className="text-[12px] opacity-75 mt-1">Total 4-Year Tuition (AUPP, Paragon, CADT)</div>
+                <div className="text-[12px] opacity-75 mt-1">{language === "km" ? "ថ្លៃសិក្សាសរុប ៤ ឆ្នាំ (AUPP, Paragon, CADT)" : "Total 4-Year Tuition (AUPP, Paragon, CADT)"}</div>
               </button>
 
               <div className="p-4 rounded-2xl bg-[#F0F2FA]/70 border border-[#E6E8F0] flex flex-col justify-between">
                 <div>
                   <div className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
-                    Scholarship Offset Potential
+                    {language === "km" ? "សក្តានុពលអាហារូបករណ៍" : "Scholarship Offset Potential"}
                   </div>
                   <div className="text-base font-black text-emerald-700 mt-1">
-                    Up to 100% Full-Ride
+                    {language === "km" ? "រហូតដល់ ១០០% ពេញលេញ" : "Up to 100% Full-Ride"}
                   </div>
                   <p className="text-xs text-[#68708A] mt-1 leading-snug">
-                    Over 500+ MoEYS and partner corporate grants available annually.
+                    {language === "km" ? "អាហារូបករណ៍ MoEYS និងក្រុមហ៊ុនដៃគូជាង ៥០០ មានជារៀងរាល់ឆ្នាំ។" : "Over 500+ MoEYS and partner corporate grants available annually."}
                   </p>
                 </div>
                 <Link
                   href="/scholarships"
                   className="inline-flex items-center gap-1.5 text-xs font-bold text-[#111965] hover:underline mt-2"
                 >
-                  <span>Explore Available Scholarships</span>
+                  <span>{language === "km" ? "រកមើលអាហារូបករណ៍ដែលមាន" : "Explore Available Scholarships"}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -283,9 +283,9 @@ function UniversitiesContent() {
             label: t("universitiesDirectory.allProvinces"),
             options: [
               { value: "", label: t("universitiesDirectory.allProvinces") },
-              { value: "Phnom Penh", label: "Phnom Penh" },
-              { value: "Battambang", label: "Battambang" },
-              { value: "Siem Reap", label: "Siem Reap" },
+              { value: "Phnom Penh", label: language === "km" ? "ភ្នំពេញ" : "Phnom Penh" },
+              { value: "Battambang", label: language === "km" ? "បាត់ដំបង" : "Battambang" },
+              { value: "Siem Reap", label: language === "km" ? "សៀមរាប" : "Siem Reap" },
             ],
           },
         ]}
@@ -315,7 +315,7 @@ function UniversitiesContent() {
               </div>
               <div className="min-w-0">
                 <div className="text-[12.5px] font-black uppercase tracking-wider text-blue-900">
-                  {t("universitiesDirectory.filteringByMajor") || "តម្រងតាមមុខជំនាញដែលបានណែនាំ (Filtered by Recommended Major)"}
+                  {language === "km" ? "តម្រងតាមមុខជំនាញដែលបានណែនាំ" : "Filtered by Recommended Major"}
                 </div>
                 <div className="text-sm sm:text-base font-black text-[#111965] truncate">
                   {majorInfo ? getLocalized(majorInfo.name) : majorSlug}
@@ -328,7 +328,7 @@ function UniversitiesContent() {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-[#111965] hover:bg-slate-100 border border-blue-200 transition-colors shrink-0 cursor-pointer shadow-2xs"
             >
               <X className="w-3.5 h-3.5 text-rose-500" />
-              <span>{t("universitiesDirectory.clearMajorFilter") || "បង្ហាញទាំងអស់"}</span>
+              <span>{language === "km" ? "បង្ហាញទាំងអស់" : "Show all"}</span>
             </button>
           </div>
         )}
@@ -474,7 +474,7 @@ function UniversitiesContent() {
                         </h3>
                         <div className="flex items-center gap-1.5 text-xs text-[#68708A] mt-1">
                           <MapPin className="w-3.5 h-3.5 text-[#111965] shrink-0" />
-                          <span>{getLocalized(uni.province) || uni.province || "Phnom Penh, Cambodia"}</span>
+                          <span>{getLocalized(uni.province) || uni.province || (language === "km" ? "ភ្នំពេញ, កម្ពុជា" : "Phnom Penh, Cambodia")}</span>
                         </div>
                       </div>
 
@@ -485,13 +485,13 @@ function UniversitiesContent() {
                           {uni.is_tuition_verified && (
                             <span className="text-emerald-700 font-semibold flex items-center gap-1">
                               <CheckCircle2 className="w-3 h-3" />
-                              <span>Verified</span>
+                              <span>{language === "km" ? "ផ្ទៀងផ្ទាត់" : "Verified"}</span>
                             </span>
                           )}
                         </div>
                         <div className="text-base font-extrabold text-[#111965]">
                           {uni.tuition_range_min_usd !== null
-                            ? `${formatMoney(uni.tuition_range_min_usd)} – ${formatMoney(uni.tuition_range_max_usd || uni.tuition_range_min_usd)} / yr`
+                            ? `${formatMoney(uni.tuition_range_min_usd)} – ${formatMoney(uni.tuition_range_max_usd || uni.tuition_range_min_usd)} ${language === "km" ? "/ ឆ្នាំ" : "/ yr"}`
                             : t("universitiesDirectory.tuitionPending")}
                         </div>
                       </div>

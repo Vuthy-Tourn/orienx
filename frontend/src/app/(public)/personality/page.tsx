@@ -525,7 +525,7 @@ export default function PublicPersonalityGuidePage() {
                 />
               )}
               <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D] fill-[#F7CE4D]/30" />
-              <span>{getLocalized({ km: "ទាំងអស់ (All 16)", en: "All (16)" })}</span>
+              <span>{language === "km" ? "ទាំងអស់ ១៦" : "All 16"}</span>
               <span
                 className={`px-1.5 py-0.5 rounded-md text-[12.5px] font-black transition-colors ${
                   selectedRole === "all" ? "bg-[#111965]/10 text-[#111965]" : "bg-slate-200/80 text-slate-600"

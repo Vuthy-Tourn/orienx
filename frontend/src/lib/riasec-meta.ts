@@ -328,6 +328,7 @@ export interface HollandArchetypeMeta {
   taglineEn: string;
   taglineKm: string;
   strengths: string[];
+  strengthsEn: string[];
   optimalWorkEnvironmentKm: string;
   optimalWorkEnvironmentEn: string;
   targetIndustriesKm: string[];
@@ -527,6 +528,11 @@ export function getHollandArchetype(hollandCode: string): HollandArchetypeMeta {
         secondary.strengths[0]?.km || "ការវិភាគស៊ីជម្រៅ",
         tertiary.strengths[0]?.km || "ការច្នៃប្រឌិត",
       ],
+      strengthsEn: [
+        primary.strengths[0]?.en || "Practical execution",
+        secondary.strengths[0]?.en || "Analytical thinking",
+        tertiary.strengths[0]?.en || "Creative problem solving",
+      ],
       optimalWorkEnvironmentKm: known.optimalWorkEnvironmentKm || primary.workEnvironment.km,
       optimalWorkEnvironmentEn: known.optimalWorkEnvironmentEn || primary.workEnvironment.en,
       targetIndustriesKm: known.targetIndustriesKm || [
@@ -558,6 +564,11 @@ export function getHollandArchetype(hollandCode: string): HollandArchetypeMeta {
       primary.strengths[0]?.km || "ភាពជាអ្នកអនុវត្ត",
       secondary.strengths[0]?.km || "ការវិភាគទិន្នន័យ",
       tertiary.strengths[0]?.km || "ការសម្រេចចិត្តប្រកបដោយប្រសិទ្ធភាព",
+    ],
+    strengthsEn: [
+      primary.strengths[0]?.en || "Practical execution",
+      secondary.strengths[0]?.en || "Data analysis",
+      tertiary.strengths[0]?.en || "Effective decision-making",
     ],
     optimalWorkEnvironmentKm: primary.workEnvironment.km,
     optimalWorkEnvironmentEn: primary.workEnvironment.en,

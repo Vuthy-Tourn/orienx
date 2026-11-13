@@ -31,6 +31,7 @@ const SALARY_TIERS: Record<string, {
   mid: string;
   senior: string;
   growthRate: string;
+  growthRateKm: string;
   iconName: "cpu" | "chart" | "construction";
   colorTheme: { bg: string; text: string; border: string };
   recommendedMajors: { en: string; km: string; slug: string }[];
@@ -41,6 +42,7 @@ const SALARY_TIERS: Record<string, {
     mid: "$950 – $1,600",
     senior: "$1,800 – $3,500+",
     growthRate: "+28% YoY Growth",
+    growthRateKm: "+២៨% កំណើនប្រចាំឆ្នាំ",
     iconName: "cpu",
     colorTheme: { bg: "bg-blue-50", text: "text-blue-900", border: "border-blue-200" },
     recommendedMajors: [
@@ -54,6 +56,7 @@ const SALARY_TIERS: Record<string, {
     mid: "$800 – $1,400",
     senior: "$1,500 – $2,800+",
     growthRate: "+19% YoY Growth",
+    growthRateKm: "+១៩% កំណើនប្រចាំឆ្នាំ",
     iconName: "chart",
     colorTheme: { bg: "bg-emerald-50", text: "text-emerald-900", border: "border-emerald-200" },
     recommendedMajors: [
@@ -67,6 +70,7 @@ const SALARY_TIERS: Record<string, {
     mid: "$750 – $1,300",
     senior: "$1,400 – $2,500+",
     growthRate: "+15% YoY Growth",
+    growthRateKm: "+១៥% កំណើនប្រចាំឆ្នាំ",
     iconName: "construction",
     colorTheme: { bg: "bg-amber-50", text: "text-amber-900", border: "border-amber-200" },
     recommendedMajors: [
@@ -76,13 +80,19 @@ const SALARY_TIERS: Record<string, {
   },
 };
 
-const RIASEC_MAP: Record<string, { titleEn: string; titleKm: string; desc: string; color: string }> = {
-  R: { titleEn: "Realistic", titleKm: "ជាក់ស្តែង (អនុវត្ត)", desc: "Hands-on problem solvers who work with physical objects, tools, and construction.", color: "bg-amber-50 text-amber-900 border-amber-200" },
-  I: { titleEn: "Investigative", titleKm: "ស្រាវជ្រាវ (វិភាគ)", desc: "Analytical thinkers who excel at logic, programming, algorithms, and research.", color: "bg-blue-50 text-blue-900 border-blue-200" },
-  A: { titleEn: "Artistic", titleKm: "សិល្បៈ (ច្នៃប្រឌិត)", desc: "Expressive creators focused on UX/UI design, media production, and innovation.", color: "bg-purple-50 text-purple-900 border-purple-200" },
-  S: { titleEn: "Social", titleKm: "សង្គម (ជួយអ្នកដទៃ)", desc: "Empathetic communicators who thrive in education, mentoring, and counseling.", color: "bg-emerald-50 text-emerald-900 border-emerald-200" },
-  E: { titleEn: "Enterprising", titleKm: "សហគ្រិន (ដឹកនាំ)", desc: "Persuasive decision makers drawn to management, leadership, and entrepreneurship.", color: "bg-orange-50 text-orange-900 border-orange-200" },
-  C: { titleEn: "Conventional", titleKm: "ការិយាល័យ (រៀបរយ)", desc: "Organized detail specialists skilled in finance, compliance, and administration.", color: "bg-slate-50 text-slate-900 border-slate-200" },
+const INDUSTRY_KM: Record<string, string> = {
+  Technology: "បច្ចេកវិទ្យា",
+  "Finance & Banking": "ហិរញ្ញវត្ថុ & ធនាគារ",
+  "Engineering & Construction": "វិស្វកម្ម & សំណង់",
+};
+
+const RIASEC_MAP: Record<string, { titleEn: string; titleKm: string; desc: string; descKm: string; color: string }> = {
+  R: { titleEn: "Realistic", titleKm: "ជាក់ស្តែង (អនុវត្ត)", desc: "Hands-on problem solvers who work with physical objects, tools, and construction.", descKm: "អ្នកដោះស្រាយបញ្ហាជាក់ស្តែង ដែលធ្វើការជាមួយវត្ថុ ឧបករណ៍ និងសំណង់។", color: "bg-amber-50 text-amber-900 border-amber-200" },
+  I: { titleEn: "Investigative", titleKm: "ស្រាវជ្រាវ (វិភាគ)", desc: "Analytical thinkers who excel at logic, programming, algorithms, and research.", descKm: "អ្នកគិតវិភាគ ពូកែផ្នែកតក្កវិជ្ជា កម្មវិធី ក្បួនដោះស្រាយ និងការស្រាវជ្រាវ។", color: "bg-blue-50 text-blue-900 border-blue-200" },
+  A: { titleEn: "Artistic", titleKm: "សិល្បៈ (ច្នៃប្រឌិត)", desc: "Expressive creators focused on UX/UI design, media production, and innovation.", descKm: "អ្នកបង្កើតច្នៃប្រឌិត ផ្តោតលើ UX/UI ផលិតកម្មមេឌៀ និងនវានុវត្តន៍។", color: "bg-purple-50 text-purple-900 border-purple-200" },
+  S: { titleEn: "Social", titleKm: "សង្គម (ជួយអ្នកដទៃ)", desc: "Empathetic communicators who thrive in education, mentoring, and counseling.", descKm: "អ្នកទំនាក់ទំនងដែលយល់ចិត្ត ពូកែផ្នែកអប់រំ ណែនាំ និងការប្រឹក្សា។", color: "bg-emerald-50 text-emerald-900 border-emerald-200" },
+  E: { titleEn: "Enterprising", titleKm: "សហគ្រិន (ដឹកនាំ)", desc: "Persuasive decision makers drawn to management, leadership, and entrepreneurship.", descKm: "អ្នកសម្រេចចិត្តដែលមានឥទ្ធិពល ទាក់ទាញផ្នែកគ្រប់គ្រង ដឹកនាំ និងសហគ្រិនភាព។", color: "bg-orange-50 text-orange-900 border-orange-200" },
+  C: { titleEn: "Conventional", titleKm: "ការិយាល័យ (រៀបរយ)", desc: "Organized detail specialists skilled in finance, compliance, and administration.", descKm: "អ្នករៀបចំលម្អិត ពូកែផ្នែកហិរញ្ញវត្ថុ ការអនុលោម និងរដ្ឋបាល។", color: "bg-slate-50 text-slate-900 border-slate-200" },
 };
 
 export default function CareersPage() {
@@ -173,10 +183,10 @@ export default function CareersPage() {
                 </div>
                 <div>
                   <h3 className="text-sm font-black text-[#111965]">
-                    Cambodia 2026 Salary Benchmark Barometer
+                    {language === "km" ? "រង្វាស់ប្រាក់ខែយោងកម្ពុជា ២០២៦" : "Cambodia 2026 Salary Benchmark Barometer"}
                   </h3>
                   <p className="text-xs text-[#68708A]">
-                    Monthly compensation estimates based on local tech, finance, and engineering hiring
+                    {language === "km" ? "ការប៉ាន់ស្មានប្រាក់ខែប្រចាំខែ ផ្អែកលើការជួលក្នុងវិស័យបច្ចេកវិទ្យា ហិរញ្ញវត្ថុ និងវិស្វកម្មក្នុងស្រុក" : "Monthly compensation estimates based on local tech, finance, and engineering hiring"}
                   </p>
                 </div>
               </div>
@@ -190,7 +200,7 @@ export default function CareersPage() {
                     seniorityLevel === "junior" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
                   }`}
                 >
-                  Junior (0-2 Years)
+                  {language === "km" ? "កម្រិតដំបូង (០-២ ឆ្នាំ)" : "Junior (0-2 Years)"}
                 </button>
                 <button
                   type="button"
@@ -199,7 +209,7 @@ export default function CareersPage() {
                     seniorityLevel === "mid" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
                   }`}
                 >
-                  Mid-Level (3-5 Years)
+                  {language === "km" ? "កម្រិតមធ្យម (៣-៥ ឆ្នាំ)" : "Mid-Level (3-5 Years)"}
                 </button>
                 <button
                   type="button"
@@ -208,7 +218,7 @@ export default function CareersPage() {
                     seniorityLevel === "senior" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
                   }`}
                 >
-                  Senior / Lead (5+ Years)
+                  {language === "km" ? "កម្រិតជាន់ខ្ពស់ / អ្នកដឹកនាំ (៥ ឆ្នាំ+)" : "Senior / Lead (5+ Years)"}
                 </button>
               </div>
             </div>
@@ -217,34 +227,34 @@ export default function CareersPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-[#E6E8F0] space-y-1">
                 <div className="flex items-center justify-between text-xs font-bold text-[#68708A]">
-                  <span>Software & AI Engineering</span>
-                  <span className="text-blue-700 font-extrabold">+28% Demand</span>
+                  <span>{language === "km" ? "វិស្វកម្មសូហ្វវែរ & AI" : "Software & AI Engineering"}</span>
+                  <span className="text-blue-700 font-extrabold">{language === "km" ? "+២៨% តម្រូវការ" : "+28% Demand"}</span>
                 </div>
                 <div className="text-xl font-black text-[#111965]">
                   {seniorityLevel === "junior" ? "$450 – $900" : seniorityLevel === "mid" ? "$950 – $1,600" : "$1,800 – $3,500+"}
-                  <span className="text-xs font-normal text-[#68708A] ml-1">/ month</span>
+                  <span className="text-xs font-normal text-[#68708A] ml-1">{language === "km" ? "/ ខែ" : "/ month"}</span>
                 </div>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-[#E6E8F0] space-y-1">
                 <div className="flex items-center justify-between text-xs font-bold text-[#68708A]">
-                  <span>Banking & Financial Analysis</span>
-                  <span className="text-emerald-700 font-extrabold">+19% Demand</span>
+                  <span>{language === "km" ? "ធនាគារ & វិភាគហិរញ្ញវត្ថុ" : "Banking & Financial Analysis"}</span>
+                  <span className="text-emerald-700 font-extrabold">{language === "km" ? "+១៩% តម្រូវការ" : "+19% Demand"}</span>
                 </div>
                 <div className="text-xl font-black text-[#111965]">
                   {seniorityLevel === "junior" ? "$400 – $750" : seniorityLevel === "mid" ? "$800 – $1,400" : "$1,500 – $2,800+"}
-                  <span className="text-xs font-normal text-[#68708A] ml-1">/ month</span>
+                  <span className="text-xs font-normal text-[#68708A] ml-1">{language === "km" ? "/ ខែ" : "/ month"}</span>
                 </div>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-[#E6E8F0] space-y-1">
                 <div className="flex items-center justify-between text-xs font-bold text-[#68708A]">
-                  <span>Civil & Infrastructure Engineering</span>
-                  <span className="text-amber-700 font-extrabold">+15% Demand</span>
+                  <span>{language === "km" ? "វិស្វកម្មសំណង់ស៊ីវិល & ហេដ្ឋារចនាសម្ព័ន្ធ" : "Civil & Infrastructure Engineering"}</span>
+                  <span className="text-amber-700 font-extrabold">{language === "km" ? "+១៥% តម្រូវការ" : "+15% Demand"}</span>
                 </div>
                 <div className="text-xl font-black text-[#111965]">
                   {seniorityLevel === "junior" ? "$350 – $700" : seniorityLevel === "mid" ? "$750 – $1,300" : "$1,400 – $2,500+"}
-                  <span className="text-xs font-normal text-[#68708A] ml-1">/ month</span>
+                  <span className="text-xs font-normal text-[#68708A] ml-1">{language === "km" ? "/ ខែ" : "/ month"}</span>
                 </div>
               </div>
             </div>
@@ -260,9 +270,9 @@ export default function CareersPage() {
         clearSearchLabel={language === "km" ? "សម្អាតការស្វែងរក" : "Clear search"}
         chips={[
           { value: "", label: t("careersDirectory.allIndustries") },
-          { value: "Technology", label: "Technology" },
-          { value: "Finance & Banking", label: "Finance & Banking" },
-          { value: "Engineering & Construction", label: "Engineering & Construction" },
+          { value: "Technology", label: language === "km" ? "បច្ចេកវិទ្យា" : "Technology" },
+          { value: "Finance & Banking", label: language === "km" ? "ហិរញ្ញវត្ថុ & ធនាគារ" : "Finance & Banking" },
+          { value: "Engineering & Construction", label: language === "km" ? "វិស្វកម្ម & សំណង់" : "Engineering & Construction" },
         ]}
         activeChip={industryFilter}
         onChipChange={setIndustryFilter}
@@ -373,14 +383,14 @@ export default function CareersPage() {
                           {renderIcon(meta.iconName)}
                         </div>
                         <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${meta.colorTheme.bg} ${meta.colorTheme.text} ${meta.colorTheme.border}`}>
-                          {c.industry}
+                          {language === "km" ? INDUSTRY_KM[c.industry] || c.industry : c.industry}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-1.5">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[12px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                          <span>{meta.growthRate}</span>
+                          <span>{language === "km" ? meta.growthRateKm : meta.growthRate}</span>
                         </span>
                         <BookmarkButton entityType="career" entityId={c.id} />
                       </div>
@@ -392,9 +402,9 @@ export default function CareersPage() {
                         {getLocalized(c.title)}
                       </h3>
                       <div className="text-xs text-[#68708A] font-mono mt-1 flex items-center gap-1.5">
-                        <span className="font-bold text-[#111965]">RIASEC: {c.riasec_code}</span>
+                        <span className="font-bold text-[#111965]">{language === "km" ? "រីស៊ីស" : "RIASEC"}: {c.riasec_code}</span>
                         <span>•</span>
-                        <span>Min: {c.education_level || "Bachelor"}</span>
+                        <span>{language === "km" ? "អប្បបរមា" : "Min"}: {language === "km" ? "បរិញ្ញាបត្រ" : c.education_level || "Bachelor"}</span>
                       </div>
                     </div>
 
@@ -406,9 +416,15 @@ export default function CareersPage() {
                     <div className="p-3.5 rounded-xl bg-[#F0F2FA]/70 border border-[#E6E8F0] space-y-1.5">
                       <div className="text-[12px] text-[#68708A] font-bold flex items-center justify-between">
                         <span>
-                          {seniorityLevel === "junior" ? "Junior (0-2y)" : seniorityLevel === "mid" ? "Mid-Level (3-5y)" : "Senior (5y+)"} Salary Benchmark:
+                          {language === "km"
+                            ? seniorityLevel === "junior"
+                              ? "កម្រិតដំបូង (០-២ ឆ្នាំ) ប្រាក់ខែយោង:"
+                              : seniorityLevel === "mid"
+                              ? "កម្រិតមធ្យម (៣-៥ ឆ្នាំ) ប្រាក់ខែយោង:"
+                              : "កម្រិតជាន់ខ្ពស់ (៥ ឆ្នាំ+) ប្រាក់ខែយោង:"
+                            : `${seniorityLevel === "junior" ? "Junior (0-2y)" : seniorityLevel === "mid" ? "Mid-Level (3-5y)" : "Senior (5y+)"} Salary Benchmark:`}
                         </span>
-                        <span className="text-xs font-semibold text-[#111965]">USD / Month</span>
+                        <span className="text-xs font-semibold text-[#111965]">{language === "km" ? "ដុល្លារ / ខែ" : "USD / Month"}</span>
                       </div>
                       <div className="text-lg font-black text-[#111965]">
                         {activeSalary}
@@ -418,7 +434,7 @@ export default function CareersPage() {
                     {/* Career Milestones Pathway */}
                     <div className="space-y-1.5 pt-1">
                       <div className="text-[12.5px] uppercase font-bold text-[#68708A] tracking-wider">
-                        Typical Career Ladder (Cambodia)
+                        {language === "km" ? "ជណ្តើរអាជីពធម្មតា (កម្ពុជា)" : "Typical Career Ladder (Cambodia)"}
                       </div>
                       <div className="flex items-center gap-1 text-[12px] text-[#171A2C]">
                         {meta.milestones.map((m, idx) => (
@@ -459,7 +475,7 @@ export default function CareersPage() {
                   {/* Card Footer CTA */}
                   <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-between">
                     <span className="text-xs text-[#68708A]">
-                      Cambodia Market
+                      {language === "km" ? "ទីផ្សារកម្ពុជា" : "Cambodia Market"}
                     </span>
 
                     <Link
@@ -489,7 +505,9 @@ export default function CareersPage() {
               {t("careersDirectory.notFound")}
             </h3>
             <p className="text-xs text-[#68708A] max-w-md mx-auto">
-              Try choosing "All Industries" or clearing your search term to see the complete list of career opportunities in Cambodia.
+              {language === "km"
+                ? "សូមជ្រើសរើស “គ្រប់វិស័យ” ឬសម្អាតពាក្យស្វែងរក ដើម្បីមើលឱកាសការងារទាំងអស់នៅកម្ពុជា។"
+                : "Try choosing \"All Industries\" or clearing your search term to see the complete list of career opportunities in Cambodia."}
             </p>
             <button
               onClick={resetFilters}
@@ -506,13 +524,13 @@ export default function CareersPage() {
             <div className="space-y-1">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-[#F7CE4D] text-xs font-bold">
                 <Compass className="w-3.5 h-3.5" />
-                <span>Holland RIASEC Vocational Framework</span>
+                <span>{language === "km" ? "ក្របខ័ណ្ឌវិជ្ជាជីវៈ Holland RIASEC" : "Holland RIASEC Vocational Framework"}</span>
               </div>
               <h3 className="text-xl font-extrabold text-white">
-                How Career Compatibility Works in Futera
+                {language === "km" ? "តើភាពស៊ីសង្វាក់អាជីពដំណើរការយ៉ាងណានៅ Futera" : "How Career Compatibility Works in Futera"}
               </h3>
               <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-                Click any code below to filter careers matching that psychological work style:
+                {language === "km" ? "ចុចលើកូដខាងក្រោម ដើម្បីតម្រងអាជីពដែលត្រូវនឹងរបៀបធ្វើការនេះ:" : "Click any code below to filter careers matching that psychological work style:"}
               </p>
             </div>
 
@@ -520,7 +538,7 @@ export default function CareersPage() {
               href="/dashboard/assessments/riasec"
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all shadow-md shrink-0 self-start sm:self-auto"
             >
-              <span>Take RIASEC Test</span>
+              <span>{language === "km" ? "ធ្វើតេស្ត RIASEC" : "Take RIASEC Test"}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -544,7 +562,7 @@ export default function CareersPage() {
                     {language === "km" ? info.titleKm.split(" ")[0] : info.titleEn}
                   </div>
                   <div className="text-[12.5px] opacity-80 line-clamp-2 mt-1">
-                    {info.desc}
+                    {language === "km" ? info.descKm : info.desc}
                   </div>
                 </button>
               );

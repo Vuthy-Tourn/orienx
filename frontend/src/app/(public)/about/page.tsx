@@ -377,15 +377,15 @@ export default function AboutPage() {
               <div className="gsap-hero-anim flex flex-wrap items-center justify-center lg:justify-start gap-3.5 text-xs font-bold text-slate-200 pt-1">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>100% Free For Students</span>
+                  <span>{language === "km" ? "ឥតគិតថ្លៃ ១០០% សម្រាប់សិស្ស" : "100% Free For Students"}</span>
                 </div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#F7CE4D]" />
-                  <span>Verified MoEYS Data</span>
+                  <span>{language === "km" ? "ទិន្នន័យ MoEYS ផ្ទៀងផ្ទាត់" : "Verified MoEYS Data"}</span>
                 </div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15">
                   <BrainCircuit className="w-3.5 h-3.5 text-blue-400" />
-                  <span>RIASEC + MBTI Scientific Engine</span>
+                  <span>{language === "km" ? "ម៉ាស៊ីនវិទ្យាសាស្ត្រ RIASEC + MBTI" : "RIASEC + MBTI Scientific Engine"}</span>
                 </div>
               </div>
 
@@ -415,7 +415,7 @@ export default function AboutPage() {
               <div
                 className="gsap-hero-mascot-card relative p-6 sm:p-8 rounded-3xl bg-white/[0.08] backdrop-blur-2xl border border-white/20 shadow-2xl max-w-sm w-full space-y-4 text-center overflow-hidden cursor-pointer select-none"
                 onClick={cycleTaraTip}
-                title="Click Tara for guidance advice!"
+                title={language === "km" ? "ចុចលើតារាសម្រាប់គន្លឹះណែនាំ" : "Click Tara for guidance advice!"}
               >
                 <BorderBeam size={220} duration={9} delay={0} borderWidth={1.5} />
 
@@ -441,7 +441,7 @@ export default function AboutPage() {
                 <div className="space-y-2 relative z-10">
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F7CE4D] text-[#111965] text-xs font-black shadow-xs">
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>Tara Guidance Tip (Click to Rotate)</span>
+                    <span>{language === "km" ? "គន្លឹះណែនាំពីតារា" : "Tara Guidance Tip"}</span>
                   </div>
 
                   <p className="text-xs sm:text-sm text-slate-100 font-medium leading-relaxed p-4 rounded-2xl bg-[#080D2B]/80 border border-white/15 backdrop-blur-md min-h-[76px] flex items-center justify-center shadow-inner">
@@ -472,7 +472,7 @@ export default function AboutPage() {
                 {t("aboutPage.statMajors", "Curated Cambodian Majors")}
               </div>
               <div className="text-[12px] text-[#68708A] leading-relaxed">
-                STEM, AI, Business, & Creative Curricula
+                {language === "km" ? "STEM, AI, ពាណិជ្ជកម្ម & មុខវិជ្ជាច្នៃប្រឌិត" : "STEM, AI, Business, & Creative Curricula"}
               </div>
             </div>
           </div>
@@ -484,7 +484,7 @@ export default function AboutPage() {
             </div>
             <div className="space-y-1">
               <div className="text-2xl sm:text-4xl font-black text-[#111965] tracking-tight">
-                <NumberTicker value={6} suffix=" Campuses" />
+                <NumberTicker value={6} suffix={language === "km" ? " សាកលវិទ្យាល័យ" : " Campuses"} />
               </div>
               <div className="text-xs sm:text-sm font-black text-[#171A2C]">
                 {t("aboutPage.statUniversities", "Verified Universities")}
@@ -508,7 +508,7 @@ export default function AboutPage() {
                 {t("aboutPage.statTuition", "Verified Tuition Data")}
               </div>
               <div className="text-[12px] text-[#68708A] leading-relaxed">
-                Cross-referenced with MoEYS admission notices
+                {language === "km" ? "ផ្ទៀងផ្ទាត់ជាមួយសេចក្តីជូនដំណឹងចូលរៀនរបស់ MoEYS" : "Cross-referenced with MoEYS admission notices"}
               </div>
             </div>
           </div>
@@ -520,13 +520,13 @@ export default function AboutPage() {
             </div>
             <div className="space-y-1">
               <div className="text-2xl sm:text-4xl font-black text-[#111965] tracking-tight">
-                4 Pillars
+                {language === "km" ? "៤ សសរស្តម្ភ" : "4 Pillars"}
               </div>
               <div className="text-xs sm:text-sm font-black text-[#171A2C]">
                 {t("aboutPage.statScience", "Scientific Matching Engine")}
               </div>
               <div className="text-[12px] text-[#68708A] leading-relaxed">
-                RIASEC + MBTI + Academics + Labor Market
+                {language === "km" ? "RIASEC + MBTI + លទ្ធផលសិក្សា + ទីផ្សារការងារ" : "RIASEC + MBTI + Academics + Labor Market"}
               </div>
             </div>
           </div>

@@ -30,7 +30,7 @@ import {
 } from "@/lib/personality-meta";
 
 export default function PersonalityAssessmentPage() {
-  const { t, getLocalized } = useLanguage();
+  const { t, getLocalized, language } = useLanguage();
   const queryClient = useQueryClient();
 
   const [activeTab, setActiveTab] = useState<"form" | "results">("form");
@@ -213,10 +213,27 @@ export default function PersonalityAssessmentPage() {
     const pType = latestResult.personality_type || "INTJ";
     const arch = ARCHETYPE_META[pType] || ARCHETYPE_META["INTJ"];
 
-    const traitsKm = latestResult.traits_summary_km || {};
-    const strengths = traitsKm.strengths || ["ការគិតបែបយុទ្ធសាស្ត្រ", "ការវិភាគស៊ីជម្រៅ", "ភាពស្មោះត្រង់នឹងគោលការណ៍"];
-    const learningStyle = traitsKm.learning_style || "ការរៀនតាមរយៈទ្រឹស្តីស៊ីជម្រៅ និងការអនុវត្តគម្រោងជាក់ស្តែង";
-    const bestFields = traitsKm.best_fields || ["វិស្វកម្មសូហ្វវែរ & STEM", "ស្ថាបត្យកម្មប្រព័ន្ធ", "ទិន្នន័យ និងបញ្ញាសិប្បនិម្មិត"];
+    const traits =
+      (language === "km"
+        ? latestResult.traits_summary_km
+        : latestResult.traits_summary_en) ||
+      latestResult.traits_summary_km ||
+      {};
+    const strengths =
+      traits.strengths ||
+      (language === "km"
+        ? ["ការគិតបែបយុទ្ធសាស្ត្រ", "ការវិភាគស៊ីជម្រៅ", "ភាពស្មោះត្រង់នឹងគោលការណ៍"]
+        : ["Strategic thinking", "Deep analysis", "Principled decision-making"]);
+    const learningStyle =
+      traits.learning_style ||
+      (language === "km"
+        ? "ការរៀនតាមរយៈទ្រឹស្តីស៊ីជម្រៅ និងការអនុវត្តគម្រោងជាក់ស្តែង"
+        : "Deep theoretical study followed by hands-on project work");
+    const bestFields =
+      traits.best_fields ||
+      (language === "km"
+        ? ["វិស្វកម្មសូហ្វវែរ & STEM", "ស្ថាបត្យកម្មប្រព័ន្ធ", "ទិន្នន័យ និងបញ្ញាសិប្បនិម្មិត"]
+        : ["Software Engineering & STEM", "Systems Architecture", "Data & Artificial Intelligence"]);
 
     // Dominant polarities
     const isE = latestResult.extraversion_score >= 50;
@@ -267,7 +284,7 @@ export default function PersonalityAssessmentPage() {
               <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 uppercase tracking-wider shadow-2xs">
                 <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
                 <span>
-                  {arch.roleNameEn.toUpperCase()} • {arch.roleNameKm}
+                  {language === "km" ? arch.roleNameKm : arch.roleNameEn.toUpperCase()}
                 </span>
               </div>
 
@@ -336,7 +353,7 @@ export default function PersonalityAssessmentPage() {
                 <Target className="w-4 h-4" />
               </span>
               <span className="text-xs font-extrabold uppercase tracking-wide">
-                ចំណុចខ្លាំងចម្បង (Strengths)
+                {language === "km" ? "ចំណុចខ្លាំងចម្បង" : "Key Strengths"}
               </span>
             </div>
             <div className="flex flex-wrap gap-1.5 pt-1">
@@ -359,7 +376,7 @@ export default function PersonalityAssessmentPage() {
                 <GraduationCap className="w-4 h-4" />
               </span>
               <span className="text-xs font-extrabold uppercase tracking-wide">
-                រចនាប័ទ្មសិក្សា (Learning Style)
+                {language === "km" ? "រចនាប័ទ្មសិក្សា" : "Learning Style"}
               </span>
             </div>
             <p className="text-xs text-[#171A2C] leading-relaxed font-medium pt-1">
@@ -374,7 +391,7 @@ export default function PersonalityAssessmentPage() {
                 <Brain className="w-4 h-4" />
               </span>
               <span className="text-xs font-extrabold uppercase tracking-wide">
-                វិស័យសិក្សាសាកសម (Best Fields)
+                {language === "km" ? "វិស័យសិក្សាសាកសម" : "Best Fields"}
               </span>
             </div>
             <div className="flex flex-wrap gap-1.5 pt-1">
@@ -399,7 +416,9 @@ export default function PersonalityAssessmentPage() {
                 {t("personalityAssessment.dimensionBreakdown") || "ពិន្ទុវិមាត្រទាំង ៤ (The 4 Preference Dimensions)"}
               </h3>
               <p className="text-xs text-[#68708A]">
-                កម្រិតទំនោរចិត្តរវាងប៉ូលផ្ទុយគ្នានីមួយៗនៃការទទួលព័ត៌មាន ការសម្រេចចិត្ត និងការប្រាស្រ័យទាក់ទង
+                {language === "km"
+                  ? "កម្រិតទំនោរចិត្តរវាងប៉ូលផ្ទុយគ្នានីមួយៗនៃការទទួលព័ត៌មាន ការសម្រេចចិត្ត និងការប្រាស្រ័យទាក់ទង"
+                  : "How your preferences tilt between opposite poles in how you take in information, decide, and organize."}
               </p>
             </div>
             <span className="text-[12px] font-bold text-[#68708A] bg-[#F0F2FA] px-2.5 py-1 rounded-lg self-start sm:self-auto">
@@ -414,7 +433,7 @@ export default function PersonalityAssessmentPage() {
                 <div className="flex items-center justify-between gap-2">
                   <div>
                     <h4 className="text-xs sm:text-sm font-extrabold text-[#111965]">
-                      ចិត្ត & ថាមពល (Mind)
+                      {language === "km" ? "ចិត្ត & ថាមពល" : "Mind"}
                     </h4>
                     <p className="text-[12px] text-[#68708A]">Extraverted vs Introverted</p>
                   </div>
@@ -451,8 +470,12 @@ export default function PersonalityAssessmentPage() {
 
               <p className="text-[12px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
                 {isE
-                  ? "អ្នកទទួលបានថាមពលពីការធ្វើការងារជាក្រុម ការពិភាក្សាផ្លាស់ប្តូរគំនិត និងបរិស្ថានសង្គមរស់រវើក។"
-                  : "អ្នកបញ្ចូលថាមពលនៅកន្លែងស្ងប់ស្ងាត់ និងការផ្តោតអារម្មណ៍ស៊ីជម្រៅតែម្នាក់ឯង។"}
+                  ? language === "km"
+                    ? "អ្នកទទួលបានថាមពលពីការធ្វើការងារជាក្រុម ការពិភាក្សាផ្លាស់ប្តូរគំនិត និងបរិស្ថានសង្គមរស់រវើក។"
+                    : "You draw energy from teamwork, discussion, and lively social environments."
+                  : language === "km"
+                  ? "អ្នកបញ្ចូលថាមពលនៅកន្លែងស្ងប់ស្ងាត់ និងការផ្តោតអារម្មណ៍ស៊ីជម្រៅតែម្នាក់ឯង។"
+                  : "You recharge in quiet settings and through deep, solitary focus."}
               </p>
             </div>
 
@@ -462,7 +485,7 @@ export default function PersonalityAssessmentPage() {
                 <div className="flex items-center justify-between gap-2">
                   <div>
                     <h4 className="text-xs sm:text-sm font-extrabold text-[#111965]">
-                      ការទទួលព័ត៌មាន (Energy)
+                      {language === "km" ? "ការទទួលព័ត៌មាន" : "Energy"}
                     </h4>
                     <p className="text-[12px] text-[#68708A]">Observant vs Intuitive</p>
                   </div>
@@ -499,8 +522,12 @@ export default function PersonalityAssessmentPage() {
 
               <p className="text-[12px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
                 {isN
-                  ? "អ្នកចាប់អារម្មណ៍លើគំនិតច្នៃប្រឌិតថ្មីៗ ចក្ខុវិស័យអនាគត ទ្រឹស្តីទូលំទូលាយ និងការស្រាវជ្រាវគំនិតប្លែកៗ។"
-                  : "អ្នកផ្តោតលើទិន្នន័យជាក់ស្តែង ការអនុវត្តជាក់លាក់ និងបទពិសោធន៍ផ្ទាល់ដៃដែលផ្តល់លទ្ធផលប្រាកដ។"}
+                  ? language === "km"
+                    ? "អ្នកចាប់អារម្មណ៍លើគំនិតច្នៃប្រឌិតថ្មីៗ ចក្ខុវិស័យអនាគត ទ្រឹស្តីទូលំទូលាយ និងការស្រាវជ្រាវគំនិតប្លែកៗ។"
+                    : "You're drawn to new ideas, future possibilities, broad theories, and unconventional research."
+                  : language === "km"
+                  ? "អ្នកផ្តោតលើទិន្នន័យជាក់ស្តែង ការអនុវត្តជាក់លាក់ និងបទពិសោធន៍ផ្ទាល់ដៃដែលផ្តល់លទ្ធផលប្រាកដ។"
+                  : "You focus on concrete data, practical implementation, and hands-on experience with measurable results."}
               </p>
             </div>
 
@@ -510,7 +537,7 @@ export default function PersonalityAssessmentPage() {
                 <div className="flex items-center justify-between gap-2">
                   <div>
                     <h4 className="text-xs sm:text-sm font-extrabold text-[#111965]">
-                      ការសម្រេចចិត្ត (Nature)
+                      {language === "km" ? "ការសម្រេចចិត្ត" : "Nature"}
                     </h4>
                     <p className="text-[12px] text-[#68708A]">Thinking vs Feeling</p>
                   </div>
@@ -547,8 +574,12 @@ export default function PersonalityAssessmentPage() {
 
               <p className="text-[12px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
                 {isT
-                  ? "អ្នកធ្វើការសម្រេចចិត្តដោយផ្អែកលើតក្កវិជ្ជាសុក្រឹត ការវិភាគមិនលំអៀង និងគោលការណ៍យុត្តិធម៌។"
-                  : "អ្នកផ្តល់អាទិភាពលើតម្លៃមនុស្ស ភាពសុខដុមរមនា និងផលប៉ះពាល់ដល់អារម្មណ៍អ្នកដទៃ។"}
+                  ? language === "km"
+                    ? "អ្នកធ្វើការសម្រេចចិត្តដោយផ្អែកលើតក្កវិជ្ជាសុក្រឹត ការវិភាគមិនលំអៀង និងគោលការណ៍យុត្តិធម៌។"
+                    : "You decide using rigorous logic, unbiased analysis, and fair principles."
+                  : language === "km"
+                  ? "អ្នកផ្តល់អាទិភាពលើតម្លៃមនុស្ស ភាពសុខដុមរមនា និងផលប៉ះពាល់ដល់អារម្មណ៍អ្នកដទៃ។"
+                  : "You prioritize human values, harmony, and the emotional impact on others."}
               </p>
             </div>
 
@@ -558,7 +589,7 @@ export default function PersonalityAssessmentPage() {
                 <div className="flex items-center justify-between gap-2">
                   <div>
                     <h4 className="text-xs sm:text-sm font-extrabold text-[#111965]">
-                      យុទ្ធសាស្ត្រជីវិត (Tactics)
+                      {language === "km" ? "យុទ្ធសាស្ត្រជីវិត" : "Tactics"}
                     </h4>
                     <p className="text-[12px] text-[#68708A]">Judging vs Prospecting</p>
                   </div>
@@ -595,8 +626,12 @@ export default function PersonalityAssessmentPage() {
 
               <p className="text-[12px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
                 {isJ
-                  ? "អ្នកចូលចិត្តផែនការច្បាស់លាស់ កាលវិភាគរៀបរយ និងការសម្រេចកិច្ចការទាន់ពេលវេលា។"
-                  : "អ្នកចូលចិត្តភាពបត់បែន រក្សាជម្រើសបើកទូលាយ និងអាចសម្របតាមស្ថានភាពផ្លាស់ប្តូរភ្លាមៗ។"}
+                  ? language === "km"
+                    ? "អ្នកចូលចិត្តផែនការច្បាស់លាស់ កាលវិភាគរៀបរយ និងការសម្រេចកិច្ចការទាន់ពេលវេលា។"
+                    : "You prefer clear plans, organized schedules, and completing tasks on time."
+                  : language === "km"
+                  ? "អ្នកចូលចិត្តភាពបត់បែន រក្សាជម្រើសបើកទូលាយ និងអាចសម្របតាមស្ថានភាពផ្លាស់ប្តូរភ្លាមៗ។"
+                  : "You prefer flexibility, keeping options open, and adapting quickly to changing situations."}
               </p>
             </div>
           </div>
@@ -708,7 +743,7 @@ export default function PersonalityAssessmentPage() {
             </div>
           ) : (
             <div className="p-4 rounded-xl bg-slate-50 text-center text-xs text-[#68708A]">
-              មិនទាន់មានអនុសាសន៍នៅឡើយទេ
+              {language === "km" ? "មិនទាន់មានអនុសាសន៍នៅឡើយទេ" : "No recommendations yet"}
             </div>
           )}
 

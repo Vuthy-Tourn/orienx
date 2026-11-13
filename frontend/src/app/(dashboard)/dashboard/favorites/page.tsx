@@ -17,7 +17,6 @@ import {
   MapPin,
   Sparkles,
   Calendar,
-  Trash2,
   FolderOpen,
 } from "lucide-react";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
@@ -54,19 +53,6 @@ export default function FavoritesPage() {
   const { data: favorites, isLoading } = useQuery({
     queryKey: ["user-favorites"],
     queryFn: async () => apiFetch<any>("/favorites"),
-  });
-
-  const { mutate: removeFavorite } = useMutation({
-    mutationFn: async ({ type, id }: { type: string; id: string }) => {
-      return apiFetch("/favorites/toggle", {
-        method: "POST",
-        body: JSON.stringify({ entity_type: type, entity_id: id }),
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user-favorites"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard-summary"] });
-    },
   });
 
   const { mutate: updateScholarshipStatus } = useMutation({
@@ -241,14 +227,7 @@ export default function FavoritesPage() {
                           </div>
 
                           {/* Footer Actions */}
-                          <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-between gap-2 text-xs">
-                            <button
-                              onClick={() => removeFavorite({ type: "major", id: m.id })}
-                              className="inline-flex items-center gap-1 text-slate-400 hover:text-rose-600 font-bold transition-colors cursor-pointer py-1"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                              <span>{t("favoritesPage.remove", "លុបចេញ")}</span>
-                            </button>
+                          <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-end gap-2 text-xs">
 
                             <div className="flex items-center gap-2">
                               <Link
@@ -282,14 +261,14 @@ export default function FavoritesPage() {
                       {t("favoritesPage.noMajors", "មិនទាន់មានជំនាញដែលបានចំណាំនៅឡើយទេ")}
                     </h3>
                     <p className="text-xs text-[#68708A] max-w-sm mx-auto">
-                      រុករកបញ្ជីមុខជំនាញ ឬពិនិត្យមើលអនុសាសន៍ឆ្លាតវៃ ហើយចុចលើរូបចំណាំដើម្បីរក្សាទុកនៅទីនេះ។
+                      {language === "km" ? "រុករកបញ្ជីមុខជំនាញ ឬពិនិត្យមើលអនុសាសន៍ឆ្លាតវៃ ហើយចុចលើរូបចំណាំដើម្បីរក្សាទុកនៅទីនេះ។" : "Browse the majors directory or check your recommendations, then tap the bookmark icon to save it here."}
                     </p>
                   </div>
                   <Link
                     href="/majors"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs"
                   >
-                    <span>រុករកមុខជំនាញ (Explore Majors)</span>
+                    <span>{language === "km" ? "រុករកមុខជំនាញ" : "Explore Majors"}</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -333,8 +312,8 @@ export default function FavoritesPage() {
                               }`}
                             >
                               {isPublic
-                                ? t("universitiesDirectory.publicType", "រដ្ឋ (Public)")
-                                : t("universitiesDirectory.privateType", "ឯកជន (Private)")}
+                                ? t("universitiesDirectory.publicType", "សាកលវិទ្យាល័យរដ្ឋ")
+                                : t("universitiesDirectory.privateType", "សាកលវិទ្យាល័យឯកជន")}
                             </span>
 
                             <BookmarkButton
@@ -375,14 +354,7 @@ export default function FavoritesPage() {
                           </div>
 
                           {/* Footer Actions */}
-                          <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-between gap-2 text-xs">
-                            <button
-                              onClick={() => removeFavorite({ type: "university", id: u.id })}
-                              className="inline-flex items-center gap-1 text-slate-400 hover:text-rose-600 font-bold transition-colors cursor-pointer py-1"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                              <span>{t("favoritesPage.remove", "លុបចេញ")}</span>
-                            </button>
+                          <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-end gap-2 text-xs">
 
                             <Link
                               href={`/universities/${u.slug}`}
@@ -407,14 +379,14 @@ export default function FavoritesPage() {
                       {t("favoritesPage.noUniversities", "មិនទាន់មានសាកលវិទ្យាល័យដែលបានរក្សាទុកនៅឡើយទេ")}
                     </h3>
                     <p className="text-xs text-[#68708A] max-w-sm mx-auto">
-                      រុករកសាកលវិទ្យាល័យល្បីៗនៅកម្ពុជា ហើយចុចលើរូបចំណាំដើម្បីរក្សាទុកងាយស្រួលប្រៀបធៀប។
+                      {language === "km" ? "រុករកសាកលវិទ្យាល័យល្បីៗនៅកម្ពុជា ហើយចុចលើរូបចំណាំដើម្បីរក្សាទុកងាយស្រួលប្រៀបធៀប។" : "Browse universities across Cambodia, then tap the bookmark icon to save them for comparison."}
                     </p>
                   </div>
                   <Link
                     href="/universities"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs"
                   >
-                    <span>រុករកសាកលវិទ្យាល័យ (Explore Universities)</span>
+                    <span>{language === "km" ? "រុករកសាកលវិទ្យាល័យ" : "Explore Universities"}</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -473,14 +445,7 @@ export default function FavoritesPage() {
                       </div>
 
                       {/* Footer */}
-                      <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-between gap-2 text-xs">
-                        <button
-                          onClick={() => removeFavorite({ type: "career", id: c.id })}
-                          className="inline-flex items-center gap-1 text-slate-400 hover:text-rose-600 font-bold transition-colors cursor-pointer py-1"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                          <span>{t("favoritesPage.remove", "លុបចេញ")}</span>
-                        </button>
+                      <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-end gap-2 text-xs">
 
                         <Link
                           href={`/careers/${c.slug}`}
@@ -503,14 +468,14 @@ export default function FavoritesPage() {
                       {t("favoritesPage.noCareers", "មិនទាន់មានអាជីពដែលបានរក្សាទុកនៅឡើយទេ")}
                     </h3>
                     <p className="text-xs text-[#68708A] max-w-sm mx-auto">
-                      ស្វែងយល់ពីអាជីពការងារដែលត្រូវនឹងបុគ្គលិកលក្ខណៈរបស់អ្នក ហើយរក្សាទុកសម្រាប់តាមដាន។
+                      {language === "km" ? "ស្វែងយល់ពីអាជីពការងារដែលត្រូវនឹងបុគ្គលិកលក្ខណៈរបស់អ្នក ហើយរក្សាទុកសម្រាប់តាមដាន។" : "Explore careers that fit your personality, then save them to track later."}
                     </p>
                   </div>
                   <Link
                     href="/careers"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs"
                   >
-                    <span>រុករកអាជីពការងារ (Explore Careers)</span>
+                    <span>{language === "km" ? "រុករកអាជីពការងារ" : "Explore Careers"}</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -594,14 +559,7 @@ export default function FavoritesPage() {
                         </div>
 
                         {/* Footer Actions */}
-                        <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-between gap-2 text-xs">
-                          <button
-                            onClick={() => removeFavorite({ type: "scholarship", id: s.id })}
-                            className="inline-flex items-center gap-1 text-slate-400 hover:text-rose-600 font-bold transition-colors cursor-pointer py-1"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                            <span>{t("favoritesPage.remove", "លុបចេញ")}</span>
-                          </button>
+                        <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-end gap-2 text-xs">
 
                           <div className="flex items-center gap-2">
                             <Link
@@ -638,14 +596,14 @@ export default function FavoritesPage() {
                       {t("favoritesPage.noScholarships", "មិនទាន់មានអាហារូបករណ៍ដែលបានរក្សាទុកនៅឡើយទេ")}
                     </h3>
                     <p className="text-xs text-[#68708A] max-w-sm mx-auto">
-                      តាមដានឱកាសអាហារូបករណ៍ ១០០% និងជំនួយហិរញ្ញវត្ថុដើម្បីកុំឱ្យខកខានកាលបរិច្ឆេទផុតកំណត់។
+                      {language === "km" ? "តាមដានឱកាសអាហារូបករណ៍ ១០០% និងជំនួយហិរញ្ញវត្ថុដើម្បីកុំឱ្យខកខានកាលបរិច្ឆេទផុតកំណត់។" : "Track full scholarships and financial aid so you never miss a deadline."}
                     </p>
                   </div>
                   <Link
                     href="/scholarships"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs"
                   >
-                    <span>រុករកអាហារូបករណ៍ (Explore Scholarships)</span>
+                    <span>{language === "km" ? "រុករកអាហារូបករណ៍" : "Explore Scholarships"}</span>
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>

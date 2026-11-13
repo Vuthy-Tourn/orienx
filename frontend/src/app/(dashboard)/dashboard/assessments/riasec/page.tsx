@@ -284,7 +284,7 @@ export default function RiasecAssessmentPage() {
               <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 uppercase tracking-wider shadow-2xs">
                 <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
                 <span>
-                  {archetype.titleEn.toUpperCase()} • {archetype.titleKm}
+                  {language === "km" ? archetype.titleKm : archetype.titleEn.toUpperCase()}
                 </span>
               </div>
 
@@ -352,7 +352,7 @@ export default function RiasecAssessmentPage() {
               </span>
             </div>
             <div className="flex flex-wrap gap-1.5 pt-1">
-              {archetype.strengths.map((str: string, idx: number) => (
+              {(language === "km" ? archetype.strengths : archetype.strengthsEn).map((str: string, idx: number) => (
                 <span
                   key={idx}
                   className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-50/80 text-emerald-800 border border-emerald-100"
@@ -599,7 +599,7 @@ export default function RiasecAssessmentPage() {
           <div className="space-y-0.5 px-1">
             <h4 className="text-xs sm:text-sm font-black text-[#111965] uppercase tracking-wide">
               {getLocalized({
-                km: "ពិន្ទុវិស័យទាំង ៦ លម្អិត (All 6 Career Categories)",
+                km: "ពិន្ទុវិស័យទាំង ៦ លម្អិត",
                 en: "All 6 Holland Career Categories in Detail",
               })}
             </h4>
@@ -811,7 +811,7 @@ export default function RiasecAssessmentPage() {
             </div>
           ) : (
             <div className="p-4 rounded-xl bg-slate-50 text-center text-xs text-[#68708A]">
-              មិនទាន់មានអនុសាសន៍នៅឡើយទេ
+              {language === "km" ? "មិនទាន់មានអនុសាសន៍នៅឡើយទេ" : "No recommendations yet"}
             </div>
           )}
 

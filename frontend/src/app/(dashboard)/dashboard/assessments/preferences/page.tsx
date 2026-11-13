@@ -30,16 +30,16 @@ export default function AcademicPreferencesPage() {
   const [requiresScholarship, setRequiresScholarship] = useState<boolean>(false);
 
   const availableSubjects = [
-    { id: "Mathematics", labelKm: "គណិតវិទ្យា (Math)", labelEn: "Mathematics" },
-    { id: "Informatics", labelKm: "ព័ត៌មានវិទ្យា (Informatics)", labelEn: "Informatics" },
-    { id: "Physics", labelKm: "រូបវិទ្យា (Physics)", labelEn: "Physics" },
-    { id: "Chemistry", labelKm: "គីមីវិទ្យា (Chemistry)", labelEn: "Chemistry" },
-    { id: "Biology", labelKm: "ជីវវិទ្យា (Biology)", labelEn: "Biology" },
-    { id: "English", labelKm: "ភាសាអង់គ្លេស (English)", labelEn: "English" },
-    { id: "Khmer Literature", labelKm: "អក្សរសាស្ត្រខ្មែរ (Khmer)", labelEn: "Khmer Literature" },
-    { id: "Economics", labelKm: "សេដ្ឋកិច្ច (Economics)", labelEn: "Economics" },
-    { id: "History", labelKm: "ប្រវត្តិវិទ្យា (History)", labelEn: "History" },
-    { id: "Geography", labelKm: "ភូមិវិទ្យា (Geography)", labelEn: "Geography" },
+    { id: "Mathematics", labelKm: "គណិតវិទ្យា", labelEn: "Mathematics" },
+    { id: "Informatics", labelKm: "ព័ត៌មានវិទ្យា", labelEn: "Informatics" },
+    { id: "Physics", labelKm: "រូបវិទ្យា", labelEn: "Physics" },
+    { id: "Chemistry", labelKm: "គីមីវិទ្យា", labelEn: "Chemistry" },
+    { id: "Biology", labelKm: "ជីវវិទ្យា", labelEn: "Biology" },
+    { id: "English", labelKm: "ភាសាអង់គ្លេស", labelEn: "English" },
+    { id: "Khmer Literature", labelKm: "អក្សរសាស្ត្រខ្មែរ", labelEn: "Khmer Literature" },
+    { id: "Economics", labelKm: "សេដ្ឋកិច្ច", labelEn: "Economics" },
+    { id: "History", labelKm: "ប្រវត្តិវិទ្យា", labelEn: "History" },
+    { id: "Geography", labelKm: "ភូមិវិទ្យា", labelEn: "Geography" },
   ];
 
   const availableActivities = [

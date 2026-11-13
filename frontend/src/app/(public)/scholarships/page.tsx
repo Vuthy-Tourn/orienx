@@ -134,10 +134,10 @@ export default function ScholarshipsPage() {
               </div>
               <div>
                 <h3 className="text-sm font-black text-[#111965]">
-                  Instant Eligibility Checker (Grade 12 BacII Qualifier)
+                  {language === "km" ? "កម្មវិធីពិនិត្យសិទ្ធិទទួលអាហារូបករណ៍តាមនិទ្ទេសបាក់ឌុប" : "Instant Eligibility Checker"}
                 </h3>
                 <p className="text-xs text-[#68708A]">
-                  Select your expected Grade 12 National Exam standing to preview verified funding
+                  {language === "km" ? "ជ្រើសរើសនិទ្ទេសបាក់ឌុបដែលអ្នករំពឹង ដើម្បីមើលអាហារូបករណ៍ដែលអាចទទួលបាន" : "Select your expected Grade 12 National Exam standing to preview verified funding"}
                 </p>
               </div>
             </div>
@@ -146,7 +146,7 @@ export default function ScholarshipsPage() {
               {/* Grade Selection */}
               <div className="space-y-1.5">
                 <label className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
-                  BacII Exam Grade
+                  {language === "km" ? "និទ្ទេសបាក់ឌុប" : "BacII Exam Grade"}
                 </label>
                 <div className="grid grid-cols-4 gap-1.5">
                   {["ALL", "A", "B", "C"].map((grade) => (
@@ -160,7 +160,7 @@ export default function ScholarshipsPage() {
                           : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
                       }`}
                     >
-                      {grade === "ALL" ? "Any" : `Grade ${grade}`}
+                      {grade === "ALL" ? (language === "km" ? "ទាំងអស់" : "Any") : language === "km" ? `និទ្ទេស ${grade}` : `Grade ${grade}`}
                     </button>
                   ))}
                 </div>
@@ -169,13 +169,13 @@ export default function ScholarshipsPage() {
               {/* Study Field Selection */}
               <div className="space-y-1.5">
                 <label className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
-                  Intended Field
+                  {language === "km" ? "វិស័យដែលចង់រៀន" : "Intended Field"}
                 </label>
                 <div className="grid grid-cols-3 gap-1.5">
                   {[
-                    { id: "ALL", label: "Any" },
-                    { id: "STEM", label: "STEM/Tech" },
-                    { id: "BIZ", label: "Business" },
+                    { id: "ALL", label: language === "km" ? "ទាំងអស់" : "Any" },
+                    { id: "STEM", label: language === "km" ? "STEM/បច្ចេកវិទ្យា" : "STEM/Tech" },
+                    { id: "BIZ", label: language === "km" ? "ពាណិជ្ជកម្ម" : "Business" },
                   ].map((field) => (
                     <button
                       key={field.id}
@@ -197,10 +197,10 @@ export default function ScholarshipsPage() {
               <div className="p-3.5 rounded-2xl bg-[#F0F2FA]/80 border border-[#E6E8F0] flex items-center justify-between">
                 <div>
                   <div className="text-[12.5px] font-bold text-[#68708A] uppercase">
-                    Qualified Programs
+                    {language === "km" ? "កម្មវិធីដែលមានសិទ្ធិ" : "Qualified Programs"}
                   </div>
                   <div className="text-sm font-black text-emerald-700">
-                    {targetBaciiGrade === "A" ? "100% Full Tuition + Stipend" : "Full & Partial Tuition Available"}
+                    {targetBaciiGrade === "A" ? (language === "km" ? "អាហារូបករណ៍ពេញ ១០០% + ប្រាក់ឧបត្ថម្ភ" : "100% Full Tuition + Stipend") : (language === "km" ? "មានអាហារូបករណ៍ពេញ និងមួយផ្នែក" : "Full & Partial Tuition Available")}
                   </div>
                   <div className="text-[12px] text-[#68708A]">CADT, MoEYS, AUPP, ITC</div>
                 </div>
@@ -269,16 +269,16 @@ export default function ScholarshipsPage() {
                 {/* Benefits Breakdown Pills */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-xs">
                   <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 space-y-0.5">
-                    <span className="text-[12.5px] uppercase font-bold text-[#F7CE4D] block">Tuition Coverage</span>
-                    <span className="font-extrabold text-white">100% 4-Year Full-Ride</span>
+                    <span className="text-[12.5px] uppercase font-bold text-[#F7CE4D] block">{language === "km" ? "ថ្លៃសិក្សា" : "Tuition Coverage"}</span>
+                    <span className="font-extrabold text-white">{language === "km" ? "ពេញ ១០០% សម្រាប់ ៤ ឆ្នាំ" : "100% 4-Year Full-Ride"}</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 space-y-0.5">
-                    <span className="text-[12.5px] uppercase font-bold text-[#F7CE4D] block">Living Stipend</span>
-                    <span className="font-extrabold text-white">$120 / Month Allowance</span>
+                    <span className="text-[12.5px] uppercase font-bold text-[#F7CE4D] block">{language === "km" ? "ប្រាក់ឧបត្ថម្ភរស់នៅ" : "Living Stipend"}</span>
+                    <span className="font-extrabold text-white">{language === "km" ? "ប្រាក់ឧបត្ថម្ភ $120 / ខែ" : "$120 / Month Allowance"}</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 space-y-0.5">
-                    <span className="text-[12.5px] uppercase font-bold text-[#F7CE4D] block">Hardware Grant</span>
-                    <span className="font-extrabold text-white">Free High-Spec Laptop</span>
+                    <span className="text-[12.5px] uppercase font-bold text-[#F7CE4D] block">{language === "km" ? "ឧបករណ៍សិក្សា" : "Hardware Grant"}</span>
+                    <span className="font-extrabold text-white">{language === "km" ? "កុំព្យូទ័រយួរដៃឥតគិតថ្លៃ" : "Free High-Spec Laptop"}</span>
                   </div>
                 </div>
 
@@ -400,12 +400,12 @@ export default function ScholarshipsPage() {
                         }`}
                       >
                         <Award className="w-3.5 h-3.5 text-amber-600" />
-                        <span>{isFull ? "100% Full Tuition" : `${s.coverage_percentage || 50}% Partial Coverage`}</span>
+                        <span>{isFull ? (language === "km" ? "អាហារូបករណ៍ពេញ ១០០%" : "100% Full Tuition") : (language === "km" ? `${s.coverage_percentage || 50}% មួយផ្នែក` : `${s.coverage_percentage || 50}% Partial Coverage`)}</span>
                       </span>
 
                       <span className="flex items-center gap-1.5 text-xs text-[#68708A] font-medium">
                         <Calendar className="w-3.5 h-3.5 text-amber-600" />
-                        <span>Deadline: {s.application_deadline || "Rolling"}</span>
+                        <span>{language === "km" ? "ផុតកំណត់:" : "Deadline:"} {s.application_deadline || (language === "km" ? "ជាបន្តបន្ទាប់" : "Rolling")}</span>
                       </span>
                     </div>
 
@@ -429,7 +429,7 @@ export default function ScholarshipsPage() {
                     {/* Target Institutions tag */}
                     {s.country_or_institution && (
                       <div className="text-xs text-[#68708A] flex items-center gap-1.5">
-                        <span className="font-bold text-[#111965]">Target Campuses:</span>
+                        <span className="font-bold text-[#111965]">{language === "km" ? "សាកលវិទ្យាល័យគោលដៅ:" : "Target Campuses:"}</span>
                         <span className="truncate">{s.country_or_institution}</span>
                       </div>
                     )}
@@ -505,7 +505,7 @@ export default function ScholarshipsPage() {
               {t("scholarshipsPage.notFound")}
             </h3>
             <p className="text-xs text-[#68708A] max-w-md mx-auto">
-              Try adjusting your search criteria or selecting "All Coverage Types" to view available scholarships.
+              {language === "km" ? "សូមកែលម្អការស្វែងរក ឬជ្រើសរើស “គ្រប់ប្រភេទអាហារូបករណ៍” ដើម្បីមើលអាហារូបករណ៍ដែលមាន។" : "Try adjusting your search criteria or selecting \"All Coverage Types\" to view available scholarships."}
             </p>
             <button
               onClick={resetFilters}

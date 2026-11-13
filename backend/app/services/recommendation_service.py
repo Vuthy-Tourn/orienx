@@ -40,6 +40,16 @@ class RecommendationService:
         has_riasec = riasec is not None
         has_pref = pref is not None
 
+        # Recommendations are an *output* of the diagnostics. If the student has
+        # not completed at least one test, do not fabricate scores (the previous
+        # behaviour defaulted to RIASEC 50 / MBTI INTJ / Academics 50).
+        if not has_personality and not has_riasec:
+            await session.execute(
+                delete(MajorRecommendation).where(MajorRecommendation.user_id == user_id)
+            )
+            await session.commit()
+            return []
+
         # Dynamically scale weights based on which assessments the user has completed
         # Give Personality high weight (40%) so that MBTI cognitive orientation (Extraversion vs Introversion, etc.)
         # meaningfully differentiates recommendations and drives dynamic ranking shifts!
@@ -272,7 +282,10 @@ class RecommendationService:
             final_match = round(max(30.0, min(99.0, raw_score)), 1)
 
             # Build explainable rationale report tailored to assessment state
-            if is_e and slug in ["business-administration", "banking-finance", "international-relations"]:
+            if not personality:
+                personality_reason_en = "Complete the 16-Personality test to add cognitive-fit detail to this recommendation."
+                personality_reason_km = "ធ្វើតេស្ត 16-Personality ដើម្បីបន្ថែមព័ត៌មានអំពីភាពត្រូវគ្នានៃការគិត។"
+            elif is_e and slug in ["business-administration", "banking-finance", "international-relations"]:
                 personality_reason_en = f"As an Extravert ({user_mbti}), your active leadership, interpersonal persuasion, and collaborative dynamism make you an exceptional fit for {major_name_en}."
                 personality_reason_km = f"ក្នុងនាមជាបុគ្គល Extravert ({user_mbti}) ភាពជាអ្នកដឹកនាំ ភាពស្វាហាប់ក្នុងការប្រាស្រ័យទាក់ទង និងការចរចាជាក្រុមត្រូវគ្នាយ៉ាងល្អឥតខ្ចោះជាមួយ {major_name_km}។"
             elif not is_e and slug in ["software-engineering", "data-science-ai"]:
@@ -288,9 +301,14 @@ class RecommendationService:
                 personality_reason_en = f"Your {user_mbti} perspective provides complementary strengths to succeed in {major_name_en}."
                 personality_reason_km = f"ទម្រង់បុគ្គលិកលក្ខណៈ {user_mbti} របស់អ្នកផ្តល់នូវទស្សនៈប្លែក និងសមត្ថភាពបត់បែនក្នុងការសិក្សាជំនាញ {major_name_km}។"
 
-            if riasec:
+            if riasec and personality:
                 fit_summary_en = f"Strong alignment based on your Holland code ({riasec.holland_code}) and {user_mbti} cognitive style."
                 fit_summary_km = f"ត្រូវគ្នាយ៉ាងខ្លាំងជាមួយកូដចំណាប់អារម្មណ៍អាជីពរបស់អ្នក ({riasec.holland_code}) និងទម្រង់បុគ្គលិកលក្ខណៈ {user_mbti}។"
+                riasec_reason_en = f"Primary discipline aligns with your {major.riasec_primary} ({prim_score:.0f}%) and {major.riasec_secondary} ({sec_score:.0f}%) interest areas."
+                riasec_reason_km = f"ជំនាញនេះត្រូវគ្នានឹងវិស័យចំណាប់អារម្មណ៍ចម្បងរបស់អ្នកគឺ {major.riasec_primary} ({prim_score:.0f}%) និង {major.riasec_secondary} ({sec_score:.0f}%)។"
+            elif riasec:
+                fit_summary_en = f"Strong alignment based on your Holland code ({riasec.holland_code}). Add the 16-Personality test to refine it."
+                fit_summary_km = f"ត្រូវគ្នាយ៉ាងខ្លាំងជាមួយកូដចំណាប់អារម្មណ៍អាជីពរបស់អ្នក ({riasec.holland_code})។ បន្ថែមតេស្ត 16-Personality ដើម្បីបង្កើនភាពសុក្រិត។"
                 riasec_reason_en = f"Primary discipline aligns with your {major.riasec_primary} ({prim_score:.0f}%) and {major.riasec_secondary} ({sec_score:.0f}%) interest areas."
                 riasec_reason_km = f"ជំនាញនេះត្រូវគ្នានឹងវិស័យចំណាប់អារម្មណ៍ចម្បងរបស់អ្នកគឺ {major.riasec_primary} ({prim_score:.0f}%) និង {major.riasec_secondary} ({sec_score:.0f}%)។"
             else:

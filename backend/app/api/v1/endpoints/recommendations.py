@@ -88,7 +88,11 @@ async def generate_recommendations(
 
     return ApiResponse(
         success=True,
-        message="Recommendations calculated with explainable rationale",
+        message=(
+            "Recommendations calculated with explainable rationale"
+            if data
+            else "Complete at least one assessment to unlock recommendations"
+        ),
         data=data
     )
 
@@ -119,7 +123,15 @@ async def get_recommended_majors(
 
     data = [_map_recommendation_out(r) for r in recs]
 
-    return ApiResponse(success=True, data=data)
+    return ApiResponse(
+        success=True,
+        message=(
+            "Recommendations loaded"
+            if data
+            else "Complete at least one assessment to unlock recommendations"
+        ),
+        data=data
+    )
 
 
 @router.get("/majors/{major_id}/explain")

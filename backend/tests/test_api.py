@@ -169,3 +169,34 @@ async def test_auth_and_assessments_flow(client):
     assert dash_data["assessments_status"]["riasec_completed"] is True
     assert dash_data["assessments_status"]["preferences_completed"] is True
     assert dash_data["favorites_count"]["majors"] >= 1
+
+
+@pytest.mark.asyncio
+async def test_new_user_has_no_recommendations(client):
+    """A fresh account must not receive fabricated major matches."""
+    email = f"new-{uuid.uuid4().hex[:10]}@futera.edu.kh"
+    register_res = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": email,
+            "password": "NewStudentPass123!",
+            "full_name_en": "Fresh Student",
+            "province": "Phnom Penh",
+            "current_education_level": "GRADE_12",
+            "graduation_year": 2026,
+            "preferred_language": "en",
+        },
+    )
+    assert register_res.status_code == 200
+    token = register_res.json()["data"]["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    rec_res = await client.get("/api/v1/recommendations/majors", headers=headers)
+    assert rec_res.status_code == 200
+    assert rec_res.json()["data"] == []
+
+    summary_res = await client.get("/api/v1/students/dashboard-summary", headers=headers)
+    status = summary_res.json()["data"]["assessments_status"]
+    assert status["personality_completed"] is False
+    assert status["riasec_completed"] is False
+    assert status["preferences_completed"] is False

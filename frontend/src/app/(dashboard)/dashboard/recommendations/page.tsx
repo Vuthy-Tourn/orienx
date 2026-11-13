@@ -14,6 +14,8 @@ import {
   Zap,
   LayoutGrid,
   List,
+  Compass,
+  BrainCircuit,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
@@ -22,7 +24,7 @@ type FilterTab = "top3" | "suitable" | "stem" | "all";
 type ViewMode = "grid" | "list";
 
 export default function RecommendationsPage() {
-  const { t, getLocalized } = useLanguage();
+  const { t, getLocalized, language } = useLanguage();
   const queryClient = useQueryClient();
   const [filterTab, setFilterTab] = useState<FilterTab>("top3");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -33,6 +35,21 @@ export default function RecommendationsPage() {
     queryKey: ["recommended-majors"],
     queryFn: async () => apiFetch<any[]>("/recommendations/majors"),
   });
+
+  // Gate the page on the same assessment status the dashboard uses.
+  const { data: summary, isLoading: summaryLoading } = useQuery({
+    queryKey: ["dashboard-summary"],
+    queryFn: async () => apiFetch<any>("/students/dashboard-summary"),
+  });
+  const assessmentStatus = summary?.assessments_status;
+  const hasAnyTest = Boolean(
+    assessmentStatus?.personality_completed || assessmentStatus?.riasec_completed
+  );
+  const needsAssessment =
+    !summaryLoading && Boolean(assessmentStatus) && !hasAnyTest;
+  const showRiasecScore = !assessmentStatus || Boolean(assessmentStatus.riasec_completed);
+  const showPersonalityScore = !assessmentStatus || Boolean(assessmentStatus.personality_completed);
+  const showAcademicScore = !assessmentStatus || Boolean(assessmentStatus.preferences_completed);
 
   // 2. Fetch user favorites to track active bookmark states
   const { data: favorites } = useQuery({
@@ -133,21 +150,89 @@ export default function RecommendationsPage() {
 
         {/* Action Controls */}
         <div className="flex items-center gap-2 self-start sm:self-auto">
-          <button
-            onClick={() => recomputeRecs()}
-            disabled={recomputing}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#111965] bg-white border border-[#E6E8F0] hover:bg-[#F0F2FA] transition-colors shadow-2xs disabled:opacity-50 cursor-pointer"
-          >
-            <RotateCcw className={`w-3.5 h-3.5 ${recomputing ? "animate-spin" : ""}`} />
-            <span>
-              {recomputing
-                ? t("recommendationsPage.recalculating", "កំពុងគណនា...")
-                : t("recommendationsPage.recalculate", "គណនាឡើងវិញ")}
-            </span>
-          </button>
+          {!needsAssessment && (
+            <button
+              onClick={() => recomputeRecs()}
+              disabled={recomputing}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#111965] bg-white border border-[#E6E8F0] hover:bg-[#F0F2FA] transition-colors shadow-2xs disabled:opacity-50 cursor-pointer"
+            >
+              <RotateCcw className={`w-3.5 h-3.5 ${recomputing ? "animate-spin" : ""}`} />
+              <span>
+                {recomputing
+                  ? t("recommendationsPage.recalculating", "កំពុងគណនា...")
+                  : t("recommendationsPage.recalculate", "គណនាឡើងវិញ")}
+              </span>
+            </button>
+          )}
         </div>
       </div>
 
+      {needsAssessment ? (
+        <div className="mx-auto max-w-2xl rounded-3xl border border-[#E6E8F0] bg-white p-6 text-center shadow-xs sm:p-10">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#FFF9E6] text-[#B45309]">
+            <Sparkles className="h-7 w-7" />
+          </div>
+          <div className="mt-4 space-y-1.5">
+            <h2 className="text-lg font-black text-[#111965] sm:text-xl">
+              {language === "km"
+                ? "អនុសាសន៍របស់អ្នកនឹងបើកបន្ទាប់ពីតេស្តដំបូង"
+                : "Your matches unlock after your first assessment"}
+            </h2>
+            <p className="mx-auto max-w-md text-xs leading-relaxed text-[#68708A] sm:text-sm">
+              {language === "km"
+                ? "ធ្វើតេស្ត RIASEC ឬ 16-Personality ដើម្បីឱ្យយើងចាត់ថ្នាក់ជំនាញតាមចំណាប់អារម្មណ៍ និងចំណុចខ្លាំងរបស់អ្នក។"
+                : "Take the RIASEC or 16-Personality test so we can rank majors against your interests and strengths."}
+            </p>
+          </div>
+
+          <div className="mt-6 grid grid-cols-1 gap-3 text-left sm:grid-cols-2">
+            <Link
+              href="/dashboard/assessments/riasec"
+              className="group flex items-start gap-3 rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4 transition-colors hover:border-[#111965]/30 hover:bg-white"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#111965] text-[#F7CE4D]">
+                <Compass className="h-5 w-5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-black text-[#111965]">
+                  {language === "km" ? "តេស្តចំណាប់អារម្មណ៍ RIASEC" : "RIASEC Interest Test"}
+                </div>
+                <p className="text-[12px] text-[#68708A]">
+                  {language === "km" ? "៣០ សំណួរ · ប្រហែល ៥ នាទី" : "30 questions · about 5 min"}
+                </p>
+              </div>
+              <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-[#68708A] transition-transform group-hover:translate-x-0.5" />
+            </Link>
+
+            <Link
+              href="/dashboard/assessments/personality"
+              className="group flex items-start gap-3 rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4 transition-colors hover:border-[#111965]/30 hover:bg-white"
+            >
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#111965] text-[#F7CE4D]">
+                <BrainCircuit className="h-5 w-5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-black text-[#111965]">
+                  {language === "km" ? "តេស្ត 16-Personality (MBTI)" : "16-Personality (MBTI)"}
+                </div>
+                <p className="text-[12px] text-[#68708A]">
+                  {language === "km" ? "១២ សំណួរ · ប្រហែល ៤ នាទី" : "12 questions · about 4 min"}
+                </p>
+              </div>
+              <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-[#68708A] transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+
+          <Link
+            href="/dashboard/assessments"
+            className="mt-5 inline-flex items-center gap-1 text-xs font-bold text-[#111965] underline-offset-4 hover:underline"
+          >
+            <span>{language === "km" ? "មើលតេស្តទាំងអស់" : "View all assessments"}</span>
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      ) : (
+        <>
       {/* ========================================================
           TOOLBAR: FILTER TABS & VIEW TOGGLE
           ======================================================== */}
@@ -250,7 +335,13 @@ export default function RecommendationsPage() {
                 {t("recommendationsPage.top3BannerTitle", "ជំនាញសាកសមបំផុតទាំង ៣ សម្រាប់អ្នក")}
               </h2>
               <p className="text-xs text-white/80 line-clamp-1">
-                {t("recommendationsPage.top3BannerSubtitle", "ជ្រើសរើស និងចាត់ថ្នាក់យ៉ាងយកចិត្តទុកដាក់ដោយ AI ផ្អែកលើបុគ្គលិកលក្ខណៈ ទំនោរការគិត និងចំណុចខ្លាំងនៃការសិក្សា។")}
+                {language === "km"
+                  ? showAcademicScore
+                    ? "ជ្រើសរើស និងចាត់ថ្នាក់ដោយ AI ផ្អែកលើបុគ្គលិកលក្ខណៈ ចំណាប់អារម្មណ៍ និងចំណូលចិត្តសិក្សារបស់អ្នក។"
+                    : "ចាត់ថ្នាក់ដោយផ្អែកលើតេស្តដែលអ្នកបានបំពេញ។ បន្ថែមតេស្តផ្សេងទៀតដើម្បីបង្កើនភាពសុក្រិត។"
+                  : showAcademicScore
+                  ? "Specially curated and ranked based on your personality, interests, and academic preferences."
+                  : "Ranked from the assessments you've completed. Add the remaining tests to sharpen your matches."}
               </p>
             </div>
           </div>
@@ -372,14 +463,35 @@ export default function RecommendationsPage() {
 
                   {/* Middle: 4 Mini Scores */}
                   <div className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
-                    <span className="px-2 py-1 rounded-lg text-[12.5px] font-black bg-blue-50 text-blue-800 border border-blue-100" title="RIASEC Fit">
-                      RIA: {rec.riasec_match_score}%
+                    <span
+                      className={`px-2 py-1 rounded-lg text-[12.5px] font-black border ${
+                        showRiasecScore
+                          ? "bg-blue-50 text-blue-800 border-blue-100"
+                          : "bg-slate-50 text-slate-400 border-slate-200"
+                      }`}
+                      title={showRiasecScore ? "RIASEC Fit" : "Take the RIASEC test to unlock"}
+                    >
+                      RIA: {showRiasecScore ? `${rec.riasec_match_score}%` : "—"}
                     </span>
-                    <span className="px-2 py-1 rounded-lg text-[12.5px] font-black bg-emerald-50 text-emerald-800 border border-emerald-100" title="Academic Fit">
-                      Acad: {rec.academic_match_score}%
+                    <span
+                      className={`px-2 py-1 rounded-lg text-[12.5px] font-black border ${
+                        showAcademicScore
+                          ? "bg-emerald-50 text-emerald-800 border-emerald-100"
+                          : "bg-slate-50 text-slate-400 border-slate-200"
+                      }`}
+                      title={showAcademicScore ? "Academic Fit" : "Complete Academic Preferences to unlock"}
+                    >
+                      Acad: {showAcademicScore ? `${rec.academic_match_score}%` : "—"}
                     </span>
-                    <span className="px-2 py-1 rounded-lg text-[12.5px] font-black bg-purple-50 text-purple-800 border border-purple-100" title="Personality Fit">
-                      MBTI: {rec.personality_match_score}%
+                    <span
+                      className={`px-2 py-1 rounded-lg text-[12.5px] font-black border ${
+                        showPersonalityScore
+                          ? "bg-purple-50 text-purple-800 border-purple-100"
+                          : "bg-slate-50 text-slate-400 border-slate-200"
+                      }`}
+                      title={showPersonalityScore ? "Personality Fit" : "Take the 16-Personality test to unlock"}
+                    >
+                      MBTI: {showPersonalityScore ? `${rec.personality_match_score}%` : "—"}
                     </span>
                   </div>
 
@@ -464,39 +576,59 @@ export default function RecommendationsPage() {
 
                 {/* 3. 4 Compact Pillars (Mini Badges with Scores) */}
                 <div className="grid grid-cols-4 gap-1.5 text-center">
-                  <div className="p-1.5 rounded-lg bg-blue-50/60 border border-blue-100 space-y-0.5">
-                    <div className="text-[12px] font-bold text-blue-800 uppercase flex items-center justify-center gap-1">
-                      <span>RIASEC</span>
+                  <div
+                    className={`p-1.5 rounded-lg border space-y-0.5 ${
+                      showRiasecScore ? "bg-blue-50/60 border-blue-100" : "bg-slate-50 border-slate-200"
+                    }`}
+                    title={showRiasecScore ? undefined : "Take the RIASEC test to unlock"}
+                  >
+                    <div className={`text-[12px] font-bold uppercase ${showRiasecScore ? "text-blue-800" : "text-slate-400"}`}>
+                      RIASEC
                     </div>
-                    <div className="text-xs font-black text-blue-900">
-                      {rec.riasec_match_score}%
-                    </div>
-                  </div>
-
-                  <div className="p-1.5 rounded-lg bg-emerald-50/60 border border-emerald-100 space-y-0.5">
-                    <div className="text-[12px] font-bold text-emerald-800 uppercase flex items-center justify-center gap-1">
-                      <span>{getLocalized({ km: "សិក្សា", en: "Acad" })}</span>
-                    </div>
-                    <div className="text-xs font-black text-emerald-900">
-                      {rec.academic_match_score}%
+                    <div className={`text-xs font-black ${showRiasecScore ? "text-blue-900" : "text-slate-400"}`}>
+                      {showRiasecScore ? `${rec.riasec_match_score}%` : "—"}
                     </div>
                   </div>
 
-                  <div className="p-1.5 rounded-lg bg-purple-50/60 border border-purple-100 space-y-0.5">
-                    <div className="text-[12px] font-bold text-purple-800 uppercase flex items-center justify-center gap-1">
-                      <span>{getLocalized({ km: "បុគ្គលិក", en: "MBTI" })}</span>
+                  <div
+                    className={`p-1.5 rounded-lg border space-y-0.5 ${
+                      showAcademicScore ? "bg-emerald-50/60 border-emerald-100" : "bg-slate-50 border-slate-200"
+                    }`}
+                    title={showAcademicScore ? undefined : "Complete Academic Preferences to unlock"}
+                  >
+                    <div className={`text-[12px] font-bold uppercase ${showAcademicScore ? "text-emerald-800" : "text-slate-400"}`}>
+                      {getLocalized({ km: "សិក្សា", en: "Acad" })}
                     </div>
-                    <div className="text-xs font-black text-purple-900">
-                      {rec.personality_match_score}%
+                    <div className={`text-xs font-black ${showAcademicScore ? "text-emerald-900" : "text-slate-400"}`}>
+                      {showAcademicScore ? `${rec.academic_match_score}%` : "—"}
                     </div>
                   </div>
 
-                  <div className="p-1.5 rounded-lg bg-amber-50/60 border border-amber-100 space-y-0.5">
-                    <div className="text-[12px] font-bold text-amber-800 uppercase flex items-center justify-center gap-1">
-                      <span>{getLocalized({ km: "អាជីព", en: "Career" })}</span>
+                  <div
+                    className={`p-1.5 rounded-lg border space-y-0.5 ${
+                      showPersonalityScore ? "bg-purple-50/60 border-purple-100" : "bg-slate-50 border-slate-200"
+                    }`}
+                    title={showPersonalityScore ? undefined : "Take the 16-Personality test to unlock"}
+                  >
+                    <div className={`text-[12px] font-bold uppercase ${showPersonalityScore ? "text-purple-800" : "text-slate-400"}`}>
+                      {getLocalized({ km: "បុគ្គលិក", en: "MBTI" })}
                     </div>
-                    <div className="text-xs font-black text-amber-900">
-                      {rec.career_match_score}%
+                    <div className={`text-xs font-black ${showPersonalityScore ? "text-purple-900" : "text-slate-400"}`}>
+                      {showPersonalityScore ? `${rec.personality_match_score}%` : "—"}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-1.5 rounded-lg border space-y-0.5 ${
+                      showAcademicScore ? "bg-amber-50/60 border-amber-100" : "bg-slate-50 border-slate-200"
+                    }`}
+                    title={showAcademicScore ? undefined : "Complete Academic Preferences to unlock"}
+                  >
+                    <div className={`text-[12px] font-bold uppercase ${showAcademicScore ? "text-amber-800" : "text-slate-400"}`}>
+                      {getLocalized({ km: "អាជីព", en: "Career" })}
+                    </div>
+                    <div className={`text-xs font-black ${showAcademicScore ? "text-amber-900" : "text-slate-400"}`}>
+                      {showAcademicScore ? `${rec.career_match_score}%` : "—"}
                     </div>
                   </div>
                 </div>
@@ -548,6 +680,8 @@ export default function RecommendationsPage() {
             {t("recommendationsPage.startTest", "ចាប់ផ្តើមធ្វើតេស្ត")}
           </Link>
         </div>
+      )}
+        </>
       )}
     </div>
   );
