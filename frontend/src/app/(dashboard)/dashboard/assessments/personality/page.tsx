@@ -20,18 +20,13 @@ import {
   Target,
   Zap,
   Building2,
-  ChevronDown,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
 
 import {
   DIMENSION_TITLES,
-  ROLES_META,
   ARCHETYPE_META,
   DimensionGroup,
-  RoleMeta,
-  ArchetypeMetaItem,
 } from "@/lib/personality-meta";
 
 export default function PersonalityAssessmentPage() {
@@ -621,12 +616,6 @@ export default function PersonalityAssessmentPage() {
                   en: `Top Recommended Majors For You & Your ${pType} Edge`,
                 })}
               </h3>
-              <p className="text-xs text-[#68708A]">
-                {getLocalized({
-                  km: `ផ្ទៀងផ្ទាត់ដោយប្រព័ន្ធ ៤ សសរស្តម្ភ និងបង្ហាញពីចំណុចខ្លាំងនៃការដឹកនាំបែប ${pType} របស់អ្នកក្នុងជំនាញនីមួយៗ`,
-                  en: `Unified recommendations powered by your 4-pillar profile, showing how your ${pType} executive mindset gives you an edge`,
-                })}
-              </p>
             </div>
 
             <Link
@@ -663,33 +652,32 @@ export default function PersonalityAssessmentPage() {
                   >
                     <div className="space-y-2.5">
                       <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <span className="w-6 h-6 rounded-lg text-xs font-black bg-[#111965] text-[#F7CE4D] flex items-center justify-center shadow-2xs">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="w-6 h-6 rounded-lg text-xs font-black bg-[#111965] text-[#F7CE4D] flex items-center justify-center shadow-2xs flex-shrink-0">
                             #{idx + 1}
                           </span>
-                          <span className="text-[12.5px] font-bold text-[#68708A] tracking-wide">
-                            {major.category}
-                          </span>
                           {major.is_stem && (
-                            <span className="px-1.5 py-0.5 rounded text-[12px] font-black bg-sky-50 text-sky-700 border border-sky-200">
+                            <span className="px-1.5 py-0.5 rounded text-[12px] font-black bg-sky-50 text-sky-700 border border-sky-200 flex-shrink-0">
                               STEM
                             </span>
                           )}
                         </div>
 
                         <div className="flex items-center gap-1">
-                          <span className="px-2.5 py-0.5 rounded-full text-[12px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
+                          <span className="px-2.5 py-0.5 rounded-full text-[12px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs flex-shrink-0">
                             {fitScore}% Fit
                           </span>
                         </div>
                       </div>
 
                       <h4 className="text-sm sm:text-base font-black text-[#111965] leading-snug">
-                        {getLocalized(major.name)}
+                        <Link href={`/majors/${major.slug}`} className="hover:text-[#1E277A] transition-colors">
+                          {getLocalized(major.name)}
+                        </Link>
                       </h4>
 
                       {/* Personality-specific rationale snippet */}
-                      <p className="text-[12px] text-[#4A5568] line-clamp-2 leading-relaxed bg-[#F8FAFD] p-2.5 rounded-xl border border-[#E6E8F0]/70 min-h-[46px] flex items-center">
+                      <p className="text-[12px] text-[#4A5568] line-clamp-2 leading-relaxed">
                         {getLocalized({ km: exp.personality_reason_km, en: exp.personality_reason_en }) ||
                           getLocalized({ km: exp.fit_summary_km, en: exp.fit_summary_en }) ||
                           getLocalized({
@@ -699,69 +687,20 @@ export default function PersonalityAssessmentPage() {
                       </p>
                     </div>
 
-                    {/* Offering Universities */}
-                    <div className="pt-2 border-t border-[#E6E8F0] space-y-2">
-                      <div className="text-[12px] font-bold text-[#68708A] flex items-center justify-between gap-2">
-                        <span>{t("personalityAssessment.offeringInstitutions", "គ្រឹះស្ថានបណ្តុះបណ្តាល:")}</span>
-                        {unis.length > 0 ? (
-                          <span className="font-semibold text-slate-500">
-                            {unis.length} {t("recommendationsPage.institutions", "កន្លែង")}
-                          </span>
-                        ) : (
-                          <span className="text-[12.5px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/70 font-medium">
-                            {t("personalityAssessment.verifyingInstitutions", "កំពុងផ្ទៀងផ្ទាត់")}
-                          </span>
-                        )}
-                      </div>
-
-                      {unis.length > 0 ? (
-                        <div className="flex flex-wrap items-center gap-1.5 min-h-[28px]">
-                          {unis.slice(0, 3).map((u: any) => (
-                            <Link
-                              key={u.university_id}
-                              href={`/universities/${u.university_slug}`}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[12.5px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
-                              title={getLocalized(u.university_name)}
-                            >
-                              <Building2 className="w-2.5 h-2.5 opacity-60" />
-                              <span>{getLocalized(u.university_acronym) || u.university_slug.toUpperCase()}</span>
-                              {u.tuition_annual_usd ? (
-                                <span className="text-[12px] opacity-75 font-normal">
-                                  (${Math.round(u.tuition_annual_usd)})
-                                </span>
-                              ) : null}
-                            </Link>
-                          ))}
-                          {unis.length > 3 && (
-                            <span className="text-[12.5px] font-semibold text-[#68708A]">
-                              +{unis.length - 3} {t("recommendationsPage.more", "ទៀត")}
-                            </span>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="text-[12.5px] text-[#68708A] bg-[#FAFBFD] px-2.5 py-1.5 rounded-lg border border-dashed border-[#E6E8F0] flex items-center gap-1.5">
-                          <Building2 className="w-3 h-3 text-[#68708A]/70 flex-shrink-0" />
-                          <span className="truncate">{t("personalityAssessment.verifyingCampusesDesc", "ទិន្នន័យគ្រឹះស្ថានកំពុងត្រូវបានប្រមូល និងផ្ទៀងផ្ទាត់")}</span>
-                        </div>
-                      )}
-
-                      {/* Action Links */}
-                      <div className="pt-2 flex items-center justify-between gap-2 border-t border-[#E6E8F0]/50">
-                        <Link
-                          href={`/majors/${major.slug}`}
-                          className="text-xs font-bold text-[#68708A] hover:text-[#111965] transition-colors"
-                        >
-                          {t("recommendationsPage.details", "ព័ត៌មានលម្អិត")}
-                        </Link>
-
-                        <Link
-                          href={`/universities?major=${major.slug}`}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs"
-                        >
-                          <span>{t("recommendationsPage.universities", "សាកលវិទ្យាល័យ")}</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </Link>
-                      </div>
+                    {/* Action Links */}
+                    <div className="pt-2 flex items-center justify-between gap-2 border-t border-[#E6E8F0]">
+                      <Link
+                        href={`/universities?major=${major.slug}`}
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs whitespace-nowrap"
+                      >
+                        <Building2 className="w-3 h-3 flex-shrink-0" />
+                        <span>
+                          {unis.length > 0
+                            ? `${unis.length} ${t("recommendationsPage.universities", "សាកលវិទ្យាល័យ")}`
+                            : t("recommendationsPage.universities", "សាកលវិទ្យាល័យ")}
+                        </span>
+                        <ArrowRight className="w-3 h-3" />
+                      </Link>
                     </div>
                   </div>
                 );
@@ -773,34 +712,7 @@ export default function PersonalityAssessmentPage() {
             </div>
           )}
 
-          {/* Holistic 4-Pillar Single Source of Truth Banner */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-[#F0F2FA] border border-[#D4DEF8] flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="space-y-1 text-center sm:text-left">
-              <div className="inline-flex items-center gap-1.5 text-xs font-black text-[#111965]">
-                <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
-                <span>
-                  {getLocalized({
-                    km: "ប្រព័ន្ធគណនា AI ផ្អែកលើ ៤ សសរស្តម្ភរួមបញ្ចូលគ្នា (Single Source of Truth)",
-                    en: "Unified 4-Pillar Recommendation Engine (Single Source of Truth)",
-                  })}
-                </span>
-              </div>
-              <p className="text-[12px] text-[#68708A] leading-relaxed max-w-2xl font-medium">
-                {getLocalized({
-                  km: `ដើម្បីធានាបាននូវភាពសុក្រឹត និងអាចជឿទុកចិត្តបាន ១០០% ប្រព័ន្ធ AI របស់ Futera គណនាអនុសាសន៍ដោយបូកបញ្ចូល៖ បុគ្គលិកលក្ខណៈ ${pType} (២៥%) + ចំណាប់អារម្មណ៍ RIASEC (៣០%) + មុខវិជ្ជាពូកែ (២៥%) + ទីផ្សារការងារ (២០%)។ ដូច្នេះលទ្ធផលបង្ហាញនៅទីនេះ ផ្ទាំងគ្រប់គ្រង និងទំព័រ Recommendations គឺសុក្រឹត និងស៊ីសង្វាក់គ្នាទាំងស្រុង។`,
-                  en: `To ensure maximum real-world accuracy and 100% trust, Futera calculates all recommendations by fusing: ${pType} Personality (25%) + RIASEC Interests (30%) + School Grades (25%) + Market Demand (20%). The rankings shown here, on your Dashboard, and on your Recommendations page are 100% unified and consistent.`,
-                })}
-              </p>
-            </div>
 
-            <Link
-              href="/dashboard/recommendations"
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold bg-[#111965] hover:bg-[#1A2580] text-white shadow-2xs transition-colors shrink-0 whitespace-nowrap"
-            >
-              <span>{getLocalized({ km: "មើលការវិភាគ ៤ សសរស្តម្ភលម្អិត", en: "View 4-Pillar Breakdown" })}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
         </div>
 
         {/* 5. EXPLORE 16 PERSONALITIES QUICK-BANNER (Replaces heavy doc on personal result page) */}

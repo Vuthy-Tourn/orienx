@@ -51,9 +51,12 @@ import { DotPattern } from "@/components/magicui/dot-pattern";
 import { BentoGrid, BentoGridItem } from "@/components/aceternity/bento-grid";
 import { Badge } from "@/components/ui/badge";
 import CircularGallery from "@/components/ui/circular-gallery";
+import { useTheme } from "@/contexts/theme-context";
 
 export default function HomePage() {
   const { t, getLocalized, language } = useLanguage();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const [activeUniIndex, setActiveUniIndex] = useState<number>(0);
   const [mounted, setMounted] = useState<boolean>(false);
 
@@ -344,7 +347,7 @@ export default function HomePage() {
                 <CircularGallery
                   items={galleryItems}
                   bend={0.85}
-                  textColor="#111965"
+                  textColor={isDark ? "#E2E8F0" : "#111965"}
                   borderRadius={0.06}
                   scrollSpeed={2.2}
                   scrollEase={0.07}

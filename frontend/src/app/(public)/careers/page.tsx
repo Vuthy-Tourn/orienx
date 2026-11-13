@@ -6,26 +6,17 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { DirectoryControls } from "@/components/directory/directory-controls";
 import {
   Briefcase,
-  Search,
   ArrowRight,
   TrendingUp,
-  Sparkles,
-  DollarSign,
   GraduationCap,
-  X,
   Compass,
-  CheckCircle2,
-  Layers,
   ChevronRight,
-  Award,
   Cpu,
   BarChart3,
   HardHat,
-  Sliders,
-  Check,
-  Building,
   WifiOff,
   RefreshCw,
 } from "lucide-react";
@@ -98,6 +89,7 @@ export default function CareersPage() {
   const { t, getLocalized, language } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [industryFilter, setIndustryFilter] = useState("");
+  const [sortBy, setSortBy] = useState<"default" | "title">("default");
   const [seniorityLevel, setSeniorityLevel] = useState<"junior" | "mid" | "senior">("junior");
   const [selectedRiasec, setSelectedRiasec] = useState<string | null>(null);
 
@@ -120,9 +112,14 @@ export default function CareersPage() {
 
   const filteredCareers = useMemo(() => {
     if (!careers) return [];
-    if (!selectedRiasec) return careers;
-    return careers.filter((c) => c.riasec_code?.includes(selectedRiasec));
-  }, [careers, selectedRiasec]);
+    const list = selectedRiasec
+      ? careers.filter((c) => c.riasec_code?.includes(selectedRiasec))
+      : [...careers];
+    if (sortBy === "title") {
+      list.sort((a, b) => getLocalized(a.title).localeCompare(getLocalized(b.title)));
+    }
+    return list;
+  }, [careers, selectedRiasec, sortBy, getLocalized]);
 
   const hasActiveFilters = Boolean(searchTerm || industryFilter || selectedRiasec);
 
@@ -255,103 +252,44 @@ export default function CareersPage() {
         </div>
       </section>
 
+      {/* One control surface: search, filtering, sorting. */}
+      <DirectoryControls
+        search={searchTerm}
+        onSearchChange={setSearchTerm}
+        searchPlaceholder={t("careersDirectory.searchPlaceholder")}
+        clearSearchLabel={language === "km" ? "សម្អាតការស្វែងរក" : "Clear search"}
+        chips={[
+          { value: "", label: t("careersDirectory.allIndustries") },
+          { value: "Technology", label: "Technology" },
+          { value: "Finance & Banking", label: "Finance & Banking" },
+          { value: "Engineering & Construction", label: "Engineering & Construction" },
+        ]}
+        activeChip={industryFilter}
+        onChipChange={setIndustryFilter}
+        sort={{
+          value: sortBy,
+          onChange: (value) => setSortBy(value as typeof sortBy),
+          options: [
+            { value: "default", label: language === "km" ? "លំដាប់ដើម" : "Featured order" },
+            { value: "title", label: language === "km" ? "ឈ្មោះ A–Z" : "Name A–Z" },
+          ],
+          label: language === "km" ? "តម្រៀបតាម" : "Sort by",
+        }}
+        onReset={resetFilters}
+        hasActiveFilters={hasActiveFilters}
+        resetLabel={t("careersDirectory.resetFilters")}
+      />
+
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
-        {/* Filter Toolbar */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E6E8F0] shadow-xs space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
-            {/* Search Input */}
-            <div className="sm:col-span-8 relative">
-              <Search className="w-4 h-4 text-[#68708A] absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder={t("careersDirectory.searchPlaceholder")}
-                className="w-full pl-10 pr-9 py-2.5 rounded-xl text-sm border border-[#E6E8F0] bg-[#F5F6FA]/50 focus:bg-white focus:outline-hidden focus:border-[#111965] focus:ring-2 focus:ring-[#111965]/10 transition-all placeholder:text-[#68708A]/70"
-              />
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#68708A] hover:text-[#171A2C] p-0.5"
-                  title="Clear search"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
-
-            {/* Industry Selector */}
-            <div className="sm:col-span-4">
-              <select
-                value={industryFilter}
-                onChange={(e) => setIndustryFilter(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl text-xs font-semibold border border-[#E6E8F0] bg-white text-[#171A2C] focus:outline-hidden focus:border-[#111965]"
-              >
-                <option value="">{t("careersDirectory.allIndustries")}</option>
-                <option value="Technology">Technology (បច្ចេកវិទ្យា)</option>
-                <option value="Finance & Banking">Finance & Banking (ហិរញ្ញវត្ថុ & ធនាគារ)</option>
-                <option value="Engineering & Construction">Engineering & Construction (វិស្វកម្ម & សំណង់)</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Quick Industry Filter Tabs without emojis */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#E6E8F0]/80">
-            <button
-              onClick={() => setIndustryFilter("")}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                !industryFilter
-                  ? "bg-[#111965] text-white shadow-xs"
-                  : "bg-[#F5F6FA] text-[#68708A] hover:text-[#171A2C] hover:bg-slate-200/70"
-              }`}
-            >
-              {t("careersDirectory.allIndustries")}
-            </button>
-            <button
-              onClick={() => setIndustryFilter("Technology")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                industryFilter === "Technology"
-                  ? "bg-[#111965] text-white shadow-xs"
-                  : "bg-[#F5F6FA] text-[#68708A] hover:text-[#171A2C]"
-              }`}
-            >
-              <Cpu className="w-3.5 h-3.5 text-blue-600" />
-              <span>Technology</span>
-            </button>
-            <button
-              onClick={() => setIndustryFilter("Finance & Banking")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                industryFilter === "Finance & Banking"
-                  ? "bg-[#111965] text-white shadow-xs"
-                  : "bg-[#F5F6FA] text-[#68708A] hover:text-[#171A2C]"
-              }`}
-            >
-              <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Finance & Banking</span>
-            </button>
-            <button
-              onClick={() => setIndustryFilter("Engineering & Construction")}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
-                industryFilter === "Engineering & Construction"
-                  ? "bg-[#111965] text-white shadow-xs"
-                  : "bg-[#F5F6FA] text-[#68708A] hover:text-[#171A2C]"
-              }`}
-            >
-              <HardHat className="w-3.5 h-3.5 text-amber-600" />
-              <span>Engineering & Construction</span>
-            </button>
-
-            {hasActiveFilters && (
-              <button
-                onClick={resetFilters}
-                className="ml-auto inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors"
-              >
-                <X className="w-3.5 h-3.5" />
-                <span>{t("careersDirectory.resetFilters")}</span>
-              </button>
-            )}
-          </div>
+        {/* Result count */}
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="text-sm text-[#68708A]" aria-live="polite">
+            <span className="font-bold tabular-nums text-[#111965]">
+              {filteredCareers.length}
+            </span>{" "}
+            {language === "km" ? "អាជីព" : filteredCareers.length === 1 ? "career" : "careers"}
+          </p>
         </div>
 
         {/* Careers Grid */}

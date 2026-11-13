@@ -617,7 +617,7 @@ export default function PublicPersonalityGuidePage() {
                   <div
                     className="relative w-full sm:w-44 md:w-48 shrink-0 rounded-2xl flex flex-col items-center justify-between p-3.5 overflow-hidden border border-slate-100 group-hover:border-slate-200 transition-colors"
                     style={{
-                      background: `radial-gradient(circle at 50% 60%, ${meta.roleColor}14 0%, transparent 75%), #F8FAFD`,
+                      background: `radial-gradient(circle at 50% 60%, ${meta.roleColor}14 0%, transparent 75%), var(--surface-card)`,
                     }}
                   >
                     {/* Ghost Watermark Monogram */}

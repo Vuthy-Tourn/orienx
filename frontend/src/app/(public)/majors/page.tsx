@@ -8,13 +8,9 @@ import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import { cn } from "@/lib/utils";
 import {
-  Search,
   ArrowRight,
   Sparkles,
   Building2,
-  X,
-  LayoutGrid,
-  List,
   BookOpen,
   GraduationCap,
   FlaskConical,
@@ -24,7 +20,8 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
-import { Select, type SelectOption } from "@/components/ui/select";
+import { DirectoryControls } from "@/components/directory/directory-controls";
+import type { SelectOption } from "@/components/ui/select";
 import { Dialog } from "@/components/ui/dialog";
 
 type Major = {
@@ -349,125 +346,58 @@ export default function MajorsPage() {
       </section>
 
       {/* One control surface: search, filtering, sorting, view. */}
-      <div className="z-30 border-b border-[#E6E8F0] bg-white/95 backdrop-blur sm:sticky sm:top-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-2.5 py-3 sm:flex-row sm:items-center sm:gap-3">
-            <div className="relative flex-1">
-              <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#68708A]" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder={t("majorsDirectory.searchPlaceholder")}
-                aria-label={t("majorsDirectory.searchPlaceholder")}
-                className="h-10 w-full rounded-lg border border-[#E6E8F0] bg-[#F5F6FA]/70 pl-10 pr-9 text-sm text-[#171A2C] transition-colors placeholder:text-[#68708A]/80 focus:border-[#111965] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#111965]/10"
-              />
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm("")}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-1 text-[#68708A] transition-colors hover:text-[#171A2C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30"
-                  aria-label={isKm ? "សម្អាតការស្វែងរក" : "Clear search"}
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              )}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                role="switch"
-                aria-checked={stemOnly}
-                onClick={() => setStemOnly(!stemOnly)}
-                className={cn(
-                  "inline-flex h-10 items-center gap-1.5 rounded-lg border px-3 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30",
-                  stemOnly
-                    ? "border-[#111965] bg-[#111965] text-white"
-                    : "border-[#E6E8F0] bg-white text-[#171A2C] hover:border-slate-300"
-                )}
-              >
-                <FlaskConical className="h-3.5 w-3.5" />
-                <span>{isKm ? "STEM" : "STEM"}</span>
-              </button>
-
-              <Select
-                value={sortBy}
-                onChange={setSortBy}
-                options={sortOptions}
-                label={t("majorsDirectory.sortBy")}
-                align="end"
-                className="w-[164px] shrink-0 sm:w-[188px]"
-                menuClassName="min-w-[196px]"
-              />
-
-              <div className="hidden items-center rounded-lg border border-[#E6E8F0] p-0.5 md:flex">
-                {([
-                  { mode: "grid", Icon: LayoutGrid, label: isKm ? "ក្រឡាចត្រង្គ" : "Grid view" },
-                  { mode: "list", Icon: List, label: isKm ? "បញ្ជី" : "List view" },
-                ] as const).map(({ mode, Icon, label }) => (
-                  <button
-                    key={mode}
-                    type="button"
-                    aria-pressed={viewMode === mode}
-                    aria-label={label}
-                    title={label}
-                    onClick={() => setViewMode(mode)}
-                    className={cn(
-                      "rounded-md p-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30",
-                      viewMode === mode
-                        ? "bg-[#F0F2FA] text-[#111965]"
-                        : "text-[#68708A] hover:text-[#171A2C]"
-                    )}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Categories: the only category control on the page. */}
-          <div className="-mx-4 flex items-center gap-2 overflow-x-auto px-4 pb-3 sm:mx-0 sm:flex-wrap sm:px-0">
-            <button
-              onClick={() => setSelectedCategory("")}
-              aria-pressed={!selectedCategory}
-              className={cn(
-                "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg px-3 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30",
-                !selectedCategory
-                  ? "bg-[#111965] text-white"
-                  : "bg-[#F5F6FA] text-[#5A6482] hover:bg-[#ECEFF7] hover:text-[#171A2C]"
-              )}
-            >
-              <span>{t("majorsDirectory.allCategories")}</span>
-              <span className={cn("tabular-nums", !selectedCategory ? "text-white/60" : "text-[#68708A]")}>
-                {catalogueStats?.majors ?? ""}
-              </span>
-            </button>
-
-            {(categories || []).map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                aria-pressed={selectedCategory === cat}
-                className={cn(
-                  "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg px-3 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30",
-                  selectedCategory === cat
-                    ? "bg-[#111965] text-white"
-                    : "bg-[#F5F6FA] text-[#5A6482] hover:bg-[#ECEFF7] hover:text-[#171A2C]"
-                )}
-              >
-                <span>{t(`categories.${cat}`, cat)}</span>
-                {categoryCounts[cat] != null && (
-                  <span className={cn("tabular-nums", selectedCategory === cat ? "text-white/60" : "text-[#68708A]")}>
-                    {categoryCounts[cat]}
-                  </span>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
+      <DirectoryControls
+        search={searchTerm}
+        onSearchChange={setSearchTerm}
+        searchPlaceholder={t("majorsDirectory.searchPlaceholder")}
+        clearSearchLabel={isKm ? "សម្អាតការស្វែងរក" : "Clear search"}
+        chips={[
+          {
+            value: "",
+            label: t("majorsDirectory.allCategories"),
+            count: catalogueStats?.majors,
+          },
+          ...(categories || []).map((cat) => ({
+            value: cat,
+            label: t(`categories.${cat}`, cat),
+            count: categoryCounts[cat],
+          })),
+        ]}
+        activeChip={selectedCategory}
+        onChipChange={setSelectedCategory}
+        extra={
+          <button
+            type="button"
+            role="switch"
+            aria-checked={stemOnly}
+            onClick={() => setStemOnly(!stemOnly)}
+            className={cn(
+              "inline-flex h-10 items-center gap-1.5 rounded-lg border px-3 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30",
+              stemOnly
+                ? "border-[#111965] bg-[#111965] text-white"
+                : "border-[#E6E8F0] bg-white text-[#171A2C] hover:border-slate-300"
+            )}
+          >
+            <FlaskConical className="h-3.5 w-3.5" />
+            <span>STEM</span>
+          </button>
+        }
+        sort={{
+          value: sortBy,
+          onChange: (value) => setSortBy(value as SortKey),
+          options: sortOptions,
+          label: t("majorsDirectory.sortBy"),
+        }}
+        view={{
+          mode: viewMode,
+          onChange: setViewMode,
+          gridLabel: isKm ? "ក្រឡាចត្រង្គ" : "Grid view",
+          listLabel: isKm ? "បញ្ជី" : "List view",
+        }}
+        onReset={resetFilters}
+        hasActiveFilters={hasActiveFilters}
+        resetLabel={t("majorsDirectory.resetFilters")}
+      />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Result count belongs to the results, not to a decorative header. */}
@@ -483,15 +413,6 @@ export default function MajorsPage() {
             )}
           </p>
 
-          {hasActiveFilters && (
-            <button
-              onClick={resetFilters}
-              className="inline-flex items-center gap-1 rounded text-xs font-bold text-[#111965] transition-colors hover:text-[#1E277A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30"
-            >
-              <X className="h-3.5 w-3.5" />
-              <span>{t("majorsDirectory.resetFilters")}</span>
-            </button>
-          )}
         </div>
 
         {isLoading ? (

@@ -419,7 +419,7 @@ export function HowItWorksFlow() {
       className="relative z-20 py-20 lg:py-28 bg-[#FAFBFD] text-[#111965] border-b border-[#E6E8F0] overflow-hidden select-none"
     >
       {/* Background Ambient Glow & Corner Watermark */}
-      <div className="absolute top-0 right-0 w-[550px] h-[550px] bg-blue-500/[0.035] rounded-full blur-[130px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[550px] h-[550px] bg-[#111965]/[0.04] rounded-full blur-[130px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[550px] h-[550px] bg-amber-500/[0.035] rounded-full blur-[130px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -428,16 +428,16 @@ export function HowItWorksFlow() {
             ===================================================================== */}
         <div className="flex flex-col items-center text-center max-w-2xl mx-auto space-y-3 mb-14 lg:mb-16">
           {/* Subtle Category Pill with Dashes */}
-          <div className="inline-flex items-center gap-3 text-xs tracking-[0.25em] text-[#0284C7] font-bold uppercase">
-            <span className="w-7 h-[1.5px] bg-[#0284C7]/40 rounded-full" />
+          <div className="inline-flex items-center gap-3 text-xs tracking-[0.25em] text-[#111965] font-bold uppercase">
+            <span className="w-7 h-[1.5px] bg-[#F7CE4D]/60 rounded-full" />
             <span>{t("howItWorks.badge")}</span>
-            <span className="w-7 h-[1.5px] bg-[#0284C7]/40 rounded-full" />
+            <span className="w-7 h-[1.5px] bg-[#F7CE4D]/60 rounded-full" />
           </div>
 
           {/* Clean Main Title with Cyan/Blue Accent Dot */}
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#111965] tracking-tight">
             {t("howItWorks.title")}
-            <span className="text-[#0284C7]">.</span>
+            <span className="text-[#F7CE4D]">.</span>
           </h2>
 
           {/* Refined Subtitle */}
@@ -460,8 +460,8 @@ export function HowItWorksFlow() {
             <defs>
               {/* Vibrant Cyan to Royal Blue Gradient */}
               <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#00B4D8" />
-                <stop offset="35%" stopColor="#0284C7" />
+                <stop offset="0%" stopColor="#F7CE4D" />
+                <stop offset="35%" stopColor="#111965" />
                 <stop offset="70%" stopColor="#2563EB" />
                 <stop offset="100%" stopColor="#111965" />
               </linearGradient>
@@ -506,7 +506,7 @@ export function HowItWorksFlow() {
 
             {/* Traveling Light Pulse Bead along the path */}
             {animationCompleted && (
-              <circle r="4" fill="#00B4D8" filter="url(#softGlow)">
+              <circle r="4" fill="#F7CE4D" filter="url(#softGlow)">
                 <animateMotion
                   path={mainWaveD}
                   dur="7s"
@@ -540,13 +540,13 @@ export function HowItWorksFlow() {
                   className="absolute z-20"
                 >
                   {/* Ambient Soft Blue Halo Glow */}
-                  <div className="absolute -inset-4 rounded-full bg-cyan-400/25 blur-xl pointer-events-none opacity-80" />
+                  <div className="absolute -inset-4 rounded-full bg-[#F7CE4D]/25 blur-xl pointer-events-none opacity-80" />
 
                   {/* High-End Floating White Badge */}
                   <div className="relative w-14 h-14 rounded-2xl bg-white border border-slate-100 shadow-[0_12px_28px_rgba(2,132,199,0.22),0_4px_12px_rgba(0,0,0,0.04)] flex items-center justify-center">
                     <IconComponent
-                      className={`w-6 h-6 text-[#0284C7] ${
-                        step.iconFill ? "fill-[#0284C7]/20" : ""
+                      className={`w-6 h-6 text-[#111965] ${
+                        step.iconFill ? "fill-[#111965]/20" : ""
                       }`}
                     />
 
@@ -556,7 +556,7 @@ export function HowItWorksFlow() {
                     </span>
 
                     {/* Bottom Progress Dot */}
-                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#0284C7]" />
+                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#111965]" />
                   </div>
                 </div>
 
@@ -574,7 +574,7 @@ export function HowItWorksFlow() {
                           height: "40px",
                         }),
                   }}
-                  className="absolute -translate-x-1/2 w-0.5 border-l-2 border-dashed border-sky-300/80 pointer-events-none"
+                  className="absolute -translate-x-1/2 w-0.5 border-l-2 border-dashed border-[#F7CE4D]/60 pointer-events-none"
                 />
 
                 {/* 3. STEP CONTENT BLOCK (UP or DOWN directly anchored to node) */}
@@ -597,15 +597,15 @@ export function HowItWorksFlow() {
                       ref={(el) => {
                         watermarksRef.current[idx] = el;
                       }}
-                      className="absolute top-3 right-4 text-4xl lg:text-5xl font-black text-slate-300 select-none pointer-events-none leading-none tracking-tight"
+                      className="absolute top-3 right-4 text-4xl lg:text-5xl font-black text-[#111965]/10 dark:text-white/10 select-none pointer-events-none leading-none tracking-tight"
                     >
                       {step.watermark}
                     </div>
 
                     <div className="relative z-10">
                       {/* Step Pill */}
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-50 border border-sky-200/60 text-[#0284C7] text-[12px] font-bold tracking-wide mb-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#0284C7]" />
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200/70 text-[#111965] text-[12px] font-bold tracking-wide mb-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#111965]" />
                         <span>STEP {step.num}</span>
                       </div>
 
@@ -622,7 +622,7 @@ export function HowItWorksFlow() {
                       {/* Subtle Action Link */}
                       <Link
                         href={step.href}
-                        className="inline-flex items-center gap-1 text-[12.5px] font-bold text-[#0284C7] mt-3 transition-colors hover:text-[#2563EB]"
+                        className="inline-flex items-center gap-1 text-[12.5px] font-bold text-[#111965] mt-3 transition-colors hover:text-[#1E277A]"
                       >
                         <span>{t("howItWorks.learnMore")}</span>
                         <ChevronRight className="w-3.5 h-3.5" />
@@ -640,7 +640,7 @@ export function HowItWorksFlow() {
             ===================================================================== */}
         <div className="lg:hidden relative space-y-6 pt-4">
           {/* Vertical Connecting Line */}
-          <div className="absolute top-8 bottom-8 left-7 w-0.5 bg-gradient-to-b from-[#00B4D8] via-[#0284C7] to-[#111965] -translate-x-1/2" />
+          <div className="absolute top-8 bottom-8 left-7 w-0.5 bg-gradient-to-b from-[#F7CE4D] via-[#111965] to-[#111965] -translate-x-1/2" />
 
           {steps.map((step, idx) => {
             const IconComponent = step.icon;
@@ -651,11 +651,11 @@ export function HowItWorksFlow() {
               >
                 {/* Mobile Floating Node Badge */}
                 <div className="relative z-10 flex-shrink-0">
-                  <div className="absolute -inset-2 rounded-full bg-cyan-400/20 blur-md" />
+                  <div className="absolute -inset-2 rounded-full bg-[#F7CE4D]/20 blur-md" />
                   <div className="relative w-12 h-12 rounded-xl bg-white border border-slate-100 shadow-[0_8px_20px_rgba(2,132,199,0.2)] flex items-center justify-center">
                     <IconComponent
-                      className={`w-5 h-5 text-[#0284C7] ${
-                        step.iconFill ? "fill-[#0284C7]/20" : ""
+                      className={`w-5 h-5 text-[#111965] ${
+                        step.iconFill ? "fill-[#111965]/20" : ""
                       }`}
                     />
                     <span className="absolute -top-1.5 -right-1.5 px-1 py-0.2 rounded-full bg-[#111965] text-white text-[12px] font-black border border-white">
@@ -667,11 +667,11 @@ export function HowItWorksFlow() {
                 {/* Content Card */}
                 <div className="flex-1 bg-white p-5 rounded-2xl border border-slate-100 shadow-[0_4px_16px_rgba(0,0,0,0.03)] space-y-2 relative overflow-hidden">
                   {/* Faint Watermark Number */}
-                  <div className="absolute -top-3 -right-1 text-5xl font-black text-slate-100 select-none pointer-events-none">
+                  <div className="absolute -top-3 -right-1 text-5xl font-black text-[#111965]/10 dark:text-white/10 select-none pointer-events-none">
                     {step.watermark}
                   </div>
 
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-50 text-[#0284C7] text-[12px] font-bold">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 text-[#111965] text-[12px] font-bold">
                     <span>STEP {step.num}</span>
                   </div>
 
@@ -685,7 +685,7 @@ export function HowItWorksFlow() {
 
                   <Link
                     href={step.href}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-[#0284C7] pt-1"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-[#111965] pt-1"
                   >
                     <span>{t("howItWorks.learnMore")}</span>
                     <ChevronRight className="w-3.5 h-3.5" />

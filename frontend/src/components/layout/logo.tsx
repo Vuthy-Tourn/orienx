@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useIsDarkMode } from "@/contexts/theme-context";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -74,10 +77,14 @@ export function OrienXWordmark({
 
 export function Logo({
   className,
-  isLight = false,
+  isLight,
   showText = true,
   size = "md",
 }: LogoProps) {
+  // Follow the app theme unless a surface explicitly pins the variant
+  // (the navy footer always uses the light mark).
+  const isDark = useIsDarkMode();
+  const light = isLight ?? isDark;
   const iconSizes = {
     sm: "w-8 h-8",
     md: "w-10 h-10",
@@ -96,10 +103,10 @@ export function Logo({
           iconSizes[size]
         )}
       >
-        <CompassStarLogoMark isLight={isLight} />
+        <CompassStarLogoMark isLight={light} />
       </div>
 
-      {showText && <OrienXWordmark isLight={isLight} size={size} />}
+      {showText && <OrienXWordmark isLight={light} size={size} />}
     </Link>
   );
 }

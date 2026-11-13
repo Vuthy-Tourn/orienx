@@ -429,11 +429,11 @@ export default function RecommendationsPage() {
                       >
                         #{rec.rank_position}
                       </span>
-                      <span className="text-[12.5px] font-bold text-[#68708A] uppercase tracking-wide truncate max-w-[150px]">
+                      <span className="text-[12.5px] font-bold text-[#68708A] uppercase tracking-wide truncate max-w-[220px]">
                         {major.category}
                       </span>
                       {major.is_stem && (
-                        <span className="px-1.5 py-0.2 rounded text-[12px] font-black bg-sky-50 text-sky-700 border border-sky-200">
+                        <span className="px-1.5 py-0.2 rounded text-[12px] font-black bg-sky-50 text-sky-700 border border-sky-200 flex-shrink-0">
                           STEM
                         </span>
                       )}
@@ -500,54 +500,6 @@ export default function RecommendationsPage() {
                     </div>
                   </div>
                 </div>
-
-                {/* Offering Campuses / Universities Chips */}
-                {major.offering_universities && major.offering_universities.length > 0 ? (
-                  <div className="space-y-1.5 pt-1 border-t border-[#E6E8F0]/70">
-                    <div className="flex items-center justify-between text-[12.5px] font-bold text-[#68708A]">
-                      <span className="tracking-wide">
-                        {t("recommendationsPage.campuses", "គ្រឹះស្ថានបណ្តុះបណ្តាល:")}
-                      </span>
-                      <span className="font-semibold text-slate-500">
-                        {major.offering_universities.length} {t("recommendationsPage.institutions", "កន្លែង")}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      {major.offering_universities.slice(0, 4).map((u: any) => (
-                        <Link
-                          key={u.university_id}
-                          href={`/universities/${u.university_slug}`}
-                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[12.5px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
-                          title={getLocalized(u.university_name)}
-                        >
-                          <Building2 className="w-2.5 h-2.5 opacity-60" />
-                          <span>{getLocalized(u.university_acronym) || u.university_slug.toUpperCase()}</span>
-                          {u.tuition_annual_usd ? (
-                            <span className="text-[12px] opacity-75 font-normal">
-                              (${Math.round(u.tuition_annual_usd)})
-                            </span>
-                          ) : null}
-                        </Link>
-                      ))}
-                      {major.offering_universities.length > 4 && (
-                        <span className="text-[12.5px] text-[#68708A] font-semibold">
-                          +{major.offering_universities.length - 4}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-1.5 pt-1 border-t border-[#E6E8F0]/70">
-                    <div className="flex items-center justify-between text-[12.5px] font-bold text-[#68708A]">
-                      <span className="tracking-wide">
-                        {t("recommendationsPage.campuses", "គ្រឹះស្ថានបណ្តុះបណ្តាល:")}
-                      </span>
-                      <span className="text-[12px] text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/70 font-semibold">
-                        {t("personalityAssessment.verifyingInstitutions", "កំពុងផ្ទៀងផ្ទាត់")}
-                      </span>
-                    </div>
-                  </div>
-                )}
 
                 {/* 4. Footer: Campus Count & Action Buttons */}
                 <div className="pt-2 border-t border-[#E6E8F0] flex items-center justify-between text-xs gap-2">

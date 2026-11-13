@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { Logo } from "@/components/layout/logo";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { useLanguage } from "@/contexts/language-context";
 import { useAuth } from "@/contexts/auth-context";
 import {
@@ -24,22 +25,25 @@ import {
   Info,
   BrainCircuit,
   ArrowRight,
-  CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
   const pathname = usePathname();
-  const { t, getLocalized, language } = useLanguage();
+  const { t, language } = useLanguage();
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [assessmentsOpen, setAssessmentsOpen] = useState(false);
+  const [exploreOpen, setExploreOpen] = useState(false);
   const [mobileAssessmentsOpen, setMobileAssessmentsOpen] = useState(false);
+  const [mobileExploreOpen, setMobileExploreOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const exploreTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setExploreOpen(false);
     setAssessmentsOpen(true);
   };
 
@@ -49,10 +53,24 @@ export function Navbar() {
     }, 150);
   };
 
+  const handleExploreEnter = () => {
+    if (exploreTimeoutRef.current) clearTimeout(exploreTimeoutRef.current);
+    setAssessmentsOpen(false);
+    setExploreOpen(true);
+  };
+
+  const handleExploreLeave = () => {
+    exploreTimeoutRef.current = setTimeout(() => {
+      setExploreOpen(false);
+    }, 150);
+  };
+
   // Auto-close menus on route change
   useEffect(() => {
     setMobileMenuOpen(false);
     setAssessmentsOpen(false);
+    setExploreOpen(false);
+    setMobileExploreOpen(false);
   }, [pathname]);
 
   // Handle escape key to close menu
@@ -61,6 +79,7 @@ export function Navbar() {
       if (e.key === "Escape") {
         setMobileMenuOpen(false);
         setAssessmentsOpen(false);
+        setExploreOpen(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -77,7 +96,6 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const isHomePage = pathname === "/";
   const isAuthPage =
     pathname === "/login" ||
     pathname === "/register" ||
@@ -159,7 +177,7 @@ export function Navbar() {
 
   const assessmentSubItems = [...diagnosticTests, resultHub];
 
-  const navLinks = [
+  const exploreLinks = [
     {
       href: "/majors",
       label: t("nav.majors", "ស្វែងរកមុខជំនាញ"),
@@ -188,6 +206,9 @@ export function Navbar() {
       descKm: "ឱកាសអាហារូបករណ៍ក្នុង និងក្រៅប្រទេស",
       descEn: "Local & international grant opportunities",
     },
+  ];
+
+  const navLinks = [
     {
       isDropdown: true,
       label: language === "km" ? "តេស្តវាយតម្លៃ" : "Assessments",
@@ -211,10 +232,10 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-200 ease-in-out border-b",
+        "sticky top-0 z-50 w-full transition-all duration-200 ease-in-out",
         scrolled
-          ? "bg-white/95 backdrop-blur-md border-[#E6E8F0] shadow-sm"
-          : "bg-white/90 backdrop-blur-md border-[#E6E8F0]/80"
+          ? "bg-white/95 backdrop-blur-md shadow-sm"
+          : "bg-white/90 backdrop-blur-md"
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -225,6 +246,101 @@ export function Navbar() {
 
         {/* Desktop Navigation Links */}
         <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          {/* Explore group: the four directory pages live here */}
+          <div
+            className="relative"
+            onMouseEnter={handleExploreEnter}
+            onMouseLeave={handleExploreLeave}
+          >
+            <button
+              type="button"
+              onClick={() => setExploreOpen((prev) => !prev)}
+              className={cn(
+                "relative px-3 py-1.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap cursor-pointer",
+                exploreLinks.some(
+                  (item) =>
+                    pathname === item.href ||
+                    (item.href !== "/" && pathname?.startsWith(item.href))
+                ) || exploreOpen
+                  ? "text-[#111965] font-bold after:absolute after:inset-x-2.5 after:-bottom-0.5 after:h-[2px] after:rounded-full after:bg-[#F7CE4D]"
+                  : "text-[#5A6482] hover:text-[#111965]"
+              )}
+              aria-expanded={exploreOpen}
+            >
+              <span>{language === "km" ? "ស្វែងរក" : "Explore"}</span>
+              <ChevronDown
+                className={cn(
+                  "w-3.5 h-3.5 transition-transform duration-200 text-slate-400",
+                  exploreOpen && "rotate-180 text-[#111965]"
+                )}
+              />
+            </button>
+
+            <AnimatePresence>
+              {exploreOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                  transition={{ duration: 0.16, ease: "easeOut" }}
+                  className="absolute left-1/2 -translate-x-1/2 top-full pt-2.5 z-50 w-[440px]"
+                >
+                  <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl p-3 backdrop-blur-md">
+                    <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
+                      <span className="text-[12px] font-black uppercase tracking-wider text-[#111965]">
+                        {language === "km" ? "ស្វែងរក" : "Explore OrienX"}
+                      </span>
+                      <span className="text-[12.5px] font-bold text-slate-400">
+                        {language === "km" ? "៤ ផ្នែក" : "4 destinations"}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1 pt-1">
+                      {exploreLinks.map((item) => {
+                        const Icon = item.icon;
+                        const isActive =
+                          pathname === item.href ||
+                          (item.href !== "/" && pathname?.startsWith(item.href));
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            onClick={() => setExploreOpen(false)}
+                            className={cn(
+                              "flex items-start gap-2.5 p-2.5 rounded-xl border transition-colors group",
+                              isActive
+                                ? "bg-[#FFF9E6] border-[#F7CE4D]/40"
+                                : "border-transparent hover:bg-slate-50"
+                            )}
+                          >
+                            <div
+                              className={cn(
+                                "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors",
+                                isActive
+                                  ? "bg-[#111965] text-[#F7CE4D]"
+                                  : "bg-[#F0F2FA] text-[#111965] group-hover:bg-[#111965] group-hover:text-white"
+                              )}
+                            >
+                              <Icon className="w-4 h-4" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="text-xs font-bold text-[#111965] leading-snug">
+                                {item.label}
+                              </div>
+                              <p className="text-[12px] text-slate-500 leading-snug mt-0.5 line-clamp-2">
+                                {language === "km" ? item.descKm : item.descEn}
+                              </p>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           {navLinks.map((item, idx) => {
             if (item.isDropdown && item.subItems) {
               const isAnySubActive = item.subItems.some(
@@ -245,12 +361,11 @@ export function Navbar() {
                     className={cn(
                       "relative px-3 py-1.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap cursor-pointer",
                       isAnySubActive || assessmentsOpen
-                        ? "bg-[#111965]/8 text-[#111965] font-bold shadow-2xs"
-                        : "text-[#5A6482] hover:text-[#111965] hover:bg-slate-100/70"
+                        ? "text-[#111965] font-bold after:absolute after:inset-x-2.5 after:-bottom-0.5 after:h-[2px] after:rounded-full after:bg-[#F7CE4D]"
+                        : "text-[#5A6482] hover:text-[#111965]"
                     )}
                     aria-expanded={assessmentsOpen}
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                     <span>{item.label}</span>
                     <ChevronDown
                       className={cn(
@@ -444,8 +559,8 @@ export function Navbar() {
                 className={cn(
                   "relative px-3 py-1.5 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-150 flex items-center gap-1.5 whitespace-nowrap",
                   isActive
-                    ? "bg-[#111965]/8 text-[#111965] font-bold shadow-2xs"
-                    : "text-[#5A6482] hover:text-[#111965] hover:bg-slate-100/70"
+                    ? "text-[#111965] font-bold after:absolute after:inset-x-2.5 after:-bottom-0.5 after:h-[2px] after:rounded-full after:bg-[#F7CE4D]"
+                    : "text-[#5A6482] hover:text-[#111965]"
                 )}
               >
                 <span>{item.label}</span>
@@ -455,10 +570,9 @@ export function Navbar() {
         </nav>
 
         {/* Desktop Right Actions Cluster */}
-        <div className="hidden lg:flex items-center gap-2.5 xl:gap-3">
+        <div className="hidden lg:flex items-center gap-2 xl:gap-2.5">
           <LanguageSwitcher />
-
-          <div className="h-5 w-px bg-slate-200" />
+          <ThemeToggle />
 
           {user ? (
             <div className="flex items-center gap-2">
@@ -510,6 +624,7 @@ export function Navbar() {
         {/* Mobile Header Buttons (Language + Hamburger) */}
         <div className="flex items-center gap-2 lg:hidden">
           <LanguageSwitcher />
+          <ThemeToggle />
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-700 hover:text-[#111965] hover:bg-slate-100 transition-colors focus:outline-none"
@@ -550,6 +665,87 @@ export function Navbar() {
               <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 space-y-4">
                 {/* Navigation Links List */}
                 <div className="space-y-1.5">
+                  {/* Explore group */}
+                  <div className="rounded-2xl border border-slate-200/90 overflow-hidden bg-white">
+                    <button
+                      type="button"
+                      onClick={() => setMobileExploreOpen((prev) => !prev)}
+                      className={cn(
+                        "w-full flex items-center justify-between p-3 text-left font-bold text-sm transition-colors cursor-pointer",
+                        exploreLinks.some(
+                          (item) =>
+                            pathname === item.href ||
+                            (item.href !== "/" && pathname?.startsWith(item.href))
+                        )
+                          ? "bg-[#111965]/10 text-[#111965] font-bold"
+                          : "text-[#171A2C] hover:bg-slate-50"
+                      )}
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <div className="w-10 h-10 rounded-xl bg-[#111965]/5 text-[#111965] border border-[#111965]/10 flex items-center justify-center shrink-0">
+                          <Compass className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="text-sm font-bold text-[#111965]">
+                            {language === "km" ? "ស្វែងរក" : "Explore"}
+                          </div>
+                          <div className="text-[12px] text-[#68708A] font-normal line-clamp-1">
+                            {language === "km"
+                              ? "មុខជំនាញ សាកលវិទ្យាល័យ អាជីព & អាហារូបករណ៍"
+                              : "Majors, universities, careers & scholarships"}
+                          </div>
+                        </div>
+                      </div>
+                      <ChevronDown
+                        className={cn(
+                          "w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ml-2",
+                          mobileExploreOpen && "rotate-180 text-[#111965]"
+                        )}
+                      />
+                    </button>
+
+                    {mobileExploreOpen && (
+                      <div className="p-2 bg-slate-50/80 border-t border-slate-100 space-y-1.5">
+                        {exploreLinks.map((item) => {
+                          const Icon = item.icon;
+                          const isActive =
+                            pathname === item.href ||
+                            (item.href !== "/" && pathname?.startsWith(item.href));
+                          return (
+                            <Link
+                              key={item.href}
+                              href={item.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className={cn(
+                                "flex items-center justify-between p-2.5 rounded-xl border transition-all",
+                                isActive
+                                  ? "bg-white border-slate-300 shadow-2xs font-bold"
+                                  : "bg-white/80 border-slate-200/70 hover:bg-white"
+                              )}
+                            >
+                              <div className="flex items-center gap-2.5">
+                                <div
+                                  className={cn(
+                                    "w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border",
+                                    isActive
+                                      ? "bg-[#111965] text-[#F7CE4D] border-[#111965]"
+                                      : "bg-white text-[#111965] border-slate-200"
+                                  )}
+                                >
+                                  <Icon className="w-3.5 h-3.5" />
+                                </div>
+                                <span className="text-xs font-bold text-[#111965]">
+                                  {item.label}
+                                </span>
+                              </div>
+                              <ChevronRight className="w-4 h-4 text-slate-300 shrink-0 ml-2" />
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
                   {navLinks.map((item, idx) => {
                     if (item.isDropdown && item.subItems) {
                       const isAnySubActive = item.subItems.some(
@@ -570,7 +766,7 @@ export function Navbar() {
                             className={cn(
                               "w-full flex items-center justify-between p-3 text-left font-bold text-sm transition-colors cursor-pointer",
                               isAnySubActive
-                                ? "bg-[#111965]/8 text-[#111965]"
+                                ? "bg-[#111965]/10 text-[#111965] font-bold"
                                 : "text-[#171A2C] hover:bg-slate-50"
                             )}
                           >

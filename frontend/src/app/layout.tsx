@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Plus_Jakarta_Sans, Noto_Sans_Khmer } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/language-context";
@@ -44,7 +45,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="km" className={`${plusJakarta.variable} ${notoSansKhmer.variable}`}>
+    <html
+      lang="km"
+      suppressHydrationWarning
+      className={`${plusJakarta.variable} ${notoSansKhmer.variable}`}
+    >
+      <head>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`(function(){try{var t=localStorage.getItem('futera_theme');var d=t==='dark'||((!t||t==='system')&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d){document.documentElement.classList.add('dark');}}catch(e){}})();`}
+        </Script>
+      </head>
       <body className="min-h-screen flex flex-col bg-[#F5F6FA] text-[#171A2C] selection:bg-[#F7CE4D] selection:text-[#111965]">
         <QueryProvider>
           <ThemeProvider>

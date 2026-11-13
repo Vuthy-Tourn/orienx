@@ -20,6 +20,8 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
     >
       <button
         onClick={() => setLanguage("km")}
+        aria-label="Khmer"
+        aria-pressed={language === "km"}
         className={cn(
           "px-2.5 py-1 rounded-md transition-all duration-150 flex items-center gap-1.5",
           language === "km"
@@ -27,11 +29,12 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
             : "text-[#68708A] hover:text-[#171A2C]"
         )}
       >
-        <span className="font-mono text-[12.5px] font-bold opacity-75">KH</span>
         <span>ខ្មែរ</span>
       </button>
       <button
         onClick={() => setLanguage("en")}
+        aria-label="English"
+        aria-pressed={language === "en"}
         className={cn(
           "px-2.5 py-1 rounded-md transition-all duration-150 flex items-center gap-1.5",
           language === "en"
@@ -39,8 +42,7 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
             : "text-[#68708A] hover:text-[#171A2C]"
         )}
       >
-        <span className="font-mono text-[12.5px] font-bold opacity-75">EN</span>
-        <span>English</span>
+        <span className="font-mono text-[12.5px] font-bold">EN</span>
       </button>
     </div>
   );

@@ -173,11 +173,11 @@ const TUITION_BENCHMARKS = [
 // =========================================================================
 // Data: MoEYS BACII Grade Cutoffs & Privileges
 // =========================================================================
-const accentInk = (hex: string) => {
-  const r = parseInt(hex.slice(1, 3), 16) / 255;
-  const g = parseInt(hex.slice(3, 5), 16) / 255;
-  const b = parseInt(hex.slice(5, 7), 16) / 255;
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.55 ? "#0A0F2C" : "#FFFFFF";
+const PILL_INK_DARK: Record<string, string> = {
+  "#B45309": "#FCD34D",
+  "#1D4ED8": "#93C5FD",
+  "#047857": "#6EE7B7",
+  "#7E22CE": "#D8B4FE",
 };
 
 const BACII_GRADE_TIERS = [
@@ -185,8 +185,8 @@ const BACII_GRADE_TIERS = [
     grade: "Grade A",
     accent: "#F59E0B",
     pillInk: "#B45309",
-    summaryEn: "Top academic band",
-    summaryKm: "កម្រិតខ្ពស់បំផុត",
+    summaryEn: "Top band",
+    summaryKm: "កម្រិតកំពូល",
     notesEn: [
       "Eligible to apply to every bachelor's programme.",
       "Strong position for competitive majors and state scholarship quotas.",
@@ -202,7 +202,7 @@ const BACII_GRADE_TIERS = [
     grade: "Grade B",
     accent: "#2563EB",
     pillInk: "#1D4ED8",
-    summaryEn: "Upper academic band",
+    summaryEn: "Upper band",
     summaryKm: "កម្រិតខ្ពស់",
     notesEn: [
       "Eligible to apply to bachelor's programmes, including competitive faculties.",
@@ -219,8 +219,8 @@ const BACII_GRADE_TIERS = [
     grade: "Grade C & D",
     accent: "#10B981",
     pillInk: "#047857",
-    summaryEn: "Passing band with diploma",
-    summaryKm: "កម្រិតជាប់ និងទទួលបានសញ្ញាបត្រ",
+    summaryEn: "Passing band",
+    summaryKm: "កម្រិតជាប់",
     notesEn: [
       "Qualifies for the BACII diploma and bachelor's applications.",
       "Selective programmes may require higher scores or extra exams.",
@@ -236,7 +236,7 @@ const BACII_GRADE_TIERS = [
     grade: "Grade E",
     accent: "#9333EA",
     pillInk: "#7E22CE",
-    summaryEn: "Base diploma band",
+    summaryEn: "Base band",
     summaryKm: "កម្រិតមូលដ្ឋាន",
     notesEn: [
       "BACII diploma awarded — the base requirement for higher education.",
@@ -1390,8 +1390,6 @@ export default function PublicBaciiGuidePage() {
 
           <div className="gsap-bacii-tier-grid mx-auto grid max-w-4xl grid-cols-1 gap-5 md:grid-cols-2 lg:gap-6">
             {BACII_GRADE_TIERS.map((tier, idx) => {
-              const shortGrade = tier.grade.replace("Grade ", "").replace(/\s*&\s*/, "/");
-
               return (
                 <div
                   key={idx}
@@ -1427,67 +1425,40 @@ export default function PublicBaciiGuidePage() {
                     <div className="absolute inset-x-0 bottom-0 top-[56px] rounded-[28px] bg-[var(--card)]" />
                   </div>
 
-                  {/* Pill in the notch */}
+                  {/* Band tag in the top-right notch */}
                   <div
-                    className="absolute right-2.5 top-3 z-20 flex h-8 items-center rounded-full border px-3"
+                    className="absolute right-2.5 top-3 z-20 flex h-8 items-center rounded-full border px-2 sm:px-3"
                     style={
                       {
                         backgroundColor: `${tier.accent}14`,
                         borderColor: `${tier.accent}3D`,
                         "--pill-ink": tier.pillInk,
-                        "--pill-ink-dark": tier.accent,
+                        "--pill-ink-dark": PILL_INK_DARK[tier.pillInk] ?? "#E2E8F0",
                       } as React.CSSProperties
                     }
                   >
-                    <span className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--pill-ink)] dark:text-[var(--pill-ink-dark)]">
-                      {isKm ? tier.grade : `Grade ${shortGrade}`}
+                    <span className="whitespace-nowrap text-[9px] font-bold uppercase tracking-[0.08em] text-[var(--pill-ink)] dark:text-[var(--pill-ink-dark)] sm:text-[10px] sm:tracking-[0.1em]">
+                      {isKm ? tier.summaryKm : tier.summaryEn}
                     </span>
                   </div>
 
-                  {/* Content sits on top of the silhouette */}
                   <div className="relative flex flex-1 flex-col">
-                    <div className="flex flex-1 flex-col p-4 pt-16 sm:pt-4">
-                      {/* Issuer row */}
-                      <div className="flex items-center gap-3">
-                        <span
-                          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-[19px] font-black"
-                          style={{
-                            backgroundColor: tier.accent,
-                            color: accentInk(tier.accent),
-                          }}
-                        >
-                          {tier.grade.replace("Grade ", "").slice(0, 1)}
-                        </span>
-                        <div className="min-w-0">
-                          <p className="flex items-center gap-1.5 text-[16.5px] font-semibold leading-tight text-[var(--card-ink)]">
-                            MoEYS BACII
-                            <ShieldCheck className="h-4 w-4 shrink-0 text-[#3B82F6]" />
-                          </p>
-                          <p className="mt-0.5 text-[12px] leading-snug text-[var(--card-muted)]">
-                            {isKm ? "ក្រសួងអប់រំ យុវជន និងកីឡា" : "Ministry of Education"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <h3 className="mt-4 text-[24px] font-extrabold leading-[1.12] tracking-[-0.02em] text-[var(--card-ink)] sm:text-[26px]">
+                    <div className="flex flex-1 flex-col p-4">
+                      <h3 className="text-[26px] font-extrabold leading-[1.08] tracking-[-0.02em] text-[var(--card-ink)] sm:text-[30px]">
                         {tier.grade}
                       </h3>
 
-                      <p className="mt-1 text-[12.5px] font-semibold text-[var(--card-muted)]">
-                        {isKm ? tier.summaryKm : tier.summaryEn}
-                      </p>
-
-                      <p className="mt-4 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--card-faint)]">
+                      <p className="mt-4 text-[12px] font-bold uppercase tracking-[0.12em] text-[var(--card-faint)]">
                         {isKm ? "អត្ថន័យសម្រាប់ការដាក់ពាក្យ" : "What this means"}
                       </p>
                       <ul className="mt-2 space-y-1.5">
                         {(isKm ? tier.notesKm : tier.notesEn).map((n, i) => (
                           <li
                             key={i}
-                            className="flex items-start gap-1.5 text-[12.5px] leading-[1.5] text-[var(--card-body)]"
+                            className="flex items-start gap-2 text-[14px] leading-[1.55] text-[var(--card-body)]"
                           >
                             <Check
-                              className="mt-0.5 h-3.5 w-3.5 shrink-0"
+                              className="mt-0.5 h-4 w-4 shrink-0"
                               style={{ color: tier.accent }}
                             />
                             <span>{n}</span>

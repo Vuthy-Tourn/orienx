@@ -441,14 +441,14 @@ export default function DashboardOverviewPage() {
             <div className="relative w-20 h-20 flex-shrink-0">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
                 <path
-                  className="text-slate-100"
+                  className="text-[#E6E8F0] dark:text-white/10"
                   strokeWidth="3.6"
                   stroke="currentColor"
                   fill="none"
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                 />
                 <path
-                  className="text-[#111965] transition-all duration-700"
+                  className="text-[#F7CE4D] transition-all duration-700"
                   strokeDasharray={`${progressPercent}, 100`}
                   strokeWidth="3.6"
                   strokeLinecap="round"
