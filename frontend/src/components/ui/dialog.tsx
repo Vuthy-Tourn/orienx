@@ -9,9 +9,11 @@ interface DialogProps {
   onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
   className?: string;
+  /** Hide the built-in close button when the caller renders its own. */
+  hideClose?: boolean;
 }
 
-export function Dialog({ open, onOpenChange, children, className }: DialogProps) {
+export function Dialog({ open, onOpenChange, children, className, hideClose = false }: DialogProps) {
   const surfaceRef = React.useRef<HTMLDivElement>(null);
   const restoreFocusRef = React.useRef<HTMLElement | null>(null);
   const onOpenChangeRef = React.useRef(onOpenChange);
@@ -56,14 +58,16 @@ export function Dialog({ open, onOpenChange, children, className }: DialogProps)
         tabIndex={-1}
         className={cn("relative z-50 w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-[#E6E8F0] animate-in zoom-in-95 duration-200 focus:outline-none", className)}
       >
-        <button
-          type="button"
-          onClick={() => onOpenChange(false)}
-          className="absolute right-5 top-5 rounded-xl p-1.5 text-[#68708A] hover:bg-[#F0F2FA] hover:text-[#111965] transition-colors"
-          aria-label="Close dialog"
-        >
-          <X className="h-5 w-5" />
-        </button>
+        {!hideClose && (
+          <button
+            type="button"
+            onClick={() => onOpenChange(false)}
+            className="absolute right-5 top-5 rounded-xl p-1.5 text-[#68708A] hover:bg-[#F0F2FA] hover:text-[#111965] transition-colors"
+            aria-label="Close dialog"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        )}
         {children}
       </div>
     </div>

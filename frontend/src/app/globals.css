@@ -22,6 +22,21 @@
   --text-3xl--line-height: 2.375rem;
 }
 
+/* Assessment heroes fill the viewport under the 4rem sticky navbar.
+   min-height (not height) so tall content still grows instead of clipping. */
+.hero-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100vh - 4rem);
+}
+
+@supports (height: 100svh) {
+  .hero-screen {
+    min-height: calc(100svh - 4rem);
+  }
+}
+
 @layer base {
   :root {
     --primary-navy: #111965;

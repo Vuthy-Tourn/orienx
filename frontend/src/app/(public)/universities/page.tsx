@@ -662,7 +662,7 @@ function UniversitiesContent() {
 
       {/* Quick Comparison Modal Dialog */}
       {isCompareModalOpen && (
-        <Dialog open={isCompareModalOpen} onOpenChange={setIsCompareModalOpen}>
+        <Dialog open={isCompareModalOpen} onOpenChange={setIsCompareModalOpen} hideClose>
           <div className="space-y-5">
             <div className="flex items-start justify-between border-b border-[#E6E8F0] pb-3">
               <div>

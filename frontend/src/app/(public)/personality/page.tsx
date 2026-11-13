@@ -253,7 +253,7 @@ export default function PublicPersonalityGuidePage() {
       <section
         onMouseMove={handleHeroMouseMove}
         onMouseLeave={handleHeroMouseLeave}
-        className="relative overflow-hidden bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white pt-24 pb-32 md:pb-36 lg:pb-40 px-4 sm:px-6 lg:px-8 select-none"
+        className="hero-screen relative overflow-hidden bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white pt-24 pb-32 md:pb-36 lg:pb-40 px-4 sm:px-6 lg:px-8 select-none"
       >
         {/* Dynamic Cursor Spotlight Beam (Subtle Brand Tint) */}
         <motion.div
@@ -800,6 +800,7 @@ export default function PublicPersonalityGuidePage() {
             if (!open) setActiveArchetypeCode(null);
           }}
           className="max-w-3xl sm:max-w-4xl max-h-[90vh] overflow-y-auto p-5 sm:p-8"
+          hideClose
         >
           <div className="space-y-6">
             {/* Modal Header Hero */}
