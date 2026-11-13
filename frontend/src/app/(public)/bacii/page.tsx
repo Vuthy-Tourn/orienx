@@ -75,7 +75,6 @@ const STREAM_PROFILES = {
     nameKm: "ថ្នាក់វិទ្យាសាស្ត្រពិត (Science Stream)",
     shortDescEn: "Advanced Math, Physics, Chemistry, Biology & Computing",
     shortDescKm: "គណិតវិទ្យាកម្រិតខ្ពស់ រូបវិទ្យា គីមីវិទ្យា ជីវវិទ្យា និងព័ត៌មានវិទ្យា",
-    badgeColor: "bg-blue-50 text-blue-700 border-blue-200",
     accentColor: "#2563EB",
     coreSubjectsEn: ["Advanced Math", "Physics", "Chemistry", "Biology"],
     coreSubjectsKm: ["គណិតវិទ្យា", "រូបវិទ្យា", "គីមីវិទ្យា", "ជីវវិទ្យា"],
@@ -109,7 +108,6 @@ const STREAM_PROFILES = {
     nameKm: "ថ្នាក់វិទ្យាសាស្ត្រសង្គម (Social Science Stream)",
     shortDescEn: "Khmer Literature, History, Geography, Morality & Economics",
     shortDescKm: "អក្សរសាស្ត្រខ្មែរ ប្រវត្តិវិទ្យា ភូមិវិទ្យា សីលធម៌ និងសេដ្ឋកិច្ច",
-    badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
     accentColor: "#059669",
     coreSubjectsEn: ["Khmer Literature", "History", "Geography", "Morality & Economics"],
     coreSubjectsKm: ["អក្សរសាស្ត្រខ្មែរ", "ប្រវត្តិវិទ្យា", "ភូមិវិទ្យា", "សីលធម៌-ពលរដ្ឋ & សេដ្ឋកិច្ច"],
@@ -175,67 +173,80 @@ const TUITION_BENCHMARKS = [
 // =========================================================================
 // Data: MoEYS BACII Grade Cutoffs & Privileges
 // =========================================================================
+const accentInk = (hex: string) => {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.55 ? "#0A0F2C" : "#FFFFFF";
+};
+
 const BACII_GRADE_TIERS = [
   {
     grade: "Grade A",
-    scoreRange: "427.500 – 500.000 pts",
-    badgeColor: "bg-amber-100 text-amber-800 border-amber-300",
-    privilegesEn: [
-      "100% Full-Ride MoEYS Priority State Scholarships automatically granted",
-      "Pre-qualification for CADT Techo Digital Talent 100% scholarship exam",
-      "Honored by Samdech Prime Minister at official national ceremony",
-      "Waived entrance examination fees across multiple private institutions",
+    accent: "#F59E0B",
+    pillInk: "#B45309",
+    summaryEn: "Top academic band",
+    summaryKm: "កម្រិតខ្ពស់បំផុត",
+    notesEn: [
+      "Eligible to apply to every bachelor's programme.",
+      "Strong position for competitive majors and state scholarship quotas.",
+      "Each university still sets its own cutoff and conditions.",
     ],
-    privilegesKm: [
-      "ទទួលបានអាហារូបករណ៍រដ្ឋ ១០០% អាទិភាពក្រសួងអប់រំ (MoEYS) ដោយស្វ័យប្រវត្តិ",
-      "មានសិទ្ធិប្រឡងអាហារូបករណ៍ទេពកោសល្យឌីជីថលតេជោ (CADT) ១០០%",
-      "ទទួលបានការលើកទឹកចិត្ត និងជួបសំណេះសំណាលផ្ទាល់ជាមួយសម្តេចនាយករដ្ឋមន្ត្រី",
-      "លើកលែងថ្លៃពាក្យប្រឡងនៅគ្រឹះស្ថានឧត្តមសិក្សាឯកជនជាច្រើន",
+    notesKm: [
+      "មានសិទ្ធិដាក់ពាក្យចូលរៀនគ្រប់កម្មវិធីបរិញ្ញាបត្រ។",
+      "ទីតាំងល្អសម្រាប់ជំនាញប្រកួតប្រជែង និងកូតាអាហារូបករណ៍រដ្ឋ។",
+      "សាកលវិទ្យាល័យនីមួយៗកំណត់លក្ខខណ្ឌដោយខ្លួនឯង។",
     ],
   },
   {
     grade: "Grade B",
-    scoreRange: "380.000 – 427.499 pts",
-    badgeColor: "bg-blue-100 text-blue-800 border-blue-300",
-    privilegesEn: [
-      "Eligible for 50%–100% MoEYS state scholarship quotas at RUPP, ITC, and RULE",
-      "Priority consideration in competitive engineering and medicine concourses",
-      "Institutional merit tuition discounts from 25% to 50% at private universities",
+    accent: "#2563EB",
+    pillInk: "#1D4ED8",
+    summaryEn: "Upper academic band",
+    summaryKm: "កម្រិតខ្ពស់",
+    notesEn: [
+      "Eligible to apply to bachelor's programmes, including competitive faculties.",
+      "Scholarship quotas are competitive — verify each university's requirement.",
+      "Some programmes may ask for higher scores or an entrance exam.",
     ],
-    privilegesKm: [
-      "មានសិទ្ធិទទួលបានកូតាអាហារូបករណ៍រដ្ឋ ៥០% ដល់ ១០០% នៅ RUPP, ITC និង RULE",
-      "អាទិភាពខ្ពស់ក្នុងការប្រឡងជ្រើសរើសចូលរៀនវិស្វកម្ម និងវេជ្ជសាស្ត្រ",
-      "ទទួលបានការបញ្ចុះតម្លៃសិក្សាពី ២៥% ដល់ ៥០% នៅសាកលវិទ្យាល័យឯកជន",
+    notesKm: [
+      "មានសិទ្ធិដាក់ពាក្យគ្រប់កម្មវិធីបរិញ្ញាបត្រ រួមទាំងមហាវិទ្យាល័យប្រកួតប្រជែង។",
+      "កូតាអាហារូបករណ៍មានការប្រកួតប្រជែង — ត្រូវផ្ទៀងផ្ទាត់តាមសាកលវិទ្យាល័យ។",
+      "កម្មវិធីខ្លះអាចត្រូវការពិន្ទុខ្ពស់ ឬការប្រឡងចូលបន្ថែម។",
     ],
   },
   {
     grade: "Grade C & D",
-    scoreRange: "285.000 – 379.999 pts",
-    badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-300",
-    privilegesEn: [
-      "Direct qualification to sit entrance exams for all selective Cambodian public faculties",
-      "Full eligibility for Bachelor Degree enrollments across all accredited Cambodian universities",
-      "Provincial and female STEM priority scholarship quotas apply",
+    accent: "#10B981",
+    pillInk: "#047857",
+    summaryEn: "Passing band with diploma",
+    summaryKm: "កម្រិតជាប់ និងទទួលបានសញ្ញាបត្រ",
+    notesEn: [
+      "Qualifies for the BACII diploma and bachelor's applications.",
+      "Selective programmes may require higher scores or extra exams.",
+      "Check each university's admission notice before applying.",
     ],
-    privilegesKm: [
-      "មានសិទ្ធិពេញលេញក្នុងការប្រឡងចូលគ្រប់មហាវិទ្យាល័យរដ្ឋ និងឯកជន",
-      "ចុះឈ្មោះចូលរៀនថ្នាក់បរិញ្ញាបត្របានគ្រប់សាកលវិទ្យាល័យដែលទទួលស្គាល់ដោយ MoEYS",
-      "មានសិទ្ធិទទួលបានកូតាអាហារូបករណ៍សម្រាប់សិស្សខេត្ត និងសិស្សនារីផ្នែក STEM",
+    notesKm: [
+      "ទទួលបានសញ្ញាបត្របាក់ឌុប និងមានសិទ្ធិដាក់ពាក្យបរិញ្ញាបត្រ។",
+      "កម្មវិធីជ្រើសរើសអាចត្រូវការពិន្ទុខ្ពស់ ឬការប្រឡងបន្ថែម។",
+      "ពិនិត្យសេចក្តីជូនដំណឹងចូលរៀនរបស់សាកលវិទ្យាល័យនីមួយៗ។",
     ],
   },
   {
     grade: "Grade E",
-    scoreRange: "237.500 – 284.999 pts",
-    badgeColor: "bg-purple-100 text-purple-800 border-purple-300",
-    privilegesEn: [
-      "Official BACII High School Diploma awarded by MoEYS",
-      "Eligible for Bachelor Degree programs at private universities and Associate Degrees at public institutes",
-      "TVET Level 5 and technical vocational pathways available",
+    accent: "#9333EA",
+    pillInk: "#7E22CE",
+    summaryEn: "Base diploma band",
+    summaryKm: "កម្រិតមូលដ្ឋាន",
+    notesEn: [
+      "BACII diploma awarded — the base requirement for higher education.",
+      "Consider foundation years, associate degrees, or TVET pathways.",
+      "Private universities often accept this band; confirm with each.",
     ],
-    privilegesKm: [
-      "ទទួលបានសញ្ញាបត្រមធ្យមសិក្សាទុតិយភូមិ (បាក់ឌុប) ផ្លូវការពីក្រសួងអប់រំ",
-      "មានសិទ្ធិចុះឈ្មោះរៀនបរិញ្ញាបត្រនៅសាកលវិទ្យាល័យឯកជន ឬបរិញ្ញាបត្ររងនៅសាកលវិទ្យាល័យរដ្ឋ",
-      "អាចបន្តការសិក្សាជំនាញបច្ចេកទេស និងវិជ្ជាជីវៈកម្រិតខ្ពស់ (TVET កម្រិត ៥)",
+    notesKm: [
+      "ទទួលបានសញ្ញាបត្របាក់ឌុប — ជាលក្ខខណ្ឌមូលដ្ឋានសម្រាប់ការសិក្សាខ្ពស់។",
+      "អាចពិចារណាឆ្នាំមូលដ្ឋាន បរិញ្ញាបត្ររង ឬផ្លូវបច្ចេកទេស TVET។",
+      "សាកលវិទ្យាល័យឯកជនជាច្រើនទទួលកម្រិតនេះ — ត្រូវផ្ទៀងផ្ទាត់ជាមួយសាលា។",
     ],
   },
 ];
@@ -547,6 +558,41 @@ export default function PublicBaciiGuidePage() {
           scrollTrigger: {
             trigger: ".gsap-bacii-matrix-grid",
             start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // Section 3: BACII grade tiers
+      gsap.fromTo(
+        ".gsap-bacii-tiers-head",
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".gsap-bacii-tiers-head",
+            start: "top 88%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      gsap.fromTo(
+        ".gsap-bacii-tier-card",
+        { opacity: 0, y: 36, scale: 0.97 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.7,
+          stagger: 0.09,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".gsap-bacii-tier-grid",
+            start: "top 88%",
             toggleActions: "play none none none",
           },
         }
@@ -1325,9 +1371,9 @@ export default function PublicBaciiGuidePage() {
       {/* =========================================================================
           SECTION 4: MoEYS BACII GRADE CUTOFFS & PRIVILEGES
           ========================================================================= */}
-      <section className="py-16 bg-[#FAFBFD] border-y border-[#E6E8F0]">
+      <section className="py-16 bg-[#FAFBFD] dark:bg-[#0B0F19] border-y border-[#E6E8F0] dark:border-[#1E293B]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-3">
+          <div className="gsap-bacii-tiers-head text-center max-w-2xl mx-auto space-y-3">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold border border-purple-200">
               <Award className="w-3.5 h-3.5 text-purple-600" />
               <span>{isKm ? "កម្រិតនិទ្ទេសបាក់ឌុប & អត្ថប្រយោជន៍" : "MoEYS Grade Cutoffs & Honors"}</span>
@@ -1337,50 +1383,132 @@ export default function PublicBaciiGuidePage() {
             </h2>
             <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
               {isKm
-                ? "ស្វែងយល់ពីសិទ្ធិទទួលបានអាហារូបករណ៍រដ្ឋ ១០០% និងលក្ខខណ្ឌចូលរៀនតាមកម្រិតពិន្ទុជាក់ស្តែង។"
-                : "Official MoEYS state scholarship quotas and university entrance privileges corresponding to each BACII grade tier."}
+                ? "អត្ថន័យទូទៅនៃនិទ្ទេសបាក់ឌុបសម្រាប់ការដាក់ពាក្យចូលរៀន។ សាកលវិទ្យាល័យនីមួយៗកំណត់លក្ខខណ្ឌដោយខ្លួនឯង។"
+                : "What each BACII grade generally means for university applications. Every institution sets its own cutoffs and conditions."}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {BACII_GRADE_TIERS.map((tier, idx) => (
-              <div
-                key={idx}
-                className="rounded-3xl border border-slate-200 bg-white p-6 shadow-2xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className={`px-3 py-1 rounded-xl text-xs font-black border ${tier.badgeColor}`}>
-                      {tier.grade}
-                    </span>
-                    <span className="text-xs font-mono text-slate-500 font-bold">{tier.scoreRange}</span>
-                  </div>
-                  <div className="pt-2 space-y-2">
-                    <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                      {isKm ? "អត្ថប្រយោជន៍ផ្លូវការ" : "Official Privileges"}
-                    </div>
-                    <ul className="space-y-2 text-xs text-slate-700 font-medium">
-                      {(isKm ? tier.privilegesKm : tier.privilegesEn).map((p, i) => (
-                        <li key={i} className="flex items-start gap-1.5">
-                          <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                          <span>{p}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+          <div className="gsap-bacii-tier-grid mx-auto grid max-w-4xl grid-cols-1 gap-5 md:grid-cols-2 lg:gap-6">
+            {BACII_GRADE_TIERS.map((tier, idx) => {
+              const shortGrade = tier.grade.replace("Grade ", "").replace(/\s*&\s*/, "/");
 
-                <div className="pt-3 border-t border-slate-100">
-                  <Link
-                    href="/scholarships"
-                    className="inline-flex items-center gap-1 text-xs font-black text-blue-600 hover:text-blue-800"
+              return (
+                <div
+                  key={idx}
+                  className="gsap-bacii-tier-card relative flex flex-col [--card:#FFFFFF] [--card-band:#F1F4FA] [--card-pill:#E7ECF5] [--card-ink:#111965] [--card-body:#3D4560] [--card-muted:#5A6482] [--card-faint:#7A829B] [--card-line:rgba(17,25,101,0.12)] [--card-shadow:0_20px_40px_rgba(17,25,101,0.10)] dark:[--card:#141A26] dark:[--card-band:#1B2231] dark:[--card-pill:#232B3C] dark:[--card-ink:#F8FAFC] dark:[--card-body:#CBD5E1] dark:[--card-muted:#94A3B8] dark:[--card-faint:#7C8AA3] dark:[--card-line:rgba(255,255,255,0.10)] dark:[--card-shadow:0_26px_46px_rgba(0,0,0,0.5)]"
+                >
+                  {/*
+                    Silhouette = two card-coloured surfaces. The notch is a gap
+                    between them, so it shows the page through it (works in light
+                    and dark themes, with no page-coloured overlay).
+                  */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0"
+                    style={{ filter: "drop-shadow(var(--card-shadow))" }}
                   >
-                    <span>{isKm ? "ពិនិត្យអាហារូបករណ៍" : "View Scholarships"}</span>
-                    <ChevronRight className="w-3 h-3" />
-                  </Link>
+                    {/* shoulder: the tall left part of the top edge */}
+                    <div
+                      className="absolute left-0 top-0 h-[92px] w-[calc(100%-100px)] rounded-tl-[28px] rounded-tr-[40px] bg-[var(--card)]"
+                      style={{
+                        backgroundImage: `radial-gradient(140% 160% at 0% 0%, ${tier.accent}2B 0%, transparent 58%)`,
+                      }}
+                    >
+                      <span
+                        className="absolute -right-3 top-[44px] h-3 w-3"
+                        style={{
+                          background:
+                            "radial-gradient(circle at 100% 0%, transparent 12px, var(--card) 12px)",
+                        }}
+                      />
+                    </div>
+
+                    {/* body: starts at the ledge, under the whole width */}
+                    <div className="absolute inset-x-0 bottom-0 top-[56px] rounded-[28px] bg-[var(--card)]" />
+                  </div>
+
+                  {/* Pill in the notch */}
+                  <div
+                    className="absolute right-2.5 top-3 z-20 flex h-8 items-center rounded-full border px-3"
+                    style={
+                      {
+                        backgroundColor: `${tier.accent}14`,
+                        borderColor: `${tier.accent}3D`,
+                        "--pill-ink": tier.pillInk,
+                        "--pill-ink-dark": tier.accent,
+                      } as React.CSSProperties
+                    }
+                  >
+                    <span className="whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.1em] text-[var(--pill-ink)] dark:text-[var(--pill-ink-dark)]">
+                      {isKm ? tier.grade : `Grade ${shortGrade}`}
+                    </span>
+                  </div>
+
+                  {/* Content sits on top of the silhouette */}
+                  <div className="relative flex flex-1 flex-col">
+                    <div className="flex flex-1 flex-col p-4 pt-16 sm:pt-4">
+                      {/* Issuer row */}
+                      <div className="flex items-center gap-3">
+                        <span
+                          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-[19px] font-black"
+                          style={{
+                            backgroundColor: tier.accent,
+                            color: accentInk(tier.accent),
+                          }}
+                        >
+                          {tier.grade.replace("Grade ", "").slice(0, 1)}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="flex items-center gap-1.5 text-[16.5px] font-semibold leading-tight text-[var(--card-ink)]">
+                            MoEYS BACII
+                            <ShieldCheck className="h-4 w-4 shrink-0 text-[#3B82F6]" />
+                          </p>
+                          <p className="mt-0.5 text-[12px] leading-snug text-[var(--card-muted)]">
+                            {isKm ? "ក្រសួងអប់រំ យុវជន និងកីឡា" : "Ministry of Education"}
+                          </p>
+                        </div>
+                      </div>
+
+                      <h3 className="mt-4 text-[24px] font-extrabold leading-[1.12] tracking-[-0.02em] text-[var(--card-ink)] sm:text-[26px]">
+                        {tier.grade}
+                      </h3>
+
+                      <p className="mt-1 text-[12.5px] font-semibold text-[var(--card-muted)]">
+                        {isKm ? tier.summaryKm : tier.summaryEn}
+                      </p>
+
+                      <p className="mt-4 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--card-faint)]">
+                        {isKm ? "អត្ថន័យសម្រាប់ការដាក់ពាក្យ" : "What this means"}
+                      </p>
+                      <ul className="mt-2 space-y-1.5">
+                        {(isKm ? tier.notesKm : tier.notesEn).map((n, i) => (
+                          <li
+                            key={i}
+                            className="flex items-start gap-1.5 text-[12.5px] leading-[1.5] text-[var(--card-body)]"
+                          >
+                            <Check
+                              className="mt-0.5 h-3.5 w-3.5 shrink-0"
+                              style={{ color: tier.accent }}
+                            />
+                            <span>{n}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="mt-auto rounded-b-[28px] border-t border-[var(--card-line)] bg-[var(--card-band)] p-4">
+                      <Link
+                        href="/scholarships"
+                        className="flex w-full items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-[#F7CE4D] to-[#FFE49A] px-4 py-2.5 text-[12.5px] font-bold text-[#0A0F2C] shadow-[0_0_26px_rgba(247,206,77,0.4)] transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F7CE4D]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0C10]"
+                      >
+                        <span>{isKm ? "ពិនិត្យអាហារូបករណ៍តាមសាលា" : "See what each university offers"}</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

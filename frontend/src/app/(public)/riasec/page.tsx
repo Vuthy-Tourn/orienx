@@ -320,16 +320,17 @@ export default function RiasecPublicGuidePage() {
       // Section 4: 4-Pillar AI Intelligence
       gsap.fromTo(
         ".gsap-pillar-card",
-        { opacity: 0, y: 25 },
+        { opacity: 0, y: 34, scale: 0.96 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power2.out",
+          scale: 1,
+          duration: 0.7,
+          stagger: { each: 0.09, from: "start" },
+          ease: "power3.out",
           scrollTrigger: {
             trigger: ".gsap-pillars-grid",
-            start: "top 85%",
+            start: "top 88%",
             toggleActions: "play none none none",
           },
         }
@@ -832,73 +833,124 @@ export default function RiasecPublicGuidePage() {
           </div>
 
           <div className="gsap-pillars-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="gsap-pillar-card p-5 rounded-2xl bg-[#F8FAFD] border-2 border-amber-300 shadow-2xs space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full">
-                  ៣០% ទម្ងន់ពិន្ទុ
-                </span>
-                <Compass className="w-4 h-4 text-amber-600" />
-              </div>
-              <h4 className="text-sm font-extrabold text-[#111965]">
-                {language === "km" ? "ចំណាប់អារម្មណ៍ RIASEC" : "RIASEC Interests"}
-              </h4>
-              <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                {language === "km"
-                  ? "វាស់វែងកម្រិតចំណង់ចំណូលចិត្តពិតប្រាកដចំពោះសកម្មភាពការងារជាក់ស្តែង។"
-                  : "Measures authentic enthusiasm for tangible, real-world work environments."}
-              </p>
-            </div>
+            {[
+              {
+                pct: 30,
+                Icon: Compass,
+                accent: "#F59E0B",
+                titleEn: "RIASEC Interests",
+                titleKm: "ចំណាប់អារម្មណ៍ RIASEC",
+                descEn:
+                  "Measures authentic enthusiasm for tangible, real-world work environments.",
+                descKm:
+                  "វាស់វែងកម្រិតចំណង់ចំណូលចិត្តពិតប្រាកដចំពោះសកម្មភាពការងារជាក់ស្តែង។",
+              },
+              {
+                pct: 25,
+                Icon: BrainCircuit,
+                accent: "#9333EA",
+                titleEn: "MBTI Personality",
+                titleKm: "បុគ្គលិកលក្ខណៈ MBTI",
+                descEn:
+                  "Identifies cognitive orientation, communication style, and decisions.",
+                descKm:
+                  "កំណត់ទម្រង់ចិត្ត ស្ទីលទំនាក់ទំនង និងរបៀបសម្រេចចិត្តរបស់អ្នក។",
+              },
+              {
+                pct: 25,
+                Icon: GraduationCap,
+                accent: "#0284C7",
+                titleEn: "Academic Strengths",
+                titleKm: "មុខវិជ្ជាពូកែ (Grades)",
+                descEn:
+                  "Verifies high school grades and subjects where the student shines.",
+                descKm:
+                  "ផ្ទៀងផ្ទាត់ពិន្ទុបាក់ឌុប ឬមុខវិជ្ជាវិទ្យាល័យដែលសិស្សមានប្រៀបខ្លាំង។",
+              },
+              {
+                pct: 20,
+                Icon: TrendingUp,
+                accent: "#059669",
+                titleEn: "Market Demand",
+                titleKm: "ទីផ្សារការងារ (Demand)",
+                descEn:
+                  "Real-world labor market demand, growth velocity, and salary tracks.",
+                descKm:
+                  "ទិន្នន័យតម្រូវការការងារជាក់ស្តែងនៅកម្ពុជា និងប្រាក់បៀវត្សរ៍គោលដៅ។",
+              },
+            ].map(({ pct, Icon, accent, titleEn, titleKm, descEn, descKm }) => {
+              const primary = pct === 30;
 
-            <div className="gsap-pillar-card p-5 rounded-2xl bg-[#F8FAFD] border border-slate-200 shadow-2xs space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-purple-800 bg-purple-100 px-2.5 py-0.5 rounded-full">
-                  ២៥% ទម្ងន់ពិន្ទុ
-                </span>
-                <BrainCircuit className="w-4 h-4 text-purple-600" />
-              </div>
-              <h4 className="text-sm font-extrabold text-[#111965]">
-                {language === "km" ? "បុគ្គលិកលក្ខណៈ MBTI" : "MBTI Personality"}
-              </h4>
-              <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                {language === "km"
-                  ? "កំណត់ទម្រង់ចិត្ត ស្ទីលទំនាក់ទំនង និងរបៀបសម្រេចចិត្តរបស់អ្នក។"
-                  : "Identifies cognitive orientation, communication style, and decisions."}
-              </p>
-            </div>
+              return (
+                <div
+                  key={titleEn}
+                  className={
+                    primary
+                      ? "gsap-pillar-card group relative flex flex-col gap-5 rounded-2xl bg-[#111965] p-5 text-white shadow-[0_20px_45px_-28px_rgba(17,25,101,0.9)] transition-transform duration-300 hover:-translate-y-1"
+                      : "gsap-pillar-card group relative flex flex-col gap-5 rounded-2xl border border-[#E6E8F0] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-md"
+                  }
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <span
+                      className={
+                        primary
+                          ? "inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#F7CE4D]"
+                          : "inline-flex h-10 w-10 items-center justify-center rounded-xl"
+                      }
+                      style={
+                        primary
+                          ? undefined
+                          : { backgroundColor: `${accent}1A`, color: accent }
+                      }
+                    >
+                      <Icon className="h-[18px] w-[18px]" />
+                    </span>
 
-            <div className="gsap-pillar-card p-5 rounded-2xl bg-[#F8FAFD] border border-slate-200 shadow-2xs space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-sky-800 bg-sky-100 px-2.5 py-0.5 rounded-full">
-                  ២៥% ទម្ងន់ពិន្ទុ
-                </span>
-                <GraduationCap className="w-4 h-4 text-sky-600" />
-              </div>
-              <h4 className="text-sm font-extrabold text-[#111965]">
-                {language === "km" ? "មុខវិជ្ជាពូកែ (Grades)" : "Academic Strengths"}
-              </h4>
-              <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                {language === "km"
-                  ? "ផ្ទៀងផ្ទាត់ពិន្ទុបាក់ឌុប ឬមុខវិជ្ជាវិទ្យាល័យដែលសិស្សមានប្រៀបខ្លាំង។"
-                  : "Verifies high school grades and subjects where the student shines."}
-              </p>
-            </div>
+                    <span className="text-right">
+                      <span
+                        className={
+                          primary
+                            ? "block text-[24px] font-extrabold leading-none tabular-nums text-[#F7CE4D]"
+                            : "block text-[24px] font-extrabold leading-none tabular-nums text-[#111965]"
+                        }
+                      >
+                        {pct}%
+                      </span>
+                      <span
+                        className={
+                          primary
+                            ? "text-[12px] font-semibold text-white/50"
+                            : "text-[12px] font-semibold text-[#68708A]"
+                        }
+                      >
+                        {language === "km" ? "ទម្ងន់" : "weight"}
+                      </span>
+                    </span>
+                  </div>
 
-            <div className="gsap-pillar-card p-5 rounded-2xl bg-[#F8FAFD] border border-slate-200 shadow-2xs space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                  ២០% ទម្ងន់ពិន្ទុ
-                </span>
-                <TrendingUp className="w-4 h-4 text-emerald-600" />
-              </div>
-              <h4 className="text-sm font-extrabold text-[#111965]">
-                {language === "km" ? "ទីផ្សារការងារ (Demand)" : "Market Demand"}
-              </h4>
-              <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                {language === "km"
-                  ? "ទិន្នន័យតម្រូវការការងារជាក់ស្តែងនៅកម្ពុជា និងប្រាក់បៀវត្សរ៍គោលដៅ។"
-                  : "Real-world labor market demand, growth velocity, and salary tracks."}
-              </p>
-            </div>
+                  <div>
+                    <h4
+                      className={
+                        primary
+                          ? "text-[15px] font-extrabold text-white"
+                          : "text-[15px] font-extrabold text-[#111965]"
+                      }
+                    >
+                      {language === "km" ? titleKm : titleEn}
+                    </h4>
+                    <p
+                      className={
+                        primary
+                          ? "mt-1.5 text-[13px] leading-relaxed text-white/70"
+                          : "mt-1.5 text-[13px] leading-relaxed text-[#68708A]"
+                      }
+                    >
+                      {language === "km" ? descKm : descEn}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

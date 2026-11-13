@@ -799,13 +799,20 @@ export default function PublicPersonalityGuidePage() {
           onOpenChange={(open) => {
             if (!open) setActiveArchetypeCode(null);
           }}
-          className="max-w-3xl sm:max-w-4xl max-h-[90vh] overflow-y-auto p-5 sm:p-8"
+          className="max-w-3xl sm:max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar p-0 sm:p-0"
           hideClose
         >
-          <div className="space-y-6">
-            {/* Modal Header Hero */}
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 p-6 rounded-3xl bg-gradient-to-r from-[#111965] via-[#1A2580] to-[#0F1654] text-white relative overflow-hidden">
-              <div className="relative w-28 h-32 sm:w-32 sm:h-36 shrink-0 flex items-center justify-center bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20 p-2">
+          {/* Sticky header: stays pinned while the details scroll under it */}
+          <div className="sticky top-0 z-20 flex flex-col sm:flex-row items-center sm:items-start gap-5 bg-gradient-to-r from-[#111965] via-[#1A2580] to-[#0F1654] px-5 py-5 sm:px-8 sm:py-6 text-white relative overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setActiveArchetypeCode(null)}
+              aria-label={language === "km" ? "បិទ" : "Close"}
+              className="absolute right-3 top-3 z-30 rounded-full bg-white/10 p-2 text-white/80 transition-colors hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 sm:right-4 sm:top-4"
+            >
+              <X className="h-4 w-4" />
+            </button>
+            <div className="relative w-28 h-32 sm:w-32 sm:h-36 shrink-0 flex items-center justify-center bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20 p-2">
                 <Image
                   src={`/images/personality-types/${activeArchetypeCode.toLowerCase()}.svg`}
                   alt={activeArchetypeCode}
@@ -842,8 +849,9 @@ export default function PublicPersonalityGuidePage() {
                   })}
                 </p>
               </div>
-            </div>
+          </div>
 
+          <div className="space-y-6 p-5 sm:p-8">
             {/* In-depth Overview */}
             {(activeArchetype.overviewKm || activeArchetype.overviewEn) && (
               <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E6E8F0] space-y-2 shadow-2xs">

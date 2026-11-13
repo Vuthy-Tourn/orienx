@@ -33,6 +33,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 import { PrecisionFormula } from "@/components/assessments/precision-formula";
+import { PillarsBento } from "@/components/about/pillars-bento";
 import ScrollStack, { ScrollStackItem } from "@/components/ui/scroll-stack";
 
 // Conversational Tara mascot advice tips
@@ -251,19 +252,6 @@ export default function AboutPage() {
           ".gsap-formula-bar",
           { y: 24, opacity: 0, scale: 0.98 },
           { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }
-        )
-        .fromTo(
-          ".gsap-pillar-card",
-          { y: 30, opacity: 0, scale: 0.98 },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            stagger: 0.1,
-            duration: 0.6,
-            ease: "power2.out",
-          },
-          "-=0.3"
         )
         .fromTo(
           ".gsap-pillar-cta",
@@ -570,72 +558,8 @@ export default function AboutPage() {
             className="gsap-formula-bar max-w-4xl mx-auto"
           />
 
-          {/* Minimalist 4-Pillar Cards Grid */}
-          <div className="gsap-pillars-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto">
-            {SCIENTIFIC_PILLARS.map((p, idx) => {
-              const PillarIcon = p.icon;
-              return (
-                <div
-                  key={idx}
-                  className="gsap-pillar-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-5 group"
-                >
-                  <div className="space-y-4">
-                    {/* Header Row */}
-                    <div className="flex items-center justify-between">
-                      <div
-                        className="w-10 h-10 rounded-2xl flex items-center justify-center font-black shadow-xs transition-transform group-hover:scale-105"
-                        style={{ backgroundColor: `${p.color}15`, color: p.color }}
-                      >
-                        <PillarIcon className="w-5 h-5" />
-                      </div>
-                      <span
-                        className="text-xs font-mono font-black px-2.5 py-0.5 rounded-full border"
-                        style={{
-                          backgroundColor: `${p.color}10`,
-                          color: p.color,
-                          borderColor: `${p.color}30`,
-                        }}
-                      >
-                        {p.weight}
-                      </span>
-                    </div>
-
-                    {/* Title & Category */}
-                    <div className="space-y-1">
-                      <span className="text-[12.5px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
-                        Pillar {p.number} • {language === "km" ? p.categoryKm : p.categoryEn}
-                      </span>
-                      <h3 className="text-base font-black text-[#111965] leading-snug">
-                        {language === "km" ? p.titleKm : p.titleEn}
-                      </h3>
-                    </div>
-
-                    {/* Concise Summary */}
-                    <p className="text-xs text-[#68708A] leading-relaxed font-medium">
-                      {language === "km" ? p.descKm : p.descEn}
-                    </p>
-                  </div>
-
-                  {/* Footer Action Link & Proof */}
-                  <div className="space-y-3 pt-3 border-t border-slate-100">
-                    <div className="flex items-center gap-1.5 text-[12px] font-bold text-slate-500">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span className="truncate">{language === "km" ? p.proofKm : p.proofEn}</span>
-                    </div>
-
-                    <Link
-                      href={p.href}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold transition-all group-hover:translate-x-1"
-                      style={{ color: p.color }}
-                    >
-                      <span>{language === "km" ? p.ctaKm : p.ctaEn}</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {/* 4-Pillar cards rendered through MagicBento (spotlight + glow) */}
+          <PillarsBento pillars={SCIENTIFIC_PILLARS} />
 
           {/* Minimalist Diagnostic CTA Banner */}
           <div className="gsap-pillar-cta max-w-4xl mx-auto p-6 sm:p-7 rounded-3xl bg-linear-to-r from-[#111965] to-[#1A2580] text-white shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-5">

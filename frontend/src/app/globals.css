@@ -211,6 +211,35 @@ body {
   background: #94A3B8;
 }
 
+/* Opt out of the scrollbar entirely (modals, horizontal rails). */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* MagicBento takes a numeric column count, so collapse it here:
+   4 across on desktop, 2 on tablet, 1 on phones (auto-height there). */
+.bento-pillars.magic-bento {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-auto-rows: auto !important;
+}
+@media (min-width: 640px) {
+  .bento-pillars.magic-bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (min-width: 1024px) {
+  .bento-pillars.magic-bento {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-auto-rows: 400px !important;
+  }
+}
+
 /* Magic UI & Aceternity UI Animations */
 @keyframes shimmer-slide {
   to {
