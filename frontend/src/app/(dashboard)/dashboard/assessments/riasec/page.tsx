@@ -414,7 +414,7 @@ export default function RiasecAssessmentPage() {
             {/* Left: Radar Chart */}
             <div className="lg:col-span-7 space-y-4">
               <div className="space-y-1">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-[10px] font-black uppercase tracking-wider border border-indigo-200">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-[12.5px] font-black uppercase tracking-wider border border-indigo-200">
                   <Layers className="w-3 h-3 text-indigo-600" />
                   <span>Holland Hexagon Spectrum</span>
                 </div>
@@ -451,7 +451,7 @@ export default function RiasecAssessmentPage() {
                             <div className="bg-[#111965] text-white p-3 rounded-2xl shadow-xl border border-white/10 text-xs space-y-1.5">
                               <div className="flex items-center gap-2">
                                 <span
-                                  className="w-5 h-5 rounded-md text-white font-black text-[10px] flex items-center justify-center shrink-0"
+                                  className="w-5 h-5 rounded-md text-white font-black text-[12.5px] flex items-center justify-center shrink-0"
                                   style={{ backgroundColor: meta?.color || "#111965" }}
                                 >
                                   {data.code}
@@ -520,7 +520,7 @@ export default function RiasecAssessmentPage() {
                     })}
                   </h4>
                 </div>
-                <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                <span className="text-[12.5px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
                   {hCode} Code
                 </span>
               </div>
@@ -558,7 +558,7 @@ export default function RiasecAssessmentPage() {
                                 {getLocalized({ km: meta.nameKm, en: meta.nameEn })}
                               </span>
                             </div>
-                            <span className="text-[10px] font-semibold text-[#68708A]">
+                            <span className="text-[12.5px] font-semibold text-[#68708A]">
                               {getLocalized({ km: rankInfo.labelKm, en: rankInfo.labelEn })}
                             </span>
                           </div>
@@ -583,7 +583,7 @@ export default function RiasecAssessmentPage() {
                         />
                       </div>
 
-                      <p className="text-[11px] text-[#4A5568] leading-snug">
+                      <p className="text-[12px] text-[#4A5568] leading-snug">
                         {getLocalized({ km: meta.descKm, en: meta.descEn })}
                       </p>
                     </div>
@@ -603,7 +603,7 @@ export default function RiasecAssessmentPage() {
                 en: "All 6 Holland Career Categories in Detail",
               })}
             </h4>
-            <p className="text-[11px] text-[#68708A]">
+            <p className="text-[12px] text-[#68708A]">
               {getLocalized({
                 km: "ស្វែងយល់ពីអត្ថន័យនៃកូដនីមួយៗ និងកម្រិតចំណាប់អារម្មណ៍របស់អ្នកចំពោះវិស័យការងារទាំង ៦",
                 en: "Understand what each RIASEC dimension means and how strongly your interests align",
@@ -639,7 +639,7 @@ export default function RiasecAssessmentPage() {
                           <h5 className="font-black text-[#111965] text-xs leading-snug">
                             {getLocalized({ km: meta.nameKm, en: meta.nameEn })}
                           </h5>
-                          <span className="text-[10px] font-semibold text-[#68708A]">
+                          <span className="text-[12.5px] font-semibold text-[#68708A]">
                             Holland Dimension ({key})
                           </span>
                         </div>
@@ -652,7 +652,7 @@ export default function RiasecAssessmentPage() {
                     <div className="flex items-baseline justify-between pt-1">
                       <div className="text-xl font-black text-[#111965] tracking-tight">{score}%</div>
                       <span
-                        className="px-2 py-0.5 rounded-full text-[10px] font-extrabold"
+                        className="px-2 py-0.5 rounded-full text-[12.5px] font-extrabold"
                         style={{
                           backgroundColor: `${meta.color}15`,
                           color: meta.color,
@@ -673,21 +673,21 @@ export default function RiasecAssessmentPage() {
                       />
                     </div>
 
-                    <p className="text-[11px] text-[#4A5568] leading-relaxed pt-1">
+                    <p className="text-[12px] text-[#4A5568] leading-relaxed pt-1">
                       {getLocalized({ km: meta.descKm, en: meta.descEn })}
                     </p>
                   </div>
 
                   {/* Sample careers snippet */}
                   <div className="pt-2 border-t border-slate-100 space-y-1.5">
-                    <span className="text-[10px] font-bold text-[#68708A] uppercase tracking-wider block">
+                    <span className="text-[12.5px] font-bold text-[#68708A] uppercase tracking-wider block">
                       {getLocalized({ km: "អាជីពតួយ៉ាង (Sample Careers):", en: "Sample Careers:" })}
                     </span>
                     <div className="flex flex-wrap gap-1">
                       {meta.sampleCareers.slice(0, 2).map((c, cIdx) => (
                         <span
                           key={cIdx}
-                          className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-[#F0F2FA] text-[#111965]"
+                          className="px-2 py-0.5 rounded-md text-[12.5px] font-semibold bg-[#F0F2FA] text-[#111965]"
                         >
                           {getLocalized({ km: c.km, en: c.en })}
                         </span>
@@ -704,7 +704,7 @@ export default function RiasecAssessmentPage() {
         <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E8F0] pb-4">
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-black uppercase tracking-wider border border-emerald-200">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[12.5px] font-black uppercase tracking-wider border border-emerald-200">
                 <Sparkles className="w-3 h-3 text-emerald-600" />
                 <span>
                   {getLocalized({
@@ -765,18 +765,18 @@ export default function RiasecAssessmentPage() {
                           <span className="w-6 h-6 rounded-lg text-xs font-black bg-[#111965] text-[#F7CE4D] flex items-center justify-center shadow-2xs">
                             #{idx + 1}
                           </span>
-                          <span className="text-[10px] font-bold text-[#68708A] tracking-wide">
+                          <span className="text-[12.5px] font-bold text-[#68708A] tracking-wide">
                             {major.category}
                           </span>
                           {major.is_stem && (
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-black bg-sky-50 text-sky-700 border border-sky-200">
+                            <span className="px-1.5 py-0.5 rounded text-[12px] font-black bg-sky-50 text-sky-700 border border-sky-200">
                               STEM
                             </span>
                           )}
                         </div>
 
                         <div className="flex items-center gap-1">
-                          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
+                          <span className="px-2.5 py-0.5 rounded-full text-[12px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
                             {fitScore}% Fit
                           </span>
                         </div>
@@ -787,7 +787,7 @@ export default function RiasecAssessmentPage() {
                       </h4>
 
                       {/* RIASEC-specific rationale snippet */}
-                      <p className="text-[11px] text-[#4A5568] line-clamp-2 leading-relaxed bg-[#F8FAFD] p-2.5 rounded-xl border border-[#E6E8F0]/70 min-h-[46px] flex items-center">
+                      <p className="text-[12px] text-[#4A5568] line-clamp-2 leading-relaxed bg-[#F8FAFD] p-2.5 rounded-xl border border-[#E6E8F0]/70 min-h-[46px] flex items-center">
                         {getLocalized({ km: exp.riasec_reason_km, en: exp.riasec_reason_en }) ||
                           getLocalized({ km: exp.fit_summary_km, en: exp.fit_summary_en }) ||
                           getLocalized({
@@ -799,14 +799,14 @@ export default function RiasecAssessmentPage() {
 
                     {/* Offering Universities */}
                     <div className="pt-2 border-t border-[#E6E8F0] space-y-2">
-                      <div className="text-[11px] font-bold text-[#68708A] flex items-center justify-between gap-2">
+                      <div className="text-[12px] font-bold text-[#68708A] flex items-center justify-between gap-2">
                         <span>{t("personalityAssessment.offeringInstitutions", "គ្រឹះស្ថានបណ្តុះបណ្តាល:")}</span>
                         {unis.length > 0 ? (
                           <span className="font-semibold text-slate-500">
                             {unis.length} {t("recommendationsPage.institutions", "កន្លែង")}
                           </span>
                         ) : (
-                          <span className="text-[10px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/70 font-medium">
+                          <span className="text-[12.5px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/70 font-medium">
                             {t("personalityAssessment.verifyingInstitutions", "កំពុងផ្ទៀងផ្ទាត់")}
                           </span>
                         )}
@@ -818,26 +818,26 @@ export default function RiasecAssessmentPage() {
                             <Link
                               key={u.university_id}
                               href={`/universities/${u.university_slug}`}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[12.5px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
                               title={getLocalized(u.university_name)}
                             >
                               <Building2 className="w-2.5 h-2.5 opacity-60" />
                               <span>{getLocalized(u.university_acronym) || u.university_slug?.toUpperCase()}</span>
                               {u.tuition_annual_usd ? (
-                                <span className="text-[9px] opacity-75 font-normal">
+                                <span className="text-[12px] opacity-75 font-normal">
                                   (${Math.round(u.tuition_annual_usd)})
                                 </span>
                               ) : null}
                             </Link>
                           ))}
                           {unis.length > 3 && (
-                            <span className="text-[10px] font-semibold text-[#68708A]">
+                            <span className="text-[12.5px] font-semibold text-[#68708A]">
                               +{unis.length - 3} {t("recommendationsPage.more", "ទៀត")}
                             </span>
                           )}
                         </div>
                       ) : (
-                        <div className="text-[10px] text-[#68708A] bg-[#FAFBFD] px-2.5 py-1.5 rounded-lg border border-dashed border-[#E6E8F0] flex items-center gap-1.5">
+                        <div className="text-[12.5px] text-[#68708A] bg-[#FAFBFD] px-2.5 py-1.5 rounded-lg border border-dashed border-[#E6E8F0] flex items-center gap-1.5">
                           <Building2 className="w-3 h-3 text-[#68708A]/70 shrink-0" />
                           <span className="truncate">{t("personalityAssessment.verifyingCampusesDesc", "ទិន្នន័យគ្រឹះស្ថានកំពុងត្រូវបានប្រមូល និងផ្ទៀងផ្ទាត់")}</span>
                         </div>
@@ -883,7 +883,7 @@ export default function RiasecAssessmentPage() {
                   })}
                 </span>
               </div>
-              <p className="text-[11px] text-[#68708A] leading-relaxed max-w-2xl font-medium">
+              <p className="text-[12px] text-[#68708A] leading-relaxed max-w-2xl font-medium">
                 {getLocalized({
                   km: `ដើម្បីធានាបាននូវភាពសុក្រឹត និងអាចជឿទុកចិត្តបាន ១០០% ប្រព័ន្ធ AI របស់ OrienX គណនាអនុសាសន៍ដោយបូកបញ្ចូល៖ ចំណាប់អារម្មណ៍ RIASEC ${hCode} (៣០%) + បុគ្គលិកលក្ខណៈ (២៥%) + មុខវិជ្ជាពូកែ (២៥%) + ទីផ្សារការងារ (២០%)។ ដូច្នេះលទ្ធផលបង្ហាញនៅទីនេះ ផ្ទាំងគ្រប់គ្រង និងទំព័រ Recommendations គឺសុក្រឹត និងស៊ីសង្វាក់គ្នាទាំងស្រុង។`,
                   en: `To ensure maximum real-world accuracy and 100% trust, OrienX calculates all recommendations by fusing: RIASEC Interests ${hCode} (30%) + MBTI Personality (25%) + School Grades (25%) + Market Demand (20%). The rankings shown here, on your Dashboard, and on your Recommendations page are 100% unified and consistent.`,

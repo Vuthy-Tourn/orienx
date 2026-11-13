@@ -720,7 +720,7 @@ export default function PublicBaciiGuidePage() {
                   <div className="space-y-4">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30 mb-1">
+                        <span className="inline-block px-2.5 py-0.5 rounded-full text-[12.5px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30 mb-1">
                           STEM Track • ថ្នាក់វិទ្យាសាស្ត្រពិត
                         </span>
                         <h3 className="text-base sm:text-lg font-black text-white">
@@ -732,9 +732,9 @@ export default function PublicBaciiGuidePage() {
 
                     {/* Entrance Concourses */}
                     <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
+                      <div className="text-[12px] font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
                         <span>{isKm ? "ការប្រឡងប្រជែងចូលរៀនស្នូល" : "Major Competitive Entrance Concourses"}</span>
-                        <span className="text-[10px] text-blue-300 font-mono">MoEYS</span>
+                        <span className="text-[12.5px] text-blue-300 font-mono">MoEYS</span>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-slate-200">
                         <div className="flex items-center gap-1.5 truncate">
@@ -758,7 +758,7 @@ export default function PublicBaciiGuidePage() {
 
                     {/* Top Majors Unlocked */}
                     <div className="space-y-1.5">
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-300">
+                      <div className="text-[12px] font-bold uppercase tracking-wider text-slate-300">
                         {isKm ? "ជំនាញបើកទូលាយដោយផ្ទាល់" : "Direct Unlocked Pathways"}
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -781,7 +781,7 @@ export default function PublicBaciiGuidePage() {
                   <div className="space-y-4">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 mb-1">
+                        <span className="inline-block px-2.5 py-0.5 rounded-full text-[12.5px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 mb-1">
                           Humanities & Business • ថ្នាក់វិទ្យាសាស្ត្រសង្គម
                         </span>
                         <h3 className="text-base sm:text-lg font-black text-white">
@@ -793,9 +793,9 @@ export default function PublicBaciiGuidePage() {
 
                     {/* Entrance Concourses */}
                     <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-2">
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
+                      <div className="text-[12px] font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
                         <span>{isKm ? "ការប្រឡងប្រជែងចូលរៀនស្នូល" : "Major Competitive Entrance Concourses"}</span>
-                        <span className="text-[10px] text-emerald-300 font-mono">MoEYS</span>
+                        <span className="text-[12.5px] text-emerald-300 font-mono">MoEYS</span>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-slate-200">
                         <div className="flex items-center gap-1.5 truncate">
@@ -819,7 +819,7 @@ export default function PublicBaciiGuidePage() {
 
                     {/* Top Majors Unlocked */}
                     <div className="space-y-1.5">
-                      <div className="text-[11px] font-bold uppercase tracking-wider text-slate-300">
+                      <div className="text-[12px] font-bold uppercase tracking-wider text-slate-300">
                         {isKm ? "ជំនាញបើកទូលាយដោយផ្ទាល់" : "Direct Unlocked Pathways"}
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -864,7 +864,7 @@ export default function PublicBaciiGuidePage() {
           ========================================================================= */}
       <section id="stream-comparison" className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 border border-[#111965]/10 text-[11px] font-bold text-[#111965] tracking-wider uppercase">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 border border-[#111965]/10 text-[12px] font-bold text-[#111965] tracking-wider uppercase">
             <Layers className="w-3.5 h-3.5 text-[#F7CE4D]" />
             <span>{isKm ? "ការប្រៀបធៀបថ្នាក់បាក់ឌុបទាំងពីរ" : "High School Stream Comparison"}</span>
           </div>
@@ -949,7 +949,7 @@ export default function PublicBaciiGuidePage() {
                         </span>
                         <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all shrink-0" />
                       </div>
-                      <span className="text-[10px] text-slate-500 font-semibold mt-0.5 block truncate">Univ: {m.univ}</span>
+                      <span className="text-[12.5px] text-slate-500 font-semibold mt-0.5 block truncate">Univ: {m.univ}</span>
                     </Link>
                   ))}
                 </div>
@@ -1025,7 +1025,7 @@ export default function PublicBaciiGuidePage() {
                         </span>
                         <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all shrink-0" />
                       </div>
-                      <span className="text-[10px] text-slate-500 font-semibold mt-0.5 block truncate">Univ: {m.univ}</span>
+                      <span className="text-[12.5px] text-slate-500 font-semibold mt-0.5 block truncate">Univ: {m.univ}</span>
                     </Link>
                   ))}
                 </div>
@@ -1103,7 +1103,7 @@ export default function PublicBaciiGuidePage() {
               <div className="space-y-2">
                 <label className="text-xs font-black uppercase tracking-wider text-slate-500 flex items-center justify-between">
                   <span>1. {isKm ? "ជ្រើសរើសថ្នាក់បាក់ឌុបរបស់អ្នក" : "Select Your BACII Track"}</span>
-                  <span className="text-[#2563EB] text-[11px] font-bold">{selectedStream.toUpperCase()} STREAM</span>
+                  <span className="text-[#2563EB] text-[12px] font-bold">{selectedStream.toUpperCase()} STREAM</span>
                 </label>
                 <div className="grid grid-cols-2 gap-2.5">
                   <button
@@ -1116,7 +1116,7 @@ export default function PublicBaciiGuidePage() {
                     }`}
                   >
                     <span>🔬 {isKm ? "ថ្នាក់វិទ្យាសាស្ត្រ" : "Science Stream"}</span>
-                    <span className="text-[10px] font-semibold opacity-85">STEM Track</span>
+                    <span className="text-[12.5px] font-semibold opacity-85">STEM Track</span>
                   </button>
                   <button
                     type="button"
@@ -1128,7 +1128,7 @@ export default function PublicBaciiGuidePage() {
                     }`}
                   >
                     <span>📚 {isKm ? "ថ្នាក់សង្គម" : "Social Stream"}</span>
-                    <span className="text-[10px] font-semibold opacity-85">Humanities Track</span>
+                    <span className="text-[12.5px] font-semibold opacity-85">Humanities Track</span>
                   </button>
                 </div>
               </div>
@@ -1178,7 +1178,7 @@ export default function PublicBaciiGuidePage() {
                   onChange={(e) => setSelectedBudget(Number(e.target.value))}
                   className="w-full accent-[#111965] h-2 bg-slate-200 rounded-lg cursor-pointer"
                 />
-                <div className="flex justify-between text-[11px] text-slate-500 font-bold">
+                <div className="flex justify-between text-[12px] text-slate-500 font-bold">
                   <span>$400 (State Univ)</span>
                   <span>$1,500 (Digital Tech)</span>
                   <span>$5,000+ (Dual)</span>
@@ -1227,12 +1227,12 @@ export default function PublicBaciiGuidePage() {
                             {isKm ? item.majorKm : item.majorEn}
                           </h4>
                           {item.fitLevel === "high" ? (
-                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                            <span className="px-2.5 py-0.5 rounded-full text-[12.5px] font-black bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
                               <Check className="w-3 h-3 text-emerald-600" />
                               <span>{isKm ? "ត្រូវគ្នា ១០០%" : "100% Eligible"}</span>
                             </span>
                           ) : (
-                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                            <span className="px-2.5 py-0.5 rounded-full text-[12.5px] font-black bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
                               <AlertTriangle className="w-3 h-3 text-amber-600" />
                               <span>{isKm ? "ទាមទាររៀនបំប៉ន" : "Bridge Math Needed"}</span>
                             </span>

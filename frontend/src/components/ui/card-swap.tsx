@@ -319,7 +319,7 @@ const ItemCard = ({ item }: { item: CardSwapItem }) => (
             </span>
           )}
           {item.title && (
-            <span className="overflow-hidden text-[14px] leading-[1.2] font-medium tracking-[-0.01em] text-ellipsis whitespace-nowrap">
+            <span className="overflow-hidden text-[15px] leading-[1.2] font-medium tracking-[-0.01em] text-ellipsis whitespace-nowrap">
               {item.title}
             </span>
           )}

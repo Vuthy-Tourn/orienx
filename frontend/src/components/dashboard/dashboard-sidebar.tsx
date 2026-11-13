@@ -150,7 +150,7 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
               <div className="text-xs font-bold text-[#0F172A] truncate group-hover:text-[#111965] transition-colors">
                 {displayName}
               </div>
-              <div className="text-[11px] text-[#94A3B8] truncate">
+              <div className="text-[12px] text-[#94A3B8] truncate">
                 {t("dashboardLayout.levelGrade")}
               </div>
             </div>

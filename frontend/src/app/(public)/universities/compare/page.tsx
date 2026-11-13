@@ -124,7 +124,7 @@ function UniversityCompareContent() {
                   </th>
                   {universities.map((u: any) => (
                     <th key={u.id} className="p-5 text-left border-l border-[#E6E8F0] w-1/4">
-                      <div className="text-[11px] font-bold text-[#68708A] uppercase">
+                      <div className="text-[12px] font-bold text-[#68708A] uppercase">
                         {getLocalized(u.acronym)}
                       </div>
                       <div className="text-sm font-bold text-[#111965] mt-0.5 leading-snug">
@@ -178,7 +178,7 @@ function UniversityCompareContent() {
                           : t("universitiesCompare.tuitionNotAvailable")}
                       </div>
                       {u.is_tuition_verified && (
-                        <div className="text-[11px] text-emerald-700 font-semibold mt-1">
+                        <div className="text-[12px] text-emerald-700 font-semibold mt-1">
                           {t("universitiesCompare.verifiedFee")}
                         </div>
                       )}
@@ -211,7 +211,7 @@ function UniversityCompareContent() {
                       <div className="font-bold text-[#111965]">
                         {u.offerings?.length || u.majors_count} {t("universitiesCompare.programs")}
                       </div>
-                      <div className="text-[11px] text-[#68708A] mt-1 space-y-0.5">
+                      <div className="text-[12px] text-[#68708A] mt-1 space-y-0.5">
                         {u.offerings?.slice(0, 3).map((um: any) => (
                           <div key={um.major_id}>• {getLocalized(um.major_name)}</div>
                         ))}

@@ -132,7 +132,7 @@ export default function ForgotPasswordPage() {
                 )}
               </button>
 
-              <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 text-[11px] text-amber-900 flex items-start gap-2">
+              <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 text-[12px] text-amber-900 flex items-start gap-2">
                 <Sparkles className="w-3.5 h-3.5 text-amber-700 shrink-0 mt-0.5" />
                 <span>
                   {language === "km"

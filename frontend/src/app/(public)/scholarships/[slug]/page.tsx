@@ -174,7 +174,7 @@ export default function ScholarshipDetailPage() {
           {/* Quick Metrics Strip */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
             <div className="p-3.5 rounded-2xl bg-[#F8F9FC] border border-[#E6E8F0] space-y-0.5">
-              <span className="text-[11px] font-bold text-[#68708A] uppercase tracking-wider">
+              <span className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
                 {t("scholarshipDetail.institution")}
               </span>
               <div className="text-xs sm:text-sm font-bold text-[#111965] truncate">
@@ -183,7 +183,7 @@ export default function ScholarshipDetailPage() {
             </div>
 
             <div className="p-3.5 rounded-2xl bg-[#F8F9FC] border border-[#E6E8F0] space-y-0.5">
-              <span className="text-[11px] font-bold text-[#68708A] uppercase tracking-wider flex items-center gap-1">
+              <span className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-amber-600" />
                 <span>{t("scholarshipDetail.deadline")}</span>
               </span>
@@ -193,7 +193,7 @@ export default function ScholarshipDetailPage() {
             </div>
 
             <div className="p-3.5 rounded-2xl bg-[#F8F9FC] border border-[#E6E8F0] space-y-0.5">
-              <span className="text-[11px] font-bold text-[#68708A] uppercase tracking-wider">
+              <span className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
                 {t("scholarshipDetail.source")}
               </span>
               <div className="text-xs sm:text-sm font-bold text-[#111965] truncate">

@@ -40,7 +40,7 @@ export function FuteraBlobCharacter({
       {/* Optional Speech Bubble */}
       {showSpeech && speechText && (
         <div className="absolute -top-12 z-20 animate-in fade-in zoom-in-95 duration-200">
-          <div className="relative bg-[#111965] text-[#F7CE4D] text-[11px] font-black px-3 py-1.5 rounded-2xl shadow-lg border border-[#F7CE4D]/40 whitespace-nowrap">
+          <div className="relative bg-[#111965] text-[#F7CE4D] text-[12px] font-black px-3 py-1.5 rounded-2xl shadow-lg border border-[#F7CE4D]/40 whitespace-nowrap">
             {speechText}
             {/* Bubble Tail */}
             <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-[#111965] rotate-45 border-r border-b border-[#F7CE4D]/40" />

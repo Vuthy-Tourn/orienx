@@ -253,7 +253,7 @@ export default function DashboardOverviewPage() {
                   fill
                   className="object-cover"
                 />
-                <div className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-[#111965] text-[9px] font-black text-[#F7CE4D] shadow-xs">
+                <div className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-[#111965] text-[12px] font-black text-[#F7CE4D] shadow-xs">
                   {topScore}% Match
                 </div>
               </div>
@@ -314,7 +314,7 @@ export default function DashboardOverviewPage() {
                 <div className="text-xs font-black text-[#1E1B4B] truncate">
                   {t("dashboardPage.skillsPersonality")}
                 </div>
-                <div className="text-[11px] text-[#6B21A8] font-semibold truncate">
+                <div className="text-[12px] text-[#6B21A8] font-semibold truncate">
                   {status?.personality_type ? `${status.personality_type} Type` : "12 Questions"}
                 </div>
               </div>
@@ -332,7 +332,7 @@ export default function DashboardOverviewPage() {
                 <div className="text-xs font-black text-[#4C0519] truncate">
                   {t("dashboardPage.skillsCareer")}
                 </div>
-                <div className="text-[11px] text-[#9F1239] font-semibold truncate">
+                <div className="text-[12px] text-[#9F1239] font-semibold truncate">
                   {status?.holland_code ? `Code: ${status.holland_code}` : "18 Questions"}
                 </div>
               </div>
@@ -350,7 +350,7 @@ export default function DashboardOverviewPage() {
                 <div className="text-xs font-black text-[#052E16] truncate">
                   {t("dashboardPage.skillsPreferences")}
                 </div>
-                <div className="text-[11px] text-[#166534] font-semibold truncate">
+                <div className="text-[12px] text-[#166534] font-semibold truncate">
                   Phnom Penh
                 </div>
               </div>
@@ -368,7 +368,7 @@ export default function DashboardOverviewPage() {
                 <div className="text-xs font-black text-[#451A03] truncate">
                   {t("dashboardPage.skillsAiFit")}
                 </div>
-                <div className="text-[11px] text-[#92400E] font-semibold truncate">
+                <div className="text-[12px] text-[#92400E] font-semibold truncate">
                   {recommendations?.length || 6} Matches
                 </div>
               </div>
@@ -414,7 +414,7 @@ export default function DashboardOverviewPage() {
                     <div className="text-xs font-bold text-[#111965] truncate group-hover:text-[#B45309] transition-colors">
                       {major.name}
                     </div>
-                    <div className="flex items-center gap-1 text-[11px] font-semibold text-[#64748B]">
+                    <div className="flex items-center gap-1 text-[12px] font-semibold text-[#64748B]">
                       <span>{major.score}</span>
                       <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
                     </div>
@@ -460,7 +460,7 @@ export default function DashboardOverviewPage() {
 
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
                 <Target className="w-4 h-4 text-[#F7CE4D]" />
-                <span className="text-[11px] font-black text-[#111965] leading-tight pt-0.5">
+                <span className="text-[12px] font-black text-[#111965] leading-tight pt-0.5">
                   {progressPercent}%
                 </span>
               </div>
@@ -471,7 +471,7 @@ export default function DashboardOverviewPage() {
               <div className="text-xs font-black text-[#111965]">
                 {completedCount === 3 ? t("dashboardPage.greatJob") : t("dashboardPage.keepGoing")}
               </div>
-              <p className="text-[11px] text-[#64748B] leading-relaxed">
+              <p className="text-[12px] text-[#64748B] leading-relaxed">
                 {completedCount === 3
                   ? t("dashboardPage.allCompletedDesc")
                   : t("dashboardPage.completeAllDesc")}
@@ -489,9 +489,9 @@ export default function DashboardOverviewPage() {
                   pDone ? "bg-[#111965] text-[#F7CE4D] shadow-xs" : "bg-slate-100 text-slate-400"
                 )}
               >
-                {pDone ? <Check className="w-3.5 h-3.5 stroke-[3] text-[#F7CE4D]" /> : <span className="text-[10px] font-bold">1</span>}
+                {pDone ? <Check className="w-3.5 h-3.5 stroke-[3] text-[#F7CE4D]" /> : <span className="text-[12.5px] font-bold">1</span>}
               </div>
-              <span className="text-[10px] font-bold text-[#64748B]">MBTI</span>
+              <span className="text-[12.5px] font-bold text-[#64748B]">MBTI</span>
             </div>
 
             {/* Step 2: RIASEC */}
@@ -502,9 +502,9 @@ export default function DashboardOverviewPage() {
                   rDone ? "bg-[#111965] text-[#F7CE4D] shadow-xs" : "bg-slate-100 text-slate-400"
                 )}
               >
-                {rDone ? <Check className="w-3.5 h-3.5 stroke-[3] text-[#F7CE4D]" /> : <span className="text-[10px] font-bold">2</span>}
+                {rDone ? <Check className="w-3.5 h-3.5 stroke-[3] text-[#F7CE4D]" /> : <span className="text-[12.5px] font-bold">2</span>}
               </div>
-              <span className="text-[10px] font-bold text-[#64748B]">RIASEC</span>
+              <span className="text-[12.5px] font-bold text-[#64748B]">RIASEC</span>
             </div>
 
             {/* Step 3: Prefs */}
@@ -515,9 +515,9 @@ export default function DashboardOverviewPage() {
                   prefDone ? "bg-[#111965] text-[#F7CE4D] shadow-xs" : "bg-slate-100 text-slate-400"
                 )}
               >
-                {prefDone ? <Check className="w-3.5 h-3.5 stroke-[3] text-[#F7CE4D]" /> : <span className="text-[10px] font-bold">3</span>}
+                {prefDone ? <Check className="w-3.5 h-3.5 stroke-[3] text-[#F7CE4D]" /> : <span className="text-[12.5px] font-bold">3</span>}
               </div>
-              <span className="text-[10px] font-bold text-[#64748B]">Prefs</span>
+              <span className="text-[12.5px] font-bold text-[#64748B]">Prefs</span>
             </div>
           </div>
         </div>
@@ -530,7 +530,7 @@ export default function DashboardOverviewPage() {
             </h2>
             <Link
               href="/dashboard/recommendations"
-              className="text-[11px] font-bold text-[#111965] hover:text-[#B45309] hover:underline"
+              className="text-[12px] font-bold text-[#111965] hover:text-[#B45309] hover:underline"
             >
               {t("dashboardPage.seeAll")}
             </Link>
@@ -565,7 +565,7 @@ export default function DashboardOverviewPage() {
                     {/* Rank Badge */}
                     <span
                       className={cn(
-                        "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black flex-shrink-0",
+                        "w-5 h-5 rounded-full flex items-center justify-center text-[12.5px] font-black flex-shrink-0",
                         rank === 1
                           ? "bg-[#F7CE4D] text-[#111965]"
                           : rank === 2
@@ -592,7 +592,7 @@ export default function DashboardOverviewPage() {
                     {/* Score: Distinct Accent Gold for #1 */}
                     <span
                       className={cn(
-                        "text-[11px] font-extrabold flex-shrink-0 px-2 py-0.5 rounded-full",
+                        "text-[12px] font-extrabold flex-shrink-0 px-2 py-0.5 rounded-full",
                         isTop
                           ? "bg-[#F7CE4D] text-[#111965]"
                           : "bg-slate-100 text-slate-600"
@@ -628,7 +628,7 @@ export default function DashboardOverviewPage() {
                   ? getLocalized(featuredScholarship.title) || featuredScholarship.title?.en
                   : "Techo Digital Talent Scholarship"}
               </div>
-              <p className="text-[11px] text-[#475569] leading-snug line-clamp-2">
+              <p className="text-[12px] text-[#475569] leading-snug line-clamp-2">
                 100% Full Tuition Coverage for digital tech degrees in Cambodia.
               </p>
             </div>
@@ -636,7 +636,7 @@ export default function DashboardOverviewPage() {
 
           {/* Progress Bar (Matching Reference Layout) */}
           <div className="space-y-1 pt-1">
-            <div className="flex items-center justify-between text-[10px] font-bold text-[#111965]">
+            <div className="flex items-center justify-between text-[12.5px] font-bold text-[#111965]">
               <span>Coverage Progress</span>
               <span className="text-[#B45309] font-black group-hover:translate-x-0.5 transition-transform">
                 View Saved &rarr;

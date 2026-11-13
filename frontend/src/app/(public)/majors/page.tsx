@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
-import { DotPattern } from "@/components/magicui/dot-pattern";
+import { Select, type SelectOption } from "@/components/ui/select";
 import { Dialog } from "@/components/ui/dialog";
 
 type Major = {
@@ -42,7 +42,8 @@ type Major = {
 };
 
 // Local image lookup for Cambodian majors
-const MAJOR_IMAGES: Record<string, string> = {  "software-engineering": "/images/majors/software-engineering.webp",
+const MAJOR_IMAGES: Record<string, string> = {
+  "software-engineering": "/images/majors/software-engineering.webp",
   "data-science-ai": "/images/majors/data-science-ai.webp",
   "business-administration": "/images/majors/business-administration.webp",
   "banking-finance": "/images/majors/banking-finance.webp",
@@ -114,6 +115,17 @@ const RIASEC_NAMES: Record<string, { en: string; km: string; color: string }> = 
 
 const formatUsd = (value: number) => `$${Math.round(value).toLocaleString("en-US")}`;
 
+type SortKey = "default" | "name" | "universities";
+
+// Category identity colour. Reuses the same hue language as the assessment
+// pillars so a major's field is recognisable across the product.
+const CATEGORY_COLOR: Record<string, string> = {
+  "Information Technology": "#2563EB",
+  Engineering: "#D97706",
+  "Business & Economics": "#059669",
+  "Social Sciences": "#7C3AED",
+};
+
 /** Compact two-letter Holland interest marker. */
 function RiasecPair({
   primary,
@@ -138,7 +150,7 @@ function RiasecPair({
             key={code}
             title={meta.en}
             className={cn(
-              "inline-flex h-5 w-5 items-center justify-center rounded border text-[11px] font-bold tabular-nums",
+              "inline-flex h-5 w-5 items-center justify-center rounded border text-[12px] font-bold tabular-nums",
               meta.color
             )}
           >
@@ -156,9 +168,25 @@ export default function MajorsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [stemOnly, setStemOnly] = useState(false);
-  const [sortBy, setSortBy] = useState<"default" | "name" | "universities">("default");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+  const [sortBy, setSortBy] = useState<SortKey>("default");  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [activePreviewMajor, setActivePreviewMajor] = useState<Major | null>(null);
+
+  const sortOptions: SelectOption<SortKey>[] = [
+    {
+      value: "default",
+      label: isKm ? "លំដាប់ដើម" : "Featured order",
+      description: isKm ? "តាមលំដាប់បញ្ជី" : "Catalogue order",
+    },
+    {
+      value: "name",
+      label: t("majorsDirectory.sortAlphabetical"),
+    },
+    {
+      value: "universities",
+      label: t("majorsDirectory.sortPopular"),
+      description: isKm ? "សាកលវិទ្យាល័យច្រើនមុន" : "Most universities first",
+    },
+  ];
 
   const { data: categories } = useQuery({
     queryKey: ["major-categories"],
@@ -237,14 +265,6 @@ export default function MajorsPage() {
 
   const totalMajors = catalogueStats?.majors ?? sortedMajors.length;
 
-  // Featured programme: first entry, real data only (no invented curriculum).
-  const featuredMajor = useMemo(() => {
-    if (!catalog || catalog.length === 0) return null;
-    return catalog.find((m) => m.slug === "software-engineering") || catalog[0];
-  }, [catalog]);
-
-  const showFeatured = featuredMajor && !hasActiveFilters;
-
   const heroStats = [
     {
       label: isKm ? "ជំនាញ" : "Majors",
@@ -262,47 +282,63 @@ export default function MajorsPage() {
 
   return (
     <div className="min-h-screen bg-[#F5F6FA] pb-24">
-      {/* Orientation band: what this directory is, and the one action that
+      {/* Page header: what this directory is, plus the one action that
           shortens the list fastest (the interest test). */}
-      <section className="relative overflow-hidden bg-[#0A0F3D]">
-        <DotPattern className="fill-white/10 [mask-image:radial-gradient(ellipse_at_65%_0%,white,transparent_70%)]" />
+      <section className="border-b border-[#E6E8F0] bg-white">
+        <div className="mx-auto max-w-7xl px-4 pt-9 sm:px-6 sm:pt-11 lg:px-8">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#111965]/15 bg-[#111965]/5 px-3 py-1 text-[12px] font-bold text-[#111965]">
+              <GraduationCap className="h-3.5 w-3.5" />
+              {t("majorsDirectory.badge")}
+            </span>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
-            <div className="lg:col-span-7">
-              <span className="block h-1 w-10 rounded-full bg-[#F7CE4D]" />
-              <h1 className="mt-5 text-[2rem] font-extrabold leading-[1.06] tracking-[-0.02em] text-white sm:text-[2.6rem] lg:text-[3.1rem]">
-                {t("majorsDirectory.title")}
-              </h1>
-              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/70 sm:text-base">
-                {t("majorsDirectory.subtitle")}
-              </p>
+            <h1 className="mt-3.5 text-[2rem] font-extrabold leading-[1.12] tracking-[-0.025em] text-[#111965] sm:text-[2.5rem]">
+              {t("majorsDirectory.title")}
+            </h1>
 
-              <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
-                <Link
-                  href="/riasec"
-                  className="inline-flex h-11 items-center gap-2 rounded-lg bg-[#F7CE4D] px-4 text-sm font-bold text-[#111965] transition-colors hover:bg-[#E5BD3B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F7CE4D] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0F3D]"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  <span>
-                    {isKm ? "រកជំនាញដែលត្រូវនឹងខ្លួនឯង (១០ នាទី)" : "Find my fit in 10 minutes"}
-                  </span>
-                </Link>
-                <Link
-                  href="/assessments"
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-white/75 underline-offset-4 transition-colors hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-                >
-                  <span>{isKm ? "តើយើងផ្គូផ្គងដោយរបៀបណា" : "How we match majors"}</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
+            <p className="mt-3 max-w-[46ch] text-sm leading-relaxed text-[#68708A] sm:text-[16px]">
+              {t("majorsDirectory.subtitle")}
+            </p>
+
+            <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
+              <Link
+                href="/riasec"
+                className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#F7CE4D] px-4 text-sm font-bold text-[#111965] shadow-[0_1px_2px_rgba(17,25,101,0.08)] transition-colors hover:bg-[#E5BD3B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30 focus-visible:ring-offset-2"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span>
+                  {isKm ? "រកជំនាញដែលត្រូវនឹងខ្លួនឯង" : "Find my fit in 10 minutes"}
+                </span>
+              </Link>
+
+              <Link
+                href="/assessments"
+                className="inline-flex items-center gap-1.5 text-[14px] font-bold text-[#111965] underline-offset-4 transition-colors hover:text-[#1E277A] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30"
+              >
+                <span>{isKm ? "តើយើងផ្គូផ្គងដោយរបៀបណា" : "How we match majors"}</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
+          </div>
+        </div>
 
-            <dl className="grid grid-cols-3 gap-4 border-t border-white/10 pt-6 lg:col-span-5 lg:gap-0 lg:divide-x lg:divide-white/10 lg:border-t-0 lg:pt-0">
+        {/* Catalogue figures, set as a data band across the full header width. */}
+        <div className="mt-8 border-t border-[#E6E8F0]">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <dl className="grid grid-cols-3 divide-x divide-[#E6E8F0]">
               {heroStats.map((stat, idx) => (
-                <div key={stat.label} className={cn("lg:px-5", idx === 0 && "lg:pl-0")}>
-                  <dt className="text-[12px] leading-snug text-white/55">{stat.label}</dt>
-                  <dd className="mt-1 text-xl font-extrabold tabular-nums text-white sm:text-2xl">
+                <div
+                  key={stat.label}
+                  className={cn(
+                    "py-4",
+                    idx === 0 ? "pr-4" : "pl-4",
+                    idx === heroStats.length - 1 && "pr-0"
+                  )}
+                >
+                  <dt className="text-[12px] font-semibold leading-snug text-[#68708A]">
+                    {stat.label}
+                  </dt>
+                  <dd className="mt-1 text-xl font-extrabold tabular-nums text-[#111965] sm:text-[23px]">
                     {stat.value}
                   </dd>
                 </div>
@@ -354,30 +390,20 @@ export default function MajorsPage() {
                 <span>{isKm ? "STEM" : "STEM"}</span>
               </button>
 
-              <div className="relative">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as "default" | "name" | "universities")}
-                  aria-label={t("majorsDirectory.sortBy")}
-                  className="h-10 appearance-none rounded-lg border border-[#E6E8F0] bg-white pl-3 pr-8 text-xs font-semibold text-[#171A2C] transition-colors hover:border-slate-300 focus:border-[#111965] focus:outline-none focus:ring-2 focus:ring-[#111965]/10"
-                >
-                  <option value="default">{isKm ? "លំដាប់ដើម" : "Featured order"}</option>
-                  <option value="name">{t("majorsDirectory.sortAlphabetical")}</option>
-                  <option value="universities">{t("majorsDirectory.sortPopular")}</option>
-                </select>
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 12 12"
-                  className="pointer-events-none absolute right-2.5 top-1/2 h-3 w-3 -translate-y-1/2 text-[#68708A]"
-                >
-                  <path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
+              <Select
+                value={sortBy}
+                onChange={setSortBy}
+                options={sortOptions}
+                label={t("majorsDirectory.sortBy")}
+                align="end"
+                className="w-[164px] shrink-0 sm:w-[188px]"
+                menuClassName="min-w-[196px]"
+              />
 
               <div className="hidden items-center rounded-lg border border-[#E6E8F0] p-0.5 md:flex">
                 {([
-                  { mode: "list", Icon: List, label: isKm ? "បញ្ជី" : "List view" },
                   { mode: "grid", Icon: LayoutGrid, label: isKm ? "ក្រឡាចត្រង្គ" : "Grid view" },
+                  { mode: "list", Icon: List, label: isKm ? "បញ្ជី" : "List view" },
                 ] as const).map(({ mode, Icon, label }) => (
                   <button
                     key={mode}
@@ -442,90 +468,6 @@ export default function MajorsPage() {
         </div>
       </div>
 
-      {showFeatured && (
-        <section className="border-b border-[#E6E8F0] bg-white">
-          <div className="mx-auto grid max-w-7xl items-center gap-6 px-4 py-8 sm:px-6 lg:grid-cols-12 lg:gap-12 lg:px-8">
-              <div className="lg:col-span-7">
-                <p className="text-xs font-semibold text-[#68708A]">
-                  {isKm ? "ជំនាញដែលគួរស្វែងយល់មុនគេ" : "Start here"}
-                </p>
-                <h2 className="mt-2 text-2xl font-extrabold leading-snug tracking-[-0.01em] text-[#111965] sm:text-[1.75rem]">
-                  {getLocalized(featuredMajor.name)}
-                </h2>
-                <p className="mt-3 max-w-xl text-sm leading-relaxed text-[#68708A]">
-                  {getLocalized(featuredMajor.description)}
-                </p>
-
-                <dl className="mt-6 flex flex-wrap items-start gap-x-8 gap-y-4">
-                  <div>
-                    <dt className="text-[12px] text-[#68708A]">
-                      {isKm ? "សាកលវិទ្យាល័យ" : "Universities"}
-                    </dt>
-                    <dd className="mt-0.5 text-base font-bold tabular-nums text-[#171A2C]">
-                      {featuredMajor.universities_count || 0}
-                    </dd>
-                  </div>
-                  {typeof featuredMajor.min_tuition_usd === "number" && (
-                    <div>
-                      <dt className="text-[12px] text-[#68708A]">
-                        {isKm ? "ថ្លៃសិក្សាចាប់ផ្តើម" : "Tuition from"}
-                      </dt>
-                      <dd className="mt-0.5 text-base font-bold tabular-nums text-[#171A2C]">
-                        {formatUsd(featuredMajor.min_tuition_usd)}
-                        <span className="ml-1 text-xs font-medium text-[#68708A]">
-                          {isKm ? "/ ឆ្នាំ" : "/ year"}
-                        </span>
-                      </dd>
-                    </div>
-                  )}
-                  <div>
-                    <dt className="text-[12px] text-[#68708A]">
-                      {t("majorsDirectory.hollandCode")}
-                    </dt>
-                    <dd className="mt-1">
-                      <RiasecPair
-                        primary={featuredMajor.riasec_primary}
-                        secondary={featuredMajor.riasec_secondary}
-                        label={t("majorsDirectory.hollandCode")}
-                      />
-                    </dd>
-                  </div>
-                </dl>
-
-                <div className="mt-6 flex flex-wrap items-center gap-3">
-                  <Link
-                    href={`/majors/${featuredMajor.slug}`}
-                    className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-[#111965] px-4 text-xs font-bold text-white transition-colors hover:bg-[#1E277A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30 focus-visible:ring-offset-2"
-                  >
-                    <span>{isKm ? "មើលកម្មវិធីសិក្សា" : "View the program"}</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => setActivePreviewMajor(featuredMajor)}
-                    className="inline-flex h-10 items-center gap-1.5 rounded-lg px-3 text-xs font-bold text-[#111965] transition-colors hover:bg-[#F0F2FA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30"
-                  >
-                    <BookOpen className="h-3.5 w-3.5" />
-                    <span>{isKm ? "មើលកម្មវិធីបួនឆ្នាំ" : "Four-year outline"}</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="lg:col-span-5">
-                <div className="relative aspect-[16/10] max-h-[260px] w-full overflow-hidden rounded-xl bg-[#F0F2FA] sm:max-h-[340px] lg:max-h-none">
-                  <Image
-                    src={MAJOR_IMAGES[featuredMajor.slug] || "/images/majors/software-engineering.webp"}
-                    alt={getLocalized(featuredMajor.name) || "Major"}
-                    fill
-                    priority
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 480px"
-                  />
-                </div>
-              </div>
-            </div>
-        </section>
-      )}
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Result count belongs to the results, not to a decorative header. */}
@@ -633,24 +575,24 @@ export default function MajorsPage() {
 
                     <div className="min-w-0">
                       <div className="flex items-start gap-2">
-                        <h3 className="text-[15px] font-bold leading-snug text-[#111965] transition-colors group-hover:text-[#1E277A] sm:text-base">
+                        <h3 className="text-[16px] font-bold leading-snug text-[#111965] transition-colors group-hover:text-[#1E277A] sm:text-base">
                           <Link href={`/majors/${m.slug}`} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30">
                             {getLocalized(m.name)}
                           </Link>
                         </h3>
                         {m.is_stem && (
-                          <span className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded bg-[#FFF9E6] px-1.5 py-0.5 text-[11px] font-bold text-[#7A5F00]">
+                          <span className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded bg-[#FFF9E6] px-1.5 py-0.5 text-[12px] font-bold text-[#7A5F00]">
                             <Sparkles className="h-2.5 w-2.5" />
                             STEM
                           </span>
                         )}
                       </div>
 
-                      <p className="mt-1 line-clamp-1 text-[13px] leading-relaxed text-[#68708A]">
+                      <p className="mt-1 line-clamp-1 text-[14px] leading-relaxed text-[#68708A]">
                         {getLocalized(m.description)}
                       </p>
 
-                      <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12px] text-[#68708A] sm:text-[13px]">
+                      <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[13px] text-[#68708A] sm:text-[14px]">
                         <span className="inline-flex items-center gap-1.5">
                           <Building2 className="h-3.5 w-3.5" />
                           {universityCount > 0
@@ -703,15 +645,19 @@ export default function MajorsPage() {
             })}
           </ul>
         ) : (
-          <ul className="grid gap-x-6 gap-y-9 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {sortedMajors.map((m) => {
               const coverImage = MAJOR_IMAGES[m.slug] || "/images/majors/software-engineering.webp";
               const universityCount = m.universities_count || 0;
               const tuition = typeof m.min_tuition_usd === "number" ? m.min_tuition_usd : null;
+              const categoryColor = CATEGORY_COLOR[m.category] || "#111965";
 
               return (
-                <li key={m.id} className="group flex flex-col">
-                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-[#F0F2FA]">
+                <li
+                  key={m.id}
+                  className="group relative flex flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-[#E6E8F0] transition-shadow duration-200 hover:shadow-[0_18px_40px_-24px_rgba(17,25,101,0.45)] hover:ring-[#111965]/25"
+                >
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#F0F2FA]">
                     <Image
                       src={coverImage}
                       alt={getLocalized(m.name) || "Major"}
@@ -720,8 +666,8 @@ export default function MajorsPage() {
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                     {m.is_stem && (
-                      <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded bg-white/95 px-1.5 py-0.5 text-[11px] font-bold text-[#7A5F00]">
-                        <Sparkles className="h-2.5 w-2.5" />
+                      <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-md bg-[#111965] px-2 py-1 text-[12.5px] font-bold text-white">
+                        <Sparkles className="h-2.5 w-2.5 text-[#F7CE4D]" />
                         STEM
                       </span>
                     )}
@@ -730,46 +676,93 @@ export default function MajorsPage() {
                     </span>
                   </div>
 
-                  <h3 className="mt-3 text-base font-bold leading-snug text-[#111965] transition-colors group-hover:text-[#1E277A]">
-                    <Link href={`/majors/${m.slug}`} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30">
-                      {getLocalized(m.name)}
-                    </Link>
-                  </h3>
-
-                  <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-[#68708A]">
-                    {getLocalized(m.description)}
-                  </p>
-
-                  <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12px] text-[#68708A]">
-                    <span className="inline-flex items-center gap-1.5">
-                      <Building2 className="h-3.5 w-3.5" />
-                      {universityCount > 0
-                        ? `${universityCount} ${isKm ? "សាកលវិទ្យាល័យ" : universityCount === 1 ? "university" : "universities"}`
-                        : isKm ? "មិនទាន់មានកម្មវិធី" : "No program listed yet"}
-                    </span>
-                    {tuition !== null && (
-                      <span className="inline-flex items-center gap-1.5">
-                        <Wallet className="h-3.5 w-3.5" />
-                        {isKm ? "ចាប់ពី" : "from"} {formatUsd(tuition)}
-                        <span className="text-[#68708A]/80">{isKm ? "/ឆ្នាំ" : "/yr"}</span>
+                  <div className="flex flex-1 flex-col p-5">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="inline-flex min-w-0 items-center gap-1.5">
+                        <span
+                          aria-hidden="true"
+                          className="h-1.5 w-1.5 shrink-0 rounded-full"
+                          style={{ backgroundColor: categoryColor }}
+                        />
+                        <span className="truncate text-[12px] font-bold text-[#68708A]">
+                          {t(`categories.${m.category}`, m.category)}
+                        </span>
                       </span>
-                    )}
-                  </div>
 
-                  <div className="mt-3 flex items-center justify-between gap-2">
-                    <RiasecPair
-                      primary={m.riasec_primary}
-                      secondary={m.riasec_secondary}
-                      label={t("majorsDirectory.hollandCode")}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setActivePreviewMajor(m)}
-                      className="inline-flex items-center gap-1 rounded text-xs font-bold text-[#111965] transition-colors hover:text-[#1E277A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30"
-                    >
-                      <BookOpen className="h-3.5 w-3.5" />
-                      <span>Curriculum</span>
-                    </button>
+                      <RiasecPair
+                        primary={m.riasec_primary}
+                        secondary={m.riasec_secondary}
+                        label={t("majorsDirectory.hollandCode")}
+                      />
+                    </div>
+
+                    <h3 className="mt-2 text-[18px] font-extrabold leading-[1.28] tracking-[-0.01em] text-[#111965] transition-colors group-hover:text-[#1E277A]">
+                      <Link
+                        href={`/majors/${m.slug}`}
+                        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30"
+                      >
+                        {getLocalized(m.name)}
+                      </Link>
+                    </h3>
+
+                    <p className="mt-2 line-clamp-2 text-[14px] leading-[1.55] text-[#68708A]">
+                      {getLocalized(m.description)}
+                    </p>
+
+                    <div className="mt-auto pt-5">
+                      <dl className="grid grid-cols-2 gap-3 border-t border-[#E6E8F0] pt-3.5">
+                        <div>
+                          <dt className="text-[12.5px] font-semibold leading-snug text-[#68708A]">
+                            {isKm ? "ថ្លៃសិក្សាចាប់ផ្តើម" : "Tuition from"}
+                          </dt>
+                          <dd className="mt-1 text-[20px] font-extrabold leading-tight tabular-nums text-[#111965]">
+                            {tuition !== null ? (
+                              <>
+                                {formatUsd(tuition)}
+                                <span className="ml-0.5 text-[12px] font-semibold text-[#68708A]">
+                                  {isKm ? "/ឆ្នាំ" : "/yr"}
+                                </span>
+                              </>
+                            ) : (
+                              <span className="text-[14px] font-semibold text-[#68708A]">—</span>
+                            )}
+                          </dd>
+                        </div>
+
+                        <div>
+                          <dt className="text-[12.5px] font-semibold leading-snug text-[#68708A]">
+                            {isKm ? "សាកលវិទ្យាល័យ" : "Universities"}
+                          </dt>
+                          <dd className="mt-1 text-[20px] font-extrabold leading-tight tabular-nums text-[#111965]">
+                            {universityCount > 0 ? (
+                              universityCount
+                            ) : (
+                              <span className="text-[14px] font-semibold text-[#68708A]">—</span>
+                            )}
+                          </dd>
+                        </div>
+                      </dl>
+
+                      <div className="mt-4 flex items-center justify-between gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setActivePreviewMajor(m)}
+                          aria-label={isKm ? "មើលកម្មវិធីសិក្សា" : "Preview curriculum"}
+                          className="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-[13px] font-bold text-[#111965] transition-colors hover:bg-[#F0F2FA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30"
+                        >
+                          <BookOpen className="h-3.5 w-3.5" />
+                          <span className="hidden sm:inline">Curriculum</span>
+                        </button>
+
+                        <Link
+                          href={`/majors/${m.slug}`}
+                          className="inline-flex h-8 items-center gap-1 rounded-md bg-[#111965] px-3 text-[13px] font-bold text-white transition-colors hover:bg-[#1E277A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30 focus-visible:ring-offset-2"
+                        >
+                          <span>{t("majorsDirectory.details")}</span>
+                          <ArrowRight className="h-3 w-3" />
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 </li>
               );
@@ -796,14 +789,14 @@ export default function MajorsPage() {
                 <ol className="space-y-2">
                   {MAJOR_CURRICULUM_DATA[activePreviewMajor.slug].years.map((y) => (
                     <li key={y.year} className="flex gap-4 rounded-lg border border-[#E6E8F0] p-3.5">
-                      <span className="flex h-6 min-w-[2.6rem] shrink-0 items-center justify-center rounded-md bg-[#F0F2FA] px-1.5 text-[11px] font-bold tabular-nums text-[#111965]">
+                      <span className="flex h-6 min-w-[2.6rem] shrink-0 items-center justify-center rounded-md bg-[#F0F2FA] px-1.5 text-[12px] font-bold tabular-nums text-[#111965]">
                         {isKm ? "ឆ្នាំ" : "Year"} {y.year}
                       </span>
                       <div className="min-w-0">
                         <p className="text-sm font-bold leading-snug text-[#171A2C]">
                           {isKm ? y.titleKm : y.titleEn}
                         </p>
-                        <p className="mt-0.5 text-[12.5px] leading-relaxed text-[#68708A]">{y.focus}</p>
+                        <p className="mt-0.5 text-[13.5px] leading-relaxed text-[#68708A]">{y.focus}</p>
                       </div>
                     </li>
                   ))}
@@ -815,7 +808,7 @@ export default function MajorsPage() {
                   </p>
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {MAJOR_CURRICULUM_DATA[activePreviewMajor.slug].keySkills.map((s) => (
-                      <span key={s} className="rounded border border-[#E6E8F0] bg-white px-2 py-0.5 text-[12px] font-medium text-[#171A2C]">
+                      <span key={s} className="rounded border border-[#E6E8F0] bg-white px-2 py-0.5 text-[13px] font-medium text-[#171A2C]">
                         {s}
                       </span>
                     ))}
@@ -827,7 +820,7 @@ export default function MajorsPage() {
                     <p className="text-xs font-bold text-[#111965]">
                       {isKm ? "អាជីពដែលអាចបន្ត" : "Roles this leads to"}
                     </p>
-                    <p className="mt-1 text-[12.5px] leading-relaxed text-[#68708A]">
+                    <p className="mt-1 text-[13.5px] leading-relaxed text-[#68708A]">
                       {MAJOR_CURRICULUM_DATA[activePreviewMajor.slug].sampleCareers.join(", ")}
                     </p>
                   </div>
@@ -842,7 +835,7 @@ export default function MajorsPage() {
             )}
 
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#E6E8F0] pt-4">
-              <span className="inline-flex items-center gap-1.5 text-[12.5px] text-[#68708A]">
+              <span className="inline-flex items-center gap-1.5 text-[13.5px] text-[#68708A]">
                 <GraduationCap className="h-4 w-4" />
                 {activePreviewMajor.universities_count || 0}{" "}
                 {isKm ? "សាកលវិទ្យាល័យ" : "universities offer this"}

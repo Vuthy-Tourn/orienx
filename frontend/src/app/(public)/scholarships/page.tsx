@@ -143,7 +143,7 @@ export default function ScholarshipsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
               {/* Grade Selection */}
               <div className="space-y-1.5">
-                <label className="text-[11px] font-bold text-[#68708A] uppercase tracking-wider">
+                <label className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
                   BacII Exam Grade
                 </label>
                 <div className="grid grid-cols-4 gap-1.5">
@@ -166,7 +166,7 @@ export default function ScholarshipsPage() {
 
               {/* Study Field Selection */}
               <div className="space-y-1.5">
-                <label className="text-[11px] font-bold text-[#68708A] uppercase tracking-wider">
+                <label className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
                   Intended Field
                 </label>
                 <div className="grid grid-cols-3 gap-1.5">
@@ -194,13 +194,13 @@ export default function ScholarshipsPage() {
               {/* Live Eligibility Result Box */}
               <div className="p-3.5 rounded-2xl bg-[#F0F2FA]/80 border border-[#E6E8F0] flex items-center justify-between">
                 <div>
-                  <div className="text-[10px] font-bold text-[#68708A] uppercase">
+                  <div className="text-[12.5px] font-bold text-[#68708A] uppercase">
                     Qualified Programs
                   </div>
                   <div className="text-sm font-black text-emerald-700">
                     {targetBaciiGrade === "A" ? "100% Full Tuition + Stipend" : "Full & Partial Tuition Available"}
                   </div>
-                  <div className="text-[11px] text-[#68708A]">CADT, MoEYS, AUPP, ITC</div>
+                  <div className="text-[12px] text-[#68708A]">CADT, MoEYS, AUPP, ITC</div>
                 </div>
                 <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
                   <Check className="w-4 h-4" />
@@ -240,15 +240,15 @@ export default function ScholarshipsPage() {
                 {/* Benefits Breakdown Pills */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-xs">
                   <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 space-y-0.5">
-                    <span className="text-[10px] uppercase font-bold text-[#F7CE4D] block">Tuition Coverage</span>
+                    <span className="text-[12.5px] uppercase font-bold text-[#F7CE4D] block">Tuition Coverage</span>
                     <span className="font-extrabold text-white">100% 4-Year Full-Ride</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 space-y-0.5">
-                    <span className="text-[10px] uppercase font-bold text-[#F7CE4D] block">Living Stipend</span>
+                    <span className="text-[12.5px] uppercase font-bold text-[#F7CE4D] block">Living Stipend</span>
                     <span className="font-extrabold text-white">$120 / Month Allowance</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-xs border border-white/15 space-y-0.5">
-                    <span className="text-[10px] uppercase font-bold text-[#F7CE4D] block">Hardware Grant</span>
+                    <span className="text-[12.5px] uppercase font-bold text-[#F7CE4D] block">Hardware Grant</span>
                     <span className="font-extrabold text-white">Free High-Spec Laptop</span>
                   </div>
                 </div>
@@ -453,7 +453,7 @@ export default function ScholarshipsPage() {
 
                     {/* Provider & Title */}
                     <div>
-                      <div className="text-[11px] font-bold text-[#68708A] uppercase tracking-wide flex items-center gap-1.5">
+                      <div className="text-[12px] font-bold text-[#68708A] uppercase tracking-wide flex items-center gap-1.5">
                         <Building className="w-3.5 h-3.5 text-[#111965]" />
                         <span>{getLocalized(s.provider)}</span>
                       </div>
@@ -483,7 +483,7 @@ export default function ScholarshipsPage() {
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                           <span>{t("scholarshipsPage.eligibilityCriteria")}</span>
                         </div>
-                        <ul className="space-y-1 text-[#68708A] text-[11px]">
+                        <ul className="space-y-1 text-[#68708A] text-[12px]">
                           {criteriaArray.slice(0, 2).map((item: string, idx: number) => (
                             <li key={idx} className="flex items-start gap-1.5">
                               <span className="text-[#111965] font-bold">•</span>

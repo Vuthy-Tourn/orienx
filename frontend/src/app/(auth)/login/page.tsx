@@ -157,7 +157,7 @@ export default function LoginPage() {
               {/* Header with Brand Badge */}
               <div className="flex items-center justify-between">
                 <Logo showText={true} />
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-700">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[12px] font-bold text-emerald-700">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span>{language === "km" ? "ច្រកចូលសុវត្ថិភាព" : "Secure Student Portal"}</span>
                 </div>
@@ -184,7 +184,7 @@ export default function LoginPage() {
                     <span>{t("auth.demoTitle", "Instant Demo Login Accounts")}</span>
                   </div>
                   {activeDemo && (
-                    <span className="text-[11px] font-medium text-emerald-600 inline-flex items-center gap-1">
+                    <span className="text-[12px] font-medium text-emerald-600 inline-flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3" />
                       {language === "km" ? "បានបំពេញរួចរាល់" : "Credentials loaded"}
                     </span>
@@ -208,7 +208,7 @@ export default function LoginPage() {
                       <div className="text-xs font-bold text-[#111965]">
                         {language === "km" ? "គណនីសិស្សគំរូ" : "Demo Student"}
                       </div>
-                      <div className="text-[10px] text-[#68708A] truncate">
+                      <div className="text-[12.5px] text-[#68708A] truncate">
                         student@futera.edu.kh
                       </div>
                     </div>
@@ -230,7 +230,7 @@ export default function LoginPage() {
                       <div className="text-xs font-bold text-[#111965]">
                         {language === "km" ? "គណនីអ្នកគ្រប់គ្រង" : "Demo Admin"}
                       </div>
-                      <div className="text-[10px] text-[#68708A] truncate">
+                      <div className="text-[12.5px] text-[#68708A] truncate">
                         admin@futera.edu.kh
                       </div>
                     </div>
@@ -360,7 +360,7 @@ export default function LoginPage() {
                 </Link>
               </div>
 
-              <div className="flex items-center justify-center gap-4 text-[11px] text-[#68708A]/80">
+              <div className="flex items-center justify-center gap-4 text-[12px] text-[#68708A]/80">
                 <span className="flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                   <span>256-Bit TLS</span>
@@ -420,7 +420,7 @@ export default function LoginPage() {
                     <Award className="w-3.5 h-3.5 text-[#F7CE4D]" />
                     {language === "km" ? "គំរូអនុសាសន៍ RIASEC" : "Live Holland Interest Sample"}
                   </span>
-                  <span className="text-[11px] text-[#F7CE4D] font-mono font-bold">
+                  <span className="text-[12px] text-[#F7CE4D] font-mono font-bold">
                     {hollandProfiles[activeHolland].match}
                   </span>
                 </div>
@@ -445,7 +445,7 @@ export default function LoginPage() {
 
                 {/* Holland Active Card Info */}
                 <div className="pt-1 space-y-1">
-                  <div className="text-[11px] font-semibold text-amber-300 flex items-center gap-1">
+                  <div className="text-[12px] font-semibold text-amber-300 flex items-center gap-1">
                     <span>
                       {language === "km"
                         ? `${activeHolland} - ${hollandProfiles[activeHolland].codeKm}`
@@ -457,7 +457,7 @@ export default function LoginPage() {
                       ? hollandProfiles[activeHolland].majorKm
                       : hollandProfiles[activeHolland].major}
                   </div>
-                  <div className="text-[11px] text-slate-300">
+                  <div className="text-[12px] text-slate-300">
                     {hollandProfiles[activeHolland].school}
                   </div>
                 </div>
@@ -471,10 +471,10 @@ export default function LoginPage() {
                     : "“Futera allowed me to compare real tuition fees across RUPP, ITC, and CADT, helping me land a computer science scholarship before graduation.”"}
                 </p>
                 <div className="flex items-center gap-2 pt-1 border-t border-white/10">
-                  <div className="w-6 h-6 rounded-full bg-[#F7CE4D] text-[#111965] flex items-center justify-center font-bold text-[10px]">
+                  <div className="w-6 h-6 rounded-full bg-[#F7CE4D] text-[#111965] flex items-center justify-center font-bold text-[12.5px]">
                     SC
                   </div>
-                  <div className="text-[11px]">
+                  <div className="text-[12px]">
                     <span className="font-bold text-white">Sokha Chan</span>
                     <span className="text-slate-400"> · CADT CS Sophomore</span>
                   </div>
@@ -486,19 +486,19 @@ export default function LoginPage() {
             <div className="relative z-10 pt-4 mt-6 border-t border-white/15 grid grid-cols-3 gap-2 text-center">
               <div>
                 <div className="text-base sm:text-lg font-black text-white">35,000+</div>
-                <div className="text-[10px] text-slate-300">
+                <div className="text-[12.5px] text-slate-300">
                   {language === "km" ? "សិស្សបានទទួលការណែនាំ" : "Students Guided"}
                 </div>
               </div>
               <div>
                 <div className="text-base sm:text-lg font-black text-amber-300">50+</div>
-                <div className="text-[10px] text-slate-300">
+                <div className="text-[12.5px] text-slate-300">
                   {language === "km" ? "សាកលវិទ្យាល័យផ្លូវការ" : "Verified Universities"}
                 </div>
               </div>
               <div>
                 <div className="text-base sm:text-lg font-black text-emerald-400">100%</div>
-                <div className="text-[10px] text-slate-300">
+                <div className="text-[12.5px] text-slate-300">
                   {language === "km" ? "ឥតគិតថ្លៃសម្រាប់សិស្ស" : "Free for Students"}
                 </div>
               </div>

@@ -551,7 +551,7 @@ export function HowItWorksFlow() {
                     />
 
                     {/* Step Number Tag Pill: '01', '02', '03', '04' */}
-                    <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-[#111965] text-white text-[10px] font-black tracking-tight shadow-md border-2 border-white select-none">
+                    <span className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded-full bg-[#111965] text-white text-[12.5px] font-black tracking-tight shadow-md border-2 border-white select-none">
                       {step.num}
                     </span>
 
@@ -604,7 +604,7 @@ export function HowItWorksFlow() {
 
                     <div className="relative z-10">
                       {/* Step Pill */}
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-50 border border-sky-200/60 text-[#0284C7] text-[11px] font-bold tracking-wide mb-2">
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-50 border border-sky-200/60 text-[#0284C7] text-[12px] font-bold tracking-wide mb-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#0284C7]" />
                         <span>STEP {step.num}</span>
                       </div>
@@ -622,7 +622,7 @@ export function HowItWorksFlow() {
                       {/* Subtle Action Link */}
                       <Link
                         href={step.href}
-                        className="inline-flex items-center gap-1 text-[11.5px] font-bold text-[#0284C7] mt-3 transition-colors hover:text-[#2563EB]"
+                        className="inline-flex items-center gap-1 text-[12.5px] font-bold text-[#0284C7] mt-3 transition-colors hover:text-[#2563EB]"
                       >
                         <span>{t("howItWorks.learnMore")}</span>
                         <ChevronRight className="w-3.5 h-3.5" />
@@ -658,7 +658,7 @@ export function HowItWorksFlow() {
                         step.iconFill ? "fill-[#0284C7]/20" : ""
                       }`}
                     />
-                    <span className="absolute -top-1.5 -right-1.5 px-1 py-0.2 rounded-full bg-[#111965] text-white text-[9px] font-black border border-white">
+                    <span className="absolute -top-1.5 -right-1.5 px-1 py-0.2 rounded-full bg-[#111965] text-white text-[12px] font-black border border-white">
                       {step.num}
                     </span>
                   </div>
@@ -671,7 +671,7 @@ export function HowItWorksFlow() {
                     {step.watermark}
                   </div>
 
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-50 text-[#0284C7] text-[11px] font-bold">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-50 text-[#0284C7] text-[12px] font-bold">
                     <span>STEP {step.num}</span>
                   </div>
 

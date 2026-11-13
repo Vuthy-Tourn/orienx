@@ -243,7 +243,7 @@ export function MascotInteractiveHero() {
 
                   {/* Speech Message (Auto-types and rotates with read delay) */}
                   <div className="min-h-[50px] flex items-center">
-                    <p className="text-xs sm:text-[13px] font-medium text-slate-100 leading-relaxed">
+                    <p className="text-xs sm:text-[14px] font-medium text-slate-100 leading-relaxed">
                       {renderFormattedSpeech(displayedSpeech)}
                       {isTyping && (
                         <span className="inline-block w-1.5 h-3 ml-1 bg-[#F7CE4D] animate-pulse rounded-full align-middle" />

@@ -37,7 +37,7 @@ export function SettingsPanel({ className, onChanged }: SettingsPanelProps) {
             <h3 className="text-sm font-black text-[#111965]">
               {t("settings.languageTitle")}
             </h3>
-            <p className="text-[11px] text-[#68708A]">
+            <p className="text-[12px] text-[#68708A]">
               {t("settings.languageDesc")}
             </p>
           </div>
@@ -57,14 +57,14 @@ export function SettingsPanel({ className, onChanged }: SettingsPanelProps) {
           >
             <div className="space-y-0.5 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-blue-100 text-blue-800 font-mono">
+                <span className="px-1.5 py-0.5 rounded text-[12.5px] font-black bg-blue-100 text-blue-800 font-mono">
                   KH
                 </span>
                 <span className="text-sm font-black text-[#111965] truncate">
                   {t("settings.khmerLang")}
                 </span>
               </div>
-              <p className="text-[11px] text-[#68708A] truncate leading-tight">
+              <p className="text-[12px] text-[#68708A] truncate leading-tight">
                 {t("settings.khmerLangDesc")}
               </p>
             </div>
@@ -93,14 +93,14 @@ export function SettingsPanel({ className, onChanged }: SettingsPanelProps) {
           >
             <div className="space-y-0.5 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-black bg-slate-100 text-slate-700 font-mono">
+                <span className="px-1.5 py-0.5 rounded text-[12.5px] font-black bg-slate-100 text-slate-700 font-mono">
                   EN
                 </span>
                 <span className="text-sm font-black text-[#111965] truncate">
                   {t("settings.englishLang")}
                 </span>
               </div>
-              <p className="text-[11px] text-[#68708A] truncate leading-tight">
+              <p className="text-[12px] text-[#68708A] truncate leading-tight">
                 {t("settings.englishLangDesc")}
               </p>
             </div>
@@ -128,7 +128,7 @@ export function SettingsPanel({ className, onChanged }: SettingsPanelProps) {
             <h3 className="text-sm font-black text-[#111965]">
               {t("settings.themeTitle")}
             </h3>
-            <p className="text-[11px] text-[#68708A]">
+            <p className="text-[12px] text-[#68708A]">
               {t("settings.themeDesc")}
             </p>
           </div>
@@ -190,7 +190,7 @@ export function SettingsPanel({ className, onChanged }: SettingsPanelProps) {
                 <span className="text-xs font-black text-[#111965] block leading-tight truncate">
                   {getLocalized({ km: "ទម្រង់ពន្លឺ (Light)", en: "Light" })}
                 </span>
-                <span className="text-[10px] text-[#68708A] block leading-tight truncate">
+                <span className="text-[12.5px] text-[#68708A] block leading-tight truncate">
                   {getLocalized({ km: "ផ្ទៃភ្លឺច្បាស់ ងាយស្រួលមើលពេលថ្ងៃ", en: "Bright & clear daytime look" })}
                 </span>
               </div>
@@ -252,7 +252,7 @@ export function SettingsPanel({ className, onChanged }: SettingsPanelProps) {
                 <span className="text-xs font-black text-[#111965] block leading-tight truncate">
                   {getLocalized({ km: "ទម្រង់ងងឹត (Dark)", en: "Dark" })}
                 </span>
-                <span className="text-[10px] text-[#68708A] block leading-tight truncate">
+                <span className="text-[12.5px] text-[#68708A] block leading-tight truncate">
                   {getLocalized({ km: "ផ្ទៃងងឹត ជួយការពារភ្នែកពេលយប់", en: "60-30-10 charcoal workspace" })}
                 </span>
               </div>
@@ -313,7 +313,7 @@ export function SettingsPanel({ className, onChanged }: SettingsPanelProps) {
                 <span className="text-xs font-black text-[#111965] block leading-tight truncate">
                   {getLocalized({ km: `តាមប្រព័ន្ធ (${resolvedTheme === "dark" ? "Dark" : "Light"})`, en: `System (${resolvedTheme === "dark" ? "Dark" : "Light"})` })}
                 </span>
-                <span className="text-[10px] text-[#68708A] block leading-tight truncate">
+                <span className="text-[12.5px] text-[#68708A] block leading-tight truncate">
                   {getLocalized({ km: "កែសម្រួលស្វ័យប្រវត្តិតាមឧបករណ៍", en: "Follows macOS & OS settings" })}
                 </span>
               </div>
@@ -323,7 +323,7 @@ export function SettingsPanel({ className, onChanged }: SettingsPanelProps) {
       </div>
 
       {/* Auto-save notification note */}
-      <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center gap-2 text-[11px] text-[#68708A]">
+      <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center gap-2 text-[12px] text-[#68708A]">
         <Sparkles className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />
         <span>{t("settings.savedAutomatically")}</span>
       </div>

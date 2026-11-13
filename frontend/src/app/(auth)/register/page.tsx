@@ -203,7 +203,7 @@ export default function RegisterPage() {
             {/* Header & Badges */}
             <div className="flex items-center justify-between">
               <Logo showText={true} />
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-[11px] font-bold text-amber-900">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-[12px] font-bold text-amber-900">
                 <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                 <span>{language === "km" ? "ឥតគិតថ្លៃ ១០០%" : "100% Free for Students"}</span>
               </div>
@@ -236,7 +236,7 @@ export default function RegisterPage() {
               <div className="space-y-2">
                 <label className="text-xs font-bold text-[#171A2C] flex items-center justify-between">
                   <span>{t("auth.educationLabel", "Current Education Level")}</span>
-                  <span className="text-[11px] font-normal text-[#68708A]">
+                  <span className="text-[12px] font-normal text-[#68708A]">
                     {language === "km" ? "ជ្រើសរើសដើម្បីសម្រួលអនុសាសន៍" : "Tailors recommendation criteria"}
                   </span>
                 </label>
@@ -273,7 +273,7 @@ export default function RegisterPage() {
                           <div className="text-xs font-bold text-[#111965] leading-tight">
                             {language === "km" ? lvl.titleKm : lvl.title}
                           </div>
-                          <div className="text-[10px] text-[#68708A] line-clamp-1 mt-0.5">
+                          <div className="text-[12.5px] text-[#68708A] line-clamp-1 mt-0.5">
                             {language === "km" ? lvl.descKm : lvl.desc}
                           </div>
                         </div>
@@ -371,7 +371,7 @@ export default function RegisterPage() {
                 {/* Password Strength Visual Meter */}
                 {password.length > 0 && (
                   <div className="space-y-1.5 pt-1 animate-in fade-in duration-200">
-                    <div className="flex items-center justify-between text-[11px]">
+                    <div className="flex items-center justify-between text-[12px]">
                       <span className="text-[#68708A]">
                         {language === "km" ? "កម្រិតសុវត្ថិភាព:" : "Strength:"}
                       </span>
@@ -393,7 +393,7 @@ export default function RegisterPage() {
                       ))}
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 pt-1 text-[10px] text-[#68708A]">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 pt-1 text-[12.5px] text-[#68708A]">
                       <div className="flex items-center gap-1">
                         <Check
                           className={`w-3 h-3 ${
@@ -487,7 +487,7 @@ export default function RegisterPage() {
                 )}
               </button>
 
-              <p className="text-[11px] text-[#68708A] text-center">
+              <p className="text-[12px] text-[#68708A] text-center">
                 {language === "km"
                   ? "តាមរយៈការចុះឈ្មោះ អ្នកយល់ព្រមតាមលក្ខខណ្ឌប្រើប្រាស់របស់ OrienX។ ទិន្នន័យរបស់អ្នកត្រូវបានការពារយ៉ាងតឹងរ៉ឹង។"
                   : "By creating an account, you agree to OrienX Terms. Your student profile data is private and encrypted."}
@@ -552,7 +552,7 @@ export default function RegisterPage() {
                     <div className="text-xs font-bold text-white">
                       {language === "km" ? "ធ្វើតេស្តចំណាប់អារម្មណ៍ RIASEC" : "Take Holland RIASEC Test"}
                     </div>
-                    <div className="text-[11px] text-slate-300 mt-0.5 leading-snug">
+                    <div className="text-[12px] text-slate-300 mt-0.5 leading-snug">
                       {language === "km"
                         ? "១៥ នាទីដើម្បីស្វែងរកប្រភេទចំណាប់អារម្មណ៍ និងមុខវិជ្ជាខ្លាំង"
                         : "Discover your cognitive strengths across Realistic, Investigative, and 4 other dimensions"}
@@ -568,7 +568,7 @@ export default function RegisterPage() {
                     <div className="text-xs font-bold text-white">
                       {language === "km" ? "ផ្គូផ្គង ៥០+ សាកលវិទ្យាល័យ" : "Match 50+ Cambodian Universities"}
                     </div>
-                    <div className="text-[11px] text-slate-300 mt-0.5 leading-snug">
+                    <div className="text-[12px] text-slate-300 mt-0.5 leading-snug">
                       {language === "km"
                         ? "ទទួលបានពិន្ទុផ្គូផ្គង និងហេតុផលតម្លាភាពសម្រាប់គ្រប់ដេប៉ាតឺម៉ង់"
                         : "Transparent percentage match scores for RUPP, ITC, CADT, AUPP, and more"}
@@ -584,7 +584,7 @@ export default function RegisterPage() {
                     <div className="text-xs font-bold text-white">
                       {language === "km" ? "គណនាតម្លៃសិក្សា ៤ ឆ្នាំ និងអាហារូបករណ៍" : "Estimate 4-Year Tuition & Aid"}
                     </div>
-                    <div className="text-[11px] text-slate-300 mt-0.5 leading-snug">
+                    <div className="text-[12px] text-slate-300 mt-0.5 leading-snug">
                       {language === "km"
                         ? "ដឹងច្បាស់ពីថ្លៃសិក្សាផ្លូវការ កន្លែងស្នាក់នៅ និងលក្ខខណ្ឌអាហារូបករណ៍"
                         : "Verify official tuition per year, living allowance budgets, and application deadlines"}
@@ -610,19 +610,19 @@ export default function RegisterPage() {
             <div className="relative z-10 pt-4 mt-6 border-t border-white/15 grid grid-cols-3 gap-2 text-center">
               <div>
                 <div className="text-base sm:text-lg font-black text-white">35,000+</div>
-                <div className="text-[10px] text-slate-300">
+                <div className="text-[12.5px] text-slate-300">
                   {language === "km" ? "សិស្សបានទទួលការណែនាំ" : "Students Guided"}
                 </div>
               </div>
               <div>
                 <div className="text-base sm:text-lg font-black text-amber-300">300+</div>
-                <div className="text-[10px] text-slate-300">
+                <div className="text-[12.5px] text-slate-300">
                   {language === "km" ? "ជំនាញសិក្សាផ្ទៀងផ្ទាត់" : "Mapped Majors"}
                 </div>
               </div>
               <div>
                 <div className="text-base sm:text-lg font-black text-emerald-400">$0</div>
-                <div className="text-[10px] text-slate-300">
+                <div className="text-[12.5px] text-slate-300">
                   {language === "km" ? "ឥតគិតថ្លៃជានិច្ច" : "Always Free"}
                 </div>
               </div>

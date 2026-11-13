@@ -118,7 +118,7 @@ export default function RecommendationsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E8F0] pb-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#111965] text-[#F7CE4D] text-[10px] font-black uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#111965] text-[#F7CE4D] text-[12.5px] font-black uppercase tracking-wider">
               <Sparkles className="w-3 h-3 text-[#F7CE4D]" />
               <span>AI Fit</span>
             </span>
@@ -254,7 +254,7 @@ export default function RecommendationsPage() {
               </p>
             </div>
           </div>
-          <span className="hidden md:inline-flex items-center px-2.5 py-1 rounded-full bg-white/10 text-[11px] font-bold text-white/90 border border-white/15 flex-shrink-0">
+          <span className="hidden md:inline-flex items-center px-2.5 py-1 rounded-full bg-white/10 text-[12px] font-bold text-white/90 border border-white/15 flex-shrink-0">
             Top 3 Curated
           </span>
         </div>
@@ -335,11 +335,11 @@ export default function RecommendationsPage() {
 
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-[10px] font-bold text-[#68708A] uppercase">
+                        <span className="text-[12.5px] font-bold text-[#68708A] uppercase">
                           {major.category}
                         </span>
                         {major.is_stem && (
-                          <span className="px-1.5 py-0.2 rounded text-[9px] font-black bg-sky-50 text-sky-700 border border-sky-200">
+                          <span className="px-1.5 py-0.2 rounded text-[12px] font-black bg-sky-50 text-sky-700 border border-sky-200">
                             STEM
                           </span>
                         )}
@@ -354,14 +354,14 @@ export default function RecommendationsPage() {
                             <Link
                               key={u.university_id}
                               href={`/universities/${u.university_slug}`}
-                              className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
+                              className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[12px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
                               title={getLocalized(u.university_name)}
                             >
                               <span>{getLocalized(u.university_acronym) || u.university_slug.toUpperCase()}</span>
                             </Link>
                           ))}
                           {major.offering_universities.length > 3 && (
-                            <span className="text-[9px] text-[#68708A]">
+                            <span className="text-[12px] text-[#68708A]">
                               +{major.offering_universities.length - 3}
                             </span>
                           )}
@@ -372,13 +372,13 @@ export default function RecommendationsPage() {
 
                   {/* Middle: 4 Mini Scores */}
                   <div className="flex items-center gap-1 sm:gap-1.5 flex-shrink-0">
-                    <span className="px-2 py-1 rounded-lg text-[10px] font-black bg-blue-50 text-blue-800 border border-blue-100" title="RIASEC Fit">
+                    <span className="px-2 py-1 rounded-lg text-[12.5px] font-black bg-blue-50 text-blue-800 border border-blue-100" title="RIASEC Fit">
                       RIA: {rec.riasec_match_score}%
                     </span>
-                    <span className="px-2 py-1 rounded-lg text-[10px] font-black bg-emerald-50 text-emerald-800 border border-emerald-100" title="Academic Fit">
+                    <span className="px-2 py-1 rounded-lg text-[12.5px] font-black bg-emerald-50 text-emerald-800 border border-emerald-100" title="Academic Fit">
                       Acad: {rec.academic_match_score}%
                     </span>
-                    <span className="px-2 py-1 rounded-lg text-[10px] font-black bg-purple-50 text-purple-800 border border-purple-100" title="Personality Fit">
+                    <span className="px-2 py-1 rounded-lg text-[12.5px] font-black bg-purple-50 text-purple-800 border border-purple-100" title="Personality Fit">
                       MBTI: {rec.personality_match_score}%
                     </span>
                   </div>
@@ -429,11 +429,11 @@ export default function RecommendationsPage() {
                       >
                         #{rec.rank_position}
                       </span>
-                      <span className="text-[10px] font-bold text-[#68708A] uppercase tracking-wide truncate max-w-[150px]">
+                      <span className="text-[12.5px] font-bold text-[#68708A] uppercase tracking-wide truncate max-w-[150px]">
                         {major.category}
                       </span>
                       {major.is_stem && (
-                        <span className="px-1.5 py-0.2 rounded text-[9px] font-black bg-sky-50 text-sky-700 border border-sky-200">
+                        <span className="px-1.5 py-0.2 rounded text-[12px] font-black bg-sky-50 text-sky-700 border border-sky-200">
                           STEM
                         </span>
                       )}
@@ -457,7 +457,7 @@ export default function RecommendationsPage() {
                 {/* 2. Concise AI Fit Summary (1 line) */}
                 <div className="p-2.5 rounded-xl bg-[#F8FAFD] border border-[#E6E8F0]/80 flex items-start gap-2 text-xs">
                   <Sparkles className="w-3.5 h-3.5 text-[#111965] mt-0.5 flex-shrink-0" />
-                  <p className="line-clamp-2 text-[11px] sm:text-xs text-[#4A5568] leading-relaxed">
+                  <p className="line-clamp-2 text-[12px] sm:text-xs text-[#4A5568] leading-relaxed">
                     {getLocalized({ km: exp?.fit_summary_km, en: exp?.fit_summary_en })}
                   </p>
                 </div>
@@ -465,7 +465,7 @@ export default function RecommendationsPage() {
                 {/* 3. 4 Compact Pillars (Mini Badges with Scores) */}
                 <div className="grid grid-cols-4 gap-1.5 text-center">
                   <div className="p-1.5 rounded-lg bg-blue-50/60 border border-blue-100 space-y-0.5">
-                    <div className="text-[9px] font-bold text-blue-800 uppercase flex items-center justify-center gap-1">
+                    <div className="text-[12px] font-bold text-blue-800 uppercase flex items-center justify-center gap-1">
                       <span>RIASEC</span>
                     </div>
                     <div className="text-xs font-black text-blue-900">
@@ -474,7 +474,7 @@ export default function RecommendationsPage() {
                   </div>
 
                   <div className="p-1.5 rounded-lg bg-emerald-50/60 border border-emerald-100 space-y-0.5">
-                    <div className="text-[9px] font-bold text-emerald-800 uppercase flex items-center justify-center gap-1">
+                    <div className="text-[12px] font-bold text-emerald-800 uppercase flex items-center justify-center gap-1">
                       <span>{getLocalized({ km: "សិក្សា", en: "Acad" })}</span>
                     </div>
                     <div className="text-xs font-black text-emerald-900">
@@ -483,7 +483,7 @@ export default function RecommendationsPage() {
                   </div>
 
                   <div className="p-1.5 rounded-lg bg-purple-50/60 border border-purple-100 space-y-0.5">
-                    <div className="text-[9px] font-bold text-purple-800 uppercase flex items-center justify-center gap-1">
+                    <div className="text-[12px] font-bold text-purple-800 uppercase flex items-center justify-center gap-1">
                       <span>{getLocalized({ km: "បុគ្គលិក", en: "MBTI" })}</span>
                     </div>
                     <div className="text-xs font-black text-purple-900">
@@ -492,7 +492,7 @@ export default function RecommendationsPage() {
                   </div>
 
                   <div className="p-1.5 rounded-lg bg-amber-50/60 border border-amber-100 space-y-0.5">
-                    <div className="text-[9px] font-bold text-amber-800 uppercase flex items-center justify-center gap-1">
+                    <div className="text-[12px] font-bold text-amber-800 uppercase flex items-center justify-center gap-1">
                       <span>{getLocalized({ km: "អាជីព", en: "Career" })}</span>
                     </div>
                     <div className="text-xs font-black text-amber-900">
@@ -504,7 +504,7 @@ export default function RecommendationsPage() {
                 {/* Offering Campuses / Universities Chips */}
                 {major.offering_universities && major.offering_universities.length > 0 ? (
                   <div className="space-y-1.5 pt-1 border-t border-[#E6E8F0]/70">
-                    <div className="flex items-center justify-between text-[10px] font-bold text-[#68708A]">
+                    <div className="flex items-center justify-between text-[12.5px] font-bold text-[#68708A]">
                       <span className="tracking-wide">
                         {t("recommendationsPage.campuses", "គ្រឹះស្ថានបណ្តុះបណ្តាល:")}
                       </span>
@@ -517,20 +517,20 @@ export default function RecommendationsPage() {
                         <Link
                           key={u.university_id}
                           href={`/universities/${u.university_slug}`}
-                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[12.5px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
                           title={getLocalized(u.university_name)}
                         >
                           <Building2 className="w-2.5 h-2.5 opacity-60" />
                           <span>{getLocalized(u.university_acronym) || u.university_slug.toUpperCase()}</span>
                           {u.tuition_annual_usd ? (
-                            <span className="text-[9px] opacity-75 font-normal">
+                            <span className="text-[12px] opacity-75 font-normal">
                               (${Math.round(u.tuition_annual_usd)})
                             </span>
                           ) : null}
                         </Link>
                       ))}
                       {major.offering_universities.length > 4 && (
-                        <span className="text-[10px] text-[#68708A] font-semibold">
+                        <span className="text-[12.5px] text-[#68708A] font-semibold">
                           +{major.offering_universities.length - 4}
                         </span>
                       )}
@@ -538,11 +538,11 @@ export default function RecommendationsPage() {
                   </div>
                 ) : (
                   <div className="space-y-1.5 pt-1 border-t border-[#E6E8F0]/70">
-                    <div className="flex items-center justify-between text-[10px] font-bold text-[#68708A]">
+                    <div className="flex items-center justify-between text-[12.5px] font-bold text-[#68708A]">
                       <span className="tracking-wide">
                         {t("recommendationsPage.campuses", "គ្រឹះស្ថានបណ្តុះបណ្តាល:")}
                       </span>
-                      <span className="text-[9px] text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/70 font-semibold">
+                      <span className="text-[12px] text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/70 font-semibold">
                         {t("personalityAssessment.verifyingInstitutions", "កំពុងផ្ទៀងផ្ទាត់")}
                       </span>
                     </div>
@@ -551,7 +551,7 @@ export default function RecommendationsPage() {
 
                 {/* 4. Footer: Campus Count & Action Buttons */}
                 <div className="pt-2 border-t border-[#E6E8F0] flex items-center justify-between text-xs gap-2">
-                  <div className="flex items-center gap-1 text-[11px] font-bold text-[#68708A]">
+                  <div className="flex items-center gap-1 text-[12px] font-bold text-[#68708A]">
                     <Building2 className="w-3.5 h-3.5 text-[#111965]" />
                     <span>
                       {major.universities_count || exp?.universities_count || 0} {t("recommendationsPage.institutions", "គ្រឹះស្ថាន")}
@@ -561,14 +561,14 @@ export default function RecommendationsPage() {
                   <div className="flex items-center gap-2">
                     <Link
                       href={`/majors/${major.slug}`}
-                      className="text-[11px] font-bold text-[#68708A] hover:text-[#111965] transition-colors cursor-pointer"
+                      className="text-[12px] font-bold text-[#68708A] hover:text-[#111965] transition-colors cursor-pointer"
                     >
                       {t("recommendationsPage.details", "ព័ត៌មានលម្អិត")}
                     </Link>
 
                     <Link
                       href={`/universities?major=${major.slug}`}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl font-black text-[11px] text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs cursor-pointer whitespace-nowrap"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl font-black text-[12px] text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-2xs cursor-pointer whitespace-nowrap"
                     >
                       <span>{t("recommendationsPage.universities", "សាកលវិទ្យាល័យ")}</span>
                       <ArrowRight className="w-3 h-3" />

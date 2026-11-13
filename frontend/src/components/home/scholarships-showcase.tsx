@@ -263,11 +263,11 @@ export function ScholarshipsShowcase() {
               {/* Category Eyebrow Badge with Pulsing Live Status */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#E6E8F0] shadow-2xs backdrop-blur-xs">
                 <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-widest text-[#111965]">
+                <span className="text-[12.5px] sm:text-[12px] font-black uppercase tracking-widest text-[#111965]">
                   {language === "km" ? "អាហារូបករណ៍ផ្លូវការដែលបានផ្ទៀងផ្ទាត់" : "VERIFIED SCHOLARSHIPS 2026"}
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
-                <span className="text-[10px] sm:text-[11px] font-bold text-emerald-700">
+                <span className="text-[12.5px] sm:text-[12px] font-bold text-emerald-700">
                   {scholarships.length} {language === "km" ? "កម្មវិធីសកម្ម" : "Active Programs"}
                 </span>
               </div>
@@ -299,7 +299,7 @@ export function ScholarshipsShowcase() {
               {/* Highlight Ribbon: Coverage & Badge */}
               <div className="rounded-xl bg-gradient-to-r from-amber-500/10 via-[#F7CE4D]/15 to-transparent border border-[#F7CE4D]/45 p-3 sm:p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div className="space-y-0.5">
-                  <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-amber-900 flex items-center gap-1">
+                  <span className="text-[12.5px] sm:text-[12px] font-black uppercase tracking-wider text-amber-900 flex items-center gap-1">
                     <Sparkles className="w-3 h-3 text-amber-600" />
                     <span>{t("scholarshipsShowcase.verifiedBenefit")}</span>
                   </span>
@@ -410,7 +410,7 @@ export function ScholarshipsShowcase() {
             </div>
 
             {/* Trust Proof Micro-Badges */}
-            <div className="pt-2 border-t border-[#E6E8F0]/80 flex flex-wrap items-center gap-y-2 gap-x-5 text-[11px] text-[#68708A] font-semibold">
+            <div className="pt-2 border-t border-[#E6E8F0]/80 flex flex-wrap items-center gap-y-2 gap-x-5 text-[12px] text-[#68708A] font-semibold">
               <span className="inline-flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                 <span>{language === "km" ? "ទិន្នន័យផ្លូវការពីក្រសួង និងដៃគូ" : "Verified Admissions Data"}</span>

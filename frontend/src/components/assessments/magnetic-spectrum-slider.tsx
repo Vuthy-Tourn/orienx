@@ -222,7 +222,7 @@ export function MagneticSpectrumSlider({
               </div>
 
               <div>
-                <span className="block text-[11px] font-extrabold uppercase tracking-widest text-[#68708A]">
+                <span className="block text-[12px] font-extrabold uppercase tracking-widest text-[#68708A]">
                   Trait {optionA.target_trait} Pole
                 </span>
                 <span className="block text-sm font-bold text-[#111965]">
@@ -233,13 +233,13 @@ export function MagneticSpectrumSlider({
 
             {/* Gravity Pull Badge */}
             {leftIntensity === "peak" && (
-              <span className="px-3 py-1 rounded-full text-[11px] font-black bg-[#F7CE4D] text-[#111965] shadow-xs flex items-center gap-1 animate-in zoom-in-95">
+              <span className="px-3 py-1 rounded-full text-[12px] font-black bg-[#F7CE4D] text-[#111965] shadow-xs flex items-center gap-1 animate-in zoom-in-95">
                 <Sparkles className="w-3 h-3 text-[#111965]" />
                 <span>{t("magneticSpectrum.dominant")}</span>
               </span>
             )}
             {leftIntensity === "lean" && (
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#F0F2FA] text-[#111965] border border-[#111965]/20">
+              <span className="px-2.5 py-0.5 rounded-full text-[12.5px] font-bold bg-[#F0F2FA] text-[#111965] border border-[#111965]/20">
                 <span>{t("magneticSpectrum.lean")}</span>
               </span>
             )}
@@ -254,7 +254,7 @@ export function MagneticSpectrumSlider({
 
           {/* Click to Gravitate Hint */}
           <div className="z-10 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-[#68708A]">
-            <span className="text-[11px] font-medium">
+            <span className="text-[12px] font-medium">
               {t("magneticSpectrum.clickToPull")}
             </span>
             <span className="text-xs font-bold text-[#111965]">Pole A ◄</span>
@@ -301,7 +301,7 @@ export function MagneticSpectrumSlider({
               </div>
 
               <div>
-                <span className="block text-[11px] font-extrabold uppercase tracking-widest text-[#68708A]">
+                <span className="block text-[12px] font-extrabold uppercase tracking-widest text-[#68708A]">
                   Trait {optionB.target_trait} Pole
                 </span>
                 <span className="block text-sm font-bold text-[#111965]">
@@ -312,13 +312,13 @@ export function MagneticSpectrumSlider({
 
             {/* Gravity Pull Badge */}
             {rightIntensity === "peak" && (
-              <span className="px-3 py-1 rounded-full text-[11px] font-black bg-[#F7CE4D] text-[#111965] shadow-xs flex items-center gap-1 animate-in zoom-in-95">
+              <span className="px-3 py-1 rounded-full text-[12px] font-black bg-[#F7CE4D] text-[#111965] shadow-xs flex items-center gap-1 animate-in zoom-in-95">
                 <Sparkles className="w-3 h-3 text-[#111965]" />
                 <span>{t("magneticSpectrum.dominant")}</span>
               </span>
             )}
             {rightIntensity === "lean" && (
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#F0F2FA] text-[#111965] border border-[#111965]/20">
+              <span className="px-2.5 py-0.5 rounded-full text-[12.5px] font-bold bg-[#F0F2FA] text-[#111965] border border-[#111965]/20">
                 <span>{t("magneticSpectrum.lean")}</span>
               </span>
             )}
@@ -334,7 +334,7 @@ export function MagneticSpectrumSlider({
           {/* Click to Gravitate Hint */}
           <div className="z-10 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-[#68708A]">
             <span className="text-xs font-bold text-[#111965]">► Pole B</span>
-            <span className="text-[11px] font-medium">
+            <span className="text-[12px] font-medium">
               {t("magneticSpectrum.clickToPull")}
             </span>
           </div>
@@ -348,12 +348,12 @@ export function MagneticSpectrumSlider({
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <Compass className="w-4 h-4 text-[#111965]" />
-            <span className="font-extrabold text-[#111965] uppercase tracking-wider text-[11px]">
+            <span className="font-extrabold text-[#111965] uppercase tracking-wider text-[12px]">
               {t("magneticSpectrum.spectrumTitle")}
             </span>
           </div>
 
-          <span className="text-[11px] font-bold text-[#68708A]">
+          <span className="text-[12px] font-bold text-[#68708A]">
             {t("magneticSpectrum.tapAnchor")}
           </span>
         </div>
@@ -408,7 +408,7 @@ export function MagneticSpectrumSlider({
                       <span className="text-xs font-bold">◇</span>
                     ) : step.pos === 1 || step.pos === 5 ? (
                       // Polar Anchors
-                      <span className="text-[11px] font-black">
+                      <span className="text-[12px] font-black">
                         {step.pos === 1 ? "◄" : "►"}
                       </span>
                     ) : (
@@ -419,7 +419,7 @@ export function MagneticSpectrumSlider({
 
                   {/* Step Descriptor Label */}
                   <span
-                    className={`mt-3 text-[10px] font-bold transition-colors hidden sm:block ${
+                    className={`mt-3 text-[12.5px] font-bold transition-colors hidden sm:block ${
                       isAnchorSelected
                         ? "text-[#111965]"
                         : "text-slate-400 group-hover:text-slate-600"
@@ -456,7 +456,7 @@ export function MagneticSpectrumSlider({
                   ? getLocalized({ km: SNAP_STANCES[value - 1]?.labelKm, en: SNAP_STANCES[value - 1]?.labelEn })
                   : t("magneticSpectrum.positionNeedle")}
               </span>
-              <span className="block text-[11px] text-[#68708A]">
+              <span className="block text-[12px] text-[#68708A]">
                 {isSelected
                   ? value === 1
                     ? `${t("magneticSpectrum.stronglyAligned")} ${getLocalized({ km: optionA.label_km, en: optionA.label_en })}`

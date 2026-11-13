@@ -376,7 +376,7 @@ export default function PublicPersonalityGuidePage() {
 
         {/* FOREGROUND HERO CONTENT (Crisp, High-Contrast & Interactive) */}
         <div className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 relative z-10 my-6 sm:my-14 lg:my-16 py-2 sm:py-4 px-2 sm:px-4">
-          <div className="gsap-mbti-hero-anim inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 shadow-xs uppercase tracking-wider">
+          <div className="gsap-mbti-hero-anim inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[12.5px] sm:text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 shadow-xs uppercase tracking-wider">
             <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#F7CE4D]" />
             <span>NERIS & 16Personalities Standard</span>
           </div>
@@ -437,7 +437,7 @@ export default function PublicPersonalityGuidePage() {
             >
               <div className="flex items-center justify-between gap-2 mb-2">
                 <span
-                  className="px-2.5 py-0.5 rounded-full text-[11px] font-black uppercase tracking-wider text-white"
+                  className="px-2.5 py-0.5 rounded-full text-[12px] font-black uppercase tracking-wider text-white"
                   style={{ backgroundColor: role.color }}
                 >
                   {role.nameEn}
@@ -527,7 +527,7 @@ export default function PublicPersonalityGuidePage() {
               <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D] fill-[#F7CE4D]/30" />
               <span>{getLocalized({ km: "ទាំងអស់ (All 16)", en: "All (16)" })}</span>
               <span
-                className={`px-1.5 py-0.5 rounded-md text-[10px] font-black transition-colors ${
+                className={`px-1.5 py-0.5 rounded-md text-[12.5px] font-black transition-colors ${
                   selectedRole === "all" ? "bg-[#111965]/10 text-[#111965]" : "bg-slate-200/80 text-slate-600"
                 }`}
               >
@@ -560,7 +560,7 @@ export default function PublicPersonalityGuidePage() {
                   />
                   <span>{language === "km" ? r.nameKm : r.nameEn}</span>
                   <span
-                    className="px-1.5 py-0.5 rounded-md text-[10px] font-black transition-colors"
+                    className="px-1.5 py-0.5 rounded-md text-[12.5px] font-black transition-colors"
                     style={{
                       backgroundColor: isSelected ? `${r.color}20` : "#DCE2EE",
                       color: isSelected ? r.color : "#475569",
@@ -627,7 +627,7 @@ export default function PublicPersonalityGuidePage() {
 
                     {/* Role Pill */}
                     <div
-                      className="self-start inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border shadow-2xs"
+                      className="self-start inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[12.5px] font-black uppercase tracking-wider border shadow-2xs"
                       style={{
                         backgroundColor: `${meta.roleColor}14`,
                         color: meta.roleColor,
@@ -657,7 +657,7 @@ export default function PublicPersonalityGuidePage() {
                       {code.split("").map((letter, i) => (
                         <span
                           key={i}
-                          className="w-5 h-5 rounded-md text-[9px] font-black flex items-center justify-center bg-white text-[#111965] border border-slate-200 shadow-2xs"
+                          className="w-5 h-5 rounded-md text-[12px] font-black flex items-center justify-center bg-white text-[#111965] border border-slate-200 shadow-2xs"
                         >
                           {letter}
                         </span>
@@ -674,7 +674,7 @@ export default function PublicPersonalityGuidePage() {
                           <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-blue-900 transition-colors">
                             {language === "km" ? meta.nameKm : meta.nameEn}
                           </h3>
-                          <span className="text-[10px] font-bold text-[#68708A] bg-slate-100 px-2 py-0.5 rounded-md sm:hidden">
+                          <span className="text-[12.5px] font-bold text-[#68708A] bg-slate-100 px-2 py-0.5 rounded-md sm:hidden">
                             {code}
                           </span>
                         </div>
@@ -686,7 +686,7 @@ export default function PublicPersonalityGuidePage() {
                       {/* Key Strengths (Full text, No Truncation!) */}
                       {meta.strengthsKm && (
                         <div className="space-y-1 pt-1">
-                          <span className="text-[9px] font-black text-[#68708A] uppercase tracking-wider">
+                          <span className="text-[12px] font-black text-[#68708A] uppercase tracking-wider">
                             {getLocalized({ km: "ចំណុចខ្លាំងចម្បង:", en: "Key Strengths:" })}
                           </span>
                           <div className="flex flex-wrap gap-1.5">
@@ -695,7 +695,7 @@ export default function PublicPersonalityGuidePage() {
                               .map((s: string, idx: number) => (
                                 <span
                                   key={idx}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-emerald-50 text-emerald-900 border border-emerald-100"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[12px] font-semibold bg-emerald-50 text-emerald-900 border border-emerald-100"
                                 >
                                   <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
                                   <span>{s}</span>
@@ -708,7 +708,7 @@ export default function PublicPersonalityGuidePage() {
                       {/* Best Academic Fields (Full text, No Truncation!) */}
                       {meta.bestFieldsKm && (
                         <div className="space-y-1 pt-0.5">
-                          <span className="text-[9px] font-black text-[#68708A] uppercase tracking-wider">
+                          <span className="text-[12px] font-black text-[#68708A] uppercase tracking-wider">
                             {getLocalized({ km: "វិស័យសិក្សាសាកសម:", en: "Top Fields:" })}
                           </span>
                           <div className="flex flex-wrap gap-1.5">
@@ -717,7 +717,7 @@ export default function PublicPersonalityGuidePage() {
                               .map((f: string, idx: number) => (
                                 <span
                                   key={idx}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold border"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[12px] font-semibold border"
                                   style={{
                                     backgroundColor: `${meta.roleColor}0E`,
                                     color: meta.roleColor,
@@ -994,7 +994,7 @@ export default function PublicPersonalityGuidePage() {
                     >
                       <div>
                         <div className="flex items-center justify-between gap-1 mb-1">
-                          <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">
+                          <span className="text-[12.5px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">
                             Top Match
                           </span>
                           <ExternalLink className="w-3 h-3 text-slate-400 group-hover:text-[#111965]" />
@@ -1002,11 +1002,11 @@ export default function PublicPersonalityGuidePage() {
                         <h5 className="text-xs sm:text-sm font-black text-[#111965] group-hover:text-blue-700 leading-snug">
                           {language === "km" ? m.titleKm : m.titleEn}
                         </h5>
-                        <p className="text-[11px] text-[#68708A] line-clamp-2 mt-1 leading-relaxed">
+                        <p className="text-[12px] text-[#68708A] line-clamp-2 mt-1 leading-relaxed">
                           {language === "km" ? m.reasonKm : m.reasonEn}
                         </p>
                       </div>
-                      <span className="text-[11px] font-bold text-[#111965] group-hover:underline flex items-center gap-1 pt-1 border-t border-slate-100">
+                      <span className="text-[12px] font-bold text-[#111965] group-hover:underline flex items-center gap-1 pt-1 border-t border-slate-100">
                         <span>{getLocalized({ km: "ស្វែងយល់លម្អិត", en: "Learn More" })}</span>
                         <ArrowRight className="w-3 h-3" />
                       </span>

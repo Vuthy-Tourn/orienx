@@ -457,7 +457,7 @@ export function AssessmentStage({
       <div className="space-y-2.5">
         <div className="flex items-center justify-between text-xs font-extrabold text-[#68708A]">
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-black bg-[#111965] text-[#F7CE4D] uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-full text-[12.5px] sm:text-[12px] font-black bg-[#111965] text-[#F7CE4D] uppercase tracking-wider">
               {getLocalized({ km: currentQ.dimensionNameKm, en: currentQ.dimensionNameEn })}
             </span>
             <span className="text-[#111965] font-black tracking-wide">
@@ -470,7 +470,7 @@ export function AssessmentStage({
               <button
                 type="button"
                 onClick={onPrefill}
-                className="text-[11px] font-bold text-[#111965] bg-[#F0F2FA] hover:bg-[#E6E8F0] px-2.5 py-0.5 rounded-full transition-colors cursor-pointer border border-[#E6E8F0]"
+                className="text-[12px] font-bold text-[#111965] bg-[#F0F2FA] hover:bg-[#E6E8F0] px-2.5 py-0.5 rounded-full transition-colors cursor-pointer border border-[#E6E8F0]"
                 title="Fill sample answers"
               >
                 ⚡ {t("assessmentStage.prefillSample")}
@@ -493,14 +493,14 @@ export function AssessmentStage({
         {/* Draft Auto-Save & Unready Answers Status Toolbar (All on Left - Right side kept clear for Mascot) */}
         <div className="flex items-center justify-start text-xs pt-0.5 flex-wrap gap-2">
           {answeredCount > 0 ? (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[12px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
               <Save className="w-3 h-3 text-emerald-600" />
               <span>
                 {t("assessmentStage.draftSaved")} ({answeredCount}/{totalCount} {t("assessmentStage.ready")})
               </span>
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium text-[#68708A] bg-slate-100">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[12px] font-medium text-[#68708A] bg-slate-100">
               <FileEdit className="w-3 h-3" />
               <span>{t("assessmentStage.noDraftYet")}</span>
             </span>
@@ -514,7 +514,7 @@ export function AssessmentStage({
                   unreadyIndices.find((i) => i >= currentIndex) ?? unreadyIndices[0];
                 onIndexChange(nextUnready);
               }}
-              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[12px] font-bold bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition-colors cursor-pointer"
               title={getLocalized({ km: "លោតទៅសំណួរមិនទាន់ឆ្លើយបន្ទាប់", en: "Jump to next unready question" })}
             >
               <AlertCircle className="w-3 h-3 text-amber-600" />
@@ -528,7 +528,7 @@ export function AssessmentStage({
             <button
               type="button"
               onClick={onClearDraft}
-              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[12px] font-bold text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-all cursor-pointer"
               title={getLocalized({ km: "សម្អាតចម្លើយព្រាងទាំងអស់", en: "Clear all draft answers" })}
             >
               <RotateCcw className="w-3 h-3" />
@@ -851,7 +851,7 @@ export function AssessmentStage({
                   onClick={() => onIndexChange(idx)}
                   className={`flex-shrink-0 rounded-full font-bold transition-all flex items-center justify-center cursor-pointer select-none ${
                     isCompact
-                      ? "w-6 h-6 sm:w-7 sm:h-7 text-[11px] sm:text-xs"
+                      ? "w-6 h-6 sm:w-7 sm:h-7 text-[12px] sm:text-xs"
                       : "w-7 h-7 sm:w-8 sm:h-8 text-xs"
                   } ${
                     isCurrent

@@ -233,7 +233,7 @@ export default function AcademicPreferencesPage() {
             className="w-full accent-[#111965] cursor-pointer"
           />
 
-          <div className="flex justify-between text-[11px] text-[#68708A]">
+          <div className="flex justify-between text-[12px] text-[#68708A]">
             <span>{t("academicPreferences.stateSubsidized")}</span>
             <span>$1,000 / yr</span>
             <span>$3,000 / yr</span>

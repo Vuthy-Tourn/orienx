@@ -9,12 +9,12 @@ import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/contexts/language-context";
 import { FaqSection, FaqItem } from "@/components/home/faq-section";
 import { CtaBanner } from "@/components/home/cta-banner";
+import { PrecisionFormula } from "@/components/assessments/precision-formula";
 import {
   Compass,
   Sparkles,
   GraduationCap,
   TrendingUp,
-  BrainCircuit,
   ArrowRight,
   CheckCircle2,
   Check,
@@ -25,7 +25,6 @@ import {
   Award,
   ChevronRight,
   Zap,
-  BarChart3,
   Sliders,
   FileCheck,
   Share2,
@@ -443,27 +442,10 @@ export default function PublicAssessmentsHubPage() {
               </div>
 
               {/* The 100% Equation Bar */}
-              <div className="gsap-assess-hero-anim bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 sm:p-5 max-w-xl space-y-3 shadow-lg">
-                <div className="flex items-center justify-between text-xs font-bold text-slate-300">
-                  <span className="flex items-center gap-1.5 text-white">
-                    <BarChart3 className="w-4 h-4 text-[#F7CE4D]" />
-                    <span>{isKm ? "រូបមន្តវិទ្យាសាស្ត្រ ១០០%" : "The 100% Scientific Precision Formula"}</span>
-                  </span>
-                  <span className="text-[#F7CE4D] font-mono font-bold">30% + 25% + 25% + 20% = 100%</span>
-                </div>
-                <div className="h-3.5 w-full bg-black/40 rounded-full overflow-hidden flex p-0.5 gap-0.5 border border-white/10">
-                  <div className="h-full bg-amber-500 rounded-l-full" style={{ width: "30%" }} title="30% RIASEC" />
-                  <div className="h-full bg-blue-500" style={{ width: "25%" }} title="25% Personality" />
-                  <div className="h-full bg-emerald-500" style={{ width: "25%" }} title="25% BACII Stream" />
-                  <div className="h-full bg-purple-500 rounded-r-full" style={{ width: "20%" }} title="20% Labor Market" />
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] text-slate-300 pt-1 font-semibold">
-                  <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" /> 30% RIASEC</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" /> 25% Personality</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" /> 25% BACII Stream</span>
-                  <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-purple-500 shrink-0" /> 20% NEA Market</span>
-                </div>
-              </div>
+              <PrecisionFormula
+                variant="dark"
+                className="gsap-assess-hero-anim max-w-xl"
+              />
 
               {/* Action CTAs */}
               <div className="gsap-assess-hero-anim pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
@@ -516,13 +498,13 @@ export default function PublicAssessmentsHubPage() {
                       <Target className="w-4 h-4 text-[#F7CE4D]" />
                       <span>{isKm ? "រុករកម៉ាស៊ីនវិភាគទាំង ៤" : "Live Pillar Inspector"}</span>
                     </div>
-                    <span className="text-[11px] font-mono text-[#F7CE4D] font-bold">
+                    <span className="text-[12px] font-mono text-[#F7CE4D] font-bold">
                       {currentPillar.weight} WEIGHT
                     </span>
                   </div>
 
                   {/* 4 Mini Tabs */}
-                  <div className="grid grid-cols-4 gap-1 bg-black/30 p-1 rounded-xl border border-white/10 text-[11px] font-bold">
+                  <div className="grid grid-cols-4 gap-1 bg-black/30 p-1 rounded-xl border border-white/10 text-[12px] font-bold">
                     {ENGINES.map((eng, idx) => (
                       <button
                         key={eng.id}
@@ -550,7 +532,7 @@ export default function PublicAssessmentsHubPage() {
                 <div className="space-y-4">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/10 text-[#F7CE4D] border border-white/15 mb-1">
+                      <span className="inline-block px-2.5 py-0.5 rounded-full text-[12.5px] font-bold bg-white/10 text-[#F7CE4D] border border-white/15 mb-1">
                         Pillar {currentPillar.number} • {currentPillar.weight} Weight
                       </span>
                       <h3 className="text-base sm:text-lg font-black text-white">
@@ -608,7 +590,7 @@ export default function PublicAssessmentsHubPage() {
           ========================================================================= */}
       <section id="engines" className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 border border-[#111965]/10 text-[11px] font-bold text-[#111965] tracking-wider uppercase">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 border border-[#111965]/10 text-[12px] font-bold text-[#111965] tracking-wider uppercase">
             <Zap className="w-3.5 h-3.5 text-[#F7CE4D]" />
             <span>{isKm ? "ម៉ាស៊ីនវិភាគទាំង ៤ របស់ OrienX" : "The 4 Pillars of Precision Matching"}</span>
           </div>
@@ -738,7 +720,7 @@ export default function PublicAssessmentsHubPage() {
                     : "Complete 30 localized question items to measure your natural affinity for practical, analytical, or social tasks."}
                 </p>
               </div>
-              <div className="text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
+              <div className="text-[12px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 ~10 Mins • 30 Items
               </div>
             </div>
@@ -757,7 +739,7 @@ export default function PublicAssessmentsHubPage() {
                     : "Explore your cognitive information style and study endurance across 4 temperament archetypes."}
                 </p>
               </div>
-              <div className="text-[11px] font-bold text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
+              <div className="text-[12px] font-bold text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 ~12 Mins • 60 Items
               </div>
             </div>
@@ -776,7 +758,7 @@ export default function PublicAssessmentsHubPage() {
                     : "Confirm Grade 12 Science vs. Social stream prerequisites, annual tuition budget, and campus location."}
                 </p>
               </div>
-              <div className="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
+              <div className="text-[12px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 ~5 Mins • 10 Criteria
               </div>
             </div>
@@ -795,7 +777,7 @@ export default function PublicAssessmentsHubPage() {
                     : "Receive transparent fit percentage scores, tuition schedules, and parent-shareable counselor PDF reports."}
                 </p>
               </div>
-              <div className="text-[11px] font-bold text-purple-800 bg-purple-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
+              <div className="text-[12px] font-bold text-purple-800 bg-purple-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 Instant • 100% Precision
               </div>
             </div>

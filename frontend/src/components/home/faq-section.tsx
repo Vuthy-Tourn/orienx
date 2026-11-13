@@ -71,7 +71,7 @@ export function FaqSection({
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         {/* Section Header */}
         <div className="text-center space-y-2.5 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 border border-[#111965]/10 text-[11px] font-bold text-[#111965] tracking-wider uppercase mb-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 border border-[#111965]/10 text-[12px] font-bold text-[#111965] tracking-wider uppercase mb-1">
             <HelpCircle className="w-3.5 h-3.5 text-[#F7CE4D]" />
             <span>{resolvedEyebrow}</span>
           </div>

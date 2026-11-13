@@ -440,7 +440,7 @@ export default function CareersPage() {
                       </div>
 
                       <div className="flex items-center gap-1.5">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[12px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                           <span>{meta.growthRate}</span>
                         </span>
@@ -466,7 +466,7 @@ export default function CareersPage() {
 
                     {/* Interactive Active Salary Benchmark Card */}
                     <div className="p-3.5 rounded-xl bg-[#F0F2FA]/70 border border-[#E6E8F0] space-y-1.5">
-                      <div className="text-[11px] text-[#68708A] font-bold flex items-center justify-between">
+                      <div className="text-[12px] text-[#68708A] font-bold flex items-center justify-between">
                         <span>
                           {seniorityLevel === "junior" ? "Junior (0-2y)" : seniorityLevel === "mid" ? "Mid-Level (3-5y)" : "Senior (5y+)"} Salary Benchmark:
                         </span>
@@ -479,10 +479,10 @@ export default function CareersPage() {
 
                     {/* Career Milestones Pathway */}
                     <div className="space-y-1.5 pt-1">
-                      <div className="text-[10px] uppercase font-bold text-[#68708A] tracking-wider">
+                      <div className="text-[12.5px] uppercase font-bold text-[#68708A] tracking-wider">
                         Typical Career Ladder (Cambodia)
                       </div>
-                      <div className="flex items-center gap-1 text-[11px] text-[#171A2C]">
+                      <div className="flex items-center gap-1 text-[12px] text-[#171A2C]">
                         {meta.milestones.map((m, idx) => (
                           <React.Fragment key={idx}>
                             <span className="font-medium bg-slate-100 px-2 py-0.5 rounded-md truncate max-w-[100px]">
@@ -499,7 +499,7 @@ export default function CareersPage() {
                     {/* Recommended Academic Majors */}
                     {meta.recommendedMajors.length > 0 && (
                       <div className="space-y-1.5 pt-1">
-                        <div className="text-[11px] font-bold text-[#68708A] flex items-center gap-1">
+                        <div className="text-[12px] font-bold text-[#68708A] flex items-center gap-1">
                           <GraduationCap className="w-3.5 h-3.5 text-[#111965]" />
                           <span>{t("careersDirectory.degreePathways")}:</span>
                         </div>
@@ -508,7 +508,7 @@ export default function CareersPage() {
                             <Link
                               key={m.slug}
                               href={`/majors/${m.slug}`}
-                              className="px-2 py-0.5 rounded-md bg-[#F5F6FA] hover:bg-[#F0F2FA] text-[11px] font-semibold text-[#111965] border border-[#E6E8F0] hover:border-[#111965]/30 transition-colors"
+                              className="px-2 py-0.5 rounded-md bg-[#F5F6FA] hover:bg-[#F0F2FA] text-[12px] font-semibold text-[#111965] border border-[#E6E8F0] hover:border-[#111965]/30 transition-colors"
                             >
                               {language === "km" ? m.km : m.en}
                             </Link>
@@ -605,7 +605,7 @@ export default function CareersPage() {
                   <div className="text-xs font-bold mt-0.5">
                     {language === "km" ? info.titleKm.split(" ")[0] : info.titleEn}
                   </div>
-                  <div className="text-[10px] opacity-80 line-clamp-2 mt-1">
+                  <div className="text-[12.5px] opacity-80 line-clamp-2 mt-1">
                     {info.desc}
                   </div>
                 </button>

@@ -186,7 +186,7 @@ export default function UniversityDetailPage() {
           {/* Key Facts Strip */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
             <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0]">
-              <div className="text-[10px] text-[#68708A] uppercase font-bold">
+              <div className="text-[12.5px] text-[#68708A] uppercase font-bold">
                 {t("universityDetail.annualTuition")}
               </div>
               <div className="text-base font-extrabold text-[#111965] mt-0.5">
@@ -199,7 +199,7 @@ export default function UniversityDetailPage() {
             </div>
 
             <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0]">
-              <div className="text-[10px] text-[#68708A] uppercase font-bold">
+              <div className="text-[12.5px] text-[#68708A] uppercase font-bold">
                 {t("universityDetail.location")}
               </div>
               <div className="text-sm font-semibold text-[#171A2C] mt-0.5 flex items-center gap-1">
@@ -209,7 +209,7 @@ export default function UniversityDetailPage() {
             </div>
 
             <div className="p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0]">
-              <div className="text-[10px] text-[#68708A] uppercase font-bold">
+              <div className="text-[12.5px] text-[#68708A] uppercase font-bold">
                 {t("universityDetail.contact")}
               </div>
               <div className="text-xs font-medium text-[#171A2C] mt-0.5 space-y-1">
@@ -249,7 +249,7 @@ export default function UniversityDetailPage() {
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#F0F2FA] text-[#111965]">
+                    <span className="px-2.5 py-0.5 rounded-full text-[12px] font-semibold bg-[#F0F2FA] text-[#111965]">
                       {t(`categories.${um.major_category}`, um.major_category)}
                     </span>
                     <span className="text-xs font-bold text-emerald-700">

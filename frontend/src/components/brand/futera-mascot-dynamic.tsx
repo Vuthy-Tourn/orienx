@@ -238,7 +238,7 @@ export function FuteraMascotDynamic({
           }`}
         >
           <div
-            className={`relative text-[11px] sm:text-xs font-black px-4 py-2.5 rounded-2xl shadow-xl border whitespace-nowrap leading-tight text-center transition-colors duration-300 ${
+            className={`relative text-[12px] sm:text-xs font-black px-4 py-2.5 rounded-2xl shadow-xl border whitespace-nowrap leading-tight text-center transition-colors duration-300 ${
               effectiveEmotion === "sad"
                 ? "bg-[#1E1B4B] text-[#A5B4FC] border-[#818CF8]/50"
                 : "bg-[#111965] text-[#F7CE4D] border-[#F7CE4D]/60"

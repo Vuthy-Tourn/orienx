@@ -698,7 +698,7 @@ export function FeaturedMajorsGrid() {
                     <div className="text-xs font-semibold uppercase tracking-wider text-[#68708A]">
                       {categoryLabel}
                     </div>
-                    <h3 className="text-lg sm:text-[21px] font-extrabold text-[#111965] tracking-tight leading-snug group-hover:text-[#0284C7] transition-colors duration-200">
+                    <h3 className="text-lg sm:text-[22px] font-extrabold text-[#111965] tracking-tight leading-snug group-hover:text-[#0284C7] transition-colors duration-200">
                       {title}
                     </h3>
                     <div className="text-xs sm:text-sm text-[#68708A] font-medium pt-0.5">

@@ -411,7 +411,7 @@ export default function HomePage() {
 
                     <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row items-start sm:items-center lg:items-end xl:items-center gap-4 shrink-0">
                       <div className="p-3.5 sm:p-4 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] min-w-[210px]">
-                        <div className="text-[10px] text-[#68708A] uppercase font-bold tracking-wider">
+                        <div className="text-[12.5px] text-[#68708A] uppercase font-bold tracking-wider">
                           {t("featuredUniversities.tuition")}
                         </div>
                         <div className="text-base sm:lg font-black text-[#111965] mt-0.5">

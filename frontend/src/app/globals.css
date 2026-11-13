@@ -2,6 +2,26 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Type scale — one step up from Tailwind's defaults across the platform so
+   Khmer subscripts and small UI labels stay legible. Arbitrary pixel sizes in
+   components were raised to match. */
+@theme {
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.0625rem;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.3125rem;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.5625rem;
+  --text-lg: 1.1875rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.875rem;
+  --text-2xl: 1.625rem;
+  --text-2xl--line-height: 2.125rem;
+  --text-3xl: 2rem;
+  --text-3xl--line-height: 2.375rem;
+}
+
 @layer base {
   :root {
     --primary-navy: #111965;

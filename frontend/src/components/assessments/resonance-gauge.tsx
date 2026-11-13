@@ -154,7 +154,7 @@ export function ResonanceGauge({ value, onChange }: ResonanceGaugeProps) {
               <div className="space-y-0.5 w-full pt-1.5">
                 <div
                   className={cn(
-                    "text-[10px] sm:text-xs font-bold leading-tight truncate transition-colors",
+                    "text-[12.5px] sm:text-xs font-bold leading-tight truncate transition-colors",
                     isSelected
                       ? "text-[#111965] font-black"
                       : "text-slate-600 group-hover:text-slate-900"
@@ -165,7 +165,7 @@ export function ResonanceGauge({ value, onChange }: ResonanceGaugeProps) {
 
                 <div
                   className={cn(
-                    "text-[9px] font-semibold transition-colors hidden sm:block",
+                    "text-[12px] font-semibold transition-colors hidden sm:block",
                     isSelected ? "text-slate-500 font-bold" : "text-slate-400"
                   )}
                 >

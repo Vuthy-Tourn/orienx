@@ -112,7 +112,7 @@ export default function MajorDetailPage() {
                   {t(`categories.${major.category}`, major.category)}
                 </span>
                 {major.is_stem && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                  <span className="px-2 py-0.5 rounded-full text-[12.5px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
                     STEM Discipline
                   </span>
                 )}
@@ -220,7 +220,7 @@ export default function MajorDetailPage() {
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold text-[#68708A] uppercase">
+                    <span className="text-[12px] font-bold text-[#68708A] uppercase">
                       {getLocalized(u.university_acronym)}
                     </span>
                     <span className="text-xs font-extrabold text-emerald-700">
@@ -264,7 +264,7 @@ export default function MajorDetailPage() {
                   className="p-5 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-2"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#F5F6FA] text-[#111965]">
+                    <span className="px-2 py-0.5 rounded-full text-[12.5px] font-semibold bg-[#F5F6FA] text-[#111965]">
                       {car.industry}
                     </span>
                     <span className="text-xs font-bold text-[#68708A]">RIASEC: {car.riasec_code}</span>

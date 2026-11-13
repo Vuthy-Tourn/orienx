@@ -407,7 +407,7 @@ export default function PersonalityAssessmentPage() {
                 កម្រិតទំនោរចិត្តរវាងប៉ូលផ្ទុយគ្នានីមួយៗនៃការទទួលព័ត៌មាន ការសម្រេចចិត្ត និងការប្រាស្រ័យទាក់ទង
               </p>
             </div>
-            <span className="text-[11px] font-bold text-[#68708A] bg-[#F0F2FA] px-2.5 py-1 rounded-lg self-start sm:self-auto">
+            <span className="text-[12px] font-bold text-[#68708A] bg-[#F0F2FA] px-2.5 py-1 rounded-lg self-start sm:self-auto">
               NERIS Standard
             </span>
           </div>
@@ -421,10 +421,10 @@ export default function PersonalityAssessmentPage() {
                     <h4 className="text-xs sm:text-sm font-extrabold text-[#111965]">
                       ចិត្ត & ថាមពល (Mind)
                     </h4>
-                    <p className="text-[11px] text-[#68708A]">Extraverted vs Introverted</p>
+                    <p className="text-[12px] text-[#68708A]">Extraverted vs Introverted</p>
                   </div>
                   <span
-                    className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white shrink-0"
+                    className="px-2.5 py-0.5 rounded-full text-[12px] font-black text-white shrink-0"
                     style={{ backgroundColor: isE ? "#0284C7" : "#88619A" }}
                   >
                     {isE ? "Extraverted (E)" : "Introverted (I)"} • {Math.max(latestResult.extraversion_score, latestResult.introversion_score)}%
@@ -433,7 +433,7 @@ export default function PersonalityAssessmentPage() {
 
                 {/* Spectrum Rail */}
                 <div className="space-y-1.5 pt-1">
-                  <div className="flex justify-between text-[11px] font-bold">
+                  <div className="flex justify-between text-[12px] font-bold">
                     <span className={isE ? "text-[#0284C7]" : "text-slate-400"}>
                       Extraverted (E) • {latestResult.extraversion_score}%
                     </span>
@@ -454,7 +454,7 @@ export default function PersonalityAssessmentPage() {
                 </div>
               </div>
 
-              <p className="text-[11px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
+              <p className="text-[12px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
                 {isE
                   ? "អ្នកទទួលបានថាមពលពីការធ្វើការងារជាក្រុម ការពិភាក្សាផ្លាស់ប្តូរគំនិត និងបរិស្ថានសង្គមរស់រវើក។"
                   : "អ្នកបញ្ចូលថាមពលនៅកន្លែងស្ងប់ស្ងាត់ និងការផ្តោតអារម្មណ៍ស៊ីជម្រៅតែម្នាក់ឯង។"}
@@ -469,10 +469,10 @@ export default function PersonalityAssessmentPage() {
                     <h4 className="text-xs sm:text-sm font-extrabold text-[#111965]">
                       ការទទួលព័ត៌មាន (Energy)
                     </h4>
-                    <p className="text-[11px] text-[#68708A]">Observant vs Intuitive</p>
+                    <p className="text-[12px] text-[#68708A]">Observant vs Intuitive</p>
                   </div>
                   <span
-                    className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white shrink-0"
+                    className="px-2.5 py-0.5 rounded-full text-[12px] font-black text-white shrink-0"
                     style={{ backgroundColor: !isN ? "#0284C7" : "#059669" }}
                   >
                     {!isN ? "Observant (S)" : "Intuitive (N)"} • {Math.max(latestResult.sensing_score, latestResult.intuition_score)}%
@@ -481,7 +481,7 @@ export default function PersonalityAssessmentPage() {
 
                 {/* Spectrum Rail */}
                 <div className="space-y-1.5 pt-1">
-                  <div className="flex justify-between text-[11px] font-bold">
+                  <div className="flex justify-between text-[12px] font-bold">
                     <span className={!isN ? "text-[#0284C7]" : "text-slate-400"}>
                       Observant (S) • {latestResult.sensing_score}%
                     </span>
@@ -502,7 +502,7 @@ export default function PersonalityAssessmentPage() {
                 </div>
               </div>
 
-              <p className="text-[11px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
+              <p className="text-[12px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
                 {isN
                   ? "អ្នកចាប់អារម្មណ៍លើគំនិតច្នៃប្រឌិតថ្មីៗ ចក្ខុវិស័យអនាគត ទ្រឹស្តីទូលំទូលាយ និងការស្រាវជ្រាវគំនិតប្លែកៗ។"
                   : "អ្នកផ្តោតលើទិន្នន័យជាក់ស្តែង ការអនុវត្តជាក់លាក់ និងបទពិសោធន៍ផ្ទាល់ដៃដែលផ្តល់លទ្ធផលប្រាកដ។"}
@@ -517,10 +517,10 @@ export default function PersonalityAssessmentPage() {
                     <h4 className="text-xs sm:text-sm font-extrabold text-[#111965]">
                       ការសម្រេចចិត្ត (Nature)
                     </h4>
-                    <p className="text-[11px] text-[#68708A]">Thinking vs Feeling</p>
+                    <p className="text-[12px] text-[#68708A]">Thinking vs Feeling</p>
                   </div>
                   <span
-                    className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white shrink-0"
+                    className="px-2.5 py-0.5 rounded-full text-[12px] font-black text-white shrink-0"
                     style={{ backgroundColor: isT ? "#4F46E5" : "#F43F5E" }}
                   >
                     {isT ? "Thinking (T)" : "Feeling (F)"} • {Math.max(latestResult.thinking_score, latestResult.feeling_score)}%
@@ -529,7 +529,7 @@ export default function PersonalityAssessmentPage() {
 
                 {/* Spectrum Rail */}
                 <div className="space-y-1.5 pt-1">
-                  <div className="flex justify-between text-[11px] font-bold">
+                  <div className="flex justify-between text-[12px] font-bold">
                     <span className={isT ? "text-[#4F46E5]" : "text-slate-400"}>
                       Thinking (T) • {latestResult.thinking_score}%
                     </span>
@@ -550,7 +550,7 @@ export default function PersonalityAssessmentPage() {
                 </div>
               </div>
 
-              <p className="text-[11px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
+              <p className="text-[12px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
                 {isT
                   ? "អ្នកធ្វើការសម្រេចចិត្តដោយផ្អែកលើតក្កវិជ្ជាសុក្រឹត ការវិភាគមិនលំអៀង និងគោលការណ៍យុត្តិធម៌។"
                   : "អ្នកផ្តល់អាទិភាពលើតម្លៃមនុស្ស ភាពសុខដុមរមនា និងផលប៉ះពាល់ដល់អារម្មណ៍អ្នកដទៃ។"}
@@ -565,10 +565,10 @@ export default function PersonalityAssessmentPage() {
                     <h4 className="text-xs sm:text-sm font-extrabold text-[#111965]">
                       យុទ្ធសាស្ត្រជីវិត (Tactics)
                     </h4>
-                    <p className="text-[11px] text-[#68708A]">Judging vs Prospecting</p>
+                    <p className="text-[12px] text-[#68708A]">Judging vs Prospecting</p>
                   </div>
                   <span
-                    className="px-2.5 py-0.5 rounded-full text-[11px] font-black text-white shrink-0"
+                    className="px-2.5 py-0.5 rounded-full text-[12px] font-black text-white shrink-0"
                     style={{ backgroundColor: isJ ? "#0D9488" : "#E4A43C" }}
                   >
                     {isJ ? "Judging (J)" : "Prospecting (P)"} • {Math.max(latestResult.judging_score, latestResult.perceiving_score)}%
@@ -577,7 +577,7 @@ export default function PersonalityAssessmentPage() {
 
                 {/* Spectrum Rail */}
                 <div className="space-y-1.5 pt-1">
-                  <div className="flex justify-between text-[11px] font-bold">
+                  <div className="flex justify-between text-[12px] font-bold">
                     <span className={isJ ? "text-[#0D9488]" : "text-slate-400"}>
                       Judging (J) • {latestResult.judging_score}%
                     </span>
@@ -598,7 +598,7 @@ export default function PersonalityAssessmentPage() {
                 </div>
               </div>
 
-              <p className="text-[11px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
+              <p className="text-[12px] text-[#4A5568] leading-relaxed pt-2 border-t border-slate-200/60">
                 {isJ
                   ? "អ្នកចូលចិត្តផែនការច្បាស់លាស់ កាលវិភាគរៀបរយ និងការសម្រេចកិច្ចការទាន់ពេលវេលា។"
                   : "អ្នកចូលចិត្តភាពបត់បែន រក្សាជម្រើសបើកទូលាយ និងអាចសម្របតាមស្ថានភាពផ្លាស់ប្តូរភ្លាមៗ។"}
@@ -611,7 +611,7 @@ export default function PersonalityAssessmentPage() {
         <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E8F0] pb-4">
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-black uppercase tracking-wider border border-emerald-200">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[12.5px] font-black uppercase tracking-wider border border-emerald-200">
                 <Sparkles className="w-3 h-3 text-emerald-600" />
                 <span>{getLocalized({ km: "អនុសាសន៍ AI សុក្រឹតកម្រិតខ្ពស់ (៤ សសរស្តម្ភ)", en: "Verified AI Recommendations" })}</span>
               </div>
@@ -667,18 +667,18 @@ export default function PersonalityAssessmentPage() {
                           <span className="w-6 h-6 rounded-lg text-xs font-black bg-[#111965] text-[#F7CE4D] flex items-center justify-center shadow-2xs">
                             #{idx + 1}
                           </span>
-                          <span className="text-[10px] font-bold text-[#68708A] tracking-wide">
+                          <span className="text-[12.5px] font-bold text-[#68708A] tracking-wide">
                             {major.category}
                           </span>
                           {major.is_stem && (
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-black bg-sky-50 text-sky-700 border border-sky-200">
+                            <span className="px-1.5 py-0.5 rounded text-[12px] font-black bg-sky-50 text-sky-700 border border-sky-200">
                               STEM
                             </span>
                           )}
                         </div>
 
                         <div className="flex items-center gap-1">
-                          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
+                          <span className="px-2.5 py-0.5 rounded-full text-[12px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-2xs">
                             {fitScore}% Fit
                           </span>
                         </div>
@@ -689,7 +689,7 @@ export default function PersonalityAssessmentPage() {
                       </h4>
 
                       {/* Personality-specific rationale snippet */}
-                      <p className="text-[11px] text-[#4A5568] line-clamp-2 leading-relaxed bg-[#F8FAFD] p-2.5 rounded-xl border border-[#E6E8F0]/70 min-h-[46px] flex items-center">
+                      <p className="text-[12px] text-[#4A5568] line-clamp-2 leading-relaxed bg-[#F8FAFD] p-2.5 rounded-xl border border-[#E6E8F0]/70 min-h-[46px] flex items-center">
                         {getLocalized({ km: exp.personality_reason_km, en: exp.personality_reason_en }) ||
                           getLocalized({ km: exp.fit_summary_km, en: exp.fit_summary_en }) ||
                           getLocalized({
@@ -701,14 +701,14 @@ export default function PersonalityAssessmentPage() {
 
                     {/* Offering Universities */}
                     <div className="pt-2 border-t border-[#E6E8F0] space-y-2">
-                      <div className="text-[11px] font-bold text-[#68708A] flex items-center justify-between gap-2">
+                      <div className="text-[12px] font-bold text-[#68708A] flex items-center justify-between gap-2">
                         <span>{t("personalityAssessment.offeringInstitutions", "គ្រឹះស្ថានបណ្តុះបណ្តាល:")}</span>
                         {unis.length > 0 ? (
                           <span className="font-semibold text-slate-500">
                             {unis.length} {t("recommendationsPage.institutions", "កន្លែង")}
                           </span>
                         ) : (
-                          <span className="text-[10px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/70 font-medium">
+                          <span className="text-[12.5px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/70 font-medium">
                             {t("personalityAssessment.verifyingInstitutions", "កំពុងផ្ទៀងផ្ទាត់")}
                           </span>
                         )}
@@ -720,26 +720,26 @@ export default function PersonalityAssessmentPage() {
                             <Link
                               key={u.university_id}
                               href={`/universities/${u.university_slug}`}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[12.5px] font-bold bg-[#F0F2FA] text-[#111965] hover:bg-[#111965] hover:text-white transition-colors"
                               title={getLocalized(u.university_name)}
                             >
                               <Building2 className="w-2.5 h-2.5 opacity-60" />
                               <span>{getLocalized(u.university_acronym) || u.university_slug.toUpperCase()}</span>
                               {u.tuition_annual_usd ? (
-                                <span className="text-[9px] opacity-75 font-normal">
+                                <span className="text-[12px] opacity-75 font-normal">
                                   (${Math.round(u.tuition_annual_usd)})
                                 </span>
                               ) : null}
                             </Link>
                           ))}
                           {unis.length > 3 && (
-                            <span className="text-[10px] font-semibold text-[#68708A]">
+                            <span className="text-[12.5px] font-semibold text-[#68708A]">
                               +{unis.length - 3} {t("recommendationsPage.more", "ទៀត")}
                             </span>
                           )}
                         </div>
                       ) : (
-                        <div className="text-[10px] text-[#68708A] bg-[#FAFBFD] px-2.5 py-1.5 rounded-lg border border-dashed border-[#E6E8F0] flex items-center gap-1.5">
+                        <div className="text-[12.5px] text-[#68708A] bg-[#FAFBFD] px-2.5 py-1.5 rounded-lg border border-dashed border-[#E6E8F0] flex items-center gap-1.5">
                           <Building2 className="w-3 h-3 text-[#68708A]/70 flex-shrink-0" />
                           <span className="truncate">{t("personalityAssessment.verifyingCampusesDesc", "ទិន្នន័យគ្រឹះស្ថានកំពុងត្រូវបានប្រមូល និងផ្ទៀងផ្ទាត់")}</span>
                         </div>
@@ -785,7 +785,7 @@ export default function PersonalityAssessmentPage() {
                   })}
                 </span>
               </div>
-              <p className="text-[11px] text-[#68708A] leading-relaxed max-w-2xl font-medium">
+              <p className="text-[12px] text-[#68708A] leading-relaxed max-w-2xl font-medium">
                 {getLocalized({
                   km: `ដើម្បីធានាបាននូវភាពសុក្រឹត និងអាចជឿទុកចិត្តបាន ១០០% ប្រព័ន្ធ AI របស់ Futera គណនាអនុសាសន៍ដោយបូកបញ្ចូល៖ បុគ្គលិកលក្ខណៈ ${pType} (២៥%) + ចំណាប់អារម្មណ៍ RIASEC (៣០%) + មុខវិជ្ជាពូកែ (២៥%) + ទីផ្សារការងារ (២០%)។ ដូច្នេះលទ្ធផលបង្ហាញនៅទីនេះ ផ្ទាំងគ្រប់គ្រង និងទំព័រ Recommendations គឺសុក្រឹត និងស៊ីសង្វាក់គ្នាទាំងស្រុង។`,
                   en: `To ensure maximum real-world accuracy and 100% trust, Futera calculates all recommendations by fusing: ${pType} Personality (25%) + RIASEC Interests (30%) + School Grades (25%) + Market Demand (20%). The rankings shown here, on your Dashboard, and on your Recommendations page are 100% unified and consistent.`,

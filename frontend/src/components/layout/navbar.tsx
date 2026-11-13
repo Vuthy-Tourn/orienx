@@ -271,12 +271,12 @@ export function Navbar() {
                       >
                         <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl p-3 space-y-1.5 backdrop-blur-md">
                           <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
-                            <span className="text-[11px] font-black uppercase tracking-wider text-[#111965]">
+                            <span className="text-[12px] font-black uppercase tracking-wider text-[#111965]">
                               {language === "km"
                                 ? "តេស្តវាយតម្លៃលើផ្លាតហ្វម"
                                 : "Platform Diagnostic Tests"}
                             </span>
-                            <span className="text-[10px] font-bold text-slate-400">
+                            <span className="text-[12.5px] font-bold text-slate-400">
                               {language === "km"
                                 ? "៣ តេស្ត • ១ លទ្ធផល"
                                 : "3 Tests · 1 Report"}
@@ -318,14 +318,14 @@ export function Navbar() {
                                       </span>
                                       <span
                                         className={cn(
-                                          "text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-md shrink-0 border",
+                                          "text-[12.5px] font-mono font-bold px-1.5 py-0.2 rounded-md shrink-0 border",
                                           test.tagClass
                                         )}
                                       >
                                         {language === "km" ? test.badgeKm : test.badgeEn}
                                       </span>
                                     </div>
-                                    <p className="text-[11px] text-slate-500 leading-snug line-clamp-1 mt-0.5">
+                                    <p className="text-[12px] text-slate-500 leading-snug line-clamp-1 mt-0.5">
                                       {language === "km" ? test.descKm : test.descEn}
                                     </p>
                                   </div>
@@ -349,12 +349,12 @@ export function Navbar() {
                                   className="pt-1.5 mt-0.5 border-t border-slate-100"
                                 >
                                   <div className="px-3 pt-2 pb-1.5 flex items-center justify-between gap-2">
-                                    <span className="text-[10px] font-black uppercase tracking-wider text-purple-700/80">
+                                    <span className="text-[12.5px] font-black uppercase tracking-wider text-purple-700/80">
                                       {language === "km"
                                         ? "លទ្ធផលរបស់អ្នក"
                                         : "Your Outcome"}
                                     </span>
-                                    <span className="text-[10px] font-semibold text-slate-400 whitespace-nowrap">
+                                    <span className="text-[12.5px] font-semibold text-slate-400 whitespace-nowrap">
                                       {language === "km"
                                         ? "តេស្ត ៣ + ទីផ្សារការងារ"
                                         : "3 tests + job market"}
@@ -387,7 +387,7 @@ export function Navbar() {
                                         </span>
                                         <span
                                           className={cn(
-                                            "text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-md shrink-0 border",
+                                            "text-[12.5px] font-mono font-bold px-1.5 py-0.2 rounded-md shrink-0 border",
                                             outcome.tagClass
                                           )}
                                         >
@@ -396,7 +396,7 @@ export function Navbar() {
                                             : outcome.badgeEn}
                                         </span>
                                       </div>
-                                      <p className="text-[11px] text-slate-500 leading-snug line-clamp-1 mt-0.5">
+                                      <p className="text-[12px] text-slate-500 leading-snug line-clamp-1 mt-0.5">
                                         {language === "km"
                                           ? outcome.descKm
                                           : outcome.descEn}
@@ -582,7 +582,7 @@ export function Navbar() {
                                 <div className="text-sm font-bold text-[#111965]">
                                   {item.label}
                                 </div>
-                                <div className="text-[11px] text-[#68708A] font-normal line-clamp-1">
+                                <div className="text-[12px] text-[#68708A] font-normal line-clamp-1">
                                   {language === "km"
                                     ? item.descKm
                                     : item.descEn}
@@ -637,7 +637,7 @@ export function Navbar() {
                                     </div>
                                     <span
                                       className={cn(
-                                        "text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md border",
+                                        "text-[12.5px] font-mono font-bold px-1.5 py-0.5 rounded-md border",
                                         test.tagClass
                                       )}
                                     >
@@ -664,12 +664,12 @@ export function Navbar() {
                                       className="pt-1.5 mt-1 border-t border-slate-200/80"
                                     >
                                       <div className="px-1 pt-2 pb-1.5 flex items-center justify-between gap-2">
-                                        <span className="text-[10px] font-black uppercase tracking-wider text-purple-700/80">
+                                        <span className="text-[12.5px] font-black uppercase tracking-wider text-purple-700/80">
                                           {language === "km"
                                             ? "លទ្ធផលរបស់អ្នក"
                                             : "Your Outcome"}
                                         </span>
-                                        <span className="text-[10px] font-semibold text-slate-400 whitespace-nowrap">
+                                        <span className="text-[12.5px] font-semibold text-slate-400 whitespace-nowrap">
                                           {language === "km"
                                             ? "តេស្ត ៣ + ទីផ្សារការងារ"
                                             : "3 tests + job market"}
@@ -700,7 +700,7 @@ export function Navbar() {
                                                 ? outcome.labelKm
                                                 : outcome.labelEn}
                                             </span>
-                                            <span className="text-[10px] text-slate-500 block leading-tight mt-0.5 line-clamp-1">
+                                            <span className="text-[12.5px] text-slate-500 block leading-tight mt-0.5 line-clamp-1">
                                               {language === "km"
                                                 ? outcome.descKm
                                                 : outcome.descEn}
@@ -709,7 +709,7 @@ export function Navbar() {
                                         </div>
                                         <span
                                           className={cn(
-                                            "text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md border shrink-0 ml-2",
+                                            "text-[12.5px] font-mono font-bold px-1.5 py-0.5 rounded-md border shrink-0 ml-2",
                                             outcome.tagClass
                                           )}
                                         >
@@ -760,7 +760,7 @@ export function Navbar() {
                             <div className="text-sm font-bold leading-snug">
                               {item.label}
                             </div>
-                            <div className="text-[11px] text-[#68708A] font-normal leading-tight mt-0.5 line-clamp-1">
+                            <div className="text-[12px] text-[#68708A] font-normal leading-tight mt-0.5 line-clamp-1">
                               {language === "km" ? item.descKm : item.descEn}
                             </div>
                           </div>

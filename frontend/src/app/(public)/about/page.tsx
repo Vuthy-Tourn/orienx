@@ -32,6 +32,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { NumberTicker } from "@/components/magicui/number-ticker";
+import { PrecisionFormula } from "@/components/assessments/precision-formula";
 import ScrollStack, { ScrollStackItem } from "@/components/ui/scroll-stack";
 
 // Conversational Tara mascot advice tips
@@ -250,12 +251,6 @@ export default function AboutPage() {
           ".gsap-formula-bar",
           { y: 24, opacity: 0, scale: 0.98 },
           { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }
-        )
-        .fromTo(
-          ".gsap-formula-seg",
-          { scaleX: 0, transformOrigin: "left center" },
-          { scaleX: 1, duration: 0.65, stagger: 0.1, ease: "power2.out" },
-          "-=0.25"
         )
         .fromTo(
           ".gsap-pillar-card",
@@ -488,7 +483,7 @@ export default function AboutPage() {
               <div className="text-xs sm:text-sm font-black text-[#171A2C]">
                 {t("aboutPage.statMajors", "Curated Cambodian Majors")}
               </div>
-              <div className="text-[11px] text-[#68708A] leading-relaxed">
+              <div className="text-[12px] text-[#68708A] leading-relaxed">
                 STEM, AI, Business, & Creative Curricula
               </div>
             </div>
@@ -506,7 +501,7 @@ export default function AboutPage() {
               <div className="text-xs sm:text-sm font-black text-[#171A2C]">
                 {t("aboutPage.statUniversities", "Verified Universities")}
               </div>
-              <div className="text-[11px] text-[#68708A] leading-relaxed">
+              <div className="text-[12px] text-[#68708A] leading-relaxed">
                 RUPP, ITC, CADT, AUPP, Paragon, NUM
               </div>
             </div>
@@ -524,7 +519,7 @@ export default function AboutPage() {
               <div className="text-xs sm:text-sm font-black text-[#171A2C]">
                 {t("aboutPage.statTuition", "Verified Tuition Data")}
               </div>
-              <div className="text-[11px] text-[#68708A] leading-relaxed">
+              <div className="text-[12px] text-[#68708A] leading-relaxed">
                 Cross-referenced with MoEYS admission notices
               </div>
             </div>
@@ -542,7 +537,7 @@ export default function AboutPage() {
               <div className="text-xs sm:text-sm font-black text-[#171A2C]">
                 {t("aboutPage.statScience", "Scientific Matching Engine")}
               </div>
-              <div className="text-[11px] text-[#68708A] leading-relaxed">
+              <div className="text-[12px] text-[#68708A] leading-relaxed">
                 RIASEC + MBTI + Academics + Labor Market
               </div>
             </div>
@@ -570,76 +565,10 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* Interactive 100% Mathematical Precision Formula Bar */}
-          <div className="gsap-formula-bar max-w-4xl mx-auto p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2 font-bold text-[#111965]">
-                <BrainCircuit className="w-4 h-4 text-[#111965]" />
-                <span className="text-sm font-black">
-                  {language === "km" ? "រូបមន្តផ្គូផ្គង ១០០% បែបវិទ្យាសាស្ត្រ" : "The 100% Scientific Equation"}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 font-mono text-xs font-black text-slate-500">
-                <span className="text-amber-600">30%</span> + <span className="text-blue-600">25%</span> + <span className="text-emerald-600">25%</span> + <span className="text-purple-600">20%</span> = <span className="text-[#111965] font-black">100% Precision</span>
-              </div>
-            </div>
-
-            {/* Multi-segment Animated Progress Track */}
-            <div className="h-4 w-full bg-slate-100 rounded-full overflow-hidden flex p-1 gap-1.5 shadow-inner">
-              <div
-                className="gsap-formula-seg h-full bg-amber-500 rounded-full relative group cursor-pointer transition-transform hover:scale-y-110"
-                style={{ flex: 30 }}
-              >
-                <div className="hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 -translate-x-1/2 bg-[#0A0F3D] text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-lg pointer-events-none whitespace-nowrap z-30">
-                  30% Holland RIASEC Interests
-                </div>
-              </div>
-              <div
-                className="gsap-formula-seg h-full bg-blue-600 rounded-full relative group cursor-pointer transition-transform hover:scale-y-110"
-                style={{ flex: 25 }}
-              >
-                <div className="hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 -translate-x-1/2 bg-[#0A0F3D] text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-lg pointer-events-none whitespace-nowrap z-30">
-                  25% 16-Personality Cognitive Style
-                </div>
-              </div>
-              <div
-                className="gsap-formula-seg h-full bg-emerald-500 rounded-full relative group cursor-pointer transition-transform hover:scale-y-110"
-                style={{ flex: 25 }}
-              >
-                <div className="hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 -translate-x-1/2 bg-[#0A0F3D] text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-lg pointer-events-none whitespace-nowrap z-30">
-                  25% BACII Stream Prerequisite
-                </div>
-              </div>
-              <div
-                className="gsap-formula-seg h-full bg-purple-600 rounded-full relative group cursor-pointer transition-transform hover:scale-y-110"
-                style={{ flex: 20 }}
-              >
-                <div className="hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 -translate-x-1/2 bg-[#0A0F3D] text-white text-[10px] font-bold px-2.5 py-1 rounded-md shadow-lg pointer-events-none whitespace-nowrap z-30">
-                  20% Cambodian Labor Market (NEA)
-                </div>
-              </div>
-            </div>
-
-            {/* Legend Labels */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-bold">
-              <div className="flex items-center gap-1.5 text-slate-700">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 flex-shrink-0" />
-                <span>30% RIASEC</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-slate-700">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-600 flex-shrink-0" />
-                <span>25% 16-Personality</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-slate-700">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 flex-shrink-0" />
-                <span>25% BACII Stream</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-slate-700">
-                <span className="w-2.5 h-2.5 rounded-full bg-purple-600 flex-shrink-0" />
-                <span>20% NEA Market</span>
-              </div>
-            </div>
-          </div>
+          <PrecisionFormula
+            variant="light"
+            className="gsap-formula-bar max-w-4xl mx-auto"
+          />
 
           {/* Minimalist 4-Pillar Cards Grid */}
           <div className="gsap-pillars-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto">
@@ -673,7 +602,7 @@ export default function AboutPage() {
 
                     {/* Title & Category */}
                     <div className="space-y-1">
-                      <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+                      <span className="text-[12.5px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
                         Pillar {p.number} • {language === "km" ? p.categoryKm : p.categoryEn}
                       </span>
                       <h3 className="text-base font-black text-[#111965] leading-snug">
@@ -689,7 +618,7 @@ export default function AboutPage() {
 
                   {/* Footer Action Link & Proof */}
                   <div className="space-y-3 pt-3 border-t border-slate-100">
-                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500">
+                    <div className="flex items-center gap-1.5 text-[12px] font-bold text-slate-500">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                       <span className="truncate">{language === "km" ? p.proofKm : p.proofEn}</span>
                     </div>
@@ -711,7 +640,7 @@ export default function AboutPage() {
           {/* Minimalist Diagnostic CTA Banner */}
           <div className="gsap-pillar-cta max-w-4xl mx-auto p-6 sm:p-7 rounded-3xl bg-linear-to-r from-[#111965] to-[#1A2580] text-white shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-5">
             <div className="space-y-1.5 max-w-xl">
-              <div className="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold text-[#F7CE4D] uppercase tracking-wider">
+              <div className="inline-flex items-center gap-1.5 text-[12px] font-mono font-bold text-[#F7CE4D] uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{language === "km" ? "តេស្តវិទ្យាសាស្ត្រឥតគិតថ្លៃ" : "Free Scientific Assessment"}</span>
               </div>
@@ -794,11 +723,11 @@ export default function AboutPage() {
                     <span className="font-mono text-xs font-black px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/60">
                       01
                     </span>
-                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    <span className="text-[12px] font-bold text-slate-500 uppercase tracking-wider">
                       {language === "km" ? "ការធ្វើតេស្តវិភាគបុគ្គលិកលក្ខណៈ" : "Diagnostics & Discovery"}
                     </span>
                   </div>
-                  <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-bold text-indigo-600">
+                  <div className="hidden sm:flex items-center gap-1.5 text-[12px] font-bold text-indigo-600">
                     <Compass className="w-3.5 h-3.5" />
                     <span>Holland RIASEC & 16P</span>
                   </div>
@@ -843,14 +772,14 @@ export default function AboutPage() {
                           {language === "km" ? "លទ្ធផលតេស្តវិជ្ជាជីវៈ" : "Vocational Alignment"}
                         </span>
                       </div>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200/60">
+                      <span className="text-[12.5px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200/60">
                         {language === "km" ? "ផ្ទៀងផ្ទាត់" : "Verified"}
                       </span>
                     </div>
 
                     <div className="space-y-2">
                       <div>
-                        <div className="flex justify-between text-[11px] font-semibold text-slate-600 mb-1">
+                        <div className="flex justify-between text-[12px] font-semibold text-slate-600 mb-1">
                           <span>{language === "km" ? "ស្រាវជ្រាវ (Investigative)" : "Investigative (I)"}</span>
                           <span className="font-mono text-indigo-600 font-bold">92%</span>
                         </div>
@@ -860,7 +789,7 @@ export default function AboutPage() {
                       </div>
 
                       <div>
-                        <div className="flex justify-between text-[11px] font-semibold text-slate-600 mb-1">
+                        <div className="flex justify-between text-[12px] font-semibold text-slate-600 mb-1">
                           <span>{language === "km" ? "សិល្បៈ (Artistic)" : "Artistic (A)"}</span>
                           <span className="font-mono text-amber-600 font-bold">78%</span>
                         </div>
@@ -870,7 +799,7 @@ export default function AboutPage() {
                       </div>
 
                       <div>
-                        <div className="flex justify-between text-[11px] font-semibold text-slate-600 mb-1">
+                        <div className="flex justify-between text-[12px] font-semibold text-slate-600 mb-1">
                           <span>{language === "km" ? "សង្គម (Social)" : "Social (S)"}</span>
                           <span className="font-mono text-emerald-600 font-bold">65%</span>
                         </div>
@@ -882,9 +811,9 @@ export default function AboutPage() {
 
                     <div className="p-2.5 rounded-xl bg-white border border-slate-200/80 flex items-center gap-2.5">
                       <BrainCircuit className="w-4 h-4 text-indigo-600 flex-shrink-0" />
-                      <div className="text-[11px]">
+                      <div className="text-[12px]">
                         <span className="font-bold text-[#111965] block">The Visionary Architect (INTJ)</span>
-                        <span className="text-[#68708A] text-[10px]">
+                        <span className="text-[#68708A] text-[12.5px]">
                           {language === "km" ? "សមត្ថភាពវិភាគ និងរៀបចំយុទ្ធសាស្ត្រ" : "Analytical & Systems Alignment"}
                         </span>
                       </div>
@@ -901,11 +830,11 @@ export default function AboutPage() {
                     <span className="font-mono text-xs font-black px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200/60">
                       02
                     </span>
-                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    <span className="text-[12px] font-bold text-slate-500 uppercase tracking-wider">
                       {language === "km" ? "ការផ្គូផ្គងជំនាញឆ្លាតវៃ" : "Algorithmic Alignment"}
                     </span>
                   </div>
-                  <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-bold text-amber-600">
+                  <div className="hidden sm:flex items-center gap-1.5 text-[12px] font-bold text-amber-600">
                     <Target className="w-3.5 h-3.5" />
                     <span>4-Pillar Transparent Engine</span>
                   </div>
@@ -950,7 +879,7 @@ export default function AboutPage() {
                           {language === "km" ? "រូបមន្តផ្គូផ្គង ៤ សសរស្ដម្ភ" : "Alignment Formula"}
                         </span>
                       </div>
-                      <span className="text-[10px] font-mono font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/60">
+                      <span className="text-[12.5px] font-mono font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200/60">
                         100% Weight
                       </span>
                     </div>
@@ -962,14 +891,14 @@ export default function AboutPage() {
                         { label: language === "km" ? "បុគ្គលិកលក្ខណៈ 16P" : "16P Cognitive Style", pct: "25%", color: "bg-indigo-600" },
                         { label: language === "km" ? "តម្រូវការទីផ្សារការងារ NEA" : "Cambodia Market Demand", pct: "20%", color: "bg-emerald-600" },
                       ].map((item, idx) => (
-                        <div key={idx} className="flex items-center justify-between text-[11px] p-1.5 rounded-lg bg-white border border-slate-100">
+                        <div key={idx} className="flex items-center justify-between text-[12px] p-1.5 rounded-lg bg-white border border-slate-100">
                           <span className="font-semibold text-slate-700">{item.label}</span>
                           <span className="font-mono font-bold text-[#111965]">{item.pct}</span>
                         </div>
                       ))}
                     </div>
 
-                    <div className="p-2.5 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between text-[11px]">
+                    <div className="p-2.5 rounded-xl bg-white border border-slate-200/80 flex items-center justify-between text-[12px]">
                       <span className="text-slate-600 font-medium">Top Match:</span>
                       <span className="font-bold text-[#111965]">CADT • Computer Science & AI</span>
                     </div>
@@ -985,11 +914,11 @@ export default function AboutPage() {
                     <span className="font-mono text-xs font-black px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
                       03
                     </span>
-                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    <span className="text-[12px] font-bold text-slate-500 uppercase tracking-wider">
                       {language === "km" ? "សុចរិតភាពទិន្នន័យតម្លៃ" : "Data Integrity & Tuition"}
                     </span>
                   </div>
-                  <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-bold text-emerald-600">
+                  <div className="hidden sm:flex items-center gap-1.5 text-[12px] font-bold text-emerald-600">
                     <ShieldCheck className="w-3.5 h-3.5" />
                     <span>MoEYS & Registrar Portals</span>
                   </div>
@@ -1034,7 +963,7 @@ export default function AboutPage() {
                           {language === "km" ? "កាលវិភាគតម្លៃសិក្សាពិត" : "Verified Campus Tuition"}
                         </span>
                       </div>
-                      <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
+                      <span className="text-[12.5px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
                         2026 Ready
                       </span>
                     </div>
@@ -1045,19 +974,19 @@ export default function AboutPage() {
                         { name: "ITC Techno", fee: "$650 - $900 / yr", tag: "Certified Labs", bg: "bg-amber-50 text-amber-700" },
                         { name: "CADT (Tech)", fee: "$1,200 - $1,800 / yr", tag: "Techo Grants", bg: "bg-indigo-50 text-indigo-700" },
                       ].map((uni, idx) => (
-                        <div key={idx} className="p-2 rounded-xl bg-white border border-slate-100 flex items-center justify-between text-[11px]">
+                        <div key={idx} className="p-2 rounded-xl bg-white border border-slate-100 flex items-center justify-between text-[12px]">
                           <div>
                             <span className="font-bold text-[#111965] block">{uni.name}</span>
-                            <span className="text-slate-500 font-mono text-[10px]">{uni.fee}</span>
+                            <span className="text-slate-500 font-mono text-[12.5px]">{uni.fee}</span>
                           </div>
-                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${uni.bg}`}>
+                          <span className={`text-[12.5px] font-bold px-2 py-0.5 rounded-full ${uni.bg}`}>
                             {uni.tag}
                           </span>
                         </div>
                       ))}
                     </div>
 
-                    <div className="pt-1 flex items-center gap-1.5 text-[10px] font-bold text-emerald-700">
+                    <div className="pt-1 flex items-center gap-1.5 text-[12.5px] font-bold text-emerald-700">
                       <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                       <span>{language === "km" ? "ផ្ទៀងផ្ទាត់ដោយការិយាល័យចុះឈ្មោះ" : "Cross-referenced with Official Registrar"}</span>
                     </div>
@@ -1073,11 +1002,11 @@ export default function AboutPage() {
                     <span className="font-mono text-xs font-black px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200/60">
                       04
                     </span>
-                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    <span className="text-[12px] font-bold text-slate-500 uppercase tracking-wider">
                       {language === "km" ? "ឱកាសអាហារូបករណ៍រដ្ឋ" : "Financial Support & Grants"}
                     </span>
                   </div>
-                  <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-bold text-purple-600">
+                  <div className="hidden sm:flex items-center gap-1.5 text-[12px] font-bold text-purple-600">
                     <Award className="w-3.5 h-3.5" />
                     <span>State & Techo Grants</span>
                   </div>
@@ -1122,7 +1051,7 @@ export default function AboutPage() {
                           {language === "km" ? "អាហារូបករណ៍កំពុងបើក" : "Active Scholarships"}
                         </span>
                       </div>
-                      <span className="text-[10px] font-mono font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200/60">
+                      <span className="text-[12.5px] font-mono font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200/60">
                         Live Radar
                       </span>
                     </div>
@@ -1131,25 +1060,25 @@ export default function AboutPage() {
                       <div className="p-2.5 rounded-xl bg-white border border-slate-100 space-y-1">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-[#111965]">MoEYS National Priority</span>
-                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                          <span className="text-[12.5px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
                             100% Full-Ride
                           </span>
                         </div>
-                        <p className="text-[10px] text-slate-500">Grade A/B Priority • 4-Year Full Coverage</p>
+                        <p className="text-[12.5px] text-slate-500">Grade A/B Priority • 4-Year Full Coverage</p>
                       </div>
 
                       <div className="p-2.5 rounded-xl bg-white border border-slate-100 space-y-1">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-[#111965]">CADT Techo Digital Talent</span>
-                          <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full">
+                          <span className="text-[12.5px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full">
                             Tuition + Stipend
                           </span>
                         </div>
-                        <p className="text-[10px] text-slate-500">National Exam Required • Monthly Living Support</p>
+                        <p className="text-[12.5px] text-slate-500">National Exam Required • Monthly Living Support</p>
                       </div>
                     </div>
 
-                    <div className="p-2 rounded-xl bg-amber-50/80 border border-amber-200/60 flex items-center justify-between text-[11px] text-amber-800 font-medium">
+                    <div className="p-2 rounded-xl bg-amber-50/80 border border-amber-200/60 flex items-center justify-between text-[12px] text-amber-800 font-medium">
                       <span>{language === "km" ? "៣ កម្មវិធីជិតផុតកំណត់:" : "3 Deadlines Closing Soon:"}</span>
                       <span className="font-bold text-amber-900">14 Days Left</span>
                     </div>
@@ -1165,11 +1094,11 @@ export default function AboutPage() {
                     <span className="font-mono text-xs font-black px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200/60">
                       05
                     </span>
-                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    <span className="text-[12px] font-bold text-slate-500 uppercase tracking-wider">
                       {language === "km" ? "ទំនុកចិត្តអនាគត និងគ្រួសារ" : "Future Ready & Family Roadmap"}
                     </span>
                   </div>
-                  <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-bold text-blue-600">
+                  <div className="hidden sm:flex items-center gap-1.5 text-[12px] font-bold text-blue-600">
                     <TrendingUp className="w-3.5 h-3.5" />
                     <span>NEA Salary Benchmarks</span>
                   </div>
@@ -1214,30 +1143,30 @@ export default function AboutPage() {
                           {language === "km" ? "ទិន្នន័យប្រាក់បៀវត្សរ៍ NEA" : "NEA Salary Benchmarks"}
                         </span>
                       </div>
-                      <span className="text-[10px] font-mono font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200/60">
+                      <span className="text-[12.5px] font-mono font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200/60">
                         Official NEA
                       </span>
                     </div>
 
                     <div className="space-y-1.5">
-                      <div className="p-2 rounded-xl bg-white border border-slate-100 flex items-center justify-between text-[11px]">
+                      <div className="p-2 rounded-xl bg-white border border-slate-100 flex items-center justify-between text-[12px]">
                         <div>
                           <span className="font-bold text-[#111965] block">Software / AI Engineer</span>
-                          <span className="text-slate-500 text-[10px]">High Demand Sector</span>
+                          <span className="text-slate-500 text-[12.5px]">High Demand Sector</span>
                         </div>
                         <span className="font-mono font-bold text-emerald-600">$600 - $2,400+</span>
                       </div>
 
-                      <div className="p-2 rounded-xl bg-white border border-slate-100 flex items-center justify-between text-[11px]">
+                      <div className="p-2 rounded-xl bg-white border border-slate-100 flex items-center justify-between text-[12px]">
                         <div>
                           <span className="font-bold text-[#111965] block">Data Science & Analytics</span>
-                          <span className="text-slate-500 text-[10px]">Rapid Growth Sector</span>
+                          <span className="text-slate-500 text-[12.5px]">Rapid Growth Sector</span>
                         </div>
                         <span className="font-mono font-bold text-emerald-600">$550 - $2,100+</span>
                       </div>
                     </div>
 
-                    <div className="p-2.5 rounded-xl bg-gradient-to-r from-[#111965] to-[#1A2580] text-white flex items-center justify-between text-[11px]">
+                    <div className="p-2.5 rounded-xl bg-gradient-to-r from-[#111965] to-[#1A2580] text-white flex items-center justify-between text-[12px]">
                       <span className="font-semibold">{language === "km" ? "របាយការណ៍សង្ខេបសម្រាប់គ្រួសារ:" : "Parent Diagnostic Summary:"}</span>
                       <span className="font-mono text-amber-300 font-bold">PDF Ready</span>
                     </div>

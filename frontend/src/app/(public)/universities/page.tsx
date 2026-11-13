@@ -216,13 +216,13 @@ function UniversitiesContent() {
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold opacity-80 uppercase tracking-wider">Public State Degree</span>
+                  <span className="text-[12px] font-bold opacity-80 uppercase tracking-wider">Public State Degree</span>
                   <Landmark className="w-4 h-4 text-blue-400" />
                 </div>
                 <div className="text-xl font-black mt-2">
                   {currency === "USD" ? "$1,000 – $3,600" : "4.1M – 14.8M KHR"}
                 </div>
-                <div className="text-[11px] opacity-75 mt-1">Total 4-Year Tuition (RUPP, ITC Techno, NUM)</div>
+                <div className="text-[12px] opacity-75 mt-1">Total 4-Year Tuition (RUPP, ITC Techno, NUM)</div>
               </button>
 
               <button
@@ -235,18 +235,18 @@ function UniversitiesContent() {
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold opacity-80 uppercase tracking-wider">Private University Degree</span>
+                  <span className="text-[12px] font-bold opacity-80 uppercase tracking-wider">Private University Degree</span>
                   <Building2 className="w-4 h-4 text-purple-400" />
                 </div>
                 <div className="text-xl font-black mt-2">
                   {currency === "USD" ? "$6,000 – $24,000" : "24.6M – 98.4M KHR"}
                 </div>
-                <div className="text-[11px] opacity-75 mt-1">Total 4-Year Tuition (AUPP, Paragon, CADT)</div>
+                <div className="text-[12px] opacity-75 mt-1">Total 4-Year Tuition (AUPP, Paragon, CADT)</div>
               </button>
 
               <div className="p-4 rounded-2xl bg-[#F0F2FA]/70 border border-[#E6E8F0] flex flex-col justify-between">
                 <div>
-                  <div className="text-[11px] font-bold text-[#68708A] uppercase tracking-wider">
+                  <div className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
                     Scholarship Offset Potential
                   </div>
                   <div className="text-base font-black text-emerald-700 mt-1">
@@ -279,7 +279,7 @@ function UniversitiesContent() {
                 <Sparkles className="w-4 h-4 text-[#F7CE4D]" />
               </div>
               <div className="min-w-0">
-                <div className="text-[10px] font-black uppercase tracking-wider text-blue-900">
+                <div className="text-[12.5px] font-black uppercase tracking-wider text-blue-900">
                   {t("universitiesDirectory.filteringByMajor") || "តម្រងតាមមុខជំនាញដែលបានណែនាំ (Filtered by Recommended Major)"}
                 </div>
                 <div className="text-sm sm:text-base font-black text-[#111965] truncate">
@@ -525,7 +525,7 @@ function UniversitiesContent() {
                         </span>
 
                         {uni.is_tuition_verified && (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-semibold bg-emerald-950/80 text-emerald-200 border border-emerald-500/30 px-2 py-0.5 rounded-md backdrop-blur-xs">
+                          <span className="inline-flex items-center gap-1 text-[12px] font-semibold bg-emerald-950/80 text-emerald-200 border border-emerald-500/30 px-2 py-0.5 rounded-md backdrop-blur-xs">
                             <ShieldCheck className="w-3 h-3 text-emerald-400" />
                             <span>{t("universitiesDirectory.verifiedBadgeShort")}</span>
                           </span>
@@ -547,7 +547,7 @@ function UniversitiesContent() {
 
                       {/* Verified Tuition Fee Box */}
                       <div className="p-3.5 rounded-xl bg-[#F0F2FA]/70 border border-[#E6E8F0] space-y-1">
-                        <div className="flex items-center justify-between text-[11px] text-[#68708A]">
+                        <div className="flex items-center justify-between text-[12px] text-[#68708A]">
                           <span className="font-bold">{t("universitiesDirectory.tuitionTitle")}</span>
                           {uni.is_tuition_verified && (
                             <span className="text-emerald-700 font-semibold flex items-center gap-1">
@@ -625,7 +625,7 @@ function UniversitiesContent() {
                 <div className="font-bold text-white text-sm">
                   <span className="text-[#F7CE4D]">{selectedForCompare.length}</span> / 4 {t("universitiesDirectory.selectedNotice")}
                 </div>
-                <div className="text-slate-300 font-mono text-[11px] truncate max-w-xs">
+                <div className="text-slate-300 font-mono text-[12px] truncate max-w-xs">
                   {selectedForCompare.map((s) => s.toUpperCase()).join(", ")}
                 </div>
               </div>
@@ -685,13 +685,13 @@ function UniversitiesContent() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {comparedUniversities.map((uni) => (
                 <div key={uni.id} className="p-3.5 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-2">
-                  <div className="font-mono text-[10px] font-bold text-[#68708A] uppercase">
+                  <div className="font-mono text-[12.5px] font-bold text-[#68708A] uppercase">
                     {getLocalized(uni.acronym) || uni.slug.toUpperCase()}
                   </div>
                   <div className="text-xs font-bold text-[#111965] line-clamp-1">
                     {getLocalized(uni.name)}
                   </div>
-                  <div className="pt-1 text-[11px] space-y-1 text-[#68708A]">
+                  <div className="pt-1 text-[12px] space-y-1 text-[#68708A]">
                     <div>
                       <span className="font-bold text-[#171A2C]">Type: </span>
                       <span>{uni.university_type === "PUBLIC" ? "Public" : "Private"}</span>
@@ -707,7 +707,7 @@ function UniversitiesContent() {
                   </div>
                   <Link
                     href={`/universities/${uni.slug}`}
-                    className="block pt-2 text-[11px] font-bold text-[#111965] hover:underline"
+                    className="block pt-2 text-[12px] font-bold text-[#111965] hover:underline"
                   >
                     View Campus Profile →
                   </Link>

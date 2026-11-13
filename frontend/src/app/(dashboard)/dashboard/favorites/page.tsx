@@ -149,7 +149,7 @@ export default function FavoritesPage() {
               <Icon className="w-4 h-4" />
               <span>{tab.label}</span>
               <span
-                className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${
+                className={`px-1.5 py-0.5 rounded-full text-[12.5px] font-black ${
                   isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-700"
                 }`}
               >
@@ -201,7 +201,7 @@ export default function FavoritesPage() {
 
                             <div className="flex items-center gap-1.5">
                               {m.is_stem && (
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-extrabold bg-[#F7CE4D] text-[#111965] shadow-xs">
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[12px] font-extrabold bg-[#F7CE4D] text-[#111965] shadow-xs">
                                   <Sparkles className="w-3 h-3" />
                                   <span>STEM</span>
                                 </span>
@@ -216,11 +216,11 @@ export default function FavoritesPage() {
 
                           {/* Bottom Holland Indicator */}
                           <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white text-xs">
-                            <span className="font-mono text-[11px] bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md font-bold">
+                            <span className="font-mono text-[12px] bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md font-bold">
                               RIASEC: {m.riasec_primary ? `${m.riasec_primary}${m.riasec_secondary ? `-${m.riasec_secondary}` : ""}` : "RIA"}
                             </span>
                             {m.personality_affinity && (
-                              <span className="font-mono text-[10px] bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md text-amber-300 font-bold">
+                              <span className="font-mono text-[12.5px] bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md text-amber-300 font-bold">
                                 {m.personality_affinity}
                               </span>
                             )}
@@ -346,10 +346,10 @@ export default function FavoritesPage() {
 
                           {/* Bottom Acronym & Province */}
                           <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white text-xs">
-                            <span className="font-mono text-[11px] bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md font-bold">
+                            <span className="font-mono text-[12px] bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md font-bold">
                               {formatName(u.acronym) || "CAMBODIA"}
                             </span>
-                            <span className="text-[11px] font-medium bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md flex items-center gap-1">
+                            <span className="text-[12px] font-medium bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md flex items-center gap-1">
                               <MapPin className="w-3 h-3 text-[#F7CE4D]" />
                               <span>{u.province || "Phnom Penh"}</span>
                             </span>
@@ -556,7 +556,7 @@ export default function FavoritesPage() {
                               <select
                                 value={s.status}
                                 onChange={(e) => updateScholarshipStatus({ id: s.id, status: e.target.value })}
-                                className="text-[11px] font-bold px-2 py-1 rounded-lg border border-[#E6E8F0] bg-[#F5F6FA] text-[#111965] cursor-pointer"
+                                className="text-[12px] font-bold px-2 py-1 rounded-lg border border-[#E6E8F0] bg-[#F5F6FA] text-[#111965] cursor-pointer"
                               >
                                 <option value="SAVED">{t("favoritesPage.statusSaved", "បានរក្សាទុក")}</option>
                                 <option value="PLANNING_TO_APPLY">{t("favoritesPage.statusPlanning", "គ្រោងនឹងដាក់ពាក្យ")}</option>

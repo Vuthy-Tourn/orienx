@@ -136,7 +136,7 @@ export default function AdminDashboardPage() {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="p-5 rounded-2xl bg-white border border-[#E6E8F0] space-y-1 shadow-2xs">
-              <div className="text-[10px] text-[#68708A] uppercase font-bold flex items-center justify-between">
+              <div className="text-[12.5px] text-[#68708A] uppercase font-bold flex items-center justify-between">
                 <span>Total Students</span>
                 <Users className="w-3.5 h-3.5 text-[#111965]" />
               </div>
@@ -144,7 +144,7 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className="p-5 rounded-2xl bg-white border border-[#E6E8F0] space-y-1 shadow-2xs">
-              <div className="text-[10px] text-[#68708A] uppercase font-bold flex items-center justify-between">
+              <div className="text-[12.5px] text-[#68708A] uppercase font-bold flex items-center justify-between">
                 <span>Universities</span>
                 <Building2 className="w-3.5 h-3.5 text-blue-600" />
               </div>
@@ -152,7 +152,7 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className="p-5 rounded-2xl bg-white border border-[#E6E8F0] space-y-1 shadow-2xs">
-              <div className="text-[10px] text-[#68708A] uppercase font-bold flex items-center justify-between">
+              <div className="text-[12.5px] text-[#68708A] uppercase font-bold flex items-center justify-between">
                 <span>Assessments Done</span>
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
               </div>
@@ -162,7 +162,7 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className="p-5 rounded-2xl bg-white border border-[#E6E8F0] space-y-1 shadow-2xs">
-              <div className="text-[10px] text-[#68708A] uppercase font-bold flex items-center justify-between">
+              <div className="text-[12.5px] text-[#68708A] uppercase font-bold flex items-center justify-between">
                 <span>Recommendations</span>
                 <TrendingUp className="w-3.5 h-3.5 text-[#F7CE4D]" />
               </div>
@@ -219,7 +219,7 @@ export default function AdminDashboardPage() {
                 onChange={(e) => setWRiasec(parseFloat(e.target.value))}
                 className="w-full accent-[#111965]"
               />
-              <span className="text-[10px] text-[#68708A] block">Holland interest alignment</span>
+              <span className="text-[12.5px] text-[#68708A] block">Holland interest alignment</span>
             </div>
 
             {/* 2. Academic Strengths Weight */}
@@ -237,7 +237,7 @@ export default function AdminDashboardPage() {
                 onChange={(e) => setWAcademic(parseFloat(e.target.value))}
                 className="w-full accent-[#111965]"
               />
-              <span className="text-[10px] text-[#68708A] block">Prerequisite school subjects</span>
+              <span className="text-[12.5px] text-[#68708A] block">Prerequisite school subjects</span>
             </div>
 
             {/* 3. Personality Weight */}
@@ -255,7 +255,7 @@ export default function AdminDashboardPage() {
                 onChange={(e) => setWPersonality(parseFloat(e.target.value))}
                 className="w-full accent-[#111965]"
               />
-              <span className="text-[10px] text-[#68708A] block">MBTI preference dimensions</span>
+              <span className="text-[12.5px] text-[#68708A] block">MBTI preference dimensions</span>
             </div>
 
             {/* 4. Career Alignment Weight */}
@@ -273,7 +273,7 @@ export default function AdminDashboardPage() {
                 onChange={(e) => setWCareer(parseFloat(e.target.value))}
                 className="w-full accent-[#111965]"
               />
-              <span className="text-[10px] text-[#68708A] block">Stated career aspirations</span>
+              <span className="text-[12.5px] text-[#68708A] block">Stated career aspirations</span>
             </div>
           </div>
         </div>
@@ -300,16 +300,16 @@ export default function AdminDashboardPage() {
                   <tr key={u.id} className="hover:bg-slate-50 transition-colors">
                     <td className="p-3.5">
                       <div className="font-bold text-[#111965]">{u.full_name_en || "N/A"}</div>
-                      <div className="text-[11px] text-[#68708A]">{u.email}</div>
+                      <div className="text-[12px] text-[#68708A]">{u.email}</div>
                     </td>
                     <td className="p-3.5">
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#F0F2FA] text-[#111965]">
+                      <span className="px-2 py-0.5 rounded-full text-[12.5px] font-bold bg-[#F0F2FA] text-[#111965]">
                         {u.roles?.join(", ")}
                       </span>
                     </td>
                     <td className="p-3.5 font-medium">{u.province || "Phnom Penh"}</td>
                     <td className="p-3.5">
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      <span className="px-2 py-0.5 rounded-full text-[12.5px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
                         {u.status}
                       </span>
                     </td>

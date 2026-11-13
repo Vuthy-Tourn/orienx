@@ -457,13 +457,13 @@ export default function RiasecPublicGuidePage() {
                       <h3 className="text-xs sm:text-sm font-black text-white">
                         {language === "km" ? "គំរូតេស្ត & រ៉ាដាអន្តរកម្ម" : "Interactive Holland Radar Preview"}
                       </h3>
-                      <p className="text-[10px] text-slate-300">
+                      <p className="text-[12.5px] text-slate-300">
                         {language === "km" ? "ជ្រើសរើសទម្រង់គំរូខាងក្រោមដើម្បីមើលការប្រែប្រួល" : "Click presets to see radar & major match changes"}
                       </p>
                     </div>
                   </div>
 
-                  <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-md bg-[#F7CE4D] text-[#111965]">
+                  <span className="text-[12.5px] font-black uppercase px-2 py-0.5 rounded-md bg-[#F7CE4D] text-[#111965]">
                     {currentPreset.code}
                   </span>
                 </div>
@@ -509,9 +509,9 @@ export default function RiasecPublicGuidePage() {
                     >
                       <div className="flex items-center justify-between">
                         <span className="truncate">{preset.code}</span>
-                        <span className="text-[9px] opacity-75">Fit</span>
+                        <span className="text-[12px] opacity-75">Fit</span>
                       </div>
-                      <div className="text-[10px] truncate opacity-90">
+                      <div className="text-[12.5px] truncate opacity-90">
                         {language === "km" ? preset.titleKm.split(" ")[0] : preset.titleEn.split(" ")[0]}
                       </div>
                     </button>
@@ -520,7 +520,7 @@ export default function RiasecPublicGuidePage() {
 
                 {/* Dynamic Result Snippet */}
                 <div className="p-3 rounded-2xl bg-black/25 border border-white/15 space-y-1.5 text-xs">
-                  <div className="flex items-center justify-between text-[11px] text-slate-300">
+                  <div className="flex items-center justify-between text-[12px] text-slate-300">
                     <span>{language === "km" ? "ជំនាញផ្គូផ្គងគំរូ:" : "Matched Cambodian Major:"}</span>
                     <span className="text-[#F7CE4D] font-extrabold">{currentPreset.code} Code</span>
                   </div>
@@ -530,7 +530,7 @@ export default function RiasecPublicGuidePage() {
                     </span>
                     <Link
                       href={`/majors/${currentPreset.matchedMajorSlug}`}
-                      className="text-[10px] font-black text-[#F7CE4D] hover:underline shrink-0 flex items-center gap-0.5"
+                      className="text-[12.5px] font-black text-[#F7CE4D] hover:underline shrink-0 flex items-center gap-0.5"
                     >
                       <span>{language === "km" ? "មើល" : "View"}</span>
                       <ChevronRight className="w-3 h-3" />
@@ -592,7 +592,7 @@ export default function RiasecPublicGuidePage() {
                         <h3 className="text-base font-black text-[#111965] leading-snug">
                           {language === "km" ? meta.shortNameKm : meta.shortNameEn}
                         </h3>
-                        <span className="text-[11px] font-bold text-slate-400">
+                        <span className="text-[12px] font-bold text-slate-400">
                           Holland Dimension ({code})
                         </span>
                       </div>
@@ -617,14 +617,14 @@ export default function RiasecPublicGuidePage() {
 
                   {/* Core Strengths Badges */}
                   <div className="space-y-1.5 pt-1">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">
+                    <span className="text-[12.5px] font-black text-slate-400 uppercase tracking-wider block">
                       {language === "km" ? "ចំណុចខ្លាំងស្នូល (Core Strengths):" : "Core Strengths:"}
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {meta.strengths.map((str, sIdx) => (
                         <span
                           key={sIdx}
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-[#F8FAFD] text-[#111965] border border-slate-200/80"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[12px] font-semibold bg-[#F8FAFD] text-[#111965] border border-slate-200/80"
                         >
                           <Check className="w-3 h-3 text-emerald-600" />
                           <span>{language === "km" ? str.km : str.en}</span>
@@ -635,7 +635,7 @@ export default function RiasecPublicGuidePage() {
 
                   {/* Matching Cambodian Majors */}
                   <div className="space-y-1.5 pt-2 border-t border-slate-100">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">
+                    <span className="text-[12.5px] font-black text-slate-400 uppercase tracking-wider block">
                       {language === "km" ? "ជំនាញត្រូវគ្នានៅកម្ពុជា (Matching Majors):" : "Matching Cambodian Majors:"}
                     </span>
                     <div className="space-y-1">
@@ -655,12 +655,12 @@ export default function RiasecPublicGuidePage() {
 
                 {/* Footer with Careers */}
                 <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <div className="text-[11px] text-slate-500 font-medium truncate">
+                  <div className="text-[12px] text-slate-500 font-medium truncate">
                     {language === "km" ? "អាជីព:" : "Careers:"} {meta.sampleCareers.slice(0, 2).map((c) => (language === "km" ? c.km : c.en)).join(", ")}
                   </div>
                   <Link
                     href="/dashboard/assessments/riasec"
-                    className="inline-flex items-center gap-1 text-[11px] font-black text-[#111965] hover:text-[#0284C7] transition-colors shrink-0 ml-2"
+                    className="inline-flex items-center gap-1 text-[12px] font-black text-[#111965] hover:text-[#0284C7] transition-colors shrink-0 ml-2"
                   >
                     <span>{language === "km" ? "ធ្វើតេស្ត" : "Test"}</span>
                     <ArrowRight className="w-3 h-3" />
@@ -778,7 +778,7 @@ export default function RiasecPublicGuidePage() {
                   >
                     {item.code}
                   </span>
-                  <span className="text-[10px] font-black uppercase text-slate-400 group-hover:text-[#111965] transition-colors flex items-center gap-1">
+                  <span className="text-[12.5px] font-black uppercase text-slate-400 group-hover:text-[#111965] transition-colors flex items-center gap-1">
                     <span>{language === "km" ? "មើលលម្អិត" : "Inspect"}</span>
                     <ChevronRight className="w-3 h-3" />
                   </span>
@@ -788,7 +788,7 @@ export default function RiasecPublicGuidePage() {
                   <h4 className="text-base font-black text-[#111965] leading-snug">
                     {language === "km" ? item.titleKm : item.titleEn}
                   </h4>
-                  <p className="text-[11px] text-slate-400 font-bold mt-0.5">
+                  <p className="text-[12px] text-slate-400 font-bold mt-0.5">
                     {getHollandSpelledOut(item.code, language === "km" ? "km" : "en")}
                   </p>
                 </div>
@@ -799,7 +799,7 @@ export default function RiasecPublicGuidePage() {
               </div>
 
               <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#111965]">
-                <span className="text-[11px] text-slate-500">
+                <span className="text-[12px] text-slate-500">
                   {language === "km" ? "ស្វែងយល់បន្ថែម" : "View Profile"}
                 </span>
                 <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#111965] group-hover:translate-x-1 transition-all" />

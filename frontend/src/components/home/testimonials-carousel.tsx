@@ -146,7 +146,7 @@ export function TestimonialsCarousel() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-2.5">
-          <span className="text-[11px] sm:text-xs font-bold text-[#68708A] tracking-[0.2em] uppercase block">
+          <span className="text-[12px] sm:text-xs font-bold text-[#68708A] tracking-[0.2em] uppercase block">
             {t("homeTestimonials.eyebrow")}
           </span>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
@@ -212,7 +212,7 @@ export function TestimonialsCarousel() {
                     className="absolute inset-0 flex flex-col items-center justify-center"
                   >
                     <h4 className="text-sm font-bold text-[#111965] truncate w-full">{prevItem.author}</h4>
-                    <p className="text-[11px] text-[#68708A] truncate w-full">{prevItem.role}</p>
+                    <p className="text-[12px] text-[#68708A] truncate w-full">{prevItem.role}</p>
                   </motion.div>
                 </AnimatePresence>
               </div>
@@ -334,7 +334,7 @@ export function TestimonialsCarousel() {
                     className="absolute inset-0 flex flex-col items-center justify-center"
                   >
                     <h4 className="text-sm font-bold text-[#111965] truncate w-full">{nextItem.author}</h4>
-                    <p className="text-[11px] text-[#68708A] truncate w-full">{nextItem.role}</p>
+                    <p className="text-[12px] text-[#68708A] truncate w-full">{nextItem.role}</p>
                   </motion.div>
                 </AnimatePresence>
               </div>
