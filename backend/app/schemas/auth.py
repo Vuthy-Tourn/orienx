@@ -1,11 +1,11 @@
 import uuid
 from typing import Optional, List
-from pydantic import BaseModel, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict, Field
 
 
 class RegisterRequest(BaseModel):
     email: EmailStr
-    password: str
+    password: str = Field(min_length=8, max_length=128)
     full_name_en: str
     full_name_km: Optional[str] = None
     province: str = "Phnom Penh"
@@ -20,7 +20,21 @@ class RegisterRequest(BaseModel):
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
+    remember_me: bool = True
     
+    model_config = ConfigDict(extra="forbid")
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str = Field(min_length=10, max_length=255)
+    new_password: str = Field(min_length=8, max_length=128)
+
     model_config = ConfigDict(extra="forbid")
 
 

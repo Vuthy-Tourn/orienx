@@ -31,6 +31,13 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = str(Path(__file__).resolve().parents[2] / "uploads")
     MAX_UPLOAD_MB: int = 5
 
+    # Password recovery. Set PASSWORD_RESET_DEBUG=false once email delivery
+    # is configured; when true the reset link is returned to the client and
+    # logged so the flow can be exercised locally.
+    FRONTEND_URL: str = "http://localhost:3000"
+    PASSWORD_RESET_EXPIRE_MINUTES: int = 30
+    PASSWORD_RESET_DEBUG: bool = True
+
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost:3000",

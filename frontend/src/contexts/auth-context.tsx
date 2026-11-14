@@ -26,7 +26,7 @@ export interface User {
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<User | null>;
+  login: (email: string, password: string, rememberMe?: boolean) => Promise<User | null>;
   register: (data: any) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
@@ -124,11 +124,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       window.removeEventListener("futera:session-expired", handleExpired);
   }, [clearSessionCache, clearSessionHint]);
 
-  const login = async (email: string, password: string) => {
+  const login = async (
+    email: string,
+    password: string,
+    rememberMe = true
+  ) => {
     // The backend sets httpOnly access + refresh cookies on this response.
     await apiFetch("/auth/login?cookie_only=true", {
       method: "POST",
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, remember_me: rememberMe }),
     });
     clearSessionCache();
     return await fetchCurrentUser();

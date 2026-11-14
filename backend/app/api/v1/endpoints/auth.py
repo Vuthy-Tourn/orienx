@@ -1,6 +1,9 @@
+import hashlib
+import logging
+import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
-from typing import Optional
+from typing import Any, Dict, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
@@ -10,46 +13,67 @@ from app.core.security import hash_password, verify_password, create_access_toke
 from app.core.dependencies import get_current_user
 from app.models.auth import User, Role, RefreshToken
 from app.models.profile import StudentProfile
-from app.schemas.auth import RegisterRequest, LoginRequest, TokenResponse, UserOut
+from app.schemas.auth import (
+    ForgotPasswordRequest,
+    LoginRequest,
+    RegisterRequest,
+    ResetPasswordRequest,
+    TokenResponse,
+    UserOut,
+)
 from app.schemas.common import ApiResponse
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
-def _set_access_cookie(response: Response, access_token: str) -> None:
-    response.set_cookie(
-        key=settings.ACCESS_COOKIE_NAME,
-        value=access_token,
-        httponly=True,
-        secure=settings.COOKIE_SECURE,
-        samesite=settings.COOKIE_SAMESITE,
-        max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
-        path=settings.ACCESS_COOKIE_PATH,
-    )
+def _set_access_cookie(
+    response: Response, access_token: str, remember: bool = True
+) -> None:
+    access_cookie: Dict[str, Any] = {
+        "key": settings.ACCESS_COOKIE_NAME,
+        "value": access_token,
+        "httponly": True,
+        "secure": settings.COOKIE_SECURE,
+        "samesite": settings.COOKIE_SAMESITE,
+        "path": settings.ACCESS_COOKIE_PATH,
+    }
+    if remember:
+        access_cookie["max_age"] = settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+    response.set_cookie(**access_cookie)
+
     # Non-sensitive hint so the SPA can skip /auth/me for signed-out visitors.
-    response.set_cookie(
-        key=settings.SESSION_HINT_COOKIE_NAME,
-        value="1",
-        httponly=False,
-        secure=settings.COOKIE_SECURE,
-        samesite=settings.COOKIE_SAMESITE,
-        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
-        path=settings.SESSION_HINT_COOKIE_PATH,
-    )
+    hint_cookie: Dict[str, Any] = {
+        "key": settings.SESSION_HINT_COOKIE_NAME,
+        "value": "1",
+        "httponly": False,
+        "secure": settings.COOKIE_SECURE,
+        "samesite": settings.COOKIE_SAMESITE,
+        "path": settings.SESSION_HINT_COOKIE_PATH,
+    }
+    if remember:
+        hint_cookie["max_age"] = settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400
+    response.set_cookie(**hint_cookie)
 
 
 def _set_refresh_cookie(
-    response: Response, raw_token: str, token_id: uuid.UUID
+    response: Response, raw_token: str, token_id: uuid.UUID, remember: bool = True
 ) -> None:
-    response.set_cookie(
-        key=settings.REFRESH_COOKIE_NAME,
-        value=f"{raw_token}:{token_id}",
-        httponly=True,
-        secure=settings.COOKIE_SECURE,
-        samesite=settings.COOKIE_SAMESITE,
-        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
-        path=settings.REFRESH_COOKIE_PATH,
-    )
+    refresh_cookie: Dict[str, Any] = {
+        "key": settings.REFRESH_COOKIE_NAME,
+        "value": f"{raw_token}:{token_id}:{1 if remember else 0}",
+        "httponly": True,
+        "secure": settings.COOKIE_SECURE,
+        "samesite": settings.COOKIE_SAMESITE,
+        "path": settings.REFRESH_COOKIE_PATH,
+    }
+    if remember:
+        refresh_cookie["max_age"] = settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400
+    response.set_cookie(**refresh_cookie)
+
+
+def _hash_reset_token(raw_token: str) -> str:
+    return hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
 
 
 @router.post("/register", response_model=ApiResponse[TokenResponse])
@@ -113,8 +137,8 @@ async def register(
 
     # HttpOnly browser session cookies. The JS client never receives or
     # persists the access token.
-    _set_access_cookie(response, access_token)
-    _set_refresh_cookie(response, raw_refresh, db_refresh.id)
+    _set_access_cookie(response, access_token, remember=True)
+    _set_refresh_cookie(response, raw_refresh, db_refresh.id, remember=True)
 
     return ApiResponse(
         success=True,
@@ -168,8 +192,10 @@ async def login(
     db.add(db_refresh)
     await db.commit()
 
-    _set_access_cookie(response, access_token)
-    _set_refresh_cookie(response, raw_refresh, db_refresh.id)
+    _set_access_cookie(response, access_token, remember=data.remember_me)
+    _set_refresh_cookie(
+        response, raw_refresh, db_refresh.id, remember=data.remember_me
+    )
 
     return ApiResponse(
         success=True,
@@ -195,7 +221,11 @@ async def refresh_token(
     if not cookie_val or ":" not in cookie_val:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh cookie missing")
 
-    raw_token, token_id_str = cookie_val.split(":", 1)
+    parts = cookie_val.split(":")
+    if len(parts) < 2:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Malformed refresh cookie")
+    raw_token, token_id_str = parts[0], parts[1]
+    remember = parts[2] != "0" if len(parts) > 2 else True
     try:
         token_id = uuid.UUID(token_id_str)
     except ValueError:
@@ -243,8 +273,8 @@ async def refresh_token(
     db.add(new_rt)
     await db.commit()
 
-    _set_access_cookie(response, new_access_token)
-    _set_refresh_cookie(response, new_raw, new_rt.id)
+    _set_access_cookie(response, new_access_token, remember=remember)
+    _set_refresh_cookie(response, new_raw, new_rt.id, remember=remember)
 
     return ApiResponse(
         success=True,
@@ -267,7 +297,8 @@ async def logout(
 ):
     cookie_val = request.cookies.get(settings.REFRESH_COOKIE_NAME)
     if cookie_val and ":" in cookie_val:
-        _, token_id_str = cookie_val.split(":", 1)
+        parts = cookie_val.split(":")
+        token_id_str = parts[1] if len(parts) > 1 else ""
         try:
             token_id = uuid.UUID(token_id_str)
             await db.execute(
@@ -292,6 +323,82 @@ async def logout(
         path=settings.SESSION_HINT_COOKIE_PATH,
     )
     return ApiResponse(success=True, message="Logged out successfully", data=True)
+
+
+@router.post("/forgot-password", response_model=ApiResponse[Dict[str, Any]])
+async def forgot_password(
+    data: ForgotPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Create a short-lived reset token without revealing whether the email exists."""
+    stmt = select(User).where(User.email == data.email)
+    user = (await db.execute(stmt)).scalar_one_or_none()
+
+    payload: Dict[str, Any] = {"sent": True}
+
+    if user:
+        raw_token = secrets.token_urlsafe(32)
+        user.password_reset_token = _hash_reset_token(raw_token)
+        user.password_reset_expires_at = datetime.now(timezone.utc) + timedelta(
+            minutes=settings.PASSWORD_RESET_EXPIRE_MINUTES
+        )
+        await db.commit()
+
+        reset_url = (
+            f"{settings.FRONTEND_URL.rstrip('/')}"
+            f"/reset-password?token={raw_token}"
+        )
+        logger.info("Password reset link for %s: %s", user.email, reset_url)
+
+        if settings.PASSWORD_RESET_DEBUG:
+            payload["reset_url"] = reset_url
+
+    return ApiResponse(
+        success=True,
+        message=(
+            "If an account exists for that email, a password reset link has been sent."
+        ),
+        data=payload,
+    )
+
+
+@router.post("/reset-password", response_model=ApiResponse[bool])
+async def reset_password(
+    data: ResetPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    digest = _hash_reset_token(data.token)
+    stmt = select(User).where(User.password_reset_token == digest)
+    user = (await db.execute(stmt)).scalar_one_or_none()
+
+    expires_at = user.password_reset_expires_at if user else None
+    if (
+        not user
+        or not expires_at
+        or expires_at < datetime.now(timezone.utc)
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired reset token",
+        )
+
+    user.password_hash = hash_password(data.new_password)
+    user.password_reset_token = None
+    user.password_reset_expires_at = None
+
+    # A password reset invalidates every existing browser session.
+    await db.execute(
+        update(RefreshToken)
+        .where(RefreshToken.user_id == user.id)
+        .values(is_revoked=True, revoked_at=datetime.now(timezone.utc))
+    )
+    await db.commit()
+
+    return ApiResponse(
+        success=True,
+        message="Password updated successfully",
+        data=True,
+    )
 
 
 @router.get("/me", response_model=ApiResponse[UserOut])

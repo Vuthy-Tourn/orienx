@@ -2,159 +2,177 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { AlertCircle, ArrowLeft, ArrowUpRight, Mail, MailCheck } from "lucide-react";
+
+import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
-import { Logo } from "@/components/layout/logo";
-import { LanguageSwitcher } from "@/components/layout/language-switcher";
-import { DotPattern } from "@/components/magicui/dot-pattern";
-import {
-  Mail,
-  ArrowRight,
-  ArrowLeft,
-  CheckCircle2,
-  AlertCircle,
-  ShieldCheck,
-  Sparkles,
-} from "lucide-react";
+import { AuthField } from "@/components/auth/auth-field";
+import { AuthButton } from "@/components/auth/auth-button";
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function ForgotPasswordPage() {
-  const { language } = useLanguage();
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { t, language } = useLanguage();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const [email, setEmail] = useState("");
+  const [fieldError, setFieldError] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [resetUrl, setResetUrl] = useState<string | null>(null);
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setError(null);
+
+    if (!email.trim()) {
+      setFieldError(t("auth.requiredEmail"));
+      return;
+    }
+    if (!EMAIL_PATTERN.test(email.trim())) {
+      setFieldError(t("auth.invalidEmail"));
+      return;
+    }
+
+    setFieldError("");
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const result = await apiFetch<{
+        sent: boolean;
+        reset_url?: string | null;
+      }>("/auth/forgot-password", {
+        method: "POST",
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      setResetUrl(result?.reset_url || null);
+      setSent(true);
+    } catch (err) {
+      setError(
+        (err instanceof Error ? err.message : null) ||
+          "We could not send the reset link. Please try again."
+      );
+    } finally {
       setLoading(false);
-      setSubmitted(true);
-    }, 600);
+    }
   };
 
-  return (
-    <div className="relative min-h-screen flex items-center justify-center p-4 sm:p-6 bg-[#F5F6FA] overflow-hidden py-8 sm:py-12">
-      <DotPattern
-        width={24}
-        height={24}
-        cx={1.5}
-        cy={1.5}
-        cr={1.5}
-        className="text-slate-300/40 [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"
-      />
-
-      <div className="relative z-10 w-full max-w-md mx-auto space-y-4">
-        {/* Top Bar Navigation */}
-        <div className="flex items-center justify-between px-1">
-          <Link
-            href="/login"
-            className="inline-flex items-center gap-2 text-xs font-semibold text-[#68708A] hover:text-[#111965] transition-colors py-1.5 px-3 rounded-xl bg-white/70 hover:bg-white border border-[#E6E8F0] shadow-2xs"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>{language === "km" ? "ត្រឡប់ទៅចូលគណនី" : "Back to Sign In"}</span>
-          </Link>
-          <LanguageSwitcher />
+  if (sent) {
+    return (
+      <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <div className="mb-7 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/15 bg-white/[0.06] text-[#F7CE4D] shadow-[0_16px_30px_-22px_rgba(0,0,0,0.6)] backdrop-blur-sm">
+          <MailCheck className="h-6 w-6" />
         </div>
 
-        <div className="bg-white rounded-3xl border border-[#E6E8F0] p-6 sm:p-8 shadow-xl shadow-slate-200/50 space-y-6">
-          <div className="text-center space-y-2">
-            <div className="flex justify-center mb-1">
-              <Logo showText={false} />
-            </div>
-            <h1 className="text-2xl font-extrabold text-[#111965]">
-              {language === "km" ? "កំណត់ពាក្យសម្ងាត់ឡើងវិញ" : "Reset Your Password"}
-            </h1>
-            <p className="text-xs text-[#68708A]">
-              {language === "km"
-                ? "បញ្ចូលអាសយដ្ឋានអ៊ីមែលរបស់អ្នកដើម្បីទទួលតំណភ្ជាប់កំណត់ពាក្យសម្ងាត់ឡើងវិញ"
-                : "Enter your registered email address and we'll send you a password reset link"}
+        <h1 className="text-[2.05rem] font-black leading-[1.04] tracking-[-0.05em] text-white sm:text-[2.35rem]">
+          {t("auth.checkYourEmail")}
+        </h1>
+        <p className="mt-3 text-[13.5px] leading-relaxed text-white/65">
+          {t("auth.resetSentDescription")}
+        </p>
+
+        <div className="mt-5 flex items-center gap-2.5 rounded-[14px] border border-white/15 bg-white/[0.06] px-4 py-3 text-[12px] font-bold text-white/80 backdrop-blur-sm">
+          <Mail className="h-4 w-4 shrink-0 text-white/50" />
+          <span className="truncate">{email.trim()}</span>
+        </div>
+
+        {resetUrl && (
+          <div className="mt-4 rounded-[14px] border border-dashed border-white/15 bg-white/[0.04] p-3.5 backdrop-blur-sm">
+            <p className="text-[10px] font-black uppercase tracking-[0.16em] text-white/50">
+              Local development
             </p>
-          </div>
-
-          {submitted ? (
-            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-3">
-              <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-5 h-5" />
-              </div>
-              <div className="space-y-1">
-                <div className="text-sm font-bold text-emerald-900">
-                  {language === "km" ? "បានផ្ញើតំណភ្ជាប់រួចរាល់" : "Reset Link Sent"}
-                </div>
-                <p className="text-xs text-emerald-700">
-                  {language === "km"
-                    ? `យើងបានផ្ញើការណែនាំទៅកាន់ ${email}។ សូមពិនិត្យប្រអប់សំបុត្រ ឬ Spam របស់អ្នក។`
-                    : `We've sent password recovery instructions to ${email}. Please check your inbox or spam folder.`}
-                </p>
-              </div>
-              <Link
-                href="/login"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#111965] hover:underline pt-2"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>{language === "km" ? "ត្រឡប់ទៅកាន់ទំព័រចូល" : "Back to Sign In"}</span>
-              </Link>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#171A2C]">
-                  {language === "km" ? "អ៊ីមែល (Email Address)" : "Email Address"}
-                </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-[#68708A] absolute left-3.5 top-3" />
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="student@futera.edu.kh"
-                    className="w-full pl-10 pr-3.5 py-2.5 rounded-xl text-sm border border-[#E6E8F0] bg-slate-50/50 hover:bg-white focus:bg-white focus:outline-hidden focus:border-[#111965] focus:ring-2 focus:ring-[#111965]/15 transition-all text-[#171A2C]"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3 rounded-xl font-bold text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] active:scale-[0.99] shadow-md shadow-amber-300/30 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 mt-2"
-              >
-                {loading ? (
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-[#111965]/30 border-t-[#111965] rounded-full animate-spin" />
-                    <span>{language === "km" ? "កំពុងផ្ញើ..." : "Sending link..."}</span>
-                  </div>
-                ) : (
-                  <>
-                    <span>
-                      {language === "km" ? "ផ្ញើតំណភ្ជាប់កំណត់ឡើងវិញ" : "Send Reset Link"}
-                    </span>
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
-
-              <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 text-[12px] text-amber-900 flex items-start gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-amber-700 shrink-0 mt-0.5" />
-                <span>
-                  {language === "km"
-                    ? "សម្រាប់គណនីសាកល្បង Demo អ្នកអាចចូលប្រើប្រាស់បានភ្លាមៗតាមរយៈប៊ូតុង Instant Demo នៅទំព័រ Sign In។"
-                    : "For testing demo accounts, you can use the instant one-click demo credentials on the Sign In page."}
-                </span>
-              </div>
-            </form>
-          )}
-
-          <div className="pt-4 border-t border-[#E6E8F0] text-center text-xs text-[#68708A]">
-            <Link
-              href="/login"
-              className="inline-flex items-center gap-1.5 font-bold text-[#111965] hover:underline"
+            <a
+              href={resetUrl}
+              className="mt-1.5 inline-flex items-center gap-1.5 text-[12px] font-bold text-[#F7CE4D] underline-offset-4 hover:text-[#FFE28A] hover:underline"
             >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>{language === "km" ? "ត្រឡប់ទៅកាន់ទំព័រចូល" : "Back to Sign In"}</span>
-            </Link>
+              {t("auth.devResetLink")}
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
           </div>
-        </div>
+        )}
+
+        <Link
+          href="/login"
+          className="mt-7 inline-flex items-center gap-2 text-[12px] font-black text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          {t("auth.backToSignIn")}
+        </Link>
       </div>
+    );
+  }
+
+  return (
+    <div>
+      <div data-form-anim className="mb-8">
+        <div className="mb-4 flex items-center gap-2.5">
+          <span className="h-px w-7 bg-[#F7CE4D]" />
+          <span
+            className={`font-black text-white/50 ${
+              language === "km"
+                ? "text-[11px] tracking-normal"
+                : "text-[10px] uppercase tracking-[0.2em]"
+            }`}
+          >
+            {t("auth.accountRecovery")}
+          </span>
+        </div>
+        <h1 className="text-[2.05rem] font-black leading-[1.04] tracking-[-0.05em] text-white sm:text-[2.35rem]">
+          {t("auth.forgotHeading")}
+        </h1>
+        <p className="mt-3 text-[13.5px] leading-relaxed text-white/65">
+          {t("auth.forgotDescription")}
+        </p>
+      </div>
+
+      {error && (
+        <div
+          data-form-anim
+          role="alert"
+          className="mb-5 flex items-start gap-2.5 rounded-[14px] border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-[12px] font-medium leading-relaxed text-rose-200 animate-in fade-in slide-in-from-top-2 duration-300"
+        >
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} noValidate className="space-y-5">
+        <div data-form-anim>
+          <AuthField
+            label={t("auth.emailLabel")}
+            icon={Mail}
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            spellCheck={false}
+            placeholder={t("auth.emailPlaceholder")}
+            value={email}
+            onChange={(event) => {
+              setEmail(event.target.value);
+              setFieldError("");
+            }}
+            error={fieldError || undefined}
+          />
+        </div>
+
+        <div data-form-anim>
+          <AuthButton
+            type="submit"
+            loading={loading}
+            loadingLabel={t("auth.sendingResetLink")}
+          >
+            {t("auth.sendResetLink")}
+          </AuthButton>
+        </div>
+      </form>
+
+      <Link
+        data-form-anim
+        href="/login"
+        className="mt-7 inline-flex items-center gap-2 text-[12px] font-black text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline"
+      >
+        <ArrowLeft className="h-3.5 w-3.5" />
+        {t("auth.backToSignIn")}
+      </Link>
     </div>
   );
 }
-
