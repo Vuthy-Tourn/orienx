@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useRef } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 
 export interface User {
@@ -28,9 +29,25 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const previousUserId = useRef<string | null>(null);
+
+  const clearSessionCache = () => {
+    // User-specific queries share static keys (dashboard-summary, favorites,
+    // recommendations…). Drop them so the next account never renders the
+    // previous student's cached data without a hard refresh.
+    queryClient.clear();
+
+    // Assessment drafts are also account-scoped. Leaving them behind would
+    // show the previous student's answers to the next user.
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("futera_personality_draft_v1");
+      localStorage.removeItem("futera_riasec_draft_v1");
+    }
+  };
 
   const fetchCurrentUser = async (authToken?: string | null) => {
     try {
@@ -56,6 +73,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     fetchCurrentUser();
   }, []);
 
+  // Defensive: if the authenticated identity changes through any flow,
+  // drop user-scoped queries instead of serving the previous account's data.
+  useEffect(() => {
+    if (
+      user?.id &&
+      previousUserId.current &&
+      previousUserId.current !== user.id
+    ) {
+      queryClient.clear();
+    }
+    previousUserId.current = user?.id ?? null;
+  }, [user?.id, queryClient]);
+
   const login = async (email: string, password: string) => {
     const res = await apiFetch<{ access_token: string; role: string }>("/auth/login", {
       method: "POST",
@@ -63,6 +93,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
     const accessToken = res.access_token;
     localStorage.setItem("futera_access_token", accessToken);
+    clearSessionCache();
     setToken(accessToken);
     await fetchCurrentUser(accessToken);
   };
@@ -74,6 +105,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
     const accessToken = res.access_token;
     localStorage.setItem("futera_access_token", accessToken);
+    clearSessionCache();
     setToken(accessToken);
     await fetchCurrentUser(accessToken);
   };
@@ -85,6 +117,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Ignore
     } finally {
       localStorage.removeItem("futera_access_token");
+      clearSessionCache();
       setUser(null);
       setToken(null);
     }
