@@ -422,7 +422,8 @@ function UniversitiesContent() {
               return (
                 <div
                   key={uni.id}
-                  className={`group relative rounded-2xl bg-white border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-lg hover:-translate-y-1 ${
+                  onClick={() => router.push(`/universities/${uni.slug}`)}
+                  className={`group relative cursor-pointer rounded-2xl bg-white border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-lg hover:-translate-y-1 ${
                     isSelected ? "border-[#111965] ring-2 ring-[#111965]/20" : "border-[#E6E8F0] hover:border-[#111965]/30"
                   }`}
                 >
@@ -462,7 +463,10 @@ function UniversitiesContent() {
                           />
                           <button
                             type="button"
-                            onClick={() => toggleCompare(uni.slug)}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              toggleCompare(uni.slug);
+                            }}
                             className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold shadow-xs transition-all cursor-pointer ${
                               isSelected
                                 ? "bg-[#F7CE4D] text-[#111965] ring-1 ring-[#111965]/20"
@@ -550,6 +554,7 @@ function UniversitiesContent() {
 
                     <Link
                       href={`/universities/${uni.slug}`}
+                      onClick={(event) => event.stopPropagation()}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all shadow-2xs group-hover:shadow-xs"
                     >
                       <span>{t("universitiesDirectory.viewDetails")}</span>
@@ -575,7 +580,7 @@ function UniversitiesContent() {
               {t("universitiesDirectory.notFound")}
             </h3>
             <p className="text-xs text-[#68708A] max-w-md mx-auto">
-              Try adjusting your search query or selecting "All University Types" to view the complete list of Cambodian institutions.
+              Try adjusting your search query or selecting &quot;All University Types&quot; to view the complete list of Cambodian institutions.
             </p>
             <button
               onClick={resetFilters}

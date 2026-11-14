@@ -47,6 +47,7 @@ async def test_auth_and_assessments_flow(client):
     rupp_data = rupp_res.json()["data"]
     assert rupp_data["slug"] == "rupp"
     assert rupp_data["is_tuition_verified"] is True
+    assert "major_image_url" in rupp_data["offerings"][0]
 
     # 4. Compare universities
     comp_res = await client.get("/api/v1/universities/compare?ids=rupp,itc")

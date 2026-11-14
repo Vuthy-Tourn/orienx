@@ -29,6 +29,7 @@ class UniversityOfferingOut(BaseModel):
     major_slug: str
     major_name: Dict[str, str]
     major_category: str
+    major_image_url: Optional[str] = None
     degree_level: str
     duration_years: float
     tuition_annual_usd: Optional[float] = None
