@@ -16,10 +16,47 @@ from app.schemas.common import ApiResponse
 router = APIRouter()
 
 
+def _set_access_cookie(response: Response, access_token: str) -> None:
+    response.set_cookie(
+        key=settings.ACCESS_COOKIE_NAME,
+        value=access_token,
+        httponly=True,
+        secure=settings.COOKIE_SECURE,
+        samesite=settings.COOKIE_SAMESITE,
+        max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        path=settings.ACCESS_COOKIE_PATH,
+    )
+    # Non-sensitive hint so the SPA can skip /auth/me for signed-out visitors.
+    response.set_cookie(
+        key=settings.SESSION_HINT_COOKIE_NAME,
+        value="1",
+        httponly=False,
+        secure=settings.COOKIE_SECURE,
+        samesite=settings.COOKIE_SAMESITE,
+        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
+        path=settings.SESSION_HINT_COOKIE_PATH,
+    )
+
+
+def _set_refresh_cookie(
+    response: Response, raw_token: str, token_id: uuid.UUID
+) -> None:
+    response.set_cookie(
+        key=settings.REFRESH_COOKIE_NAME,
+        value=f"{raw_token}:{token_id}",
+        httponly=True,
+        secure=settings.COOKIE_SECURE,
+        samesite=settings.COOKIE_SAMESITE,
+        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
+        path=settings.REFRESH_COOKIE_PATH,
+    )
+
+
 @router.post("/register", response_model=ApiResponse[TokenResponse])
 async def register(
     data: RegisterRequest,
     response: Response,
+    cookie_only: bool = False,
     db: AsyncSession = Depends(get_db)
 ):
     # Check if email exists
@@ -74,22 +111,16 @@ async def register(
     db.add(db_refresh)
     await db.commit()
 
-    # Set HttpOnly refresh cookie
-    response.set_cookie(
-        key="futera_refresh_token",
-        value=f"{raw_refresh}:{db_refresh.id}",
-        httponly=True,
-        secure=False, # Set to True in production HTTPS
-        samesite="lax",
-        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
-        path="/api/v1/auth"
-    )
+    # HttpOnly browser session cookies. The JS client never receives or
+    # persists the access token.
+    _set_access_cookie(response, access_token)
+    _set_refresh_cookie(response, raw_refresh, db_refresh.id)
 
     return ApiResponse(
         success=True,
         message="Account created successfully",
         data=TokenResponse(
-            access_token=access_token,
+            access_token="" if cookie_only else access_token,
             expires_in_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES,
             user_id=new_user.id,
             email=new_user.email,
@@ -102,6 +133,7 @@ async def register(
 async def login(
     data: LoginRequest,
     response: Response,
+    cookie_only: bool = False,
     db: AsyncSession = Depends(get_db)
 ):
     stmt = select(User).where(User.email == data.email)
@@ -136,21 +168,14 @@ async def login(
     db.add(db_refresh)
     await db.commit()
 
-    response.set_cookie(
-        key="futera_refresh_token",
-        value=f"{raw_refresh}:{db_refresh.id}",
-        httponly=True,
-        secure=False,
-        samesite="lax",
-        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
-        path="/api/v1/auth"
-    )
+    _set_access_cookie(response, access_token)
+    _set_refresh_cookie(response, raw_refresh, db_refresh.id)
 
     return ApiResponse(
         success=True,
         message="Login successful",
         data=TokenResponse(
-            access_token=access_token,
+            access_token="" if cookie_only else access_token,
             expires_in_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES,
             user_id=user.id,
             email=user.email,
@@ -163,9 +188,10 @@ async def login(
 async def refresh_token(
     request: Request,
     response: Response,
+    cookie_only: bool = False,
     db: AsyncSession = Depends(get_db)
 ):
-    cookie_val = request.cookies.get("futera_refresh_token")
+    cookie_val = request.cookies.get(settings.REFRESH_COOKIE_NAME)
     if not cookie_val or ":" not in cookie_val:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh cookie missing")
 
@@ -217,21 +243,14 @@ async def refresh_token(
     db.add(new_rt)
     await db.commit()
 
-    response.set_cookie(
-        key="futera_refresh_token",
-        value=f"{new_raw}:{new_rt.id}",
-        httponly=True,
-        secure=False,
-        samesite="lax",
-        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
-        path="/api/v1/auth"
-    )
+    _set_access_cookie(response, new_access_token)
+    _set_refresh_cookie(response, new_raw, new_rt.id)
 
     return ApiResponse(
         success=True,
         message="Token refreshed",
         data=TokenResponse(
-            access_token=new_access_token,
+            access_token="" if cookie_only else new_access_token,
             expires_in_minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES,
             user_id=user.id,
             email=user.email,
@@ -246,7 +265,7 @@ async def logout(
     response: Response,
     db: AsyncSession = Depends(get_db)
 ):
-    cookie_val = request.cookies.get("futera_refresh_token")
+    cookie_val = request.cookies.get(settings.REFRESH_COOKIE_NAME)
     if cookie_val and ":" in cookie_val:
         _, token_id_str = cookie_val.split(":", 1)
         try:
@@ -260,7 +279,18 @@ async def logout(
         except Exception:
             pass
 
-    response.delete_cookie(key="futera_refresh_token", path="/api/v1/auth")
+    response.delete_cookie(
+        key=settings.REFRESH_COOKIE_NAME,
+        path=settings.REFRESH_COOKIE_PATH,
+    )
+    response.delete_cookie(
+        key=settings.ACCESS_COOKIE_NAME,
+        path=settings.ACCESS_COOKIE_PATH,
+    )
+    response.delete_cookie(
+        key=settings.SESSION_HINT_COOKIE_NAME,
+        path=settings.SESSION_HINT_COOKIE_PATH,
+    )
     return ApiResponse(success=True, message="Logged out successfully", data=True)
 
 

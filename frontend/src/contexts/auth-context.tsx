@@ -1,6 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useRef } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 
@@ -18,7 +25,6 @@ export interface User {
 
 interface AuthContextType {
   user: User | null;
-  token: string | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (data: any) => Promise<void>;
@@ -31,11 +37,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const previousUserId = useRef<string | null>(null);
+  const userRef = useRef<User | null>(null);
 
-  const clearSessionCache = () => {
+  const clearSessionCache = useCallback(() => {
     // User-specific queries share static keys (dashboard-summary, favorites,
     // recommendations…). Drop them so the next account never renders the
     // previous student's cached data without a hard refresh.
@@ -44,94 +50,117 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Assessment drafts are also account-scoped. Leaving them behind would
     // show the previous student's answers to the next user.
     if (typeof window !== "undefined") {
+      // Purge legacy bearer tokens from older builds and account-scoped drafts.
+      localStorage.removeItem("futera_access_token");
       localStorage.removeItem("futera_personality_draft_v1");
       localStorage.removeItem("futera_riasec_draft_v1");
     }
-  };
+  }, [queryClient]);
 
-  const fetchCurrentUser = async (authToken?: string | null) => {
+  const clearSessionHint = useCallback(() => {
+    if (typeof document !== "undefined") {
+      document.cookie = "futera_session=; Max-Age=0; path=/";
+    }
+  }, []);
+
+  const fetchCurrentUser = useCallback(async () => {
     try {
-      const activeToken = authToken || localStorage.getItem("futera_access_token");
-      if (!activeToken) {
+      // The hint cookie only says a session *may* exist; it is not a token.
+      // Signed-out visitors skip the /auth/me round-trip entirely.
+      if (
+        typeof document !== "undefined" &&
+        !document.cookie
+          .split("; ")
+          .some((entry) => entry.startsWith("futera_session="))
+      ) {
         setUser(null);
         setIsLoading(false);
         return;
       }
-      const userData = await apiFetch<User>("/auth/me", { token: activeToken });
+
+      // Cookies are httpOnly, so the browser sends them automatically.
+      const userData = await apiFetch<User>("/auth/me");
       setUser(userData);
-      setToken(activeToken);
-    } catch (e) {
+    } catch {
       setUser(null);
-      setToken(null);
-      localStorage.removeItem("futera_access_token");
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchCurrentUser();
-  }, []);
+  }, [fetchCurrentUser]);
 
   // Defensive: if the authenticated identity changes through any flow,
   // drop user-scoped queries instead of serving the previous account's data.
   useEffect(() => {
+    userRef.current = user;
     if (
       user?.id &&
       previousUserId.current &&
       previousUserId.current !== user.id
     ) {
-      queryClient.clear();
+      clearSessionCache();
     }
     previousUserId.current = user?.id ?? null;
-  }, [user?.id, queryClient]);
+  }, [user, clearSessionCache]);
+
+  // The API client emits this when the refresh cookie is no longer valid.
+  useEffect(() => {
+    const handleExpired = () => {
+      // Always drop the stale session hint. A signed-out visitor can hit a 401
+      // while browsing public pages, so only clear user caches when a user was
+      // actually signed in.
+      clearSessionHint();
+      if (!userRef.current) return;
+      clearSessionCache();
+      setUser(null);
+    };
+    window.addEventListener("futera:session-expired", handleExpired);
+    return () =>
+      window.removeEventListener("futera:session-expired", handleExpired);
+  }, [clearSessionCache, clearSessionHint]);
 
   const login = async (email: string, password: string) => {
-    const res = await apiFetch<{ access_token: string; role: string }>("/auth/login", {
+    // The backend sets httpOnly access + refresh cookies on this response.
+    await apiFetch("/auth/login?cookie_only=true", {
       method: "POST",
       body: JSON.stringify({ email, password }),
     });
-    const accessToken = res.access_token;
-    localStorage.setItem("futera_access_token", accessToken);
     clearSessionCache();
-    setToken(accessToken);
-    await fetchCurrentUser(accessToken);
+    await fetchCurrentUser();
   };
 
   const register = async (data: any) => {
-    const res = await apiFetch<{ access_token: string; role: string }>("/auth/register", {
+    await apiFetch("/auth/register?cookie_only=true", {
       method: "POST",
       body: JSON.stringify(data),
     });
-    const accessToken = res.access_token;
-    localStorage.setItem("futera_access_token", accessToken);
     clearSessionCache();
-    setToken(accessToken);
-    await fetchCurrentUser(accessToken);
+    await fetchCurrentUser();
   };
 
   const logout = async () => {
     try {
       await apiFetch("/auth/logout", { method: "POST" });
-    } catch (e) {
-      // Ignore
+    } catch {
+      // The local session is cleared even if the server call fails.
     } finally {
-      localStorage.removeItem("futera_access_token");
       clearSessionCache();
+      clearSessionHint();
       setUser(null);
-      setToken(null);
     }
   };
 
   const refreshUser = async () => {
-    await fetchCurrentUser(token);
+    await fetchCurrentUser();
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        token,
         isLoading,
         login,
         register,
@@ -151,4 +180,3 @@ export function useAuth() {
   }
   return context;
 }
-

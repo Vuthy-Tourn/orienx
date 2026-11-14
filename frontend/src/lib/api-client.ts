@@ -1,60 +1,61 @@
 const API_BASE = ""; // Proxied via Next.js rewrites to /api/v1
 
-export interface ApiFetchOptions extends RequestInit {
-  token?: string | null;
-}
+export type ApiFetchOptions = RequestInit;
 
+/**
+ * Same-origin API client.
+ *
+ * The browser session lives in httpOnly cookies, so this function never reads
+ * or writes an access token. On a 401 it asks the refresh endpoint to rotate
+ * the session cookies, then retries the original request once.
+ */
 export async function apiFetch<T = any>(
   endpoint: string,
   options: ApiFetchOptions = {}
 ): Promise<T> {
-  const { token, headers: customHeaders, ...restOptions } = options;
+  const { headers: customHeaders, ...restOptions } = options;
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     ...(customHeaders as Record<string, string>),
   };
 
-  const storedToken =
-    token || (typeof window !== "undefined" ? localStorage.getItem("futera_access_token") : null);
+  const url = endpoint.startsWith("/api/v1")
+    ? endpoint
+    : `/api/v1${endpoint.startsWith("/") ? "" : "/"}${endpoint}`;
 
-  if (storedToken) {
-    headers["Authorization"] = `Bearer ${storedToken}`;
-  }
+  const run = () =>
+    fetch(url, {
+      headers,
+      credentials: "same-origin",
+      ...restOptions,
+    });
 
-  const url = endpoint.startsWith("/api/v1") ? endpoint : `/api/v1${endpoint.startsWith("/") ? "" : "/"}${endpoint}`;
+  let res = await run();
 
-  let res = await fetch(url, {
-    headers,
-    ...restOptions,
-  });
-
-  // Handle 401: Token expired, attempt refresh
-  if (res.status === 401 && !endpoint.includes("/auth/login") && !endpoint.includes("/auth/refresh")) {
+  // Access cookie expired? Rotate it with the refresh cookie and retry once.
+  if (
+    res.status === 401 &&
+    !endpoint.includes("/auth/login") &&
+    !endpoint.includes("/auth/register") &&
+    !endpoint.includes("/auth/refresh")
+  ) {
     try {
-      const refreshRes = await fetch("/api/v1/auth/refresh", {
+      const refreshRes = await fetch("/api/v1/auth/refresh?cookie_only=true", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
       });
+
       if (refreshRes.ok) {
-        const refreshData = await refreshRes.json();
-        const newToken = refreshData?.data?.access_token;
-        if (newToken && typeof window !== "undefined") {
-          localStorage.setItem("futera_access_token", newToken);
-          headers["Authorization"] = `Bearer ${newToken}`;
-          // Retry original request with fresh token
-          res = await fetch(url, {
-            headers,
-            ...restOptions,
-          });
-        }
-      } else {
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("futera_access_token");
-        }
+        res = await run();
+      } else if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("futera:session-expired"));
       }
-    } catch (e) {
-      console.error("Token refresh failed", e);
+    } catch {
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("futera:session-expired"));
+      }
     }
   }
 
@@ -67,4 +68,3 @@ export async function apiFetch<T = any>(
 
   return data?.data !== undefined ? data.data : data;
 }
-
