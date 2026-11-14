@@ -59,6 +59,7 @@ async def list_scholarships(
             official_url=s.official_url,
             source_name=s.source_name,
             last_verified_at=s.last_verified_at,
+            poster_url=s.poster_url,
             is_verified=s.is_verified
         )
         for s in paginated
@@ -94,6 +95,7 @@ async def get_scholarship_detail(slug: str, db: AsyncSession = Depends(get_db)):
             official_url=s.official_url,
             source_name=s.source_name,
             last_verified_at=s.last_verified_at,
+            poster_url=s.poster_url,
             is_verified=s.is_verified,
             eligibility_criteria=s.eligibility_criteria,
             academic_requirements=s.academic_requirements,

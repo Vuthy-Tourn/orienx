@@ -17,6 +17,7 @@ class ScholarshipSummaryOut(BaseModel):
     official_url: str
     source_name: Optional[str] = None
     last_verified_at: Optional[date] = None
+    poster_url: Optional[str] = None
     is_verified: bool
     
     model_config = ConfigDict(extra="ignore")

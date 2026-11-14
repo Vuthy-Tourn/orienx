@@ -69,6 +69,7 @@ async def list_majors(
             riasec_primary=m.riasec_primary,
             riasec_secondary=m.riasec_secondary,
             personality_affinity=m.personality_affinity,
+            image_url=m.image_url,
             is_stem=m.is_stem,
             universities_count=len(m.university_majors),
             min_tuition_usd=min(
@@ -149,6 +150,7 @@ async def get_major_detail(slug: str, db: AsyncSession = Depends(get_db)):
             riasec_primary=m.riasec_primary,
             riasec_secondary=m.riasec_secondary,
             personality_affinity=m.personality_affinity,
+            image_url=m.image_url,
             is_stem=m.is_stem,
             universities_count=len(m.university_majors),
             min_tuition_usd=min(

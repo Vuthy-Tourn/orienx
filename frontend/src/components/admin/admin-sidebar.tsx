@@ -91,9 +91,7 @@ export function AdminSidebar({
         )}
       >
         <div className="flex h-16 items-center border-b border-[#E6E8F0] px-5">
-          <Link href="/admin" onClick={onCloseMobile}>
-            <Logo />
-          </Link>
+          <Logo href="/admin" />
         </div>
 
         <div className="border-b border-[#E6E8F0] px-4 py-3">

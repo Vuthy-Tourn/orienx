@@ -48,6 +48,7 @@ def _map_recommendation_out(r: MajorRecommendation) -> MajorRecommendationOut:
             riasec_primary=r.major.riasec_primary,
             riasec_secondary=r.major.riasec_secondary,
             personality_affinity=r.major.personality_affinity,
+            image_url=r.major.image_url,
             is_stem=r.major.is_stem,
             universities_count=len(r.major.university_majors) if r.major and r.major.university_majors else 0,
             offering_universities=offering_unis

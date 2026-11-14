@@ -34,6 +34,7 @@ type Major = {
   riasec_primary?: string;
   riasec_secondary?: string;
   personality_affinity?: string | null;
+  image_url?: string | null;
   is_stem: boolean;
   universities_count?: number;
   min_tuition_usd?: number | null;
@@ -452,7 +453,8 @@ export default function MajorsPage() {
         ) : viewMode === "list" ? (
           <ul className="overflow-hidden rounded-xl border border-[#E6E8F0] bg-white">
             {sortedMajors.map((m) => {
-              const coverImage = MAJOR_IMAGES[m.slug] || "/images/majors/software-engineering.webp";
+              const coverImage =
+                m.image_url || MAJOR_IMAGES[m.slug] || "/images/majors/software-engineering.webp";
               const universityCount = m.universities_count || 0;
               const tuition = typeof m.min_tuition_usd === "number" ? m.min_tuition_usd : null;
 
@@ -546,7 +548,8 @@ export default function MajorsPage() {
         ) : (
           <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {sortedMajors.map((m) => {
-              const coverImage = MAJOR_IMAGES[m.slug] || "/images/majors/software-engineering.webp";
+              const coverImage =
+                m.image_url || MAJOR_IMAGES[m.slug] || "/images/majors/software-engineering.webp";
               const universityCount = m.universities_count || 0;
               const tuition = typeof m.min_tuition_usd === "number" ? m.min_tuition_usd : null;
               const categoryColor = CATEGORY_COLOR[m.category] || "#111965";

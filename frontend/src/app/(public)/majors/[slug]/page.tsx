@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
@@ -102,6 +103,20 @@ export default function MajorDetailPage() {
           <ArrowLeft className="w-4 h-4" />
           <span>{t("majorDetail.back")}</span>
         </button>
+
+        {major.image_url && (
+          <div className="relative h-40 w-full overflow-hidden rounded-3xl border border-[#E6E8F0] bg-slate-100 shadow-xs sm:h-56">
+            <Image
+              src={major.image_url}
+              alt={getLocalized(major.name) || "Major"}
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 1024px"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+          </div>
+        )}
 
         {/* Major Header */}
         <div className="rounded-3xl bg-white border border-[#E6E8F0] p-6 sm:p-8 shadow-xs space-y-5">

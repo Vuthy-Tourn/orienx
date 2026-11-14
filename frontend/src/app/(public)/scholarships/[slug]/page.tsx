@@ -90,7 +90,7 @@ export default function ScholarshipDetailPage() {
     "moeys-national-scholarship": "/images/universities/rupp.jpg",
   };
 
-  const posterImage = posterMap[scholarship.slug];
+  const posterImage = scholarship.poster_url || posterMap[scholarship.slug];
 
   const applicationSteps: string[] =
     (getLocalized(scholarship.application_process) as unknown as string[]) ||

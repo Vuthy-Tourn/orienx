@@ -327,7 +327,11 @@ export default function ScholarshipsPage() {
               <div className="lg:col-span-4 flex justify-center lg:justify-end">
                 <div className="relative w-52 h-64 sm:w-60 sm:h-72 rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 bg-slate-900 group">
                   <Image
-                    src={SCHOLARSHIP_POSTERS[spotlightScholarship.slug] || "/images/scholarships/techo-scholarship-poster.jpg"}
+                    src={
+                      spotlightScholarship.poster_url ||
+                      SCHOLARSHIP_POSTERS[spotlightScholarship.slug] ||
+                      "/images/scholarships/techo-scholarship-poster.jpg"
+                    }
                     alt={getLocalized(spotlightScholarship.title) || "Poster"}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -398,7 +402,10 @@ export default function ScholarshipsPage() {
         ) : sortedScholarships.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {sortedScholarships.map((s: any) => {
-              const poster = SCHOLARSHIP_POSTERS[s.slug] || "/images/scholarships/techo-scholarship-poster.jpg";
+              const poster =
+                s.poster_url ||
+                SCHOLARSHIP_POSTERS[s.slug] ||
+                "/images/scholarships/techo-scholarship-poster.jpg";
               const isFull = s.coverage_type === "FULL_TUITION";
               const criteria = getLocalized(s.eligibility_criteria) || s.eligibility_criteria?.en || [];
               const criteriaArray = Array.isArray(criteria) ? criteria : [];
@@ -428,17 +435,28 @@ export default function ScholarshipsPage() {
                       </span>
                     </div>
 
-                    {/* Provider & Title */}
-                    <div>
-                      <div className="text-[12px] font-bold text-[#68708A] uppercase tracking-wide flex items-center gap-1.5">
-                        <Building className="w-3.5 h-3.5 text-[#111965]" />
-                        <span>{getLocalized(s.provider)}</span>
+                    {/* Poster & Title */}
+                    <div className="flex items-start gap-3.5">
+                      <div className="relative h-[76px] w-[58px] shrink-0 overflow-hidden rounded-lg border border-[#E6E8F0] bg-slate-100">
+                        <Image
+                          src={poster}
+                          alt={getLocalized(s.title) || "Scholarship poster"}
+                          fill
+                          className="object-cover"
+                          sizes="58px"
+                        />
                       </div>
-                      <Link href={`${linkPrefix}/scholarships/${s.slug}`} className="hover:underline">
-                        <h3 className="text-lg font-extrabold text-[#111965] group-hover:text-[#1E277A] transition-colors leading-snug mt-1">
-                          {getLocalized(s.title)}
-                        </h3>
-                      </Link>
+                      <div className="min-w-0">
+                        <div className="text-[12px] font-bold text-[#68708A] uppercase tracking-wide flex items-center gap-1.5">
+                          <Building className="w-3.5 h-3.5 text-[#111965]" />
+                          <span className="truncate">{getLocalized(s.provider)}</span>
+                        </div>
+                        <Link href={`${linkPrefix}/scholarships/${s.slug}`} className="hover:underline">
+                          <h3 className="text-lg font-extrabold text-[#111965] group-hover:text-[#1E277A] transition-colors leading-snug mt-1">
+                            {getLocalized(s.title)}
+                          </h3>
+                        </Link>
+                      </div>
                     </div>
 
                     <p className="text-xs text-[#68708A] leading-relaxed line-clamp-3">

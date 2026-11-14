@@ -339,6 +339,8 @@ def _flat_university(u: University) -> Dict[str, Any]:
         "website_url": u.website_url,
         "contact_email": u.contact_email,
         "contact_phone": u.contact_phone,
+        "logo_url": u.logo_url,
+        "cover_image_url": u.cover_image_url,
         "established_year": u.established_year,
         "tuition_range_min_usd": float(u.tuition_range_min_usd) if u.tuition_range_min_usd is not None else None,
         "tuition_range_max_usd": float(u.tuition_range_max_usd) if u.tuition_range_max_usd is not None else None,
@@ -361,6 +363,7 @@ def _flat_major(m: Major) -> Dict[str, Any]:
         "riasec_primary": m.riasec_primary,
         "riasec_secondary": m.riasec_secondary,
         "personality_affinity": m.personality_affinity,
+        "image_url": m.image_url,
         "is_stem": m.is_stem,
     }
 
@@ -400,6 +403,7 @@ def _flat_scholarship(s: Scholarship) -> Dict[str, Any]:
         "application_deadline": s.application_deadline.isoformat() if s.application_deadline else None,
         "official_url": s.official_url,
         "source_name": s.source_name,
+        "poster_url": s.poster_url,
         "is_verified": s.is_verified,
     }
 
@@ -538,6 +542,8 @@ async def admin_create_university(
         website_url=body.website_url or "",
         contact_email=body.contact_email,
         contact_phone=body.contact_phone,
+        logo_url=body.logo_url,
+        cover_image_url=body.cover_image_url,
         established_year=body.established_year,
         tuition_range_min_usd=body.tuition_range_min_usd,
         tuition_range_max_usd=body.tuition_range_max_usd,
@@ -575,7 +581,8 @@ async def admin_update_university(
         university.description = _merge_pair(university.description, body.description_en, body.description_km)
     for field in (
         "university_type", "province", "website_url", "contact_email", "contact_phone",
-        "established_year", "tuition_range_min_usd", "tuition_range_max_usd",
+        "logo_url", "cover_image_url", "established_year",
+        "tuition_range_min_usd", "tuition_range_max_usd",
         "is_tuition_verified", "is_verified",
     ):
         value = getattr(body, field)
@@ -645,6 +652,7 @@ async def admin_create_major(
         riasec_primary=body.riasec_primary.upper(),
         riasec_secondary=body.riasec_secondary.upper(),
         personality_affinity=body.personality_affinity,
+        image_url=body.image_url,
         is_stem=bool(body.is_stem),
     )
     db.add(major)
@@ -674,7 +682,7 @@ async def admin_update_major(
         major.name = _merge_pair(major.name, body.name_en, body.name_km)
     if body.description_en is not None or body.description_km is not None:
         major.description = _merge_pair(major.description, body.description_en, body.description_km)
-    for field in ("category", "personality_affinity", "is_stem"):
+    for field in ("category", "personality_affinity", "image_url", "is_stem"):
         value = getattr(body, field)
         if value is not None:
             setattr(major, field, value)
@@ -849,6 +857,7 @@ async def admin_create_scholarship(
         application_deadline=body.application_deadline,
         official_url=body.official_url,
         source_name=body.source_name,
+        poster_url=body.poster_url,
         is_verified=body.is_verified if body.is_verified is not None else True,
     )
     db.add(scholarship)
@@ -882,7 +891,7 @@ async def admin_update_scholarship(
         scholarship.description = _merge_pair(scholarship.description, body.description_en, body.description_km)
     for field in (
         "coverage_type", "coverage_percentage", "country_or_institution",
-        "application_deadline", "official_url", "source_name", "is_verified",
+        "application_deadline", "official_url", "source_name", "poster_url", "is_verified",
     ):
         value = getattr(body, field)
         if value is not None:

@@ -11,6 +11,8 @@ interface LogoProps {
   isLight?: boolean;
   showText?: boolean;
   size?: "sm" | "md" | "lg";
+  /** Where the logo links. Defaults to the public home page. */
+  href?: string;
 }
 
 /**
@@ -80,6 +82,7 @@ export function Logo({
   isLight,
   showText = true,
   size = "md",
+  href = "/",
 }: LogoProps) {
   // Follow the app theme unless a surface explicitly pins the variant
   // (the navy footer always uses the light mark).
@@ -93,7 +96,7 @@ export function Logo({
 
   return (
     <Link
-      href="/"
+      href={href}
       className={cn("inline-flex items-center gap-2.5 group select-none", className)}
     >
       {/* Brand Icon Mark - Clean, Transparent, No Background */}

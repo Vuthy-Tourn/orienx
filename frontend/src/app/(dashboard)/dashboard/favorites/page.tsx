@@ -162,7 +162,8 @@ export default function FavoritesPage() {
               {favorites?.majors?.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
                   {favorites.majors.map((m: any) => {
-                    const coverImage = MAJOR_IMAGES[m.slug] || "/images/majors/software-engineering.webp";
+                    const coverImage =
+                      m.image_url || MAJOR_IMAGES[m.slug] || "/images/majors/software-engineering.webp";
                     return (
                       <div
                         key={m.id}
@@ -284,7 +285,8 @@ export default function FavoritesPage() {
               {favorites?.universities?.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
                   {favorites.universities.map((u: any) => {
-                    const coverImage = UNIVERSITY_IMAGES[u.slug] || "/images/universities/rupp.jpg";
+                    const coverImage =
+                      u.cover_image_url || UNIVERSITY_IMAGES[u.slug] || "/images/universities/rupp.jpg";
                     const isPublic = u.university_type === "PUBLIC";
                     return (
                       <div
@@ -534,15 +536,25 @@ export default function FavoritesPage() {
                           </div>
 
                           {/* Title & Provider */}
-                          <div className="space-y-1">
-                            <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-[#B45309] transition-colors leading-snug">
-                              {formatName(s.title)}
-                            </h3>
-                            {s.provider && (
-                              <div className="text-xs font-bold text-[#111965]">
-                                {formatName(s.provider)}
-                              </div>
+                          <div className="flex items-start gap-3">
+                            {s.poster_url && (
+                              <img
+                                src={s.poster_url}
+                                alt=""
+                                loading="lazy"
+                                className="h-[68px] w-[52px] shrink-0 rounded-lg border border-[#E6E8F0] bg-slate-100 object-cover"
+                              />
                             )}
+                            <div className="min-w-0 space-y-1">
+                              <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-[#B45309] transition-colors leading-snug">
+                                {formatName(s.title)}
+                              </h3>
+                              {s.provider && (
+                                <div className="text-xs font-bold text-[#111965]">
+                                  {formatName(s.provider)}
+                                </div>
+                              )}
+                            </div>
                           </div>
 
                           {/* Deadline */}

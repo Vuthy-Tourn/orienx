@@ -76,6 +76,8 @@ class UniversityAdminIn(BaseModel):
     website_url: Optional[str] = None
     contact_email: Optional[str] = None
     contact_phone: Optional[str] = None
+    logo_url: Optional[str] = None
+    cover_image_url: Optional[str] = None
     established_year: Optional[int] = None
     tuition_range_min_usd: Optional[float] = None
     tuition_range_max_usd: Optional[float] = None
@@ -92,6 +94,7 @@ class MajorAdminIn(BaseModel):
     category: Optional[str] = None
     description_en: Optional[str] = None
     description_km: Optional[str] = None
+    image_url: Optional[str] = None
     riasec_primary: Optional[str] = None
     riasec_secondary: Optional[str] = None
     personality_affinity: Optional[str] = None
@@ -127,6 +130,7 @@ class ScholarshipAdminIn(BaseModel):
     application_deadline: Optional[date] = None
     official_url: Optional[str] = None
     source_name: Optional[str] = None
+    poster_url: Optional[str] = None
     is_verified: Optional[bool] = None
 
     model_config = ConfigDict(extra="forbid")

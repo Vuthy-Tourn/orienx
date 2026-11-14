@@ -115,6 +115,7 @@ async def get_user_favorites(
             "riasec_primary": fm.major.riasec_primary,
             "riasec_secondary": fm.major.riasec_secondary,
             "personality_affinity": fm.major.personality_affinity,
+            "image_url": fm.major.image_url,
         }
         for fm in res_m.scalars().all() if fm.major
     ]
@@ -152,6 +153,7 @@ async def get_user_favorites(
             "country_or_institution": fs.scholarship.country_or_institution,
             "deadline": str(fs.scholarship.application_deadline) if fs.scholarship.application_deadline else None,
             "official_url": fs.scholarship.official_url,
+            "poster_url": fs.scholarship.poster_url,
             "status": fs.status,
         }
         for fs in res_s.scalars().all() if fs.scholarship

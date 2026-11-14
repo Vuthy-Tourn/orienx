@@ -94,6 +94,7 @@ class MajorSummaryOut(BaseModel):
     riasec_primary: str
     riasec_secondary: str
     personality_affinity: Optional[str] = None
+    image_url: Optional[str] = None
     is_stem: bool
     universities_count: Optional[int] = 0
     min_tuition_usd: Optional[float] = None

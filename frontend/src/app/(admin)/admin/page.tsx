@@ -2,28 +2,29 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Award,
   BookOpen,
   Briefcase,
   Building2,
   CheckCircle2,
+  Compass,
   GraduationCap,
   Loader2,
   Menu,
   Save,
   ShieldCheck,
+  Sliders,
+  Sparkles,
   TrendingUp,
   Users,
 } from "lucide-react";
 import {
   Area,
   AreaChart,
-  Bar,
-  BarChart,
   CartesianGrid,
   Cell,
-  Legend,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -74,6 +75,8 @@ const UNIVERSITY_FIELDS: AdminField[] = [
   { key: "website_url", label: "Website" },
   { key: "contact_email", label: "Contact email" },
   { key: "contact_phone", label: "Contact phone" },
+  { key: "logo_url", label: "Logo URL", placeholder: "https://..." },
+  { key: "cover_image_url", label: "Cover image URL", placeholder: "https://..." },
   { key: "established_year", label: "Established year", type: "number" },
   { key: "tuition_range_min_usd", label: "Min tuition (USD)", type: "number" },
   { key: "tuition_range_max_usd", label: "Max tuition (USD)", type: "number" },
@@ -84,6 +87,11 @@ const UNIVERSITY_FIELDS: AdminField[] = [
 ];
 
 const UNIVERSITY_COLUMNS: AdminColumn[] = [
+  {
+    key: "preview",
+    label: "Preview",
+    render: (row) => <PreviewCell src={row.cover_image_url || row.logo_url} label={row.name_en} />,
+  },
   {
     key: "name_en",
     label: "University",
@@ -129,11 +137,17 @@ const MAJOR_FIELDS: AdminField[] = [
   { key: "riasec_secondary", label: "RIASEC secondary", type: "select", options: RIASEC_OPTIONS, defaultValue: "R", required: true },
   { key: "personality_affinity", label: "MBTI affinity", placeholder: "INTJ,INTP" },
   { key: "is_stem", label: "STEM major", type: "checkbox" },
+  { key: "image_url", label: "Image URL", placeholder: "https://..." },
   { key: "description_en", label: "Description (English)", type: "textarea", wide: true },
   { key: "description_km", label: "Description (Khmer)", type: "textarea", wide: true },
 ];
 
 const MAJOR_COLUMNS: AdminColumn[] = [
+  {
+    key: "preview",
+    label: "Preview",
+    render: (row) => <PreviewCell src={row.image_url} label={row.name_en} />,
+  },
   {
     key: "name_en",
     label: "Major",
@@ -218,12 +232,18 @@ const SCHOLARSHIP_FIELDS: AdminField[] = [
   { key: "application_deadline", label: "Deadline", type: "date" },
   { key: "official_url", label: "Official URL", required: true },
   { key: "source_name", label: "Source name" },
+  { key: "poster_url", label: "Poster image URL", placeholder: "https://..." },
   { key: "is_verified", label: "Verified", type: "checkbox", defaultValue: true },
   { key: "description_en", label: "Description (English)", type: "textarea", wide: true },
   { key: "description_km", label: "Description (Khmer)", type: "textarea", wide: true },
 ];
 
 const SCHOLARSHIP_COLUMNS: AdminColumn[] = [
+  {
+    key: "preview",
+    label: "Preview",
+    render: (row) => <PreviewCell src={row.poster_url} label={row.title_en} />,
+  },
   {
     key: "title_en",
     label: "Scholarship",
@@ -255,6 +275,22 @@ const SCHOLARSHIP_COLUMNS: AdminColumn[] = [
     render: (row) => <BoolBadge value={row.is_verified} />,
   },
 ];
+
+function PreviewCell({ src, label }: { src?: string | null; label?: string }) {
+  if (!src) {
+    return <span className="text-[10px] text-[#94A3B8]">—</span>;
+  }
+  return (
+    <div className="h-8 w-12 overflow-hidden rounded-md border border-[#E6E8F0] bg-slate-100">
+      <img
+        src={src}
+        alt={label || ""}
+        loading="lazy"
+        className="h-full w-full object-cover"
+      />
+    </div>
+  );
+}
 
 function BoolBadge({ value }: { value: boolean }) {
   return value ? (
@@ -356,7 +392,7 @@ export default function AdminConsolePage() {
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8">
           <div className="mx-auto max-w-7xl">
-            <div className="rounded-3xl border border-[#E6E8F0] bg-white p-4 shadow-2xs sm:p-6">
+            <div className="space-y-4">
           {activeTab === "overview" && <OverviewPanel onNavigate={setActiveTab} />}
           {activeTab === "users" && <UsersManager />}
           {activeTab === "universities" && (
@@ -409,8 +445,86 @@ export default function AdminConsolePage() {
   );
 }
 
+function ChartCardHeader({
+  icon: Icon,
+  title,
+  subtitle,
+  accent,
+  chip,
+  dark = false,
+}: {
+  icon: React.ElementType;
+  title: string;
+  subtitle: string;
+  accent: string;
+  chip?: string;
+  dark?: boolean;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-3">
+      <div className="flex min-w-0 items-start gap-2.5">
+        <div
+          className={cn(
+            "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
+            dark ? "border border-white/15 bg-white/10 text-[#F7CE4D]" : accent
+          )}
+        >
+          <Icon className="h-4 w-4" />
+        </div>
+        <div className="min-w-0">
+          <h3 className={cn("text-sm font-black", dark ? "text-white" : "text-[#111965]")}>
+            {title}
+          </h3>
+          <p className={cn("text-[11px]", dark ? "text-slate-300" : "text-[#94A3B8]")}>
+            {subtitle}
+          </p>
+        </div>
+      </div>
+      {chip && (
+        <span
+          className={cn(
+            "shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-bold",
+            dark
+              ? "border-white/15 bg-white/10 text-slate-200"
+              : "border-[#E6E8F0] bg-[#F8FAFD] text-[#94A3B8]"
+          )}
+        >
+          {chip}
+        </span>
+      )}
+    </div>
+  );
+}
+
+function ActivityTooltip({ active, payload, label }: any) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="rounded-xl border border-white/10 bg-[#111965] px-3 py-2 text-[11px] text-white shadow-xl">
+      <p className="mb-1 font-black text-[#F7CE4D]">{label}</p>
+      {payload.map((entry: any) => (
+        <div key={entry.dataKey} className="flex items-center justify-between gap-5">
+          <span className="flex items-center gap-1.5 text-slate-200">
+            <span
+              className="h-1.5 w-1.5 rounded-full"
+              style={{ backgroundColor: entry.color }}
+            />
+            {entry.name}
+          </span>
+          <span className="font-black tabular-nums">{entry.value}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) {
   const { getLocalized } = useLanguage();
+  const { user } = useAuth();
+  const firstName =
+    user?.full_name_en?.split(" ")[0] ||
+    user?.full_name_km ||
+    user?.email?.split("@")[0] ||
+    "Admin";
   const { data: analytics, isLoading } = useQuery({
     queryKey: ["admin-analytics"],
     queryFn: async () => apiFetch<any>("/admin/analytics"),
@@ -426,12 +540,14 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
   }
 
   const cards = [
-    { label: "Students", value: analytics?.total_students ?? 0, icon: Users, tone: "bg-sky-50 text-sky-700" },
-    { label: "Universities", value: analytics?.total_universities ?? 0, icon: Building2, tone: "bg-amber-50 text-amber-700" },
-    { label: "Majors", value: analytics?.total_majors ?? 0, icon: BookOpen, tone: "bg-emerald-50 text-emerald-700" },
-    { label: "Careers", value: analytics?.total_careers ?? 0, icon: Briefcase, tone: "bg-indigo-50 text-indigo-700" },
-    { label: "Scholarships", value: analytics?.total_scholarships ?? 0, icon: Award, tone: "bg-purple-50 text-purple-700" },
-    { label: "Recommendations", value: analytics?.generated_recommendations_count ?? 0, icon: TrendingUp, tone: "bg-rose-50 text-rose-700" },
+    { label: "Students", hint: "Registered profiles", value: analytics?.total_students ?? 0, icon: Users, tone: "bg-sky-50 text-sky-700", primary: true },
+    { label: "Universities", hint: "Directory institutions", value: analytics?.total_universities ?? 0, icon: Building2, tone: "bg-amber-50 text-amber-700" },
+    { label: "Majors", hint: "Academic programs", value: analytics?.total_majors ?? 0, icon: BookOpen, tone: "bg-emerald-50 text-emerald-700" },
+    { label: "Careers", hint: "Career profiles", value: analytics?.total_careers ?? 0, icon: Briefcase, tone: "bg-indigo-50 text-indigo-700" },
+    { label: "Scholarships", hint: "Funding opportunities", value: analytics?.total_scholarships ?? 0, icon: Award, tone: "bg-purple-50 text-purple-700" },
+    { label: "Recommendations", hint: "Generated matches", value: analytics?.generated_recommendations_count ?? 0, icon: TrendingUp, tone: "bg-rose-50 text-rose-700" },
+    { label: "16P Completed", hint: "Personality completions", value: analytics?.completed_personality_assessments ?? 0, icon: CheckCircle2, tone: "bg-fuchsia-50 text-fuchsia-700" },
+    { label: "RIASEC Completed", hint: "Interest completions", value: analytics?.completed_riasec_assessments ?? 0, icon: Compass, tone: "bg-cyan-50 text-cyan-700" },
   ];
 
   const monthLabel = (value: string) => {
@@ -457,7 +573,7 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
       const label =
         typeof major.name === "object" ? getLocalized(major.name) : major.name;
       return {
-        name: String(label).length > 26 ? `${String(label).slice(0, 26)}…` : label,
+        name: String(label),
         count: major.count,
       };
     });
@@ -468,75 +584,178 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
     { name: "Scholarships", value: analytics?.total_scholarships ?? 0 },
   ].filter((item) => item.value > 0);
   const chartColors = ["#6366F1", "#F7CE4D", "#10B981", "#8B5CF6", "#0EA5E9"];
+  const activityTotals = {
+    registrations: activityData.reduce((sum: number, row: any) => sum + row.registrations, 0),
+    assessments: activityData.reduce((sum: number, row: any) => sum + row.assessments, 0),
+    recommendations: activityData.reduce((sum: number, row: any) => sum + row.recommendations, 0),
+  };
+  const roleTotal = roleData.reduce((sum: number, row: any) => sum + row.count, 0);
+  const totalContent = contentMix.reduce((sum, item) => sum + item.value, 0);
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#0A0F3D] via-[#111965] to-[#1E277A] p-5 text-white sm:p-6">
+        <div className="pointer-events-none absolute inset-0 opacity-10">
+          <Image
+            src="/images/cambodia-campuses-skyline-seamless.webp"
+            alt=""
+            fill
+            unoptimized
+            className="object-cover object-bottom"
+          />
+        </div>
+
+        <div className="relative z-10 flex items-center justify-between gap-4">
+          <div className="max-w-xl space-y-2.5 pr-20 sm:pr-44">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#F7CE4D]">
+              <ShieldCheck className="h-3 w-3" />
+              Admin workspace
+            </span>
+            <h2 className="text-xl font-black leading-tight sm:text-2xl">
+              Welcome back,{" "}
+              <span className="text-[#F7CE4D]">{firstName}!</span>
+            </h2>
+            <p className="text-xs leading-relaxed text-slate-200 sm:text-sm">
+              Here is the latest pulse across the platform. Keep the directory
+              accurate and the guidance engine healthy for every student.
+            </p>
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-semibold text-slate-200">
+              <Sparkles className="h-3 w-3 text-[#F7CE4D]" />
+              Tara&apos;s tip: re-verify tuition and scholarship deadlines before each intake.
+            </div>
+          </div>
+
+          <div className="pointer-events-none absolute right-2 top-2 h-20 w-20 shrink-0 sm:bottom-0 sm:top-auto sm:right-5 sm:h-36 sm:w-36 md:h-40 md:w-40">
+            <Image
+              src="/images/welcome-hd.webp"
+              alt="Tara, the OrienX mascot"
+              fill
+              priority
+              className="object-contain drop-shadow-xl"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {cards.map((card) => {
           const Icon = card.icon;
           return (
-            <div key={card.label} className="rounded-2xl border border-[#E6E8F0] p-3.5">
-              <div className={cn("mb-2 inline-flex h-8 w-8 items-center justify-center rounded-lg", card.tone)}>
+            <div
+              key={card.label}
+              className={cn(
+                "group relative overflow-hidden rounded-2xl border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md",
+                card.primary
+                  ? "border-[#F7CE4D]/60 bg-gradient-to-br from-white to-[#FFF9E6]"
+                  : "border-[#E6E8F0] bg-white"
+              )}
+            >
+              <div
+                className={cn(
+                  "mb-2 inline-flex h-9 w-9 items-center justify-center rounded-xl",
+                  card.primary ? "bg-[#FFF9E6] text-[#B45309]" : card.tone
+                )}
+              >
                 <Icon className="h-4 w-4" />
               </div>
-              <div className="text-xl font-black tabular-nums text-[#111965]">{card.value}</div>
-              <div className="text-[11px] font-semibold text-[#68708A]">{card.label}</div>
+              <div className="text-2xl font-black tabular-nums text-[#111965]">
+                {card.value}
+              </div>
+              <div className="text-[11px] font-bold text-[#111965]">{card.label}</div>
+              <div className="text-[10px] text-[#94A3B8]">{card.hint}</div>
             </div>
           );
         })}
       </div>
 
       <div className="grid gap-4 xl:grid-cols-3">
-        <div className="rounded-2xl border border-[#E6E8F0] p-4 xl:col-span-2">
-          <div className="flex items-baseline justify-between gap-2">
-            <h3 className="text-sm font-black text-[#111965]">Platform activity</h3>
-            <span className="text-[11px] font-semibold text-[#94A3B8]">Last 6 months</span>
+        <div className="rounded-2xl border border-[#E6E8F0] bg-white p-5 shadow-2xs xl:col-span-2">
+          <ChartCardHeader
+            icon={TrendingUp}
+            title="Platform activity"
+            subtitle="Monthly registrations, assessments, and matches"
+            accent="bg-sky-50 text-sky-700"
+            chip="Last 6 months"
+          />
+
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            {[
+              { label: "Registrations", total: activityTotals.registrations, color: "#6366F1" },
+              { label: "Assessments", total: activityTotals.assessments, color: "#F7CE4D" },
+              { label: "Recommendations", total: activityTotals.recommendations, color: "#10B981" },
+            ].map((metric) => (
+              <div key={metric.label} className="rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-2.5 py-2">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#68708A]">
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: metric.color }} />
+                  <span className="truncate">{metric.label}</span>
+                </div>
+                <div className="mt-0.5 text-lg font-black tabular-nums text-[#111965]">
+                  {metric.total}
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="mt-3 h-[280px]">
+
+          <div className="mt-3 h-[220px]">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={activityData} margin={{ top: 8, right: 8, left: -24, bottom: 0 }}>
+              <AreaChart data={activityData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="adminRegGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#6366F1" stopOpacity={0.32} />
+                    <stop offset="0%" stopColor="#6366F1" stopOpacity={0.28} />
                     <stop offset="100%" stopColor="#6366F1" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="adminAssessGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#F7CE4D" stopOpacity={0.5} />
+                    <stop offset="0%" stopColor="#F7CE4D" stopOpacity={0.45} />
                     <stop offset="100%" stopColor="#F7CE4D" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="adminRecGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#10B981" stopOpacity={0.32} />
+                    <stop offset="0%" stopColor="#10B981" stopOpacity={0.24} />
                     <stop offset="100%" stopColor="#10B981" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid stroke="#94A3B8" strokeOpacity={0.18} vertical={false} />
-                <XAxis dataKey="month" tick={{ fill: "#94A3B8", fontSize: 11 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: "#94A3B8", fontSize: 11 }} axisLine={false} tickLine={false} allowDecimals={false} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#111965",
-                    border: "1px solid #1E277A",
-                    borderRadius: 12,
-                    color: "#fff",
-                    fontSize: 12,
-                  }}
-                  labelStyle={{ color: "#F7CE4D", fontWeight: 700 }}
+                <CartesianGrid stroke="#94A3B8" strokeOpacity={0.15} strokeDasharray="3 3" vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  tick={{ fill: "#94A3B8", fontSize: 11 }}
+                  axisLine={false}
+                  tickLine={false}
+                  tickMargin={8}
                 />
-                <Legend wrapperStyle={{ fontSize: 11 }} formatter={(value) => <span style={{ color: "#94A3B8" }}>{value}</span>} />
-                <Area type="monotone" dataKey="registrations" name="Registrations" stroke="#6366F1" strokeWidth={2.2} fill="url(#adminRegGradient)" />
-                <Area type="monotone" dataKey="assessments" name="Assessments" stroke="#F7CE4D" strokeWidth={2.2} fill="url(#adminAssessGradient)" />
-                <Area type="monotone" dataKey="recommendations" name="Recommendations" stroke="#10B981" strokeWidth={2.2} fill="url(#adminRecGradient)" />
+                <YAxis
+                  tick={{ fill: "#94A3B8", fontSize: 11 }}
+                  axisLine={false}
+                  tickLine={false}
+                  allowDecimals={false}
+                  width={34}
+                />
+                <Tooltip content={<ActivityTooltip />} cursor={{ stroke: "#94A3B8", strokeDasharray: "3 3" }} />
+                <Area type="monotone" dataKey="registrations" name="Registrations" stroke="#6366F1" strokeWidth={2.4} fill="url(#adminRegGradient)" dot={false} activeDot={{ r: 4 }} />
+                <Area type="monotone" dataKey="assessments" name="Assessments" stroke="#F7CE4D" strokeWidth={2.4} fill="url(#adminAssessGradient)" dot={false} activeDot={{ r: 4 }} />
+                <Area type="monotone" dataKey="recommendations" name="Recommendations" stroke="#10B981" strokeWidth={2.4} fill="url(#adminRecGradient)" dot={false} activeDot={{ r: 4 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-[#E6E8F0] p-4">
-          <h3 className="text-sm font-black text-[#111965]">Users by role</h3>
-          <div className="mt-2 h-[260px]">
+        <div className="rounded-2xl border border-[#E6E8F0] bg-white p-5 shadow-2xs">
+          <ChartCardHeader
+            icon={Users}
+            title="Users by role"
+            subtitle="Account distribution"
+            accent="bg-purple-50 text-purple-700"
+          />
+          <div className="relative mt-3 h-[180px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={roleData} dataKey="count" nameKey="role" innerRadius={54} outerRadius={82} paddingAngle={3}>
+                <Pie
+                  data={roleData}
+                  dataKey="count"
+                  nameKey="role"
+                  innerRadius={58}
+                  outerRadius={82}
+                  paddingAngle={3}
+                  stroke="none"
+                >
                   {roleData.map((entry: any, index: number) => (
                     <Cell key={entry.role} fill={chartColors[index % chartColors.length]} />
                   ))}
@@ -550,97 +769,166 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
                     fontSize: 12,
                   }}
                 />
-                <Legend wrapperStyle={{ fontSize: 11 }} formatter={(value) => <span style={{ color: "#94A3B8" }}>{value}</span>} />
               </PieChart>
             </ResponsiveContainer>
+            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-2xl font-black text-[#111965]">{roleTotal}</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8]">Users</span>
+            </div>
+          </div>
+          <div className="mt-4 space-y-2.5">
+            {roleData.map((entry: any, index: number) => {
+              const share = roleTotal ? Math.round((entry.count / roleTotal) * 100) : 0;
+              return (
+                <div key={entry.role} className="flex items-center justify-between gap-3 text-[11px]">
+                  <span className="flex items-center gap-2 font-semibold text-[#64748B]">
+                    <span
+                      className="h-2 w-2 rounded-full"
+                      style={{ backgroundColor: chartColors[index % chartColors.length] }}
+                    />
+                    {entry.role.replace("_", " ")}
+                  </span>
+                  <span className="text-[#94A3B8]">
+                    <strong className="text-[#111965]">{entry.count}</strong> · {share}%
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
 
       <div className="grid gap-4 xl:grid-cols-3">
-        <div className="rounded-2xl border border-[#E6E8F0] p-4 xl:col-span-2">
-          <h3 className="text-sm font-black text-[#111965]">Most recommended majors</h3>
-          <div className="mt-2 h-[250px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={popularData} layout="vertical" margin={{ top: 8, right: 20, left: 0, bottom: 0 }}>
-                <XAxis type="number" hide />
-                <YAxis type="category" dataKey="name" width={190} tick={{ fill: "#64748B", fontSize: 10 }} axisLine={false} tickLine={false} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#111965",
-                    border: "1px solid #1E277A",
-                    borderRadius: 12,
-                    color: "#fff",
-                    fontSize: 12,
-                  }}
-                />
-                <Bar dataKey="count" name="Matches" radius={[0, 6, 6, 0]} barSize={16}>
-                  {popularData.map((entry: any, index: number) => (
-                    <Cell key={entry.name} fill={index === 0 ? "#F7CE4D" : "#6366F1"} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+        <div className="rounded-2xl border border-[#E6E8F0] bg-white p-5 shadow-2xs xl:col-span-2">
+          <div className="flex items-baseline justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-black text-[#111965]">Top recommended majors</h3>
+              <p className="text-[11px] text-[#94A3B8]">Most matched programs</p>
+            </div>
+            <span className="text-[11px] font-bold text-[#94A3B8]">
+              {popularData.length} majors
+            </span>
           </div>
+
+          {popularData.length === 0 ? (
+            <p className="py-10 text-center text-xs text-[#68708A]">
+              No recommendation activity yet.
+            </p>
+          ) : (
+            <div className="mt-3 divide-y divide-[#EEF2F7]">
+              {popularData.map((major: any, index: number) => (
+                <div
+                  key={major.name}
+                  className="flex items-center gap-3 py-2.5 transition-colors hover:bg-[#F8FAFD]"
+                >
+                  <span
+                    className={cn(
+                      "flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-black",
+                      index === 0
+                        ? "bg-[#F7CE4D] text-[#111965]"
+                        : "bg-[#F5F6FA] text-[#68708A]"
+                    )}
+                  >
+                    {index + 1}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-xs font-semibold text-[#171A2C]">
+                    {major.name}
+                  </span>
+                  <span className="shrink-0 text-[11px] font-bold text-[#94A3B8]">
+                    {major.count} {major.count === 1 ? "match" : "matches"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="rounded-2xl border border-[#E6E8F0] p-4">
-          <h3 className="text-sm font-black text-[#111965]">Directory mix</h3>
-          <div className="mt-2 h-[230px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={contentMix} dataKey="value" nameKey="name" innerRadius={46} outerRadius={76} paddingAngle={3}>
-                  {contentMix.map((entry: any, index: number) => (
-                    <Cell key={entry.name} fill={chartColors[index % chartColors.length]} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#111965",
-                    border: "1px solid #1E277A",
-                    borderRadius: 12,
-                    color: "#fff",
-                    fontSize: 12,
-                  }}
-                />
-                <Legend wrapperStyle={{ fontSize: 11 }} formatter={(value) => <span style={{ color: "#94A3B8" }}>{value}</span>} />
-              </PieChart>
-            </ResponsiveContainer>
+        <div className="rounded-2xl border border-[#E6E8F0] bg-white p-5 shadow-2xs">
+          <ChartCardHeader
+            icon={Building2}
+            title="Directory mix"
+            subtitle="Live catalogue records"
+            accent="bg-emerald-50 text-emerald-700"
+            chip={`${totalContent} records`}
+          />
+          <div className="mt-5 flex h-4 w-full overflow-hidden rounded-full bg-[#F0F2FA]">
+            {contentMix.map((item, index) => (
+              <div
+                key={item.name}
+                className="h-full first:rounded-l-full last:rounded-r-full"
+                style={{
+                  width: `${(item.value / Math.max(totalContent, 1)) * 100}%`,
+                  backgroundColor: chartColors[index % chartColors.length],
+                }}
+              />
+            ))}
+          </div>
+          <div className="mt-4 space-y-2.5">
+            {contentMix.map((item, index) => (
+              <div key={item.name} className="flex items-center justify-between gap-3 text-[11px]">
+                <span className="flex items-center gap-2 font-semibold text-[#64748B]">
+                  <span
+                    className="h-2 w-2 rounded-full"
+                    style={{ backgroundColor: chartColors[index % chartColors.length] }}
+                  />
+                  {item.name}
+                </span>
+                <strong className="text-[#111965]">{item.value}</strong>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col justify-between gap-3 rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4 sm:flex-row sm:items-center">
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-semibold text-[#68708A]">
-          <span>
-            16-Personality completed:{" "}
-            <strong className="text-[#111965]">{analytics?.completed_personality_assessments ?? 0}</strong>
-          </span>
-          <span>
-            RIASEC completed:{" "}
-            <strong className="text-[#111965]">{analytics?.completed_riasec_assessments ?? 0}</strong>
-          </span>
-          <span>
-            Recommendations:{" "}
-            <strong className="text-[#111965]">{analytics?.generated_recommendations_count ?? 0}</strong>
-          </span>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => onNavigate("users")}
-            className="rounded-lg border border-[#E6E8F0] bg-white px-2.5 py-1.5 text-[11px] font-bold text-[#111965] hover:bg-[#F0F2FA]"
-          >
-            Manage users
-          </button>
-          <button
-            type="button"
-            onClick={() => onNavigate("engine")}
-            className="rounded-lg border border-[#E6E8F0] bg-white px-2.5 py-1.5 text-[11px] font-bold text-[#111965] hover:bg-[#F0F2FA]"
-          >
-            Tune the engine
-          </button>
-        </div>
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {[
+          {
+            label: "Add university",
+            hint: "Manage institutions",
+            icon: Building2,
+            tone: "bg-amber-50 text-amber-700",
+            tab: "universities",
+          },
+          {
+            label: "Add scholarship",
+            hint: "Funding directory",
+            icon: Award,
+            tone: "bg-purple-50 text-purple-700",
+            tab: "scholarships",
+          },
+          {
+            label: "Manage users",
+            hint: "Roles & access",
+            icon: Users,
+            tone: "bg-sky-50 text-sky-700",
+            tab: "users",
+          },
+          {
+            label: "Tune engine",
+            hint: "Match weights",
+            icon: Sliders,
+            tone: "bg-emerald-50 text-emerald-700",
+            tab: "engine",
+          },
+        ].map((action) => {
+          const Icon = action.icon;
+          return (
+            <button
+              key={action.label}
+              type="button"
+              onClick={() => onNavigate(action.tab as AdminTab)}
+              className="group flex items-center gap-3 rounded-2xl border border-[#E6E8F0] bg-white p-3.5 text-left transition-all hover:-translate-y-0.5 hover:border-[#111965]/20 hover:shadow-sm"
+            >
+              <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", action.tone)}>
+                <Icon className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[11px] font-black text-[#111965]">{action.label}</div>
+                <div className="text-[10px] text-[#94A3B8]">{action.hint}</div>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -707,7 +995,7 @@ function RulesPanel() {
   ] as const;
 
   return (
-    <div className="max-w-2xl space-y-5">
+    <div className="max-w-2xl space-y-5 rounded-2xl border border-[#E6E8F0] bg-white p-5 shadow-2xs sm:p-6">
       <div>
         <h2 className="text-lg font-black text-[#111965]">Recommendation engine</h2>
         <p className="text-xs text-[#68708A]">

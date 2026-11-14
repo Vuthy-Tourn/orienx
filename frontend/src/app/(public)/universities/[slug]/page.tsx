@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
@@ -121,6 +122,20 @@ export default function UniversityDetailPage() {
           <span>{t("universityDetail.back")}</span>
         </button>
 
+        {uni.cover_image_url && (
+          <div className="relative h-44 w-full overflow-hidden rounded-3xl border border-[#E6E8F0] bg-slate-100 shadow-xs sm:h-60">
+            <Image
+              src={uni.cover_image_url}
+              alt={getLocalized(uni.name) || "University campus"}
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 1024px"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+          </div>
+        )}
+
         {/* Institution Header Card */}
         <div className="rounded-3xl bg-white border border-[#E6E8F0] p-6 sm:p-8 shadow-xs space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -146,9 +161,23 @@ export default function UniversityDetailPage() {
                 )}
               </div>
 
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111965] leading-snug">
-                {getLocalized(uni.name)}
-              </h1>
+              <div className="flex items-start gap-3">
+                {uni.logo_url ? (
+                  <img
+                    src={uni.logo_url}
+                    alt=""
+                    loading="lazy"
+                    className="mt-0.5 h-11 w-11 shrink-0 rounded-xl border border-[#E6E8F0] bg-white object-contain p-1"
+                  />
+                ) : (
+                  <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#111965] text-xs font-black tracking-wide text-[#F7CE4D]">
+                    {(uni.acronym?.en || uni.slug || "U").slice(0, 3).toUpperCase()}
+                  </span>
+                )}
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111965] leading-snug">
+                  {getLocalized(uni.name)}
+                </h1>
+              </div>
               <div className="text-sm font-bold text-[#68708A] uppercase tracking-wider">
                 {getLocalized(uni.acronym)} • Established {uni.established_year || "1960"}
               </div>

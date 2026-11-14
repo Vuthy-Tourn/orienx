@@ -77,6 +77,7 @@ class Major(Base):
     riasec_primary: Mapped[str] = mapped_column(String(1), nullable=False, index=True) # R, I, A, S, E, C
     riasec_secondary: Mapped[str] = mapped_column(String(1), nullable=False, index=True)
     personality_affinity: Mapped[Optional[str]] = mapped_column(String(30)) # e.g. "INTJ,INTP"
+    image_url: Mapped[Optional[str]] = mapped_column(String(500))
     is_stem: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))

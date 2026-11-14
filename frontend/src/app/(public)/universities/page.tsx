@@ -415,7 +415,8 @@ function UniversitiesContent() {
             {sortedUniversities.map((uni: any, index: number) => {
               const isSelected = selectedForCompare.includes(uni.slug);
               const isPublic = uni.university_type === "PUBLIC";
-              const coverImage = UNIVERSITY_IMAGES[uni.slug] || "/images/universities/rupp.jpg";
+              const coverImage =
+                uni.cover_image_url || UNIVERSITY_IMAGES[uni.slug] || "/images/universities/rupp.jpg";
               const isFeatured = index === 0;
 
               return (
@@ -493,9 +494,23 @@ function UniversitiesContent() {
                     {/* Card Body */}
                     <div className="p-5 space-y-3.5">
                       <div>
-                        <h3 className="text-lg font-extrabold text-[#111965] group-hover:text-[#1E277A] transition-colors leading-snug">
-                          {getLocalized(uni.name)}
-                        </h3>
+                        <div className="flex items-start gap-2.5">
+                          {uni.logo_url ? (
+                            <img
+                              src={uni.logo_url}
+                              alt=""
+                              loading="lazy"
+                              className="mt-0.5 h-9 w-9 shrink-0 rounded-lg border border-[#E6E8F0] bg-white object-contain p-1"
+                            />
+                          ) : (
+                            <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#111965] text-[10px] font-black tracking-wide text-[#F7CE4D]">
+                              {(uni.acronym?.en || uni.slug || "U").slice(0, 3).toUpperCase()}
+                            </span>
+                          )}
+                          <h3 className="text-lg font-extrabold text-[#111965] group-hover:text-[#1E277A] transition-colors leading-snug">
+                            {getLocalized(uni.name)}
+                          </h3>
+                        </div>
                         <div className="flex items-center gap-1.5 text-xs text-[#68708A] mt-1">
                           <MapPin className="w-3.5 h-3.5 text-[#111965] shrink-0" />
                           <span>{getLocalized(uni.province) || uni.province || (language === "km" ? "ភ្នំពេញ, កម្ពុជា" : "Phnom Penh, Cambodia")}</span>
