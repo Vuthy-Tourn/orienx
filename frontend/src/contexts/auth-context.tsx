@@ -26,7 +26,7 @@ export interface User {
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User | null>;
   register: (data: any) => Promise<void>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
@@ -75,14 +75,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       ) {
         setUser(null);
         setIsLoading(false);
-        return;
+        return null;
       }
 
       // Cookies are httpOnly, so the browser sends them automatically.
       const userData = await apiFetch<User>("/auth/me");
       setUser(userData);
+      return userData;
     } catch {
       setUser(null);
+      return null;
     } finally {
       setIsLoading(false);
     }
@@ -129,7 +131,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       body: JSON.stringify({ email, password }),
     });
     clearSessionCache();
-    await fetchCurrentUser();
+    return await fetchCurrentUser();
   };
 
   const register = async (data: any) => {

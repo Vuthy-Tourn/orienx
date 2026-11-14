@@ -23,9 +23,7 @@ import {
   CheckCircle2,
   Compass,
   Award,
-  BookOpen,
   Building2,
-  TrendingUp,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -100,8 +98,11 @@ export default function LoginPage() {
     setError(null);
     setLoading(true);
     try {
-      await login(email, password);
-      router.push("/dashboard");
+      const signedIn = await login(email, password);
+      const isAdmin = signedIn?.roles?.some(
+        (role) => role === "ADMIN" || role === "SUPER_ADMIN"
+      );
+      router.push(isAdmin ? "/admin" : "/dashboard");
     } catch (err: any) {
       setError(err?.message || "Invalid credentials. Please verify your email and password.");
     } finally {
@@ -118,7 +119,7 @@ export default function LoginPage() {
 
   const fillDemoAdmin = () => {
     setEmail("admin@futera.edu.kh");
-    setPassword("AdminSecure2026!");
+    setPassword("AdminPass123!");
     setActiveDemo("admin");
     setError(null);
   };
