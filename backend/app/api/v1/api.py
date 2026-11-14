@@ -10,6 +10,7 @@ from app.api.v1.endpoints import (
     scholarships,
     favorites,
     admin,
+    uploads,
 )
 
 api_router = APIRouter()
@@ -24,4 +25,5 @@ api_router.include_router(careers.router, prefix="/careers", tags=["Careers"])
 api_router.include_router(scholarships.router, prefix="/scholarships", tags=["Scholarships"])
 api_router.include_router(favorites.router, prefix="/favorites", tags=["Favorites"])
 api_router.include_router(admin.router, prefix="/admin", tags=["Administration"])
+api_router.include_router(uploads.router, prefix="/uploads", tags=["Content uploads"])
 

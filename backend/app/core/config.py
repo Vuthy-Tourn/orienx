@@ -1,3 +1,4 @@
+from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
 
@@ -26,6 +27,10 @@ class Settings(BaseSettings):
     SESSION_HINT_COOKIE_NAME: str = "futera_session"
     SESSION_HINT_COOKIE_PATH: str = "/"
     
+    # Admin content uploads (logos, covers, major images, posters)
+    UPLOAD_DIR: str = str(Path(__file__).resolve().parents[2] / "uploads")
+    MAX_UPLOAD_MB: int = 5
+
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost:3000",

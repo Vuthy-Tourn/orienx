@@ -23,3 +23,5 @@ htmlcov/
 *~
 
 *.agents
+# Uploaded admin content
+backend/uploads/

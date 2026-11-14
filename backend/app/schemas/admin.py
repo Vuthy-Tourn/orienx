@@ -1,8 +1,26 @@
 import uuid
 from typing import Optional, List, Dict, Any
-from pydantic import BaseModel, ConfigDict
+from urllib.parse import urlparse
+
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 from typing import Literal
 from datetime import date
+
+
+def _validate_image_source(value: Optional[str]) -> Optional[str]:
+    if value is None:
+        return value
+    value = value.strip()
+    if value == "":
+        return value
+    if len(value) > 500:
+        raise ValueError("Image URLs must be 500 characters or fewer.")
+    if value.startswith("/") and not value.startswith("//"):
+        return value
+    parsed = urlparse(value)
+    if parsed.scheme not in ("http", "https") or not parsed.netloc:
+        raise ValueError("Image URL must be an http(s) URL or an absolute path.")
+    return value
 
 
 class AdminAnalyticsOut(BaseModel):
@@ -86,6 +104,35 @@ class UniversityAdminIn(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    @field_validator("logo_url", "cover_image_url")
+    @classmethod
+    def validate_image_urls(cls, value: Optional[str]) -> Optional[str]:
+        return _validate_image_source(value)
+
+    @field_validator("established_year")
+    @classmethod
+    def validate_established_year(cls, value: Optional[int]) -> Optional[int]:
+        if value is not None and not 1900 <= value <= 2100:
+            raise ValueError("Established year must be between 1900 and 2100.")
+        return value
+
+    @field_validator("tuition_range_min_usd", "tuition_range_max_usd")
+    @classmethod
+    def validate_tuition(cls, value: Optional[float]) -> Optional[float]:
+        if value is not None and value < 0:
+            raise ValueError("Tuition values cannot be negative.")
+        return value
+
+    @model_validator(mode="after")
+    def validate_tuition_order(self):
+        if (
+            self.tuition_range_min_usd is not None
+            and self.tuition_range_max_usd is not None
+            and self.tuition_range_max_usd < self.tuition_range_min_usd
+        ):
+            raise ValueError("Max tuition must be at least min tuition.")
+        return self
+
 
 class MajorAdminIn(BaseModel):
     slug: Optional[str] = None
@@ -101,6 +148,11 @@ class MajorAdminIn(BaseModel):
     is_stem: Optional[bool] = None
 
     model_config = ConfigDict(extra="forbid")
+
+    @field_validator("image_url")
+    @classmethod
+    def validate_image_url(cls, value: Optional[str]) -> Optional[str]:
+        return _validate_image_source(value)
 
 
 class CareerAdminIn(BaseModel):
@@ -134,3 +186,15 @@ class ScholarshipAdminIn(BaseModel):
     is_verified: Optional[bool] = None
 
     model_config = ConfigDict(extra="forbid")
+
+    @field_validator("poster_url")
+    @classmethod
+    def validate_poster_url(cls, value: Optional[str]) -> Optional[str]:
+        return _validate_image_source(value)
+
+    @field_validator("coverage_percentage")
+    @classmethod
+    def validate_coverage_percentage(cls, value: Optional[int]) -> Optional[int]:
+        if value is not None and not 0 <= value <= 100:
+            raise ValueError("Coverage percentage must be between 0 and 100.")
+        return value

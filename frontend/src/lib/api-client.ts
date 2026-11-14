@@ -14,9 +14,11 @@ export async function apiFetch<T = any>(
   options: ApiFetchOptions = {}
 ): Promise<T> {
   const { headers: customHeaders, ...restOptions } = options;
+  const isFormData =
+    typeof FormData !== "undefined" && restOptions.body instanceof FormData;
 
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
     ...(customHeaders as Record<string, string>),
   };
 
@@ -62,7 +64,12 @@ export async function apiFetch<T = any>(
   const data = await res.json().catch(() => null);
 
   if (!res.ok) {
-    const errorMsg = data?.detail || data?.message || `HTTP ${res.status}: ${res.statusText}`;
+    const detail = data?.detail;
+    const errorMsg = Array.isArray(detail)
+      ? detail
+          .map((item: any) => item?.msg || item?.message || "Invalid value")
+          .join(" ")
+      : detail || data?.message || `HTTP ${res.status}: ${res.statusText}`;
     throw new Error(errorMsg);
   }
 

@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Check,
+  Image as ImageIcon,
   Loader2,
   Pencil,
   Plus,
   Search,
   Trash2,
+  Upload,
   X,
 } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -20,7 +22,8 @@ export type AdminFieldType =
   | "select"
   | "number"
   | "date"
-  | "checkbox";
+  | "checkbox"
+  | "image";
 
 export interface AdminField {
   key: string;
@@ -31,6 +34,9 @@ export interface AdminField {
   placeholder?: string;
   wide?: boolean;
   defaultValue?: any;
+  min?: number;
+  max?: number;
+  imageShape?: "square" | "wide" | "poster";
 }
 
 export interface AdminColumn {
@@ -49,6 +55,11 @@ interface ContentManagerProps {
   searchKeys: string[];
 }
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const UPLOAD_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
+const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+
 function emptyForm(fields: AdminField[]): Record<string, any> {
   return Object.fromEntries(
     fields.map((field) => [
@@ -61,6 +72,139 @@ function emptyForm(fields: AdminField[]): Record<string, any> {
         ? field.options?.[0]?.value ?? ""
         : "",
     ])
+  );
+}
+
+function isHttpUrl(value: string) {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "http:" || parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function isImageSource(value: string) {
+  if (value.startsWith("/") && !value.startsWith("//")) return true;
+  return isHttpUrl(value);
+}
+
+function validateForm(
+  fields: AdminField[],
+  form: Record<string, any>
+): Record<string, string> {
+  const errors: Record<string, string> = {};
+
+  for (const field of fields) {
+    if (field.type === "checkbox") continue;
+
+    const raw = form[field.key];
+    const value = typeof raw === "string" ? raw.trim() : raw;
+
+    if (value === "" || value == null) {
+      if (field.required) errors[field.key] = "This field is required.";
+      continue;
+    }
+
+    if (field.type === "image") {
+      if (!isImageSource(String(value))) {
+        errors[field.key] = "Enter a valid image URL or upload a file.";
+      }
+      continue;
+    }
+
+    if (field.key === "slug" && !SLUG_PATTERN.test(String(value))) {
+      errors[field.key] = "Use lowercase letters, numbers, and hyphens only.";
+      continue;
+    }
+
+    if (field.key === "contact_email" && !EMAIL_PATTERN.test(String(value))) {
+      errors[field.key] = "Enter a valid email address.";
+      continue;
+    }
+
+    if (field.key === "riasec_code" && !/^[RIASEC]{1,3}$/.test(String(value))) {
+      errors[field.key] = "Use 1–3 RIASEC letters: R, I, A, S, E, or C.";
+      continue;
+    }
+
+    if (field.key.endsWith("_url") && !isHttpUrl(String(value))) {
+      errors[field.key] = "Enter a valid http(s) URL.";
+      continue;
+    }
+
+    if (field.type === "number") {
+      const numberValue = Number(value);
+      if (!Number.isFinite(numberValue)) {
+        errors[field.key] = "Enter a valid number.";
+      } else if (field.min != null && numberValue < field.min) {
+        errors[field.key] = `Must be at least ${field.min}.`;
+      } else if (field.max != null && numberValue > field.max) {
+        errors[field.key] = `Must be at most ${field.max}.`;
+      }
+      continue;
+    }
+
+    if (field.type === "date" && Number.isNaN(Date.parse(String(value)))) {
+      errors[field.key] = "Enter a valid date.";
+    }
+  }
+
+  const minTuition = Number(form.tuition_range_min_usd);
+  const maxTuition = Number(form.tuition_range_max_usd);
+  if (
+    !errors.tuition_range_max_usd &&
+    form.tuition_range_min_usd !== "" &&
+    form.tuition_range_max_usd !== "" &&
+    Number.isFinite(minTuition) &&
+    Number.isFinite(maxTuition) &&
+    maxTuition < minTuition
+  ) {
+    errors.tuition_range_max_usd =
+      "Max tuition must be greater than or equal to min tuition.";
+  }
+
+  return errors;
+}
+
+function ImagePreview({
+  src,
+  shape,
+}: {
+  src?: string | null;
+  shape?: AdminField["imageShape"];
+}) {
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const failed = Boolean(src) && failedSrc === src;
+
+  const size =
+    shape === "square"
+      ? "h-16 w-16"
+      : shape === "poster"
+      ? "h-20 w-14"
+      : "h-16 w-24";
+  const canPreview =
+    typeof src === "string" && src.length > 0 && isImageSource(src);
+
+  return (
+    <div
+      className={cn(
+        "flex shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[#E6E8F0] bg-white",
+        size
+      )}
+    >
+      {canPreview && !failed ? (
+        // Plain img so arbitrary admin-provided URLs work.
+        <img
+          src={src}
+          alt="Image preview"
+          className="h-full w-full object-contain"
+          onError={() => setFailedSrc(src ?? null)}
+        />
+      ) : (
+        <ImageIcon className="h-5 w-5 text-[#94A3B8]" />
+      )}
+    </div>
   );
 }
 
@@ -78,6 +222,9 @@ export function ContentManager({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Record<string, any>>(() => emptyForm(fields));
   const [formError, setFormError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [uploadErrors, setUploadErrors] = useState<Record<string, string>>({});
+  const [uploadingField, setUploadingField] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [noticeTone, setNoticeTone] = useState<"success" | "error">("success");
 
@@ -97,6 +244,15 @@ export function ContentManager({
     );
   }, [rows, search, searchKeys]);
 
+  useEffect(() => {
+    if (!dialogOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setDialogOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [dialogOpen]);
+
   const { mutate: save, isPending: saving } = useMutation({
     mutationFn: async () => {
       const payload: Record<string, any> = {};
@@ -109,7 +265,7 @@ export function ContentManager({
         } else if (field.type === "date") {
           payload[field.key] = value || null;
         } else {
-          payload[field.key] = value ?? "";
+          payload[field.key] = typeof value === "string" ? value.trim() : value ?? "";
         }
       }
       if (editingId) {
@@ -129,6 +285,9 @@ export function ContentManager({
       queryClient.invalidateQueries({ queryKey: ["admin-analytics"] });
       setDialogOpen(false);
       setFormError(null);
+      setFieldErrors({});
+      setUploadErrors({});
+      setUploadingField(null);
       setNoticeTone("success");
       setNotice(editingId ? "Record updated." : "Record created.");
       setTimeout(() => setNotice(null), 3000);
@@ -155,10 +314,23 @@ export function ContentManager({
     },
   });
 
+  const updateField = (key: string, value: any) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+    setFieldErrors((prev) => {
+      if (!prev[key]) return prev;
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  };
+
   const openNew = () => {
     setEditingId(null);
     setForm(emptyForm(fields));
     setFormError(null);
+    setFieldErrors({});
+    setUploadErrors({});
+    setUploadingField(null);
     setDialogOpen(true);
   };
 
@@ -173,7 +345,75 @@ export function ContentManager({
       )
     );
     setFormError(null);
+    setFieldErrors({});
+    setUploadErrors({});
+    setUploadingField(null);
     setDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setDialogOpen(false);
+    setFormError(null);
+    setFieldErrors({});
+    setUploadErrors({});
+    setUploadingField(null);
+  };
+
+  const handleImageFile = async (field: AdminField, file: File) => {
+    setUploadErrors((prev) => {
+      if (!prev[field.key]) return prev;
+      const next = { ...prev };
+      delete next[field.key];
+      return next;
+    });
+
+    if (!UPLOAD_TYPES.includes(file.type)) {
+      setUploadErrors((prev) => ({
+        ...prev,
+        [field.key]: "Choose a PNG, JPG, WebP, or GIF image.",
+      }));
+      return;
+    }
+
+    if (file.size > MAX_UPLOAD_BYTES) {
+      setUploadErrors((prev) => ({
+        ...prev,
+        [field.key]: "Images must be 5 MB or smaller.",
+      }));
+      return;
+    }
+
+    setUploadingField(field.key);
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const uploaded = await apiFetch<{ url: string }>("/uploads", {
+        method: "POST",
+        body,
+      });
+      if (!uploaded?.url) {
+        throw new Error("The upload did not return an image URL.");
+      }
+      updateField(field.key, uploaded.url);
+    } catch (error: any) {
+      setUploadErrors((prev) => ({
+        ...prev,
+        [field.key]: error?.message || "Could not upload this image.",
+      }));
+    } finally {
+      setUploadingField(null);
+    }
+  };
+
+  const handleSave = () => {
+    const errors = validateForm(fields, form);
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      setFormError("Please fix the highlighted fields before saving.");
+      return;
+    }
+    setFormError(null);
+    save();
   };
 
   const handleDelete = (row: Record<string, any>) => {
@@ -299,8 +539,14 @@ export function ContentManager({
           role="dialog"
           aria-modal="true"
           aria-label={editingId ? `Edit ${title}` : `Add ${title}`}
+          onClick={(event) => {
+            if (event.target === event.currentTarget) closeDialog();
+          }}
         >
-          <div className="my-6 w-full max-w-3xl rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-2xl sm:p-6">
+          <div
+            className="my-6 w-full max-w-3xl rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-2xl sm:p-6"
+            onClick={(event) => event.stopPropagation()}
+          >
             <div className="flex items-start justify-between gap-3 border-b border-[#E6E8F0] pb-3">
               <div>
                 <h3 className="text-base font-black text-[#111965]">
@@ -312,7 +558,7 @@ export function ContentManager({
               </div>
               <button
                 type="button"
-                onClick={() => setDialogOpen(false)}
+                onClick={closeDialog}
                 className="rounded-lg p-1.5 text-[#68708A] hover:bg-slate-100 hover:text-[#171A2C]"
                 aria-label="Close"
               >
@@ -327,90 +573,239 @@ export function ContentManager({
             )}
 
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {fields.map((field) => (
-                <label
-                  key={field.key}
-                  className={cn("space-y-1.5", field.wide && "sm:col-span-2")}
-                >
-                  <span className="block text-[11px] font-black uppercase tracking-wider text-[#68708A]">
-                    {field.label}
-                    {field.required && <span className="text-rose-500"> *</span>}
-                  </span>
-                  {field.type === "textarea" ? (
-                    <textarea
-                      value={form[field.key] ?? ""}
-                      onChange={(event) =>
-                        setForm((prev) => ({ ...prev, [field.key]: event.target.value }))
-                      }
-                      placeholder={field.placeholder}
-                      rows={3}
-                      className="w-full rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3 py-2 text-xs text-[#171A2C] outline-none focus:border-[#111965] focus:bg-white"
-                    />
-                  ) : field.type === "select" ? (
-                    <select
-                      value={form[field.key] ?? ""}
-                      onChange={(event) =>
-                        setForm((prev) => ({ ...prev, [field.key]: event.target.value }))
-                      }
-                      className="h-10 w-full rounded-xl border border-[#E6E8F0] bg-white px-3 text-xs font-semibold text-[#171A2C] outline-none focus:border-[#111965]"
-                    >
-                      {field.options?.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  ) : field.type === "checkbox" ? (
-                    <button
-                      type="button"
-                      role="switch"
-                      aria-checked={Boolean(form[field.key])}
-                      onClick={() =>
-                        setForm((prev) => ({
-                          ...prev,
-                          [field.key]: !prev[field.key],
-                        }))
-                      }
-                      className={cn(
-                        "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-bold transition-colors",
-                        form[field.key]
-                          ? "border-[#111965] bg-[#111965] text-white"
-                          : "border-[#E6E8F0] bg-white text-[#68708A]"
-                      )}
-                    >
-                      <Check className="h-3.5 w-3.5" />
-                      {form[field.key] ? "Enabled" : "Disabled"}
-                    </button>
-                  ) : (
-                    <input
-                      type={field.type === "number" ? "number" : field.type === "date" ? "date" : "text"}
-                      value={form[field.key] ?? ""}
-                      onChange={(event) =>
-                        setForm((prev) => ({ ...prev, [field.key]: event.target.value }))
-                      }
-                      placeholder={field.placeholder}
-                      className="h-10 w-full rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3 text-xs text-[#171A2C] outline-none focus:border-[#111965] focus:bg-white"
-                    />
-                  )}
-                </label>
-              ))}
+              {fields.map((field) => {
+                const fieldId = `${resource}-${field.key}`;
+                const hasError = Boolean(fieldErrors[field.key]);
+                const inputClass = cn(
+                  "w-full rounded-xl border bg-[#F8FAFD] px-3 text-xs text-[#171A2C] outline-none focus:bg-white",
+                  hasError
+                    ? "border-rose-400 focus:border-rose-500"
+                    : "border-[#E6E8F0] focus:border-[#111965]",
+                  field.type === "textarea" ? "py-2" : "h-10"
+                );
+
+                return (
+                  <div
+                    key={field.key}
+                    className={cn("space-y-1.5", field.wide && "sm:col-span-2")}
+                  >
+                    {field.type === "image" ? (
+                      <>
+                        <span className="block text-[11px] font-black uppercase tracking-wider text-[#68708A]">
+                          {field.label}
+                          {field.required && <span className="text-rose-500"> *</span>}
+                        </span>
+                        <div
+                          className={cn(
+                            "rounded-xl border p-2.5",
+                            hasError
+                              ? "border-rose-300 bg-rose-50/40"
+                              : "border-[#E6E8F0] bg-[#F8FAFD]"
+                          )}
+                        >
+                          <div className="flex items-start gap-3">
+                            <ImagePreview
+                              src={form[field.key]}
+                              shape={field.imageShape}
+                            />
+                            <div className="min-w-0 flex-1 space-y-2">
+                              <input
+                                id={fieldId}
+                                type="text"
+                                value={form[field.key] ?? ""}
+                                onChange={(event) =>
+                                  updateField(field.key, event.target.value)
+                                }
+                                placeholder={
+                                  field.placeholder ??
+                                  "Paste a URL or upload from your laptop"
+                                }
+                                aria-label={field.label}
+                                maxLength={500}
+                                className={cn(
+                                  "h-9 w-full rounded-lg border bg-white px-2.5 text-xs text-[#171A2C] outline-none",
+                                  hasError
+                                    ? "border-rose-400 focus:border-rose-500"
+                                    : "border-[#E6E8F0] focus:border-[#111965]"
+                                )}
+                              />
+                              <div className="flex flex-wrap items-center gap-2">
+                                <label
+                                  className={cn(
+                                    "inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#E6E8F0] bg-white px-2.5 py-1.5 text-[11px] font-bold text-[#111965] transition-colors hover:border-[#111965]/30",
+                                    uploadingField === field.key &&
+                                      "pointer-events-none opacity-60"
+                                  )}
+                                >
+                                  {uploadingField === field.key ? (
+                                    <Loader2 className="h-3 w-3 animate-spin" />
+                                  ) : (
+                                    <Upload className="h-3 w-3" />
+                                  )}
+                                  <span>
+                                    {uploadingField === field.key
+                                      ? "Uploading…"
+                                      : "Upload from laptop"}
+                                  </span>
+                                  <input
+                                    type="file"
+                                    accept={UPLOAD_TYPES.join(",")}
+                                    className="sr-only"
+                                    disabled={uploadingField === field.key}
+                                    onChange={(event) => {
+                                      const file = event.target.files?.[0];
+                                      event.target.value = "";
+                                      if (file) handleImageFile(field, file);
+                                    }}
+                                  />
+                                </label>
+
+                                {form[field.key] && (
+                                  <button
+                                    type="button"
+                                    onClick={() => updateField(field.key, "")}
+                                    className="rounded-lg px-2 py-1.5 text-[11px] font-bold text-rose-600 transition-colors hover:bg-rose-50"
+                                  >
+                                    Remove
+                                  </button>
+                                )}
+
+                                <span className="text-[10px] text-[#94A3B8]">
+                                  PNG, JPG, WebP, GIF · 5 MB max
+                                </span>
+                              </div>
+                              {uploadErrors[field.key] && (
+                                <p className="text-[11px] font-semibold text-rose-600">
+                                  {uploadErrors[field.key]}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                          {hasError && (
+                            <p className="mt-1.5 text-[11px] font-semibold text-rose-600">
+                              {fieldErrors[field.key]}
+                            </p>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {field.type === "checkbox" ? (
+                          <span className="block text-[11px] font-black uppercase tracking-wider text-[#68708A]">
+                            {field.label}
+                            {field.required && (
+                              <span className="text-rose-500"> *</span>
+                            )}
+                          </span>
+                        ) : (
+                          <label
+                            htmlFor={fieldId}
+                            className="block text-[11px] font-black uppercase tracking-wider text-[#68708A]"
+                          >
+                            {field.label}
+                            {field.required && (
+                              <span className="text-rose-500"> *</span>
+                            )}
+                          </label>
+                        )}
+
+                        {field.type === "textarea" ? (
+                          <textarea
+                            id={fieldId}
+                            value={form[field.key] ?? ""}
+                            onChange={(event) =>
+                              updateField(field.key, event.target.value)
+                            }
+                            placeholder={field.placeholder}
+                            rows={3}
+                            className={inputClass}
+                          />
+                        ) : field.type === "select" ? (
+                          <select
+                            id={fieldId}
+                            value={form[field.key] ?? ""}
+                            onChange={(event) =>
+                              updateField(field.key, event.target.value)
+                            }
+                            className={cn(inputClass, "font-semibold")}
+                          >
+                            {field.options?.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
+                        ) : field.type === "checkbox" ? (
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={Boolean(form[field.key])}
+                            onClick={() =>
+                              updateField(field.key, !form[field.key])
+                            }
+                            className={cn(
+                              "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-bold transition-colors",
+                              form[field.key]
+                                ? "border-[#111965] bg-[#111965] text-white"
+                                : "border-[#E6E8F0] bg-white text-[#68708A]"
+                            )}
+                          >
+                            <Check className="h-3.5 w-3.5" />
+                            {form[field.key] ? "Enabled" : "Disabled"}
+                          </button>
+                        ) : (
+                          <input
+                            id={fieldId}
+                            type={
+                              field.type === "number"
+                                ? "number"
+                                : field.type === "date"
+                                ? "date"
+                                : "text"
+                            }
+                            value={form[field.key] ?? ""}
+                            onChange={(event) =>
+                              updateField(field.key, event.target.value)
+                            }
+                            placeholder={field.placeholder}
+                            min={field.min}
+                            max={field.max}
+                            maxLength={field.key.endsWith("_url") ? 500 : undefined}
+                            className={inputClass}
+                          />
+                        )}
+
+                        {hasError && (
+                          <p className="text-[11px] font-semibold text-rose-600">
+                            {fieldErrors[field.key]}
+                          </p>
+                        )}
+                      </>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             <div className="mt-5 flex items-center justify-end gap-2 border-t border-[#E6E8F0] pt-4">
               <button
                 type="button"
-                onClick={() => setDialogOpen(false)}
+                onClick={closeDialog}
                 className="rounded-xl border border-[#E6E8F0] px-4 py-2 text-xs font-bold text-[#68708A] hover:bg-slate-50"
               >
                 Cancel
               </button>
               <button
                 type="button"
-                onClick={() => save()}
+                onClick={handleSave}
                 disabled={saving}
                 className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7CE4D] px-4 py-2 text-xs font-black text-[#111965] hover:bg-[#E5BD3B] disabled:opacity-50"
               >
-                {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
+                {saving ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <Check className="h-3.5 w-3.5" />
+                )}
                 {saving ? "Saving…" : "Save changes"}
               </button>
             </div>
