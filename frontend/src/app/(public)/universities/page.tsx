@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import { DirectoryControls } from "@/components/directory/directory-controls";
+import { DirectoryHeroStats } from "@/components/directory/directory-hero-stats";
 import {
   Building2,
   MapPin,
@@ -26,7 +27,6 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DotPattern } from "@/components/magicui/dot-pattern";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { Dialog } from "@/components/ui/dialog";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
@@ -135,131 +135,52 @@ function UniversitiesContent() {
     return `$${Math.round(usdVal)}`;
   };
 
+  const statsSource = universities || [];
+  const programCount = statsSource.reduce(
+    (sum: number, u: any) => sum + (u.majors_count || 0),
+    0
+  );
+  const minTuition = statsSource
+    .map((u: any) => u.tuition_range_min_usd)
+    .filter((v: any): v is number => typeof v === "number" && v > 0)
+    .sort((a: number, b: number) => a - b)[0];
+  const heroStats = [
+    {
+      label: language === "km" ? "សាកលវិទ្យាល័យ" : "Universities",
+      value: universities ? String(statsSource.length) : "—",
+    },
+    {
+      label: language === "km" ? "កម្មវិធីសិក្សា" : "Programs",
+      value: universities ? String(programCount) : "—",
+    },
+    {
+      label: language === "km" ? "ថ្លៃសិក្សាចាប់ផ្តើម" : "Tuition from",
+      value: minTuition ? formatMoney(minTuition) : "—",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-[#F5F6FA] pb-28">
-      {/* Hero Section with Interactive Tuition Estimator */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-12 pb-14">
-        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-35" />
+      {/* Hero */}
+      <section className="border-b border-[#E6E8F0] bg-white">
+        <div className="mx-auto max-w-7xl px-4 pt-9 sm:px-6 sm:pt-11 lg:px-8">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#111965]/15 bg-[#111965]/5 px-3 py-1 text-[12px] font-bold text-[#111965]">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              {t("universitiesDirectory.badge")}
+            </span>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8">
-          <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
-              <span>{t("universitiesDirectory.badge")}</span>
-            </div>
-
-            <h1 className="text-3xl sm:text-5xl font-black text-[#111965] tracking-tight leading-tight">
+            <h1 className="mt-3.5 text-[2rem] font-extrabold leading-[1.12] tracking-[-0.025em] text-[#111965] sm:text-[2.5rem]">
               {t("universitiesDirectory.title")}
             </h1>
 
-            <p className="text-sm sm:text-base text-[#68708A] leading-relaxed max-w-2xl">
+            <p className="mt-3 max-w-[46ch] text-sm leading-relaxed text-[#68708A] sm:text-[16px]">
               {t("universitiesDirectory.subtitle")}
             </p>
           </div>
-
-          {/* Interactive 4-Year Tuition Investment Estimator */}
-          <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E6E8F0] pb-3">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-xl bg-blue-50 text-[#111965]">
-                  <Calculator className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-black text-[#111965]">
-                    {language === "km" ? "ការប៉ាន់ស្មានថ្លៃសិក្សាបរិញ្ញាបត្រ ៤ ឆ្នាំ" : "4-Year Degree Tuition Investment Estimator"}
-                  </h3>
-                  <p className="text-xs text-[#68708A]">
-                    {language === "km" ? "ជួរថ្លៃសិក្សាផ្លូវការ ផ្ទៀងផ្ទាត់ជាមួយបញ្ជីសាកលវិទ្យាល័យកម្ពុជា" : "Official fee ranges cross-referenced with Cambodian university registries"}
-                  </p>
-                </div>
-              </div>
-
-              {/* Currency Toggle */}
-              <div className="flex items-center gap-1 self-start sm:self-auto bg-slate-100 p-1 rounded-xl text-xs font-bold">
-                <button
-                  type="button"
-                  onClick={() => setCurrency("USD")}
-                  className={`px-3 py-1 rounded-lg transition-all ${
-                    currency === "USD" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
-                  }`}
-                >
-                  USD ($)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCurrency("KHR")}
-                  className={`px-3 py-1 rounded-lg transition-all ${
-                    currency === "KHR" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
-                  }`}
-                >
-                  KHR (៛)
-                </button>
-              </div>
-            </div>
-
-            {/* Estimator Controls & Results */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <button
-                type="button"
-                onClick={() => setEstimatorType("PUBLIC")}
-                className={`p-4 rounded-2xl border text-left transition-all ${
-                  estimatorType === "PUBLIC"
-                    ? "bg-[#111965] text-white border-[#111965] shadow-sm"
-                    : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[12px] font-bold opacity-80 uppercase tracking-wider">{language === "km" ? "សញ្ញាបត្រសាកលវិទ្យាល័យរដ្ឋ" : "Public State Degree"}</span>
-                  <Landmark className="w-4 h-4 text-blue-400" />
-                </div>
-                <div className="text-xl font-black mt-2">
-                  {currency === "USD" ? "$1,000 – $3,600" : "4.1M – 14.8M KHR"}
-                </div>
-                <div className="text-[12px] opacity-75 mt-1">{language === "km" ? "ថ្លៃសិក្សាសរុប ៤ ឆ្នាំ (RUPP, ITC Techno, NUM)" : "Total 4-Year Tuition (RUPP, ITC Techno, NUM)"}</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setEstimatorType("PRIVATE")}
-                className={`p-4 rounded-2xl border text-left transition-all ${
-                  estimatorType === "PRIVATE"
-                    ? "bg-[#111965] text-white border-[#111965] shadow-sm"
-                    : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-[12px] font-bold opacity-80 uppercase tracking-wider">{language === "km" ? "សញ្ញាបត្រសាកលវិទ្យាល័យឯកជន" : "Private University Degree"}</span>
-                  <Building2 className="w-4 h-4 text-purple-400" />
-                </div>
-                <div className="text-xl font-black mt-2">
-                  {currency === "USD" ? "$6,000 – $24,000" : "24.6M – 98.4M KHR"}
-                </div>
-                <div className="text-[12px] opacity-75 mt-1">{language === "km" ? "ថ្លៃសិក្សាសរុប ៤ ឆ្នាំ (AUPP, Paragon, CADT)" : "Total 4-Year Tuition (AUPP, Paragon, CADT)"}</div>
-              </button>
-
-              <div className="p-4 rounded-2xl bg-[#F0F2FA]/70 border border-[#E6E8F0] flex flex-col justify-between">
-                <div>
-                  <div className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
-                    {language === "km" ? "សក្តានុពលអាហារូបករណ៍" : "Scholarship Offset Potential"}
-                  </div>
-                  <div className="text-base font-black text-emerald-700 mt-1">
-                    {language === "km" ? "រហូតដល់ ១០០% ពេញលេញ" : "Up to 100% Full-Ride"}
-                  </div>
-                  <p className="text-xs text-[#68708A] mt-1 leading-snug">
-                    {language === "km" ? "អាហារូបករណ៍ MoEYS និងក្រុមហ៊ុនដៃគូជាង ៥០០ មានជារៀងរាល់ឆ្នាំ។" : "Over 500+ MoEYS and partner corporate grants available annually."}
-                  </p>
-                </div>
-                <Link
-                  href="/scholarships"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#111965] hover:underline mt-2"
-                >
-                  <span>{language === "km" ? "រកមើលអាហារូបករណ៍ដែលមាន" : "Explore Available Scholarships"}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-          </div>
         </div>
+
+        <DirectoryHeroStats stats={heroStats} />
       </section>
 
       {/* One control surface: search, filtering, sorting. */}
@@ -332,6 +253,109 @@ function UniversitiesContent() {
             </button>
           </div>
         )}
+
+        {/* Interactive 4-Year Tuition Investment Estimator */}
+        <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E6E8F0] pb-3">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-xl bg-blue-50 text-[#111965]">
+                <Calculator className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-[#111965]">
+                  {language === "km" ? "ការប៉ាន់ស្មានថ្លៃសិក្សាបរិញ្ញាបត្រ ៤ ឆ្នាំ" : "4-Year Degree Tuition Investment Estimator"}
+                </h3>
+                <p className="text-xs text-[#68708A]">
+                  {language === "km" ? "ជួរថ្លៃសិក្សាផ្លូវការ ផ្ទៀងផ្ទាត់ជាមួយបញ្ជីសាកលវិទ្យាល័យកម្ពុជា" : "Official fee ranges cross-referenced with Cambodian university registries"}
+                </p>
+              </div>
+            </div>
+
+            {/* Currency Toggle */}
+            <div className="flex items-center gap-1 self-start sm:self-auto bg-slate-100 p-1 rounded-xl text-xs font-bold">
+              <button
+                type="button"
+                onClick={() => setCurrency("USD")}
+                className={`px-3 py-1 rounded-lg transition-all ${
+                  currency === "USD" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
+                }`}
+              >
+                USD ($)
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrency("KHR")}
+                className={`px-3 py-1 rounded-lg transition-all ${
+                  currency === "KHR" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
+                }`}
+              >
+                KHR (៛)
+              </button>
+            </div>
+          </div>
+
+          {/* Estimator Controls & Results */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button
+              type="button"
+              onClick={() => setEstimatorType("PUBLIC")}
+              className={`p-4 rounded-2xl border text-left transition-all ${
+                estimatorType === "PUBLIC"
+                  ? "bg-[#111965] text-white border-[#111965] shadow-sm"
+                  : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[12px] font-bold opacity-80 uppercase tracking-wider">{language === "km" ? "សញ្ញាបត្រសាកលវិទ្យាល័យរដ្ឋ" : "Public State Degree"}</span>
+                <Landmark className="w-4 h-4 text-blue-400" />
+              </div>
+              <div className="text-xl font-black mt-2">
+                {currency === "USD" ? "$1,000 – $3,600" : "4.1M – 14.8M KHR"}
+              </div>
+              <div className="text-[12px] opacity-75 mt-1">{language === "km" ? "ថ្លៃសិក្សាសរុប ៤ ឆ្នាំ (RUPP, ITC Techno, NUM)" : "Total 4-Year Tuition (RUPP, ITC Techno, NUM)"}</div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setEstimatorType("PRIVATE")}
+              className={`p-4 rounded-2xl border text-left transition-all ${
+                estimatorType === "PRIVATE"
+                  ? "bg-[#111965] text-white border-[#111965] shadow-sm"
+                  : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[12px] font-bold opacity-80 uppercase tracking-wider">{language === "km" ? "សញ្ញាបត្រសាកលវិទ្យាល័យឯកជន" : "Private University Degree"}</span>
+                <Building2 className="w-4 h-4 text-purple-400" />
+              </div>
+              <div className="text-xl font-black mt-2">
+                {currency === "USD" ? "$6,000 – $24,000" : "24.6M – 98.4M KHR"}
+              </div>
+              <div className="text-[12px] opacity-75 mt-1">{language === "km" ? "ថ្លៃសិក្សាសរុប ៤ ឆ្នាំ (AUPP, Paragon, CADT)" : "Total 4-Year Tuition (AUPP, Paragon, CADT)"}</div>
+            </button>
+
+            <div className="p-4 rounded-2xl bg-[#F0F2FA]/70 border border-[#E6E8F0] flex flex-col justify-between">
+              <div>
+                <div className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
+                  {language === "km" ? "សក្តានុពលអាហារូបករណ៍" : "Scholarship Offset Potential"}
+                </div>
+                <div className="text-base font-black text-emerald-700 mt-1">
+                  {language === "km" ? "រហូតដល់ ១០០% ពេញលេញ" : "Up to 100% Full-Ride"}
+                </div>
+                <p className="text-xs text-[#68708A] mt-1 leading-snug">
+                  {language === "km" ? "អាហារូបករណ៍ MoEYS និងក្រុមហ៊ុនដៃគូជាង ៥០០ មានជារៀងរាល់ឆ្នាំ។" : "Over 500+ MoEYS and partner corporate grants available annually."}
+                </p>
+              </div>
+              <Link
+                href="/scholarships"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#111965] hover:underline mt-2"
+              >
+                <span>{language === "km" ? "រកមើលអាហារូបករណ៍ដែលមាន" : "Explore Available Scholarships"}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
 
         {/* Result count */}
         <div className="flex flex-wrap items-baseline justify-between gap-2">

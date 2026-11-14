@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import { DirectoryControls } from "@/components/directory/directory-controls";
+import { DirectoryHeroStats } from "@/components/directory/directory-hero-stats";
 import {
   Briefcase,
   ArrowRight,
@@ -21,7 +22,6 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DotPattern } from "@/components/magicui/dot-pattern";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
 
@@ -152,114 +152,52 @@ export default function CareersPage() {
     }
   };
 
+  const statsSource = careers || [];
+  const industryCount = new Set(statsSource.map((c: any) => c.industry)).size;
+  const entrySalaries = Object.values(SALARY_TIERS)
+    .map((tier) => {
+      const match = tier.junior.match(/\d+/);
+      return match ? Number(match[0]) : 0;
+    })
+    .filter((value) => value > 0);
+  const minSalary = entrySalaries.length ? Math.min(...entrySalaries) : null;
+  const heroStats = [
+    {
+      label: language === "km" ? "អាជីព" : "Careers",
+      value: careers ? String(statsSource.length) : "—",
+    },
+    {
+      label: language === "km" ? "វិស័យ" : "Industries",
+      value: careers ? String(industryCount) : "—",
+    },
+    {
+      label: language === "km" ? "ប្រាក់ខែចាប់ផ្តើម" : "Entry salary",
+      value: minSalary ? `$${minSalary}` : "—",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-[#F5F6FA] pb-24">
-      {/* Hero Header with Magic UI DotPattern */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-12 pb-14">
-        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-35" />
+      {/* Hero */}
+      <section className="border-b border-[#E6E8F0] bg-white">
+        <div className="mx-auto max-w-7xl px-4 pt-9 sm:px-6 sm:pt-11 lg:px-8">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#111965]/15 bg-[#111965]/5 px-3 py-1 text-[12px] font-bold text-[#111965]">
+              <Briefcase className="h-3.5 w-3.5" />
+              {t("careersDirectory.badge")}
+            </span>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8">
-          <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#111965]/10 text-[#111965] text-xs font-bold border border-[#111965]/15">
-              <Briefcase className="w-3.5 h-3.5 text-[#111965]" />
-              <span>{t("careersDirectory.badge")}</span>
-            </div>
-
-            <h1 className="text-3xl sm:text-5xl font-black text-[#111965] tracking-tight leading-tight">
+            <h1 className="mt-3.5 text-[2rem] font-extrabold leading-[1.12] tracking-[-0.025em] text-[#111965] sm:text-[2.5rem]">
               {t("careersDirectory.title")}
             </h1>
 
-            <p className="text-sm sm:text-base text-[#68708A] leading-relaxed max-w-2xl">
+            <p className="mt-3 max-w-[46ch] text-sm leading-relaxed text-[#68708A] sm:text-[16px]">
               {t("careersDirectory.subtitle")}
             </p>
           </div>
-
-          {/* Interactive Seniority & Salary Barometer */}
-          <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E6E8F0] pb-3">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-xl bg-blue-50 text-[#111965]">
-                  <TrendingUp className="w-4 h-4" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-black text-[#111965]">
-                    {language === "km" ? "រង្វាស់ប្រាក់ខែយោងកម្ពុជា ២០២៦" : "Cambodia 2026 Salary Benchmark Barometer"}
-                  </h3>
-                  <p className="text-xs text-[#68708A]">
-                    {language === "km" ? "ការប៉ាន់ស្មានប្រាក់ខែប្រចាំខែ ផ្អែកលើការជួលក្នុងវិស័យបច្ចេកវិទ្យា ហិរញ្ញវត្ថុ និងវិស្វកម្មក្នុងស្រុក" : "Monthly compensation estimates based on local tech, finance, and engineering hiring"}
-                  </p>
-                </div>
-              </div>
-
-              {/* Seniority Selector */}
-              <div className="flex items-center gap-1 self-start sm:self-auto bg-slate-100 p-1 rounded-xl text-xs font-bold">
-                <button
-                  type="button"
-                  onClick={() => setSeniorityLevel("junior")}
-                  className={`px-3 py-1.5 rounded-lg transition-all ${
-                    seniorityLevel === "junior" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
-                  }`}
-                >
-                  {language === "km" ? "កម្រិតដំបូង (០-២ ឆ្នាំ)" : "Junior (0-2 Years)"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSeniorityLevel("mid")}
-                  className={`px-3 py-1.5 rounded-lg transition-all ${
-                    seniorityLevel === "mid" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
-                  }`}
-                >
-                  {language === "km" ? "កម្រិតមធ្យម (៣-៥ ឆ្នាំ)" : "Mid-Level (3-5 Years)"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSeniorityLevel("senior")}
-                  className={`px-3 py-1.5 rounded-lg transition-all ${
-                    seniorityLevel === "senior" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
-                  }`}
-                >
-                  {language === "km" ? "កម្រិតជាន់ខ្ពស់ / អ្នកដឹកនាំ (៥ ឆ្នាំ+)" : "Senior / Lead (5+ Years)"}
-                </button>
-              </div>
-            </div>
-
-            {/* Quick Sector Comparison Pills */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-[#E6E8F0] space-y-1">
-                <div className="flex items-center justify-between text-xs font-bold text-[#68708A]">
-                  <span>{language === "km" ? "វិស្វកម្មសូហ្វវែរ & AI" : "Software & AI Engineering"}</span>
-                  <span className="text-blue-700 font-extrabold">{language === "km" ? "+២៨% តម្រូវការ" : "+28% Demand"}</span>
-                </div>
-                <div className="text-xl font-black text-[#111965]">
-                  {seniorityLevel === "junior" ? "$450 – $900" : seniorityLevel === "mid" ? "$950 – $1,600" : "$1,800 – $3,500+"}
-                  <span className="text-xs font-normal text-[#68708A] ml-1">{language === "km" ? "/ ខែ" : "/ month"}</span>
-                </div>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-[#E6E8F0] space-y-1">
-                <div className="flex items-center justify-between text-xs font-bold text-[#68708A]">
-                  <span>{language === "km" ? "ធនាគារ & វិភាគហិរញ្ញវត្ថុ" : "Banking & Financial Analysis"}</span>
-                  <span className="text-emerald-700 font-extrabold">{language === "km" ? "+១៩% តម្រូវការ" : "+19% Demand"}</span>
-                </div>
-                <div className="text-xl font-black text-[#111965]">
-                  {seniorityLevel === "junior" ? "$400 – $750" : seniorityLevel === "mid" ? "$800 – $1,400" : "$1,500 – $2,800+"}
-                  <span className="text-xs font-normal text-[#68708A] ml-1">{language === "km" ? "/ ខែ" : "/ month"}</span>
-                </div>
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-[#E6E8F0] space-y-1">
-                <div className="flex items-center justify-between text-xs font-bold text-[#68708A]">
-                  <span>{language === "km" ? "វិស្វកម្មសំណង់ស៊ីវិល & ហេដ្ឋារចនាសម្ព័ន្ធ" : "Civil & Infrastructure Engineering"}</span>
-                  <span className="text-amber-700 font-extrabold">{language === "km" ? "+១៥% តម្រូវការ" : "+15% Demand"}</span>
-                </div>
-                <div className="text-xl font-black text-[#111965]">
-                  {seniorityLevel === "junior" ? "$350 – $700" : seniorityLevel === "mid" ? "$750 – $1,300" : "$1,400 – $2,500+"}
-                  <span className="text-xs font-normal text-[#68708A] ml-1">{language === "km" ? "/ ខែ" : "/ month"}</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
+
+        <DirectoryHeroStats stats={heroStats} />
       </section>
 
       {/* One control surface: search, filtering, sorting. */}
@@ -292,6 +230,92 @@ export default function CareersPage() {
 
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
+        {/* Interactive Seniority & Salary Barometer */}
+        <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E6E8F0] pb-3">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-xl bg-blue-50 text-[#111965]">
+                <TrendingUp className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-[#111965]">
+                  {language === "km" ? "រង្វាស់ប្រាក់ខែយោងកម្ពុជា ២០២៦" : "Cambodia 2026 Salary Benchmark Barometer"}
+                </h3>
+                <p className="text-xs text-[#68708A]">
+                  {language === "km" ? "ការប៉ាន់ស្មានប្រាក់ខែប្រចាំខែ ផ្អែកលើការជួលក្នុងវិស័យបច្ចេកវិទ្យា ហិរញ្ញវត្ថុ និងវិស្វកម្មក្នុងស្រុក" : "Monthly compensation estimates based on local tech, finance, and engineering hiring"}
+                </p>
+              </div>
+            </div>
+
+            {/* Seniority Selector */}
+            <div className="flex items-center gap-1 self-start sm:self-auto bg-slate-100 p-1 rounded-xl text-xs font-bold">
+              <button
+                type="button"
+                onClick={() => setSeniorityLevel("junior")}
+                className={`px-3 py-1.5 rounded-lg transition-all ${
+                  seniorityLevel === "junior" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
+                }`}
+              >
+                {language === "km" ? "កម្រិតដំបូង (០-២ ឆ្នាំ)" : "Junior (0-2 Years)"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setSeniorityLevel("mid")}
+                className={`px-3 py-1.5 rounded-lg transition-all ${
+                  seniorityLevel === "mid" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
+                }`}
+              >
+                {language === "km" ? "កម្រិតមធ្យម (៣-៥ ឆ្នាំ)" : "Mid-Level (3-5 Years)"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setSeniorityLevel("senior")}
+                className={`px-3 py-1.5 rounded-lg transition-all ${
+                  seniorityLevel === "senior" ? "bg-white text-[#111965] shadow-xs" : "text-[#68708A]"
+                }`}
+              >
+                {language === "km" ? "កម្រិតជាន់ខ្ពស់ / អ្នកដឹកនាំ (៥ ឆ្នាំ+)" : "Senior / Lead (5+ Years)"}
+              </button>
+            </div>
+          </div>
+
+          {/* Quick Sector Comparison Pills */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-[#E6E8F0] space-y-1">
+              <div className="flex items-center justify-between text-xs font-bold text-[#68708A]">
+                <span>{language === "km" ? "វិស្វកម្មសូហ្វវែរ & AI" : "Software & AI Engineering"}</span>
+                <span className="text-blue-700 font-extrabold">{language === "km" ? "+២៨% តម្រូវការ" : "+28% Demand"}</span>
+              </div>
+              <div className="text-xl font-black text-[#111965]">
+                {seniorityLevel === "junior" ? "$450 – $900" : seniorityLevel === "mid" ? "$950 – $1,600" : "$1,800 – $3,500+"}
+                <span className="text-xs font-normal text-[#68708A] ml-1">{language === "km" ? "/ ខែ" : "/ month"}</span>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-[#E6E8F0] space-y-1">
+              <div className="flex items-center justify-between text-xs font-bold text-[#68708A]">
+                <span>{language === "km" ? "ធនាគារ & វិភាគហិរញ្ញវត្ថុ" : "Banking & Financial Analysis"}</span>
+                <span className="text-emerald-700 font-extrabold">{language === "km" ? "+១៩% តម្រូវការ" : "+19% Demand"}</span>
+              </div>
+              <div className="text-xl font-black text-[#111965]">
+                {seniorityLevel === "junior" ? "$400 – $750" : seniorityLevel === "mid" ? "$800 – $1,400" : "$1,500 – $2,800+"}
+                <span className="text-xs font-normal text-[#68708A] ml-1">{language === "km" ? "/ ខែ" : "/ month"}</span>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-[#F8FAFC] border border-[#E6E8F0] space-y-1">
+              <div className="flex items-center justify-between text-xs font-bold text-[#68708A]">
+                <span>{language === "km" ? "វិស្វកម្មសំណង់ស៊ីវិល & ហេដ្ឋារចនាសម្ព័ន្ធ" : "Civil & Infrastructure Engineering"}</span>
+                <span className="text-amber-700 font-extrabold">{language === "km" ? "+១៥% តម្រូវការ" : "+15% Demand"}</span>
+              </div>
+              <div className="text-xl font-black text-[#111965]">
+                {seniorityLevel === "junior" ? "$350 – $700" : seniorityLevel === "mid" ? "$750 – $1,300" : "$1,400 – $2,500+"}
+                <span className="text-xs font-normal text-[#68708A] ml-1">{language === "km" ? "/ ខែ" : "/ month"}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Result count */}
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <p className="text-sm text-[#68708A]" aria-live="polite">

@@ -8,6 +8,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import { DirectoryControls } from "@/components/directory/directory-controls";
+import { DirectoryHeroStats } from "@/components/directory/directory-hero-stats";
 import { useAuth } from "@/contexts/auth-context";
 import {
   Award,
@@ -26,7 +27,6 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
-import { DotPattern } from "@/components/magicui/dot-pattern";
 import { BorderBeam } from "@/components/magicui/border-beam";
 
 // Map scholarship slugs to local poster assets
@@ -104,113 +104,47 @@ export default function ScholarshipsPage() {
     return list;
   }, [scholarships, sortBy, getLocalized]);
 
+  const statsSource = scholarships || [];
+  const fullCount = statsSource.filter(
+    (s: any) => s.coverage_type === "FULL_TUITION"
+  ).length;
+  const heroStats = [
+    {
+      label: language === "km" ? "អាហារូបករណ៍" : "Scholarships",
+      value: scholarships ? String(statsSource.length) : "—",
+    },
+    {
+      label: language === "km" ? "ពេញ ១០០%" : "Full tuition",
+      value: scholarships ? String(fullCount) : "—",
+    },
+    {
+      label: language === "km" ? "មួយផ្នែក" : "Partial",
+      value: scholarships ? String(statsSource.length - fullCount) : "—",
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-[#F5F6FA] pb-24">
-      {/* Hero Header with Magic UI DotPattern */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-white to-[#F0F2FA] border-b border-[#E6E8F0] pt-12 pb-14">
-        <DotPattern className="[mask-image:radial-gradient(ellipse_at_center,white,transparent_75%)] opacity-35" />
+      {/* Hero */}
+      <section className="border-b border-[#E6E8F0] bg-white">
+        <div className="mx-auto max-w-7xl px-4 pt-9 sm:px-6 sm:pt-11 lg:px-8">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#111965]/15 bg-[#111965]/5 px-3 py-1 text-[12px] font-bold text-[#111965]">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              {t("scholarshipsPage.verifiedBadge")}
+            </span>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8">
-          <div className="max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
-              <span>{t("scholarshipsPage.verifiedBadge")}</span>
-            </div>
-
-            <h1 className="text-3xl sm:text-5xl font-black text-[#111965] tracking-tight leading-tight">
+            <h1 className="mt-3.5 text-[2rem] font-extrabold leading-[1.12] tracking-[-0.025em] text-[#111965] sm:text-[2.5rem]">
               {t("scholarshipsPage.title")}
             </h1>
 
-            <p className="text-sm sm:text-base text-[#68708A] leading-relaxed max-w-2xl">
+            <p className="mt-3 max-w-[46ch] text-sm leading-relaxed text-[#68708A] sm:text-[16px]">
               {t("scholarshipsPage.subtitle")}
             </p>
           </div>
-
-          {/* Interactive "Do I Qualify?" Scholarship Eligibility Radar */}
-          <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-4">
-            <div className="flex items-center gap-2 border-b border-[#E6E8F0] pb-3">
-              <div className="p-2 rounded-xl bg-amber-50 text-amber-800">
-                <FileCheck className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-black text-[#111965]">
-                  {language === "km" ? "កម្មវិធីពិនិត្យសិទ្ធិទទួលអាហារូបករណ៍តាមនិទ្ទេសបាក់ឌុប" : "Instant Eligibility Checker"}
-                </h3>
-                <p className="text-xs text-[#68708A]">
-                  {language === "km" ? "ជ្រើសរើសនិទ្ទេសបាក់ឌុបដែលអ្នករំពឹង ដើម្បីមើលអាហារូបករណ៍ដែលអាចទទួលបាន" : "Select your expected Grade 12 National Exam standing to preview verified funding"}
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-              {/* Grade Selection */}
-              <div className="space-y-1.5">
-                <label className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
-                  {language === "km" ? "និទ្ទេសបាក់ឌុប" : "BacII Exam Grade"}
-                </label>
-                <div className="grid grid-cols-4 gap-1.5">
-                  {["ALL", "A", "B", "C"].map((grade) => (
-                    <button
-                      key={grade}
-                      type="button"
-                      onClick={() => setTargetBaciiGrade(grade)}
-                      className={`py-2 text-xs font-bold rounded-xl border transition-all ${
-                        targetBaciiGrade === grade
-                          ? "bg-[#111965] text-white border-[#111965] shadow-xs"
-                          : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
-                      }`}
-                    >
-                      {grade === "ALL" ? (language === "km" ? "ទាំងអស់" : "Any") : language === "km" ? `និទ្ទេស ${grade}` : `Grade ${grade}`}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Study Field Selection */}
-              <div className="space-y-1.5">
-                <label className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
-                  {language === "km" ? "វិស័យដែលចង់រៀន" : "Intended Field"}
-                </label>
-                <div className="grid grid-cols-3 gap-1.5">
-                  {[
-                    { id: "ALL", label: language === "km" ? "ទាំងអស់" : "Any" },
-                    { id: "STEM", label: language === "km" ? "STEM/បច្ចេកវិទ្យា" : "STEM/Tech" },
-                    { id: "BIZ", label: language === "km" ? "ពាណិជ្ជកម្ម" : "Business" },
-                  ].map((field) => (
-                    <button
-                      key={field.id}
-                      type="button"
-                      onClick={() => setTargetStudyField(field.id)}
-                      className={`py-2 text-xs font-bold rounded-xl border transition-all ${
-                        targetStudyField === field.id
-                          ? "bg-[#111965] text-white border-[#111965] shadow-xs"
-                          : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
-                      }`}
-                    >
-                      {field.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Live Eligibility Result Box */}
-              <div className="p-3.5 rounded-2xl bg-[#F0F2FA]/80 border border-[#E6E8F0] flex items-center justify-between">
-                <div>
-                  <div className="text-[12.5px] font-bold text-[#68708A] uppercase">
-                    {language === "km" ? "កម្មវិធីដែលមានសិទ្ធិ" : "Qualified Programs"}
-                  </div>
-                  <div className="text-sm font-black text-emerald-700">
-                    {targetBaciiGrade === "A" ? (language === "km" ? "អាហារូបករណ៍ពេញ ១០០% + ប្រាក់ឧបត្ថម្ភ" : "100% Full Tuition + Stipend") : (language === "km" ? "មានអាហារូបករណ៍ពេញ និងមួយផ្នែក" : "Full & Partial Tuition Available")}
-                  </div>
-                  <div className="text-[12px] text-[#68708A]">CADT, MoEYS, AUPP, ITC</div>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
-                  <Check className="w-4 h-4" />
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
+
+        <DirectoryHeroStats stats={heroStats} />
       </section>
 
       {/* One control surface: search, filtering, sorting. */}
@@ -242,6 +176,91 @@ export default function ScholarshipsPage() {
 
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
+        {/* Interactive "Do I Qualify?" Scholarship Eligibility Radar */}
+        <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-4">
+          <div className="flex items-center gap-2 border-b border-[#E6E8F0] pb-3">
+            <div className="p-2 rounded-xl bg-amber-50 text-amber-800">
+              <FileCheck className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-black text-[#111965]">
+                {language === "km" ? "កម្មវិធីពិនិត្យសិទ្ធិទទួលអាហារូបករណ៍តាមនិទ្ទេសបាក់ឌុប" : "Instant Eligibility Checker"}
+              </h3>
+              <p className="text-xs text-[#68708A]">
+                {language === "km" ? "ជ្រើសរើសនិទ្ទេសបាក់ឌុបដែលអ្នករំពឹង ដើម្បីមើលអាហារូបករណ៍ដែលអាចទទួលបាន" : "Select your expected Grade 12 National Exam standing to preview verified funding"}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+            {/* Grade Selection */}
+            <div className="space-y-1.5">
+              <label className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
+                {language === "km" ? "និទ្ទេសបាក់ឌុប" : "BacII Exam Grade"}
+              </label>
+              <div className="grid grid-cols-4 gap-1.5">
+                {["ALL", "A", "B", "C"].map((grade) => (
+                  <button
+                    key={grade}
+                    type="button"
+                    onClick={() => setTargetBaciiGrade(grade)}
+                    className={`py-2 text-xs font-bold rounded-xl border transition-all ${
+                      targetBaciiGrade === grade
+                        ? "bg-[#111965] text-white border-[#111965] shadow-xs"
+                        : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
+                    }`}
+                  >
+                    {grade === "ALL" ? (language === "km" ? "ទាំងអស់" : "Any") : language === "km" ? `និទ្ទេស ${grade}` : `Grade ${grade}`}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Study Field Selection */}
+            <div className="space-y-1.5">
+              <label className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
+                {language === "km" ? "វិស័យដែលចង់រៀន" : "Intended Field"}
+              </label>
+              <div className="grid grid-cols-3 gap-1.5">
+                {[
+                  { id: "ALL", label: language === "km" ? "ទាំងអស់" : "Any" },
+                  { id: "STEM", label: language === "km" ? "STEM/បច្ចេកវិទ្យា" : "STEM/Tech" },
+                  { id: "BIZ", label: language === "km" ? "ពាណិជ្ជកម្ម" : "Business" },
+                ].map((field) => (
+                  <button
+                    key={field.id}
+                    type="button"
+                    onClick={() => setTargetStudyField(field.id)}
+                    className={`py-2 text-xs font-bold rounded-xl border transition-all ${
+                      targetStudyField === field.id
+                        ? "bg-[#111965] text-white border-[#111965] shadow-xs"
+                        : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
+                    }`}
+                  >
+                    {field.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Live Eligibility Result Box */}
+            <div className="p-3.5 rounded-2xl bg-[#F0F2FA]/80 border border-[#E6E8F0] flex items-center justify-between">
+              <div>
+                <div className="text-[12.5px] font-bold text-[#68708A] uppercase">
+                  {language === "km" ? "កម្មវិធីដែលមានសិទ្ធិ" : "Qualified Programs"}
+                </div>
+                <div className="text-sm font-black text-emerald-700">
+                  {targetBaciiGrade === "A" ? (language === "km" ? "អាហារូបករណ៍ពេញ ១០០% + ប្រាក់ឧបត្ថម្ភ" : "100% Full Tuition + Stipend") : (language === "km" ? "មានអាហារូបករណ៍ពេញ និងមួយផ្នែក" : "Full & Partial Tuition Available")}
+                </div>
+                <div className="text-[12px] text-[#68708A]">CADT, MoEYS, AUPP, ITC</div>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                <Check className="w-4 h-4" />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Spotlight Flagship Banner with Magic UI BorderBeam */}
         {spotlightScholarship && !hasActiveFilters && (
           <div className="relative rounded-3xl bg-gradient-to-br from-[#111965] via-[#1E277A] to-[#0A0F3D] text-white p-6 sm:p-8 shadow-xl overflow-hidden">
