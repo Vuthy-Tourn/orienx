@@ -935,146 +935,293 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
 }
 
 function RulesPanel() {
-  const queryClient = useQueryClient();
   const { data: rules } = useQuery({
     queryKey: ["admin-rules"],
     queryFn: async () => apiFetch<any[]>("/admin/rules"),
   });
   const activeRule = rules?.[0];
-  const [weights, setWeights] = useState({
-    weight_personality: 0.25,
-    weight_riasec: 0.3,
-    weight_academic_strengths: 0.25,
-    weight_career_alignment: 0.2,
-  });
-  const [isActive, setIsActive] = useState(true);
-  const [saved, setSaved] = useState(false);
 
-  useEffect(() => {
-    if (activeRule) {
-      setWeights({
-        weight_personality: Number(activeRule.weight_personality),
-        weight_riasec: Number(activeRule.weight_riasec),
-        weight_academic_strengths: Number(activeRule.weight_academic_strengths),
-        weight_career_alignment: Number(activeRule.weight_career_alignment),
-      });
-      setIsActive(Boolean(activeRule.is_active));
-    }
-  }, [activeRule]);
+  if (!activeRule) {
+    return (
+      <div className="mx-auto max-w-5xl py-16 text-center text-xs text-[#68708A]">
+        No recommendation rule is configured yet.
+      </div>
+    );
+  }
+
+  return (
+    <RuleEditor key={activeRule.id} rule={activeRule} />
+  );
+}
+
+function RuleEditor({ rule }: { rule: Record<string, any> }) {
+  const queryClient = useQueryClient();
+  const [weights, setWeights] = useState({
+    weight_personality: Number(rule.weight_personality),
+    weight_riasec: Number(rule.weight_riasec),
+    weight_academic_strengths: Number(rule.weight_academic_strengths),
+    weight_career_alignment: Number(rule.weight_career_alignment),
+  });
+  const [isActive, setIsActive] = useState(Boolean(rule.is_active));
+  const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const total = Object.values(weights).reduce((sum, value) => sum + Number(value || 0), 0);
+  const totalPercent = Math.round(total * 100);
+  const isBalanced = Math.abs(total - 1) < 0.001;
+  const difference = 100 - totalPercent;
 
   const { mutate: saveWeights, isPending } = useMutation({
     mutationFn: async () => {
-      if (!activeRule) return;
-      return apiFetch(`/admin/rules/${activeRule.id}`, {
+      return apiFetch(`/admin/rules/${rule.id}`, {
         method: "PUT",
         body: JSON.stringify({ ...weights, is_active: isActive }),
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-rules"] });
+      setSaveError(null);
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     },
+    onError: (error: any) => {
+      setSaved(false);
+      setSaveError(error?.message || "Could not save these weights.");
+    },
   });
 
-  if (!activeRule) {
-    return (
-      <div className="py-16 text-center text-xs text-[#68708A]">
-        No recommendation rule is configured yet.
-      </div>
-    );
-  }
-
   const pillars = [
-    { key: "weight_personality", label: "16-Personality", color: "bg-purple-500" },
-    { key: "weight_riasec", label: "RIASEC", color: "bg-sky-500" },
-    { key: "weight_academic_strengths", label: "Academic strengths", color: "bg-emerald-500" },
-    { key: "weight_career_alignment", label: "Career alignment", color: "bg-amber-500" },
+    {
+      key: "weight_personality",
+      label: "16-Personality",
+      hint: "Interests and working style",
+      color: "#8B5CF6",
+      tint: "bg-[#F5F3FF] text-[#6D28D9]",
+    },
+    {
+      key: "weight_riasec",
+      label: "RIASEC",
+      hint: "Career interest profile",
+      color: "#0EA5E9",
+      tint: "bg-[#F0F9FF] text-[#0369A1]",
+    },
+    {
+      key: "weight_academic_strengths",
+      label: "Academic strengths",
+      hint: "Grades and subject fit",
+      color: "#10B981",
+      tint: "bg-[#ECFDF5] text-[#047857]",
+    },
+    {
+      key: "weight_career_alignment",
+      label: "Career alignment",
+      hint: "Long-term career direction",
+      color: "#F59E0B",
+      tint: "bg-[#FFFBEB] text-[#B45309]",
+    },
   ] as const;
 
+  const updateWeight = (
+    key: (typeof pillars)[number]["key"],
+    value: number
+  ) => {
+    setSaved(false);
+    setSaveError(null);
+    setWeights((prev) => ({ ...prev, [key]: value }));
+  };
+
   return (
-    <div className="max-w-2xl space-y-5 rounded-2xl border border-[#E6E8F0] bg-white p-5 shadow-2xs sm:p-6">
-      <div>
-        <h2 className="text-lg font-black text-[#111965]">Recommendation engine</h2>
-        <p className="text-xs text-[#68708A]">
-          Control how the four pillars contribute to the final major match score.
-        </p>
+    <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-[#E6E8F0] bg-white shadow-2xs">
+      <div className="border-b border-[#E6E8F0] p-5 sm:p-6">
+        <div className="flex items-start gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#111965]/10 bg-[#F0F2FA] text-[#111965]">
+            <Sliders className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <h2 className="text-lg font-black text-[#111965]">
+              Recommendation engine
+            </h2>
+            <p className="mt-0.5 text-xs text-[#68708A]">
+              Control how the four pillars contribute to the final major match
+              score.
+            </p>
+          </div>
+        </div>
       </div>
 
-      {saved && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-800">
-          Weights saved. New recommendations will use this rule.
-        </div>
-      )}
+      <div className="grid gap-6 p-5 sm:p-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="space-y-5">
+          {pillars.map((pillar) => {
+            const percent = Math.round(Number(weights[pillar.key]) * 100);
+            return (
+              <div key={pillar.key} className="space-y-2">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span
+                        aria-hidden="true"
+                        className="h-2 w-2 shrink-0 rounded-full"
+                        style={{ backgroundColor: pillar.color }}
+                      />
+                      <label
+                        htmlFor={`rule-${pillar.key}`}
+                        className="text-xs font-bold text-[#111965]"
+                      >
+                        {pillar.label}
+                      </label>
+                    </div>
+                    <p className="mt-0.5 pl-4 text-[10px] text-[#94A3B8]">
+                      {pillar.hint}
+                    </p>
+                  </div>
+                  <span
+                    className={cn(
+                      "shrink-0 rounded-md px-2 py-0.5 text-[11px] font-black tabular-nums",
+                      pillar.tint
+                    )}
+                  >
+                    {percent}%
+                  </span>
+                </div>
 
-      <div className="space-y-4">
-        {pillars.map((pillar) => (
-          <label key={pillar.key} className="block space-y-1.5">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-[#111965]">{pillar.label}</span>
-              <span className="font-black tabular-nums text-[#111965]">
-                {Math.round(Number(weights[pillar.key]) * 100)}%
+                <input
+                  id={`rule-${pillar.key}`}
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  value={weights[pillar.key]}
+                  onChange={(event) =>
+                    updateWeight(pillar.key, Number(event.target.value))
+                  }
+                  aria-label={`${pillar.label} weight`}
+                  aria-valuetext={`${percent}%`}
+                  style={{
+                    background: `linear-gradient(to right, ${pillar.color} 0%, ${pillar.color} ${percent}%, #EEF2F7 ${percent}%, #EEF2F7 100%)`,
+                  }}
+                  className="h-2 w-full cursor-pointer appearance-none rounded-full outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-[#111965]/20 focus-visible:ring-offset-2 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-[#111965] [&::-moz-range-thumb]:shadow-sm [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-[3px] [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-[#111965] [&::-webkit-slider-thumb]:shadow-md"
+                />
+              </div>
+            );
+          })}
+        </div>
+
+        <aside className="space-y-3 lg:border-l lg:border-[#EEF2F7] lg:pl-6">
+          <div className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#68708A]">
+                Total allocation
+              </span>
+              <span
+                className={cn(
+                  "rounded-full px-2 py-0.5 text-[11px] font-black tabular-nums",
+                  isBalanced
+                    ? "bg-emerald-100 text-emerald-700"
+                    : "bg-amber-100 text-amber-700"
+                )}
+              >
+                {totalPercent}%
               </span>
             </div>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.01}
-              value={weights[pillar.key]}
-              onChange={(event) =>
-                setWeights((prev) => ({ ...prev, [pillar.key]: Number(event.target.value) }))
-              }
-              className="w-full accent-[#111965]"
-            />
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-              <div
-                className={cn("h-full rounded-full", pillar.color)}
-                style={{ width: `${Number(weights[pillar.key]) * 100}%` }}
-              />
+
+            <div className="mt-3 flex h-2 w-full overflow-hidden rounded-full bg-[#E8ECF4]">
+              {pillars.map((pillar) => {
+                const width = Number(weights[pillar.key]) * 100;
+                if (width <= 0) return null;
+                return (
+                  <span
+                    key={pillar.key}
+                    className="h-full transition-[width] duration-150"
+                    style={{
+                      width: `${width}%`,
+                      backgroundColor: pillar.color,
+                    }}
+                  />
+                );
+              })}
             </div>
-          </label>
-        ))}
+
+            <p
+              className={cn(
+                "mt-2 text-[11px] leading-relaxed",
+                isBalanced ? "text-emerald-700" : "text-amber-700"
+              )}
+            >
+              {isBalanced
+                ? "Balanced. All four pillars add up to 100%."
+                : difference > 0
+                ? `${difference}% unallocated. Adjust the sliders to reach 100%.`
+                : `${Math.abs(difference)}% over. Adjust the sliders to reach 100%.`}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            role="switch"
+            aria-checked={isActive}
+            onClick={() => {
+              setSaved(false);
+              setSaveError(null);
+              setIsActive((prev) => !prev);
+            }}
+            className={cn(
+              "flex w-full items-center justify-between gap-3 rounded-xl border px-3.5 py-3 text-left transition-colors",
+              isActive
+                ? "border-[#111965]/15 bg-[#F8FAFD]"
+                : "border-[#E6E8F0] bg-white"
+            )}
+          >
+            <span className="min-w-0">
+              <span className="block text-xs font-bold text-[#111965]">
+                Rule active
+              </span>
+              <span className="mt-0.5 block text-[10px] text-[#94A3B8]">
+                {isActive
+                  ? "New matches use these weights."
+                  : "New matches ignore this rule."}
+              </span>
+            </span>
+            <span
+              className={cn(
+                "relative h-5 w-9 shrink-0 rounded-full transition-colors",
+                isActive ? "bg-[#111965]" : "bg-slate-200"
+              )}
+            >
+              <span
+                className={cn(
+                  "absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-transform",
+                  isActive ? "translate-x-[18px]" : "translate-x-0.5"
+                )}
+              />
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => saveWeights()}
+            disabled={isPending || !isBalanced}
+            className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-[#F7CE4D] px-4 py-2.5 text-xs font-black text-[#111965] transition-colors hover:bg-[#E5BD3B] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isPending ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : saved ? (
+              <CheckCircle2 className="h-3.5 w-3.5" />
+            ) : (
+              <Save className="h-3.5 w-3.5" />
+            )}
+            {isPending ? "Saving…" : saved ? "Weights saved" : "Save weights"}
+          </button>
+
+          {saveError && (
+            <p className="text-center text-[10px] font-semibold text-rose-600">
+              {saveError}
+            </p>
+          )}
+          <p className="text-center text-[10px] text-[#94A3B8]">
+            Changes apply to newly generated recommendations.
+          </p>
+        </aside>
       </div>
-
-      <div
-        className={cn(
-          "flex items-center justify-between rounded-xl border px-3 py-2 text-xs font-bold",
-          Math.abs(total - 1) < 0.001
-            ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-            : "border-amber-200 bg-amber-50 text-amber-800"
-        )}
-      >
-        <span>Total weight</span>
-        <span className="tabular-nums">{Math.round(total * 100)}%</span>
-      </div>
-
-      <label className="flex items-center justify-between rounded-xl border border-[#E6E8F0] px-3 py-2.5 text-xs font-bold text-[#111965]">
-        <span>Rule active</span>
-        <input
-          type="checkbox"
-          checked={isActive}
-          onChange={(event) => setIsActive(event.target.checked)}
-          className="h-4 w-4 accent-[#111965]"
-        />
-      </label>
-
-      <button
-        type="button"
-        onClick={() => saveWeights()}
-        disabled={isPending || Math.abs(total - 1) > 0.001}
-        className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7CE4D] px-4 py-2.5 text-xs font-black text-[#111965] hover:bg-[#E5BD3B] disabled:opacity-50"
-      >
-        {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-        {isPending ? "Saving…" : "Save weights"}
-      </button>
-      {Math.abs(total - 1) > 0.001 && (
-        <p className="text-[11px] font-bold text-amber-700">
-          Weights must add up to 100% before saving.
-        </p>
-      )}
     </div>
   );
 }
