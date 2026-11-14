@@ -14,6 +14,24 @@ from app.models.recommendation import RecommendationRule, MajorRecommendation
 class RecommendationService:
 
     @staticmethod
+    async def has_completed_diagnostic(session: AsyncSession, user_id: uuid.UUID) -> bool:
+        """A recommendation is only valid after at least one diagnostic test."""
+        stmt_p = (
+            select(PersonalityResult.id)
+            .where(PersonalityResult.user_id == user_id)
+            .limit(1)
+        )
+        if (await session.execute(stmt_p)).first() is not None:
+            return True
+
+        stmt_r = (
+            select(RiasecResult.id)
+            .where(RiasecResult.user_id == user_id)
+            .limit(1)
+        )
+        return (await session.execute(stmt_r)).first() is not None
+
+    @staticmethod
     async def generate_recommendations(
         session: AsyncSession,
         user_id: uuid.UUID

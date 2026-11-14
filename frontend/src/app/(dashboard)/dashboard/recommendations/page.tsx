@@ -34,12 +34,16 @@ export default function RecommendationsPage() {
   const { data: recommendations, isLoading, error } = useQuery({
     queryKey: ["recommended-majors"],
     queryFn: async () => apiFetch<any[]>("/recommendations/majors"),
+    staleTime: 0,
+    refetchOnMount: "always",
   });
 
   // Gate the page on the same assessment status the dashboard uses.
   const { data: summary, isLoading: summaryLoading } = useQuery({
     queryKey: ["dashboard-summary"],
     queryFn: async () => apiFetch<any>("/students/dashboard-summary"),
+    staleTime: 0,
+    refetchOnMount: "always",
   });
   const assessmentStatus = summary?.assessments_status;
   const hasAnyTest = Boolean(

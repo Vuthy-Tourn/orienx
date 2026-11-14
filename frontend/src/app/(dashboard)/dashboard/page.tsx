@@ -51,6 +51,8 @@ export default function DashboardOverviewPage() {
   const { data: recommendations, isLoading: isRecsLoading } = useQuery({
     queryKey: ["recommended-majors"],
     queryFn: async () => apiFetch<any[]>("/recommendations/majors"),
+    staleTime: 0,
+    refetchOnMount: "always",
   });
 
   // 4. REAL Scholarships
@@ -95,11 +97,10 @@ export default function DashboardOverviewPage() {
   const topRec = Array.isArray(recommendations) && recommendations.length > 0
     ? recommendations[0]
     : null;
-  const topMajorName =
-    getLocalized(topRec?.major?.name) ||
-    topRec?.major?.name?.en ||
-    "Software Engineering & Computer Science";
-  const topScore = Math.round(topRec?.match_score || 96);
+  const topMajorName = topRec
+    ? getLocalized(topRec?.major?.name) || topRec?.major?.name?.en || ""
+    : "";
+  const topScore = topRec ? Math.round(topRec.match_score || 0) : 0;
 
   // Top 4 recommendations for right leaderboard
   const topRankedList = Array.isArray(recommendations)
@@ -243,6 +244,7 @@ export default function DashboardOverviewPage() {
             </Link>
           </div>
 
+          {topRec ? (
           <div className="p-4 sm:p-5 rounded-[24px] bg-white border border-slate-200/90 shadow-2xs hover:shadow-md transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             {/* Campus Thumbnail with Aspect Ratio & Subtle Match Badge */}
             <div className="flex items-center gap-4 flex-1 w-full">
@@ -293,6 +295,32 @@ export default function DashboardOverviewPage() {
               <span>{t("dashboardPage.resume")}</span>
             </Link>
           </div>
+          ) : (
+            <div className="p-5 rounded-[24px] bg-white border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-[#F7CE4D]/20 text-[#B45309] flex items-center justify-center shrink-0">
+                  <Compass className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-[#111965]">
+                    {language === "km" ? "មិនទាន់មានការណែនាំនៅឡើយទេ" : "No recommendation yet"}
+                  </h3>
+                  <p className="text-xs text-[#64748B]">
+                    {language === "km"
+                      ? "បំពេញតេស្តដំបូងដើម្បីបើកការណែនាំជំនាញផ្ទាល់ខ្លួន។"
+                      : "Complete your first assessment to unlock your personalized major matches."}
+                  </p>
+                </div>
+              </div>
+              <Link
+                href="/dashboard/assessments"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-xs transition-all active:scale-95 shrink-0 w-full sm:w-auto"
+              >
+                <span>{language === "km" ? "ចាប់ផ្តើមតេស្ត" : "Start assessment"}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* 3. "BUILD YOUR SKILLS" / 4 CLEAN PASTEL TILES */}
@@ -369,7 +397,9 @@ export default function DashboardOverviewPage() {
                   {t("dashboardPage.skillsAiFit")}
                 </div>
                 <div className="text-[12px] text-[#92400E] font-semibold truncate">
-                  {recommendations?.length || 6} Matches
+                  {recommendations && recommendations.length > 0
+                    ? `${recommendations.length} ${language === "km" ? "ការផ្គូផ្គង" : "Matches"}`
+                    : language === "km" ? "បំពេញតេស្ត" : "Take a test"}
                 </div>
               </div>
             </Link>
@@ -447,19 +477,24 @@ export default function DashboardOverviewPage() {
                   fill="none"
                   d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                 />
-                <path
-                  className="text-[#F7CE4D] transition-all duration-700"
-                  strokeDasharray={`${progressPercent}, 100`}
-                  strokeWidth="3.6"
-                  strokeLinecap="round"
-                  stroke="currentColor"
-                  fill="none"
-                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                />
+                {progressPercent > 0 && (
+                  <path
+                    className="text-[#F7CE4D] transition-all duration-700"
+                    strokeDasharray={`${progressPercent}, 100`}
+                    strokeWidth="3.6"
+                    strokeLinecap="round"
+                    stroke="currentColor"
+                    fill="none"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  />
+                )}
               </svg>
 
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <Target className="w-4 h-4 text-[#F7CE4D]" />
+                <Target className={cn(
+                  "w-4 h-4",
+                  progressPercent > 0 ? "text-[#F7CE4D]" : "text-[#C7CCDA] dark:text-white/30"
+                )} />
                 <span className="text-[12px] font-black text-[#111965] leading-tight pt-0.5">
                   {progressPercent}%
                 </span>
@@ -605,7 +640,9 @@ export default function DashboardOverviewPage() {
               })
             ) : (
               <div className="text-xs text-slate-400 py-3 text-center">
-                Take assessments to generate matches.
+                {language === "km"
+                  ? "បំពេញតេស្តដើម្បីបង្កើតការផ្គូផ្គង។"
+                  : "Take assessments to generate matches."}
               </div>
             )}
           </div>

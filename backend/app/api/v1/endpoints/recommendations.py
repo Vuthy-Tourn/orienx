@@ -2,7 +2,7 @@ import uuid
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
@@ -112,6 +112,22 @@ async def get_recommended_majors(
         .where(MajorRecommendation.user_id == current_user.id)
         .order_by(MajorRecommendation.rank_position.asc())
     )
+    # Never serve stale rows from before the tests were reset or from an
+    # older build that fabricated a default profile. This check runs even when
+    # recommendations already exist.
+    if not await RecommendationService.has_completed_diagnostic(db, current_user.id):
+        await db.execute(
+            delete(MajorRecommendation).where(
+                MajorRecommendation.user_id == current_user.id
+            )
+        )
+        await db.commit()
+        return ApiResponse(
+            success=True,
+            message="Complete at least one assessment to unlock recommendations",
+            data=[],
+        )
+
     res = await db.execute(stmt)
     recs = res.scalars().all()
 

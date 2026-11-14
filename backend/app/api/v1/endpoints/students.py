@@ -106,15 +106,17 @@ async def get_dashboard_summary(
     res_pref = await db.execute(stmt_pref)
     pref = res_pref.scalar_one_or_none()
 
-    # Top recommendations
-    stmt_rec = (
-        select(MajorRecommendation)
-        .where(MajorRecommendation.user_id == current_user.id)
-        .order_by(MajorRecommendation.rank_position.asc())
-        .limit(3)
-    )
-    res_rec = await db.execute(stmt_rec)
-    top_recs = res_rec.scalars().all()
+    # Top recommendations are only meaningful after at least one test.
+    top_recs = []
+    if personality is not None or riasec is not None:
+        stmt_rec = (
+            select(MajorRecommendation)
+            .where(MajorRecommendation.user_id == current_user.id)
+            .order_by(MajorRecommendation.rank_position.asc())
+            .limit(3)
+        )
+        res_rec = await db.execute(stmt_rec)
+        top_recs = res_rec.scalars().all()
 
     # Favorites count
     c_maj = (await db.execute(select(func.count(FavoriteMajor.major_id)).where(FavoriteMajor.user_id == current_user.id))).scalar() or 0
