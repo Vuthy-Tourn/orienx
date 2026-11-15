@@ -232,9 +232,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       {/* Top bar */}
       <header className="absolute inset-x-0 top-0 z-30 flex items-center justify-between gap-4 px-5 py-5 sm:px-8 lg:px-10">
         <div data-auth-brand>
-          <div className="inline-flex items-center rounded-full border border-white/15 bg-[#0A0F3D]/80 px-3.5 py-2 shadow-[0_12px_32px_-18px_rgba(0,0,0,0.7)] backdrop-blur-md">
-            <Logo isLight showText size="sm" href="/" />
-          </div>
+            <Logo isLight showText size="md" href="/" />
         </div>
 
         <div className="flex items-center gap-2.5">

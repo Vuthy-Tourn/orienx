@@ -179,7 +179,9 @@
     "viewGuidelines": "View Details & Criteria",
     "tipsTitle": "How to Win a University Scholarship in Cambodia",
     "tipsDesc": "Key preparation strategies for Cambodian high school graduates and university students.",
-    "resetFilters": "Reset Filters"
+    "resetFilters": "Reset Filters",
+    "partialCoverageSuffix": "Partial Tuition",
+    "trackedScholarship": "Saved"
   },
   "scholarshipsShowcase": {
     "verifiedBenefit": "VERIFIED SCHOLARSHIP BENEFIT",

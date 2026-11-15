@@ -72,7 +72,7 @@ export function OrienXWordmark({
       )}
     >
       <span>Orien</span>
-      <span className="text-[#F69D0D]">X</span>
+      <span className="orienx-wordmark-x">X</span>
     </span>
   );
 }

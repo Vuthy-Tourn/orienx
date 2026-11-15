@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { motion, useReducedMotion } from "motion/react";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
@@ -9,6 +10,8 @@ import { Menu } from "lucide-react";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const pathname = usePathname() ?? "/dashboard";
+  const reduceMotion = useReducedMotion();
   const { user, isLoading } = useAuth();
   const { t } = useLanguage();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -57,7 +60,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Content Body */}
         <div className="flex-1 p-3 sm:p-5 lg:p-7 max-w-[1560px] w-full mx-auto">
-          {children}
+          {reduceMotion ? (
+            children
+          ) : (
+            <motion.div
+              key={pathname}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {children}
+            </motion.div>
+          )}
         </div>
       </div>
     </div>

@@ -8,6 +8,12 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { QueryProvider } from "@/providers/query-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import {
+  PageTransition,
+  ScrollProgress,
+  ScrollReveal,
+  SmoothAnchors,
+} from "@/components/motion/platform-motion";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -61,8 +67,13 @@ export default function RootLayout({
             <LanguageProvider>
               <AuthProvider>
                 <Navbar />
-                <main className="flex-1">{children}</main>
+                <ScrollProgress />
+                <main className="flex-1">
+                  <PageTransition>{children}</PageTransition>
+                </main>
                 <Footer />
+                <ScrollReveal />
+                <SmoothAnchors />
               </AuthProvider>
             </LanguageProvider>
           </ThemeProvider>

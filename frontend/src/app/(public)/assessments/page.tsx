@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
@@ -9,7 +9,6 @@ import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/contexts/language-context";
 import { FaqSection, FaqItem } from "@/components/home/faq-section";
 import { CtaBanner } from "@/components/home/cta-banner";
-import { PrecisionFormula } from "@/components/assessments/precision-formula";
 import {
   Compass,
   Sparkles,
@@ -36,6 +35,9 @@ import {
   Scale,
   Microscope,
   Lightbulb,
+  BrainCircuit,
+  X,
+  AlertTriangle,
 } from "lucide-react";
 
 // =========================================================================
@@ -46,6 +48,8 @@ const ENGINES = [
     id: "riasec",
     number: "01",
     weight: "30%",
+    heroTitleEn: "RIASEC Interests",
+    heroTitleKm: "ចំណាប់អារម្មណ៍ RIASEC",
     titleEn: "Holland RIASEC Vocational Test",
     titleKm: "តេស្តចំណាប់អារម្មណ៍អាជីព Holland RIASEC",
     taglineEn: "Vocational Psychology Standard (John Holland)",
@@ -80,6 +84,8 @@ const ENGINES = [
     id: "personality",
     number: "02",
     weight: "25%",
+    heroTitleEn: "16-Personality",
+    heroTitleKm: "បុគ្គលិកលក្ខណៈ ១៦",
     titleEn: "16 Personalities (MBTI Cognitive Style)",
     titleKm: "បុគ្គលិកលក្ខណៈទាំង ១៦ & របៀបគិត",
     taglineEn: "Cognitive Temperament Framework",
@@ -114,6 +120,8 @@ const ENGINES = [
     id: "bacii",
     number: "03",
     weight: "25%",
+    heroTitleEn: "BACII Stream",
+    heroTitleKm: "ថ្នាក់បាក់ឌុប",
     titleEn: "BACII Stream & Academic Prerequisites",
     titleKm: "ភាពត្រូវគ្នានៃថ្នាក់បាក់ឌុប & លក្ខខណ្ឌសាកលវិទ្យាល័យ",
     taglineEn: "MoEYS & University Admission Criteria",
@@ -148,6 +156,8 @@ const ENGINES = [
     id: "labor",
     number: "04",
     weight: "20%",
+    heroTitleEn: "Labor Market",
+    heroTitleKm: "ទីផ្សារការងារ",
     titleEn: "Cambodian Labor Market & Salary Realities",
     titleKm: "តម្រូវការទីផ្សារការងារ & ប្រាក់ខែជាក់ស្តែងនៅកម្ពុជា",
     taglineEn: "National Employment Agency (NEA) Data",
@@ -181,48 +191,65 @@ const ENGINES = [
 ];
 
 // =========================================================================
-// Comparison Table Data: OrienX vs Generic Online Quizzes
+// Comparison Table Data: OrienX vs Generic Online Quizzes (Clean & Concise)
 // =========================================================================
-const COMPARISON_ROWS = [
+interface ComparisonRow {
+  featureEn: string;
+  featureKm: string;
+  orienxEn: string;
+  orienxKm: string;
+  genericEn: string;
+  genericKm: string;
+}
+
+const COMPARISON_ROWS: ComparisonRow[] = [
   {
     featureEn: "Scientific Methodology",
     featureKm: "វិធីសាស្ត្របែបវិទ្យាសាស្ត្រ",
-    futeraEn: "4-Pillar Algorithmic Formula (RIASEC + MBTI + BACII + NEA)",
-    futeraKm: "រូបមន្ត ៤ វិមាត្រ (RIASEC + MBTI + ថ្នាក់បាក់ឌុប + ទីផ្សារ NEA)",
-    genericEn: "Single 5-question pop quiz based on superficial hobbies",
-    genericKm: "សំណួរកម្សាន្ត ៥ សំណួរទាយតាមការស្មាន",
+    orienxEn: "4-Pillar algorithmic formula (RIASEC, MBTI, BACII stream, and NEA labor market data).",
+    orienxKm: "រូបមន្តវិទ្យាសាស្ត្រ ៤ វិមាត្រ (RIASEC, MBTI, ថ្នាក់បាក់ឌុប និងទីផ្សារការងារ NEA)។",
+    genericEn: "Single 5-question pop quiz based on superficial hobbies and random guessing.",
+    genericKm: "កម្រងសំណួរកម្សាន្ត ៥ សំណួរទាយតាមចំណង់ចំណូលចិត្តបណ្តោះអាសន្ន។",
   },
   {
     featureEn: "Cambodian Context Localization",
-    featureKm: "ការផ្សារភ្ជាប់បរិបទកម្ពុជាពិតប្រាកដ",
-    futeraEn: "100% localized for RUPP, ITC, CADT, RULE & MoEYS criteria",
-    futeraKm: "ត្រូវគ្នា ១០០% ជាមួយ RUPP, ITC, CADT, RULE និងក្រសួងអប់រំ",
-    genericEn: "Generic US/European systems irrelevant to Cambodian universities",
-    genericKm: "ប្រើប្រព័ន្ធសហរដ្ឋអាមេរិក ឬអឺរ៉ុប មិនត្រូវនឹងសាកលវិទ្យាល័យខ្មែរ",
+    featureKm: "ការផ្សារភ្ជាប់បរិបទកម្ពុជា",
+    orienxEn: "100% localized for RUPP, ITC, CADT, RULE, and 50+ accredited Cambodian institutions.",
+    orienxKm: "ត្រូវគ្នា ១០០% ជាមួយ RUPP, ITC, CADT, RULE និងសាកលវិទ្យាល័យជាង ៥០ នៅកម្ពុជា។",
+    genericEn: "Generic foreign systems completely irrelevant to Cambodian degrees and colleges.",
+    genericKm: "ប្រើប្រព័ន្ធបរទេស មិនត្រូវនឹងសាកលវិទ្យាល័យ និងជំនាញនៅស្រុកខ្មែរឡើយ។",
   },
   {
     featureEn: "Financial & Tuition Prerequisite",
-    featureKm: "ការផ្ទៀងផ្ទាត់តម្លៃសិក្សា និងថវិកា",
-    futeraEn: "Filters by verified 4-year tuition ($500 state vs $2,500+ private)",
-    futeraKm: "ច្រោះតាមតម្លៃសិក្សា ៤ ឆ្នាំពិតប្រាកដ ($៥០០ រដ្ឋ ទល់ $២,៥០០+ ឯកជន)",
-    genericEn: "Zero budget checks; recommends unaffordable programs",
-    genericKm: "គ្មានការពិនិត្យថវិកា ណែនាំសាលាដែលលើសពីលទ្ធភាព",
+    featureKm: "ការផ្ទៀងផ្ទាត់តម្លៃសិក្សា",
+    orienxEn: "Filters by verified 4-year tuition ($500 state to $2,500+ private) to ensure affordability.",
+    orienxKm: "ច្រោះតាមតម្លៃសិក្សា ៤ ឆ្នាំពិតប្រាកដ ($៥០០ សាលារដ្ឋ ដល់ $២,៥០០+ ឯកជន)។",
+    genericEn: "Zero budget checks; often recommends unaffordable programs leading to dropouts.",
+    genericKm: "គ្មានការពិនិត្យថវិកា ណែនាំសាលាដែលលើសពីលទ្ធភាពហិរញ្ញវត្ថុគ្រួសារ។",
   },
   {
     featureEn: "BACII High School Stream Check",
-    featureKm: "ការផ្ទៀងផ្ទាត់ថ្នាក់វិទ្យាសាស្ត្រ ឬសង្គម",
-    futeraEn: "Validates Science vs. Social stream prerequisite subjects",
-    futeraKm: "ផ្ទៀងផ្ទាត់លក្ខខណ្ឌមុខវិជ្ជាថ្នាក់វិទ្យាសាស្ត្រ ឬសង្គម",
-    genericEn: "Ignores Grade 12 tracks leading to exam disqualification",
-    genericKm: "មិនគិតពីថ្នាក់រៀន នាំឱ្យធ្លាក់ការប្រឡងចូលរៀន",
+    featureKm: "ការផ្ទៀងផ្ទាត់ថ្នាក់បាក់ឌុប",
+    orienxEn: "Validates Grade 12 Science vs. Social stream prerequisite subjects before recommending.",
+    orienxKm: "ផ្ទៀងផ្ទាត់លក្ខខណ្ឌមុខវិជ្ជាថ្នាក់វិទ្យាសាស្ត្រ ឬសង្គម ដើម្បីធានាសិទ្ធិចូលរៀន។",
+    genericEn: "Ignores Grade 12 tracks, risking entrance exam disqualification.",
+    genericKm: "មិនគិតពីថ្នាក់រៀន នាំឱ្យខុសលក្ខខណ្ឌ និងធ្លាក់ការប្រឡងជ្រើសរើសចូលរៀន។",
+  },
+  {
+    featureEn: "Labor Market & Salaries (NEA)",
+    featureKm: "ទីផ្សារការងារ & ប្រាក់ខែ",
+    orienxEn: "Weighted by authentic NEA hiring demand and verified salary scales ($600–$2,400+).",
+    orienxKm: "ផ្អែកលើទិន្នន័យ NEA៖ កម្រិតប្រាក់ខែជាក់ស្តែង ($៦០០–$២,៤០០+) និងតម្រូវការការងារពិត។",
+    genericEn: "Zero local employment insights or exaggerated Western wage estimates.",
+    genericKm: "គ្មានទិន្នន័យទីផ្សារការងារ ឬដាក់ប្រាក់ខែបរទេសដែលមិនពិតនៅកម្ពុជា។",
   },
   {
     featureEn: "Parent & Counselor Sharing",
-    featureKm: "ការចែករំលែកជាមួយឪពុកម្តាយ ឬគ្រូ",
-    futeraEn: "Exportable diagnostic PDF report with clear Cambodian evidence",
-    futeraKm: "របាយការណ៍ PDF វិភាគច្បាស់លាស់ អាចផ្ញើជូនឪពុកម្តាយបាន",
-    genericEn: "Simple screenshot or buzzfeed-style summary line",
-    genericKm: "គ្រាន់តែជាពាក្យសង្ខេបមួយឃ្លា គ្មានទិន្នន័យជាក់ស្តែង",
+    featureKm: "ការចែករំលែកជាមួយអាណាព្យាបាល",
+    orienxEn: "Exportable counselor-grade PDF report with clear evidence to discuss with family.",
+    orienxKm: "របាយការណ៍ PDF វិភាគច្បាស់លាស់ អាចទាញយកពិភាក្សាជាមួយឪពុកម្តាយ ឬគ្រូ។",
+    genericEn: "Simple screenshot or buzzfeed-style summary line with zero proof.",
+    genericKm: "គ្រាន់តែជាពាក្យសង្ខេបមួយឃ្លា ឬរូបភាពកម្សាន្ត គ្មានទិន្នន័យបញ្ជាក់។",
   },
 ];
 
@@ -232,10 +259,6 @@ const COMPARISON_ROWS = [
 export default function PublicAssessmentsHubPage() {
   const { language } = useLanguage();
   const isKm = language === "km";
-
-  // Hero Interactive Pillar Showcase State
-  const [activeHeroPillar, setActiveHeroPillar] = useState<number>(0);
-  const currentPillar = ENGINES[activeHeroPillar];
 
   // Tailored Assessments FAQ items
   const assessmentsFaqs = useMemo<FaqItem[]>(() => {
@@ -377,7 +400,7 @@ export default function PublicAssessmentsHubPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFD] text-[#111965] selection:bg-[#F7CE4D] selection:text-[#111965] pb-24">
+    <div className="min-h-screen bg-[#F8FAFD] dark:bg-[#070B1E] text-[#111965] dark:text-slate-100 selection:bg-[#F7CE4D] selection:text-[#111965] transition-colors duration-300">
       {/* =========================================================================
           HERO SECTION (SPLIT 2-COLUMN WITH SEAMLESS SKYLINE BACKDROP)
           ========================================================================= */}
@@ -406,176 +429,133 @@ export default function PublicAssessmentsHubPage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Column: Heading, Subtitle, Precision Equation & CTAs */}
-            <div className="lg:col-span-7 space-y-6 text-left">
-              {/* Category / Verified Pill */}
-              <div className="gsap-assess-hero-anim inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold border border-emerald-500/30 backdrop-blur-xs">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-16">
+            {/* Left Column: concise value proposition + primary actions */}
+            <div className="space-y-6 text-left lg:col-span-7">
+              <div className="gsap-assess-hero-anim inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-[11px] font-semibold text-emerald-300">
+                <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
                 <span>
                   {isKm
-                    ? "ប្រព័ន្ធតេស្តវាយតម្លៃបែបវិទ្យាសាស្ត្រ ៤ វិមាត្រសម្រាប់សិស្សកម្ពុជា"
-                    : "Cambodia's 4-Pillar Scientific Guidance Ecosystem"}
+                    ? "ប្រព័ន្ធណែនាំ ៤ វិមាត្រសម្រាប់កម្ពុជា"
+                    : "Cambodia's 4-Pillar Guidance System"}
                 </span>
               </div>
 
-              {/* Headline */}
-              <div className="space-y-2">
-                <h1 className="gsap-assess-hero-anim text-3xl sm:text-5xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+              <div className="space-y-3">
+                <h1 className={`gsap-assess-hero-anim text-3xl font-black tracking-tight text-white sm:text-5xl lg:text-[2.7rem] xl:text-[3.4rem] ${
+                  isKm ? "leading-[1.45] sm:leading-[1.3]" : "leading-[1.08]"
+                }`}>
                   {isKm ? (
                     <>
-                      ប្រព័ន្ធតេស្តវាស់ស្ទង់សមត្ថភាព <br className="hidden sm:inline" />
-                      <span className="text-[#F7CE4D]">& ផ្គូផ្គងជំនាញសាកលវិទ្យាល័យ</span>
+                      ស្វែងយល់ខ្លួនឯងតាមវិទ្យាសាស្ត្រ
+                      <br className="hidden sm:inline" />
+                      <span className="text-[#F7CE4D]"> & ផ្គូផ្គងជំនាញដោយ AI</span>
                     </>
                   ) : (
                     <>
-                      Scientific Self-Discovery <br className="hidden sm:inline" />
-                      <span className="text-[#F7CE4D]">& AI Major Matching Engine</span>
+                      Scientific Self-Discovery
+                      <br className="hidden sm:inline" />
+                      <span className="text-[#F7CE4D]"> & AI Major Matching</span>
                     </>
                   )}
                 </h1>
-                <p className="gsap-assess-hero-anim text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
+                <p className="gsap-assess-hero-anim max-w-[46ch] text-[15px] font-normal leading-relaxed text-slate-300/90 sm:text-base">
                   {isKm
-                    ? "ហេតុអ្វីបានជាសំណួរស្មានធម្មតាមិនអាចជួយអ្នកបាន? OrienX រួមបញ្ចូលទ្រឹស្តីចិត្តវិទ្យាអាជីព RIASEC បុគ្គលិកលក្ខណៈទាំង ១៦ ថ្នាក់បាក់ឌុបជាតិ និងទីផ្សារការងារកម្ពុជា ដើម្បីផ្តល់នូវការផ្គូផ្គងដែលត្រឹមត្រូវបំផុត ១០០%។"
-                    : "Why generic 5-question online quizzes fail Cambodian students: OrienX integrates John Holland's vocational psychology, Myers-Briggs cognitive styles, Grade 12 BACII prerequisites, and official NEA labor data into a unified 100% precision formula."}
+                    ? "តេស្តវិទ្យាសាស្ត្រ ៤ ប្រភេទ ផ្តល់ផ្លូវច្បាស់លាស់មួយទៅកាន់ជំនាញ និងសាកលវិទ្យាល័យដែលស័ក្តិសមនឹងអ្នក។"
+                    : "Four evidence-based assessments, one clear path to the Cambodian major and university that fit you."}
                 </p>
               </div>
 
-              {/* The 100% Equation Bar */}
-              <PrecisionFormula
-                variant="dark"
-                className="gsap-assess-hero-anim max-w-xl"
-              />
-
-              {/* Action CTAs */}
-              <div className="gsap-assess-hero-anim pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+              <div className="gsap-assess-hero-anim flex flex-col items-stretch gap-3 pt-1 sm:flex-row sm:items-center sm:gap-5">
                 <Link
                   href="/dashboard/assessments/riasec"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-[0_4px_24px_rgba(247,206,77,0.3)] hover:shadow-[0_6px_28px_rgba(247,206,77,0.45)] transition-all active:scale-98 cursor-pointer"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#F7CE4D] px-6 py-3.5 text-sm font-black text-[#111965] shadow-[0_4px_24px_rgba(247,206,77,0.28)] transition-all hover:bg-[#E5BD3B] hover:shadow-[0_6px_28px_rgba(247,206,77,0.4)] active:scale-[0.98]"
                 >
-                  <Sparkles className="w-4 h-4 text-[#111965]" />
-                  <span>{isKm ? "ចាប់ផ្តើមធ្វើតេស្តពេញលេញដោយឥតគិតថ្លៃ" : "Start Full Free Assessment"}</span>
-                  <ArrowRight className="w-4 h-4 text-[#111965]" />
+                  <Sparkles className="h-4 w-4 text-[#111965]" />
+                  <span>{isKm ? "ចាប់ផ្តើមវាយតម្លៃឥតគិតថ្លៃ" : "Start free assessment"}</span>
+                  <ArrowRight className="h-4 w-4 text-[#111965]" />
                 </Link>
 
-                <a
+                <Link
                   href="#engines"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-sm text-white bg-white/10 hover:bg-white/15 border border-white/20 backdrop-blur-md shadow-sm transition-all text-center cursor-pointer"
+                  className="group inline-flex items-center justify-center gap-1.5 rounded-lg px-1 py-2 text-[13px] font-bold text-white/65 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F7CE4D]/50"
                 >
-                  <Zap className="w-4 h-4 text-[#F7CE4D]" />
-                  <span>{isKm ? "ស្វែងយល់ពីតេស្តទាំង ៤" : "Explore the 4 Engines"}</span>
-                </a>
+                  <span>{isKm ? "ស្វែងយល់ពីម៉ាស៊ីនទាំង ៤" : "Explore the 4 engines"}</span>
+                  <ChevronRight className="h-4 w-4 text-[#F7CE4D] transition-transform group-hover:translate-x-0.5" />
+                </Link>
               </div>
 
-              {/* Trust & Localized Metrics */}
-              <div className="gsap-assess-hero-anim pt-4 border-t border-white/10 flex flex-wrap items-center gap-5 text-xs font-semibold text-slate-300">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
-                  <span>{isKm ? "៤ ម៉ាស៊ីនវិភាគពេញលេញ" : "4 Diagnostic Engines"}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
-                  <span>{isKm ? "១២០+ ជំនាញសាកលវិទ្យាល័យ" : "120+ Cambodian Majors"}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
-                  <span>{isKm ? "៥០+ គ្រឹះស្ថានឧត្តមសិក្សា" : "50+ Cambodian Universities"}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
-                  <span>{isKm ? "ឥតគិតថ្លៃ ១០០%" : "100% Free for Students"}</span>
-                </div>
+              <div className="gsap-assess-hero-anim flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-white/10 pt-4 text-[11px] font-medium text-white/45">
+                <span>{isKm ? "ជំនាញ ១២០+" : "120+ majors"}</span>
+                <span className="h-1 w-1 rounded-full bg-white/25" />
+                <span>{isKm ? "សាកលវិទ្យាល័យ ៥០+" : "50+ universities"}</span>
+                <span className="h-1 w-1 rounded-full bg-white/25" />
+                <span>{isKm ? "ឥតគិតថ្លៃ ១០០%" : "100% free"}</span>
               </div>
             </div>
 
-            {/* Right Column: Interactive Hero 4-Pillar Showcase Card */}
+            {/* Right Column: compact four-pillar overview */}
             <div className="gsap-assess-visualizer-card lg:col-span-5">
-              <div className="relative rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 p-5 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.35)] space-y-5">
-                {/* Card Header & Pillar Tabs */}
-                <div className="space-y-3 border-b border-white/15 pb-4">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-slate-300">
-                      <Target className="w-4 h-4 text-[#F7CE4D]" />
-                      <span>{isKm ? "រុករកម៉ាស៊ីនវិភាគទាំង ៤" : "Live Pillar Inspector"}</span>
-                    </div>
-                    <span className="text-[12px] font-mono text-[#F7CE4D] font-bold">
-                      {currentPillar.weight} WEIGHT
+              <div className="relative overflow-hidden rounded-[28px] border border-white/15 bg-white/[0.07] p-5 shadow-[0_28px_80px_-28px_rgba(0,0,0,0.85)] backdrop-blur-xl sm:p-6">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-[#F7CE4D]/10 blur-3xl"
+                />
+
+                <div className="relative">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/50">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      {isKm ? "ម៉ាស៊ីនផ្គូផ្គងផ្ទាល់" : "Live matching engine"}
+                    </span>
+                    <span className="rounded-full border border-[#F7CE4D]/25 bg-[#F7CE4D]/10 px-2.5 py-1 text-[10px] font-extrabold text-[#F7CE4D]">
+                      {isKm ? "ឥតគិតថ្លៃ" : "100% FREE"}
                     </span>
                   </div>
 
-                  {/* 4 Mini Tabs */}
-                  <div className="grid grid-cols-4 gap-1 bg-black/30 p-1 rounded-xl border border-white/10 text-[12px] font-bold">
-                    {ENGINES.map((eng, idx) => (
-                      <button
-                        key={eng.id}
-                        type="button"
-                        onClick={() => setActiveHeroPillar(idx)}
-                        className={`py-1.5 px-1 rounded-lg text-center transition-all cursor-pointer truncate ${
-                          activeHeroPillar === idx
-                            ? "bg-white text-[#111965] shadow-xs font-black"
-                            : "text-slate-300 hover:text-white"
-                        }`}
-                      >
-                        {eng.id === "riasec"
-                          ? "RIASEC"
-                          : eng.id === "personality"
-                          ? "MBTI"
-                          : eng.id === "bacii"
-                          ? "BACII"
-                          : "Labor"}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Dynamic Pillar Content */}
-                <div className="space-y-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <span className="inline-block px-2.5 py-0.5 rounded-full text-[12.5px] font-bold bg-white/10 text-[#F7CE4D] border border-white/15 mb-1">
-                        Pillar {currentPillar.number} • {currentPillar.weight} Weight
-                      </span>
-                      <h3 className="text-base sm:text-lg font-black text-white">
-                        {isKm ? currentPillar.titleKm : currentPillar.titleEn}
-                      </h3>
-                      <p className="text-xs text-slate-300 mt-0.5 font-medium">
-                        {isKm ? currentPillar.taglineKm : currentPillar.taglineEn}
-                      </p>
-                    </div>
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-md text-white"
-                      style={{ backgroundColor: currentPillar.color }}
-                    >
-                      {React.createElement(currentPillar.icon, { className: "w-5 h-5" })}
-                    </div>
-                  </div>
-
-                  {/* Description Box */}
-                  <p className="text-xs text-slate-200 leading-relaxed font-normal bg-white/5 p-3 rounded-2xl border border-white/10">
-                    {isKm ? currentPillar.descKm : currentPillar.descEn}
-                  </p>
-
-                  {/* Features list */}
-                  <div className="space-y-1.5 text-xs text-slate-200">
-                    {(isKm ? currentPillar.featuresKm : currentPillar.featuresEn).map((feat, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                        <span className="truncate">{feat}</span>
-                      </div>
+                  <div className="mt-4 flex h-1.5 gap-0.5 overflow-hidden rounded-full" aria-hidden="true">
+                    {ENGINES.map((engine) => (
+                      <span
+                        key={engine.id}
+                        className="rounded-full"
+                        style={{
+                          flexGrow: parseFloat(engine.weight),
+                          flexBasis: 0,
+                          backgroundColor: engine.color,
+                        }}
+                      />
                     ))}
                   </div>
 
-                  {/* Quick Card Action */}
-                  <div className="pt-2 flex items-center justify-between text-xs border-t border-white/10">
-                    <span className="text-slate-300 font-medium">
-                      {isKm ? currentPillar.metricsKm : currentPillar.metricsEn}
+                  <div className="mt-3 divide-y divide-white/[0.06]">
+                    {ENGINES.map((engine) => {
+                      const Icon = engine.icon;
+                      return (
+                        <div key={engine.id} className="flex items-center gap-3 py-2.5">
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.06]">
+                            <Icon className="h-4 w-4" style={{ color: engine.color }} />
+                          </span>
+                          <span className="min-w-0 flex-1 truncate text-[12.5px] font-semibold text-white/90">
+                            {isKm ? engine.heroTitleKm : engine.heroTitleEn}
+                          </span>
+                          <span className="shrink-0 text-[12px] font-extrabold tabular-nums text-[#F7CE4D]">
+                            {engine.weight}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-3 flex items-center justify-between gap-3 border-t border-white/10 pt-3.5">
+                    <span className="text-[10.5px] font-medium text-white/40">
+                      {isKm ? "២៥–៣០ នាទីសរុប" : "25–30 min total"}
                     </span>
                     <Link
-                      href={currentPillar.primaryLink}
-                      className="text-[#F7CE4D] hover:underline font-bold inline-flex items-center gap-1 cursor-pointer"
+                      href="#engines"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#F7CE4D] transition-colors hover:text-[#FFE28A]"
                     >
-                      <span>{isKm ? currentPillar.linkTextKm : currentPillar.linkTextEn}</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
+                      <span>{isKm ? "មើលរបៀបផ្គូផ្គង" : "See how it works"}</span>
+                      <ArrowRight className="h-3 w-3" />
                     </Link>
                   </div>
                 </div>
@@ -590,14 +570,14 @@ export default function PublicAssessmentsHubPage() {
           ========================================================================= */}
       <section id="engines" className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 border border-[#111965]/10 text-[12px] font-bold text-[#111965] tracking-wider uppercase">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 dark:bg-white/10 border border-[#111965]/10 dark:border-white/15 text-[12px] font-bold text-[#111965] dark:text-blue-300 tracking-wider uppercase">
             <Zap className="w-3.5 h-3.5 text-[#F7CE4D]" />
             <span>{isKm ? "ម៉ាស៊ីនវិភាគទាំង ៤ របស់ OrienX" : "The 4 Pillars of Precision Matching"}</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] dark:text-white tracking-tight">
             {isKm ? "តេស្តវិភាគលម្អិតសម្រាប់សិស្សកម្ពុជា" : "Dedicated Diagnostic Engines"}
           </h2>
-          <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#68708A] dark:text-slate-300 leading-relaxed">
             {isKm
               ? "តេស្តនីមួយៗឆ្លុះបញ្ចាំងពីវិមាត្រសំខាន់ៗដែលចាំបាច់ក្នុងការជ្រើសរើសជំនាញសិក្សា។ ចុចលើតេស្តនីមួយៗដើម្បីស្វែងយល់លម្អិត។"
               : "Each test addresses a distinct diagnostic dimension to ensure a holistic, highly realistic academic and career trajectory."}
@@ -610,24 +590,24 @@ export default function PublicAssessmentsHubPage() {
             return (
               <div
                 key={engine.id}
-                className="gsap-engine-card rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between space-y-6 relative overflow-hidden group"
+                className="gsap-engine-card rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0B112C] p-6 sm:p-8 shadow-2xs hover:shadow-md dark:hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all flex flex-col justify-between space-y-6 relative overflow-hidden group"
               >
                 <div className="space-y-4">
                   {/* Header Row */}
                   <div className="flex items-start justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs font-mono font-bold text-slate-400">
+                        <span className="text-xs font-mono font-bold text-slate-400 dark:text-slate-500">
                           PILLAR {engine.number}
                         </span>
                         <span className={`px-2.5 py-0.5 rounded-full text-xs font-black border ${engine.badgeClass}`}>
                           Weight: {engine.weight}
                         </span>
                       </div>
-                      <h3 className="text-xl sm:text-2xl font-black text-[#111965] group-hover:text-blue-700 transition-colors">
+                      <h3 className="text-xl sm:text-2xl font-black text-[#111965] dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
                         {isKm ? engine.titleKm : engine.titleEn}
                       </h3>
-                      <p className="text-xs font-bold text-slate-500">
+                      <p className="text-xs font-bold text-slate-500 dark:text-slate-400">
                         {isKm ? engine.taglineKm : engine.taglineEn}
                       </p>
                     </div>
@@ -641,21 +621,21 @@ export default function PublicAssessmentsHubPage() {
                   </div>
 
                   {/* Description */}
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                     {isKm ? engine.descKm : engine.descEn}
                   </p>
 
                   {/* Metrics Badge */}
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200">
-                    <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-white/5 text-slate-700 dark:text-slate-300 text-xs font-bold border border-slate-200 dark:border-white/10">
+                    <ShieldCheck className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                     <span>{isKm ? engine.metricsKm : engine.metricsEn}</span>
                   </div>
 
                   {/* Key Features List */}
-                  <div className="space-y-2 pt-3 border-t border-slate-100">
+                  <div className="space-y-2 pt-3 border-t border-slate-100 dark:border-white/10">
                     {(isKm ? engine.featuresKm : engine.featuresEn).map((feat, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-700 font-medium">
-                        <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium">
+                        <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                         <span>{feat}</span>
                       </div>
                     ))}
@@ -663,17 +643,17 @@ export default function PublicAssessmentsHubPage() {
                 </div>
 
                 {/* Bottom Action Buttons */}
-                <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-3">
+                <div className="pt-4 border-t border-slate-100 dark:border-white/10 flex flex-col sm:flex-row items-center gap-3">
                   <Link
                     href={engine.primaryLink}
-                    className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 text-xs sm:text-sm font-bold transition-all cursor-pointer"
+                    className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 text-xs sm:text-sm font-bold transition-all cursor-pointer"
                   >
                     <span>{isKm ? engine.linkTextKm : engine.linkTextEn}</span>
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
                   </Link>
                   <Link
                     href={engine.testLink}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-[#111965] hover:bg-[#18237c] text-white text-xs sm:text-sm font-black shadow-xs transition-all cursor-pointer whitespace-nowrap"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-[#111965] dark:bg-blue-600 hover:bg-[#18237c] dark:hover:bg-blue-500 text-white text-xs sm:text-sm font-black shadow-xs transition-all cursor-pointer whitespace-nowrap"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
                     <span>{isKm ? engine.startTextKm : engine.startTextEn}</span>
@@ -688,17 +668,17 @@ export default function PublicAssessmentsHubPage() {
       {/* =========================================================================
           SECTION 2: STEP-BY-STEP ASSESSMENT JOURNEY
           ========================================================================= */}
-      <section className="py-16 bg-white border-y border-[#E6E8F0]">
+      <section className="py-16 bg-white dark:bg-[#090D26] border-y border-[#E6E8F0] dark:border-white/10 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200">
-              <Sliders className="w-3.5 h-3.5 text-emerald-600" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 text-xs font-bold border border-emerald-200 dark:border-emerald-800/40">
+              <Sliders className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               <span>{isKm ? "ដំណើរការវាយតម្លៃជា ៤ ជំហាន" : "The 4-Step Student Journey"}</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] dark:text-white tracking-tight">
               {isKm ? "របៀបដែល OrienX ដំណើរការ" : "How the Assessment Pathway Works"}
             </h2>
-            <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#68708A] dark:text-slate-300 leading-relaxed">
               {isKm
                 ? "ចំណាយពេលត្រឹមតែ ២៥-៣០ នាទីដើម្បីទទួលបានផែនទីបង្ហាញផ្លូវសិក្សា និងអាជីពពេញលេញ។"
                 : "From authentic self-discovery to confident enrollment in your dream university program."}
@@ -706,78 +686,78 @@ export default function PublicAssessmentsHubPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 gsap-steps-grid">
-            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between gsap-step-card">
+            <div className="bg-[#FAFBFD] dark:bg-[#0B112C] rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-2xs space-y-3 relative flex flex-col justify-between gsap-step-card">
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-2xl bg-amber-500 text-white font-black flex items-center justify-center text-sm shadow-md shadow-amber-500/25">
                   1
                 </div>
-                <h3 className="text-base font-extrabold text-[#111965]">
+                <h3 className="text-base font-extrabold text-[#111965] dark:text-white">
                   {isKm ? "១. តេស្ត RIASEC" : "1. Holland RIASEC"}
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   {isKm
                     ? "ឆ្លើយ ៣០ សំណួរជាក់ស្តែងដើម្បីស្វែងរកចំណាប់អារម្មណ៍ការងារពីធម្មជាតិ ៦ វិមាត្រ។"
                     : "Complete 30 localized question items to measure your natural affinity for practical, analytical, or social tasks."}
                 </p>
               </div>
-              <div className="text-[12px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
+              <div className="text-[12px] font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/40 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 ~10 Mins • 30 Items
               </div>
             </div>
 
-            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between gsap-step-card">
+            <div className="bg-[#FAFBFD] dark:bg-[#0B112C] rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-2xs space-y-3 relative flex flex-col justify-between gsap-step-card">
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white font-black flex items-center justify-center text-sm shadow-md shadow-blue-600/25">
                   2
                 </div>
-                <h3 className="text-base font-extrabold text-[#111965]">
+                <h3 className="text-base font-extrabold text-[#111965] dark:text-white">
                   {isKm ? "២. តេស្តបុគ្គលិកលក្ខណៈ" : "2. 16 Personalities"}
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   {isKm
                     ? "ស្វែងយល់ពីរចនាប័ទ្មនៃការគិត ភាពធន់នឹងសម្ពាធ និងរបៀបធ្វើការងារជាក្រុម។"
                     : "Explore your cognitive information style and study endurance across 4 temperament archetypes."}
                 </p>
               </div>
-              <div className="text-[12px] font-bold text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
+              <div className="text-[12px] font-bold text-blue-800 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 ~12 Mins • 60 Items
               </div>
             </div>
 
-            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between gsap-step-card">
+            <div className="bg-[#FAFBFD] dark:bg-[#0B112C] rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-2xs space-y-3 relative flex flex-col justify-between gsap-step-card">
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white font-black flex items-center justify-center text-sm shadow-md shadow-emerald-600/25">
                   3
                 </div>
-                <h3 className="text-base font-extrabold text-[#111965]">
+                <h3 className="text-base font-extrabold text-[#111965] dark:text-white">
                   {isKm ? "៣. ចំណូលចិត្ត & ថ្នាក់បាក់ឌុប" : "3. Academic Stream"}
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   {isKm
                     ? "កំណត់មុខវិជ្ជាពូកែ ថ្នាក់វិទ្យាសាស្ត្រ ឬសង្គម ថវិកាសិក្សា និងទីតាំងសាកលវិទ្យាល័យ។"
                     : "Confirm Grade 12 Science vs. Social stream prerequisites, annual tuition budget, and campus location."}
                 </p>
               </div>
-              <div className="text-[12px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
+              <div className="text-[12px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 ~5 Mins • 10 Criteria
               </div>
             </div>
 
-            <div className="bg-[#FAFBFD] rounded-3xl p-6 border border-slate-200 shadow-2xs space-y-3 relative flex flex-col justify-between gsap-step-card">
+            <div className="bg-[#FAFBFD] dark:bg-[#0B112C] rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-2xs space-y-3 relative flex flex-col justify-between gsap-step-card">
               <div className="space-y-3">
                 <div className="w-10 h-10 rounded-2xl bg-purple-600 text-white font-black flex items-center justify-center text-sm shadow-md shadow-purple-600/25">
                   4
                 </div>
-                <h3 className="text-base font-extrabold text-[#111965]">
+                <h3 className="text-base font-extrabold text-[#111965] dark:text-white">
                   {isKm ? "៤. លទ្ធផលផ្គូផ្គង AI" : "4. AI Recommendations"}
                 </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   {isKm
                     ? "ប្រព័ន្ធ AI បញ្ចូលទិន្នន័យទាំង ៤ វិមាត្រដើម្បីបង្កើតបញ្ជីជំនាញ និងសាកលវិទ្យាល័យស័ក្តិសម ១០០%។"
                     : "Receive transparent fit percentage scores, tuition schedules, and parent-shareable counselor PDF reports."}
                 </p>
               </div>
-              <div className="text-[12px] font-bold text-purple-800 bg-purple-200 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
+              <div className="text-[12px] font-bold text-purple-800 dark:text-purple-300 bg-purple-200 dark:bg-purple-950/40 border border-purple-300 dark:border-purple-800/40 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
                 Instant • 100% Precision
               </div>
             </div>
@@ -788,51 +768,65 @@ export default function PublicAssessmentsHubPage() {
       {/* =========================================================================
           SECTION 3: COMPARISON MATRIX: ORIENX VS GENERIC QUIZZES
           ========================================================================= */}
-      <section className="py-16 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 gsap-compare-container">
-        <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200">
-            <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+      <section className="py-14 sm:py-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 gsap-compare-container">
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto space-y-2.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 text-xs font-bold border border-blue-200/80 dark:border-blue-800/40">
+            <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span>{isKm ? "ភាពខុសគ្នាពីតេស្តទូទៅ" : "OrienX vs. Generic Online Quizzes"}</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111965] dark:text-white tracking-tight">
             {isKm ? "ហេតុអ្វីសិស្ស និងអាណាព្យាបាលជឿទុកចិត្តលើ OrienX" : "Why OrienX Outperforms Generic Quizzes"}
           </h2>
-          <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#68708A] dark:text-slate-400 leading-relaxed max-w-lg mx-auto">
             {isKm
-              ? "ការប្រៀបធៀបរវាងការទាយបែបកម្សាន្ត និងការវិភាគបែបវិទ្យាសាស្ត្រក្នុងបរិបទកម្ពុជា។"
-              : "See how multi-factor algorithmic rigor eliminates guesswork, major dropouts, and unrealistic university choices."}
+              ? "ការប្រៀបធៀបរវាងការវិភាគបែបវិទ្យាសាស្ត្រក្នុងបរិបទកម្ពុជា និងការទាយបែបកម្សាន្ត។"
+              : "How multi-factor algorithmic rigor eliminates major dropouts and unrealistic university choices."}
           </p>
         </div>
 
-        <div className="overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-2xs gsap-compare-table">
-          <table className="w-full text-left border-collapse min-w-[640px]">
+        {/* Clean, Highly Readable Comparison Table */}
+        <div className="overflow-x-auto rounded-2xl border border-slate-200/90 dark:border-white/10 bg-white dark:bg-[#0B1128] shadow-xs gsap-compare-table">
+          <table className="w-full text-left border-collapse min-w-[620px]">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-xs font-black uppercase tracking-wider text-slate-500">
-                <th className="p-5 w-1/4">{isKm ? "លក្ខណៈវិនិច្ឆ័យ" : "Criteria"}</th>
-                <th className="p-5 w-5/12 bg-blue-50/70 text-[#111965]">
-                  <span className="flex items-center gap-1.5 font-black text-blue-800">
-                    <Sparkles className="w-4 h-4 text-[#F7CE4D]" />
-                    <span>OrienX Assessment Ecosystem</span>
-                  </span>
+              <tr className="border-b border-slate-200/80 dark:border-white/10 bg-slate-50/70 dark:bg-white/[0.02] text-[11px] font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <th className="py-4 px-5 sm:px-6 w-1/4">
+                  {isKm ? "លក្ខណៈវិនិច្ឆ័យ" : "Criteria"}
                 </th>
-                <th className="p-5 w-1/3 text-slate-400">
+                <th className="py-4 px-5 sm:px-6 w-5/12 bg-blue-50/60 dark:bg-blue-500/10 text-blue-900 dark:text-blue-300 border-x border-blue-100 dark:border-blue-500/20">
+                  <div className="flex items-center gap-1.5 font-bold">
+                    <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D] shrink-0" />
+                    <span>OrienX Assessment Ecosystem</span>
+                  </div>
+                </th>
+                <th className="py-4 px-5 sm:px-6 w-1/3 text-slate-400 dark:text-slate-500 font-bold">
                   {isKm ? "តេស្តអនឡាញទូទៅ" : "Generic Online Quizzes"}
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-xs sm:text-sm font-medium">
+            <tbody className="divide-y divide-slate-100 dark:divide-white/5 text-xs sm:text-sm">
               {COMPARISON_ROWS.map((row, idx) => (
-                <tr key={idx} className="hover:bg-slate-50/60 transition-colors">
-                  <td className="p-5 font-bold text-slate-800">
+                <tr
+                  key={idx}
+                  className="hover:bg-slate-50/50 dark:hover:bg-white/[0.015] transition-colors"
+                >
+                  {/* Criterion Title */}
+                  <td className="py-4 px-5 sm:px-6 font-bold text-slate-900 dark:text-white align-top">
                     {isKm ? row.featureKm : row.featureEn}
                   </td>
-                  <td className="p-5 bg-blue-50/30 text-slate-800">
-                    <div className="flex items-start gap-2">
-                      <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                      <span>{isKm ? row.futeraKm : row.futeraEn}</span>
+
+                  {/* OrienX: Clean checkmark + direct punchy sentence */}
+                  <td className="py-4 px-5 sm:px-6 bg-blue-50/30 dark:bg-blue-500/[0.03] text-slate-800 dark:text-slate-200 border-x border-blue-100/80 dark:border-blue-500/15 align-top">
+                    <div className="flex items-start gap-2.5">
+                      <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                      <span className="font-medium leading-relaxed">
+                        {isKm ? row.orienxKm : row.orienxEn}
+                      </span>
                     </div>
                   </td>
-                  <td className="p-5 text-slate-500">
+
+                  {/* Generic: Clean direct contrast */}
+                  <td className="py-4 px-5 sm:px-6 text-slate-500 dark:text-slate-400 align-top leading-relaxed font-normal">
                     {isKm ? row.genericKm : row.genericEn}
                   </td>
                 </tr>

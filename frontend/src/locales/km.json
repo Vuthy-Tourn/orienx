@@ -179,7 +179,9 @@
     "viewGuidelines": "មើលព័ត៌មានលម្អិត និងលក្ខខណ្ឌ",
     "tipsTitle": "គន្លឹះដើម្បីទទួលបានអាហារូបករណ៍នៅកម្ពុជា",
     "tipsDesc": "យុទ្ធសាស្ត្រត្រៀមខ្លួនសម្រាប់សិស្សទើបចប់បាក់ឌុប និងនិស្សិតសាកលវិទ្យាល័យ។",
-    "resetFilters": "កំណត់ឡើងវិញ"
+    "resetFilters": "កំណត់ឡើងវិញ",
+    "partialCoverageSuffix": "មួយផ្នែក",
+    "trackedScholarship": "បានរក្សាទុក"
   },
   "scholarshipsShowcase": {
     "verifiedBenefit": "កម្រិតជំនួយឧបត្ថម្ភផ្លូវការ",

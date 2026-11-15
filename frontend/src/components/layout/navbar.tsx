@@ -609,7 +609,7 @@ export function Navbar() {
             <div className="flex items-center gap-2">
               <Link
                 href="/login"
-                className="px-3 py-1.5 rounded-xl text-xs xl:text-sm font-semibold text-[#111965] hover:bg-slate-100/80 transition-colors whitespace-nowrap"
+                className="px-3 py-1.5 rounded-xl text-xs xl:text-sm font-semibold text-[#111965] hover:bg-slate-100/80 dark:hover:bg-white/10 transition-colors whitespace-nowrap"
               >
                 {t("nav.signIn", "ចូលគណនី")}
               </Link>

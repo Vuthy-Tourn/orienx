@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
@@ -22,7 +22,6 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BorderBeam } from "@/components/magicui/border-beam";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
 
 // Career salary benchmarks by experience tier (Cambodian Market 2026)
@@ -33,7 +32,6 @@ const SALARY_TIERS: Record<string, {
   growthRate: string;
   growthRateKm: string;
   iconName: "cpu" | "chart" | "construction";
-  colorTheme: { bg: string; text: string; border: string };
   recommendedMajors: { en: string; km: string; slug: string }[];
   milestones: string[];
 }> = {
@@ -44,7 +42,6 @@ const SALARY_TIERS: Record<string, {
     growthRate: "+28% YoY Growth",
     growthRateKm: "+២៨% កំណើនប្រចាំឆ្នាំ",
     iconName: "cpu",
-    colorTheme: { bg: "bg-blue-50", text: "text-blue-900", border: "border-blue-200" },
     recommendedMajors: [
       { en: "Software Engineering", km: "វិស្វកម្មកម្មវិធី", slug: "software-engineering" },
       { en: "Data Science & AI", km: "វិទ្យាសាស្ត្រទិន្នន័យ & AI", slug: "data-science-ai" },
@@ -58,7 +55,6 @@ const SALARY_TIERS: Record<string, {
     growthRate: "+19% YoY Growth",
     growthRateKm: "+១៩% កំណើនប្រចាំឆ្នាំ",
     iconName: "chart",
-    colorTheme: { bg: "bg-emerald-50", text: "text-emerald-900", border: "border-emerald-200" },
     recommendedMajors: [
       { en: "Banking & Finance", km: "ធនាគារ និងហិរញ្ញវត្ថុ", slug: "banking-finance" },
       { en: "Business Administration", km: "គ្រប់គ្រងធុរកិច្ច", slug: "business-administration" },
@@ -72,7 +68,6 @@ const SALARY_TIERS: Record<string, {
     growthRate: "+15% YoY Growth",
     growthRateKm: "+១៥% កំណើនប្រចាំឆ្នាំ",
     iconName: "construction",
-    colorTheme: { bg: "bg-amber-50", text: "text-amber-900", border: "border-amber-200" },
     recommendedMajors: [
       { en: "Civil Engineering", km: "វិស្វកម្មសំណង់ស៊ីវិល", slug: "civil-engineering" },
     ],
@@ -85,6 +80,16 @@ const INDUSTRY_KM: Record<string, string> = {
   "Finance & Banking": "ហិរញ្ញវត្ថុ & ធនាគារ",
   "Engineering & Construction": "វិស្វកម្ម & សំណង់",
 };
+
+const SENIORITY_LABELS = {
+  junior: { en: "Junior benchmark", km: "ប្រាក់ខែយោងកម្រិតដំបូង" },
+  mid: { en: "Mid-level benchmark", km: "ប្រាក់ខែយោងកម្រិតមធ្យម" },
+  senior: { en: "Senior benchmark", km: "ប្រាក់ខែយោងកម្រិតជាន់ខ្ពស់" },
+} as const;
+
+function shortMilestone(value: string) {
+  return value.replace(/\s*\([^)]*\)/g, "").split(" / ")[0].trim();
+}
 
 const RIASEC_MAP: Record<string, { titleEn: string; titleKm: string; desc: string; descKm: string; color: string }> = {
   R: { titleEn: "Realistic", titleKm: "ជាក់ស្តែង (អនុវត្ត)", desc: "Hands-on problem solvers who work with physical objects, tools, and construction.", descKm: "អ្នកដោះស្រាយបញ្ហាជាក់ស្តែង ដែលធ្វើការជាមួយវត្ថុ ឧបករណ៍ និងសំណង់។", color: "bg-amber-50 text-amber-900 border-amber-200" },
@@ -142,13 +147,13 @@ export default function CareersPage() {
   const renderIcon = (name: "cpu" | "chart" | "construction") => {
     switch (name) {
       case "cpu":
-        return <Cpu className="w-4 h-4 text-blue-600" />;
+        return <Cpu className="h-3.5 w-3.5" />;
       case "chart":
-        return <BarChart3 className="w-4 h-4 text-emerald-600" />;
+        return <BarChart3 className="h-3.5 w-3.5" />;
       case "construction":
-        return <HardHat className="w-4 h-4 text-amber-600" />;
+        return <HardHat className="h-3.5 w-3.5" />;
       default:
-        return <Briefcase className="w-4 h-4 text-[#111965]" />;
+        return <Briefcase className="h-3.5 w-3.5" />;
     }
   };
 
@@ -286,9 +291,9 @@ export default function CareersPage() {
                 <span>{language === "km" ? "វិស្វកម្មសូហ្វវែរ & AI" : "Software & AI Engineering"}</span>
                 <span className="text-blue-700 font-extrabold">{language === "km" ? "+២៨% តម្រូវការ" : "+28% Demand"}</span>
               </div>
-              <div className="text-xl font-black text-[#111965]">
+              <div className="whitespace-nowrap text-xl font-black text-[#111965]">
                 {seniorityLevel === "junior" ? "$450 – $900" : seniorityLevel === "mid" ? "$950 – $1,600" : "$1,800 – $3,500+"}
-                <span className="text-xs font-normal text-[#68708A] ml-1">{language === "km" ? "/ ខែ" : "/ month"}</span>
+                <span className="ml-1 whitespace-nowrap text-xs font-normal text-[#68708A]">{language === "km" ? "/ ខែ" : "/ month"}</span>
               </div>
             </div>
 
@@ -297,9 +302,9 @@ export default function CareersPage() {
                 <span>{language === "km" ? "ធនាគារ & វិភាគហិរញ្ញវត្ថុ" : "Banking & Financial Analysis"}</span>
                 <span className="text-emerald-700 font-extrabold">{language === "km" ? "+១៩% តម្រូវការ" : "+19% Demand"}</span>
               </div>
-              <div className="text-xl font-black text-[#111965]">
+              <div className="whitespace-nowrap text-xl font-black text-[#111965]">
                 {seniorityLevel === "junior" ? "$400 – $750" : seniorityLevel === "mid" ? "$800 – $1,400" : "$1,500 – $2,800+"}
-                <span className="text-xs font-normal text-[#68708A] ml-1">{language === "km" ? "/ ខែ" : "/ month"}</span>
+                <span className="ml-1 whitespace-nowrap text-xs font-normal text-[#68708A]">{language === "km" ? "/ ខែ" : "/ month"}</span>
               </div>
             </div>
 
@@ -308,9 +313,9 @@ export default function CareersPage() {
                 <span>{language === "km" ? "វិស្វកម្មសំណង់ស៊ីវិល & ហេដ្ឋារចនាសម្ព័ន្ធ" : "Civil & Infrastructure Engineering"}</span>
                 <span className="text-amber-700 font-extrabold">{language === "km" ? "+១៥% តម្រូវការ" : "+15% Demand"}</span>
               </div>
-              <div className="text-xl font-black text-[#111965]">
+              <div className="whitespace-nowrap text-xl font-black text-[#111965]">
                 {seniorityLevel === "junior" ? "$350 – $700" : seniorityLevel === "mid" ? "$750 – $1,300" : "$1,400 – $2,500+"}
-                <span className="text-xs font-normal text-[#68708A] ml-1">{language === "km" ? "/ ខែ" : "/ month"}</span>
+                <span className="ml-1 whitespace-nowrap text-xs font-normal text-[#68708A]">{language === "km" ? "/ ខែ" : "/ month"}</span>
               </div>
             </div>
           </div>
@@ -328,7 +333,7 @@ export default function CareersPage() {
 
         {/* Careers Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 xl:gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="rounded-2xl bg-white border border-[#E6E8F0] p-6 space-y-4 shadow-2xs">
                 <div className="flex justify-between items-center">
@@ -370,19 +375,18 @@ export default function CareersPage() {
             </div>
           </div>
         ) : filteredCareers && filteredCareers.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCareers.map((c: any, index: number) => {
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 xl:gap-6">
+            {filteredCareers.map((c: any) => {
               const meta = SALARY_TIERS[c.slug] || {
                 junior: "$350 – $700",
                 mid: "$750 – $1,300",
                 senior: "$1,400 – $2,500+",
                 growthRate: "+15% YoY",
+                growthRateKm: "+១៥% កំណើនប្រចាំឆ្នាំ",
                 iconName: "cpu" as const,
-                colorTheme: { bg: "bg-slate-50", text: "text-slate-900", border: "border-slate-200" },
                 recommendedMajors: [],
                 milestones: ["Junior", "Specialist", "Director"],
               };
-              const isFirst = index === 0;
 
               // Display salary according to current seniorityLevel
               const activeSalary =
@@ -391,126 +395,164 @@ export default function CareersPage() {
                   : seniorityLevel === "mid"
                   ? meta.mid
                   : meta.senior;
+              const growthShort =
+                language === "km"
+                  ? meta.growthRateKm.split(" ")[0]
+                  : `${meta.growthRate.split(" ")[0]} YoY`;
+              const industry =
+                language === "km"
+                  ? INDUSTRY_KM[c.industry] || c.industry
+                  : c.industry;
 
               return (
-                <div
+                <article
                   key={c.id}
-                  className="group relative rounded-2xl bg-white border border-[#E6E8F0] hover:border-[#111965]/30 p-6 shadow-2xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-5"
+                  className="group relative flex flex-col overflow-hidden rounded-[22px] bg-white ring-1 ring-[#E6E8F0] transition-all duration-300 hover:ring-[#111965]/25 hover:shadow-[0_26px_60px_-34px_rgba(17,25,101,0.45)] motion-reduce:transition-none"
                 >
-                  {isFirst && <BorderBeam size={180} duration={12} delay={1} borderWidth={1.5} />}
-
-                  <div className="space-y-4">
-                    {/* Top Industry & Growth Pill */}
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-1.5">
-                        <div className="p-1 rounded-md bg-slate-100 text-[#111965]">
-                          {renderIcon(meta.iconName)}
-                        </div>
-                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${meta.colorTheme.bg} ${meta.colorTheme.text} ${meta.colorTheme.border}`}>
-                          {language === "km" ? INDUSTRY_KM[c.industry] || c.industry : c.industry}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-1.5">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[12px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                          <span>{language === "km" ? meta.growthRateKm : meta.growthRate}</span>
-                        </span>
-                        <BookmarkButton entityType="career" entityId={c.id} />
-                      </div>
+                  {/* Industry + demand + save */}
+                  <div className="flex items-center justify-between gap-3 px-5 pt-4">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#F0F2FA] text-[#111965]">
+                        {renderIcon(meta.iconName)}
+                      </span>
+                      <span
+                        className={`line-clamp-2 leading-tight text-[#68708A] sm:line-clamp-1 ${
+                          language === "km"
+                            ? "text-[11px] font-semibold"
+                            : "text-[10px] font-bold uppercase tracking-[0.12em]"
+                        }`}
+                        title={industry}
+                      >
+                        {industry}
+                      </span>
                     </div>
 
-                    {/* Career Title */}
-                    <div>
-                      <h3 className="text-lg font-extrabold text-[#111965] group-hover:text-[#1E277A] transition-colors leading-snug">
+                    <div className="flex shrink-0 items-center gap-2">
+                      <span
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700"
+                        title={language === "km" ? meta.growthRateKm : meta.growthRate}
+                      >
+                        <TrendingUp className="h-3.5 w-3.5" />
+                        <span className="sm:hidden">
+                          {meta.growthRate.split(" ")[0]}
+                        </span>
+                        <span className="hidden sm:inline">{growthShort}</span>
+                      </span>
+                      <BookmarkButton entityType="career" entityId={c.id} />
+                    </div>
+                  </div>
+
+                  {/* Role + summary */}
+                  <div className="px-5 pt-3.5">
+                    <h3
+                      className={`line-clamp-2 text-[19px] font-extrabold tracking-[-0.015em] text-[#111965] transition-colors group-hover:text-[#1E277A] ${
+                        language === "km" ? "leading-[1.5]" : "leading-[1.28]"
+                      }`}
+                    >
+                      <Link
+                        href={`/careers/${c.slug}`}
+                        className="rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30"
+                      >
                         {getLocalized(c.title)}
-                      </h3>
-                      <div className="text-xs text-[#68708A] font-mono mt-1 flex items-center gap-1.5">
-                        <span className="font-bold text-[#111965]">{language === "km" ? "រីស៊ីស" : "RIASEC"}: {c.riasec_code}</span>
-                        <span>•</span>
-                        <span>{language === "km" ? "អប្បបរមា" : "Min"}: {language === "km" ? "បរិញ្ញាបត្រ" : c.education_level || "Bachelor"}</span>
-                      </div>
+                      </Link>
+                    </h3>
+                    <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#68708A]">
+                      <span>
+                        <span className="font-bold text-[#111965]">
+                          {language === "km" ? "រីស៊ីស" : "RIASEC"}
+                        </span>{" "}
+                        {c.riasec_code}
+                      </span>
+                      <span className="text-slate-300">·</span>
+                      <span>
+                        <span className="font-bold text-[#111965]">
+                          {language === "km" ? "អប្បបរមា" : "Min."}
+                        </span>{" "}
+                        {language === "km"
+                          ? "បរិញ្ញាបត្រ"
+                          : c.education_level || "Bachelor"}
+                      </span>
                     </div>
+                  </div>
 
-                    <p className="text-xs text-[#68708A] line-clamp-3 leading-relaxed">
-                      {getLocalized(c.description)}
-                    </p>
+                  <p
+                    className={`px-5 pt-3 min-h-[64px] line-clamp-3 text-[12.5px] text-[#68708A] ${
+                      language === "km" ? "leading-[1.7]" : "leading-[1.65]"
+                    }`}
+                  >
+                    {getLocalized(c.description)}
+                  </p>
 
-                    {/* Interactive Active Salary Benchmark Card */}
-                    <div className="p-3.5 rounded-xl bg-[#F0F2FA]/70 border border-[#E6E8F0] space-y-1.5">
-                      <div className="text-[12px] text-[#68708A] font-bold flex items-center justify-between">
-                        <span>
-                          {language === "km"
-                            ? seniorityLevel === "junior"
-                              ? "កម្រិតដំបូង (០-២ ឆ្នាំ) ប្រាក់ខែយោង:"
-                              : seniorityLevel === "mid"
-                              ? "កម្រិតមធ្យម (៣-៥ ឆ្នាំ) ប្រាក់ខែយោង:"
-                              : "កម្រិតជាន់ខ្ពស់ (៥ ឆ្នាំ+) ប្រាក់ខែយោង:"
-                            : `${seniorityLevel === "junior" ? "Junior (0-2y)" : seniorityLevel === "mid" ? "Mid-Level (3-5y)" : "Senior (5y+)"} Salary Benchmark:`}
-                        </span>
-                        <span className="text-xs font-semibold text-[#111965]">{language === "km" ? "ដុល្លារ / ខែ" : "USD / Month"}</span>
-                      </div>
-                      <div className="text-lg font-black text-[#111965]">
-                        {activeSalary}
-                      </div>
+                  {/* Live salary benchmark */}
+                  <div className="mx-5 mt-4 rounded-xl bg-[#F0F2FA] px-4 py-3">
+                    <div className="flex items-start justify-between gap-3 text-[10px] font-bold uppercase tracking-[0.1em] text-[#68708A]">
+                      <span>{SENIORITY_LABELS[seniorityLevel][language]}</span>
+                      <span className="shrink-0">
+                        {language === "km" ? "ដុល្លារ / ខែ" : "USD / month"}
+                      </span>
                     </div>
+                    <div className="mt-1.5 text-[22px] font-extrabold leading-none tracking-[-0.02em] tabular-nums text-[#111965]">
+                      {activeSalary}
+                    </div>
+                  </div>
 
-                    {/* Career Milestones Pathway */}
-                    <div className="space-y-1.5 pt-1">
-                      <div className="text-[12.5px] uppercase font-bold text-[#68708A] tracking-wider">
-                        {language === "km" ? "ជណ្តើរអាជីពធម្មតា (កម្ពុជា)" : "Typical Career Ladder (Cambodia)"}
-                      </div>
-                      <div className="flex items-center gap-1 text-[12px] text-[#171A2C]">
+                  {/* Path + degree links */}
+                  <div className="mt-4 space-y-3 border-t border-[#E6E8F0] px-5 py-3.5">
+                    <div>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#68708A]">
+                        {language === "km" ? "ផ្លូវអាជីពធម្មតា" : "Typical career path"}
+                      </p>
+                      <div className="mt-1.5 flex flex-wrap items-center gap-x-1 gap-y-1 text-[11.5px] font-semibold text-[#111965]">
                         {meta.milestones.map((m, idx) => (
-                          <React.Fragment key={idx}>
-                            <span className="font-medium bg-slate-100 px-2 py-0.5 rounded-md truncate max-w-[100px]">
-                              {m.split(" ")[0]}
-                            </span>
-                            {idx < meta.milestones.length - 1 && (
-                              <ChevronRight className="w-3 h-3 text-slate-400 shrink-0" />
+                          <span key={idx} className="inline-flex items-center gap-1">
+                            {idx > 0 && (
+                              <ChevronRight className="h-3 w-3 shrink-0 text-slate-300" />
                             )}
-                          </React.Fragment>
+                            <span title={m}>{shortMilestone(m)}</span>
+                          </span>
                         ))}
                       </div>
                     </div>
 
-                    {/* Recommended Academic Majors */}
                     {meta.recommendedMajors.length > 0 && (
-                      <div className="space-y-1.5 pt-1">
-                        <div className="text-[12px] font-bold text-[#68708A] flex items-center gap-1">
-                          <GraduationCap className="w-3.5 h-3.5 text-[#111965]" />
-                          <span>{t("careersDirectory.degreePathways")}:</span>
-                        </div>
-                        <div className="flex flex-wrap gap-1.5">
-                          {meta.recommendedMajors.map((m) => (
-                            <Link
-                              key={m.slug}
-                              href={`/majors/${m.slug}`}
-                              className="px-2 py-0.5 rounded-md bg-[#F5F6FA] hover:bg-[#F0F2FA] text-[12px] font-semibold text-[#111965] border border-[#E6E8F0] hover:border-[#111965]/30 transition-colors"
-                            >
-                              {language === "km" ? m.km : m.en}
-                            </Link>
+                      <div>
+                        <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-[#68708A]">
+                          <GraduationCap className="h-3.5 w-3.5" />
+                          <span>{t("careersDirectory.degreePathways")}</span>
+                        </p>
+                        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+                          {meta.recommendedMajors.map((m, idx) => (
+                            <span key={m.slug} className="inline-flex items-center gap-2">
+                              <Link
+                                href={`/majors/${m.slug}`}
+                                className="text-[11.5px] font-semibold text-[#111965] underline-offset-2 transition-colors hover:text-[#1E277A] hover:underline"
+                              >
+                                {language === "km" ? m.km : m.en}
+                              </Link>
+                              {idx < meta.recommendedMajors.length - 1 && (
+                                <span className="text-slate-300">·</span>
+                              )}
+                            </span>
                           ))}
                         </div>
                       </div>
                     )}
                   </div>
 
-                  {/* Card Footer CTA */}
-                  <div className="pt-3 border-t border-[#E6E8F0] flex items-center justify-between">
-                    <span className="text-xs text-[#68708A]">
+                  {/* Footer */}
+                  <div className="mt-auto flex items-center justify-between gap-2 border-t border-[#E6E8F0] px-5 py-3">
+                    <span className="text-[11px] font-medium text-[#68708A]">
                       {language === "km" ? "ទីផ្សារកម្ពុជា" : "Cambodia Market"}
                     </span>
-
                     <Link
                       href={`/careers/${c.slug}`}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all shadow-2xs group-hover:shadow-xs"
+                      className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#F7CE4D] px-3.5 text-[12px] font-extrabold text-[#111965] transition-colors hover:bg-[#E5BD3B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30 focus-visible:ring-offset-2"
                     >
                       <span>{t("careersDirectory.viewProfile")}</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                     </Link>
                   </div>
-                </div>
+                </article>
               );
             })}
           </div>

@@ -408,189 +408,100 @@ export default function RiasecAssessmentPage() {
           </div>
         </div>
 
-        {/* 3. HOLLAND RADAR & TOP 3 PILLARS (2-Column Balanced Card) */}
-        <div className="p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-            {/* Left: Radar Chart */}
-            <div className="lg:col-span-7 space-y-4">
-              <div className="space-y-1">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-[12.5px] font-black uppercase tracking-wider border border-indigo-200">
-                  <Layers className="w-3 h-3 text-indigo-600" />
-                  <span>Holland Hexagon Spectrum</span>
-                </div>
-                <h3 className="text-base sm:text-lg font-black text-[#111965]">
-                  {t("riasecAssessment.radarTitle") || "គំនូសតាងរ៉ាដាចំណាប់អារម្មណ៍អាជីព (Holland Radar Fit)"}
-                </h3>
-                <p className="text-xs text-[#68708A]">
-                  {getLocalized({
-                    km: "ប្រៀបធៀបកម្រិតចំណាប់អារម្មណ៍លើវិស័យទាំង ៦ នៃទ្រឹស្តី John Holland",
-                    en: "Visualizing interest intensity across John Holland's 6 foundational career domains",
-                  })}
-                </p>
-              </div>
-
-              <div className="w-full h-72 sm:h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
-                    <PolarGrid stroke={isDark ? "#334155" : "#E6E8F0"} />
-                    <PolarAngleAxis
-                      dataKey="subject"
-                      tick={{ fill: isDark ? "#E2E8F0" : "#111965", fontSize: 11, fontWeight: 700 }}
-                    />
-                    <PolarRadiusAxis
-                      angle={30}
-                      domain={[0, 100]}
-                      tick={{ fill: isDark ? "#94A3B8" : "#68708A", fontSize: 10 }}
-                    />
-                    <Tooltip
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          const data = payload[0].payload;
-                          const meta = RIASEC_DIMENSIONS[data.code];
-                          return (
-                            <div className="bg-[#111965] text-white p-3 rounded-2xl shadow-xl border border-white/10 text-xs space-y-1.5">
-                              <div className="flex items-center gap-2">
-                                <span
-                                  className="w-5 h-5 rounded-md text-white font-black text-[12.5px] flex items-center justify-center shrink-0"
-                                  style={{ backgroundColor: meta?.color || "#111965" }}
-                                >
-                                  {data.code}
-                                </span>
-                                <span className="font-bold text-white">
-                                  {getLocalized({ km: meta?.nameKm, en: meta?.nameEn })}
-                                </span>
-                              </div>
-                              <div className="text-[#F7CE4D] font-black text-sm">
-                                {data.score}% Fit
-                              </div>
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Radar
-                      name="Student Fit"
-                      dataKey="score"
-                      stroke={isDark ? "#93C5FD" : "#111965"}
-                      strokeWidth={2.5}
-                      fill="#F7CE4D"
-                      fillOpacity={0.55}
-                    />
-                  </RadarChart>
-                </ResponsiveContainer>
-              </div>
-
-              {/* Quick Dimension Badges under Radar */}
-              <div className="flex flex-wrap items-center justify-center gap-2 pt-1 border-t border-[#E6E8F0]/70">
-                {Object.entries(RIASEC_DIMENSIONS).map(([k, meta]) => {
-                  const score = scoresMap[k] || 0;
-                  const isTop = topLetters.includes(k);
-                  return (
-                    <div
-                      key={k}
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold border transition-all ${
-                        isTop
-                          ? "bg-white shadow-2xs font-black text-[#111965]"
-                          : "bg-slate-50 text-[#68708A] border-slate-200"
-                      }`}
-                      style={{ borderColor: isTop ? meta.color : undefined }}
-                    >
-                      <span
-                        className="w-2.5 h-2.5 rounded-full shrink-0"
-                        style={{ backgroundColor: meta.color }}
-                      />
-                      <span>{k}:</span>
-                      <span>{score}%</span>
-                    </div>
-                  );
-                })}
-              </div>
+        {/* 3. HOLLAND RADAR (Clean Centered & Balanced Layout) */}
+        <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-6">
+          <div className="text-center max-w-xl mx-auto space-y-1.5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-black uppercase tracking-wider border border-indigo-200">
+              <Layers className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Holland Hexagon Spectrum</span>
             </div>
+            <h3 className="text-base sm:text-xl font-black text-[#111965]">
+              {t("riasecAssessment.radarTitle") || "គំនូសតាងរ៉ាដាចំណាប់អារម្មណ៍អាជីព (Holland Radar Fit)"}
+            </h3>
+            <p className="text-xs sm:text-sm text-[#68708A] leading-relaxed">
+              {getLocalized({
+                km: "ប្រៀបធៀបកម្រិតចំណាប់អារម្មណ៍លើវិស័យទាំង ៦ នៃទ្រឹស្តី John Holland",
+                en: "Visualizing interest intensity across John Holland's 6 foundational career domains",
+              })}
+            </p>
+          </div>
 
-            {/* Right: Top 3 Primary Holland Domains (Ranked Podium Style) */}
-            <div className="lg:col-span-5 space-y-3.5 border-t lg:border-t-0 lg:border-l border-[#E6E8F0] pt-5 lg:pt-0 lg:pl-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Award className="w-4 h-4 text-amber-500" />
-                  <h4 className="text-xs sm:text-sm font-black text-[#111965] uppercase tracking-wide">
-                    {getLocalized({
-                      km: "វិស័យចម្បងទាំង ៣ (Top 3 Dominant Codes)",
-                      en: "Top 3 Dominant Codes (Holland Pillars)",
-                    })}
-                  </h4>
-                </div>
-                <span className="text-[12.5px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-                  {hCode} Code
-                </span>
-              </div>
-
-              <div className="space-y-3">
-                {topLetters.map((letter: string, rankIdx: number) => {
-                  const meta = RIASEC_DIMENSIONS[letter];
-                  if (!meta) return null;
-                  const score = scoresMap[letter] || 0;
-                  const IconComp = meta.icon;
-
-                  const rankLabels = [
-                    { labelKm: "វិស័យចម្បង #១", labelEn: "Primary Driver #1", badgeBg: "bg-amber-100 text-amber-900 border-amber-300" },
-                    { labelKm: "វិស័យគាំទ្រ #២", labelEn: "Secondary Anchor #2", badgeBg: "bg-slate-100 text-slate-800 border-slate-300" },
-                    { labelKm: "វិស័យកាតាលីករ #៣", labelEn: "Tertiary Catalyst #3", badgeBg: "bg-orange-50 text-orange-900 border-orange-200" },
-                  ];
-                  const rankInfo = rankLabels[rankIdx] || rankLabels[0];
-
-                  return (
-                    <div
-                      key={letter}
-                      className="p-3.5 rounded-2xl border border-[#E6E8F0] bg-gradient-to-b from-white to-[#FAFBFD] space-y-2 hover:border-slate-300 transition-all shadow-2xs"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2.5">
-                          <span
-                            className="w-7 h-7 rounded-xl text-white font-black text-xs flex items-center justify-center shrink-0 shadow-2xs"
-                            style={{ backgroundColor: meta.color }}
-                          >
-                            {letter}
-                          </span>
-                          <div>
-                            <div className="flex items-center gap-1.5">
-                              <span className="text-xs font-black text-[#111965]">
-                                {getLocalized({ km: meta.nameKm, en: meta.nameEn })}
-                              </span>
-                            </div>
-                            <span className="text-[12.5px] font-semibold text-[#68708A]">
-                              {getLocalized({ km: rankInfo.labelKm, en: rankInfo.labelEn })}
+          <div className="w-full max-w-lg mx-auto h-72 sm:h-84">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
+                <PolarGrid stroke={isDark ? "#334155" : "#E6E8F0"} />
+                <PolarAngleAxis
+                  dataKey="subject"
+                  tick={{ fill: isDark ? "#E2E8F0" : "#111965", fontSize: 11, fontWeight: 700 }}
+                />
+                <PolarRadiusAxis
+                  angle={30}
+                  domain={[0, 100]}
+                  tick={{ fill: isDark ? "#94A3B8" : "#68708A", fontSize: 10 }}
+                />
+                <Tooltip
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      const data = payload[0].payload;
+                      const meta = RIASEC_DIMENSIONS[data.code];
+                      return (
+                        <div className="bg-[#111965] text-white p-3 rounded-2xl shadow-xl border border-white/10 text-xs space-y-1.5">
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="w-5 h-5 rounded-md text-white font-black text-[12.5px] flex items-center justify-center shrink-0"
+                              style={{ backgroundColor: meta?.color || "#111965" }}
+                            >
+                              {data.code}
+                            </span>
+                            <span className="font-bold text-white">
+                              {getLocalized({ km: meta?.nameKm, en: meta?.nameEn })}
                             </span>
                           </div>
+                          <div className="text-[#F7CE4D] font-black text-sm">
+                            {data.score}% Fit
+                          </div>
                         </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Radar
+                  name="Student Fit"
+                  dataKey="score"
+                  stroke={isDark ? "#93C5FD" : "#111965"}
+                  strokeWidth={2.5}
+                  fill="#F7CE4D"
+                  fillOpacity={0.55}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
 
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-black text-[#111965]">{score}%</span>
-                          <span
-                            className="p-1 rounded-md"
-                            style={{ backgroundColor: `${meta.color}15`, color: meta.color }}
-                          >
-                            <IconComp className="w-3.5 h-3.5" />
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Progress bar */}
-                      <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                        <div
-                          style={{ width: `${score}%`, backgroundColor: meta.color }}
-                          className="h-full rounded-full transition-all duration-500"
-                        />
-                      </div>
-
-                      <p className="text-[12px] text-[#4A5568] leading-snug">
-                        {getLocalized({ km: meta.descKm, en: meta.descEn })}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+          {/* Quick Dimension Badges under Radar */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-3 border-t border-[#E6E8F0]/70 max-w-2xl mx-auto">
+            {Object.entries(RIASEC_DIMENSIONS).map(([k, meta]) => {
+              const score = scoresMap[k] || 0;
+              const isTop = topLetters.includes(k);
+              return (
+                <div
+                  key={k}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all ${
+                    isTop
+                      ? "bg-white shadow-2xs font-black text-[#111965]"
+                      : "bg-slate-50 text-[#68708A] border-slate-200"
+                  }`}
+                  style={{ borderColor: isTop ? meta.color : undefined }}
+                >
+                  <span
+                    className="w-2.5 h-2.5 rounded-full shrink-0"
+                    style={{ backgroundColor: meta.color }}
+                  />
+                  <span>{k}:</span>
+                  <span>{score}%</span>
+                </div>
+              );
+            })}
           </div>
         </div>
 

@@ -422,6 +422,7 @@ function UniversitiesContent() {
               return (
                 <div
                   key={uni.id}
+                  data-reveal
                   onClick={() => router.push(`/universities/${uni.slug}`)}
                   className={`group relative cursor-pointer rounded-2xl bg-white border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-lg hover:-translate-y-1 ${
                     isSelected ? "border-[#111965] ring-2 ring-[#111965]/20" : "border-[#E6E8F0] hover:border-[#111965]/30"
