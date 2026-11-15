@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/contexts/language-context";
+import { useAuth } from "@/contexts/auth-context";
 import { FaqSection, FaqItem } from "@/components/home/faq-section";
 import { CtaBanner } from "@/components/home/cta-banner";
 import {
@@ -258,6 +259,7 @@ const COMPARISON_ROWS: ComparisonRow[] = [
 // =========================================================================
 export default function PublicAssessmentsHubPage() {
   const { language } = useLanguage();
+  const { user } = useAuth();
   const isKm = language === "km";
 
   // Tailored Assessments FAQ items
@@ -466,7 +468,7 @@ export default function PublicAssessmentsHubPage() {
                 </p>
               </div>
 
-              <div className="gsap-assess-hero-anim flex flex-col items-stretch gap-3 pt-1 sm:flex-row sm:items-center sm:gap-5">
+              <div className="gsap-assess-hero-anim flex flex-col items-stretch gap-3 pt-1 sm:flex-row sm:items-center sm:gap-4">
                 <Link
                   href="/dashboard/assessments/riasec"
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#F7CE4D] px-6 py-3.5 text-sm font-black text-[#111965] shadow-[0_4px_24px_rgba(247,206,77,0.28)] transition-all hover:bg-[#E5BD3B] hover:shadow-[0_6px_28px_rgba(247,206,77,0.4)] active:scale-[0.98]"
@@ -475,6 +477,16 @@ export default function PublicAssessmentsHubPage() {
                   <span>{isKm ? "ចាប់ផ្តើមវាយតម្លៃឥតគិតថ្លៃ" : "Start free assessment"}</span>
                   <ArrowRight className="h-4 w-4 text-[#111965]" />
                 </Link>
+
+                {user && (
+                  <Link
+                    href="/dashboard/recommendations"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-purple-400/40 bg-purple-500/15 px-5 py-3.5 text-sm font-black text-purple-200 transition-all hover:bg-purple-500/25 hover:border-purple-300 active:scale-[0.98]"
+                  >
+                    <BrainCircuit className="h-4 w-4 text-purple-300" />
+                    <span>{isKm ? "មើលលទ្ធផលផ្គូផ្គង" : "View My Matches"}</span>
+                  </Link>
+                )}
 
                 <Link
                   href="#engines"

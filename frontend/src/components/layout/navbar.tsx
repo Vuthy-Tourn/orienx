@@ -160,16 +160,16 @@ export function Navbar() {
   ];
 
   // The Match Hub is the *output* of the three tests, not a fourth test.
-  // Signed-in students go straight to their ranked matches; everyone else
-  // lands on the explainer page, where the unlock condition is obvious.
+  // Always links to /assessments so students can explore the full assessment
+  // overview and 4-pillar methodology directly, even when signed in.
   const resultHub = {
-    href: user ? "/dashboard/recommendations" : "/assessments",
+    href: "/assessments",
     labelEn: "AI Major & Career Matching Hub",
     labelKm: "លទ្ធផលផ្គូផ្គងជំនាញ & អាជីព",
     descEn: "See your ranked major matches and why each one fits you",
     descKm: "មើលលទ្ធផលផ្គូផ្គងជំនាញ និងហេតុផលដែលត្រូវនឹងអ្នក",
-    badgeEn: user ? "Your Report" : "After 3 Tests",
-    badgeKm: user ? "របាយការណ៍" : "ក្រោយតេស្ត ៣",
+    badgeEn: user ? "Overview" : "After 3 Tests",
+    badgeKm: user ? "ទិដ្ឋភាពរួម" : "ក្រោយតេស្ត ៣",
     icon: BrainCircuit,
     color: "#9333EA",
     bgClass: "bg-purple-600",
