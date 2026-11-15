@@ -1,11 +1,27 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { Check, Loader2, Search, ShieldCheck, X } from "lucide-react";
+import {
+  Activity,
+  Check,
+  Crown,
+  FilterX,
+  GraduationCap,
+  Loader2,
+  RotateCcw,
+  Search,
+  ShieldCheck,
+  Users,
+  X,
+} from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useAuth } from "@/contexts/auth-context";
 import { cn } from "@/lib/utils";
+import {
+  AdminFilterDropdown,
+  type FilterOption,
+} from "./admin-filter-dropdown";
 
 interface AdminUser {
   id: string;
@@ -62,6 +78,107 @@ export function UsersManager() {
     });
   }, [users, search, roleFilter, statusFilter]);
 
+  const hasActiveFilters = Boolean(search || roleFilter || statusFilter);
+
+  const roleCounts = useMemo(() => {
+    if (!users) return { total: 0, STUDENT: 0, ADMIN: 0, SUPER_ADMIN: 0 };
+    return {
+      total: users.length,
+      STUDENT: users.filter((u) => u.roles?.includes("STUDENT")).length,
+      ADMIN: users.filter((u) => u.roles?.includes("ADMIN")).length,
+      SUPER_ADMIN: users.filter((u) => u.roles?.includes("SUPER_ADMIN")).length,
+    };
+  }, [users]);
+
+  const statusCounts = useMemo(() => {
+    if (!users) return { total: 0, ACTIVE: 0, SUSPENDED: 0, PENDING: 0 };
+    return {
+      total: users.length,
+      ACTIVE: users.filter((u) => u.status === "ACTIVE").length,
+      SUSPENDED: users.filter((u) => u.status === "SUSPENDED").length,
+      PENDING: users.filter((u) => u.status === "PENDING").length,
+    };
+  }, [users]);
+
+  const roleFilterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        value: "",
+        label: "All roles",
+        description: "All registered account types",
+        count: roleCounts.total,
+        icon: Users,
+      },
+      {
+        value: "STUDENT",
+        label: "Student",
+        description: "Learners & test takers",
+        count: roleCounts.STUDENT,
+        icon: GraduationCap,
+        badgeClass: "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300",
+      },
+      {
+        value: "ADMIN",
+        label: "Admin",
+        description: "Platform & content moderators",
+        count: roleCounts.ADMIN,
+        icon: ShieldCheck,
+        badgeClass: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300",
+      },
+      {
+        value: "SUPER_ADMIN",
+        label: "Super Admin",
+        description: "Full system & permission control",
+        count: roleCounts.SUPER_ADMIN,
+        icon: Crown,
+        badgeClass: "bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300",
+      },
+    ],
+    [roleCounts]
+  );
+
+  const statusFilterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        value: "",
+        label: "All statuses",
+        description: "Active, suspended & pending",
+        count: statusCounts.total,
+        icon: Activity,
+      },
+      {
+        value: "ACTIVE",
+        label: "Active",
+        description: "Full platform & sign-in access",
+        count: statusCounts.ACTIVE,
+        indicator: (
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+          </span>
+        ),
+        badgeClass: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300",
+      },
+      {
+        value: "SUSPENDED",
+        label: "Suspended",
+        description: "Access locked & sessions revoked",
+        count: statusCounts.SUSPENDED,
+        indicator: <span className="inline-block h-2 w-2 rounded-full bg-rose-500" />,
+        badgeClass: "bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300",
+      },
+      {
+        value: "PENDING",
+        label: "Pending",
+        description: "Awaiting email verification",
+        count: statusCounts.PENDING,
+        indicator: <span className="inline-block h-2 w-2 rounded-full bg-amber-500" />,
+        badgeClass: "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300",
+      },
+    ],
+    [statusCounts]
+  );
+
   const { mutate: save, isPending: saving } = useMutation({
     mutationFn: async () => {
       if (!selected) return;
@@ -111,41 +228,69 @@ export function UsersManager() {
         </p>
       </div>
 
-      <div className="rounded-2xl border border-[#E6E8F0] bg-white shadow-2xs">
-        <div className="flex flex-col gap-2 border-b border-[#E6E8F0] p-3 lg:flex-row lg:items-center">
+      <div className="rounded-2xl border border-[#E6E8F0] bg-white shadow-2xs dark:border-slate-800 dark:bg-[#090D24]">
+        {/* Filter Controls Toolbar */}
+        <div className="flex flex-col gap-2.5 border-b border-[#E6E8F0] p-3 sm:flex-row sm:items-center dark:border-slate-800">
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#68708A]" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#68708A] dark:text-slate-400" />
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search name or email…"
-              className="h-9 w-full rounded-lg border border-[#E6E8F0] bg-[#F5F6FA]/70 pl-9 pr-3 text-xs text-[#171A2C] outline-none focus:border-[#111965] focus:bg-white"
+              placeholder="Search by name or email…"
+              className="h-9 w-full rounded-xl border border-[#E6E8F0] bg-[#F5F6FA]/70 pl-9 pr-8 text-xs text-[#171A2C] outline-none transition-colors focus:border-[#111965] focus:bg-white dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 dark:focus:border-indigo-400 dark:focus:bg-slate-900"
             />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-1 text-[#68708A] hover:text-[#171A2C] dark:text-slate-400 dark:hover:text-white"
+                title="Clear search"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
           </div>
-          <select
-            value={roleFilter}
-            onChange={(event) => setRoleFilter(event.target.value)}
-            className="h-9 rounded-lg border border-[#E6E8F0] bg-white px-2.5 text-xs font-semibold text-[#171A2C]"
-          >
-            <option value="">All roles</option>
-            {ROLE_OPTIONS.map((role) => (
-              <option key={role} value={role}>
-                {role.replace("_", " ")}
-              </option>
-            ))}
-          </select>
-          <select
-            value={statusFilter}
-            onChange={(event) => setStatusFilter(event.target.value)}
-            className="h-9 rounded-lg border border-[#E6E8F0] bg-white px-2.5 text-xs font-semibold text-[#171A2C]"
-          >
-            <option value="">All statuses</option>
-            {STATUS_OPTIONS.map((status) => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <AdminFilterDropdown
+              label="Role"
+              value={roleFilter}
+              onChange={setRoleFilter}
+              options={roleFilterOptions}
+              icon={Users}
+              menuWidth="w-72"
+            />
+
+            <AdminFilterDropdown
+              label="Status"
+              value={statusFilter}
+              onChange={setStatusFilter}
+              options={statusFilterOptions}
+              icon={Activity}
+              menuWidth="w-72"
+            />
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  setRoleFilter("");
+                  setStatusFilter("");
+                }}
+                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-dashed border-[#E6E8F0] px-2.5 text-xs font-bold text-[#68708A] transition-colors hover:border-slate-400 hover:text-[#111965] dark:border-slate-800 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-white"
+                title="Reset all active filters"
+              >
+                <RotateCcw className="h-3 w-3" />
+                <span>Reset</span>
+              </button>
+            )}
+
+            <div className="hidden text-[11px] font-semibold text-[#68708A] dark:text-slate-400 xl:inline-block pl-2 border-l border-[#E6E8F0] dark:border-slate-800">
+              Showing <strong className="text-[#111965] dark:text-slate-200">{filtered.length}</strong> of{" "}
+              {users?.length || 0}
+            </div>
+          </div>
         </div>
 
         {isLoading ? (
@@ -154,7 +299,31 @@ export function UsersManager() {
             Loading users…
           </div>
         ) : filtered.length === 0 ? (
-          <div className="py-16 text-center text-xs text-[#68708A]">No users match those filters.</div>
+          <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F0F2FA] text-[#111965] dark:bg-slate-800 dark:text-indigo-300">
+              <FilterX className="h-6 w-6" />
+            </div>
+            <h3 className="mt-3 text-sm font-bold text-[#111965] dark:text-white">
+              No users match those filters
+            </h3>
+            <p className="mt-1 max-w-sm text-xs text-[#68708A] dark:text-slate-400">
+              Try adjusting your search query, or clear your active role and status filters to view all accounts.
+            </p>
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  setRoleFilter("");
+                  setStatusFilter("");
+                }}
+                className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-[#111965] px-3.5 py-2 text-xs font-bold text-white transition-colors hover:bg-[#1E277A] dark:bg-indigo-600 dark:hover:bg-indigo-500"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                Reset all filters
+              </button>
+            )}
+          </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[820px] text-left text-xs">
@@ -268,25 +437,70 @@ export function UsersManager() {
             )}
 
             <div className="mt-4 space-y-4">
-              <label className="block space-y-1.5">
+              <div className="space-y-1.5">
                 <span className="text-[11px] font-black uppercase tracking-wider text-[#68708A]">
                   Account status
                 </span>
-                <select
-                  value={nextStatus}
-                  onChange={(event) => setNextStatus(event.target.value)}
-                  className="h-10 w-full rounded-xl border border-[#E6E8F0] bg-white px-3 text-xs font-semibold text-[#171A2C]"
-                >
-                  {STATUS_OPTIONS.map((status) => (
-                    <option key={status} value={status}>
-                      {status}
-                    </option>
-                  ))}
-                </select>
+                <div className="grid gap-2 sm:grid-cols-3">
+                  {[
+                    {
+                      value: "ACTIVE",
+                      label: "Active",
+                      desc: "Full sign-in access",
+                      dotColor: "bg-emerald-500",
+                      activeClass:
+                        "border-emerald-500 bg-emerald-50/60 text-emerald-950 dark:border-emerald-500 dark:bg-emerald-950/30 dark:text-emerald-200",
+                    },
+                    {
+                      value: "SUSPENDED",
+                      label: "Suspended",
+                      desc: "Access revoked",
+                      dotColor: "bg-rose-500",
+                      activeClass:
+                        "border-rose-500 bg-rose-50/60 text-rose-950 dark:border-rose-500 dark:bg-rose-950/30 dark:text-rose-200",
+                    },
+                    {
+                      value: "PENDING",
+                      label: "Pending",
+                      desc: "Needs verify",
+                      dotColor: "bg-amber-500",
+                      activeClass:
+                        "border-amber-500 bg-amber-50/60 text-amber-950 dark:border-amber-500 dark:bg-amber-950/30 dark:text-amber-200",
+                    },
+                  ].map((opt) => {
+                    const isSelected = nextStatus === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => setNextStatus(opt.value)}
+                        className={cn(
+                          "flex flex-col items-start gap-1 rounded-xl border p-2.5 text-left transition-all",
+                          isSelected
+                            ? cn("shadow-xs ring-1 ring-black/5 dark:ring-white/10", opt.activeClass)
+                            : "border-[#E6E8F0] bg-white text-[#68708A] hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400"
+                        )}
+                      >
+                        <div className="flex w-full items-center justify-between">
+                          <span className="flex items-center gap-1.5 text-xs font-bold text-[#171A2C] dark:text-slate-200">
+                            <span className={cn("h-2 w-2 rounded-full", opt.dotColor)} />
+                            {opt.label}
+                          </span>
+                          {isSelected && (
+                            <Check className="h-3.5 w-3.5 stroke-[2.5]" />
+                          )}
+                        </div>
+                        <span className="text-[10px] text-[#68708A] dark:text-slate-400">
+                          {opt.desc}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
                 <p className="text-[11px] text-[#68708A]">
-                  Suspending an account also revokes its active refresh sessions.
+                  Suspending an account also revokes its active refresh sessions immediately.
                 </p>
-              </label>
+              </div>
 
               <div className="space-y-1.5">
                 <span className="text-[11px] font-black uppercase tracking-wider text-[#68708A]">

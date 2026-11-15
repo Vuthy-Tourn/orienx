@@ -1,7 +1,7 @@
 import uuid
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from typing import Optional, List, Any
-from sqlalchemy import String, Boolean, Integer, Numeric, DateTime, ForeignKey, Table, Column
+from sqlalchemy import String, Boolean, Integer, Numeric, Date, DateTime, ForeignKey, Table, Column
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
@@ -38,6 +38,9 @@ class University(Base):
     facilities: Mapped[Optional[Any]] = mapped_column(JSONB)
     scholarship_summary: Mapped[Optional[Any]] = mapped_column(JSONB)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    data_source: Mapped[Optional[str]] = mapped_column(String(200))
+    source_url: Mapped[Optional[str]] = mapped_column(String(500))
+    last_verified_at: Mapped[Optional[date]] = mapped_column(Date)
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))

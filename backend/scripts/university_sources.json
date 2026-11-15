@@ -1,0 +1,120 @@
+{
+  "rupp": {
+    "name": "Royal University of Phnom Penh",
+    "aliases": ["Royal University of Phnom Penh", "RUPP"],
+    "website": "https://www.rupp.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "itc": {
+    "name": "Institute of Technology of Cambodia",
+    "aliases": ["Institute of Technology of Cambodia", "ITC", "Techno"],
+    "website": "https://itc.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "aupp": {
+    "name": "American University of Phnom Penh",
+    "aliases": ["American University of Phnom Penh", "AUPP"],
+    "website": "https://www.aupp.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "paragoniu": {
+    "name": "Paragon International University",
+    "aliases": ["Paragon International University", "ParagonIU"],
+    "website": "https://paragoniu.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "cadt": {
+    "name": "Cambodia Academy of Digital Technology",
+    "aliases": [
+      "Cambodia Academy of Digital Technology",
+      "CADT",
+      "National Institute of Posts, Telecommunications and Information Communication Technology"
+    ],
+    "website": "https://www.cadt.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "num": {
+    "name": "National University of Management",
+    "aliases": ["National University of Management", "NUM"],
+    "website": "https://num.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "rule": {
+    "name": "Royal University of Law and Economics",
+    "aliases": ["Royal University of Law and Economics", "RULE"],
+    "website": "https://rule.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "dmuc": {
+    "name": "De Montfort University Cambodia",
+    "aliases": ["De Montfort University Cambodia", "DMUC"],
+    "website": "https://dmuc.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "camtech": {
+    "name": "Cambodia University of Technology and Science",
+    "aliases": ["Cambodia University of Technology and Science", "CamTech"],
+    "website": "https://www.camtech.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "eamu": {
+    "name": "East Asia Management University",
+    "aliases": ["East Asia Management University", "EAMU"],
+    "website": "https://www.eamu.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "iic": {
+    "name": "IIC University of Technology",
+    "aliases": ["IIC University of Technology", "IIC"],
+    "website": "https://www.iic.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "ppiu": {
+    "name": "Phnom Penh International University",
+    "aliases": ["Phnom Penh International University", "PPIU"],
+    "website": "https://www.ppiu.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "uc": {
+    "name": "The University of Cambodia",
+    "aliases": ["The University of Cambodia", "University of Cambodia", "UC"],
+    "website": "https://www.uc.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "puc": {
+    "name": "Pannasastra University of Cambodia",
+    "aliases": ["Pannasastra University of Cambodia", "Pannasastra University Cambodia", "PUC"],
+    "website": "https://www.puc.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "bbu": {
+    "name": "Build Bright University",
+    "aliases": ["Build Bright University", "BBU"],
+    "website": "https://www.bbu.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "cus": {
+    "name": "Cambodian University for Specialties",
+    "aliases": ["Cambodian University for Specialties", "CUS"],
+    "website": "https://www.cus.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "rua": {
+    "name": "Royal University of Agriculture",
+    "aliases": ["Royal University of Agriculture", "RUA"],
+    "website": "https://www.rua.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "rufa": {
+    "name": "Royal University of Fine Arts",
+    "aliases": ["Royal University of Fine Arts", "RUFA"],
+    "website": "https://www.rufa.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "western": {
+    "name": "Western University",
+    "aliases": ["Western University"],
+    "website": "https://westernuniversity.edu.kh",
+    "province": "Phnom Penh"
+  }
+}

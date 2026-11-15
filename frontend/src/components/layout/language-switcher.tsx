@@ -14,7 +14,7 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
   return (
     <div
       className={cn(
-        "inline-flex items-center p-0.5 rounded-lg border border-[#E6E8F0] bg-white text-xs font-medium shadow-xs",
+        "inline-flex items-center p-0.5 rounded-lg border border-[#E6E8F0] bg-white text-xs font-medium shadow-xs dark:border-white/10 dark:bg-white/5",
         className
       )}
     >
@@ -25,8 +25,8 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
         className={cn(
           "px-2.5 py-1 rounded-md transition-all duration-150 flex items-center gap-1.5",
           language === "km"
-            ? "bg-[#111965] text-white font-semibold shadow-xs"
-            : "text-[#68708A] hover:text-[#171A2C]"
+            ? "bg-[#111965] text-white font-semibold shadow-xs dark:bg-[#F7CE4D] dark:text-[#111965]"
+            : "text-[#68708A] hover:text-[#171A2C] dark:text-slate-400 dark:hover:text-white"
         )}
       >
         <span>ខ្មែរ</span>
@@ -38,8 +38,8 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
         className={cn(
           "px-2.5 py-1 rounded-md transition-all duration-150 flex items-center gap-1.5",
           language === "en"
-            ? "bg-[#111965] text-white font-semibold shadow-xs"
-            : "text-[#68708A] hover:text-[#171A2C]"
+            ? "bg-[#111965] text-white font-semibold shadow-xs dark:bg-[#F7CE4D] dark:text-[#111965]"
+            : "text-[#68708A] hover:text-[#171A2C] dark:text-slate-400 dark:hover:text-white"
         )}
       >
         <span className="font-mono text-[12.5px] font-bold">EN</span>

@@ -86,22 +86,22 @@ export function AdminSidebar({
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-[#E6E8F0] bg-white transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-50 flex w-72 flex-col border-r border-[#E6E8F0] bg-white transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 dark:border-white/10 dark:bg-[#090D24]",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <div className="flex h-16 items-center border-b border-[#E6E8F0] px-5">
+        <div className="flex h-16 items-center border-b border-[#E6E8F0] px-5 dark:border-white/10">
           <Logo href="/admin" />
         </div>
 
-        <div className="border-b border-[#E6E8F0] px-4 py-3">
-          <div className="flex items-center gap-2.5 rounded-xl bg-[#F8FAFD] p-2.5">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#111965] text-xs font-black text-[#F7CE4D]">
+        <div className="border-b border-[#E6E8F0] px-4 py-3 dark:border-white/10">
+          <div className="flex items-center gap-2.5 rounded-xl bg-[#F8FAFD] p-2.5 dark:bg-white/5">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#111965] text-xs font-black text-[#F7CE4D] dark:bg-white/10">
               {displayName.slice(0, 2).toUpperCase()}
             </div>
             <div className="min-w-0">
-              <div className="truncate text-xs font-black text-[#111965]">{displayName}</div>
-              <div className="text-[10px] font-bold uppercase tracking-wider text-[#68708A]">
+              <div className="truncate text-xs font-black text-[#111965] dark:text-white">{displayName}</div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-[#68708A] dark:text-slate-400">
                 {primaryRole.replace("_", " ")}
               </div>
             </div>
@@ -111,7 +111,7 @@ export function AdminSidebar({
         <nav className="min-h-0 flex-1 overflow-y-auto px-3 py-4">
           {GROUPS.map((group) => (
             <div key={group} className="mb-4">
-              <div className="mb-1.5 px-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#94A3B8]">
+              <div className="mb-1.5 px-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#94A3B8] dark:text-slate-500">
                 {group}
               </div>
               <div className="space-y-1">
@@ -127,16 +127,16 @@ export function AdminSidebar({
                         onCloseMobile();
                       }}
                       className={cn(
-                        "flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-xs font-bold transition-colors",
+                        "flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-xs font-bold transition-all",
                         active
-                          ? "bg-[#111965] text-white shadow-xs"
-                          : "text-[#64748B] hover:bg-[#F0F2FA] hover:text-[#111965]"
+                          ? "bg-[#111965] text-white shadow-xs dark:bg-blue-600"
+                          : "text-[#64748B] hover:bg-[#F0F2FA] hover:text-[#111965] dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
                       )}
                     >
                       <Icon
                         className={cn(
-                          "h-4 w-4 shrink-0",
-                          active ? "text-[#F7CE4D]" : "text-[#94A3B8]"
+                          "h-4 w-4 shrink-0 transition-colors",
+                          active ? "text-[#F7CE4D]" : "text-[#94A3B8] dark:text-slate-400"
                         )}
                       />
                       <span className="truncate">{tab.label}</span>
@@ -148,20 +148,20 @@ export function AdminSidebar({
           ))}
         </nav>
 
-        <div className="border-t border-[#E6E8F0] p-3 space-y-1">
+        <div className="border-t border-[#E6E8F0] p-3 space-y-1 dark:border-white/10">
           <Link
             href="/dashboard"
-            className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-bold text-[#64748B] transition-colors hover:bg-[#F0F2FA] hover:text-[#111965]"
+            className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-bold text-[#64748B] transition-colors hover:bg-[#F0F2FA] hover:text-[#111965] dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
           >
-            <GraduationCap className="h-4 w-4 text-[#94A3B8]" />
+            <GraduationCap className="h-4 w-4 text-[#94A3B8] dark:text-slate-400" />
             Student view
           </Link>
           <button
             type="button"
             onClick={handleLogout}
-            className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-bold text-[#64748B] transition-colors hover:bg-rose-50 hover:text-rose-600"
+            className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-bold text-[#64748B] transition-colors hover:bg-rose-50 hover:text-rose-600 dark:text-slate-300 dark:hover:bg-rose-500/10 dark:hover:text-rose-400"
           >
-            <LogOut className="h-4 w-4 text-[#94A3B8]" />
+            <LogOut className="h-4 w-4 text-[#94A3B8] dark:text-slate-400" />
             Sign out
           </button>
         </div>

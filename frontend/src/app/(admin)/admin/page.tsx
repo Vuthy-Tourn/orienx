@@ -4,12 +4,16 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
+  ArrowRight,
+  ArrowUpRight,
   Award,
   BookOpen,
   Briefcase,
   Building2,
   CheckCircle2,
+  ChevronRight,
   Compass,
+  Crown,
   GraduationCap,
   Loader2,
   Menu,
@@ -20,6 +24,8 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import {
   Area,
   AreaChart,
@@ -307,37 +313,59 @@ function BoolBadge({ value }: { value: boolean }) {
 
 export default function AdminConsolePage() {
   const { user, isLoading: authLoading } = useAuth();
+  const { language } = useLanguage();
+  const isKm = language === "km";
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const activeTabLabel =
-    ADMIN_TABS.find((tab) => tab.id === activeTab)?.label || "Overview";
+  const activeTabObj = ADMIN_TABS.find((tab) => tab.id === activeTab);
+  const activeTabLabel = isKm
+    ? (activeTab === "overview"
+        ? "ទិដ្ឋភាពទូទៅ"
+        : activeTab === "users"
+        ? "អ្នកប្រើប្រាស់ & សិទ្ធិ"
+        : activeTab === "universities"
+        ? "សាកលវិទ្យាល័យ"
+        : activeTab === "majors"
+        ? "មុខជំនាញ"
+        : activeTab === "careers"
+        ? "អាជីពការងារ"
+        : activeTab === "scholarships"
+        ? "អាហារូបករណ៍"
+        : activeTab === "engine"
+        ? "ក្បួនផ្គូផ្គង"
+        : "កំណត់ហេតុសកម្មភាព")
+    : (activeTabObj?.label || "Overview");
   const isAdmin = user?.roles?.some(
     (role) => role === "ADMIN" || role === "SUPER_ADMIN"
   );
 
   if (authLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F5F6FA] text-sm text-[#68708A]">
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        Checking administrator session…
+      <div className="flex min-h-screen items-center justify-center bg-[#F5F6FA] dark:bg-[#070B1E] text-sm text-[#68708A] dark:text-slate-400">
+        <Loader2 className="mr-2 h-4 w-4 animate-spin text-[#F7CE4D]" />
+        {isKm ? "កំពុងផ្ទៀងផ្ទាត់សិទ្ធិអភិបាល…" : "Checking administrator session…"}
       </div>
     );
   }
 
   if (!isAdmin) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F5F6FA] p-4">
-        <div className="w-full max-w-md space-y-4 rounded-3xl border border-[#E6E8F0] bg-white p-8 text-center">
-          <ShieldCheck className="mx-auto h-12 w-12 text-rose-600" />
-          <h2 className="text-xl font-bold text-[#111965]">Access denied</h2>
-          <p className="text-xs text-[#68708A]">
-            You need administrator privileges to open the OrienX control panel.
+      <div className="flex min-h-screen items-center justify-center bg-[#F5F6FA] dark:bg-[#070B1E] p-4">
+        <div className="w-full max-w-md space-y-4 rounded-3xl border border-[#E6E8F0] dark:border-white/10 bg-white dark:bg-[#090D24] p-8 text-center shadow-xl">
+          <ShieldCheck className="mx-auto h-12 w-12 text-rose-600 dark:text-rose-400" />
+          <h2 className="text-xl font-bold text-[#111965] dark:text-white">
+            {isKm ? "មិនមានសិទ្ធិចូលប្រើ" : "Access denied"}
+          </h2>
+          <p className="text-xs text-[#68708A] dark:text-slate-400">
+            {isKm
+              ? "អ្នកត្រូវការសិទ្ធិជាអភិបាលដើម្បីបើកផ្ទាំងគ្រប់គ្រង OrienX។"
+              : "You need administrator privileges to open the OrienX control panel."}
           </p>
           <Link
             href="/login"
-            className="inline-block rounded-xl bg-[#111965] px-5 py-2 text-xs font-bold text-white"
+            className="inline-block rounded-xl bg-[#111965] dark:bg-[#F7CE4D] dark:text-[#111965] px-5 py-2 text-xs font-bold text-white shadow-xs"
           >
-            Sign in as an administrator
+            {isKm ? "ចូលគណនីជាអភិបាល" : "Sign in as an administrator"}
           </Link>
         </div>
       </div>
@@ -345,7 +373,7 @@ export default function AdminConsolePage() {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#F4F7FC]">
+    <div className="flex min-h-screen bg-[#F4F7FC] dark:bg-[#070B1E]">
       <AdminSidebar
         activeTab={activeTab}
         onTabChange={setActiveTab}
@@ -354,37 +382,39 @@ export default function AdminConsolePage() {
       />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 border-b border-[#E6E8F0] bg-white/90 backdrop-blur-md">
+        <header className="sticky top-0 z-30 border-b border-[#E6E8F0] bg-white/90 backdrop-blur-md dark:border-white/10 dark:bg-[#090D24]/90">
           <div className="flex h-16 items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
             <div className="flex min-w-0 items-center gap-2.5">
               <button
                 type="button"
                 onClick={() => setMobileOpen(true)}
-                className="rounded-lg p-2 text-[#64748B] transition-colors hover:bg-[#F0F2FA] lg:hidden"
+                className="rounded-lg p-2 text-[#64748B] transition-colors hover:bg-[#F0F2FA] dark:text-slate-400 dark:hover:bg-white/10 lg:hidden"
                 aria-label="Open admin menu"
               >
                 <Menu className="h-5 w-5" />
               </button>
               <div className="min-w-0">
-                <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
-                  Admin console
+                <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8] dark:text-slate-400">
+                  {isKm ? "ផ្ទាំងគ្រប់គ្រងអភិបាល" : "Admin console"}
                 </div>
-                <div className="truncate text-sm font-black text-[#111965]">
+                <div className="truncate text-sm font-black text-[#111965] dark:text-white">
                   {activeTabLabel}
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="hidden text-[11px] font-semibold text-[#68708A] sm:inline">
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              <span className="hidden text-[11px] font-semibold text-[#68708A] dark:text-slate-400 md:inline">
                 {user?.email}
               </span>
+              <LanguageSwitcher />
+              <ThemeToggle />
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-1.5 rounded-xl border border-[#E6E8F0] bg-white px-3 py-1.5 text-[11px] font-bold text-[#111965] transition-colors hover:bg-[#F0F2FA]"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-[#E6E8F0] bg-white px-3 py-1.5 text-[11px] font-bold text-[#111965] transition-colors hover:bg-[#F0F2FA] dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
               >
                 <GraduationCap className="h-3.5 w-3.5" />
-                Student view
+                <span className="hidden sm:inline">{isKm ? "ទម្រង់សិស្ស" : "Student view"}</span>
               </Link>
             </div>
           </div>
@@ -451,44 +481,35 @@ function ChartCardHeader({
   subtitle,
   accent,
   chip,
-  dark = false,
 }: {
   icon: React.ElementType;
   title: string;
   subtitle: string;
   accent: string;
   chip?: string;
-  dark?: boolean;
 }) {
   return (
     <div className="flex items-start justify-between gap-3">
-      <div className="flex min-w-0 items-start gap-2.5">
+      <div className="flex min-w-0 items-start gap-3">
         <div
           className={cn(
-            "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
-            dark ? "border border-white/15 bg-white/10 text-[#F7CE4D]" : accent
+            "flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl shadow-2xs transition-transform group-hover:scale-105",
+            accent
           )}
         >
-          <Icon className="h-4 w-4" />
+          <Icon className="h-5 w-5" />
         </div>
         <div className="min-w-0">
-          <h3 className={cn("text-sm font-black", dark ? "text-white" : "text-[#111965]")}>
+          <h3 className="text-sm sm:text-base font-black text-[#111965] dark:text-white tracking-tight">
             {title}
           </h3>
-          <p className={cn("text-[11px]", dark ? "text-slate-300" : "text-[#94A3B8]")}>
+          <p className="text-[11px] sm:text-xs font-medium text-[#68708A] dark:text-slate-400">
             {subtitle}
           </p>
         </div>
       </div>
       {chip && (
-        <span
-          className={cn(
-            "shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-bold",
-            dark
-              ? "border-white/15 bg-white/10 text-slate-200"
-              : "border-[#E6E8F0] bg-[#F8FAFD] text-[#94A3B8]"
-          )}
-        >
+        <span className="shrink-0 rounded-full border border-slate-200/80 bg-slate-50 px-2.5 py-1 text-[10.5px] font-bold text-slate-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
           {chip}
         </span>
       )}
@@ -499,26 +520,29 @@ function ChartCardHeader({
 function ActivityTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-white/10 bg-[#111965] px-3 py-2 text-[11px] text-white shadow-xl">
-      <p className="mb-1 font-black text-[#F7CE4D]">{label}</p>
-      {payload.map((entry: any) => (
-        <div key={entry.dataKey} className="flex items-center justify-between gap-5">
-          <span className="flex items-center gap-1.5 text-slate-200">
-            <span
-              className="h-1.5 w-1.5 rounded-full"
-              style={{ backgroundColor: entry.color }}
-            />
-            {entry.name}
-          </span>
-          <span className="font-black tabular-nums">{entry.value}</span>
-        </div>
-      ))}
+    <div className="rounded-2xl border border-slate-200/80 bg-white/95 px-4 py-3 text-xs text-[#111965] shadow-2xl backdrop-blur-md dark:border-white/10 dark:bg-[#0B102B]/95 dark:text-white">
+      <p className="mb-2 font-black text-[#111965] dark:text-[#F7CE4D]">{label}</p>
+      <div className="space-y-1.5">
+        {payload.map((entry: any) => (
+          <div key={entry.dataKey} className="flex items-center justify-between gap-6 text-[11px]">
+            <span className="flex items-center gap-2 font-medium text-slate-600 dark:text-slate-300">
+              <span
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: entry.color }}
+              />
+              {entry.name}
+            </span>
+            <span className="font-black tabular-nums">{entry.value}</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
 function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) {
-  const { getLocalized } = useLanguage();
+  const { getLocalized, language } = useLanguage();
+  const isKm = language === "km";
   const { user } = useAuth();
   const firstName =
     user?.full_name_en?.split(" ")[0] ||
@@ -532,27 +556,115 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center gap-2 py-16 text-xs text-[#68708A]">
-        <Loader2 className="h-4 w-4 animate-spin" />
-        Loading analytics…
+      <div className="flex flex-col items-center justify-center gap-3 py-24 text-xs font-bold text-[#68708A] dark:text-slate-400">
+        <Loader2 className="h-6 w-6 animate-spin text-[#F7CE4D]" />
+        <span>{isKm ? "កំពុងទាញយកទិន្នន័យវិភាគលើប្រព័ន្ធ…" : "Loading platform analytics…"}</span>
       </div>
     );
   }
 
-  const cards = [
-    { label: "Students", hint: "Registered profiles", value: analytics?.total_students ?? 0, icon: Users, tone: "bg-sky-50 text-sky-700", primary: true },
-    { label: "Universities", hint: "Directory institutions", value: analytics?.total_universities ?? 0, icon: Building2, tone: "bg-amber-50 text-amber-700" },
-    { label: "Majors", hint: "Academic programs", value: analytics?.total_majors ?? 0, icon: BookOpen, tone: "bg-emerald-50 text-emerald-700" },
-    { label: "Careers", hint: "Career profiles", value: analytics?.total_careers ?? 0, icon: Briefcase, tone: "bg-indigo-50 text-indigo-700" },
-    { label: "Scholarships", hint: "Funding opportunities", value: analytics?.total_scholarships ?? 0, icon: Award, tone: "bg-purple-50 text-purple-700" },
-    { label: "Recommendations", hint: "Generated matches", value: analytics?.generated_recommendations_count ?? 0, icon: TrendingUp, tone: "bg-rose-50 text-rose-700" },
-    { label: "16P Completed", hint: "Personality completions", value: analytics?.completed_personality_assessments ?? 0, icon: CheckCircle2, tone: "bg-fuchsia-50 text-fuchsia-700" },
-    { label: "RIASEC Completed", hint: "Interest completions", value: analytics?.completed_riasec_assessments ?? 0, icon: Compass, tone: "bg-cyan-50 text-cyan-700" },
+  const statCards = [
+    {
+      id: "students",
+      label: isKm ? "សិស្សសរុប" : "Students",
+      hint: isKm ? "គណនីបានចុះឈ្មោះ" : "Registered profiles",
+      badge: isKm ? "សកម្ម" : "Active",
+      value: analytics?.total_students ?? 0,
+      icon: Users,
+      iconBg: "bg-blue-50 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400",
+      borderAccent: "hover:border-blue-400/50 dark:hover:border-blue-500/50",
+      tab: "users" as AdminTab,
+    },
+    {
+      id: "universities",
+      label: isKm ? "សាកលវិទ្យាល័យ" : "Universities",
+      hint: isKm ? "គ្រឹះស្ថានឧត្តមសិក្សា" : "Directory institutions",
+      badge: isKm ? "បញ្ជីទិន្នន័យ" : "Directory",
+      value: analytics?.total_universities ?? 0,
+      icon: Building2,
+      iconBg: "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
+      borderAccent: "hover:border-amber-400/50 dark:hover:border-amber-500/50",
+      tab: "universities" as AdminTab,
+    },
+    {
+      id: "majors",
+      label: isKm ? "មុខជំនាញ" : "Majors",
+      hint: isKm ? "កម្មវិធីសិក្សា & ឯកទេស" : "Academic programs",
+      badge: isKm ? "កម្មវិធីសិក្សា" : "120+ Curricula",
+      value: analytics?.total_majors ?? 0,
+      icon: BookOpen,
+      iconBg: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400",
+      borderAccent: "hover:border-emerald-400/50 dark:hover:border-emerald-500/50",
+      tab: "majors" as AdminTab,
+    },
+    {
+      id: "careers",
+      label: isKm ? "អាជីពការងារ" : "Careers",
+      hint: isKm ? "ទីផ្សារការងារ NEA" : "Career profiles",
+      badge: isKm ? "ទីផ្សារការងារ" : "Job Market",
+      value: analytics?.total_careers ?? 0,
+      icon: Briefcase,
+      iconBg: "bg-indigo-50 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400",
+      borderAccent: "hover:border-indigo-400/50 dark:hover:border-indigo-500/50",
+      tab: "careers" as AdminTab,
+    },
+    {
+      id: "scholarships",
+      label: isKm ? "អាហារូបករណ៍" : "Scholarships",
+      hint: isKm ? "ឱកាសជំនួយហិរញ្ញវត្ថុ" : "Funding opportunities",
+      badge: isKm ? "កូតារដ្ឋ" : "Funding",
+      value: analytics?.total_scholarships ?? 0,
+      icon: Award,
+      iconBg: "bg-purple-50 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400",
+      borderAccent: "hover:border-purple-400/50 dark:hover:border-purple-500/50",
+      tab: "scholarships" as AdminTab,
+    },
+    {
+      id: "recommendations",
+      label: isKm ? "ការផ្គូផ្គងជំនាញ" : "Recommendations",
+      hint: isKm ? "លទ្ធផលបង្កើតដោយ AI" : "Generated matches",
+      badge: isKm ? "ផ្គូផ្គង AI" : "AI Matches",
+      value: analytics?.generated_recommendations_count ?? 0,
+      icon: TrendingUp,
+      iconBg: "bg-rose-50 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400",
+      borderAccent: "hover:border-rose-400/50 dark:hover:border-rose-500/50",
+      tab: "engine" as AdminTab,
+    },
+    {
+      id: "16p",
+      label: isKm ? "បញ្ចប់តេស្ត 16P" : "16P Completed",
+      hint: isKm ? "ការបញ្ចប់តេស្ត MBTI" : "Personality completions",
+      badge: isKm ? "ការគិត" : "MBTI",
+      value: analytics?.completed_personality_assessments ?? 0,
+      icon: CheckCircle2,
+      iconBg: "bg-fuchsia-50 text-fuchsia-600 dark:bg-fuchsia-500/20 dark:text-fuchsia-400",
+      borderAccent: "hover:border-fuchsia-400/50 dark:hover:border-fuchsia-500/50",
+      tab: "overview" as AdminTab,
+    },
+    {
+      id: "riasec",
+      label: isKm ? "បញ្ចប់តេស្ត RIASEC" : "RIASEC Completed",
+      hint: isKm ? "ការបញ្ចប់តេស្តហូឡង់" : "Interest completions",
+      badge: isKm ? "ចំណាប់អារម្មណ៍" : "Holland",
+      value: analytics?.completed_riasec_assessments ?? 0,
+      icon: Compass,
+      iconBg: "bg-cyan-50 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400",
+      borderAccent: "hover:border-cyan-400/50 dark:hover:border-cyan-500/50",
+      tab: "overview" as AdminTab,
+    },
   ];
 
   const monthLabel = (value: string) => {
     const [year, month] = value.split("-");
-    return new Date(Number(year), Number(month) - 1, 1).toLocaleString("en", {
+    const monthIndex = Number(month) - 1;
+    if (isKm) {
+      const khmerMonths = [
+        "មករា", "កុម្ភៈ", "មីនា", "មេសា", "ឧសភា", "មិថុនា",
+        "កក្កដា", "សីហា", "កញ្ញា", "តុលា", "វិច្ឆិកា", "ធ្នូ"
+      ];
+      return khmerMonths[monthIndex] || value;
+    }
+    return new Date(Number(year), monthIndex, 1).toLocaleString("en", {
       month: "short",
     });
   };
@@ -577,13 +689,18 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
         count: major.count,
       };
     });
+
+  const maxMajorCount = Math.max(...popularData.map((m: any) => m.count), 1);
+
   const contentMix = [
-    { name: "Majors", value: analytics?.total_majors ?? 0 },
-    { name: "Universities", value: analytics?.total_universities ?? 0 },
-    { name: "Careers", value: analytics?.total_careers ?? 0 },
-    { name: "Scholarships", value: analytics?.total_scholarships ?? 0 },
+    { name: isKm ? "មុខជំនាញ" : "Majors", value: analytics?.total_majors ?? 0, tab: "majors" as AdminTab },
+    { name: isKm ? "សាកលវិទ្យាល័យ" : "Universities", value: analytics?.total_universities ?? 0, tab: "universities" as AdminTab },
+    { name: isKm ? "អាជីពការងារ" : "Careers", value: analytics?.total_careers ?? 0, tab: "careers" as AdminTab },
+    { name: isKm ? "អាហារូបករណ៍" : "Scholarships", value: analytics?.total_scholarships ?? 0, tab: "scholarships" as AdminTab },
   ].filter((item) => item.value > 0);
+
   const chartColors = ["#6366F1", "#F7CE4D", "#10B981", "#8B5CF6", "#0EA5E9"];
+
   const activityTotals = {
     registrations: activityData.reduce((sum: number, row: any) => sum + row.registrations, 0),
     assessments: activityData.reduce((sum: number, row: any) => sum + row.assessments, 0),
@@ -594,8 +711,9 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
 
   return (
     <div className="space-y-6">
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#0A0F3D] via-[#111965] to-[#1E277A] p-5 text-white sm:p-6">
-        <div className="pointer-events-none absolute inset-0 opacity-10">
+      {/* Welcome Banner */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0A0F3D] via-[#111965] to-[#1E277A] p-6 text-white sm:p-7 shadow-xl border border-white/10 dark:from-[#050818] dark:via-[#090D26] dark:to-[#12194D]">
+        <div className="pointer-events-none absolute inset-0 opacity-15">
           <Image
             src="/images/cambodia-campuses-skyline-seamless.webp"
             alt=""
@@ -606,26 +724,31 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
         </div>
 
         <div className="relative z-10 flex items-center justify-between gap-4">
-          <div className="max-w-xl space-y-2.5 pr-20 sm:pr-44">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-[#F7CE4D]">
-              <ShieldCheck className="h-3 w-3" />
-              Admin workspace
+          <div className="max-w-2xl space-y-2.5 pr-16 sm:pr-40">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10.5px] font-black uppercase tracking-wider text-[#F7CE4D]">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              {isKm ? "ផ្ទាំងគ្រប់គ្រងអភិបាល OrienX" : "OrienX Admin Workspace"}
             </span>
             <h2 className="text-xl font-black leading-tight sm:text-2xl">
-              Welcome back,{" "}
+              {isKm ? "សូមស្វាគមន៍ការត្រឡប់មកវិញ, " : "Welcome back, "}
               <span className="text-[#F7CE4D]">{firstName}!</span>
             </h2>
             <p className="text-xs leading-relaxed text-slate-200 sm:text-sm">
-              Here is the latest pulse across the platform. Keep the directory
-              accurate and the guidance engine healthy for every student.
+              {isKm
+                ? "នេះជាទិដ្ឋភាពទូទៅនៃប្រព័ន្ធ OrienX ថ្ងៃនេះ។ តាមដានទិន្នន័យសិស្ស សាកលវិទ្យាល័យ និងដំណើរការផ្គូផ្គងជំនាញ។"
+                : "Here is the latest pulse across the platform. Keep the directory accurate and the guidance engine healthy for every student."}
             </p>
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[10px] font-semibold text-slate-200">
-              <Sparkles className="h-3 w-3 text-[#F7CE4D]" />
-              Tara&apos;s tip: re-verify tuition and scholarship deadlines before each intake.
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3.5 py-1 text-[11px] font-semibold text-slate-200">
+              <Sparkles className="h-3 w-3 text-[#F7CE4D] shrink-0" />
+              <span>
+                {isKm
+                  ? "គន្លឹះ៖ ផ្ទៀងផ្ទាត់តម្លៃសិក្សា និងកាលបរិច្ឆេទអាហារូបករណ៍ជាប្រចាំមុនរដូវកាលចុះឈ្មោះថ្មី។"
+                  : "Tara's tip: re-verify tuition and scholarship deadlines before each intake."}
+              </span>
             </div>
           </div>
 
-          <div className="pointer-events-none absolute right-2 top-2 h-20 w-20 shrink-0 sm:bottom-0 sm:top-auto sm:right-5 sm:h-36 sm:w-36 md:h-40 md:w-40">
+          <div className="pointer-events-none absolute right-2 top-2 h-20 w-20 shrink-0 sm:bottom-0 sm:top-auto sm:right-6 sm:h-36 sm:w-36 md:h-40 md:w-40">
             <Image
               src="/images/welcome-hd.webp"
               alt="Tara, the OrienX mascot"
@@ -637,71 +760,91 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {cards.map((card) => {
+      {/* 8 Stat Cards */}
+      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4 lg:grid-cols-4">
+        {statCards.map((card) => {
           const Icon = card.icon;
           return (
-            <div
-              key={card.label}
+            <button
+              key={card.id}
+              type="button"
+              onClick={() => onNavigate(card.tab)}
               className={cn(
-                "group relative overflow-hidden rounded-2xl border p-4 transition-all hover:-translate-y-0.5 hover:shadow-md",
-                card.primary
-                  ? "border-[#F7CE4D]/60 bg-gradient-to-br from-white to-[#FFF9E6]"
-                  : "border-[#E6E8F0] bg-white"
+                "group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10 dark:bg-[#0B102B] dark:hover:border-white/20 dark:hover:shadow-[0_12px_24px_rgba(0,0,0,0.5)]",
+                card.borderAccent
               )}
             >
-              <div
-                className={cn(
-                  "mb-2 inline-flex h-9 w-9 items-center justify-center rounded-xl",
-                  card.primary ? "bg-[#FFF9E6] text-[#B45309]" : card.tone
-                )}
-              >
-                <Icon className="h-4 w-4" />
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <div
+                  className={cn(
+                    "flex h-10 w-10 items-center justify-center rounded-xl shadow-2xs transition-transform group-hover:scale-105",
+                    card.iconBg
+                  )}
+                >
+                  <Icon className="h-4.5 w-4.5" />
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="rounded-full border border-slate-200/70 bg-slate-50 px-2 py-0.5 text-[10px] font-bold text-slate-500 dark:border-white/10 dark:bg-white/5 dark:text-slate-400">
+                    {card.badge}
+                  </span>
+                  <ArrowUpRight className="h-3.5 w-3.5 text-slate-300 dark:text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
               </div>
-              <div className="text-2xl font-black tabular-nums text-[#111965]">
+              <div className="text-2xl sm:text-3xl font-black tabular-nums tracking-tight text-[#111965] dark:text-white">
                 {card.value}
               </div>
-              <div className="text-[11px] font-bold text-[#111965]">{card.label}</div>
-              <div className="text-[10px] text-[#94A3B8]">{card.hint}</div>
-            </div>
+              <div className="mt-1 text-xs font-bold text-slate-800 dark:text-slate-200 truncate group-hover:text-blue-600 dark:group-hover:text-[#F7CE4D] transition-colors">
+                {card.label}
+              </div>
+              <div className="text-[10.5px] text-[#94A3B8] dark:text-slate-400 truncate">
+                {card.hint}
+              </div>
+            </button>
           );
         })}
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-3">
-        <div className="rounded-2xl border border-[#E6E8F0] bg-white p-5 shadow-2xs xl:col-span-2">
-          <ChartCardHeader
-            icon={TrendingUp}
-            title="Platform activity"
-            subtitle="Monthly registrations, assessments, and matches"
-            accent="bg-sky-50 text-sky-700"
-            chip="Last 6 months"
-          />
+      {/* Charts Section */}
+      <div className="grid gap-5 xl:grid-cols-3">
+        {/* Platform Activity */}
+        <div className="rounded-3xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-white/10 dark:bg-[#0B102B] xl:col-span-2 flex flex-col justify-between">
+          <div>
+            <ChartCardHeader
+              icon={TrendingUp}
+              title={isKm ? "សកម្មភាពលើផ្លាតហ្វម" : "Platform activity"}
+              subtitle={isKm ? "ការចុះឈ្មោះ តេស្តវាយតម្លៃ និងការផ្គូផ្គងប្រចាំខែ" : "Monthly registrations, assessments, and matches"}
+              accent="bg-sky-50 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300"
+              chip={isKm ? "៦ ខែចុងក្រោយ" : "Last 6 months"}
+            />
 
-          <div className="mt-4 grid grid-cols-3 gap-2">
-            {[
-              { label: "Registrations", total: activityTotals.registrations, color: "#6366F1" },
-              { label: "Assessments", total: activityTotals.assessments, color: "#F7CE4D" },
-              { label: "Recommendations", total: activityTotals.recommendations, color: "#10B981" },
-            ].map((metric) => (
-              <div key={metric.label} className="rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-2.5 py-2">
-                <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#68708A]">
-                  <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: metric.color }} />
-                  <span className="truncate">{metric.label}</span>
+            <div className="mt-5 grid grid-cols-3 gap-3">
+              {[
+                { label: isKm ? "ការចុះឈ្មោះ" : "Registrations", total: activityTotals.registrations, color: "#6366F1" },
+                { label: isKm ? "តេស្តវាយតម្លៃ" : "Assessments", total: activityTotals.assessments, color: "#F7CE4D" },
+                { label: isKm ? "ការផ្គូផ្គង" : "Recommendations", total: activityTotals.recommendations, color: "#10B981" },
+              ].map((metric) => (
+                <div
+                  key={metric.label}
+                  className="rounded-2xl border border-slate-200/70 bg-[#F8FAFD] p-3 dark:border-white/10 dark:bg-white/[0.03] transition-all hover:bg-slate-100/60 dark:hover:bg-white/[0.05]"
+                >
+                  <div className="flex items-center gap-2 text-[11px] font-bold text-[#68708A] dark:text-slate-400">
+                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: metric.color }} />
+                    <span className="truncate">{metric.label}</span>
+                  </div>
+                  <div className="mt-1 text-xl sm:text-2xl font-black tabular-nums text-[#111965] dark:text-white">
+                    {metric.total}
+                  </div>
                 </div>
-                <div className="mt-0.5 text-lg font-black tabular-nums text-[#111965]">
-                  {metric.total}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
-          <div className="mt-3 h-[220px]">
+          <div className="mt-4 h-[240px]">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={activityData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+              <AreaChart data={activityData} margin={{ top: 12, right: 12, left: -10, bottom: 0 }}>
                 <defs>
                   <linearGradient id="adminRegGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#6366F1" stopOpacity={0.28} />
+                    <stop offset="0%" stopColor="#6366F1" stopOpacity={0.35} />
                     <stop offset="100%" stopColor="#6366F1" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="adminAssessGradient" x1="0" y1="0" x2="0" y2="1">
@@ -709,17 +852,17 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
                     <stop offset="100%" stopColor="#F7CE4D" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="adminRecGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#10B981" stopOpacity={0.24} />
+                    <stop offset="0%" stopColor="#10B981" stopOpacity={0.32} />
                     <stop offset="100%" stopColor="#10B981" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid stroke="#94A3B8" strokeOpacity={0.15} strokeDasharray="3 3" vertical={false} />
+                <CartesianGrid stroke="#64748B" strokeOpacity={0.12} strokeDasharray="3 3" vertical={false} />
                 <XAxis
                   dataKey="month"
-                  tick={{ fill: "#94A3B8", fontSize: 11 }}
+                  tick={{ fill: "#94A3B8", fontSize: 11, fontWeight: 600 }}
                   axisLine={false}
                   tickLine={false}
-                  tickMargin={8}
+                  tickMargin={10}
                 />
                 <YAxis
                   tick={{ fill: "#94A3B8", fontSize: 11 }}
@@ -728,69 +871,93 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
                   allowDecimals={false}
                   width={34}
                 />
-                <Tooltip content={<ActivityTooltip />} cursor={{ stroke: "#94A3B8", strokeDasharray: "3 3" }} />
-                <Area type="monotone" dataKey="registrations" name="Registrations" stroke="#6366F1" strokeWidth={2.4} fill="url(#adminRegGradient)" dot={false} activeDot={{ r: 4 }} />
-                <Area type="monotone" dataKey="assessments" name="Assessments" stroke="#F7CE4D" strokeWidth={2.4} fill="url(#adminAssessGradient)" dot={false} activeDot={{ r: 4 }} />
-                <Area type="monotone" dataKey="recommendations" name="Recommendations" stroke="#10B981" strokeWidth={2.4} fill="url(#adminRecGradient)" dot={false} activeDot={{ r: 4 }} />
+                <Tooltip content={<ActivityTooltip />} cursor={{ stroke: "#94A3B8", strokeDasharray: "3 3", strokeOpacity: 0.3 }} />
+                <Area type="monotone" dataKey="registrations" name={isKm ? "ការចុះឈ្មោះ" : "Registrations"} stroke="#6366F1" strokeWidth={2.4} fill="url(#adminRegGradient)" dot={false} activeDot={{ r: 5, fill: "#6366F1" }} />
+                <Area type="monotone" dataKey="assessments" name={isKm ? "តេស្តវាយតម្លៃ" : "Assessments"} stroke="#F7CE4D" strokeWidth={2.4} fill="url(#adminAssessGradient)" dot={false} activeDot={{ r: 5, fill: "#F7CE4D" }} />
+                <Area type="monotone" dataKey="recommendations" name={isKm ? "ការផ្គូផ្គង" : "Recommendations"} stroke="#10B981" strokeWidth={2.4} fill="url(#adminRecGradient)" dot={false} activeDot={{ r: 5, fill: "#10B981" }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-[#E6E8F0] bg-white p-5 shadow-2xs">
-          <ChartCardHeader
-            icon={Users}
-            title="Users by role"
-            subtitle="Account distribution"
-            accent="bg-purple-50 text-purple-700"
-          />
-          <div className="relative mt-3 h-[180px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={roleData}
-                  dataKey="count"
-                  nameKey="role"
-                  innerRadius={58}
-                  outerRadius={82}
-                  paddingAngle={3}
-                  stroke="none"
-                >
-                  {roleData.map((entry: any, index: number) => (
-                    <Cell key={entry.role} fill={chartColors[index % chartColors.length]} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#111965",
-                    border: "1px solid #1E277A",
-                    borderRadius: 12,
-                    color: "#fff",
-                    fontSize: 12,
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-2xl font-black text-[#111965]">{roleTotal}</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8]">Users</span>
+        {/* Users by Role */}
+        <div className="rounded-3xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-white/10 dark:bg-[#0B102B] flex flex-col justify-between">
+          <div>
+            <ChartCardHeader
+              icon={Users}
+              title={isKm ? "ការបែងចែកតាមតួនាទី" : "Users by role"}
+              subtitle={isKm ? "សមាមាត្រអ្នកប្រើប្រាស់ក្នុងប្រព័ន្ធ" : "Account distribution"}
+              accent="bg-purple-50 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300"
+              chip={`${roleTotal} ${isKm ? "គណនី" : "users"}`}
+            />
+            <div className="relative mt-4 h-[190px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={roleData}
+                    dataKey="count"
+                    nameKey="role"
+                    innerRadius={55}
+                    outerRadius={80}
+                    paddingAngle={4}
+                    stroke="none"
+                  >
+                    {roleData.map((entry: any, index: number) => (
+                      <Cell key={entry.role} fill={chartColors[index % chartColors.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#0B102B",
+                      border: "1px solid rgba(255,255,255,0.15)",
+                      borderRadius: 14,
+                      color: "#fff",
+                      fontSize: 12,
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-3xl font-black text-[#111965] dark:text-white tabular-nums tracking-tight">{roleTotal}</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#94A3B8] dark:text-slate-400">
+                  {isKm ? "អ្នកប្រើ" : "Users"}
+                </span>
+              </div>
             </div>
           </div>
+
           <div className="mt-4 space-y-2.5">
             {roleData.map((entry: any, index: number) => {
               const share = roleTotal ? Math.round((entry.count / roleTotal) * 100) : 0;
+              const roleName = entry.role === "STUDENT"
+                ? (isKm ? "សិស្ស" : "Student")
+                : entry.role === "SUPER_ADMIN"
+                ? (isKm ? "អភិបាលជាន់ខ្ពស់" : "Super Admin")
+                : (isKm ? "អភិបាល" : "Admin");
+
               return (
-                <div key={entry.role} className="flex items-center justify-between gap-3 text-[11px]">
-                  <span className="flex items-center gap-2 font-semibold text-[#64748B]">
-                    <span
-                      className="h-2 w-2 rounded-full"
-                      style={{ backgroundColor: chartColors[index % chartColors.length] }}
+                <div key={entry.role} className="space-y-1">
+                  <div className="flex items-center justify-between gap-3 text-xs">
+                    <span className="flex items-center gap-2 font-bold text-slate-700 dark:text-slate-200">
+                      <span
+                        className="h-2.5 w-2.5 rounded-full"
+                        style={{ backgroundColor: chartColors[index % chartColors.length] }}
+                      />
+                      {roleName}
+                    </span>
+                    <span className="text-slate-500 dark:text-slate-400 font-semibold text-[11px]">
+                      <strong className="text-[#111965] dark:text-white">{entry.count}</strong> · {share}%
+                    </span>
+                  </div>
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-white/10">
+                    <div
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{
+                        width: `${share}%`,
+                        backgroundColor: chartColors[index % chartColors.length],
+                      }}
                     />
-                    {entry.role.replace("_", " ")}
-                  </span>
-                  <span className="text-[#94A3B8]">
-                    <strong className="text-[#111965]">{entry.count}</strong> · {share}%
-                  </span>
+                  </div>
                 </div>
               );
             })}
@@ -798,117 +965,194 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
         </div>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-3">
-        <div className="rounded-2xl border border-[#E6E8F0] bg-white p-5 shadow-2xs xl:col-span-2">
-          <div className="flex items-baseline justify-between gap-3">
-            <div>
-              <h3 className="text-sm font-black text-[#111965]">Top recommended majors</h3>
-              <p className="text-[11px] text-[#94A3B8]">Most matched programs</p>
+      {/* Bottom Section */}
+      <div className="grid gap-5 xl:grid-cols-3">
+        {/* Top Recommended Majors */}
+        <div className="rounded-3xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-white/10 dark:bg-[#0B102B] xl:col-span-2 flex flex-col justify-between">
+          <div>
+            <div className="flex items-start justify-between gap-3 mb-4">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-amber-50 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 shadow-2xs">
+                  <Crown className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-black text-[#111965] dark:text-white tracking-tight">
+                    {isKm ? "ជំនាញដែលផ្គូផ្គងច្រើនជាងគេ" : "Top recommended majors"}
+                  </h3>
+                  <p className="text-[11px] sm:text-xs font-medium text-[#68708A] dark:text-slate-400">
+                    {isKm ? "ជំនាញដែលសិស្សទទួលបានច្រើនបំផុតពីការធ្វើតេស្ត" : "Most matched programs by student assessments"}
+                  </p>
+                </div>
+              </div>
+              <span className="shrink-0 rounded-full border border-slate-200/80 bg-slate-50 px-2.5 py-1 text-[10.5px] font-bold text-slate-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
+                {popularData.length} {isKm ? "ជំនាញ" : "majors"}
+              </span>
             </div>
-            <span className="text-[11px] font-bold text-[#94A3B8]">
-              {popularData.length} majors
-            </span>
+
+            {popularData.length === 0 ? (
+              <p className="py-12 text-center text-xs text-[#68708A] dark:text-slate-400">
+                {isKm ? "មិនទាន់មានទិន្នន័យផ្គូផ្គងជំនាញនៅឡើយទេ។" : "No recommendation activity yet."}
+              </p>
+            ) : (
+              <div className="space-y-2.5">
+                {popularData.map((major: any, index: number) => {
+                  const percent = Math.round((major.count / maxMajorCount) * 100);
+                  const isFirst = index === 0;
+                  const isSecond = index === 1;
+                  const isThird = index === 2;
+
+                  return (
+                    <div
+                      key={major.name}
+                      onClick={() => onNavigate("majors")}
+                      className="group cursor-pointer rounded-2xl border border-slate-100 bg-[#FBFBFE] p-3 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 hover:shadow-xs dark:border-white/5 dark:bg-white/[0.02] dark:hover:border-white/15 dark:hover:bg-white/[0.05]"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={cn(
+                            "flex h-7 w-7 shrink-0 items-center justify-center rounded-xl text-xs font-black shadow-2xs",
+                            isFirst
+                              ? "bg-[#F7CE4D] text-[#111965] ring-2 ring-[#F7CE4D]/30"
+                              : isSecond
+                              ? "bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200"
+                              : isThird
+                              ? "bg-orange-100 text-orange-800 dark:bg-orange-500/20 dark:text-orange-300"
+                              : "bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-400"
+                          )}
+                        >
+                          {index + 1}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <span className="truncate text-xs sm:text-sm font-bold text-[#111965] dark:text-white group-hover:text-blue-600 dark:group-hover:text-[#F7CE4D] transition-colors">
+                              {major.name}
+                            </span>
+                            <span className="shrink-0 rounded-full border border-slate-200/60 bg-white px-2 py-0.5 text-[10px] font-bold text-slate-600 dark:border-white/10 dark:bg-white/5 dark:text-slate-300">
+                              {major.count} {isKm ? "ការផ្គូផ្គង" : (major.count === 1 ? "match" : "matches")}
+                            </span>
+                          </div>
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-slate-300 dark:text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          {popularData.length === 0 ? (
-            <p className="py-10 text-center text-xs text-[#68708A]">
-              No recommendation activity yet.
-            </p>
-          ) : (
-            <div className="mt-3 divide-y divide-[#EEF2F7]">
-              {popularData.map((major: any, index: number) => (
-                <div
-                  key={major.name}
-                  className="flex items-center gap-3 py-2.5 transition-colors hover:bg-[#F8FAFD]"
-                >
-                  <span
-                    className={cn(
-                      "flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-black",
-                      index === 0
-                        ? "bg-[#F7CE4D] text-[#111965]"
-                        : "bg-[#F5F6FA] text-[#68708A]"
-                    )}
-                  >
-                    {index + 1}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate text-xs font-semibold text-[#171A2C]">
-                    {major.name}
-                  </span>
-                  <span className="shrink-0 text-[11px] font-bold text-[#94A3B8]">
-                    {major.count} {major.count === 1 ? "match" : "matches"}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-xs">
+            <span className="text-[11px] text-slate-400 dark:text-slate-500">
+              {isKm ? "ផ្អែកលើការបញ្ចប់តេស្ត RIASEC & MBTI" : "Calculated from completed student assessments"}
+            </span>
+            <button
+              type="button"
+              onClick={() => onNavigate("majors")}
+              className="inline-flex items-center gap-1 font-bold text-blue-600 dark:text-[#F7CE4D] hover:underline text-[11px]"
+            >
+              <span>{isKm ? "គ្រប់គ្រងមុខជំនាញទាំងអស់" : "Manage all majors"}</span>
+              <ArrowRight className="h-3 w-3" />
+            </button>
+          </div>
         </div>
 
-        <div className="rounded-2xl border border-[#E6E8F0] bg-white p-5 shadow-2xs">
-          <ChartCardHeader
-            icon={Building2}
-            title="Directory mix"
-            subtitle="Live catalogue records"
-            accent="bg-emerald-50 text-emerald-700"
-            chip={`${totalContent} records`}
-          />
-          <div className="mt-5 flex h-4 w-full overflow-hidden rounded-full bg-[#F0F2FA]">
-            {contentMix.map((item, index) => (
-              <div
-                key={item.name}
-                className="h-full first:rounded-l-full last:rounded-r-full"
-                style={{
-                  width: `${(item.value / Math.max(totalContent, 1)) * 100}%`,
-                  backgroundColor: chartColors[index % chartColors.length],
-                }}
-              />
-            ))}
+        {/* Directory Mix */}
+        <div className="rounded-3xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-white/10 dark:bg-[#0B102B] flex flex-col justify-between">
+          <div>
+            <ChartCardHeader
+              icon={Building2}
+              title={isKm ? "សមាសភាពទិន្នន័យ" : "Directory mix"}
+              subtitle={isKm ? "ទិន្នន័យផ្សាយផ្ទាល់លើផ្លាតហ្វម" : "Live catalogue records"}
+              accent="bg-emerald-50 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300"
+              chip={`${totalContent} ${isKm ? "កំណត់ត្រា" : "records"}`}
+            />
+
+            <div className="mt-5 flex h-4 w-full gap-1 overflow-hidden rounded-full bg-slate-100 dark:bg-white/10 p-0.5">
+              {contentMix.map((item, index) => (
+                <div
+                  key={item.name}
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${(item.value / Math.max(totalContent, 1)) * 100}%`,
+                    backgroundColor: chartColors[index % chartColors.length],
+                  }}
+                  title={`${item.name}: ${item.value}`}
+                />
+              ))}
+            </div>
+
+            <div className="mt-5 space-y-2.5">
+              {contentMix.map((item, index) => {
+                const share = totalContent ? Math.round((item.value / totalContent) * 100) : 0;
+                return (
+                  <button
+                    key={item.name}
+                    type="button"
+                    onClick={() => onNavigate(item.tab)}
+                    className="group flex w-full items-center justify-between gap-3 rounded-xl p-2 text-left transition-colors hover:bg-slate-50 dark:hover:bg-white/5"
+                  >
+                    <span className="flex items-center gap-2.5 font-bold text-xs text-slate-700 dark:text-slate-200">
+                      <span
+                        className="h-2.5 w-2.5 rounded-full shrink-0"
+                        style={{ backgroundColor: chartColors[index % chartColors.length] }}
+                      />
+                      <span className="group-hover:text-blue-600 dark:group-hover:text-[#F7CE4D] transition-colors">{item.name}</span>
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-semibold text-slate-400">
+                        {share}%
+                      </span>
+                      <strong className="rounded-lg border border-slate-200/60 bg-slate-50 px-2 py-0.5 text-xs font-black text-[#111965] dark:border-white/10 dark:bg-white/5 dark:text-white">
+                        {item.value}
+                      </strong>
+                      <ChevronRight className="h-3.5 w-3.5 text-slate-300 dark:text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <div className="mt-4 space-y-2.5">
-            {contentMix.map((item, index) => (
-              <div key={item.name} className="flex items-center justify-between gap-3 text-[11px]">
-                <span className="flex items-center gap-2 font-semibold text-[#64748B]">
-                  <span
-                    className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: chartColors[index % chartColors.length] }}
-                  />
-                  {item.name}
-                </span>
-                <strong className="text-[#111965]">{item.value}</strong>
-              </div>
-            ))}
+
+          <div className="mt-4 pt-3 border-t border-slate-100 dark:border-white/5 flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
+            <span>{isKm ? "ទិន្នន័យផ្ទៀងផ្ទាត់ផ្លូវការ" : "100% verified directory"}</span>
+            <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+              <CheckCircle2 className="h-3 w-3" />
+              {isKm ? "ទាន់សម័យ" : "Up to date"}
+            </span>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      {/* Quick Action Shortcuts */}
+      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
         {[
           {
-            label: "Add university",
-            hint: "Manage institutions",
+            label: isKm ? "បន្ថែមសាកលវិទ្យាល័យ" : "Add university",
+            hint: isKm ? "គ្រប់គ្រងគ្រឹះស្ថានសិក្សា" : "Manage institutions",
             icon: Building2,
-            tone: "bg-amber-50 text-amber-700",
-            tab: "universities",
+            iconBg: "bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
+            tab: "universities" as AdminTab,
           },
           {
-            label: "Add scholarship",
-            hint: "Funding directory",
+            label: isKm ? "បន្ថែមអាហារូបករណ៍" : "Add scholarship",
+            hint: isKm ? "បញ្ជីជំនួយហិរញ្ញវត្ថុ" : "Funding directory",
             icon: Award,
-            tone: "bg-purple-50 text-purple-700",
-            tab: "scholarships",
+            iconBg: "bg-purple-50 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400",
+            tab: "scholarships" as AdminTab,
           },
           {
-            label: "Manage users",
-            hint: "Roles & access",
+            label: isKm ? "គ្រប់គ្រងអ្នកប្រើប្រាស់" : "Manage users",
+            hint: isKm ? "តួនាទី & សិទ្ធិចូលប្រើ" : "Roles & access",
             icon: Users,
-            tone: "bg-sky-50 text-sky-700",
-            tab: "users",
+            iconBg: "bg-sky-50 text-sky-600 dark:bg-sky-500/20 dark:text-sky-400",
+            tab: "users" as AdminTab,
           },
           {
-            label: "Tune engine",
-            hint: "Match weights",
+            label: isKm ? "កែសម្រួលក្បួនផ្គូផ្គង" : "Tune engine",
+            hint: isKm ? "ទម្ងន់ពិន្ទុ AI" : "Match weights",
             icon: Sliders,
-            tone: "bg-emerald-50 text-emerald-700",
-            tab: "engine",
+            iconBg: "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400",
+            tab: "engine" as AdminTab,
           },
         ].map((action) => {
           const Icon = action.icon;
@@ -916,16 +1160,17 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
             <button
               key={action.label}
               type="button"
-              onClick={() => onNavigate(action.tab as AdminTab)}
-              className="group flex items-center gap-3 rounded-2xl border border-[#E6E8F0] bg-white p-3.5 text-left transition-all hover:-translate-y-0.5 hover:border-[#111965]/20 hover:shadow-sm"
+              onClick={() => onNavigate(action.tab)}
+              className="group relative flex items-center gap-3.5 rounded-2xl border border-slate-200/80 bg-white p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-white/10 dark:bg-[#0B102B] dark:hover:border-white/20 dark:hover:shadow-[0_8px_20px_rgba(0,0,0,0.4)]"
             >
-              <div className={cn("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl", action.tone)}>
-                <Icon className="h-4 w-4" />
+              <div className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-2xs transition-transform group-hover:scale-105", action.iconBg)}>
+                <Icon className="h-5 w-5" />
               </div>
-              <div className="min-w-0">
-                <div className="text-[11px] font-black text-[#111965]">{action.label}</div>
-                <div className="text-[10px] text-[#94A3B8]">{action.hint}</div>
+              <div className="min-w-0 flex-1">
+                <div className="text-xs font-black text-[#111965] dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-[#F7CE4D] transition-colors">{action.label}</div>
+                <div className="text-[10.5px] text-[#94A3B8] dark:text-slate-400 truncate">{action.hint}</div>
               </div>
+              <ArrowUpRight className="h-4 w-4 text-slate-300 dark:text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
             </button>
           );
         })}

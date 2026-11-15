@@ -25,3 +25,6 @@ htmlcov/
 *.agents
 # Uploaded admin content
 backend/uploads/
+
+# Raw scraper snapshots and review reports
+backend/data/university_scrape/
