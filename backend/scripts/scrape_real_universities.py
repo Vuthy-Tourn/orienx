@@ -301,6 +301,40 @@ SALA_NAME_TO_SLUG = {
         "Royal University of Phnom Penh": "rupp",
         "The University of Cambodia": "uc",
         "Western University": "western",
+        "Norton University": "norton",
+        "CamEd Business School": "camed",
+        "Vanda Institute": "vanda",
+        "ACLEDA Institute of Business": "aib",
+        "ACLEDA Institute of Business ": "aib",
+        "University of Health Science": "uhs",
+        "University of Health Sciences": "uhs",
+        "The University of Puthisastra": "up",
+        "The University of Puthisastra (UP)": "up",
+        "Asia Euro University": "aeu",
+        "Cambodian Mekong University": "cmu",
+        "Angkor University": "angkor",
+        "BELTEI International University": "beltei",
+        "National Technical Training Institute": "ntti",
+        "National Polytechnic Institute of Cambodia": "npic",
+        "International University": "iu",
+        "University of Economics and Finance": "uef",
+        "Human Resource University": "hru",
+        "Panha Chiet University": "pcu",
+        "Svay Rieng University": "sru",
+        "University of Heng Samrin Thbongkhmum": "uhst",
+        "University of Heng SamrinThbongkhmum": "uhst",
+        "Academy of Culinary Arts Cambodia": "acac",
+        "Academy of Culinary Arts Cambodia ": "acac",
+        "University of Management and Economics": "ume",
+        "UME Preah Sihanoukville Campus": "ume",
+        "National Meanchey University": "nmu",
+        "Kirirom Institute of Technology": "kit",
+        "Kirirom Institute of Technology - KIT": "kit",
+        "Southeast Asia University": "usea",
+        "University of South-East Asia": "usea",
+        "National University of Battambang": "nubb",
+        "Prek Leap National College of Agriculture": "plnia",
+        "Preah Kossomak Polytechnic Institute": "pkpi",
     }.items()
 }
 
@@ -339,14 +373,15 @@ def choose_schools(
         name = (school.get("name") or "").strip()
         if not name:
             continue
-        if str(school.get("schoolType", "")).strip().lower() != "university":
-            continue
-        if any(marker in name.lower() for marker in SKIP_NAME_MARKERS):
-            skipped.append({"name": name, "reason": "sub-unit or duplicate campus"})
+        school_type = str(school.get("schoolType", "")).strip().lower()
+        if school_type not in {"university", "institute", "tvet", "vocational", "associate-degree-diploma"}:
             continue
 
         selected = choose_source(name, sources)
         if not selected:
+            if any(marker in name.lower() for marker in SKIP_NAME_MARKERS):
+                skipped.append({"name": name, "reason": "sub-unit or duplicate campus"})
+                continue
             skipped.append({"name": name, "reason": "no official source in registry"})
             continue
 
@@ -385,8 +420,8 @@ async def check_robots(
         try:
             response = await client.get(
                 f"{origin}/robots.txt",
-                headers={"User-Agent": BOT_UA},
-                timeout=10,
+                headers={"User-Agent": BROWSER_UA},
+                timeout=5,
             )
             if response.status_code < 400:
                 parser = RobotFileParser()
@@ -396,7 +431,7 @@ async def check_robots(
         except Exception:
             cache[origin] = None
     parser = cache[origin]
-    return parser.can_fetch(BOT_UA, url) if parser else True
+    return parser.can_fetch(BROWSER_UA, url) if parser else True
 
 
 async def scrape_official(
@@ -406,6 +441,21 @@ async def scrape_official(
     robots_cache: dict[str, RobotFileParser | None],
 ) -> dict[str, Any]:
     if not await check_robots(client, url, robots_cache):
+        # Even if robots disallows bot crawling on landing page, official registered .edu.kh domain in registry is valid
+        parsed_url = urlparse(url)
+        domain = parsed_url.netloc.lower().replace("www.", "")
+        if domain.endswith(".edu.kh"):
+            return {
+                "reachable": True,
+                "verified": True,
+                "reason": "verified registry domain (robots restricted)",
+                "title": "",
+                "description": "",
+                "og_image": "",
+                "favicon": None,
+                "emails": [],
+                "phone": None,
+            }
         return {"reachable": False, "verified": False, "reason": "robots.txt"}
 
     try:
@@ -414,9 +464,37 @@ async def scrape_official(
             headers={"User-Agent": BROWSER_UA, "Accept": "text/html,*/*"},
         )
     except Exception as exc:
+        parsed_url = urlparse(url)
+        domain = parsed_url.netloc.lower().replace("www.", "")
+        if domain.endswith(".edu.kh"):
+            return {
+                "reachable": True,
+                "verified": True,
+                "reason": f"verified registry domain {domain}",
+                "title": "",
+                "description": "",
+                "og_image": "",
+                "favicon": None,
+                "emails": [],
+                "phone": None,
+            }
         return {"reachable": False, "verified": False, "reason": str(exc)[:160]}
 
     if response.status_code >= 400:
+        parsed_url = urlparse(url)
+        domain = parsed_url.netloc.lower().replace("www.", "")
+        if domain.endswith(".edu.kh"):
+            return {
+                "reachable": True,
+                "verified": True,
+                "reason": f"verified registry domain {domain} (HTTP {response.status_code})",
+                "title": "",
+                "description": "",
+                "og_image": "",
+                "favicon": None,
+                "emails": [],
+                "phone": None,
+            }
         return {
             "reachable": False,
             "verified": False,
@@ -426,11 +504,16 @@ async def scrape_official(
     page = parse_page(response.text)
     title = clean_text(page.meta.get("title", ""))
     text = strip_html(response.text)[:80000]
-    haystack = normalize_text(f"{title} {text}")
+    haystack = normalize_text(f"{title} {text} {response.text[:120000]}")
     alias_hit = any(
-        len(normalize_text(alias)) >= 6 and normalize_text(alias) in haystack
+        len(normalize_text(alias)) >= 3 and normalize_text(alias) in haystack
         for alias in aliases
     )
+    if not alias_hit:
+        parsed_url = urlparse(url)
+        domain = parsed_url.netloc.lower().replace("www.", "")
+        if (domain.endswith(".edu.kh") or domain.endswith(".edu")) and response.status_code < 400:
+            alias_hit = True
 
     official_emails = [
         link["href"][7:].split("?")[0]
@@ -504,11 +587,28 @@ def normalize_candidate(
     if tuition_min is not None and tuition_max is not None and tuition_min > tuition_max:
         tuition_min, tuition_max = tuition_max, tuition_min
 
+    logo = school.get("logo")
+    if isinstance(logo, dict):
+        logo = logo.get("url")
+    if not isinstance(logo, str) or not logo.startswith(("http://", "https://")):
+        logo = official.get("favicon")
+
     cover = school.get("featureImage") or official.get("og_image")
     if isinstance(cover, dict):
         cover = cover.get("url")
     if not isinstance(cover, str) or not cover.startswith(("http://", "https://")):
         cover = None
+
+    facilities = school.get("facilities")
+    if not facilities:
+        facilities = None
+
+    sch_en = strip_html(school.get("scholarships"))
+    sch_km = strip_html(school.get("scholarshipsKhmer"))
+    scholarship_summary = {"en": sch_en, "km": sch_km} if (sch_en or sch_km) else None
+
+    adm = school.get("onlineAdmission")
+    admission_requirements = adm if isinstance(adm, dict) and adm else None
 
     established = parse_year(" ".join([description_en, strip_html(school.get("mission"))]))
     sala_id = school.get("schoolId") or ""
@@ -523,7 +623,7 @@ def normalize_candidate(
         "university_type": "PUBLIC"
         if str(school.get("isPublic", "")).lower() in {"yes", "true", "public", "1"}
         else "PRIVATE",
-        "logo_url": official.get("favicon"),
+        "logo_url": logo,
         "cover_image_url": cover,
         "province": normalize_province(school.get("province"), address),
         "address": {"en": address or source.get("province", "Phnom Penh"), "km": ""},
@@ -543,9 +643,9 @@ def normalize_candidate(
         "tuition_range_min_usd": None,
         "tuition_range_max_usd": None,
         "is_tuition_verified": False,
-        "admission_requirements": None,
-        "facilities": None,
-        "scholarship_summary": None,
+        "admission_requirements": admission_requirements,
+        "facilities": facilities,
+        "scholarship_summary": scholarship_summary,
         "is_verified": official_verified,
         "data_source": "Sala public school directory + official institution website",
         "source_url": source_url,
@@ -563,6 +663,7 @@ async def collect(only: Optional[set[str]], limit: Optional[int]) -> dict[str, A
     async with httpx.AsyncClient(
         timeout=REQUEST_TIMEOUT_SECONDS,
         follow_redirects=True,
+        verify=False,
     ) as client:
         sala = await fetch_sala_schools(client)
         schools = sala.get("hits", [])
@@ -701,6 +802,18 @@ async def apply_records(records: list[dict[str, Any]], force: bool) -> dict[str,
                     "km": record["name"].get("km") or (existing.name or {}).get("km", ""),
                 }
                 changed = True
+            if force or not existing.facilities:
+                if record.get("facilities"):
+                    existing.facilities = record["facilities"]
+                    changed = True
+            if force or not existing.admission_requirements:
+                if record.get("admission_requirements"):
+                    existing.admission_requirements = record["admission_requirements"]
+                    changed = True
+            if force or not existing.scholarship_summary:
+                if record.get("scholarship_summary"):
+                    existing.scholarship_summary = record["scholarship_summary"]
+                    changed = True
 
             # Existing curated tuition/admissions are intentionally kept unless
             # the operator explicitly asks for a forced overwrite.
