@@ -283,6 +283,10 @@ export function ContentManager({
       queryClient.invalidateQueries({ queryKey: ["admin", resource] });
       queryClient.invalidateQueries({ queryKey: ["admin-audit"] });
       queryClient.invalidateQueries({ queryKey: ["admin-analytics"] });
+      queryClient.invalidateQueries({ queryKey: [resource] });
+      if (resource === "universities") {
+        queryClient.invalidateQueries({ queryKey: ["landing-universities"] });
+      }
       setDialogOpen(false);
       setFormError(null);
       setFieldErrors({});
@@ -304,6 +308,10 @@ export function ContentManager({
       queryClient.invalidateQueries({ queryKey: ["admin", resource] });
       queryClient.invalidateQueries({ queryKey: ["admin-audit"] });
       queryClient.invalidateQueries({ queryKey: ["admin-analytics"] });
+      queryClient.invalidateQueries({ queryKey: [resource] });
+      if (resource === "universities") {
+        queryClient.invalidateQueries({ queryKey: ["landing-universities"] });
+      }
       setNoticeTone("success");
       setNotice("Record deleted.");
       setTimeout(() => setNotice(null), 3000);

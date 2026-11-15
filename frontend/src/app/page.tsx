@@ -132,6 +132,8 @@ export default function HomePage() {
     queryFn: async () => {
       return apiFetch<any[]>("/universities");
     },
+    staleTime: 0,
+    refetchOnMount: "always",
     retry: 1,
   });
 
@@ -151,9 +153,13 @@ export default function HomePage() {
       const location = getLocalized(u.province) || "Phnom Penh";
       const highlight = getLocalized(u.description) || "";
       const majorsCount = `${u.majors_count || 0} Programs`;
-      const image = ["rupp", "itc", "aupp", "paragoniu", "cadt"].includes(u.slug)
-        ? `/images/universities/${u.slug}.jpg`
-        : "/images/universities/rupp.jpg";
+      const rawImage =
+        u.cover_image_url ||
+        (u.slug ? `/images/universities/${u.slug}.jpg` : "/images/universities/rupp.jpg");
+      const image =
+        rawImage.startsWith("http://") || rawImage.startsWith("https://")
+          ? `/api/proxy-image?url=${encodeURIComponent(rawImage)}`
+          : rawImage;
 
       return {
         slug: u.slug,
