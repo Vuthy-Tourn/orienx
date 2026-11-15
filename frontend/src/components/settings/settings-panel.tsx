@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { flushSync } from "react-dom";
 import { useLanguage } from "@/contexts/language-context";
 import { useTheme, type Theme } from "@/contexts/theme-context";
 import { Globe, Sun, Moon, Monitor, Check, Sparkles, Palette } from "lucide-react";
@@ -20,8 +21,48 @@ export function SettingsPanel({ className, onChanged }: SettingsPanelProps) {
     if (onChanged) onChanged();
   };
 
-  const handleThemeChange = (newTheme: Theme) => {
-    setTheme(newTheme);
+  const handleThemeChange = async (newTheme: Theme) => {
+    if (newTheme === theme) return;
+
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const hasViewTransition =
+      typeof document !== "undefined" &&
+      "startViewTransition" in document &&
+      typeof (document as any).startViewTransition === "function";
+
+    if (!hasViewTransition || prefersReducedMotion) {
+      setTheme(newTheme);
+      if (onChanged) onChanged();
+      return;
+    }
+
+    try {
+      const transition = (document as any).startViewTransition(() => {
+        flushSync(() => {
+          setTheme(newTheme);
+        });
+      });
+      await transition.ready;
+      const anim = document.documentElement.animate(
+        {
+          clipPath: [
+            `inset(0 0 ${window.innerHeight}px 0)`,
+            `inset(0 0 0 0)`,
+          ],
+        },
+        {
+          duration: 450,
+          easing: "cubic-bezier(0.2, 0, 0, 1)",
+          pseudoElement: "::view-transition-new(root)",
+        }
+      );
+      await anim.finished.catch(() => {});
+    } catch {
+      setTheme(newTheme);
+    }
     if (onChanged) onChanged();
   };
 

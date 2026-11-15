@@ -68,7 +68,7 @@ export default function ProfileSettingsPage() {
   });
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 animate-in fade-in pb-16 select-none">
+    <div data-dashboard-page="sections" className="max-w-3xl mx-auto space-y-6 animate-in fade-in pb-16 select-none">
       {/* Page Header */}
       <div className="space-y-1">
         <h1 className="text-xl sm:text-3xl font-extrabold text-[#111965] tracking-tight">

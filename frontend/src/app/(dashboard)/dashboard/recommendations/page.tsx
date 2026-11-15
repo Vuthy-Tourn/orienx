@@ -132,7 +132,7 @@ export default function RecommendationsPage() {
   }, [recommendations, filterTab]);
 
   return (
-    <div className="space-y-6 animate-in fade-in pb-16 select-none max-w-7xl mx-auto">
+    <div data-dashboard-page="sections" className="space-y-6 animate-in fade-in pb-16 select-none max-w-7xl mx-auto">
       {/* ========================================================
           PAGE HEADER (Compact & Elegant)
           ======================================================== */}

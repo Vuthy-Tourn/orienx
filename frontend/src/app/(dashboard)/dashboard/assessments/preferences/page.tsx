@@ -109,7 +109,7 @@ export default function AcademicPreferencesPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in">
+    <div data-dashboard-page="sections" className="max-w-3xl mx-auto space-y-8 animate-in fade-in">
       <div className="space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F0F2FA] text-[#111965] text-xs font-semibold">
           <Sliders className="w-3.5 h-3.5" />

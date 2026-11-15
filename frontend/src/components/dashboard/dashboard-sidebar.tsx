@@ -89,7 +89,7 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
               if (isMobile && onCloseMobile) onCloseMobile();
             }}
             className={cn(
-              "flex items-center gap-3.5 px-4 py-2.5 rounded-2xl text-xs font-bold transition-all duration-150",
+              "dashboard-nav-item flex items-center gap-3.5 px-4 py-2.5 rounded-2xl text-xs font-bold transition-all duration-150",
               isActive
                 ? "bg-[#111965] text-white shadow-xs font-black"
                 : "text-[#64748B] hover:text-[#111965] hover:bg-[#F0F2FA]"

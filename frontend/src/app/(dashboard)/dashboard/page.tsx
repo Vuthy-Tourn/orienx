@@ -158,13 +158,16 @@ export default function DashboardOverviewPage() {
   ];
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 select-none">
+    <div data-dashboard-page="home" className="grid grid-cols-1 xl:grid-cols-12 gap-6 select-none">
       {/* ========================================================
           LEFT / CENTER MAIN COLUMN (Span 8 on XL)
       ======================================================== */}
       <div className="xl:col-span-8 space-y-6">
         {/* 1. SCENIC HERO BANNER (Futera Primary Navy + Secondary Gold Accent) */}
-        <div className="relative rounded-[28px] overflow-hidden bg-gradient-to-r from-[#0A0F3D] via-[#111965] to-[#1E277A] border border-[#111965]/40 p-7 sm:p-9 shadow-lg min-h-[225px] flex flex-col justify-between text-white">
+        <div
+          data-no-reveal
+          className="relative rounded-[28px] overflow-hidden bg-gradient-to-r from-[#0A0F3D] via-[#111965] to-[#1E277A] border border-[#111965]/40 p-7 sm:p-9 shadow-lg min-h-[225px] flex flex-col justify-between text-white"
+        >
           {/* Full-width Single Image Backdrop */}
           <div className="absolute inset-0 pointer-events-none select-none overflow-hidden opacity-10">
             <Image
@@ -173,13 +176,13 @@ export default function DashboardOverviewPage() {
               fill
               priority
               unoptimized
-              className="object-cover object-bottom"
+              className="dashboard-hero-bg object-cover object-bottom"
             />
           </div>
 
           {/* Top Row: School Badge cleanly on Left */}
           <div className="relative z-10 flex items-center justify-between">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[#F7CE4D] font-bold text-xs border border-white/20 shadow-2xs">
+            <div className="dashboard-hero-item inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[#F7CE4D] font-bold text-xs border border-white/20 shadow-2xs" style={{ animationDelay: "0ms" }}>
               <School className="w-3.5 h-3.5 text-[#F7CE4D]" />
               <span>{highSchool} • Grade 12</span>
             </div>
@@ -187,15 +190,15 @@ export default function DashboardOverviewPage() {
 
           {/* Middle / Bottom Content */}
           <div className="relative z-10 pt-4 space-y-2 max-w-sm sm:max-w-md">
-            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+            <h1 className="dashboard-hero-item text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight" style={{ animationDelay: "70ms" }}>
               {greeting},<br />
               <span className="text-[#F7CE4D]">{userName}!</span> 👋
             </h1>
-            <p className="text-xs sm:text-sm font-medium text-slate-200 leading-relaxed pt-0.5">
+            <p className="dashboard-hero-item text-xs sm:text-sm font-medium text-slate-200 leading-relaxed pt-0.5" style={{ animationDelay: "140ms" }}>
               {t("dashboardPage.heroSubtitle")}
             </p>
 
-            <div className="pt-3">
+            <div className="dashboard-hero-item pt-3" style={{ animationDelay: "210ms" }}>
               <Link
                 href="/dashboard/recommendations"
                 className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-black text-xs sm:text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-md hover:shadow-lg transition-all active:scale-95 group cursor-pointer"
@@ -210,7 +213,7 @@ export default function DashboardOverviewPage() {
           <div
             onClick={handleTaraClick}
             title={t("dashboardPage.tapTaraCheer")}
-            className="absolute right-4 sm:right-8 md:right-12 bottom-0 z-10 cursor-pointer group select-none flex flex-col items-center"
+            className="dashboard-hero-item absolute right-4 sm:right-8 md:right-12 bottom-0 z-10 cursor-pointer group select-none flex flex-col items-center" style={{ animationDelay: "280ms" }}
           >
             <div
               className={cn(
@@ -275,7 +278,7 @@ export default function DashboardOverviewPage() {
                 <div className="flex items-center gap-3">
                   <div className="flex-1 h-2 rounded-full bg-slate-100 overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-[#111965] via-[#1E277A] to-[#F7CE4D] transition-all duration-500"
+                      className="dashboard-progress-bar h-full rounded-full bg-gradient-to-r from-[#111965] via-[#1E277A] to-[#F7CE4D] transition-all duration-500"
                       style={{ width: `${topScore}%` }}
                     />
                   </div>
@@ -468,7 +471,7 @@ export default function DashboardOverviewPage() {
 
           <div className="flex items-center gap-5">
             {/* Radial Progress Ring */}
-            <div className="relative w-20 h-20 flex-shrink-0">
+            <div className="dashboard-ring-wrap relative w-20 h-20 flex-shrink-0">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
                 <path
                   className="text-[#E6E8F0] dark:text-white/10"

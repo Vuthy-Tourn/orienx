@@ -9,20 +9,33 @@ import {
   useSpring,
 } from "motion/react";
 
-const PRIVATE_PREFIXES = [
+const AUTH_OR_ADMIN_PREFIXES = [
   "/login",
   "/register",
   "/forgot-password",
   "/reset-password",
   "/auth",
-  "/dashboard",
   "/admin",
 ];
 
-function isPrivatePath(pathname: string) {
-  return PRIVATE_PREFIXES.some(
+const PRIVATE_PREFIXES = [...AUTH_OR_ADMIN_PREFIXES, "/dashboard"];
+
+function matchesPrefix(pathname: string, prefixes: string[]) {
+  return prefixes.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
   );
+}
+
+function isPrivatePath(pathname: string) {
+  return matchesPrefix(pathname, PRIVATE_PREFIXES);
+}
+
+function isAuthOrAdminPath(pathname: string) {
+  return matchesPrefix(pathname, AUTH_OR_ADMIN_PREFIXES);
+}
+
+function isDashboardPath(pathname: string) {
+  return pathname === "/dashboard" || pathname.startsWith("/dashboard/");
 }
 
 /**
@@ -139,7 +152,7 @@ export function ScrollReveal() {
     if (typeof window === "undefined") return;
     if (
       window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      isPrivatePath(pathname)
+      isAuthOrAdminPath(pathname)
     ) {
       return;
     }
@@ -147,12 +160,35 @@ export function ScrollReveal() {
     const main = document.querySelector("main");
     if (!main || main.querySelector('[class*="gsap-"]')) return;
 
+    // Dashboard pages have their own roots. Tag the visible section blocks
+    // so they join the same reveal pass without adding attributes everywhere.
+    const tagDashboardTargets = () => {
+      if (!isDashboard) return;
+      const dashboardRoot = main.querySelector<HTMLElement>(
+        "[data-dashboard-page]"
+      );
+      if (!dashboardRoot) return;
+      const isHome = dashboardRoot.dataset.dashboardPage === "home";
+      const targets = isHome
+        ? Array.from(dashboardRoot.children).flatMap((column) =>
+            Array.from(column.children)
+          )
+        : Array.from(dashboardRoot.children);
+      targets.forEach((target) => {
+        if (target instanceof HTMLElement) {
+          target.setAttribute("data-reveal", "");
+        }
+      });
+    };
+
     let observer: IntersectionObserver | null = null;
     const timers = new Set<number>();
     const processed = new WeakSet<HTMLElement>();
 
+    const isDashboard = isDashboardPath(pathname);
+
     const cleanupElement = (el: HTMLElement) => {
-      el.classList.remove("reveal-prep", "reveal-in");
+      el.classList.remove("reveal-prep", "reveal-in", "dashboard-reveal");
       el.style.removeProperty("--reveal-delay");
     };
 
@@ -179,15 +215,17 @@ export function ScrollReveal() {
       const rect = el.getBoundingClientRect();
       if (rect.width < 2 || rect.height < 2) return false;
 
-      // Already-visible content keeps the page-transition fade as its
-      // entrance; only prep elements that are still below the fold.
+      // Public pages use the page-level fade for already-visible content.
+      // Dashboard screens intentionally stagger their whole surface on mount.
+      if (isDashboardPath(pathname)) return true;
+
       const visibleThreshold = window.innerHeight * 0.82;
       return !(rect.top < visibleThreshold && rect.bottom > 0);
     };
 
     const reveal = (el: HTMLElement) => {
       processed.add(el);
-      el.classList.add("reveal-prep");
+      if (!isDashboard) el.classList.add("reveal-prep");
       observer?.observe(el);
     };
 
@@ -217,7 +255,7 @@ export function ScrollReveal() {
             "--reveal-delay",
             `${Math.min(index, 5) * 70}ms`
           );
-          el.classList.add("reveal-in");
+          el.classList.add(isDashboard ? "dashboard-reveal" : "reveal-in");
           observer?.unobserve(el);
 
           const timer = window.setTimeout(() => {
@@ -230,9 +268,11 @@ export function ScrollReveal() {
       { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
     );
 
+    tagDashboardTargets();
     scan();
 
     const mutationObserver = new MutationObserver((mutations) => {
+      tagDashboardTargets();
       mutations.forEach((mutation) => {
         mutation.addedNodes.forEach((node) => {
           if (node instanceof HTMLElement) scan(node);
@@ -248,7 +288,7 @@ export function ScrollReveal() {
       timers.clear();
       main
         .querySelectorAll<HTMLElement>(
-          ".reveal-prep, .reveal-in, [style*='--reveal-delay']"
+          ".reveal-prep, .reveal-in, .dashboard-reveal, [style*='--reveal-delay']"
         )
         .forEach(cleanupElement);
     };

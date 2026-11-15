@@ -139,41 +139,6 @@ export function CtaBanner({
                 ))}
               </div>
 
-              {/* Student Trust Proof Bar */}
-              <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-white/10">
-                <div className="flex -space-x-2 shrink-0">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 border-2 border-[#111965] flex items-center justify-center text-[12.5px] font-bold text-[#111965] shadow-xs">
-                    ST
-                  </div>
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-400 to-sky-200 border-2 border-[#111965] flex items-center justify-center text-[12.5px] font-bold text-[#111965] shadow-xs">
-                    KH
-                  </div>
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-emerald-400 to-teal-200 border-2 border-[#111965] flex items-center justify-center text-[12.5px] font-bold text-[#111965] shadow-xs">
-                    TC
-                  </div>
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-400 to-indigo-200 border-2 border-[#111965] flex items-center justify-center text-[12.5px] font-bold text-[#111965] shadow-xs">
-                    ED
-                  </div>
-                </div>
-                <div className="text-xs text-slate-300">
-                  {trustText ? (
-                    <span>{trustText}</span>
-                  ) : (
-                    <>
-                      <span className="font-extrabold text-white">10,000+</span>{" "}
-                      {language === "km"
-                        ? "សិស្សានុសិស្សបានស្វែងរកទិសដៅរួចរាល់"
-                        : "students already guided nationwide"}
-                    </>
-                  )}
-                </div>
-                <div className="hidden sm:flex items-center gap-1 text-[#F7CE4D] text-xs font-bold pl-2 sm:border-l sm:border-white/15">
-                  <Star className="w-3.5 h-3.5 fill-current" />
-                  <span className="text-white font-extrabold">4.9</span>
-                  <span className="text-slate-400 text-[12px]">/ 5.0</span>
-                </div>
-              </div>
-
               {/* Action Buttons Row */}
               <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                 <Link

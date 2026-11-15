@@ -1,6 +1,19 @@
-@import "tailwindcss";
-
+@import 'tailwindcss';
+@plugin 'lightswind/plugin';
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Lightswind View Transitions: Disable default crossfade so custom directional animations (e.g. swipe-down) take full effect */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
 
 /* Type scale — one step up from Tailwind's defaults across the platform so
    Khmer subscripts and small UI labels stay legible. Arbitrary pixel sizes in
@@ -65,6 +78,123 @@ html {
     translate: none;
     transition: none;
     will-change: auto;
+  }
+}
+
+/* Dashboard entrance choreography. */
+@keyframes dashboard-hero-rise {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes dashboard-hero-drift {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes dashboard-bar-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes dashboard-widget-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.dashboard-hero-item {
+  animation: dashboard-hero-rise 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dashboard-hero-bg {
+  animation: dashboard-hero-drift 22s ease-in-out infinite alternate;
+  transform-origin: center bottom;
+}
+
+.dashboard-progress-bar {
+  transform-origin: left center;
+  animation: dashboard-bar-in 1000ms 350ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dashboard-ring-wrap {
+  animation: dashboard-widget-in 700ms 180ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes dashboard-section-in {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes dashboard-nav-in {
+  from {
+    opacity: 0;
+    translate: -8px 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.dashboard-reveal {
+  animation: dashboard-section-in 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+.dashboard-nav-item {
+  animation: dashboard-nav-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dashboard-nav-item:nth-child(2) {
+  animation-delay: 45ms;
+}
+.dashboard-nav-item:nth-child(3) {
+  animation-delay: 90ms;
+}
+.dashboard-nav-item:nth-child(4) {
+  animation-delay: 135ms;
+}
+.dashboard-nav-item:nth-child(5) {
+  animation-delay: 180ms;
+}
+.dashboard-nav-item:nth-child(6) {
+  animation-delay: 225ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-hero-item,
+  .dashboard-hero-bg,
+  .dashboard-progress-bar,
+  .dashboard-ring-wrap,
+  .dashboard-reveal,
+  .dashboard-nav-item {
+    animation: none;
   }
 }
 

@@ -242,7 +242,7 @@ export default function PersonalityAssessmentPage() {
     const isJ = latestResult.judging_score >= 50;
 
     return (
-      <div className="max-w-4xl mx-auto space-y-7 animate-in fade-in pb-16 select-none">
+      <div data-dashboard-page="sections" className="max-w-4xl mx-auto space-y-7 animate-in fade-in pb-16 select-none">
         {/* Top Breadcrumb & Switcher */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E8F0] pb-4">
           <div>

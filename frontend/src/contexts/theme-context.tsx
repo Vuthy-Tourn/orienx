@@ -52,8 +52,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   const setTheme = (t: Theme) => {
     setThemeState(t);
+    if (typeof window !== "undefined") {
+      const isDark =
+        t === "system"
+          ? window.matchMedia("(prefers-color-scheme: dark)").matches
+          : t === "dark";
+      document.documentElement.classList.toggle("dark", isDark);
+    }
     try {
       localStorage.setItem("futera_theme", t);
+      localStorage.setItem("theme", t);
     } catch {
       // ignore
     }

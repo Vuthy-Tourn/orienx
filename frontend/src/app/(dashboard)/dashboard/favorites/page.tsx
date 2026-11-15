@@ -101,7 +101,7 @@ export default function FavoritesPage() {
   ];
 
   return (
-    <div className="space-y-6 sm:space-y-8 animate-in fade-in">
+    <div data-dashboard-page="sections" className="space-y-6 sm:space-y-8 animate-in fade-in">
       {/* Page Header */}
       <div className="space-y-1">
         <div className="flex items-center gap-2">
