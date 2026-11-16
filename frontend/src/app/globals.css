@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 @plugin 'lightswind/plugin';
+@plugin '../../hero.ts';
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@source '../../node_modules/@heroui/toast/dist/**/*.{js,ts,jsx,tsx}';
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Lightswind View Transitions: Disable default crossfade so custom directional animations (e.g. swipe-down) take full effect */

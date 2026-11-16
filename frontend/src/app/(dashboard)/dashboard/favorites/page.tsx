@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
 import { Select } from "@/components/ui/select";
+import { useToast } from "@/components/ui/toast";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Image lookups matching public directory
@@ -49,6 +50,7 @@ const UNIVERSITY_IMAGES: Record<string, string> = {
 
 export default function FavoritesPage() {
   const { t, getLocalized, language } = useLanguage();
+  const toast = useToast();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<"majors" | "universities" | "careers" | "scholarships">("majors");
 
@@ -66,6 +68,16 @@ export default function FavoritesPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-favorites"] });
+      toast.success(
+        language === "km" ? "បានធ្វើបច្ចុប្បន្នភាពស្ថានភាព" : "Status updated."
+      );
+    },
+    onError: () => {
+      toast.error(
+        language === "km"
+          ? "មិនអាចធ្វើបច្ចុប្បន្នភាពស្ថានភាពបានទេ"
+          : "Could not update the status."
+      );
     },
   });
 

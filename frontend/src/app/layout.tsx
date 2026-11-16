@@ -8,6 +8,8 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { QueryProvider } from "@/providers/query-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { HeroUIProvider } from "@heroui/system";
+import { ToastProvider } from "@/components/ui/toast";
 import {
   PageTransition,
   ScrollProgress,
@@ -62,22 +64,26 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="min-h-screen flex flex-col bg-[#F5F6FA] text-[#171A2C] selection:bg-[#F7CE4D] selection:text-[#111965]">
-        <QueryProvider>
-          <ThemeProvider>
-            <LanguageProvider>
-              <AuthProvider>
-                <Navbar />
-                <ScrollProgress />
-                <main className="flex-1">
-                  <PageTransition>{children}</PageTransition>
-                </main>
-                <Footer />
-                <ScrollReveal />
-                <SmoothAnchors />
-              </AuthProvider>
-            </LanguageProvider>
-          </ThemeProvider>
-        </QueryProvider>
+        <HeroUIProvider>
+          <ToastProvider>
+            <QueryProvider>
+              <ThemeProvider>
+                <LanguageProvider>
+                  <AuthProvider>
+                    <Navbar />
+                    <ScrollProgress />
+                    <main className="flex-1">
+                      <PageTransition>{children}</PageTransition>
+                    </main>
+                    <Footer />
+                    <ScrollReveal />
+                    <SmoothAnchors />
+                  </AuthProvider>
+                </LanguageProvider>
+              </ThemeProvider>
+            </QueryProvider>
+          </ToastProvider>
+        </HeroUIProvider>
       </body>
     </html>
   );

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { useToast } from "@/components/ui/toast";
 import { useIsDarkMode } from "@/contexts/theme-context";
 import { FuteraMascot } from "@/components/brand/futera-mascot";
 import { AssessmentStage, AssessmentStepItem } from "@/components/assessments/assessment-stage";
@@ -42,6 +43,7 @@ import {
 
 export default function RiasecAssessmentPage() {
   const { t, getLocalized, language } = useLanguage();
+  const toast = useToast();
   const isDark = useIsDarkMode();
   const queryClient = useQueryClient();
 
@@ -189,7 +191,7 @@ export default function RiasecAssessmentPage() {
     }));
 
     if (answersList.length < questions.length) {
-      alert(t("riasecAssessment.rateAllAlert") || "Please rate all activities before submitting.");
+      toast.warning(t("riasecAssessment.rateAllAlert") || "Please rate all activities before submitting.");
       return;
     }
     submitAssessment(answersList);

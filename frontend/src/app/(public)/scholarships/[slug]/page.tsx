@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { useToast } from "@/components/ui/toast";
 import { useAuth } from "@/contexts/auth-context";
 import {
   GraduationCap,
@@ -28,6 +29,7 @@ export default function ScholarshipDetailPage() {
   const slug = params?.slug as string;
   const router = useRouter();
   const { t, getLocalized } = useLanguage();
+  const toast = useToast();
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
@@ -46,7 +48,7 @@ export default function ScholarshipDetailPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["scholarship", slug] });
-      alert(t("scholarshipDetail.savedAlert"));
+      toast.success(t("scholarshipDetail.savedAlert"));
     },
   });
 

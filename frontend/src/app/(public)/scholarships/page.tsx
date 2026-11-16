@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
+import { useToast } from "@/components/ui/toast";
 
 // Map scholarship slugs to local poster assets
 const SCHOLARSHIP_POSTERS: Record<string, string> = {
@@ -60,6 +61,7 @@ export default function ScholarshipsPage() {
   const { t, getLocalized, language } = useLanguage();
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const toast = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [coverageFilter, setCoverageFilter] = useState("");
   const [sortBy, setSortBy] = useState<"default" | "title">("default");
@@ -94,7 +96,7 @@ export default function ScholarshipsPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["scholarships"] });
-      alert(t("scholarshipsPage.savedAlert"));
+      toast.success(t("scholarshipsPage.savedAlert"));
     },
   });
 

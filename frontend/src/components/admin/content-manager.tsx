@@ -15,7 +15,8 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { Select } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/toast";
+import { cn, getErrorMessage } from "@/lib/utils";
 
 export type AdminFieldType =
   | "text"
@@ -218,16 +219,14 @@ export function ContentManager({
   searchKeys,
 }: ContentManagerProps) {
   const queryClient = useQueryClient();
+  const toast = useToast();
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Record<string, any>>(() => emptyForm(fields));
-  const [formError, setFormError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [uploadErrors, setUploadErrors] = useState<Record<string, string>>({});
   const [uploadingField, setUploadingField] = useState<string | null>(null);
-  const [notice, setNotice] = useState<string | null>(null);
-  const [noticeTone, setNoticeTone] = useState<"success" | "error">("success");
   const dialogRef = useRef<HTMLDivElement>(null);
 
   const { data: rows, isLoading } = useQuery({
@@ -290,16 +289,13 @@ export function ContentManager({
         queryClient.invalidateQueries({ queryKey: ["landing-universities"] });
       }
       setDialogOpen(false);
-      setFormError(null);
       setFieldErrors({});
       setUploadErrors({});
       setUploadingField(null);
-      setNoticeTone("success");
-      setNotice(editingId ? "Record updated." : "Record created.");
-      setTimeout(() => setNotice(null), 3000);
+      toast.success(editingId ? "Record updated." : "Record created.");
     },
-    onError: (error: any) => {
-      setFormError(error?.message || "Could not save this record.");
+    onError: (error: unknown) => {
+      toast.error(getErrorMessage(error, "Could not save this record."));
     },
   });
 
@@ -314,13 +310,10 @@ export function ContentManager({
       if (resource === "universities") {
         queryClient.invalidateQueries({ queryKey: ["landing-universities"] });
       }
-      setNoticeTone("success");
-      setNotice("Record deleted.");
-      setTimeout(() => setNotice(null), 3000);
+      toast.success("Record deleted.");
     },
-    onError: (error: any) => {
-      setNoticeTone("error");
-      setNotice(error?.message || "Could not delete this record.");
+    onError: (error: unknown) => {
+      toast.error(getErrorMessage(error, "Could not delete this record."));
     },
   });
 
@@ -337,7 +330,6 @@ export function ContentManager({
   const openNew = () => {
     setEditingId(null);
     setForm(emptyForm(fields));
-    setFormError(null);
     setFieldErrors({});
     setUploadErrors({});
     setUploadingField(null);
@@ -354,7 +346,6 @@ export function ContentManager({
         ])
       )
     );
-    setFormError(null);
     setFieldErrors({});
     setUploadErrors({});
     setUploadingField(null);
@@ -363,7 +354,6 @@ export function ContentManager({
 
   const closeDialog = () => {
     setDialogOpen(false);
-    setFormError(null);
     setFieldErrors({});
     setUploadErrors({});
     setUploadingField(null);
@@ -419,10 +409,9 @@ export function ContentManager({
     const errors = validateForm(fields, form);
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) {
-      setFormError("Please fix the highlighted fields before saving.");
+      toast.warning("Please fix the highlighted fields before saving.");
       return;
     }
-    setFormError(null);
     save();
   };
 
@@ -448,19 +437,6 @@ export function ContentManager({
           <span>Add new</span>
         </button>
       </div>
-
-      {notice && (
-        <div
-          className={cn(
-            "rounded-xl border px-3 py-2 text-xs font-bold",
-            noticeTone === "success"
-              ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-              : "border-rose-200 bg-rose-50 text-rose-700"
-          )}
-        >
-          {notice}
-        </div>
-      )}
 
       <div className="rounded-2xl border border-[#E6E8F0] bg-white shadow-2xs">
         <div className="flex flex-col gap-3 border-b border-[#E6E8F0] p-3 sm:flex-row sm:items-center sm:justify-between">
@@ -577,12 +553,6 @@ export function ContentManager({
                 <X className="h-4 w-4" />
               </button>
             </div>
-
-            {formError && (
-              <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-bold text-rose-700">
-                {formError}
-              </div>
-            )}
 
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
               {fields.map((field) => {

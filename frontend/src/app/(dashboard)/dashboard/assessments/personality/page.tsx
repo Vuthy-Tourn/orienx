@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { useToast } from "@/components/ui/toast";
 import { AssessmentStage, AssessmentStepItem } from "@/components/assessments/assessment-stage";
 import { AssessmentViewSwitcher } from "@/components/assessments/assessment-view-switcher";
 import {
@@ -31,6 +32,7 @@ import {
 
 export default function PersonalityAssessmentPage() {
   const { t, getLocalized, language } = useLanguage();
+  const toast = useToast();
   const queryClient = useQueryClient();
 
   const [activeTab, setActiveTab] = useState<"form" | "results">("form");
@@ -174,7 +176,7 @@ export default function PersonalityAssessmentPage() {
     }));
 
     if (formatted.length < questions.length) {
-      alert(t("personalityAssessment.answerAllAlert") || "Please answer all questions before submitting.");
+      toast.warning(t("personalityAssessment.answerAllAlert") || "Please answer all questions before submitting.");
       return;
     }
     submitAssessment(formatted);

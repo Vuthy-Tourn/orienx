@@ -17,7 +17,8 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { Select } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/toast";
+import { cn, getErrorMessage } from "@/lib/utils";
 
 interface Offering {
   id: string;
@@ -95,14 +96,13 @@ function formatTuition(value: number | null) {
 
 export function OfferingsManager() {
   const queryClient = useQueryClient();
+  const toast = useToast();
   const [search, setSearch] = useState("");
   const [universityFilter, setUniversityFilter] = useState("");
   const [page, setPage] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Offering | null>(null);
   const [form, setForm] = useState<OfferingForm>(EMPTY_FORM);
-  const [error, setError] = useState<string | null>(null);
-  const [notice, setNotice] = useState<string | null>(null);
 
   const { data: offerings = [], isLoading } = useQuery({
     queryKey: ["admin", "offerings"],
@@ -116,12 +116,6 @@ export function OfferingsManager() {
     queryKey: ["admin", "majors"],
     queryFn: async () => apiFetch<MajorOption[]>("/admin/majors"),
   });
-
-  useEffect(() => {
-    if (!notice) return;
-    const timer = window.setTimeout(() => setNotice(null), 3500);
-    return () => window.clearTimeout(timer);
-  }, [notice]);
 
   useEffect(() => {
     if (!dialogOpen) return;
@@ -153,14 +147,9 @@ export function OfferingsManager() {
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const visible = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  useEffect(() => {
-    setPage(1);
-  }, [search, universityFilter]);
-
   const openCreate = () => {
     setEditing(null);
     setForm(EMPTY_FORM);
-    setError(null);
     setDialogOpen(true);
   };
 
@@ -177,7 +166,6 @@ export function OfferingsManager() {
       language_of_instruction: offering.language_of_instruction,
       official_curriculum_url: offering.official_curriculum_url || "",
     });
-    setError(null);
     setDialogOpen(true);
   };
 
@@ -208,9 +196,10 @@ export function OfferingsManager() {
       queryClient.invalidateQueries({ queryKey: ["admin", "universities"] });
       queryClient.invalidateQueries({ queryKey: ["admin-analytics"] });
       setDialogOpen(false);
-      setNotice(editing ? "Program updated." : "Program added to university.");
+      toast.success(editing ? "Program updated." : "Program added to university.");
     },
-    onError: (err: any) => setError(err?.message || "Could not save this program."),
+    onError: (err: unknown) =>
+      toast.error(getErrorMessage(err, "Could not save this program.")),
   });
 
   const { mutate: remove, isPending: deleting } = useMutation({
@@ -219,19 +208,16 @@ export function OfferingsManager() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "offerings"] });
       queryClient.invalidateQueries({ queryKey: ["admin", "universities"] });
-      setNotice("Program removed.");
+      toast.success("Program removed.");
     },
-    onError: (err: any) => setError(err?.message || "Could not remove this program."),
+    onError: (err: unknown) =>
+      toast.error(getErrorMessage(err, "Could not remove this program.")),
   });
 
   return (
     <div className="space-y-5">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <div className="mb-1.5 inline-flex items-center gap-2 rounded-full border border-[#111965]/10 bg-[#111965]/5 px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#111965] dark:border-white/10 dark:bg-white/[0.05] dark:text-[#F7CE4D]">
-            <BookOpen className="h-3.5 w-3.5" />
-            University Programs
-          </div>
           <h2 className="text-xl font-black tracking-tight text-[#111965] dark:text-white sm:text-2xl">
             Majors offered by each university
           </h2>
@@ -283,14 +269,20 @@ export function OfferingsManager() {
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]" />
           <input
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) => {
+              setSearch(event.target.value);
+              setPage(1);
+            }}
             placeholder="Search university, major, degree…"
             className={cn(inputClass, "pl-9")}
           />
         </label>
         <Select
           value={universityFilter}
-          onChange={setUniversityFilter}
+          onChange={(value) => {
+            setUniversityFilter(value);
+            setPage(1);
+          }}
           options={[
             { value: "", label: "All universities" },
             ...universities.map((university) => ({
@@ -305,12 +297,6 @@ export function OfferingsManager() {
           menuClassName="min-w-[280px]"
         />
       </div>
-
-      {notice && (
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-xs font-semibold text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300">
-          {notice}
-        </div>
-      )}
 
       <div className="overflow-hidden rounded-2xl border border-[#E6E8F0] bg-white dark:border-white/10 dark:bg-[#090D24]">
         <div className="overflow-x-auto">
@@ -502,7 +488,6 @@ export function OfferingsManager() {
             <form
               onSubmit={(event) => {
                 event.preventDefault();
-                setError(null);
                 save();
               }}
               className="space-y-4"
@@ -637,12 +622,6 @@ export function OfferingsManager() {
                 />
                 Tuition verified against an official source
               </label>
-
-              {error && (
-                <div className="rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2.5 text-[11px] font-semibold text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
-                  {error}
-                </div>
-              )}
 
               <div className="flex items-center justify-end gap-2 border-t border-[#E6E8F0] pt-4 dark:border-white/10">
                 <button

@@ -16,8 +16,9 @@ import {
 } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
+import { useToast } from "@/components/ui/toast";
 import { useAuth } from "@/contexts/auth-context";
-import { cn } from "@/lib/utils";
+import { cn, getErrorMessage } from "@/lib/utils";
 import {
   AdminFilterDropdown,
   type FilterOption,
@@ -48,6 +49,7 @@ function roleBadge(role: string) {
 export function UsersManager() {
   const { user: currentUser } = useAuth();
   const queryClient = useQueryClient();
+  const toast = useToast();
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
@@ -55,7 +57,6 @@ export function UsersManager() {
   const dialogRef = useRef<HTMLDivElement>(null);
   const [nextStatus, setNextStatus] = useState("ACTIVE");
   const [nextRoles, setNextRoles] = useState<string[]>([]);
-  const [error, setError] = useState<string | null>(null);
 
   const isSuperAdmin = currentUser?.roles?.includes("SUPER_ADMIN");
 
@@ -217,16 +218,16 @@ export function UsersManager() {
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
       queryClient.invalidateQueries({ queryKey: ["admin-audit"] });
       setSelected(null);
-      setError(null);
+      toast.success("Account updated.");
     },
-    onError: (err: any) => setError(err?.message || "Could not update this account."),
+    onError: (err: unknown) =>
+      toast.error(getErrorMessage(err, "Could not update this account.")),
   });
 
   const openManage = (user: AdminUser) => {
     setSelected(user);
     setNextStatus(user.status);
     setNextRoles([...user.roles]);
-    setError(null);
   };
 
   return (
@@ -447,12 +448,6 @@ export function UsersManager() {
                 <X className="h-4 w-4" />
               </button>
             </div>
-
-            {error && (
-              <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-bold text-rose-700">
-                {error}
-              </div>
-            )}
 
             <div className="mt-4 space-y-4">
               <div className="space-y-1.5">

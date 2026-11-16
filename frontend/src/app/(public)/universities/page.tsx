@@ -30,6 +30,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { Dialog } from "@/components/ui/dialog";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
+import { useToast } from "@/components/ui/toast";
 
 // Cambodian university campus photos mapping
 const UNIVERSITY_IMAGES: Record<string, string> = {
@@ -46,6 +47,7 @@ function UniversitiesContent() {
   const searchParams = useSearchParams();
   const majorSlug = searchParams.get("major") || "";
   const { t, getLocalized, language } = useLanguage();
+  const toast = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [provinceFilter, setProvinceFilter] = useState("");
@@ -88,7 +90,7 @@ function UniversitiesContent() {
       setSelectedForCompare(selectedForCompare.filter((s) => s !== slug));
     } else {
       if (selectedForCompare.length >= 4) {
-        alert(t("universitiesDirectory.compareAlert"));
+        toast.warning(t("universitiesDirectory.compareAlert"));
         return;
       }
       setSelectedForCompare([...selectedForCompare, slug]);

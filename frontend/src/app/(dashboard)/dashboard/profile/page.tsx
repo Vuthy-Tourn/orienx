@@ -8,12 +8,14 @@ import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { SettingsPanel } from "@/components/settings/settings-panel";
 import { Select } from "@/components/ui/select";
-import { User as UserIcon, Save, CheckCircle2, Sliders, Palette, ShieldCheck } from "lucide-react";
+import { useToast } from "@/components/ui/toast";
+import { User as UserIcon, Save, Sliders, Palette, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function ProfileSettingsPage() {
   const { user, refreshUser } = useAuth();
   const { t } = useLanguage();
+  const toast = useToast();
   const searchParams = useSearchParams();
   const initialTab = searchParams.get("tab") === "preferences" ? "preferences" : "profile";
   const [activeTab, setActiveTab] = useState<"profile" | "preferences">(initialTab);
@@ -26,7 +28,6 @@ export default function ProfileSettingsPage() {
   const [highSchool, setHighSchool] = useState("");
   const [educationLevel, setEducationLevel] = useState("GRADE_12");
   const [graduationYear, setGraduationYear] = useState(2026);
-  const [successMsg, setSuccessMsg] = useState(false);
 
   const { data: profile } = useQuery({
     queryKey: ["student-profile"],
@@ -63,8 +64,7 @@ export default function ProfileSettingsPage() {
     onSuccess: async () => {
       await refreshUser();
       queryClient.invalidateQueries({ queryKey: ["student-profile"] });
-      setSuccessMsg(true);
-      setTimeout(() => setSuccessMsg(false), 4000);
+      toast.success(t("profileSettings.successMsg"));
     },
   });
 
@@ -114,13 +114,6 @@ export default function ProfileSettingsPage() {
       {/* Tab 1: Profile Information */}
       {activeTab === "profile" && (
         <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-6 animate-in fade-in">
-          {successMsg && (
-            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>{t("profileSettings.successMsg")}</span>
-            </div>
-          )}
-
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">

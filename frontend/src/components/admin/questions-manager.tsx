@@ -15,7 +15,8 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { Select } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/toast";
+import { cn, getErrorMessage } from "@/lib/utils";
 
 type QuestionTab = "personality" | "riasec";
 
@@ -123,15 +124,13 @@ const EMPTY_RIASEC: RiasecForm = {
 
 export function QuestionsManager() {
   const queryClient = useQueryClient();
+  const toast = useToast();
   const [tab, setTab] = useState<QuestionTab>("personality");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [personalityForm, setPersonalityForm] =
     useState<PersonalityForm>(EMPTY_PERSONALITY);
   const [riasecForm, setRiasecForm] = useState<RiasecForm>(EMPTY_RIASEC);
-  const [error, setError] = useState<string | null>(null);
-  const [notice, setNotice] = useState<string | null>(null);
-  const [noticeTone, setNoticeTone] = useState<"success" | "error">("success");
 
   const { data: personalityQuestions = [], isLoading: loadingPersonality } =
     useQuery({
@@ -148,12 +147,6 @@ export function QuestionsManager() {
   const activeCount = activeList.filter((question) => question.is_active).length;
 
   useEffect(() => {
-    if (!notice) return;
-    const timer = window.setTimeout(() => setNotice(null), 3500);
-    return () => window.clearTimeout(timer);
-  }, [notice]);
-
-  useEffect(() => {
     if (!dialogOpen) return;
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setDialogOpen(false);
@@ -164,7 +157,6 @@ export function QuestionsManager() {
 
   const openCreate = () => {
     setEditingId(null);
-    setError(null);
     setPersonalityForm({
       ...EMPTY_PERSONALITY,
       options: defaultOptions("EI"),
@@ -176,7 +168,6 @@ export function QuestionsManager() {
   const openEditPersonality = (question: PersonalityQuestion) => {
     setTab("personality");
     setEditingId(question.id);
-    setError(null);
     setPersonalityForm({
       dimension: question.dimension,
       prompt_en: question.prompt_en,
@@ -191,7 +182,6 @@ export function QuestionsManager() {
   const openEditRiasec = (question: RiasecQuestion) => {
     setTab("riasec");
     setEditingId(question.id);
-    setError(null);
     setRiasecForm({
       category: question.category,
       prompt_en: question.prompt_en,
@@ -204,7 +194,6 @@ export function QuestionsManager() {
 
   const closeDialog = () => {
     setDialogOpen(false);
-    setError(null);
   };
 
   const updatePersonalityOption = (
@@ -332,11 +321,11 @@ export function QuestionsManager() {
       queryClient.invalidateQueries({
         queryKey: ["admin", "questions", tab],
       });
-      setNoticeTone("success");
-      setNotice(editingId ? "Question updated." : "Question added.");
+      toast.success(editingId ? "Question updated." : "Question added.");
       setDialogOpen(false);
     },
-    onError: (err: any) => setError(err?.message || "Could not save this question."),
+    onError: (err: unknown) =>
+      toast.error(getErrorMessage(err, "Could not save this question.")),
   });
 
   const { mutate: remove, isPending: deleting } = useMutation({
@@ -346,12 +335,10 @@ export function QuestionsManager() {
       queryClient.invalidateQueries({
         queryKey: ["admin", "questions", tab],
       });
-      setNoticeTone("success");
-      setNotice("Question deleted.");
+      toast.success("Question deleted.");
     },
-    onError: (err: any) => {
-      setNoticeTone("error");
-      setNotice(err?.message || "Could not delete this question.");
+    onError: (err: unknown) => {
+      toast.error(getErrorMessage(err, "Could not delete this question."));
     },
   });
 
@@ -362,10 +349,6 @@ export function QuestionsManager() {
     <div className="space-y-5">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <div className="mb-1.5 inline-flex items-center gap-2 rounded-full border border-[#111965]/10 bg-[#111965]/5 px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#111965] dark:border-white/10 dark:bg-white/[0.05] dark:text-[#F7CE4D]">
-            <ListChecks className="h-3.5 w-3.5" />
-            Assessment Question Bank
-          </div>
           <h2 className="text-xl font-black tracking-tight text-[#111965] dark:text-white sm:text-2xl">
             Add and manage assessment questions
           </h2>
@@ -416,19 +399,6 @@ export function QuestionsManager() {
           {activeCount} active · {activeList.length - activeCount} inactive
         </span>
       </div>
-
-      {notice && (
-        <div
-          className={cn(
-            "rounded-xl border px-4 py-2.5 text-xs font-semibold",
-            noticeTone === "success"
-              ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300"
-              : "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300"
-          )}
-        >
-          {notice}
-        </div>
-      )}
 
       <div className="overflow-hidden rounded-2xl border border-[#E6E8F0] bg-white dark:border-white/10 dark:bg-[#090D24]">
         <div className="overflow-x-auto">
@@ -590,7 +560,6 @@ export function QuestionsManager() {
             <form
               onSubmit={(event) => {
                 event.preventDefault();
-                setError(null);
                 save();
               }}
               className="space-y-4"
@@ -848,12 +817,6 @@ export function QuestionsManager() {
                     answer options are needed.
                   </p>
                 </>
-              )}
-
-              {error && (
-                <div className="rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2.5 text-[11px] font-semibold text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">
-                  {error}
-                </div>
               )}
 
               <div className="flex items-center justify-end gap-2 border-t border-[#E6E8F0] pt-4 dark:border-white/10">
