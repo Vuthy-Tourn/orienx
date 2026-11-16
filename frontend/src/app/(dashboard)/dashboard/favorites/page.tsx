@@ -20,6 +20,7 @@ import {
   FolderOpen,
 } from "lucide-react";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
+import { Select } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Image lookups matching public directory
@@ -532,16 +533,43 @@ export default function FavoritesPage() {
                                 <span>{coverageLabel}</span>
                               </span>
                               {/* Tracking Status Dropdown */}
-                              <select
+                              <Select
                                 value={s.status}
-                                onChange={(e) => updateScholarshipStatus({ id: s.id, status: e.target.value })}
-                                className="text-[12px] font-bold px-2 py-1 rounded-lg border border-[#E6E8F0] bg-[#F5F6FA] text-[#111965] cursor-pointer"
-                              >
-                                <option value="SAVED">{t("favoritesPage.statusSaved", "បានរក្សាទុក")}</option>
-                                <option value="PLANNING_TO_APPLY">{t("favoritesPage.statusPlanning", "គ្រោងនឹងដាក់ពាក្យ")}</option>
-                                <option value="APPLIED">{t("favoritesPage.statusApplied", "បានដាក់ពាក្យរួច")}</option>
-                                <option value="WON">{t("favoritesPage.statusAwarded", "ទទួលបានអាហារូបករណ៍")}</option>
-                              </select>
+                                onChange={(status) =>
+                                  updateScholarshipStatus({ id: s.id, status })
+                                }
+                                options={[
+                                  {
+                                    value: "SAVED",
+                                    label: t("favoritesPage.statusSaved", "បានរក្សាទុក"),
+                                  },
+                                  {
+                                    value: "PLANNING_TO_APPLY",
+                                    label: t(
+                                      "favoritesPage.statusPlanning",
+                                      "គ្រោងនឹងដាក់ពាក្យ"
+                                    ),
+                                  },
+                                  {
+                                    value: "APPLIED",
+                                    label: t(
+                                      "favoritesPage.statusApplied",
+                                      "បានដាក់ពាក្យរួច"
+                                    ),
+                                  },
+                                  {
+                                    value: "WON",
+                                    label: t(
+                                      "favoritesPage.statusAwarded",
+                                      "ទទួលបានអាហារូបករណ៍"
+                                    ),
+                                  },
+                                ]}
+                                label={t("favoritesPage.trackingStatus", "Tracking status")}
+                                size="sm"
+                                className="w-[170px] shrink-0 sm:w-[180px]"
+                                menuClassName="min-w-[210px]"
+                              />
                             </div>
 
                             <BookmarkButton entityType="scholarship" entityId={s.id} className="flex-shrink-0" />

@@ -7,6 +7,7 @@ import {
   Award,
   BarChart3,
   BookOpen,
+  ListChecks,
   Briefcase,
   Building2,
   GraduationCap,
@@ -24,6 +25,8 @@ export type AdminTab =
   | "users"
   | "universities"
   | "majors"
+  | "offerings"
+  | "questions"
   | "careers"
   | "scholarships"
   | "engine"
@@ -39,6 +42,8 @@ export const ADMIN_TABS: {
   { id: "users", label: "Users & Access", icon: Users, group: "Workspace" },
   { id: "universities", label: "Universities", icon: Building2, group: "Directories" },
   { id: "majors", label: "Majors", icon: BookOpen, group: "Directories" },
+  { id: "offerings", label: "University Programs", icon: GraduationCap, group: "Directories" },
+  { id: "questions", label: "Assessment Questions", icon: ListChecks, group: "System" },
   { id: "careers", label: "Careers", icon: Briefcase, group: "Directories" },
   { id: "scholarships", label: "Scholarships", icon: Award, group: "Directories" },
   { id: "engine", label: "Recommendation Engine", icon: Sliders, group: "System" },

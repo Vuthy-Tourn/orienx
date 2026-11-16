@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Check,
   Image as ImageIcon,
@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
+import { Select } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 
 export type AdminFieldType =
@@ -227,6 +228,7 @@ export function ContentManager({
   const [uploadingField, setUploadingField] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [noticeTone, setNoticeTone] = useState<"success" | "error">("success");
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   const { data: rows, isLoading } = useQuery({
     queryKey: ["admin", resource],
@@ -543,18 +545,20 @@ export function ContentManager({
 
       {dialogOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[#0A0F3D]/50 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 overflow-y-auto bg-[#0A0F3D]/50 p-4 backdrop-blur-sm sm:p-6"
           role="dialog"
           aria-modal="true"
           aria-label={editingId ? `Edit ${title}` : `Add ${title}`}
           onClick={(event) => {
-            if (event.target === event.currentTarget) closeDialog();
+            if (!dialogRef.current?.contains(event.target as Node)) closeDialog();
           }}
         >
-          <div
-            className="my-6 w-full max-w-3xl rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-2xl sm:p-6"
-            onClick={(event) => event.stopPropagation()}
-          >
+          <div className="flex min-h-full items-center justify-center">
+            <div
+              ref={dialogRef}
+              className="w-full max-w-3xl rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-2xl sm:p-6"
+              onClick={(event) => event.stopPropagation()}
+            >
             <div className="flex items-start justify-between gap-3 border-b border-[#E6E8F0] pb-3">
               <div>
                 <h3 className="text-base font-black text-[#111965]">
@@ -729,20 +733,18 @@ export function ContentManager({
                             className={inputClass}
                           />
                         ) : field.type === "select" ? (
-                          <select
+                          <Select
                             id={fieldId}
                             value={form[field.key] ?? ""}
-                            onChange={(event) =>
-                              updateField(field.key, event.target.value)
-                            }
-                            className={cn(inputClass, "font-semibold")}
-                          >
-                            {field.options?.map((option) => (
-                              <option key={option.value} value={option.value}>
-                                {option.label}
-                              </option>
-                            ))}
-                          </select>
+                            onChange={(value) => updateField(field.key, value)}
+                            options={(field.options ?? []).map((option) => ({
+                              value: option.value,
+                              label: option.label,
+                            }))}
+                            label={field.label}
+                            searchable={(field.options?.length ?? 0) > 8}
+                            className="w-full"
+                          />
                         ) : field.type === "checkbox" ? (
                           <button
                             type="button"
@@ -816,6 +818,7 @@ export function ContentManager({
                 )}
                 {saving ? "Saving…" : "Save changes"}
               </button>
+            </div>
             </div>
           </div>
         </div>

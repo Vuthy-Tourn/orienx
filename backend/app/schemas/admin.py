@@ -134,6 +134,179 @@ class UniversityAdminIn(BaseModel):
         return self
 
 
+class PersonalityOptionAdminIn(BaseModel):
+    id: Optional[uuid.UUID] = None
+    label_en: str
+    label_km: str
+    target_trait: Literal["E", "I", "S", "N", "T", "F", "J", "P"]
+    weight: float = 1.0
+    order_index: int = 0
+
+    model_config = ConfigDict(extra="forbid")
+
+    @field_validator("weight")
+    @classmethod
+    def validate_weight(cls, value: float) -> float:
+        if value <= 0 or value > 10:
+            raise ValueError("Weight must be between 0 and 10.")
+        return value
+
+
+class PersonalityQuestionAdminIn(BaseModel):
+    dimension: Literal["EI", "SN", "TF", "JP"]
+    prompt_en: str
+    prompt_km: str
+    order_index: Optional[int] = None
+    is_active: bool = True
+    options: List[PersonalityOptionAdminIn]
+
+    model_config = ConfigDict(extra="forbid")
+
+    @model_validator(mode="after")
+    def validate_options(self):
+        if len(self.options) < 2:
+            raise ValueError("A personality question needs at least two options.")
+        expected = {
+            "EI": {"E", "I"},
+            "SN": {"S", "N"},
+            "TF": {"T", "F"},
+            "JP": {"J", "P"},
+        }[self.dimension]
+        traits = {option.target_trait for option in self.options}
+        if not expected.issubset(traits):
+            raise ValueError(
+                f"Options for {self.dimension} must cover {', '.join(sorted(expected))}."
+            )
+        return self
+
+
+class PersonalityQuestionUpdateIn(BaseModel):
+    dimension: Optional[Literal["EI", "SN", "TF", "JP"]] = None
+    prompt_en: Optional[str] = None
+    prompt_km: Optional[str] = None
+    order_index: Optional[int] = None
+    is_active: Optional[bool] = None
+    options: Optional[List[PersonalityOptionAdminIn]] = None
+
+    model_config = ConfigDict(extra="forbid")
+
+    @model_validator(mode="after")
+    def validate_options(self):
+        if self.options is None:
+            return self
+        if len(self.options) < 2:
+            raise ValueError("A personality question needs at least two options.")
+        dimension = self.dimension
+        if dimension:
+            expected = {
+                "EI": {"E", "I"},
+                "SN": {"S", "N"},
+                "TF": {"T", "F"},
+                "JP": {"J", "P"},
+            }[dimension]
+            if not expected.issubset({o.target_trait for o in self.options}):
+                raise ValueError(
+                    f"Options for {dimension} must cover {', '.join(sorted(expected))}."
+                )
+        return self
+
+
+class RiasecQuestionAdminIn(BaseModel):
+    category: Literal["R", "I", "A", "S", "E", "C"]
+    prompt_en: str
+    prompt_km: str
+    order_index: Optional[int] = None
+    is_active: bool = True
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class RiasecQuestionUpdateIn(BaseModel):
+    category: Optional[Literal["R", "I", "A", "S", "E", "C"]] = None
+    prompt_en: Optional[str] = None
+    prompt_km: Optional[str] = None
+    order_index: Optional[int] = None
+    is_active: Optional[bool] = None
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UniversityOfferingCreateIn(BaseModel):
+    university_id: uuid.UUID
+    major_id: uuid.UUID
+    faculty_id: Optional[uuid.UUID] = None
+    degree_level: Literal["ASSOCIATE", "BACHELOR", "MASTER", "DOCTORATE"] = "BACHELOR"
+    duration_years: float = 4.0
+    tuition_annual_usd: Optional[float] = None
+    is_tuition_verified: bool = False
+    language_of_instruction: Literal["ENGLISH", "KHMER", "BILINGUAL", "FRENCH"] = "BILINGUAL"
+    official_curriculum_url: Optional[str] = None
+
+    model_config = ConfigDict(extra="forbid")
+
+    @field_validator("duration_years")
+    @classmethod
+    def validate_duration(cls, value: float) -> float:
+        if value < 0.5 or value > 10:
+            raise ValueError("Duration must be between 0.5 and 10 years.")
+        return value
+
+    @field_validator("tuition_annual_usd")
+    @classmethod
+    def validate_offering_tuition(cls, value: Optional[float]) -> Optional[float]:
+        if value is not None and value < 0:
+            raise ValueError("Tuition cannot be negative.")
+        return value
+
+    @field_validator("official_curriculum_url")
+    @classmethod
+    def validate_curriculum_url(cls, value: Optional[str]) -> Optional[str]:
+        if value is None or value.strip() == "":
+            return value
+        parsed = urlparse(value)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            raise ValueError("Curriculum URL must be an http(s) URL.")
+        return value
+
+
+class UniversityOfferingUpdateIn(BaseModel):
+    university_id: Optional[uuid.UUID] = None
+    major_id: Optional[uuid.UUID] = None
+    faculty_id: Optional[uuid.UUID] = None
+    degree_level: Optional[Literal["ASSOCIATE", "BACHELOR", "MASTER", "DOCTORATE"]] = None
+    duration_years: Optional[float] = None
+    tuition_annual_usd: Optional[float] = None
+    is_tuition_verified: Optional[bool] = None
+    language_of_instruction: Optional[Literal["ENGLISH", "KHMER", "BILINGUAL", "FRENCH"]] = None
+    official_curriculum_url: Optional[str] = None
+
+    model_config = ConfigDict(extra="forbid")
+
+    @field_validator("duration_years")
+    @classmethod
+    def validate_duration(cls, value: Optional[float]) -> Optional[float]:
+        if value is not None and (value < 0.5 or value > 10):
+            raise ValueError("Duration must be between 0.5 and 10 years.")
+        return value
+
+    @field_validator("tuition_annual_usd")
+    @classmethod
+    def validate_offering_tuition(cls, value: Optional[float]) -> Optional[float]:
+        if value is not None and value < 0:
+            raise ValueError("Tuition cannot be negative.")
+        return value
+
+    @field_validator("official_curriculum_url")
+    @classmethod
+    def validate_curriculum_url(cls, value: Optional[str]) -> Optional[str]:
+        if value is None or value.strip() == "":
+            return value
+        parsed = urlparse(value)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            raise ValueError("Curriculum URL must be an http(s) URL.")
+        return value
+
+
 class MajorAdminIn(BaseModel):
     slug: Optional[str] = None
     name_en: Optional[str] = None

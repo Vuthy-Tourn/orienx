@@ -50,6 +50,8 @@ import {
   type AdminField,
 } from "@/components/admin/content-manager";
 import { UsersManager } from "@/components/admin/users-manager";
+import { OfferingsManager } from "@/components/admin/offerings-manager";
+import { QuestionsManager } from "@/components/admin/questions-manager";
 import {
   AdminSidebar,
   ADMIN_TABS,
@@ -328,6 +330,10 @@ export default function AdminConsolePage() {
         ? "សាកលវិទ្យាល័យ"
         : activeTab === "majors"
         ? "មុខជំនាញ"
+        : activeTab === "offerings"
+        ? "កម្មវិធីសិក្សា"
+        : activeTab === "questions"
+        ? "សំណួរវាយតម្លៃ"
         : activeTab === "careers"
         ? "អាជីពការងារ"
         : activeTab === "scholarships"
@@ -446,6 +452,8 @@ export default function AdminConsolePage() {
               searchKeys={["name_en", "name_km", "category", "slug"]}
             />
           )}
+          {activeTab === "offerings" && <OfferingsManager />}
+          {activeTab === "questions" && <QuestionsManager />}
           {activeTab === "careers" && (
             <ContentManager
               resource="careers"

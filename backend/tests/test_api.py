@@ -39,7 +39,8 @@ async def test_auth_and_assessments_flow(client):
     assert uni_filtered_res.status_code == 200
     filtered_unis = uni_filtered_res.json()["data"]
     assert len(filtered_unis) >= 1
-    assert all("rupp" in u["slug"] or "itc" in u["slug"] or "aupp" in u["slug"] or "paragoniu" in u["slug"] for u in filtered_unis)
+    filtered_slugs = {u["slug"] for u in filtered_unis}
+    assert {"rupp", "itc", "aupp"}.issubset(filtered_slugs)
 
     # Check RUPP detail
     rupp_res = await client.get("/api/v1/universities/rupp")

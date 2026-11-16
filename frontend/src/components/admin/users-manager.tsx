@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
   Check,
@@ -52,6 +52,7 @@ export function UsersManager() {
   const [roleFilter, setRoleFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [selected, setSelected] = useState<AdminUser | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const [nextStatus, setNextStatus] = useState("ACTIVE");
   const [nextRoles, setNextRoles] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -178,6 +179,15 @@ export function UsersManager() {
     ],
     [statusCounts]
   );
+
+  useEffect(() => {
+    if (!selected) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selected]);
 
   const { mutate: save, isPending: saving } = useMutation({
     mutationFn: async () => {
@@ -409,12 +419,20 @@ export function UsersManager() {
 
       {selected && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[#0A0F3D]/50 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 overflow-y-auto bg-[#0A0F3D]/50 p-4 backdrop-blur-sm sm:p-6"
           role="dialog"
           aria-modal="true"
           aria-label="Manage user"
+          onClick={(event) => {
+            if (!dialogRef.current?.contains(event.target as Node)) setSelected(null);
+          }}
         >
-          <div className="my-8 w-full max-w-lg rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-2xl sm:p-6">
+          <div className="flex min-h-full items-center justify-center">
+            <div
+              ref={dialogRef}
+              className="w-full max-w-lg rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-2xl sm:p-6"
+              onClick={(event) => event.stopPropagation()}
+            >
             <div className="flex items-start justify-between gap-3 border-b border-[#E6E8F0] pb-3">
               <div>
                 <h3 className="text-base font-black text-[#111965]">Manage account</h3>
@@ -558,6 +576,7 @@ export function UsersManager() {
                 {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
                 {saving ? "Saving…" : "Save changes"}
               </button>
+            </div>
             </div>
           </div>
         </div>

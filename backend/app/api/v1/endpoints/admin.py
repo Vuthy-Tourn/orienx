@@ -12,17 +12,31 @@ from app.core.database import get_db
 from app.core.dependencies import get_current_admin
 from app.models.auth import AuditLog, RefreshToken, User, Role
 from app.models.profile import StudentProfile
-from app.models.catalog import University, Major, Career
+from app.models.catalog import University, Major, Career, Faculty, UniversityMajor
 from app.models.scholarship import Scholarship
-from app.models.assessment import PersonalityAssessment, RiasecAssessment
+from app.models.assessment import (
+    PersonalityAssessment,
+    PersonalityAnswer,
+    PersonalityOption,
+    PersonalityQuestion,
+    RiasecAnswer,
+    RiasecAssessment,
+    RiasecQuestion,
+)
 from app.models.recommendation import MajorRecommendation, RecommendationRule
 from app.schemas.admin import (
     AdminAnalyticsOut,
     CareerAdminIn,
     MajorAdminIn,
+    PersonalityQuestionAdminIn,
+    PersonalityQuestionUpdateIn,
+    RiasecQuestionAdminIn,
+    RiasecQuestionUpdateIn,
     RuleUpdateIn,
     ScholarshipAdminIn,
     UniversityAdminIn,
+    UniversityOfferingCreateIn,
+    UniversityOfferingUpdateIn,
     UserManagementOut,
     UserRolesUpdateIn,
     UserStatusUpdateIn,
@@ -368,6 +382,37 @@ def _flat_major(m: Major) -> Dict[str, Any]:
     }
 
 
+def _flat_offering(offering: UniversityMajor) -> Dict[str, Any]:
+    university_name = (
+        offering.university.name if isinstance(offering.university.name, dict) else {}
+    )
+    major_name = (
+        offering.major.name if isinstance(offering.major.name, dict) else {}
+    )
+    return {
+        "id": str(offering.id),
+        "university_id": str(offering.university_id),
+        "university_slug": offering.university.slug,
+        "university_name_en": university_name.get("en", ""),
+        "university_name_km": university_name.get("km", ""),
+        "major_id": str(offering.major_id),
+        "major_slug": offering.major.slug,
+        "major_name_en": major_name.get("en", ""),
+        "major_name_km": major_name.get("km", ""),
+        "faculty_id": str(offering.faculty_id) if offering.faculty_id else None,
+        "degree_level": offering.degree_level,
+        "duration_years": float(offering.duration_years)
+        if offering.duration_years is not None
+        else None,
+        "tuition_annual_usd": float(offering.tuition_annual_usd)
+        if offering.tuition_annual_usd is not None
+        else None,
+        "is_tuition_verified": offering.is_tuition_verified,
+        "language_of_instruction": offering.language_of_instruction,
+        "official_curriculum_url": offering.official_curriculum_url,
+    }
+
+
 def _flat_career(c: Career) -> Dict[str, Any]:
     title = c.title if isinstance(c.title, dict) else {}
     description = c.description if isinstance(c.description, dict) else {}
@@ -614,6 +659,539 @@ async def admin_delete_university(
     await _audit(db, admin_user, "delete", "university", before)
     await db.commit()
     return ApiResponse(success=True, message="University deleted", data={"id": str(id)})
+
+
+# =========================================================================
+# University Offerings (which majors a university teaches)
+# =========================================================================
+
+@router.get("/offerings", response_model=ApiResponse[List[Dict[str, Any]]])
+async def admin_list_offerings(
+    university_id: Optional[uuid.UUID] = Query(None),
+    major_id: Optional[uuid.UUID] = Query(None),
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    stmt = (
+        select(UniversityMajor)
+        .options(
+            selectinload(UniversityMajor.university),
+            selectinload(UniversityMajor.major),
+        )
+        .order_by(UniversityMajor.created_at.desc())
+    )
+    if university_id:
+        stmt = stmt.where(UniversityMajor.university_id == university_id)
+    if major_id:
+        stmt = stmt.where(UniversityMajor.major_id == major_id)
+    rows = (await db.execute(stmt)).scalars().all()
+    return ApiResponse(success=True, data=[_flat_offering(row) for row in rows])
+
+
+async def _load_offering_dependencies(
+    db: AsyncSession,
+    university_id: uuid.UUID,
+    major_id: uuid.UUID,
+    faculty_id: Optional[uuid.UUID],
+) -> tuple[University, Major, Optional[Faculty]]:
+    university = (
+        await db.execute(select(University).where(University.id == university_id))
+    ).scalar_one_or_none()
+    if not university:
+        raise HTTPException(status_code=404, detail="University not found")
+    major = (
+        await db.execute(select(Major).where(Major.id == major_id))
+    ).scalar_one_or_none()
+    if not major:
+        raise HTTPException(status_code=404, detail="Major not found")
+    faculty = None
+    if faculty_id:
+        faculty = (
+            await db.execute(
+                select(Faculty).where(
+                    Faculty.id == faculty_id,
+                    Faculty.university_id == university_id,
+                )
+            )
+        ).scalar_one_or_none()
+        if not faculty:
+            raise HTTPException(
+                status_code=422,
+                detail="Faculty does not belong to the selected university",
+            )
+    return university, major, faculty
+
+
+async def _ensure_unique_offering(
+    db: AsyncSession,
+    university_id: uuid.UUID,
+    major_id: uuid.UUID,
+    degree_level: str,
+    language: str,
+    exclude_id: Optional[uuid.UUID] = None,
+):
+    stmt = select(UniversityMajor).where(
+        UniversityMajor.university_id == university_id,
+        UniversityMajor.major_id == major_id,
+        UniversityMajor.degree_level == degree_level,
+        UniversityMajor.language_of_instruction == language,
+    )
+    if exclude_id:
+        stmt = stmt.where(UniversityMajor.id != exclude_id)
+    existing = (await db.execute(stmt)).scalar_one_or_none()
+    if existing:
+        raise HTTPException(
+            status_code=409,
+            detail="This university already offers that major at the same degree level and language",
+        )
+
+
+@router.post("/offerings", response_model=ApiResponse[Dict[str, Any]])
+async def admin_create_offering(
+    body: UniversityOfferingCreateIn,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    university, major, faculty = await _load_offering_dependencies(
+        db, body.university_id, body.major_id, body.faculty_id
+    )
+    await _ensure_unique_offering(
+        db,
+        body.university_id,
+        body.major_id,
+        body.degree_level,
+        body.language_of_instruction,
+    )
+    offering = UniversityMajor(
+        university_id=body.university_id,
+        major_id=body.major_id,
+        faculty_id=faculty.id if faculty else None,
+        degree_level=body.degree_level,
+        duration_years=body.duration_years,
+        tuition_annual_usd=body.tuition_annual_usd,
+        is_tuition_verified=body.is_tuition_verified,
+        language_of_instruction=body.language_of_instruction,
+        official_curriculum_url=body.official_curriculum_url,
+    )
+    offering.university = university
+    offering.major = major
+    db.add(offering)
+    await db.flush()
+    await _audit(db, admin_user, "create", "university_offering", after=_flat_offering(offering))
+    await db.commit()
+    return ApiResponse(success=True, message="Program added to university", data=_flat_offering(offering))
+
+
+@router.patch("/offerings/{id}", response_model=ApiResponse[Dict[str, Any]])
+async def admin_update_offering(
+    id: uuid.UUID,
+    body: UniversityOfferingUpdateIn,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    offering = (
+        await db.execute(
+            select(UniversityMajor)
+            .options(
+                selectinload(UniversityMajor.university),
+                selectinload(UniversityMajor.major),
+            )
+            .where(UniversityMajor.id == id)
+        )
+    ).scalar_one_or_none()
+    if not offering:
+        raise HTTPException(status_code=404, detail="University offering not found")
+
+    before = _flat_offering(offering)
+    university_id = body.university_id or offering.university_id
+    major_id = body.major_id or offering.major_id
+    faculty_id = body.faculty_id if body.faculty_id is not None else offering.faculty_id
+    degree_level = body.degree_level or offering.degree_level
+    language = body.language_of_instruction or offering.language_of_instruction
+
+    if body.university_id or body.major_id or body.faculty_id is not None:
+        university, major, faculty = await _load_offering_dependencies(
+            db, university_id, major_id, faculty_id
+        )
+        offering.university = university
+        offering.major = major
+        offering.university_id = university.id
+        offering.major_id = major.id
+        offering.faculty_id = faculty.id if faculty else None
+
+    if body.degree_level or body.language_of_instruction or body.university_id or body.major_id:
+        await _ensure_unique_offering(
+            db, university_id, major_id, degree_level, language, exclude_id=offering.id
+        )
+
+    for field in (
+        "degree_level",
+        "duration_years",
+        "tuition_annual_usd",
+        "is_tuition_verified",
+        "language_of_instruction",
+        "official_curriculum_url",
+    ):
+        value = getattr(body, field)
+        if value is not None:
+            setattr(offering, field, value)
+
+    await _audit(db, admin_user, "update", "university_offering", before, _flat_offering(offering))
+    await db.commit()
+    return ApiResponse(success=True, message="Program updated", data=_flat_offering(offering))
+
+
+@router.delete("/offerings/{id}", response_model=ApiResponse[Dict[str, Any]])
+async def admin_delete_offering(
+    id: uuid.UUID,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    offering = (
+        await db.execute(
+            select(UniversityMajor)
+            .options(
+                selectinload(UniversityMajor.university),
+                selectinload(UniversityMajor.major),
+            )
+            .where(UniversityMajor.id == id)
+        )
+    ).scalar_one_or_none()
+    if not offering:
+        raise HTTPException(status_code=404, detail="University offering not found")
+    before = _flat_offering(offering)
+    await db.delete(offering)
+    await db.flush()
+    await _audit(db, admin_user, "delete", "university_offering", before)
+    await db.commit()
+    return ApiResponse(success=True, message="Program removed from university", data={"id": str(id)})
+
+
+# =========================================================================
+# Assessment Questions
+# =========================================================================
+
+def _flat_personality_question(question: PersonalityQuestion) -> Dict[str, Any]:
+    return {
+        "id": str(question.id),
+        "dimension": question.dimension,
+        "prompt_en": question.prompt_en,
+        "prompt_km": question.prompt_km,
+        "order_index": question.order_index,
+        "is_active": question.is_active,
+        "options": [
+            {
+                "id": str(option.id),
+                "label_en": option.label_en,
+                "label_km": option.label_km,
+                "target_trait": option.target_trait,
+                "weight": float(option.weight),
+                "order_index": option.order_index,
+            }
+            for option in sorted(question.options, key=lambda item: item.order_index)
+        ],
+    }
+
+
+def _flat_riasec_question(question: RiasecQuestion) -> Dict[str, Any]:
+    return {
+        "id": str(question.id),
+        "category": question.category,
+        "prompt_en": question.prompt_en,
+        "prompt_km": question.prompt_km,
+        "order_index": question.order_index,
+        "is_active": question.is_active,
+    }
+
+
+def _validate_personality_options(dimension: str, options: List[Any]) -> None:
+    expected = {"EI": {"E", "I"}, "SN": {"S", "N"}, "TF": {"T", "F"}, "JP": {"J", "P"}}[dimension]
+    if not expected.issubset({option.target_trait for option in options}):
+        raise HTTPException(
+            status_code=422,
+            detail=f"Options for {dimension} must cover {', '.join(sorted(expected))}",
+        )
+
+
+@router.get("/questions/personality", response_model=ApiResponse[List[Dict[str, Any]]])
+async def admin_list_personality_questions(
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    stmt = (
+        select(PersonalityQuestion)
+        .options(selectinload(PersonalityQuestion.options))
+        .order_by(PersonalityQuestion.order_index.asc())
+    )
+    questions = (await db.execute(stmt)).scalars().all()
+    return ApiResponse(success=True, data=[_flat_personality_question(q) for q in questions])
+
+
+@router.post("/questions/personality", response_model=ApiResponse[Dict[str, Any]])
+async def admin_create_personality_question(
+    body: PersonalityQuestionAdminIn,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    if not body.prompt_en.strip() or not body.prompt_km.strip():
+        raise HTTPException(status_code=422, detail="Both English and Khmer prompts are required")
+    _validate_personality_options(body.dimension, body.options)
+
+    next_order = body.order_index
+    if next_order is None:
+        next_order = int(
+            (await db.execute(select(func.max(PersonalityQuestion.order_index)))).scalar() or 0
+        ) + 1
+
+    question = PersonalityQuestion(
+        dimension=body.dimension,
+        prompt_en=body.prompt_en.strip(),
+        prompt_km=body.prompt_km.strip(),
+        order_index=next_order,
+        is_active=body.is_active,
+    )
+    question.options = [
+        PersonalityOption(
+            label_en=option.label_en.strip(),
+            label_km=option.label_km.strip(),
+            target_trait=option.target_trait,
+            weight=option.weight,
+            order_index=option.order_index,
+        )
+        for option in body.options
+    ]
+    db.add(question)
+    await db.flush()
+    await _audit(db, admin_user, "create", "personality_question", after=_flat_personality_question(question))
+    await db.commit()
+    return ApiResponse(success=True, message="Personality question created", data=_flat_personality_question(question))
+
+
+@router.patch("/questions/personality/{id}", response_model=ApiResponse[Dict[str, Any]])
+async def admin_update_personality_question(
+    id: uuid.UUID,
+    body: PersonalityQuestionUpdateIn,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    question = (
+        await db.execute(
+            select(PersonalityQuestion)
+            .options(selectinload(PersonalityQuestion.options))
+            .where(PersonalityQuestion.id == id)
+        )
+    ).scalar_one_or_none()
+    if not question:
+        raise HTTPException(status_code=404, detail="Personality question not found")
+
+    before = _flat_personality_question(question)
+    effective_dimension = body.dimension or question.dimension
+
+    if body.options is not None:
+        answer_count = int(
+            (
+                await db.execute(
+                    select(func.count(PersonalityAnswer.id)).where(
+                        PersonalityAnswer.question_id == question.id
+                    )
+                )
+            ).scalar()
+            or 0
+        )
+        existing = {option.id: option for option in question.options}
+        submitted_ids = {option.id for option in body.options if option.id is not None}
+        removes_existing = any(option.id not in submitted_ids for option in question.options)
+        adds_new = any(option.id is None for option in body.options)
+        if answer_count and (removes_existing or adds_new):
+            raise HTTPException(
+                status_code=409,
+                detail="This question already has student answers. Keep the existing options or deactivate it and create a new question.",
+            )
+
+        _validate_personality_options(effective_dimension, body.options)
+        for option in body.options:
+            if option.id and option.id in existing:
+                current = existing[option.id]
+                current.label_en = option.label_en.strip()
+                current.label_km = option.label_km.strip()
+                current.target_trait = option.target_trait
+                current.weight = option.weight
+                current.order_index = option.order_index
+            else:
+                question.options.append(
+                    PersonalityOption(
+                        label_en=option.label_en.strip(),
+                        label_km=option.label_km.strip(),
+                        target_trait=option.target_trait,
+                        weight=option.weight,
+                        order_index=option.order_index,
+                    )
+                )
+        for current in question.options:
+            if current.id is not None and current.id not in submitted_ids:
+                await db.delete(current)
+    elif body.dimension and body.dimension != question.dimension:
+        _validate_personality_options(body.dimension, question.options)
+
+    if body.dimension is not None:
+        question.dimension = body.dimension
+    if body.prompt_en is not None:
+        if not body.prompt_en.strip():
+            raise HTTPException(status_code=422, detail="English prompt cannot be empty")
+        question.prompt_en = body.prompt_en.strip()
+    if body.prompt_km is not None:
+        if not body.prompt_km.strip():
+            raise HTTPException(status_code=422, detail="Khmer prompt cannot be empty")
+        question.prompt_km = body.prompt_km.strip()
+    if body.order_index is not None:
+        question.order_index = body.order_index
+    if body.is_active is not None:
+        question.is_active = body.is_active
+
+    await _audit(db, admin_user, "update", "personality_question", before, _flat_personality_question(question))
+    await db.commit()
+    return ApiResponse(success=True, message="Personality question updated", data=_flat_personality_question(question))
+
+
+@router.delete("/questions/personality/{id}", response_model=ApiResponse[Dict[str, Any]])
+async def admin_delete_personality_question(
+    id: uuid.UUID,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    question = (
+        await db.execute(
+            select(PersonalityQuestion)
+            .options(selectinload(PersonalityQuestion.options))
+            .where(PersonalityQuestion.id == id)
+        )
+    ).scalar_one_or_none()
+    if not question:
+        raise HTTPException(status_code=404, detail="Personality question not found")
+    answer_count = int(
+        (
+            await db.execute(
+                select(func.count(PersonalityAnswer.id)).where(
+                    PersonalityAnswer.question_id == question.id
+                )
+            )
+        ).scalar()
+        or 0
+    )
+    if answer_count:
+        raise HTTPException(
+            status_code=409,
+            detail="This question already has student answers. Deactivate it instead of deleting it.",
+        )
+    before = _flat_personality_question(question)
+    await db.delete(question)
+    await db.flush()
+    await _audit(db, admin_user, "delete", "personality_question", before)
+    await db.commit()
+    return ApiResponse(success=True, message="Personality question deleted", data={"id": str(id)})
+
+
+@router.get("/questions/riasec", response_model=ApiResponse[List[Dict[str, Any]]])
+async def admin_list_riasec_questions(
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    stmt = select(RiasecQuestion).order_by(RiasecQuestion.order_index.asc())
+    questions = (await db.execute(stmt)).scalars().all()
+    return ApiResponse(success=True, data=[_flat_riasec_question(q) for q in questions])
+
+
+@router.post("/questions/riasec", response_model=ApiResponse[Dict[str, Any]])
+async def admin_create_riasec_question(
+    body: RiasecQuestionAdminIn,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    if not body.prompt_en.strip() or not body.prompt_km.strip():
+        raise HTTPException(status_code=422, detail="Both English and Khmer prompts are required")
+    next_order = body.order_index
+    if next_order is None:
+        next_order = int(
+            (await db.execute(select(func.max(RiasecQuestion.order_index)))).scalar() or 0
+        ) + 1
+    question = RiasecQuestion(
+        category=body.category,
+        prompt_en=body.prompt_en.strip(),
+        prompt_km=body.prompt_km.strip(),
+        order_index=next_order,
+        is_active=body.is_active,
+    )
+    db.add(question)
+    await db.flush()
+    await _audit(db, admin_user, "create", "riasec_question", after=_flat_riasec_question(question))
+    await db.commit()
+    return ApiResponse(success=True, message="RIASEC question created", data=_flat_riasec_question(question))
+
+
+@router.patch("/questions/riasec/{id}", response_model=ApiResponse[Dict[str, Any]])
+async def admin_update_riasec_question(
+    id: uuid.UUID,
+    body: RiasecQuestionUpdateIn,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    question = (
+        await db.execute(select(RiasecQuestion).where(RiasecQuestion.id == id))
+    ).scalar_one_or_none()
+    if not question:
+        raise HTTPException(status_code=404, detail="RIASEC question not found")
+    before = _flat_riasec_question(question)
+    if body.category is not None:
+        question.category = body.category
+    if body.prompt_en is not None:
+        if not body.prompt_en.strip():
+            raise HTTPException(status_code=422, detail="English prompt cannot be empty")
+        question.prompt_en = body.prompt_en.strip()
+    if body.prompt_km is not None:
+        if not body.prompt_km.strip():
+            raise HTTPException(status_code=422, detail="Khmer prompt cannot be empty")
+        question.prompt_km = body.prompt_km.strip()
+    if body.order_index is not None:
+        question.order_index = body.order_index
+    if body.is_active is not None:
+        question.is_active = body.is_active
+    await _audit(db, admin_user, "update", "riasec_question", before, _flat_riasec_question(question))
+    await db.commit()
+    return ApiResponse(success=True, message="RIASEC question updated", data=_flat_riasec_question(question))
+
+
+@router.delete("/questions/riasec/{id}", response_model=ApiResponse[Dict[str, Any]])
+async def admin_delete_riasec_question(
+    id: uuid.UUID,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    question = (
+        await db.execute(select(RiasecQuestion).where(RiasecQuestion.id == id))
+    ).scalar_one_or_none()
+    if not question:
+        raise HTTPException(status_code=404, detail="RIASEC question not found")
+    answer_count = int(
+        (
+            await db.execute(
+                select(func.count(RiasecAnswer.id)).where(
+                    RiasecAnswer.question_id == question.id
+                )
+            )
+        ).scalar()
+        or 0
+    )
+    if answer_count:
+        raise HTTPException(
+            status_code=409,
+            detail="This question already has student answers. Deactivate it instead of deleting it.",
+        )
+    before = _flat_riasec_question(question)
+    await db.delete(question)
+    await db.flush()
+    await _audit(db, admin_user, "delete", "riasec_question", before)
+    await db.commit()
+    return ApiResponse(success=True, message="RIASEC question deleted", data={"id": str(id)})
 
 
 # =========================================================================

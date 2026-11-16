@@ -7,6 +7,7 @@ import { apiFetch } from "@/lib/api-client";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { SettingsPanel } from "@/components/settings/settings-panel";
+import { Select } from "@/components/ui/select";
 import { User as UserIcon, Save, CheckCircle2, Sliders, Palette, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -156,32 +157,42 @@ export default function ProfileSettingsPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.province")}</label>
-                <select
+                <Select
                   value={province}
-                  onChange={(e) => setProvince(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] bg-white"
-                >
-                  <option value="Phnom Penh">Phnom Penh</option>
-                  <option value="Siem Reap">Siem Reap</option>
-                  <option value="Battambang">Battambang</option>
-                  <option value="Kandal">Kandal</option>
-                  <option value="Kampong Cham">Kampong Cham</option>
-                  <option value="Preah Sihanouk">Preah Sihanouk</option>
-                </select>
+                  onChange={setProvince}
+                  options={[
+                    "Phnom Penh",
+                    "Siem Reap",
+                    "Battambang",
+                    "Kandal",
+                    "Kampong Cham",
+                    "Preah Sihanouk",
+                  ].map((value) => ({ value, label: value }))}
+                  label={t("profileSettings.province")}
+                  className="w-full"
+                />
               </div>
 
               <div className="space-y-1">
                 <label className="text-xs font-bold text-[#171A2C]">{t("profileSettings.educationLevel")}</label>
-                <select
+                <Select
                   value={educationLevel}
-                  onChange={(e) => setEducationLevel(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl text-sm border border-[#E6E8F0] bg-white"
-                >
-                  <option value="GRADE_12">Grade 12 (ថ្នាក់ទី១២)</option>
-                  <option value="GRADE_11">Grade 11 (ថ្នាក់ទី១១)</option>
-                  <option value="HIGH_SCHOOL_GRADUATE">High School Graduate (ចប់បាក់ឌុប)</option>
-                  <option value="UNIVERSITY_STUDENT">University Student (និស្សិត)</option>
-                </select>
+                  onChange={setEducationLevel}
+                  options={[
+                    { value: "GRADE_12", label: "Grade 12 (ថ្នាក់ទី១២)" },
+                    { value: "GRADE_11", label: "Grade 11 (ថ្នាក់ទី១១)" },
+                    {
+                      value: "HIGH_SCHOOL_GRADUATE",
+                      label: "High School Graduate (ចប់បាក់ឌុប)",
+                    },
+                    {
+                      value: "UNIVERSITY_STUDENT",
+                      label: "University Student (និស្សិត)",
+                    },
+                  ]}
+                  label={t("profileSettings.educationLevel")}
+                  className="w-full"
+                />
               </div>
             </div>
 
