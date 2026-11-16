@@ -17,6 +17,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 import { cn, getErrorMessage } from "@/lib/utils";
 import { AdminFilterDropdown } from "./admin-filter-dropdown";
 import { AdminPagination } from "./admin-pagination";
@@ -130,6 +131,7 @@ const EMPTY_RIASEC: RiasecForm = {
 export function QuestionsManager() {
   const queryClient = useQueryClient();
   const toast = useToast();
+  const confirm = useConfirm();
   const [tab, setTab] = useState<QuestionTab>("personality");
   const [search, setSearch] = useState("");
   const [dimensionFilter, setDimensionFilter] = useState("");
@@ -659,9 +661,16 @@ export function QuestionsManager() {
                             }
                           }}
                           onDelete={() => {
-                            if (window.confirm("Delete this question?")) {
-                              remove(question.id);
-                            }
+                            void (async () => {
+                              const confirmed = await confirm({
+                                title: "Delete this question?",
+                                description:
+                                  "This question will be removed from the live assessment immediately. This action cannot be undone.",
+                                confirmLabel: "Delete question",
+                                tone: "danger",
+                              });
+                              if (confirmed) remove(question.id);
+                            })();
                           }}
                           deleting={deleting}
                         />

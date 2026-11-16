@@ -16,6 +16,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 import { cn, getErrorMessage } from "@/lib/utils";
 import { AdminFilterDropdown } from "./admin-filter-dropdown";
 import { AdminPagination } from "./admin-pagination";
@@ -97,6 +98,7 @@ function formatTuition(value: number | null) {
 export function OfferingsManager() {
   const queryClient = useQueryClient();
   const toast = useToast();
+  const confirm = useConfirm();
   const [search, setSearch] = useState("");
   const [universityFilter, setUniversityFilter] = useState("");
   const [degreeFilter, setDegreeFilter] = useState("");
@@ -507,10 +509,14 @@ export function OfferingsManager() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => {
-                            if (window.confirm("Remove this major from the university?")) {
-                              remove(offering.id);
-                            }
+                          onClick={async () => {
+                            const confirmed = await confirm({
+                              title: "Remove this program?",
+                              description: `${offering.major_name_en} will be removed from ${offering.university_name_en}. This action cannot be undone.`,
+                              confirmLabel: "Remove program",
+                              tone: "danger",
+                            });
+                            if (confirmed) remove(offering.id);
                           }}
                           disabled={deleting}
                           className="rounded-lg p-1.5 text-[#68708A] transition-colors hover:bg-rose-50 hover:text-rose-600 disabled:opacity-50 dark:text-slate-400 dark:hover:bg-rose-500/10 dark:hover:text-rose-300"

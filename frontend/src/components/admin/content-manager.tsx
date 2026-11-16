@@ -17,6 +17,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast";
+import { useConfirm } from "@/components/ui/confirm-dialog";
 import { cn, getErrorMessage } from "@/lib/utils";
 import { AdminFilterDropdown } from "./admin-filter-dropdown";
 import { AdminPagination } from "./admin-pagination";
@@ -235,6 +236,7 @@ export function ContentManager({
 }: ContentManagerProps) {
   const queryClient = useQueryClient();
   const toast = useToast();
+  const confirm = useConfirm();
   const [search, setSearch] = useState("");
   const [filterValues, setFilterValues] = useState<Record<string, string>>({});
   const [page, setPage] = useState(1);
@@ -487,9 +489,16 @@ export function ContentManager({
     save();
   };
 
-  const handleDelete = (row: Record<string, any>) => {
+  const handleDelete = async (row: Record<string, any>) => {
     const label = row.name_en || row.title_en || row.slug || "this record";
-    if (!window.confirm(`Delete ${label}? This action cannot be undone.`)) return;
+    const confirmed = await confirm({
+      title: `Delete ${label}?`,
+      description:
+        "This will permanently remove the record from the live directory. This action cannot be undone.",
+      confirmLabel: "Delete",
+      tone: "danger",
+    });
+    if (!confirmed) return;
     remove(String(row.id));
   };
 
