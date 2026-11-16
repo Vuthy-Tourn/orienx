@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   Award,
   BarChart3,
@@ -67,6 +68,7 @@ export function AdminSidebar({
 }: AdminSidebarProps) {
   const router = useRouter();
   const { user, logout } = useAuth();
+  const reduceMotion = useReducedMotion();
 
   const displayName =
     user?.full_name_en || user?.full_name_km || user?.email?.split("@")[0] || "Administrator";
@@ -82,12 +84,18 @@ export function AdminSidebar({
 
   return (
     <>
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-[#0A0F3D]/50 backdrop-blur-xs lg:hidden"
-          onClick={onCloseMobile}
-        />
-      )}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.2 }}
+            className="fixed inset-0 z-40 bg-[#0A0F3D]/50 backdrop-blur-xs lg:hidden"
+            onClick={onCloseMobile}
+          />
+        )}
+      </AnimatePresence>
 
       <aside
         className={cn(
@@ -124,28 +132,46 @@ export function AdminSidebar({
                   const Icon = tab.icon;
                   const active = activeTab === tab.id;
                   return (
-                    <button
+                    <motion.button
                       key={tab.id}
                       type="button"
                       onClick={() => {
                         onTabChange(tab.id);
                         onCloseMobile();
                       }}
+                      whileTap={reduceMotion ? undefined : { scale: 0.985 }}
+                      aria-current={active ? "page" : undefined}
                       className={cn(
-                        "flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-xs font-bold transition-all",
+                        "relative flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-xs font-bold transition-colors",
                         active
-                          ? "bg-[#111965] text-white shadow-xs dark:bg-blue-600"
+                          ? "text-white"
                           : "text-[#64748B] hover:bg-[#F0F2FA] hover:text-[#111965] dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
                       )}
                     >
+                      {active && (
+                        <motion.span
+                          layoutId="admin-sidebar-active-tab"
+                          className="absolute inset-0 rounded-xl bg-[#111965] shadow-xs dark:bg-blue-600"
+                          transition={
+                            reduceMotion
+                              ? { duration: 0 }
+                              : {
+                                  type: "spring",
+                                  stiffness: 420,
+                                  damping: 38,
+                                  mass: 0.7,
+                                }
+                          }
+                        />
+                      )}
                       <Icon
                         className={cn(
-                          "h-4 w-4 shrink-0 transition-colors",
+                          "relative z-10 h-4 w-4 shrink-0 transition-colors",
                           active ? "text-[#F7CE4D]" : "text-[#94A3B8] dark:text-slate-400"
                         )}
                       />
-                      <span className="truncate">{tab.label}</span>
-                    </button>
+                      <span className="relative z-10 truncate">{tab.label}</span>
+                    </motion.button>
                   );
                 })}
               </div>

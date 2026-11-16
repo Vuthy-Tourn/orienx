@@ -619,10 +619,11 @@ export function ContentManager({
                 </tr>
               </thead>
               <tbody>
-                {visible.map((row) => (
+                {visible.map((row, index) => (
                   <tr
                     key={row.id}
-                    className="border-b border-[#E6E8F0] last:border-b-0 hover:bg-[#F8FAFD]/70 dark:border-white/10 dark:hover:bg-white/[0.03]"
+                    className="admin-table-row border-b border-[#E6E8F0] last:border-b-0 hover:bg-[#F8FAFD]/70 dark:border-white/10 dark:hover:bg-white/[0.03]"
+                    style={{ animationDelay: `${Math.min(index, 12) * 22}ms` }}
                   >
                     {columns.map((column) => (
                       <td

@@ -190,13 +190,31 @@ html {
   animation-delay: 225ms;
 }
 
+/* Admin console table entrance. Rows are re-keyed per page/filter, so the
+   animation runs naturally when new data is shown. */
+@keyframes admin-row-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.admin-table-row {
+  animation: admin-row-in 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .dashboard-hero-item,
   .dashboard-hero-bg,
   .dashboard-progress-bar,
   .dashboard-ring-wrap,
   .dashboard-reveal,
-  .dashboard-nav-item {
+  .dashboard-nav-item,
+  .admin-table-row {
     animation: none;
   }
 }

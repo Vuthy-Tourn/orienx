@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -389,6 +390,7 @@ export default function AdminConsolePage() {
   const isKm = language === "km";
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
   const activeTabObj = ADMIN_TABS.find((tab) => tab.id === activeTab);
   const activeTabLabel = isKm
     ? (activeTab === "overview"
@@ -473,8 +475,22 @@ export default function AdminConsolePage() {
                 <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8] dark:text-slate-400">
                   {isKm ? "ផ្ទាំងគ្រប់គ្រងអភិបាល" : "Admin console"}
                 </div>
-                <div className="truncate text-sm font-black text-[#111965] dark:text-white">
-                  {activeTabLabel}
+                <div className="min-w-0 overflow-hidden">
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.div
+                      key={activeTab}
+                      initial={reduceMotion ? false : { opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={reduceMotion ? undefined : { opacity: 0, y: -5 }}
+                      transition={{
+                        duration: reduceMotion ? 0 : 0.18,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="truncate text-sm font-black text-[#111965] dark:text-white"
+                    >
+                      {activeTabLabel}
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
@@ -498,7 +514,16 @@ export default function AdminConsolePage() {
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8">
           <div className="mx-auto max-w-7xl">
-            <div className="space-y-4">
+            <motion.div
+              key={activeTab}
+              initial={reduceMotion ? false : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.3,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="space-y-4"
+            >
           {activeTab === "overview" && <OverviewPanel onNavigate={setActiveTab} />}
           {activeTab === "users" && <UsersManager />}
           {activeTab === "universities" && (
@@ -549,7 +574,7 @@ export default function AdminConsolePage() {
           )}
           {activeTab === "engine" && <RulesPanel />}
           {activeTab === "audit" && <AuditLogPanel />}
-            </div>
+            </motion.div>
           </div>
         </main>
       </div>
@@ -622,10 +647,25 @@ function ActivityTooltip({ active, payload, label }: any) {
   );
 }
 
+const ADMIN_EASE = [0.22, 1, 0.36, 1] as const;
+const ADMIN_STAGGER = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.065, delayChildren: 0.03 } },
+};
+const ADMIN_STAGGER_ITEM = {
+  hidden: { opacity: 0, y: 14 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.42, ease: ADMIN_EASE },
+  },
+};
+
 function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) {
   const { getLocalized, language } = useLanguage();
   const isKm = language === "km";
   const { user } = useAuth();
+  const reduceMotion = useReducedMotion();
   const firstName =
     user?.full_name_en?.split(" ")[0] ||
     user?.full_name_km ||
@@ -800,9 +840,17 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
   const totalContent = contentMix.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="space-y-6">
+    <motion.div
+      className="space-y-6"
+      variants={ADMIN_STAGGER}
+      initial={reduceMotion ? false : "hidden"}
+      animate="show"
+    >
       {/* Welcome Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0A0F3D] via-[#111965] to-[#1E277A] p-6 text-white sm:p-7 shadow-xl border border-white/10 dark:from-[#050818] dark:via-[#090D26] dark:to-[#12194D]">
+      <motion.div
+        variants={ADMIN_STAGGER_ITEM}
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0A0F3D] via-[#111965] to-[#1E277A] p-6 text-white sm:p-7 shadow-xl border border-white/10 dark:from-[#050818] dark:via-[#090D26] dark:to-[#12194D]"
+      >
         <div className="pointer-events-none absolute inset-0 opacity-15">
           <Image
             src="/images/cambodia-campuses-skyline-seamless.webp"
@@ -848,10 +896,13 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
             />
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* 8 Stat Cards */}
-      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4 lg:grid-cols-4">
+      <motion.div
+        variants={ADMIN_STAGGER_ITEM}
+        className="grid grid-cols-2 gap-3.5 sm:grid-cols-4 lg:grid-cols-4"
+      >
         {statCards.map((card) => {
           const Icon = card.icon;
           return (
@@ -892,10 +943,13 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
             </button>
           );
         })}
-      </div>
+      </motion.div>
 
       {/* Charts Section */}
-      <div className="grid gap-5 xl:grid-cols-3">
+      <motion.div
+        variants={ADMIN_STAGGER_ITEM}
+        className="grid gap-5 xl:grid-cols-3"
+      >
         {/* Platform Activity */}
         <div className="rounded-3xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-white/10 dark:bg-[#0B102B] xl:col-span-2 flex flex-col justify-between">
           <div>
@@ -962,9 +1016,9 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
                   width={34}
                 />
                 <Tooltip content={<ActivityTooltip />} cursor={{ stroke: "#94A3B8", strokeDasharray: "3 3", strokeOpacity: 0.3 }} />
-                <Area type="monotone" dataKey="registrations" name={isKm ? "ការចុះឈ្មោះ" : "Registrations"} stroke="#6366F1" strokeWidth={2.4} fill="url(#adminRegGradient)" dot={false} activeDot={{ r: 5, fill: "#6366F1" }} />
-                <Area type="monotone" dataKey="assessments" name={isKm ? "តេស្តវាយតម្លៃ" : "Assessments"} stroke="#F7CE4D" strokeWidth={2.4} fill="url(#adminAssessGradient)" dot={false} activeDot={{ r: 5, fill: "#F7CE4D" }} />
-                <Area type="monotone" dataKey="recommendations" name={isKm ? "ការផ្គូផ្គង" : "Recommendations"} stroke="#10B981" strokeWidth={2.4} fill="url(#adminRecGradient)" dot={false} activeDot={{ r: 5, fill: "#10B981" }} />
+                <Area type="monotone" dataKey="registrations" name={isKm ? "ការចុះឈ្មោះ" : "Registrations"} stroke="#6366F1" strokeWidth={2.4} fill="url(#adminRegGradient)" dot={false} activeDot={{ r: 5, fill: "#6366F1" }} animationDuration={900} animationBegin={120} />
+                <Area type="monotone" dataKey="assessments" name={isKm ? "តេស្តវាយតម្លៃ" : "Assessments"} stroke="#F7CE4D" strokeWidth={2.4} fill="url(#adminAssessGradient)" dot={false} activeDot={{ r: 5, fill: "#F7CE4D" }} animationDuration={900} animationBegin={220} />
+                <Area type="monotone" dataKey="recommendations" name={isKm ? "ការផ្គូផ្គង" : "Recommendations"} stroke="#10B981" strokeWidth={2.4} fill="url(#adminRecGradient)" dot={false} activeDot={{ r: 5, fill: "#10B981" }} animationDuration={900} animationBegin={320} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -991,6 +1045,8 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
                     outerRadius={80}
                     paddingAngle={4}
                     stroke="none"
+                    animationDuration={800}
+                    animationBegin={180}
                   >
                     {roleData.map((entry: any, index: number) => (
                       <Cell key={entry.role} fill={chartColors[index % chartColors.length]} />
@@ -1041,7 +1097,7 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
                   </div>
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-white/10">
                     <div
-                      className="h-full rounded-full transition-all duration-500"
+                      className="dashboard-progress-bar h-full rounded-full transition-all duration-500"
                       style={{
                         width: `${share}%`,
                         backgroundColor: chartColors[index % chartColors.length],
@@ -1053,10 +1109,13 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
             })}
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Bottom Section */}
-      <div className="grid gap-5 xl:grid-cols-3">
+      <motion.div
+        variants={ADMIN_STAGGER_ITEM}
+        className="grid gap-5 xl:grid-cols-3"
+      >
         {/* Top Recommended Majors */}
         <div className="rounded-3xl border border-slate-200/80 bg-white p-5 sm:p-6 shadow-sm dark:border-white/10 dark:bg-[#0B102B] xl:col-span-2 flex flex-col justify-between">
           <div>
@@ -1161,7 +1220,7 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
               {contentMix.map((item, index) => (
                 <div
                   key={item.name}
-                  className="h-full rounded-full transition-all duration-500"
+                  className="dashboard-progress-bar h-full rounded-full transition-all duration-500"
                   style={{
                     width: `${(item.value / Math.max(totalContent, 1)) * 100}%`,
                     backgroundColor: chartColors[index % chartColors.length],
@@ -1211,10 +1270,13 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
             </span>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Quick Action Shortcuts */}
-      <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
+      <motion.div
+        variants={ADMIN_STAGGER_ITEM}
+        className="grid grid-cols-2 gap-3.5 sm:grid-cols-4"
+      >
         {[
           {
             label: isKm ? "បន្ថែមសាកលវិទ្យាល័យ" : "Add university",
@@ -1264,8 +1326,8 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
             </button>
           );
         })}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -1769,10 +1831,11 @@ function AuditLogPanel() {
                   </tr>
                 </thead>
                 <tbody>
-                  {visible.map((log) => (
+                  {visible.map((log, index) => (
                     <tr
                       key={log.id}
-                      className="border-b border-[#E6E8F0] last:border-b-0 hover:bg-[#F8FAFD]/70 dark:border-white/10 dark:hover:bg-white/[0.03]"
+                      className="admin-table-row border-b border-[#E6E8F0] last:border-b-0 hover:bg-[#F8FAFD]/70 dark:border-white/10 dark:hover:bg-white/[0.03]"
+                      style={{ animationDelay: `${Math.min(index, 12) * 22}ms` }}
                     >
                       <td className="px-4 py-3 text-[11px] text-[#68708A] dark:text-slate-400">
                         {log.created_at ? new Date(log.created_at).toLocaleString() : "—"}

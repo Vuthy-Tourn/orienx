@@ -445,10 +445,11 @@ export function OfferingsManager() {
                   </td>
                 </tr>
               ) : (
-                visible.map((offering) => (
+                visible.map((offering, index) => (
                   <tr
                     key={offering.id}
-                    className="transition-colors hover:bg-[#F8FAFD] dark:hover:bg-white/[0.03]"
+                    className="admin-table-row transition-colors hover:bg-[#F8FAFD] dark:hover:bg-white/[0.03]"
+                    style={{ animationDelay: `${Math.min(index, 12) * 22}ms` }}
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">

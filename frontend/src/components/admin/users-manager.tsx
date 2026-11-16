@@ -366,12 +366,16 @@ export function UsersManager() {
                 </tr>
               </thead>
               <tbody>
-                {visible.map((user) => {
+                {visible.map((user, index) => {
                   const isSelf = user.id === currentUser?.id;
                   const isTargetSuper = user.roles.includes("SUPER_ADMIN");
                   const locked = isSelf || (isTargetSuper && !isSuperAdmin);
                   return (
-                    <tr key={user.id} className="border-b border-[#E6E8F0] last:border-b-0">
+                    <tr
+                      key={user.id}
+                      className="admin-table-row border-b border-[#E6E8F0] last:border-b-0 dark:border-white/10"
+                      style={{ animationDelay: `${Math.min(index, 12) * 22}ms` }}
+                    >
                       <td className="px-4 py-3">
                         <div className="font-bold text-[#111965]">
                           {user.full_name_en || user.full_name_km || user.email.split("@")[0]}

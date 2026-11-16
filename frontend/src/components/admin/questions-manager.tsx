@@ -614,7 +614,7 @@ export function QuestionsManager() {
                   </td>
                 </tr>
               ) : (
-                visible.map((question) => {
+                visible.map((question, index) => {
                   const dimension =
                     "dimension" in question
                       ? question.dimension
@@ -627,7 +627,8 @@ export function QuestionsManager() {
                   return (
                     <tr
                       key={question.id}
-                      className="transition-colors hover:bg-[#F8FAFD] dark:hover:bg-white/[0.03]"
+                      className="admin-table-row transition-colors hover:bg-[#F8FAFD] dark:hover:bg-white/[0.03]"
+                      style={{ animationDelay: `${Math.min(index, 12) * 22}ms` }}
                     >
                       <td className="px-3 py-3 text-[12px] font-black text-[#94A3B8]">
                         {question.order_index}
