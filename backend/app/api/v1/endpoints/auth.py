@@ -424,7 +424,8 @@ async def get_me(
             full_name_km=profile.full_name_km if profile else None,
             province=profile.province if profile else None,
             current_education_level=profile.current_education_level if profile else None,
-            preferred_language=profile.preferred_language if profile else "km"
+            preferred_language=profile.preferred_language if profile else "km",
+            avatar_url=profile.avatar_url if profile else None
         )
     )
 

@@ -143,9 +143,17 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
             href="/dashboard/profile"
             className="flex items-center gap-3 overflow-hidden group flex-1 min-w-0"
           >
-            <div className="w-9 h-9 rounded-full bg-[#111965] text-[#F7CE4D] flex items-center justify-center font-black text-xs flex-shrink-0 shadow-xs ring-2 ring-[#F0F2FA] group-hover:scale-105 transition-transform">
-              {user.full_name_en?.charAt(0) || user.full_name_km?.charAt(0) || user.email.charAt(0).toUpperCase()}
-            </div>
+            {user.avatar_url ? (
+              <img
+                src={user.avatar_url}
+                alt=""
+                className="w-9 h-9 rounded-full object-cover flex-shrink-0 shadow-xs ring-2 ring-[#F0F2FA] group-hover:scale-105 transition-transform"
+              />
+            ) : (
+              <div className="w-9 h-9 rounded-full bg-[#111965] text-[#F7CE4D] flex items-center justify-center font-black text-xs flex-shrink-0 shadow-xs ring-2 ring-[#F0F2FA] group-hover:scale-105 transition-transform">
+                {user.full_name_en?.charAt(0) || user.full_name_km?.charAt(0) || user.email.charAt(0).toUpperCase()}
+              </div>
+            )}
             <div className="overflow-hidden min-w-0">
               <div className="text-xs font-bold text-[#0F172A] truncate group-hover:text-[#111965] transition-colors">
                 {displayName}

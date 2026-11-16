@@ -21,6 +21,7 @@ export interface User {
   province?: string;
   current_education_level?: string;
   preferred_language?: string;
+  avatar_url?: string | null;
 }
 
 interface AuthContextType {

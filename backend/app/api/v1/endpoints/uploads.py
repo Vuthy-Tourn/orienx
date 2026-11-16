@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from fastapi.responses import FileResponse
 
 from app.core.config import settings
-from app.core.dependencies import get_current_admin
+from app.core.dependencies import get_current_admin, get_current_user
 from app.models.auth import User
 from app.schemas.common import ApiResponse
 
@@ -43,11 +43,7 @@ def _detect_image(contents: bytes) -> tuple[str, str] | None:
     return None
 
 
-@router.post("", response_model=ApiResponse[Dict[str, Any]], status_code=status.HTTP_201_CREATED)
-async def upload_content_image(
-    file: UploadFile = File(...),
-    admin_user: User = Depends(get_current_admin),
-):
+async def _store_image(file: UploadFile) -> Dict[str, Any]:
     max_bytes = settings.MAX_UPLOAD_MB * 1024 * 1024
     contents = await file.read(max_bytes + 1)
 
@@ -74,14 +70,34 @@ async def upload_content_image(
     destination = _upload_dir() / filename
     destination.write_bytes(contents)
 
+    return {
+        "url": f"{settings.API_V1_STR}/uploads/{filename}",
+        "filename": filename,
+        "size": len(contents),
+    }
+
+
+@router.post("", response_model=ApiResponse[Dict[str, Any]], status_code=status.HTTP_201_CREATED)
+async def upload_content_image(
+    file: UploadFile = File(...),
+    admin_user: User = Depends(get_current_admin),
+):
     return ApiResponse(
         success=True,
         message="Image uploaded.",
-        data={
-            "url": f"{settings.API_V1_STR}/uploads/{filename}",
-            "filename": filename,
-            "size": len(contents),
-        },
+        data=await _store_image(file),
+    )
+
+
+@router.post("/avatar", response_model=ApiResponse[Dict[str, Any]], status_code=status.HTTP_201_CREATED)
+async def upload_avatar(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
+):
+    return ApiResponse(
+        success=True,
+        message="Avatar uploaded.",
+        data=await _store_image(file),
     )
 
 

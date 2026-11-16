@@ -9,8 +9,11 @@ import { useLanguage } from "@/contexts/language-context";
 import { SettingsPanel } from "@/components/settings/settings-panel";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast";
-import { User as UserIcon, Save, Sliders, Palette, ShieldCheck } from "lucide-react";
+import { User as UserIcon, Save, Sliders, Palette, ShieldCheck, Upload, X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const AVATAR_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
+const MAX_AVATAR_BYTES = 5 * 1024 * 1024;
 
 export default function ProfileSettingsPage() {
   const { user, refreshUser } = useAuth();
@@ -28,6 +31,8 @@ export default function ProfileSettingsPage() {
   const [highSchool, setHighSchool] = useState("");
   const [educationLevel, setEducationLevel] = useState("GRADE_12");
   const [graduationYear, setGraduationYear] = useState(2026);
+  const [avatarUrl, setAvatarUrl] = useState("");
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
   const { data: profile } = useQuery({
     queryKey: ["student-profile"],
@@ -43,6 +48,7 @@ export default function ProfileSettingsPage() {
       setHighSchool(profile.high_school || "");
       setEducationLevel(profile.current_education_level || "GRADE_12");
       setGraduationYear(profile.graduation_year || 2026);
+      setAvatarUrl(profile.avatar_url || "");
     }
   }, [profile]);
 
@@ -58,6 +64,7 @@ export default function ProfileSettingsPage() {
           high_school: highSchool || undefined,
           current_education_level: educationLevel,
           graduation_year: graduationYear,
+          avatar_url: avatarUrl || null,
         }),
       });
     },
@@ -67,6 +74,39 @@ export default function ProfileSettingsPage() {
       toast.success(t("profileSettings.successMsg"));
     },
   });
+
+  const handleAvatarFile = async (file: File) => {
+    if (!AVATAR_TYPES.includes(file.type)) {
+      toast.error(t("profileSettings.photoTypeError"));
+      return;
+    }
+    if (file.size > MAX_AVATAR_BYTES) {
+      toast.error(t("profileSettings.photoSizeError"));
+      return;
+    }
+
+    setUploadingAvatar(true);
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const uploaded = await apiFetch<{ url: string }>("/uploads/avatar", {
+        method: "POST",
+        body,
+      });
+      if (!uploaded?.url) {
+        throw new Error(t("profileSettings.photoUploadError"));
+      }
+      setAvatarUrl(uploaded.url);
+    } catch (error: unknown) {
+      toast.error(
+        error instanceof Error && error.message
+          ? error.message
+          : t("profileSettings.photoUploadError")
+      );
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
 
   return (
     <div data-dashboard-page="sections" className="max-w-3xl mx-auto space-y-6 animate-in fade-in pb-16 select-none">
@@ -114,6 +154,68 @@ export default function ProfileSettingsPage() {
       {/* Tab 1: Profile Information */}
       {activeTab === "profile" && (
         <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs space-y-6 animate-in fade-in">
+          <div className="flex flex-col gap-4 rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4 sm:flex-row sm:items-center">
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[#E6E8F0] bg-white">
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={t("profileSettings.profilePhoto")}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <UserIcon className="h-8 w-8 text-[#94A3B8]" />
+              )}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-xs font-bold text-[#171A2C]">
+                {t("profileSettings.profilePhoto")}
+              </div>
+              <p className="mt-0.5 text-[11px] text-[#68708A]">
+                {t("profileSettings.profilePhotoHint")}
+              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <label
+                  className={cn(
+                    "inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#E6E8F0] bg-white px-3 py-1.5 text-[11px] font-bold text-[#111965] transition-colors hover:border-[#111965]/30",
+                    uploadingAvatar && "pointer-events-none opacity-60"
+                  )}
+                >
+                  {uploadingAvatar ? (
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                  ) : (
+                    <Upload className="h-3 w-3" />
+                  )}
+                  {uploadingAvatar
+                    ? t("profileSettings.uploadingPhoto")
+                    : avatarUrl
+                    ? t("profileSettings.changePhoto")
+                    : t("profileSettings.uploadPhoto")}
+                  <input
+                    type="file"
+                    accept={AVATAR_TYPES.join(",")}
+                    className="sr-only"
+                    disabled={uploadingAvatar}
+                    onChange={(event) => {
+                      const file = event.target.files?.[0];
+                      event.target.value = "";
+                      if (file) handleAvatarFile(file);
+                    }}
+                  />
+                </label>
+                {avatarUrl && (
+                  <button
+                    type="button"
+                    onClick={() => setAvatarUrl("")}
+                    className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-[11px] font-bold text-rose-600 transition-colors hover:bg-rose-50"
+                  >
+                    <X className="h-3 w-3" />
+                    {t("profileSettings.removePhoto")}
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1">

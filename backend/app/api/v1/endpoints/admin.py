@@ -334,6 +334,7 @@ def _user_out(user: User) -> UserManagementOut:
         full_name_en=profile.full_name_en if profile else None,
         full_name_km=profile.full_name_km if profile else None,
         province=profile.province if profile else None,
+        avatar_url=profile.avatar_url if profile else None,
         is_email_verified=user.is_email_verified,
         last_login_at=user.last_login_at.isoformat() if user.last_login_at else None,
         created_at=user.created_at.isoformat() if user.created_at else "",
@@ -516,6 +517,7 @@ async def create_user(
         province=body.province.strip() or "Phnom Penh",
         current_education_level=body.current_education_level,
         preferred_language=body.preferred_language,
+        avatar_url=body.avatar_url,
     )
     user.profile = profile
     db.add(user)
@@ -571,6 +573,7 @@ async def update_user(
         "full_name_en": profile.full_name_en if profile else None,
         "full_name_km": profile.full_name_km if profile else None,
         "province": profile.province if profile else None,
+        "avatar_url": profile.avatar_url if profile else None,
     }
 
     if body.email is not None:
@@ -623,6 +626,7 @@ async def update_user(
         or body.province is not None
         or body.current_education_level is not None
         or body.preferred_language is not None
+        or "avatar_url" in body.model_fields_set
     ):
         profile = StudentProfile(
             user=user,
@@ -631,6 +635,7 @@ async def update_user(
             province=body.province or "Phnom Penh",
             current_education_level=body.current_education_level or "GRADE_12",
             preferred_language=body.preferred_language or "km",
+            avatar_url=body.avatar_url or None,
         )
         user.profile = profile
 
@@ -645,6 +650,8 @@ async def update_user(
             profile.current_education_level = body.current_education_level
         if body.preferred_language is not None:
             profile.preferred_language = body.preferred_language
+        if "avatar_url" in body.model_fields_set:
+            profile.avatar_url = body.avatar_url or None
 
     if body.is_email_verified is not None:
         user.is_email_verified = body.is_email_verified

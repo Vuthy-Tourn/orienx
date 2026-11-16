@@ -288,6 +288,7 @@ async def test_admin_can_create_update_and_delete_user(client):
         "full_name_en": "CRUD Test User",
         "full_name_km": "អ្នកសាកល្បង CRUD",
         "province": "Phnom Penh",
+        "avatar_url": "https://example.com/avatar-one.png",
         "status": "ACTIVE",
         "roles": ["STUDENT"],
         "is_email_verified": True,
@@ -307,6 +308,7 @@ async def test_admin_can_create_update_and_delete_user(client):
     assert user["email"] == email
     assert user["roles"] == ["STUDENT"]
     assert user["full_name_en"] == "CRUD Test User"
+    assert user["avatar_url"] == "https://example.com/avatar-one.png"
 
     # The new account can authenticate with the password set by the admin.
     new_login = await client.post(
@@ -322,6 +324,7 @@ async def test_admin_can_create_update_and_delete_user(client):
             "email": updated_email,
             "full_name_en": "Updated CRUD User",
             "province": "Siem Reap",
+            "avatar_url": "https://example.com/avatar-two.png",
             "password": "NewCrudPass123!",
         },
         headers=admin_headers,
@@ -331,6 +334,15 @@ async def test_admin_can_create_update_and_delete_user(client):
     assert updated_user["email"] == updated_email
     assert updated_user["full_name_en"] == "Updated CRUD User"
     assert updated_user["province"] == "Siem Reap"
+    assert updated_user["avatar_url"] == "https://example.com/avatar-two.png"
+
+    cleared_avatar = await client.patch(
+        f"/api/v1/admin/users/{user_id}",
+        json={"avatar_url": None},
+        headers=admin_headers,
+    )
+    assert cleared_avatar.status_code == 200, cleared_avatar.text
+    assert cleared_avatar.json()["data"]["avatar_url"] is None
 
     new_login = await client.post(
         "/api/v1/auth/login",

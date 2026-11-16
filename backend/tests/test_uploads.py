@@ -103,3 +103,17 @@ async def test_admin_rejects_invalid_image_urls(client):
         headers=headers,
     )
     assert restored.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_student_can_upload_avatar(client):
+    token = await _token(client, "student@futera.edu.kh", "StudentPass123!")
+    response = await client.post(
+        "/api/v1/uploads/avatar",
+        files={"file": ("avatar.png", TINY_PNG, "image/png")},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 201, response.text
+    data = response.json()["data"]
+    assert data["url"].startswith("/api/v1/uploads/")
+    (Path(settings.UPLOAD_DIR) / data["filename"]).unlink(missing_ok=True)

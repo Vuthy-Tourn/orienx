@@ -14,6 +14,7 @@ import {
   Search,
   ShieldCheck,
   Trash2,
+  Upload,
   Users,
   X,
 } from "lucide-react";
@@ -38,6 +39,7 @@ interface AdminUser {
   full_name_en?: string | null;
   full_name_km?: string | null;
   province?: string | null;
+  avatar_url?: string | null;
   is_email_verified?: boolean;
   last_login_at?: string | null;
   created_at: string;
@@ -49,6 +51,7 @@ interface UserForm {
   full_name_en: string;
   full_name_km: string;
   province: string;
+  avatar_url: string;
   status: string;
   roles: string[];
   is_email_verified: boolean;
@@ -60,12 +63,15 @@ const EMPTY_USER_FORM: UserForm = {
   full_name_en: "",
   full_name_km: "",
   province: "Phnom Penh",
+  avatar_url: "",
   status: "ACTIVE",
   roles: ["STUDENT"],
   is_email_verified: true,
 };
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const AVATAR_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
+const MAX_AVATAR_BYTES = 5 * 1024 * 1024;
 
 const ROLE_OPTIONS = ["STUDENT", "ADMIN", "SUPER_ADMIN"] as const;
 const PAGE_SIZE = 10;
@@ -142,6 +148,14 @@ const USERS_COPY = {
     fullNameKm: "Full name (Khmer)",
     province: "Province",
     emailVerified: "Email verified",
+    profileImage: "Profile image",
+    profileImageHint: "Paste an image URL or upload a photo. PNG, JPG, WebP, or GIF up to 5 MB.",
+    uploadPhoto: "Upload photo",
+    uploadingPhoto: "Uploading…",
+    removePhoto: "Remove photo",
+    photoTypeError: "Choose a PNG, JPG, WebP, or GIF image.",
+    photoSizeError: "Images must be 5 MB or smaller.",
+    photoUploadError: "Could not upload this image.",
     tableActions: "Actions",
     edit: "Edit",
     delete: "Delete",
@@ -234,6 +248,14 @@ const USERS_COPY = {
     fullNameKm: "ឈ្មោះពេញ (ខ្មែរ)",
     province: "រាជធានី/ខេត្ត",
     emailVerified: "អ៊ីមែលបានផ្ទៀងផ្ទាត់",
+    profileImage: "រូបភាពប្រវត្តិរូប",
+    profileImageHint: "បិទភ្ជាប់ URL រូបភាព ឬផ្ទុករូបថត។ PNG, JPG, WebP ឬ GIF អតិបរមា 5 MB។",
+    uploadPhoto: "ផ្ទុករូបថត",
+    uploadingPhoto: "កំពុងផ្ទុក…",
+    removePhoto: "ដករូបថតចេញ",
+    photoTypeError: "ជ្រើសរើសរូបភាព PNG, JPG, WebP ឬ GIF។",
+    photoSizeError: "រូបភាពត្រូវមានទំហំ 5 MB ឬតូចជាងនេះ។",
+    photoUploadError: "មិនអាចផ្ទុករូបភាពនេះឡើងបានទេ។",
     tableActions: "សកម្មភាព",
     edit: "កែប្រែ",
     delete: "លុប",
@@ -255,6 +277,38 @@ const USERS_COPY = {
     close: "បិទ",
   },
 } as const;
+
+function UserAvatar({
+  src,
+  name,
+}: {
+  src?: string | null;
+  name?: string | null;
+}) {
+  const [failed, setFailed] = React.useState(false);
+  const initials = (name || "?").trim().slice(0, 2).toUpperCase();
+
+  React.useEffect(() => {
+    setFailed(false);
+  }, [src]);
+
+  if (src && !failed) {
+    return (
+      <img
+        src={src}
+        alt=""
+        className="h-9 w-9 shrink-0 rounded-full border border-[#E6E8F0] object-cover dark:border-white/10"
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+
+  return (
+    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#E6E8F0] bg-[#F0F2FA] text-[10px] font-black text-[#111965] dark:border-white/10 dark:bg-white/10 dark:text-[#F7CE4D]">
+      {initials}
+    </span>
+  );
+}
 
 function roleBadge(role: string) {
   if (role === "SUPER_ADMIN") return "bg-purple-50 text-purple-700 border-purple-200";
@@ -278,6 +332,7 @@ export function UsersManager() {
   const [editingUser, setEditingUser] = useState<AdminUser | null>(null);
   const [form, setForm] = useState<UserForm>(EMPTY_USER_FORM);
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
 
   const isSuperAdmin = currentUser?.roles?.includes("SUPER_ADMIN");
@@ -464,6 +519,7 @@ export function UsersManager() {
         full_name_en: form.full_name_en.trim(),
         full_name_km: form.full_name_km.trim() || null,
         province: form.province.trim() || "Phnom Penh",
+        avatar_url: form.avatar_url.trim() || null,
         status: form.status,
         roles: form.roles,
         is_email_verified: form.is_email_verified,
@@ -527,6 +583,7 @@ export function UsersManager() {
       full_name_en: user.full_name_en || "",
       full_name_km: user.full_name_km || "",
       province: user.province || "Phnom Penh",
+      avatar_url: user.avatar_url || "",
       status: user.status,
       roles: [...user.roles],
       is_email_verified: Boolean(user.is_email_verified),
@@ -563,6 +620,33 @@ export function UsersManager() {
       delete next[key];
       return next;
     });
+  };
+
+  const handleAvatarFile = async (file: File) => {
+    if (!AVATAR_TYPES.includes(file.type)) {
+      toast.error(copy.photoTypeError);
+      return;
+    }
+    if (file.size > MAX_AVATAR_BYTES) {
+      toast.error(copy.photoSizeError);
+      return;
+    }
+
+    setUploadingAvatar(true);
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const uploaded = await apiFetch<{ url: string }>("/uploads/avatar", {
+        method: "POST",
+        body,
+      });
+      if (!uploaded?.url) throw new Error(copy.photoUploadError);
+      updateForm("avatar_url", uploaded.url);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error, copy.photoUploadError));
+    } finally {
+      setUploadingAvatar(false);
+    }
   };
 
   return (
@@ -705,19 +789,31 @@ export function UsersManager() {
                       style={{ animationDelay: `${Math.min(index, 12) * 22}ms` }}
                     >
                       <td className="px-4 py-3">
-                        <div className="font-bold text-[#111965]">
-                          {isKm && user.full_name_km
-                            ? user.full_name_km
-                            : user.full_name_en ||
-                              user.full_name_km ||
-                              user.email.split("@")[0]}
-                          {isSelf && (
-                            <span className="ml-1.5 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-500">
-                              {copy.you}
-                            </span>
-                          )}
+                        <div className="flex items-center gap-2.5">
+                          <UserAvatar
+                            src={user.avatar_url}
+                            name={
+                              isKm && user.full_name_km
+                                ? user.full_name_km
+                                : user.full_name_en || user.email
+                            }
+                          />
+                          <div className="min-w-0">
+                            <div className="font-bold text-[#111965]">
+                              {isKm && user.full_name_km
+                                ? user.full_name_km
+                                : user.full_name_en ||
+                                  user.full_name_km ||
+                                  user.email.split("@")[0]}
+                              {isSelf && (
+                                <span className="ml-1.5 rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-500">
+                                  {copy.you}
+                                </span>
+                              )}
+                            </div>
+                            <div className="truncate text-[11px] text-[#68708A]">{user.email}</div>
+                          </div>
                         </div>
-                        <div className="text-[11px] text-[#68708A]">{user.email}</div>
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex flex-wrap gap-1">
@@ -952,6 +1048,66 @@ export function UsersManager() {
                     />
                     {copy.emailVerified}
                   </label>
+
+                  <div className="space-y-1.5 sm:col-span-2">
+                    <span className="block text-[10px] font-black uppercase tracking-wider text-[#68708A] dark:text-slate-400">
+                      {copy.profileImage}
+                    </span>
+                    <div className="flex flex-col gap-3 rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] p-3 dark:border-white/10 dark:bg-white/[0.04] sm:flex-row sm:items-start">
+                      <UserAvatar
+                        src={form.avatar_url}
+                        name={form.full_name_en || form.email}
+                      />
+                      <div className="min-w-0 flex-1 space-y-2">
+                        <input
+                          value={form.avatar_url}
+                          onChange={(event) =>
+                            updateForm("avatar_url", event.target.value)
+                          }
+                          placeholder="https://…"
+                          className="h-9 w-full rounded-lg border border-[#E6E8F0] bg-white px-2.5 text-xs text-[#171A2C] outline-none focus:border-[#111965] dark:border-white/10 dark:bg-slate-900/60 dark:text-white dark:focus:border-[#F7CE4D]/60"
+                        />
+                        <div className="flex flex-wrap items-center gap-2">
+                          <label
+                            className={cn(
+                              "inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#E6E8F0] bg-white px-2.5 py-1.5 text-[11px] font-bold text-[#111965] transition-colors hover:border-[#111965]/30 dark:border-white/10 dark:bg-slate-900 dark:text-slate-200",
+                              uploadingAvatar && "pointer-events-none opacity-60"
+                            )}
+                          >
+                            {uploadingAvatar ? (
+                              <Loader2 className="h-3 w-3 animate-spin" />
+                            ) : (
+                              <Upload className="h-3 w-3" />
+                            )}
+                            {uploadingAvatar ? copy.uploadingPhoto : copy.uploadPhoto}
+                            <input
+                              type="file"
+                              accept={AVATAR_TYPES.join(",")}
+                              className="sr-only"
+                              disabled={uploadingAvatar}
+                              onChange={(event) => {
+                                const file = event.target.files?.[0];
+                                event.target.value = "";
+                                if (file) handleAvatarFile(file);
+                              }}
+                            />
+                          </label>
+                          {form.avatar_url && (
+                            <button
+                              type="button"
+                              onClick={() => updateForm("avatar_url", "")}
+                              className="rounded-lg px-2 py-1.5 text-[11px] font-bold text-rose-600 transition-colors hover:bg-rose-50 dark:hover:bg-rose-500/10"
+                            >
+                              {copy.removePhoto}
+                            </button>
+                          )}
+                          <span className="text-[10px] leading-relaxed text-[#94A3B8]">
+                            {copy.profileImageHint}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="space-y-1.5">

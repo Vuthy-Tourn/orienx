@@ -124,9 +124,17 @@ export function AdminSidebar({
 
         <div className="border-b border-[#E6E8F0] px-4 py-3 dark:border-white/10">
           <div className="flex items-center gap-2.5 rounded-xl bg-[#F8FAFD] p-2.5 dark:bg-white/5">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#111965] text-xs font-black text-[#F7CE4D] dark:bg-white/10">
-              {displayName.slice(0, 2).toUpperCase()}
-            </div>
+            {user?.avatar_url ? (
+              <img
+                src={user.avatar_url}
+                alt=""
+                className="h-9 w-9 shrink-0 rounded-xl object-cover"
+              />
+            ) : (
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#111965] text-xs font-black text-[#F7CE4D] dark:bg-white/10">
+                {displayName.slice(0, 2).toUpperCase()}
+              </div>
+            )}
             <div className="min-w-0">
               <div className="truncate text-xs font-black text-[#111965] dark:text-white">{displayName}</div>
               <div className="text-[10px] font-bold uppercase tracking-wider text-[#68708A] dark:text-slate-400">

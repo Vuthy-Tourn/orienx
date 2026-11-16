@@ -1,7 +1,24 @@
 import uuid
 from typing import Optional
 from datetime import date
-from pydantic import BaseModel, ConfigDict
+from urllib.parse import urlparse
+from pydantic import BaseModel, ConfigDict, field_validator
+
+
+def _validate_avatar_url(value: Optional[str]) -> Optional[str]:
+    if value is None:
+        return value
+    value = value.strip()
+    if value == "":
+        return value
+    if len(value) > 500:
+        raise ValueError("Avatar URLs must be 500 characters or fewer.")
+    if value.startswith("/") and not value.startswith("//"):
+        return value
+    parsed = urlparse(value)
+    if parsed.scheme not in ("http", "https") or not parsed.netloc:
+        raise ValueError("Avatar URL must be an http(s) URL or an absolute path.")
+    return value
 
 
 class StudentProfileUpdate(BaseModel):
@@ -15,7 +32,13 @@ class StudentProfileUpdate(BaseModel):
     current_education_level: Optional[str] = None
     graduation_year: Optional[int] = None
     preferred_language: Optional[str] = None
+    avatar_url: Optional[str] = None
     bio: Optional[str] = None
+
+    @field_validator("avatar_url")
+    @classmethod
+    def validate_avatar_url(cls, value: Optional[str]) -> Optional[str]:
+        return _validate_avatar_url(value)
     
     model_config = ConfigDict(extra="forbid")
 

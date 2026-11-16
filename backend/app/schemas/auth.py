@@ -60,6 +60,7 @@ class UserOut(BaseModel):
     province: Optional[str] = None
     current_education_level: Optional[str] = None
     preferred_language: Optional[str] = "km"
+    avatar_url: Optional[str] = None
     
     model_config = ConfigDict(extra="ignore")
 

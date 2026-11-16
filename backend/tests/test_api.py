@@ -28,6 +28,32 @@ async def test_auth_and_assessments_flow(client):
     assert me_res.status_code == 200
     assert me_res.json()["data"]["email"] == "student@futera.edu.kh"
 
+    profile_res = await client.get("/api/v1/students/profile", headers=headers)
+    assert profile_res.status_code == 200
+    original_avatar = profile_res.json()["data"].get("avatar_url")
+    avatar_res = await client.put(
+        "/api/v1/students/profile",
+        json={"avatar_url": "https://example.com/student-avatar.png"},
+        headers=headers,
+    )
+    assert avatar_res.status_code == 200, avatar_res.text
+    assert (
+        avatar_res.json()["data"]["avatar_url"]
+        == "https://example.com/student-avatar.png"
+    )
+    me_avatar = await client.get("/api/v1/auth/me", headers=headers)
+    assert me_avatar.status_code == 200
+    assert (
+        me_avatar.json()["data"]["avatar_url"]
+        == "https://example.com/student-avatar.png"
+    )
+    restore_res = await client.put(
+        "/api/v1/students/profile",
+        json={"avatar_url": original_avatar},
+        headers=headers,
+    )
+    assert restore_res.status_code == 200
+
     # 3. List universities and test major filter
     uni_res = await client.get("/api/v1/universities")
     assert uni_res.status_code == 200

@@ -624,7 +624,16 @@
     "highSchool": "High School Name",
     "highSchoolPlaceholder": "e.g. Hun Sen Bak Touk High School",
     "saveBtn": "Save Profile Settings",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "profilePhoto": "Profile photo",
+    "profilePhotoHint": "PNG, JPG, WebP, or GIF · 5 MB max",
+    "uploadPhoto": "Upload photo",
+    "changePhoto": "Change photo",
+    "uploadingPhoto": "Uploading...",
+    "removePhoto": "Remove photo",
+    "photoTypeError": "Choose a PNG, JPG, WebP, or GIF image.",
+    "photoSizeError": "Images must be 5 MB or smaller.",
+    "photoUploadError": "Could not upload this image."
   },
   "academicPreferences": {
     "badge": "Academic Preferences & Financial Constraints",

@@ -624,7 +624,16 @@
     "highSchool": "ឈ្មោះវិទ្យាល័យ",
     "highSchoolPlaceholder": "ឧទាហរណ៍៖ វិទ្យាល័យ ហ៊ុន សែន បាក់ទូក",
     "saveBtn": "រក្សាទុកការកំណត់",
-    "saving": "កំពុងរក្សាទុក..."
+    "saving": "កំពុងរក្សាទុក...",
+    "profilePhoto": "រូបថតប្រវត្តិរូប",
+    "profilePhotoHint": "PNG, JPG, WebP ឬ GIF · អតិបរមា 5 MB",
+    "uploadPhoto": "ផ្ទុករូបថត",
+    "changePhoto": "ប្តូររូបថត",
+    "uploadingPhoto": "កំពុងផ្ទុក...",
+    "removePhoto": "ដករូបថតចេញ",
+    "photoTypeError": "ជ្រើសរើសរូបភាព PNG, JPG, WebP ឬ GIF។",
+    "photoSizeError": "រូបភាពត្រូវមានទំហំ 5 MB ឬតូចជាងនេះ។",
+    "photoUploadError": "មិនអាចផ្ទុករូបភាពនេះឡើងបានទេ។"
   },
   "academicPreferences": {
     "badge": "ចំណូលចិត្តការសិក្សា និងកត្តាថវិកា",

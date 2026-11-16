@@ -50,6 +50,7 @@ class UserManagementOut(BaseModel):
     full_name_en: Optional[str] = None
     full_name_km: Optional[str] = None
     province: Optional[str] = None
+    avatar_url: Optional[str] = None
     is_email_verified: bool = False
     last_login_at: Optional[str] = None
     created_at: str
@@ -87,6 +88,7 @@ class UserAdminCreateIn(BaseModel):
     full_name_en: str = Field(min_length=1, max_length=150)
     full_name_km: Optional[str] = Field(default=None, max_length=150)
     province: str = Field(default="Phnom Penh", max_length=100)
+    avatar_url: Optional[str] = None
     status: Literal["ACTIVE", "SUSPENDED", "PENDING"] = "ACTIVE"
     roles: List[Literal["STUDENT", "ADMIN", "SUPER_ADMIN"]] = Field(
         default_factory=lambda: ["STUDENT"]
@@ -97,6 +99,11 @@ class UserAdminCreateIn(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    @field_validator("avatar_url")
+    @classmethod
+    def validate_avatar_url(cls, value: Optional[str]) -> Optional[str]:
+        return _validate_image_source(value)
+
 
 class UserAdminUpdateIn(BaseModel):
     email: Optional[EmailStr] = None
@@ -104,6 +111,7 @@ class UserAdminUpdateIn(BaseModel):
     full_name_en: Optional[str] = Field(default=None, min_length=1, max_length=150)
     full_name_km: Optional[str] = Field(default=None, max_length=150)
     province: Optional[str] = Field(default=None, max_length=100)
+    avatar_url: Optional[str] = None
     status: Optional[Literal["ACTIVE", "SUSPENDED", "PENDING"]] = None
     roles: Optional[List[Literal["STUDENT", "ADMIN", "SUPER_ADMIN"]]] = None
     is_email_verified: Optional[bool] = None
@@ -111,6 +119,11 @@ class UserAdminUpdateIn(BaseModel):
     preferred_language: Optional[Literal["km", "en"]] = None
 
     model_config = ConfigDict(extra="forbid")
+
+    @field_validator("avatar_url")
+    @classmethod
+    def validate_avatar_url(cls, value: Optional[str]) -> Optional[str]:
+        return _validate_image_source(value)
 
 
 class UniversityAdminIn(BaseModel):
