@@ -259,3 +259,96 @@ async def test_admin_can_manage_assessment_questions(client):
         headers=admin_headers,
     )
     assert deleted_riasec.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_admin_can_create_update_and_delete_user(client):
+    import uuid
+
+    admin_login = await client.post(
+        "/api/v1/auth/login",
+        json={"email": "admin@futera.edu.kh", "password": "AdminPass123!"},
+    )
+    assert admin_login.status_code == 200
+    admin_data = admin_login.json()["data"]
+    admin_headers = {"Authorization": f"Bearer {admin_data['access_token']}"}
+
+    student_login = await client.post(
+        "/api/v1/auth/login",
+        json={"email": "student@futera.edu.kh", "password": "StudentPass123!"},
+    )
+    student_headers = {
+        "Authorization": f"Bearer {student_login.json()['data']['access_token']}"
+    }
+
+    email = f"crud-user-{uuid.uuid4().hex[:10]}@futera.edu.kh"
+    payload = {
+        "email": email,
+        "password": "CrudPass123!",
+        "full_name_en": "CRUD Test User",
+        "full_name_km": "អ្នកសាកល្បង CRUD",
+        "province": "Phnom Penh",
+        "status": "ACTIVE",
+        "roles": ["STUDENT"],
+        "is_email_verified": True,
+    }
+
+    forbidden = await client.post(
+        "/api/v1/admin/users", json=payload, headers=student_headers
+    )
+    assert forbidden.status_code == 403
+
+    created = await client.post(
+        "/api/v1/admin/users", json=payload, headers=admin_headers
+    )
+    assert created.status_code == 200, created.text
+    user = created.json()["data"]
+    user_id = user["id"]
+    assert user["email"] == email
+    assert user["roles"] == ["STUDENT"]
+    assert user["full_name_en"] == "CRUD Test User"
+
+    # The new account can authenticate with the password set by the admin.
+    new_login = await client.post(
+        "/api/v1/auth/login",
+        json={"email": email, "password": "CrudPass123!"},
+    )
+    assert new_login.status_code == 200
+
+    updated_email = f"crud-updated-{uuid.uuid4().hex[:8]}@futera.edu.kh"
+    updated = await client.patch(
+        f"/api/v1/admin/users/{user_id}",
+        json={
+            "email": updated_email,
+            "full_name_en": "Updated CRUD User",
+            "province": "Siem Reap",
+            "password": "NewCrudPass123!",
+        },
+        headers=admin_headers,
+    )
+    assert updated.status_code == 200, updated.text
+    updated_user = updated.json()["data"]
+    assert updated_user["email"] == updated_email
+    assert updated_user["full_name_en"] == "Updated CRUD User"
+    assert updated_user["province"] == "Siem Reap"
+
+    new_login = await client.post(
+        "/api/v1/auth/login",
+        json={"email": updated_email, "password": "NewCrudPass123!"},
+    )
+    assert new_login.status_code == 200
+
+    self_delete = await client.delete(
+        f"/api/v1/admin/users/{admin_data['user_id']}", headers=admin_headers
+    )
+    assert self_delete.status_code == 400
+
+    deleted = await client.delete(
+        f"/api/v1/admin/users/{user_id}", headers=admin_headers
+    )
+    assert deleted.status_code == 200, deleted.text
+    assert deleted.json()["data"]["id"] == user_id
+
+    listed = await client.get("/api/v1/admin/users?limit=500", headers=admin_headers)
+    assert listed.status_code == 200
+    assert all(row["id"] != user_id for row in listed.json()["data"])

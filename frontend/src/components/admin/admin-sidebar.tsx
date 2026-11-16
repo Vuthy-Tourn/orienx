@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { Logo } from "@/components/layout/logo";
 import { useAuth } from "@/contexts/auth-context";
+import { useLanguage } from "@/contexts/language-context";
 import { cn } from "@/lib/utils";
 
 export type AdminTab =
@@ -36,22 +37,29 @@ export type AdminTab =
 export const ADMIN_TABS: {
   id: AdminTab;
   label: string;
+  labelKm: string;
   icon: React.ElementType;
   group: "Workspace" | "Directories" | "System";
 }[] = [
-  { id: "overview", label: "Overview", icon: BarChart3, group: "Workspace" },
-  { id: "users", label: "Users & Access", icon: Users, group: "Workspace" },
-  { id: "universities", label: "Universities", icon: Building2, group: "Directories" },
-  { id: "majors", label: "Majors", icon: BookOpen, group: "Directories" },
-  { id: "offerings", label: "University Programs", icon: GraduationCap, group: "Directories" },
-  { id: "questions", label: "Assessment Questions", icon: ListChecks, group: "System" },
-  { id: "careers", label: "Careers", icon: Briefcase, group: "Directories" },
-  { id: "scholarships", label: "Scholarships", icon: Award, group: "Directories" },
-  { id: "engine", label: "Recommendation Engine", icon: Sliders, group: "System" },
-  { id: "audit", label: "Audit Log", icon: History, group: "System" },
+  { id: "overview", label: "Overview", labelKm: "ទិដ្ឋភាពទូទៅ", icon: BarChart3, group: "Workspace" },
+  { id: "users", label: "Users & Access", labelKm: "អ្នកប្រើប្រាស់ & សិទ្ធិ", icon: Users, group: "Workspace" },
+  { id: "universities", label: "Universities", labelKm: "សាកលវិទ្យាល័យ", icon: Building2, group: "Directories" },
+  { id: "majors", label: "Majors", labelKm: "មុខជំនាញ", icon: BookOpen, group: "Directories" },
+  { id: "offerings", label: "University Programs", labelKm: "កម្មវិធីសិក្សា", icon: GraduationCap, group: "Directories" },
+  { id: "questions", label: "Assessment Questions", labelKm: "សំណួរវាយតម្លៃ", icon: ListChecks, group: "System" },
+  { id: "careers", label: "Careers", labelKm: "អាជីពការងារ", icon: Briefcase, group: "Directories" },
+  { id: "scholarships", label: "Scholarships", labelKm: "អាហារូបករណ៍", icon: Award, group: "Directories" },
+  { id: "engine", label: "Recommendation Engine", labelKm: "ក្បួនផ្គូផ្គង", icon: Sliders, group: "System" },
+  { id: "audit", label: "Audit Log", labelKm: "កំណត់ហេតុសកម្មភាព", icon: History, group: "System" },
 ];
 
 const GROUPS = ["Workspace", "Directories", "System"] as const;
+
+const GROUP_LABELS: Record<(typeof GROUPS)[number], string> = {
+  Workspace: "កន្លែងធ្វើការ",
+  Directories: "បញ្ជីទិន្នន័យ",
+  System: "ប្រព័ន្ធ",
+};
 
 interface AdminSidebarProps {
   activeTab: AdminTab;
@@ -68,6 +76,8 @@ export function AdminSidebar({
 }: AdminSidebarProps) {
   const router = useRouter();
   const { user, logout } = useAuth();
+  const { language } = useLanguage();
+  const isKm = language === "km";
   const reduceMotion = useReducedMotion();
 
   const displayName =
@@ -76,6 +86,11 @@ export function AdminSidebar({
     user?.roles?.find((role) => role === "SUPER_ADMIN") ||
     user?.roles?.find((role) => role === "ADMIN") ||
     "ADMIN";
+  const primaryRoleLabel = isKm
+    ? primaryRole === "SUPER_ADMIN"
+      ? "អ្នកគ្រប់គ្រងជាន់ខ្ពស់"
+      : "អ្នកគ្រប់គ្រង"
+    : primaryRole.replace("_", " ");
 
   const handleLogout = async () => {
     await logout();
@@ -115,7 +130,7 @@ export function AdminSidebar({
             <div className="min-w-0">
               <div className="truncate text-xs font-black text-[#111965] dark:text-white">{displayName}</div>
               <div className="text-[10px] font-bold uppercase tracking-wider text-[#68708A] dark:text-slate-400">
-                {primaryRole.replace("_", " ")}
+                {primaryRoleLabel}
               </div>
             </div>
           </div>
@@ -125,7 +140,7 @@ export function AdminSidebar({
           {GROUPS.map((group) => (
             <div key={group} className="mb-4">
               <div className="mb-1.5 px-2 text-[10px] font-black uppercase tracking-[0.16em] text-[#94A3B8] dark:text-slate-500">
-                {group}
+                {isKm ? GROUP_LABELS[group] : group}
               </div>
               <div className="space-y-1">
                 {ADMIN_TABS.filter((tab) => tab.group === group).map((tab) => {
@@ -170,7 +185,9 @@ export function AdminSidebar({
                           active ? "text-[#F7CE4D]" : "text-[#94A3B8] dark:text-slate-400"
                         )}
                       />
-                      <span className="relative z-10 truncate">{tab.label}</span>
+                      <span className="relative z-10 truncate">
+                        {isKm ? tab.labelKm : tab.label}
+                      </span>
                     </motion.button>
                   );
                 })}
@@ -185,7 +202,7 @@ export function AdminSidebar({
             className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-bold text-[#64748B] transition-colors hover:bg-[#F0F2FA] hover:text-[#111965] dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
           >
             <GraduationCap className="h-4 w-4 text-[#94A3B8] dark:text-slate-400" />
-            Student view
+            {isKm ? "ទិដ្ឋភាពសិស្ស" : "Student view"}
           </Link>
           <button
             type="button"
@@ -193,7 +210,7 @@ export function AdminSidebar({
             className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-bold text-[#64748B] transition-colors hover:bg-rose-50 hover:text-rose-600 dark:text-slate-300 dark:hover:bg-rose-500/10 dark:hover:text-rose-400"
           >
             <LogOut className="h-4 w-4 text-[#94A3B8] dark:text-slate-400" />
-            Sign out
+            {isKm ? "ចាកចេញ" : "Sign out"}
           </button>
         </div>
       </aside>

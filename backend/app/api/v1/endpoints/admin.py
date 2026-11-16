@@ -10,6 +10,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.core.database import get_db
 from app.core.dependencies import get_current_admin
+from app.core.security import hash_password
 from app.models.auth import AuditLog, RefreshToken, User, Role
 from app.models.profile import StudentProfile
 from app.models.catalog import University, Major, Career, Faculty, UniversityMajor
@@ -37,6 +38,8 @@ from app.schemas.admin import (
     UniversityAdminIn,
     UniversityOfferingCreateIn,
     UniversityOfferingUpdateIn,
+    UserAdminCreateIn,
+    UserAdminUpdateIn,
     UserManagementOut,
     UserRolesUpdateIn,
     UserStatusUpdateIn,
@@ -195,21 +198,7 @@ async def list_users(
     res = await db.execute(stmt)
     users = res.scalars().all()
 
-    data = [
-        UserManagementOut(
-            id=u.id,
-            email=u.email,
-            status=u.status,
-            roles=[r.name for r in u.roles],
-            full_name_en=u.profile.full_name_en if u.profile else None,
-            full_name_km=u.profile.full_name_km if u.profile else None,
-            province=u.profile.province if u.profile else None,
-            is_email_verified=u.is_email_verified,
-            last_login_at=u.last_login_at.isoformat() if u.last_login_at else None,
-            created_at=u.created_at.isoformat() if u.created_at else "",
-        )
-        for u in users
-    ]
+    data = [_user_out(u) for u in users]
     return ApiResponse(success=True, data=data)
 
 
@@ -335,6 +324,49 @@ async def _audit(
     )
 
 
+def _user_out(user: User) -> UserManagementOut:
+    profile = user.profile
+    return UserManagementOut(
+        id=user.id,
+        email=user.email,
+        status=user.status,
+        roles=sorted(r.name for r in user.roles),
+        full_name_en=profile.full_name_en if profile else None,
+        full_name_km=profile.full_name_km if profile else None,
+        province=profile.province if profile else None,
+        is_email_verified=user.is_email_verified,
+        last_login_at=user.last_login_at.isoformat() if user.last_login_at else None,
+        created_at=user.created_at.isoformat() if user.created_at else "",
+    )
+
+
+async def _resolve_roles(
+    db: AsyncSession,
+    requested: List[str],
+    actor: User,
+) -> List[Role]:
+    names = list(dict.fromkeys(requested))
+    if not names:
+        raise HTTPException(status_code=400, detail="A user must have at least one role")
+    actor_roles = {r.name for r in actor.roles}
+    if "SUPER_ADMIN" in names and "SUPER_ADMIN" not in actor_roles:
+        raise HTTPException(status_code=403, detail="Only a super admin can grant SUPER_ADMIN")
+    roles = (
+        await db.execute(select(Role).where(Role.name.in_(names)))
+    ).scalars().all()
+    if len(roles) != len(names):
+        raise HTTPException(status_code=400, detail="One or more roles do not exist")
+    return list(roles)
+
+
+async def _revoke_user_sessions(db: AsyncSession, user_id: uuid.UUID) -> None:
+    await db.execute(
+        update(RefreshToken)
+        .where(RefreshToken.user_id == user_id, RefreshToken.is_revoked == False)
+        .values(is_revoked=True, revoked_at=datetime.now(timezone.utc))
+    )
+
+
 def _flat_university(u: University) -> Dict[str, Any]:
     name = u.name if isinstance(u.name, dict) else {}
     acronym = u.acronym if isinstance(u.acronym, dict) else {}
@@ -456,6 +488,244 @@ def _flat_scholarship(s: Scholarship) -> Dict[str, Any]:
 # =========================================================================
 # User management
 # =========================================================================
+
+@router.post("/users", response_model=ApiResponse[UserManagementOut])
+async def create_user(
+    body: UserAdminCreateIn,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    email = str(body.email).strip().lower()
+    existing = (
+        await db.execute(select(User).where(func.lower(User.email) == email))
+    ).scalar_one_or_none()
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    roles = await _resolve_roles(db, body.roles, admin_user)
+    user = User(
+        email=email,
+        password_hash=hash_password(body.password),
+        status=body.status,
+        is_email_verified=body.is_email_verified,
+        roles=roles,
+    )
+    profile = StudentProfile(
+        full_name_en=body.full_name_en.strip(),
+        full_name_km=(body.full_name_km or body.full_name_en).strip(),
+        province=body.province.strip() or "Phnom Penh",
+        current_education_level=body.current_education_level,
+        preferred_language=body.preferred_language,
+    )
+    user.profile = profile
+    db.add(user)
+    await db.flush()
+
+    await _audit(
+        db,
+        admin_user,
+        "create",
+        "user",
+        None,
+        {
+            "id": str(user.id),
+            "email": user.email,
+            "status": user.status,
+            "roles": sorted(r.name for r in roles),
+        },
+    )
+    await db.commit()
+    return ApiResponse(
+        success=True,
+        message="User created",
+        data=_user_out(user),
+    )
+
+
+@router.patch("/users/{id}", response_model=ApiResponse[UserManagementOut])
+async def update_user(
+    id: uuid.UUID,
+    body: UserAdminUpdateIn,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    stmt = (
+        select(User)
+        .options(selectinload(User.roles), selectinload(User.profile))
+        .where(User.id == id)
+    )
+    user = (await db.execute(stmt)).scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    actor_roles = {r.name for r in admin_user.roles}
+    target_roles = {r.name for r in user.roles}
+    if "SUPER_ADMIN" in target_roles and "SUPER_ADMIN" not in actor_roles:
+        raise HTTPException(status_code=403, detail="Only a super admin can modify a super admin")
+
+    profile = user.profile
+    before = {
+        "email": user.email,
+        "status": user.status,
+        "roles": sorted(target_roles),
+        "full_name_en": profile.full_name_en if profile else None,
+        "full_name_km": profile.full_name_km if profile else None,
+        "province": profile.province if profile else None,
+    }
+
+    if body.email is not None:
+        email = str(body.email).strip().lower()
+        if email != user.email:
+            existing = (
+                await db.execute(
+                    select(User).where(
+                        func.lower(User.email) == email,
+                        User.id != user.id,
+                    )
+                )
+            ).scalar_one_or_none()
+            if existing:
+                raise HTTPException(status_code=400, detail="Email already registered")
+            user.email = email
+
+    if body.password:
+        user.password_hash = hash_password(body.password)
+        await _revoke_user_sessions(db, user.id)
+
+    if body.status is not None and body.status != user.status:
+        if user.id == admin_user.id:
+            raise HTTPException(status_code=400, detail="You cannot change your own status")
+        user.status = body.status
+        if body.status != "ACTIVE":
+            await _revoke_user_sessions(db, user.id)
+
+    if body.roles is not None:
+        requested = set(body.roles)
+        if not requested:
+            raise HTTPException(status_code=400, detail="A user must keep at least one role")
+        if user.id == admin_user.id and requested != target_roles:
+            raise HTTPException(status_code=400, detail="You cannot change your own roles")
+        if "SUPER_ADMIN" in target_roles and "SUPER_ADMIN" not in requested:
+            super_count = (
+                await db.execute(
+                    select(func.count())
+                    .select_from(User)
+                    .where(User.roles.any(Role.name == "SUPER_ADMIN"))
+                )
+            ).scalar() or 0
+            if super_count <= 1:
+                raise HTTPException(status_code=400, detail="At least one SUPER_ADMIN must remain")
+        user.roles = await _resolve_roles(db, list(requested), admin_user)
+
+    if profile is None and (
+        body.full_name_en is not None
+        or body.full_name_km is not None
+        or body.province is not None
+        or body.current_education_level is not None
+        or body.preferred_language is not None
+    ):
+        profile = StudentProfile(
+            user=user,
+            full_name_en=body.full_name_en or user.email.split("@")[0],
+            full_name_km=body.full_name_km,
+            province=body.province or "Phnom Penh",
+            current_education_level=body.current_education_level or "GRADE_12",
+            preferred_language=body.preferred_language or "km",
+        )
+        user.profile = profile
+
+    if profile is not None:
+        if body.full_name_en is not None:
+            profile.full_name_en = body.full_name_en.strip()
+        if body.full_name_km is not None:
+            profile.full_name_km = body.full_name_km.strip()
+        if body.province is not None:
+            profile.province = body.province.strip() or "Phnom Penh"
+        if body.current_education_level is not None:
+            profile.current_education_level = body.current_education_level
+        if body.preferred_language is not None:
+            profile.preferred_language = body.preferred_language
+
+    if body.is_email_verified is not None:
+        user.is_email_verified = body.is_email_verified
+
+    await _audit(
+        db,
+        admin_user,
+        "update",
+        "user",
+        before,
+        {
+            "email": user.email,
+            "status": user.status,
+            "roles": sorted(r.name for r in user.roles),
+            "full_name_en": profile.full_name_en if profile else None,
+            "full_name_km": profile.full_name_km if profile else None,
+            "province": profile.province if profile else None,
+        },
+    )
+    await db.commit()
+    return ApiResponse(
+        success=True,
+        message="User updated",
+        data=_user_out(user),
+    )
+
+
+@router.delete("/users/{id}", response_model=ApiResponse[Dict[str, Any]])
+async def delete_user(
+    id: uuid.UUID,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    if id == admin_user.id:
+        raise HTTPException(status_code=400, detail="You cannot delete your own account")
+
+    stmt = (
+        select(User)
+        .options(selectinload(User.roles), selectinload(User.profile))
+        .where(User.id == id)
+    )
+    user = (await db.execute(stmt)).scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    actor_roles = {r.name for r in admin_user.roles}
+    target_roles = {r.name for r in user.roles}
+    if "SUPER_ADMIN" in target_roles and "SUPER_ADMIN" not in actor_roles:
+        raise HTTPException(status_code=403, detail="Only a super admin can delete a super admin")
+    if "SUPER_ADMIN" in target_roles:
+        super_count = (
+            await db.execute(
+                select(func.count())
+                .select_from(User)
+                .where(User.roles.any(Role.name == "SUPER_ADMIN"))
+            )
+        ).scalar() or 0
+        if super_count <= 1:
+            raise HTTPException(status_code=400, detail="At least one SUPER_ADMIN must remain")
+
+    await _audit(
+        db,
+        admin_user,
+        "delete",
+        "user",
+        {
+            "id": str(user.id),
+            "email": user.email,
+            "status": user.status,
+            "roles": sorted(target_roles),
+        },
+        None,
+    )
+    await db.delete(user)
+    await db.commit()
+    return ApiResponse(
+        success=True,
+        message="User deleted",
+        data={"id": str(id)},
+    )
+
 
 @router.patch("/users/{id}/status", response_model=ApiResponse[Dict[str, Any]])
 async def update_user_status(

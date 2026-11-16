@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, useId } from "react";
 import { Check, ChevronDown, X, type LucideIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/language-context";
 
 export interface FilterOption<T extends string = string> {
   value: T;
@@ -44,6 +45,8 @@ export function AdminFilterDropdown<T extends string = string>({
   const listRef = useRef<HTMLUListElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const id = useId();
+  const { language } = useLanguage();
+  const isKm = language === "km";
 
   const isFiltered = value !== allValue;
   const currentOption = options.find((opt) => opt.value === value);
@@ -156,10 +159,11 @@ export function AdminFilterDropdown<T extends string = string>({
         {/* Filter Title & Current Value */}
         <span className="flex items-center gap-1.5 truncate">
           <span className="text-[11px] font-medium text-[#68708A] dark:text-slate-400">
-            {label}:
+            {label}
+            {isKm ? "៖" : ":"}
           </span>
           <span className={cn("truncate font-bold", isFiltered ? "text-[#111965] dark:text-indigo-200" : "text-[#171A2C] dark:text-slate-200")}>
-            {currentOption?.label || "All"}
+            {currentOption?.label || (isKm ? "ទាំងអស់" : "All")}
           </span>
         </span>
 
@@ -175,7 +179,7 @@ export function AdminFilterDropdown<T extends string = string>({
                 handleClear(e as any);
               }
             }}
-            title={`Reset ${label} filter`}
+            title={isKm ? `សម្អាតតម្រង ${label}` : `Reset ${label} filter`}
             className="flex h-4 w-4 items-center justify-center rounded-full bg-[#111965]/10 text-[#111965] transition-colors hover:bg-[#111965]/20 dark:bg-indigo-500/20 dark:text-indigo-200 dark:hover:bg-indigo-500/30"
           >
             <X className="h-2.5 w-2.5" />
@@ -209,7 +213,7 @@ export function AdminFilterDropdown<T extends string = string>({
             {/* Header info */}
             <div className="flex items-center justify-between px-2.5 py-1.5 border-b border-[#F0F2FA] dark:border-slate-800/80 mb-1">
               <span className="text-[10px] font-black uppercase tracking-wider text-[#68708A] dark:text-slate-400">
-                Filter by {label}
+                {isKm ? `ចម្រាញ់តាម ${label}` : `Filter by ${label}`}
               </span>
               {isFiltered && (
                 <button
@@ -217,7 +221,7 @@ export function AdminFilterDropdown<T extends string = string>({
                   onClick={() => handleSelect(allValue)}
                   className="text-[10px] font-bold text-[#111965] hover:underline dark:text-indigo-300"
                 >
-                  Reset
+                  {isKm ? "កំណត់ឡើងវិញ" : "Reset"}
                 </button>
               )}
             </div>

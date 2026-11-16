@@ -25,7 +25,7 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
         className={cn(
           "px-2.5 py-1 rounded-md transition-all duration-150 flex items-center gap-1.5",
           language === "km"
-            ? "bg-[#111965] text-white font-semibold shadow-xs dark:bg-[#F7CE4D] dark:text-[#111965]"
+            ? "bg-[#111965] text-white font-semibold shadow-xs dark:bg-[#F7CE4D] dark:text-white"
             : "text-[#68708A] hover:text-[#171A2C] dark:text-slate-400 dark:hover:text-white"
         )}
       >
@@ -38,7 +38,7 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
         className={cn(
           "px-2.5 py-1 rounded-md transition-all duration-150 flex items-center gap-1.5",
           language === "en"
-            ? "bg-[#111965] text-white font-semibold shadow-xs dark:bg-[#F7CE4D] dark:text-[#111965]"
+            ? "bg-[#111965] text-white font-semibold shadow-xs dark:bg-[#F7CE4D] dark:text-white"
             : "text-[#68708A] hover:text-[#171A2C] dark:text-slate-400 dark:hover:text-white"
         )}
       >

@@ -3,6 +3,7 @@
 import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/language-context";
 
 interface AdminPaginationProps {
   page: number;
@@ -42,6 +43,8 @@ export function AdminPagination({
   itemLabel = "records",
   itemSingular,
 }: AdminPaginationProps) {
+  const { language } = useLanguage();
+  const isKm = language === "km";
   const safePageCount = Math.max(1, pageCount);
   const start = totalItems === 0 ? 0 : (page - 1) * pageSize + 1;
   const end = Math.min(page * pageSize, totalItems);
@@ -54,20 +57,21 @@ export function AdminPagination({
   return (
     <div className="flex flex-col gap-2 border-t border-[#E6E8F0] px-4 py-3 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
       <span className="text-[11px] font-medium text-[#68708A] dark:text-slate-400">
-        Showing{" "}
+        {isKm ? "បង្ហាញ" : "Showing"}{" "}
         <strong className="font-bold text-[#111965] dark:text-white">
           {start}–{end}
         </strong>{" "}
-        of <strong className="font-bold text-[#111965] dark:text-white">{totalItems}</strong>{" "}
+        {isKm ? "ក្នុងចំណោម" : "of"}{" "}
+        <strong className="font-bold text-[#111965] dark:text-white">{totalItems}</strong>{" "}
         {noun}
       </span>
 
-      <nav className="flex items-center gap-1" aria-label="Table pagination">
+      <nav className="flex items-center gap-1" aria-label={isKm ? "ទំព័រតារាង" : "Table pagination"}>
         <button
           type="button"
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
-          aria-label="Previous page"
+          aria-label={isKm ? "ទំព័រមុន" : "Previous page"}
           className={cn(
             baseButton,
             "border-[#E6E8F0] text-[#68708A] hover:bg-[#F0F2FA] hover:text-[#111965]",
@@ -92,7 +96,7 @@ export function AdminPagination({
               type="button"
               onClick={() => onPageChange(item)}
               aria-current={item === page ? "page" : undefined}
-              aria-label={`Page ${item}`}
+              aria-label={isKm ? `ទំព័រ ${item}` : `Page ${item}`}
               className={cn(
                 baseButton,
                 item === page
@@ -109,7 +113,7 @@ export function AdminPagination({
           type="button"
           onClick={() => onPageChange(page + 1)}
           disabled={page >= safePageCount}
-          aria-label="Next page"
+          aria-label={isKm ? "ទំព័របន្ទាប់" : "Next page"}
           className={cn(
             baseButton,
             "border-[#E6E8F0] text-[#68708A] hover:bg-[#F0F2FA] hover:text-[#111965]",

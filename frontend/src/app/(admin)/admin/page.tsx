@@ -69,50 +69,72 @@ const RIASEC_OPTIONS = ["R", "I", "A", "S", "E", "C"].map((code) => ({
   label: code,
 }));
 
+const UNIVERSITY_TYPE_OPTIONS = [
+  { value: "PUBLIC", label: "Public", labelKm: "សាធារណៈ" },
+  { value: "PRIVATE", label: "Private", labelKm: "ឯកជន" },
+];
+
+const EDUCATION_LEVEL_OPTIONS = [
+  { value: "BACHELOR", label: "Bachelor", labelKm: "បរិញ្ញាបត្រ" },
+  { value: "ASSOCIATE", label: "Associate", labelKm: "បរិញ្ញាបត្ររង" },
+  { value: "MASTER", label: "Master", labelKm: "អនុបណ្ឌិត" },
+  { value: "DOCTORATE", label: "Doctorate", labelKm: "បណ្ឌិត" },
+  { value: "DIPLOMA", label: "Diploma", labelKm: "សញ្ញាបត្របច្ចេកទេស" },
+];
+
+const COVERAGE_OPTIONS = [
+  { value: "FULL_TUITION", label: "Full tuition", labelKm: "ថ្លៃសិក្សាពេញ" },
+  { value: "PARTIAL_TUITION", label: "Partial tuition", labelKm: "ថ្លៃសិក្សាមួយផ្នែក" },
+  { value: "STIPEND_ONLY", label: "Stipend only", labelKm: "ប្រាក់ឧបត្ថម្ភប៉ុណ្ណោះ" },
+  { value: "FULL_RIDE", label: "Full ride", labelKm: "អាហារូបករណ៍ពេញលេញ" },
+];
+
 const UNIVERSITY_FIELDS: AdminField[] = [
-  { key: "slug", label: "Slug", placeholder: "auto-generated if blank" },
-  { key: "name_en", label: "Name (English)", required: true },
-  { key: "name_km", label: "Name (Khmer)" },
-  { key: "acronym_en", label: "Acronym (English)", required: true },
-  { key: "acronym_km", label: "Acronym (Khmer)" },
+  { key: "slug", label: "Slug", labelKm: "ស្លាក", placeholder: "auto-generated if blank", placeholderKm: "បង្កើតដោយស្វ័យប្រវត្តិប្រសិនបើទទេ" },
+  { key: "name_en", label: "Name (English)", labelKm: "ឈ្មោះ (អង់គ្លេស)", required: true },
+  { key: "name_km", label: "Name (Khmer)", labelKm: "ឈ្មោះ (ខ្មែរ)" },
+  { key: "acronym_en", label: "Acronym (English)", labelKm: "អក្សរកាត់ (អង់គ្លេស)", required: true },
+  { key: "acronym_km", label: "Acronym (Khmer)", labelKm: "អក្សរកាត់ (ខ្មែរ)" },
   {
     key: "university_type",
     label: "Type",
+    labelKm: "ប្រភេទ",
     type: "select",
-    options: [
-      { value: "PUBLIC", label: "Public" },
-      { value: "PRIVATE", label: "Private" },
-    ],
+    options: UNIVERSITY_TYPE_OPTIONS,
     defaultValue: "PUBLIC",
     required: true,
   },
-  { key: "province", label: "Province", defaultValue: "Phnom Penh", required: true },
-  { key: "website_url", label: "Website" },
-  { key: "contact_email", label: "Contact email" },
-  { key: "contact_phone", label: "Contact phone" },
-  { key: "logo_url", label: "Logo", type: "image", imageShape: "square", placeholder: "Paste a URL or upload from your laptop" },
-  { key: "cover_image_url", label: "Cover image", type: "image", imageShape: "wide", placeholder: "Paste a URL or upload from your laptop" },
-  { key: "established_year", label: "Established year", type: "number", min: 1900, max: 2100 },
-  { key: "tuition_range_min_usd", label: "Min tuition (USD)", type: "number", min: 0 },
-  { key: "tuition_range_max_usd", label: "Max tuition (USD)", type: "number", min: 0 },
-  { key: "is_tuition_verified", label: "Tuition verified", type: "checkbox" },
-  { key: "is_verified", label: "University verified", type: "checkbox", defaultValue: true },
-  { key: "description_en", label: "Description (English)", type: "textarea", wide: true },
-  { key: "description_km", label: "Description (Khmer)", type: "textarea", wide: true },
+  { key: "province", label: "Province", labelKm: "រាជធានី/ខេត្ត", defaultValue: "Phnom Penh", required: true },
+  { key: "website_url", label: "Website", labelKm: "គេហទំព័រ" },
+  { key: "contact_email", label: "Contact email", labelKm: "អ៊ីមែលទំនាក់ទំនង" },
+  { key: "contact_phone", label: "Contact phone", labelKm: "ទូរស័ព្ទទំនាក់ទំនង" },
+  { key: "logo_url", label: "Logo", labelKm: "រូបសញ្ញា", type: "image", imageShape: "square" },
+  { key: "cover_image_url", label: "Cover image", labelKm: "រូបភាពគម្រប", type: "image", imageShape: "wide" },
+  { key: "established_year", label: "Established year", labelKm: "ឆ្នាំបង្កើត", type: "number", min: 1900, max: 2100 },
+  { key: "tuition_range_min_usd", label: "Min tuition (USD)", labelKm: "តម្លៃសិក្សាអប្បបរមា (USD)", type: "number", min: 0 },
+  { key: "tuition_range_max_usd", label: "Max tuition (USD)", labelKm: "តម្លៃសិក្សាអតិបរមា (USD)", type: "number", min: 0 },
+  { key: "is_tuition_verified", label: "Tuition verified", labelKm: "តម្លៃសិក្សាបានផ្ទៀងផ្ទាត់", type: "checkbox" },
+  { key: "is_verified", label: "University verified", labelKm: "សាកលវិទ្យាល័យបានផ្ទៀងផ្ទាត់", type: "checkbox", defaultValue: true },
+  { key: "description_en", label: "Description (English)", labelKm: "ការពិពណ៌នា (អង់គ្លេស)", type: "textarea", wide: true },
+  { key: "description_km", label: "Description (Khmer)", labelKm: "ការពិពណ៌នា (ខ្មែរ)", type: "textarea", wide: true },
 ];
 
 const UNIVERSITY_COLUMNS: AdminColumn[] = [
   {
     key: "preview",
     label: "Preview",
+    labelKm: "មើលជាមុន",
     render: (row) => <PreviewCell src={row.cover_image_url || row.logo_url} label={row.name_en} />,
   },
   {
     key: "name_en",
     label: "University",
+    labelKm: "សាកលវិទ្យាល័យ",
     render: (row) => (
       <div>
-        <div className="font-bold text-[#111965]">{row.name_en}</div>
+        <div className="font-bold text-[#111965]">
+          <LocalizedText en={row.name_en} km={row.name_km} />
+        </div>
         <div className="text-[11px] text-[#68708A]">
           {row.acronym_en} · {row.province}
         </div>
@@ -122,15 +144,13 @@ const UNIVERSITY_COLUMNS: AdminColumn[] = [
   {
     key: "university_type",
     label: "Type",
-    render: (row) => (
-      <span className="rounded-md border border-slate-200 bg-slate-100 px-1.5 py-0.5 text-[10px] font-black text-slate-600">
-        {row.university_type}
-      </span>
-    ),
+    labelKm: "ប្រភេទ",
+    render: (row) => <UniversityTypeBadge value={row.university_type} />,
   },
   {
     key: "tuition_range_min_usd",
     label: "Tuition",
+    labelKm: "តម្លៃសិក្សា",
     render: (row) =>
       row.tuition_range_min_usd
         ? `$${row.tuition_range_min_usd}–$${row.tuition_range_max_usd ?? row.tuition_range_min_usd}`
@@ -139,36 +159,41 @@ const UNIVERSITY_COLUMNS: AdminColumn[] = [
   {
     key: "is_verified",
     label: "Verified",
+    labelKm: "បានផ្ទៀងផ្ទាត់",
     render: (row) => <BoolBadge value={row.is_verified} />,
   },
 ];
 
 const MAJOR_FIELDS: AdminField[] = [
-  { key: "slug", label: "Slug", placeholder: "auto-generated if blank" },
-  { key: "name_en", label: "Name (English)", required: true },
-  { key: "name_km", label: "Name (Khmer)" },
-  { key: "category", label: "Category", required: true },
-  { key: "riasec_primary", label: "RIASEC primary", type: "select", options: RIASEC_OPTIONS, defaultValue: "I", required: true },
-  { key: "riasec_secondary", label: "RIASEC secondary", type: "select", options: RIASEC_OPTIONS, defaultValue: "R", required: true },
-  { key: "personality_affinity", label: "MBTI affinity", placeholder: "INTJ,INTP" },
-  { key: "is_stem", label: "STEM major", type: "checkbox" },
-  { key: "image_url", label: "Major image", type: "image", imageShape: "wide", placeholder: "Paste a URL or upload from your laptop" },
-  { key: "description_en", label: "Description (English)", type: "textarea", wide: true },
-  { key: "description_km", label: "Description (Khmer)", type: "textarea", wide: true },
+  { key: "slug", label: "Slug", labelKm: "ស្លាក", placeholder: "auto-generated if blank", placeholderKm: "បង្កើតដោយស្វ័យប្រវត្តិប្រសិនបើទទេ" },
+  { key: "name_en", label: "Name (English)", labelKm: "ឈ្មោះ (អង់គ្លេស)", required: true },
+  { key: "name_km", label: "Name (Khmer)", labelKm: "ឈ្មោះ (ខ្មែរ)" },
+  { key: "category", label: "Category", labelKm: "ប្រភេទ", required: true },
+  { key: "riasec_primary", label: "RIASEC primary", labelKm: "RIASEC ចម្បង", type: "select", options: RIASEC_OPTIONS, defaultValue: "I", required: true },
+  { key: "riasec_secondary", label: "RIASEC secondary", labelKm: "RIASEC បន្ទាប់បន្សំ", type: "select", options: RIASEC_OPTIONS, defaultValue: "R", required: true },
+  { key: "personality_affinity", label: "MBTI affinity", labelKm: "ភាពស៊ីគ្នា MBTI", placeholder: "INTJ,INTP" },
+  { key: "is_stem", label: "STEM major", labelKm: "មុខជំនាញ STEM", type: "checkbox" },
+  { key: "image_url", label: "Major image", labelKm: "រូបភាពមុខជំនាញ", type: "image", imageShape: "wide" },
+  { key: "description_en", label: "Description (English)", labelKm: "ការពិពណ៌នា (អង់គ្លេស)", type: "textarea", wide: true },
+  { key: "description_km", label: "Description (Khmer)", labelKm: "ការពិពណ៌នា (ខ្មែរ)", type: "textarea", wide: true },
 ];
 
 const MAJOR_COLUMNS: AdminColumn[] = [
   {
     key: "preview",
     label: "Preview",
+    labelKm: "មើលជាមុន",
     render: (row) => <PreviewCell src={row.image_url} label={row.name_en} />,
   },
   {
     key: "name_en",
     label: "Major",
+    labelKm: "មុខជំនាញ",
     render: (row) => (
       <div>
-        <div className="font-bold text-[#111965]">{row.name_en}</div>
+        <div className="font-bold text-[#111965]">
+          <LocalizedText en={row.name_en} km={row.name_km} />
+        </div>
         <div className="text-[11px] text-[#68708A]">{row.category}</div>
       </div>
     ),
@@ -176,117 +201,122 @@ const MAJOR_COLUMNS: AdminColumn[] = [
   {
     key: "riasec_primary",
     label: "RIASEC",
+    labelKm: "RIASEC",
     render: (row) => `${row.riasec_primary}${row.riasec_secondary}`,
   },
   {
     key: "is_stem",
     label: "STEM",
+    labelKm: "STEM",
     render: (row) => <BoolBadge value={row.is_stem} />,
   },
 ];
 
 const CAREER_FIELDS: AdminField[] = [
-  { key: "slug", label: "Slug", placeholder: "auto-generated if blank" },
-  { key: "title_en", label: "Title (English)", required: true },
-  { key: "title_km", label: "Title (Khmer)" },
-  { key: "industry", label: "Industry", required: true },
+  { key: "slug", label: "Slug", labelKm: "ស្លាក", placeholder: "auto-generated if blank", placeholderKm: "បង្កើតដោយស្វ័យប្រវត្តិប្រសិនបើទទេ" },
+  { key: "title_en", label: "Title (English)", labelKm: "ចំណងជើង (អង់គ្លេស)", required: true },
+  { key: "title_km", label: "Title (Khmer)", labelKm: "ចំណងជើង (ខ្មែរ)" },
+  { key: "industry", label: "Industry", labelKm: "ឧស្សាហកម្ម", required: true },
   {
     key: "education_level",
     label: "Education level",
+    labelKm: "កម្រិតអប់រំ",
     type: "select",
-    options: [
-      { value: "BACHELOR", label: "Bachelor" },
-      { value: "ASSOCIATE", label: "Associate" },
-      { value: "MASTER", label: "Master" },
-      { value: "DOCTORATE", label: "Doctorate" },
-      { value: "DIPLOMA", label: "Diploma" },
-    ],
+    options: EDUCATION_LEVEL_OPTIONS,
     defaultValue: "BACHELOR",
   },
-  { key: "riasec_code", label: "RIASEC code", placeholder: "IRE", required: true },
-  { key: "description_en", label: "Description (English)", type: "textarea", wide: true },
-  { key: "description_km", label: "Description (Khmer)", type: "textarea", wide: true },
+  { key: "riasec_code", label: "RIASEC code", labelKm: "កូដ RIASEC", placeholder: "IRE", required: true },
+  { key: "description_en", label: "Description (English)", labelKm: "ការពិពណ៌នា (អង់គ្លេស)", type: "textarea", wide: true },
+  { key: "description_km", label: "Description (Khmer)", labelKm: "ការពិពណ៌នា (ខ្មែរ)", type: "textarea", wide: true },
 ];
 
 const CAREER_COLUMNS: AdminColumn[] = [
   {
     key: "title_en",
     label: "Career",
+    labelKm: "អាជីព",
     render: (row) => (
       <div>
-        <div className="font-bold text-[#111965]">{row.title_en}</div>
+        <div className="font-bold text-[#111965]">
+          <LocalizedText en={row.title_en} km={row.title_km} />
+        </div>
         <div className="text-[11px] text-[#68708A]">{row.industry}</div>
       </div>
     ),
   },
-  { key: "education_level", label: "Education" },
-  { key: "riasec_code", label: "RIASEC" },
+  {
+    key: "education_level",
+    label: "Education",
+    labelKm: "ការអប់រំ",
+    render: (row) => <EducationBadge value={row.education_level} />,
+  },
+  { key: "riasec_code", label: "RIASEC", labelKm: "RIASEC" },
 ];
 
 const SCHOLARSHIP_FIELDS: AdminField[] = [
-  { key: "slug", label: "Slug", placeholder: "auto-generated if blank" },
-  { key: "title_en", label: "Title (English)", required: true },
-  { key: "title_km", label: "Title (Khmer)" },
-  { key: "provider_en", label: "Provider (English)", required: true },
-  { key: "provider_km", label: "Provider (Khmer)" },
+  { key: "slug", label: "Slug", labelKm: "ស្លាក", placeholder: "auto-generated if blank", placeholderKm: "បង្កើតដោយស្វ័យប្រវត្តិប្រសិនបើទទេ" },
+  { key: "title_en", label: "Title (English)", labelKm: "ចំណងជើង (អង់គ្លេស)", required: true },
+  { key: "title_km", label: "Title (Khmer)", labelKm: "ចំណងជើង (ខ្មែរ)" },
+  { key: "provider_en", label: "Provider (English)", labelKm: "អ្នកផ្តល់ (អង់គ្លេស)", required: true },
+  { key: "provider_km", label: "Provider (Khmer)", labelKm: "អ្នកផ្តល់ (ខ្មែរ)" },
   {
     key: "coverage_type",
     label: "Coverage type",
+    labelKm: "ប្រភេទហិរញ្ញប្បទាន",
     type: "select",
-    options: [
-      { value: "FULL_TUITION", label: "Full tuition" },
-      { value: "PARTIAL_TUITION", label: "Partial tuition" },
-      { value: "STIPEND_ONLY", label: "Stipend only" },
-      { value: "FULL_RIDE", label: "Full ride" },
-    ],
+    options: COVERAGE_OPTIONS,
     defaultValue: "FULL_TUITION",
     required: true,
   },
-  { key: "coverage_percentage", label: "Coverage %", type: "number", min: 0, max: 100 },
-  { key: "country_or_institution", label: "Country / institution", required: true },
-  { key: "application_deadline", label: "Deadline", type: "date" },
-  { key: "official_url", label: "Official URL", required: true },
-  { key: "source_name", label: "Source name" },
-  { key: "poster_url", label: "Poster image", type: "image", imageShape: "poster", placeholder: "Paste a URL or upload from your laptop" },
-  { key: "is_verified", label: "Verified", type: "checkbox", defaultValue: true },
-  { key: "description_en", label: "Description (English)", type: "textarea", wide: true },
-  { key: "description_km", label: "Description (Khmer)", type: "textarea", wide: true },
+  { key: "coverage_percentage", label: "Coverage %", labelKm: "ភាគរយហិរញ្ញប្បទាន", type: "number", min: 0, max: 100 },
+  { key: "country_or_institution", label: "Country / institution", labelKm: "ប្រទេស / គ្រឹះស្ថាន", required: true },
+  { key: "application_deadline", label: "Deadline", labelKm: "កាលកំណត់", type: "date" },
+  { key: "official_url", label: "Official URL", labelKm: "URL ផ្លូវការ", required: true },
+  { key: "source_name", label: "Source name", labelKm: "ឈ្មោះប្រភព" },
+  { key: "poster_url", label: "Poster image", labelKm: "រូបភាពផ្ទាំងព័ត៌មាន", type: "image", imageShape: "poster" },
+  { key: "is_verified", label: "Verified", labelKm: "បានផ្ទៀងផ្ទាត់", type: "checkbox", defaultValue: true },
+  { key: "description_en", label: "Description (English)", labelKm: "ការពិពណ៌នា (អង់គ្លេស)", type: "textarea", wide: true },
+  { key: "description_km", label: "Description (Khmer)", labelKm: "ការពិពណ៌នា (ខ្មែរ)", type: "textarea", wide: true },
 ];
 
 const SCHOLARSHIP_COLUMNS: AdminColumn[] = [
   {
     key: "preview",
     label: "Preview",
+    labelKm: "មើលជាមុន",
     render: (row) => <PreviewCell src={row.poster_url} label={row.title_en} />,
   },
   {
     key: "title_en",
     label: "Scholarship",
+    labelKm: "អាហារូបករណ៍",
     render: (row) => (
       <div>
-        <div className="font-bold text-[#111965]">{row.title_en}</div>
-        <div className="text-[11px] text-[#68708A]">{row.provider_en}</div>
+        <div className="font-bold text-[#111965]">
+          <LocalizedText en={row.title_en} km={row.title_km} />
+        </div>
+        <div className="text-[11px] text-[#68708A]">
+          <LocalizedText en={row.provider_en} km={row.provider_km} />
+        </div>
       </div>
     ),
   },
   {
     key: "coverage_type",
     label: "Coverage",
-    render: (row) => (
-      <span className="rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-[10px] font-black text-amber-800">
-        {row.coverage_percentage ? `${row.coverage_percentage}%` : row.coverage_type?.replace("_", " ")}
-      </span>
-    ),
+    labelKm: "ហិរញ្ញប្បទាន",
+    render: (row) => <CoverageBadge row={row} />,
   },
   {
     key: "application_deadline",
     label: "Deadline",
-    render: (row) =>
-      row.application_deadline ? new Date(row.application_deadline).toLocaleDateString() : "Rolling",
+    labelKm: "កាលកំណត់",
+    render: (row) => <DeadlineCell value={row.application_deadline} />,
   },
   {
     key: "is_verified",
     label: "Verified",
+    labelKm: "បានផ្ទៀងផ្ទាត់",
     render: (row) => <BoolBadge value={row.is_verified} />,
   },
 ];
@@ -295,43 +325,42 @@ const UNIVERSITY_FILTERS: AdminFilterConfig[] = [
   {
     key: "university_type",
     label: "Type",
-    options: [
-      { value: "PUBLIC", label: "Public" },
-      { value: "PRIVATE", label: "Private" },
-    ],
+    labelKm: "ប្រភេទ",
+    options: UNIVERSITY_TYPE_OPTIONS,
   },
   {
     key: "is_verified",
     label: "Verification",
+    labelKm: "ការផ្ទៀងផ្ទាត់",
     type: "boolean",
     trueLabel: "Verified",
     falseLabel: "Unverified",
+    trueLabelKm: "បានផ្ទៀងផ្ទាត់",
+    falseLabelKm: "មិនបានផ្ទៀងផ្ទាត់",
   },
 ];
 
 const MAJOR_FILTERS: AdminFilterConfig[] = [
-  { key: "category", label: "Category" },
+  { key: "category", label: "Category", labelKm: "ប្រភេទ" },
   {
     key: "is_stem",
     label: "STEM",
+    labelKm: "STEM",
     type: "boolean",
     trueLabel: "STEM",
     falseLabel: "Non-STEM",
+    trueLabelKm: "STEM",
+    falseLabelKm: "មិនមែន STEM",
   },
 ];
 
 const CAREER_FILTERS: AdminFilterConfig[] = [
-  { key: "industry", label: "Industry" },
+  { key: "industry", label: "Industry", labelKm: "ឧស្សាហកម្ម" },
   {
     key: "education_level",
     label: "Education",
-    options: [
-      { value: "ASSOCIATE", label: "Associate" },
-      { value: "BACHELOR", label: "Bachelor" },
-      { value: "MASTER", label: "Master" },
-      { value: "DOCTORATE", label: "Doctorate" },
-      { value: "DIPLOMA", label: "Diploma" },
-    ],
+    labelKm: "ការអប់រំ",
+    options: EDUCATION_LEVEL_OPTIONS,
   },
 ];
 
@@ -339,21 +368,25 @@ const SCHOLARSHIP_FILTERS: AdminFilterConfig[] = [
   {
     key: "coverage_type",
     label: "Coverage",
-    options: [
-      { value: "FULL_TUITION", label: "Full tuition" },
-      { value: "PARTIAL_TUITION", label: "Partial tuition" },
-      { value: "STIPEND_ONLY", label: "Stipend only" },
-      { value: "FULL_RIDE", label: "Full ride" },
-    ],
+    labelKm: "ហិរញ្ញប្បទាន",
+    options: COVERAGE_OPTIONS,
   },
   {
     key: "is_verified",
     label: "Verification",
+    labelKm: "ការផ្ទៀងផ្ទាត់",
     type: "boolean",
     trueLabel: "Verified",
     falseLabel: "Unverified",
+    trueLabelKm: "បានផ្ទៀងផ្ទាត់",
+    falseLabelKm: "មិនបានផ្ទៀងផ្ទាត់",
   },
 ];
+
+function LocalizedText({ en, km }: { en?: string | null; km?: string | null }) {
+  const { language } = useLanguage();
+  return <>{language === "km" && km ? km : en}</>;
+}
 
 function PreviewCell({ src, label }: { src?: string | null; label?: string }) {
   if (!src) {
@@ -372,15 +405,61 @@ function PreviewCell({ src, label }: { src?: string | null; label?: string }) {
 }
 
 function BoolBadge({ value }: { value: boolean }) {
+  const { language } = useLanguage();
+  const isKm = language === "km";
   return value ? (
     <span className="inline-flex items-center gap-1 rounded-md border border-emerald-200 bg-emerald-50 px-1.5 py-0.5 text-[10px] font-black text-emerald-700">
       <CheckCircle2 className="h-3 w-3" />
-      Yes
+      {isKm ? "បាទ/ចាស" : "Yes"}
     </span>
   ) : (
     <span className="rounded-md border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-black text-slate-500">
-      No
+      {isKm ? "ទេ" : "No"}
     </span>
+  );
+}
+
+function UniversityTypeBadge({ value }: { value: string }) {
+  const { language } = useLanguage();
+  const isKm = language === "km";
+  const option = UNIVERSITY_TYPE_OPTIONS.find((item) => item.value === value);
+  return (
+    <span className="whitespace-nowrap rounded-md border border-slate-200 bg-slate-100 px-1.5 py-0.5 text-[10px] font-black text-slate-600">
+      {option ? (isKm ? option.labelKm : option.label) : value}
+    </span>
+  );
+}
+
+function EducationBadge({ value }: { value: string }) {
+  const { language } = useLanguage();
+  const isKm = language === "km";
+  const option = EDUCATION_LEVEL_OPTIONS.find((item) => item.value === value);
+  return <>{option ? (isKm ? option.labelKm : option.label) : value}</>;
+}
+
+function CoverageBadge({ row }: { row: Record<string, any> }) {
+  const { language } = useLanguage();
+  const isKm = language === "km";
+  const option = COVERAGE_OPTIONS.find((item) => item.value === row.coverage_type);
+  const label = option ? (isKm ? option.labelKm : option.label) : row.coverage_type;
+  return (
+    <span className="rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-[10px] font-black text-amber-800">
+      {row.coverage_percentage ? `${row.coverage_percentage}%` : label}
+    </span>
+  );
+}
+
+function DeadlineCell({ value }: { value?: string | null }) {
+  const { language } = useLanguage();
+  const isKm = language === "km";
+  return (
+    <>
+      {value
+        ? new Date(value).toLocaleDateString(isKm ? "km-KH" : "en-US")
+        : isKm
+        ? "រហូត"
+        : "Rolling"}
+    </>
   );
 }
 
@@ -467,7 +546,7 @@ export default function AdminConsolePage() {
                 type="button"
                 onClick={() => setMobileOpen(true)}
                 className="rounded-lg p-2 text-[#64748B] transition-colors hover:bg-[#F0F2FA] dark:text-slate-400 dark:hover:bg-white/10 lg:hidden"
-                aria-label="Open admin menu"
+                aria-label={isKm ? "បើកម៉ឺនុយអ្នកគ្រប់គ្រង" : "Open admin menu"}
               >
                 <Menu className="h-5 w-5" />
               </button>
@@ -529,8 +608,12 @@ export default function AdminConsolePage() {
           {activeTab === "universities" && (
             <ContentManager
               resource="universities"
-              title="Universities"
-              description="Public and private institutions in the directory."
+              title={isKm ? "សាកលវិទ្យាល័យ" : "Universities"}
+              description={
+                isKm
+                  ? "គ្រឹះស្ថានសាធារណៈ និងឯកជននៅក្នុងបញ្ជីទិន្នន័យ។"
+                  : "Public and private institutions in the directory."
+              }
               fields={UNIVERSITY_FIELDS}
               columns={UNIVERSITY_COLUMNS}
               searchKeys={["name_en", "name_km", "acronym_en", "slug", "province"]}
@@ -540,8 +623,12 @@ export default function AdminConsolePage() {
           {activeTab === "majors" && (
             <ContentManager
               resource="majors"
-              title="Majors"
-              description="Academic programs and their RIASEC / MBTI attributes."
+              title={isKm ? "មុខជំនាញ" : "Majors"}
+              description={
+                isKm
+                  ? "កម្មវិធីសិក្សា និងលក្ខណៈ RIASEC / MBTI របស់វា។"
+                  : "Academic programs and their RIASEC / MBTI attributes."
+              }
               fields={MAJOR_FIELDS}
               columns={MAJOR_COLUMNS}
               searchKeys={["name_en", "name_km", "category", "slug"]}
@@ -553,8 +640,12 @@ export default function AdminConsolePage() {
           {activeTab === "careers" && (
             <ContentManager
               resource="careers"
-              title="Careers"
-              description="Career profiles, industries, and required qualifications."
+              title={isKm ? "អាជីពការងារ" : "Careers"}
+              description={
+                isKm
+                  ? "ប្រវត្តិអាជីព ឧស្សាហកម្ម និងគុណវុឌ្ឍិដែលត្រូវការ។"
+                  : "Career profiles, industries, and required qualifications."
+              }
               fields={CAREER_FIELDS}
               columns={CAREER_COLUMNS}
               searchKeys={["title_en", "title_km", "industry", "slug"]}
@@ -564,8 +655,12 @@ export default function AdminConsolePage() {
           {activeTab === "scholarships" && (
             <ContentManager
               resource="scholarships"
-              title="Scholarships"
-              description="Funding opportunities, coverage, deadlines, and verification."
+              title={isKm ? "អាហារូបករណ៍" : "Scholarships"}
+              description={
+                isKm
+                  ? "ឱកាសហិរញ្ញប្បទាន ហិរញ្ញប្បទាន កាលកំណត់ និងការផ្ទៀងផ្ទាត់។"
+                  : "Funding opportunities, coverage, deadlines, and verification."
+              }
               fields={SCHOLARSHIP_FIELDS}
               columns={SCHOLARSHIP_COLUMNS}
               searchKeys={["title_en", "title_km", "provider_en", "country_or_institution", "slug"]}
@@ -1336,12 +1431,16 @@ function RulesPanel() {
     queryKey: ["admin-rules"],
     queryFn: async () => apiFetch<any[]>("/admin/rules"),
   });
+  const { language } = useLanguage();
+  const isKm = language === "km";
   const activeRule = rules?.[0];
 
   if (!activeRule) {
     return (
       <div className="mx-auto max-w-5xl py-16 text-center text-xs text-[#68708A]">
-        No recommendation rule is configured yet.
+        {isKm
+          ? "មិនទាន់មានច្បាប់ណែនាំដែលបានកំណត់ទេ។"
+          : "No recommendation rule is configured yet."}
       </div>
     );
   }
@@ -1353,6 +1452,8 @@ function RulesPanel() {
 
 function RuleEditor({ rule }: { rule: Record<string, any> }) {
   const queryClient = useQueryClient();
+  const { language } = useLanguage();
+  const isKm = language === "km";
   const [weights, setWeights] = useState({
     weight_personality: Number(rule.weight_personality),
     weight_riasec: Number(rule.weight_riasec),
@@ -1383,36 +1484,41 @@ function RuleEditor({ rule }: { rule: Record<string, any> }) {
     },
     onError: (error: any) => {
       setSaved(false);
-      setSaveError(error?.message || "Could not save these weights.");
+      setSaveError(
+        error?.message ||
+          (isKm
+            ? "មិនអាចរក្សាទុកទម្ងន់ទាំងនេះបានទេ។"
+            : "Could not save these weights.")
+      );
     },
   });
 
   const pillars = [
     {
       key: "weight_personality",
-      label: "16-Personality",
-      hint: "Interests and working style",
+      label: isKm ? "១៦ បុគ្គលិកលក្ខណៈ" : "16-Personality",
+      hint: isKm ? "ចំណាប់អារម្មណ៍ និងរបៀបធ្វើការ" : "Interests and working style",
       color: "#8B5CF6",
       tint: "bg-[#F5F3FF] text-[#6D28D9]",
     },
     {
       key: "weight_riasec",
       label: "RIASEC",
-      hint: "Career interest profile",
+      hint: isKm ? "ប្រវត្តិចំណាប់អារម្មណ៍អាជីព" : "Career interest profile",
       color: "#0EA5E9",
       tint: "bg-[#F0F9FF] text-[#0369A1]",
     },
     {
       key: "weight_academic_strengths",
-      label: "Academic strengths",
-      hint: "Grades and subject fit",
+      label: isKm ? "ភាពខ្លាំងសិក្សា" : "Academic strengths",
+      hint: isKm ? "ពិន្ទុ និងភាពស៊ីគ្នានៃមុខវិជ្ជា" : "Grades and subject fit",
       color: "#10B981",
       tint: "bg-[#ECFDF5] text-[#047857]",
     },
     {
       key: "weight_career_alignment",
-      label: "Career alignment",
-      hint: "Long-term career direction",
+      label: isKm ? "ភាពស៊ីគ្នានឹងអាជីព" : "Career alignment",
+      hint: isKm ? "ទិសដៅអាជីពរយៈពេលវែង" : "Long-term career direction",
       color: "#F59E0B",
       tint: "bg-[#FFFBEB] text-[#B45309]",
     },
@@ -1436,11 +1542,12 @@ function RuleEditor({ rule }: { rule: Record<string, any> }) {
           </div>
           <div className="min-w-0">
             <h2 className="text-lg font-black text-[#111965]">
-              Recommendation engine
+              {isKm ? "ក្បួនផ្គូផ្គង" : "Recommendation engine"}
             </h2>
             <p className="mt-0.5 text-xs text-[#68708A]">
-              Control how the four pillars contribute to the final major match
-              score.
+              {isKm
+                ? "គ្រប់គ្រងរបៀបដែលសសរស្តម្ភទាំងបួនរួមចំណែកដល់ពិន្ទុផ្គូផ្គងមុខជំនាញចុងក្រោយ។"
+                : "Control how the four pillars contribute to the final major match score."}
             </p>
           </div>
         </div>
@@ -1491,7 +1598,7 @@ function RuleEditor({ rule }: { rule: Record<string, any> }) {
                   onChange={(event) =>
                     updateWeight(pillar.key, Number(event.target.value))
                   }
-                  aria-label={`${pillar.label} weight`}
+                  aria-label={`${pillar.label} ${isKm ? "ទម្ងន់" : "weight"}`}
                   aria-valuetext={`${percent}%`}
                   style={{
                     background: `linear-gradient(to right, ${pillar.color} 0%, ${pillar.color} ${percent}%, #EEF2F7 ${percent}%, #EEF2F7 100%)`,
@@ -1507,7 +1614,7 @@ function RuleEditor({ rule }: { rule: Record<string, any> }) {
           <div className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4">
             <div className="flex items-center justify-between gap-2">
               <span className="text-[10px] font-black uppercase tracking-wider text-[#68708A]">
-                Total allocation
+                {isKm ? "ការបែងចែកសរុប" : "Total allocation"}
               </span>
               <span
                 className={cn(
@@ -1545,9 +1652,15 @@ function RuleEditor({ rule }: { rule: Record<string, any> }) {
               )}
             >
               {isBalanced
-                ? "Balanced. All four pillars add up to 100%."
+                ? isKm
+                  ? "មានតុល្យភាព។ សសរស្តម្ភទាំងបួនសរុបបាន 100%។"
+                  : "Balanced. All four pillars add up to 100%."
                 : difference > 0
-                ? `${difference}% unallocated. Adjust the sliders to reach 100%.`
+                ? isKm
+                  ? `${difference}% មិនទាន់បានបែងចែក។ សូមកែសម្រួលដើម្បីឈានដល់ 100%។`
+                  : `${difference}% unallocated. Adjust the sliders to reach 100%.`
+                : isKm
+                ? `${Math.abs(difference)}% លើស។ សូមកែសម្រួលដើម្បីឈានដល់ 100%។`
                 : `${Math.abs(difference)}% over. Adjust the sliders to reach 100%.`}
             </p>
           </div>
@@ -1570,11 +1683,15 @@ function RuleEditor({ rule }: { rule: Record<string, any> }) {
           >
             <span className="min-w-0">
               <span className="block text-xs font-bold text-[#111965]">
-                Rule active
+                {isKm ? "ច្បាប់សកម្ម" : "Rule active"}
               </span>
               <span className="mt-0.5 block text-[10px] text-[#94A3B8]">
                 {isActive
-                  ? "New matches use these weights."
+                  ? isKm
+                    ? "ការផ្គូផ្គងថ្មីប្រើទម្ងន់ទាំងនេះ។"
+                    : "New matches use these weights."
+                  : isKm
+                  ? "ការផ្គូផ្គងថ្មីមិនគិតច្បាប់នេះទេ។"
                   : "New matches ignore this rule."}
               </span>
             </span>
@@ -1606,7 +1723,17 @@ function RuleEditor({ rule }: { rule: Record<string, any> }) {
             ) : (
               <Save className="h-3.5 w-3.5" />
             )}
-            {isPending ? "Saving…" : saved ? "Weights saved" : "Save weights"}
+            {isPending
+              ? isKm
+                ? "កំពុងរក្សាទុក…"
+                : "Saving…"
+              : saved
+              ? isKm
+                ? "បានរក្សាទុកទម្ងន់"
+                : "Weights saved"
+              : isKm
+              ? "រក្សាទុកទម្ងន់"
+              : "Save weights"}
           </button>
 
           {saveError && (
@@ -1615,7 +1742,9 @@ function RuleEditor({ rule }: { rule: Record<string, any> }) {
             </p>
           )}
           <p className="text-center text-[10px] text-[#94A3B8]">
-            Changes apply to newly generated recommendations.
+            {isKm
+              ? "ការផ្លាស់ប្តូរអនុវត្តចំពោះអនុសាសន៍ដែលបង្កើតថ្មី។"
+              : "Changes apply to newly generated recommendations."}
           </p>
         </aside>
       </div>
@@ -1625,11 +1754,36 @@ function RuleEditor({ rule }: { rule: Record<string, any> }) {
 
 const AUDIT_PAGE_SIZE = 15;
 
+const AUDIT_ACTION_LABELS_KM: Record<string, string> = {
+  create: "បង្កើត",
+  update: "ធ្វើបច្ចុប្បន្នភាព",
+  delete: "លុប",
+  login: "ចូលប្រើ",
+  logout: "ចាកចេញ",
+  suspend: "ផ្អាក",
+  upload: "ផ្ទុកឡើង",
+};
+
+const AUDIT_RESOURCE_LABELS_KM: Record<string, string> = {
+  university: "សាកលវិទ្យាល័យ",
+  major: "មុខជំនាញ",
+  career: "អាជីពការងារ",
+  scholarship: "អាហារូបករណ៍",
+  university_offering: "កម្មវិធីសិក្សា",
+  offering: "កម្មវិធីសិក្សា",
+  personality_question: "សំណួរបុគ្គលិកលក្ខណៈ",
+  riasec_question: "សំណួរវាយតម្លៃ RIASEC",
+  user: "អ្នកប្រើប្រាស់",
+  rule: "ច្បាប់ផ្គូផ្គង",
+};
+
 function AuditLogPanel() {
   const { data: logs, isLoading } = useQuery({
     queryKey: ["admin-audit"],
     queryFn: async () => apiFetch<any[]>("/admin/audit-logs?limit=100"),
   });
+  const { language } = useLanguage();
+  const isKm = language === "km";
   const [search, setSearch] = useState("");
   const [actionFilter, setActionFilter] = useState("");
   const [resourceFilter, setResourceFilter] = useState("");
@@ -1642,14 +1796,17 @@ function AuditLogPanel() {
       new Set(allLogs.map((log) => String(log.action ?? "")).filter(Boolean))
     ).sort((left, right) => left.localeCompare(right));
     return [
-      { value: "", label: "All", count: allLogs.length },
+      { value: "", label: isKm ? "ទាំងអស់" : "All", count: allLogs.length },
       ...values.map((value) => ({
         value,
-        label: value.replace(/_/g, " "),
+        label: isKm
+          ? AUDIT_ACTION_LABELS_KM[value.toLowerCase()] ??
+            value.replace(/_/g, " ")
+          : value.replace(/_/g, " "),
         count: allLogs.filter((log) => String(log.action ?? "") === value).length,
       })),
     ];
-  }, [allLogs]);
+  }, [allLogs, isKm]);
 
   const resourceFilterOptions = useMemo(() => {
     const values = Array.from(
@@ -1658,16 +1815,19 @@ function AuditLogPanel() {
       )
     ).sort((left, right) => left.localeCompare(right));
     return [
-      { value: "", label: "All", count: allLogs.length },
+      { value: "", label: isKm ? "ទាំងអស់" : "All", count: allLogs.length },
       ...values.map((value) => ({
         value,
-        label: value.replace(/_/g, " "),
+        label: isKm
+          ? AUDIT_RESOURCE_LABELS_KM[value.toLowerCase()] ??
+            value.replace(/_/g, " ")
+          : value.replace(/_/g, " "),
         count: allLogs.filter(
           (log) => String(log.target_resource ?? "") === value
         ).length,
       })),
     ];
-  }, [allLogs]);
+  }, [allLogs, isKm]);
 
   const filtered = useMemo(() => {
     const needle = search.trim().toLowerCase();
@@ -1699,6 +1859,18 @@ function AuditLogPanel() {
   );
   const hasActiveFilters = Boolean(search || actionFilter || resourceFilter);
 
+  const actionLabel = (value: string) => {
+    const raw = String(value ?? "");
+    if (!isKm) return raw.replace(/_/g, " ");
+    return AUDIT_ACTION_LABELS_KM[raw.toLowerCase()] ?? raw.replace(/_/g, " ");
+  };
+
+  const resourceLabel = (value: string) => {
+    const raw = String(value ?? "");
+    if (!isKm) return raw.replace(/_/g, " ");
+    return AUDIT_RESOURCE_LABELS_KM[raw.toLowerCase()] ?? raw.replace(/_/g, " ");
+  };
+
   const resetFilters = () => {
     setSearch("");
     setActionFilter("");
@@ -1709,9 +1881,13 @@ function AuditLogPanel() {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-lg font-black text-[#111965] dark:text-white">Audit log</h2>
+        <h2 className="text-lg font-black text-[#111965] dark:text-white">
+          {isKm ? "កំណត់ហេតុសកម្មភាព" : "Audit log"}
+        </h2>
         <p className="text-xs text-[#68708A] dark:text-slate-400">
-          Recent administrator actions across content and accounts.
+          {isKm
+            ? "សកម្មភាពអ្នកគ្រប់គ្រងថ្មីៗលើខ្លឹមសារ និងគណនី។"
+            : "Recent administrator actions across content and accounts."}
         </p>
       </div>
 
@@ -1737,7 +1913,7 @@ function AuditLogPanel() {
                   setSearch(event.target.value);
                   setPage(1);
                 }}
-                placeholder="Search actor, action, resource…"
+                placeholder={isKm ? "ស្វែងរកអ្នកធ្វើសកម្មភាព សកម្មភាព ធនធាន…" : "Search actor, action, resource…"}
                 className="h-9 w-full rounded-xl border border-[#E6E8F0] bg-[#F5F6FA]/70 pl-9 pr-8 text-xs text-[#171A2C] outline-none transition-colors focus:border-[#111965] focus:bg-white dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 dark:focus:border-indigo-400 dark:focus:bg-slate-900"
               />
               {search && (
@@ -1748,7 +1924,7 @@ function AuditLogPanel() {
                     setPage(1);
                   }}
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-1 text-[#68708A] hover:text-[#171A2C] dark:text-slate-400 dark:hover:text-white"
-                  title="Clear search"
+                  title={isKm ? "សម្អាតការស្វែងរក" : "Clear search"}
                 >
                   <span className="text-xs font-bold">×</span>
                 </button>
@@ -1757,7 +1933,7 @@ function AuditLogPanel() {
 
             <div className="flex flex-wrap items-center gap-2">
               <AdminFilterDropdown
-                label="Action"
+                label={isKm ? "សកម្មភាព" : "Action"}
                 value={actionFilter}
                 onChange={(value) => {
                   setActionFilter(value);
@@ -1768,7 +1944,7 @@ function AuditLogPanel() {
               />
 
               <AdminFilterDropdown
-                label="Resource"
+                label={isKm ? "ធនធាន" : "Resource"}
                 value={resourceFilter}
                 onChange={(value) => {
                   setResourceFilter(value);
@@ -1784,19 +1960,19 @@ function AuditLogPanel() {
                   type="button"
                   onClick={resetFilters}
                   className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-dashed border-[#E6E8F0] px-2.5 text-xs font-bold text-[#68708A] transition-colors hover:border-slate-400 hover:text-[#111965] dark:border-slate-800 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-white"
-                  title="Reset all active filters"
+                  title={isKm ? "កំណត់តម្រងសកម្មទាំងអស់ឡើងវិញ" : "Reset all active filters"}
                 >
                   <RotateCcw className="h-3 w-3" />
-                  <span>Reset</span>
+                  <span>{isKm ? "កំណត់ឡើងវិញ" : "Reset"}</span>
                 </button>
               )}
 
               <span className="border-l border-[#E6E8F0] pl-2 text-[11px] font-semibold text-[#68708A] dark:border-slate-800 dark:text-slate-400">
-                Showing{" "}
+                {isKm ? "បង្ហាញ" : "Showing"}{" "}
                 <strong className="text-[#111965] dark:text-slate-200">
                   {filtered.length}
                 </strong>{" "}
-                of {allLogs.length}
+                {isKm ? "ក្នុងចំណោម" : "of"} {allLogs.length}
               </span>
             </div>
           </div>
@@ -1805,7 +1981,11 @@ function AuditLogPanel() {
             <div className="flex flex-col items-center justify-center gap-3 py-16 text-center text-xs text-[#68708A] dark:text-slate-400">
               <span>
                 {allLogs.length === 0
-                  ? "No admin actions have been recorded yet."
+                  ? isKm
+                    ? "មិនទាន់មានសកម្មភាពអ្នកគ្រប់គ្រងត្រូវបានកត់ត្រាទេ។"
+                    : "No admin actions have been recorded yet."
+                  : isKm
+                  ? "គ្មានកំណត់ហេតុត្រូវនឹងតម្រងទាំងនេះទេ។"
                   : "No audit entries match these filters."}
               </span>
               {hasActiveFilters && (
@@ -1815,7 +1995,7 @@ function AuditLogPanel() {
                   className="inline-flex items-center gap-1.5 rounded-xl bg-[#111965] px-3.5 py-2 text-xs font-bold text-white transition-colors hover:bg-[#1E277A] dark:bg-indigo-600 dark:hover:bg-indigo-500"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
-                  Reset all filters
+                  {isKm ? "កំណត់តម្រងទាំងអស់ឡើងវិញ" : "Reset all filters"}
                 </button>
               )}
             </div>
@@ -1824,10 +2004,10 @@ function AuditLogPanel() {
               <table className="w-full min-w-[720px] text-left text-xs">
                 <thead>
                   <tr className="border-b border-[#E6E8F0] bg-[#F8FAFD] text-[11px] uppercase tracking-wider text-[#68708A] dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-400">
-                    <th className="px-4 py-3 font-bold">When</th>
-                    <th className="px-4 py-3 font-bold">Actor</th>
-                    <th className="px-4 py-3 font-bold">Action</th>
-                    <th className="px-4 py-3 font-bold">Resource</th>
+                    <th className="px-4 py-3 font-bold">{isKm ? "ពេលវេលា" : "When"}</th>
+                    <th className="px-4 py-3 font-bold">{isKm ? "អ្នកធ្វើសកម្មភាព" : "Actor"}</th>
+                    <th className="px-4 py-3 font-bold">{isKm ? "សកម្មភាព" : "Action"}</th>
+                    <th className="px-4 py-3 font-bold">{isKm ? "ធនធាន" : "Resource"}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1838,18 +2018,22 @@ function AuditLogPanel() {
                       style={{ animationDelay: `${Math.min(index, 12) * 22}ms` }}
                     >
                       <td className="px-4 py-3 text-[11px] text-[#68708A] dark:text-slate-400">
-                        {log.created_at ? new Date(log.created_at).toLocaleString() : "—"}
+                        {log.created_at
+                          ? new Date(log.created_at).toLocaleString(
+                              isKm ? "km-KH" : "en-US"
+                            )
+                          : "—"}
                       </td>
                       <td className="px-4 py-3 font-semibold text-[#171A2C] dark:text-slate-200">
-                        {log.actor_email || "System"}
+                        {log.actor_email || (isKm ? "ប្រព័ន្ធ" : "System")}
                       </td>
                       <td className="px-4 py-3">
                         <span className="rounded-md border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-black uppercase text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300">
-                          {log.action}
+                          {actionLabel(log.action)}
                         </span>
                       </td>
                       <td className="px-4 py-3 font-semibold text-[#111965] dark:text-[#F7CE4D]">
-                        {log.target_resource}
+                        {resourceLabel(log.target_resource)}
                       </td>
                     </tr>
                   ))}
@@ -1864,8 +2048,8 @@ function AuditLogPanel() {
             totalItems={filtered.length}
             pageSize={AUDIT_PAGE_SIZE}
             onPageChange={setPage}
-            itemLabel="entries"
-            itemSingular="entry"
+            itemLabel={isKm ? "កំណត់ហេតុ" : "entries"}
+            itemSingular={isKm ? "កំណត់ហេតុ" : "entry"}
           />
         </div>
       )}

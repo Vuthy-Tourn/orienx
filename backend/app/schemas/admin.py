@@ -2,7 +2,7 @@ import uuid
 from typing import Optional, List, Dict, Any
 from urllib.parse import urlparse
 
-from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator
 from typing import Literal
 from datetime import date
 
@@ -77,6 +77,38 @@ class UserStatusUpdateIn(BaseModel):
 
 class UserRolesUpdateIn(BaseModel):
     roles: List[Literal["STUDENT", "ADMIN", "SUPER_ADMIN"]]
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UserAdminCreateIn(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=128)
+    full_name_en: str = Field(min_length=1, max_length=150)
+    full_name_km: Optional[str] = Field(default=None, max_length=150)
+    province: str = Field(default="Phnom Penh", max_length=100)
+    status: Literal["ACTIVE", "SUSPENDED", "PENDING"] = "ACTIVE"
+    roles: List[Literal["STUDENT", "ADMIN", "SUPER_ADMIN"]] = Field(
+        default_factory=lambda: ["STUDENT"]
+    )
+    is_email_verified: bool = True
+    current_education_level: str = "GRADE_12"
+    preferred_language: Literal["km", "en"] = "km"
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UserAdminUpdateIn(BaseModel):
+    email: Optional[EmailStr] = None
+    password: Optional[str] = Field(default=None, min_length=8, max_length=128)
+    full_name_en: Optional[str] = Field(default=None, min_length=1, max_length=150)
+    full_name_km: Optional[str] = Field(default=None, max_length=150)
+    province: Optional[str] = Field(default=None, max_length=100)
+    status: Optional[Literal["ACTIVE", "SUSPENDED", "PENDING"]] = None
+    roles: Optional[List[Literal["STUDENT", "ADMIN", "SUPER_ADMIN"]]] = None
+    is_email_verified: Optional[bool] = None
+    current_education_level: Optional[str] = None
+    preferred_language: Optional[Literal["km", "en"]] = None
 
     model_config = ConfigDict(extra="forbid")
 

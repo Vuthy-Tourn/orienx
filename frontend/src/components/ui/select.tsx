@@ -4,6 +4,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { Check, ChevronDown, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/language-context";
 
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
@@ -47,7 +48,7 @@ export function Select<T extends string = string>({
   onChange,
   options,
   label,
-  placeholder = "Select…",
+  placeholder,
   className,
   menuClassName,
   align = "start",
@@ -56,6 +57,8 @@ export function Select<T extends string = string>({
   searchable = false,
   id,
 }: SelectProps<T>) {
+  const { language } = useLanguage();
+  const isKm = language === "km";
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [activeIndex, setActiveIndex] = React.useState(0);
@@ -268,7 +271,7 @@ export function Select<T extends string = string>({
         )}
       >
         <span className={cn("truncate", !selected && "text-[#94A3B8] dark:text-slate-500")}>
-          {selected?.label ?? placeholder}
+          {selected?.label ?? placeholder ?? (isKm ? "ជ្រើសរើស…" : "Select…")}
         </span>
         <ChevronDown
           className={cn(
@@ -301,7 +304,7 @@ export function Select<T extends string = string>({
                       setActiveIndex(0);
                     }}
                     onKeyDown={handleSearchKeyDown}
-                    placeholder={`Search ${label.toLowerCase()}…`}
+                    placeholder={isKm ? `ស្វែងរក${label}…` : `Search ${label.toLowerCase()}…`}
                     className="h-8 w-full rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] pl-8 pr-2 text-[12px] font-medium text-[#171A2C] outline-none placeholder:text-[#94A3B8] focus:border-[#111965]/40 dark:border-white/10 dark:bg-white/[0.05] dark:text-white dark:placeholder:text-slate-500 dark:focus:border-[#F7CE4D]/50"
                   />
                 </div>
@@ -316,7 +319,7 @@ export function Select<T extends string = string>({
             >
               {filteredOptions.length === 0 ? (
                 <li className="px-3 py-4 text-center text-[12px] text-[#94A3B8] dark:text-slate-500">
-                  No matches
+                  {isKm ? "គ្មានលទ្ធផល" : "No matches"}
                 </li>
               ) : (
                 filteredOptions.map((option, index) => {

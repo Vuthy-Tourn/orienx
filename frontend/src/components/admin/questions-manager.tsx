@@ -18,6 +18,7 @@ import { apiFetch } from "@/lib/api-client";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast";
 import { useConfirm } from "@/components/ui/confirm-dialog";
+import { useLanguage } from "@/contexts/language-context";
 import { cn, getErrorMessage } from "@/lib/utils";
 import { AdminFilterDropdown } from "./admin-filter-dropdown";
 import { AdminPagination } from "./admin-pagination";
@@ -53,10 +54,10 @@ interface RiasecQuestion {
 }
 
 const DIMENSIONS = [
-  { value: "EI", label: "EI — Extraversion / Introversion" },
-  { value: "SN", label: "SN — Sensing / Intuition" },
-  { value: "TF", label: "TF — Thinking / Feeling" },
-  { value: "JP", label: "JP — Judging / Perceiving" },
+  { value: "EI", label: "EI — Extraversion / Introversion", labelKm: "EI — ចរិតខាងក្រៅ / ខាងក្នុង" },
+  { value: "SN", label: "SN — Sensing / Intuition", labelKm: "SN — អារម្មណ៍ / វិចារណញាណ" },
+  { value: "TF", label: "TF — Thinking / Feeling", labelKm: "TF — គំនិត / អារម្មណ៍" },
+  { value: "JP", label: "JP — Judging / Perceiving", labelKm: "JP — វិនិច្ឆ័យ / ការយល់ឃើញ" },
 ];
 
 const DIMENSION_TRAITS: Record<string, string[]> = {
@@ -67,15 +68,165 @@ const DIMENSION_TRAITS: Record<string, string[]> = {
 };
 
 const RIASEC_CATEGORIES = [
-  { value: "R", label: "R — Realistic" },
-  { value: "I", label: "I — Investigative" },
-  { value: "A", label: "A — Artistic" },
-  { value: "S", label: "S — Social" },
-  { value: "E", label: "E — Enterprising" },
-  { value: "C", label: "C — Conventional" },
+  { value: "R", label: "R — Realistic", labelKm: "R — ជាក់ស្តែង" },
+  { value: "I", label: "I — Investigative", labelKm: "I — ស្វែងរក" },
+  { value: "A", label: "A — Artistic", labelKm: "A — សិល្បៈ" },
+  { value: "S", label: "S — Social", labelKm: "S — សង្គម" },
+  { value: "E", label: "E — Enterprising", labelKm: "E — សហគ្រិន" },
+  { value: "C", label: "C — Conventional", labelKm: "C — ប្រពៃណី" },
 ];
 
 const PAGE_SIZE = 10;
+
+const QUESTIONS_COPY = {
+  en: {
+    title: "Add and manage assessment questions",
+    subtitle:
+      "Questions added here appear in the live student assessments. Personality questions include scored answer options; RIASEC questions are rated on the five-point interest scale.",
+    addQuestion: "Add question",
+    personality: "Personality",
+    riasec: "RIASEC",
+    searchPlaceholder: "Search prompts…",
+    clearSearch: "Clear search",
+    dimension: "Dimension",
+    category: "Category",
+    status: "Status",
+    reset: "Reset",
+    resetTitle: "Reset all active filters",
+    showing: "Showing",
+    of: "of",
+    questions: "questions",
+    question: "question",
+    order: "Order",
+    prompt: "Prompt",
+    options: "Options",
+    actions: "Actions",
+    noQuestions: "No questions in this bank yet.",
+    noMatches: "No questions match these filters.",
+    resetAll: "Reset all filters",
+    active: "Active",
+    inactive: "Inactive",
+    fivePoint: "5-point scale",
+    activeSummary: "active",
+    inactiveSummary: "inactive",
+    editQuestion: "Edit question",
+    deleteQuestion: "Delete question",
+    deleteConfirmTitle: "Delete this question?",
+    deleteConfirmBody:
+      "This question will be removed from the live assessment immediately. This action cannot be undone.",
+    deleteConfirmLabel: "Delete question",
+    editLabel: "Edit question",
+    newLabel: "New question",
+    updateTitle: "Update {tab} question",
+    addTitle: "Add {tab} question",
+    closeDialog: "Close dialog",
+    dimensionLabel: "Dimension",
+    orderLabel: "Order",
+    promptEn: "Prompt (English)",
+    promptKm: "Prompt (Khmer)",
+    activeLabel: "Active",
+    answerOptions: "Answer options & scoring",
+    addOption: "Add option",
+    labelEn: "Label (EN)",
+    labelKm: "Label (KM)",
+    trait: "Trait",
+    weight: "Weight",
+    removeOption: "Remove option",
+    categoryLabel: "Category",
+    riasecCategory: "RIASEC category",
+    riasecNote:
+      "Students answer this question on the standard 1–5 interest scale. No answer options are needed.",
+    optionsHint:
+      "Cover both traits of {dimension}. Weight controls how strongly an answer contributes to the trait score.",
+    cancel: "Cancel",
+    saving: "Saving…",
+    saveChanges: "Save changes",
+    auto: "Auto",
+    updated: "Question updated.",
+    added: "Question added.",
+    deleted: "Question deleted.",
+    saveError: "Could not save this question.",
+    deleteError: "Could not delete this question.",
+    promptsRequired: "Both English and Khmer prompts are required.",
+    minOptions: "Add at least two answer options.",
+    traitsRequired:
+      "Options for {dimension} must include {traits}.",
+    optionLabels: "Every option needs English and Khmer labels.",
+  },
+  km: {
+    title: "បន្ថែម និងគ្រប់គ្រងសំណួរវាយតម្លៃ",
+    subtitle:
+      "សំណួរដែលបន្ថែមនៅទីនេះនឹងបង្ហាញក្នុងតេស្តវាយតម្លៃសិស្សផ្ទាល់។ សំណួរបុគ្គលិកលក្ខណៈមានជម្រើសចម្លើយដែលគិតពិន្ទុ។ សំណួរ RIASEC វាយតម្លៃតាមមាត្រដ្ឋានចំណាប់អារម្មណ៍ ១–៥។",
+    addQuestion: "បន្ថែមសំណួរ",
+    personality: "បុគ្គលិកលក្ខណៈ",
+    riasec: "RIASEC",
+    searchPlaceholder: "ស្វែងរកសំណួរ…",
+    clearSearch: "សម្អាតការស្វែងរក",
+    dimension: "វិមាត្រ",
+    category: "ប្រភេទ",
+    status: "ស្ថានភាព",
+    reset: "កំណត់ឡើងវិញ",
+    resetTitle: "កំណត់តម្រងសកម្មទាំងអស់ឡើងវិញ",
+    showing: "បង្ហាញ",
+    of: "ក្នុងចំណោម",
+    questions: "សំណួរ",
+    question: "សំណួរ",
+    order: "លំដាប់",
+    prompt: "សំណួរ",
+    options: "ជម្រើស",
+    actions: "សកម្មភាព",
+    noQuestions: "មិនទាន់មានសំណួរក្នុងធនាគារនេះទេ។",
+    noMatches: "គ្មានសំណួរត្រូវនឹងតម្រងទាំងនេះទេ។",
+    resetAll: "កំណត់តម្រងទាំងអស់ឡើងវិញ",
+    active: "សកម្ម",
+    inactive: "អសកម្ម",
+    fivePoint: "មាត្រដ្ឋាន ៥ កម្រិត",
+    activeSummary: "សកម្ម",
+    inactiveSummary: "អសកម្ម",
+    editQuestion: "កែប្រែសំណួរ",
+    deleteQuestion: "លុបសំណួរ",
+    deleteConfirmTitle: "លុបសំណួរនេះមែនទេ?",
+    deleteConfirmBody:
+      "សំណួរនេះនឹងត្រូវលុបចេញពីតេស្តផ្ទាល់ភ្លាមៗ។ សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។",
+    deleteConfirmLabel: "លុបសំណួរ",
+    editLabel: "កែប្រែសំណួរ",
+    newLabel: "សំណួរថ្មី",
+    updateTitle: "ធ្វើបច្ចុប្បន្នភាពសំណួរ {tab}",
+    addTitle: "បន្ថែមសំណួរ {tab}",
+    closeDialog: "បិទប្រអប់សន្ទនា",
+    dimensionLabel: "វិមាត្រ",
+    orderLabel: "លំដាប់",
+    promptEn: "សំណួរ (អង់គ្លេស)",
+    promptKm: "សំណួរ (ខ្មែរ)",
+    activeLabel: "សកម្ម",
+    answerOptions: "ជម្រើសចម្លើយ & ការគិតពិន្ទុ",
+    addOption: "បន្ថែមជម្រើស",
+    labelEn: "ស្លាក (EN)",
+    labelKm: "ស្លាក (KM)",
+    trait: "លក្ខណៈ",
+    weight: "ទម្ងន់",
+    removeOption: "ដកជម្រើសចេញ",
+    categoryLabel: "ប្រភេទ",
+    riasecCategory: "ប្រភេទ RIASEC",
+    riasecNote:
+      "សិស្សឆ្លើយសំណួរនេះតាមមាត្រដ្ឋានចំណាប់អារម្មណ៍ ១–៥ ស្តង់ដារ។ មិនត្រូវការជម្រើសចម្លើយទេ។",
+    optionsHint:
+      "គ្របដណ្តប់លក្ខណៈទាំងពីរនៃ {dimension}។ ទម្ងន់កំណត់ថាតើចម្លើយមួយរួមចំណែកដល់ពិន្ទុលក្ខណៈប៉ុណ្ណា។",
+    cancel: "បោះបង់",
+    saving: "កំពុងរក្សាទុក…",
+    saveChanges: "រក្សាទុកការផ្លាស់ប្តូរ",
+    auto: "ស្វ័យប្រវត្តិ",
+    updated: "បានធ្វើបច្ចុប្បន្នភាពសំណួរ។",
+    added: "បានបន្ថែមសំណួរ។",
+    deleted: "បានលុបសំណួរ។",
+    saveError: "មិនអាចរក្សាទុកសំណួរនេះបានទេ។",
+    deleteError: "មិនអាចលុបសំណួរនេះបានទេ។",
+    promptsRequired: "ត្រូវបំពេញសំណួរទាំងអង់គ្លេស និងខ្មែរ។",
+    minOptions: "បន្ថែមជម្រើសចម្លើយយ៉ាងតិចពីរ។",
+    traitsRequired: "ជម្រើសសម្រាប់ {dimension} ត្រូវមាន {traits}។",
+    optionLabels: "ជម្រើសមួយៗត្រូវមានស្លាកអង់គ្លេស និងខ្មែរ។",
+  },
+} as const;
 
 const inputClass =
   "h-10 w-full rounded-xl border border-[#E6E8F0] bg-white px-3 text-[12px] font-medium text-[#111965] outline-none transition-colors placeholder:text-[#94A3B8] focus:border-[#111965]/50 focus:ring-2 focus:ring-[#111965]/10 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-slate-500 dark:focus:border-[#F7CE4D]/60 dark:focus:ring-[#F7CE4D]/10";
@@ -132,6 +283,9 @@ export function QuestionsManager() {
   const queryClient = useQueryClient();
   const toast = useToast();
   const confirm = useConfirm();
+  const { language } = useLanguage();
+  const isKm = language === "km";
+  const copy = QUESTIONS_COPY[language];
   const [tab, setTab] = useState<QuestionTab>("personality");
   const [search, setSearch] = useState("");
   const [dimensionFilter, setDimensionFilter] = useState("");
@@ -162,10 +316,13 @@ export function QuestionsManager() {
     const categories =
       tab === "personality"
         ? DIMENSIONS.map(({ value }) => ({ value, label: value }))
-        : RIASEC_CATEGORIES;
+        : RIASEC_CATEGORIES.map(({ value, label, labelKm }) => ({
+            value,
+            label: isKm ? labelKm : label,
+          }));
 
     return [
-      { value: "", label: "All", count: source.length },
+      { value: "", label: isKm ? "ទាំងអស់" : "All", count: source.length },
       ...categories.map((category) => ({
         ...category,
         count: source.filter(
@@ -176,23 +333,23 @@ export function QuestionsManager() {
         ).length,
       })),
     ];
-  }, [tab, personalityQuestions, riasecQuestions]);
+  }, [tab, personalityQuestions, riasecQuestions, isKm]);
 
   const statusFilterOptions = useMemo(
     () => [
-      { value: "", label: "All", count: activeList.length },
+      { value: "", label: isKm ? "ទាំងអស់" : "All", count: activeList.length },
       {
         value: "active",
-        label: "Active",
+        label: copy.active,
         count: activeList.filter((question) => question.is_active).length,
       },
       {
         value: "inactive",
-        label: "Inactive",
+        label: copy.inactive,
         count: activeList.filter((question) => !question.is_active).length,
       },
     ],
-    [activeList]
+    [activeList, copy, isKm]
   );
 
   const filtered = useMemo(() => {
@@ -331,29 +488,31 @@ export function QuestionsManager() {
 
   const validatePersonality = () => {
     if (!personalityForm.prompt_en.trim() || !personalityForm.prompt_km.trim()) {
-      return "Both English and Khmer prompts are required.";
+      return copy.promptsRequired;
     }
     if (personalityForm.options.length < 2) {
-      return "Add at least two answer options.";
+      return copy.minOptions;
     }
     const expected = DIMENSION_TRAITS[personalityForm.dimension];
     const traits = new Set(personalityForm.options.map((option) => option.target_trait));
     if (!expected.every((trait) => traits.has(trait))) {
-      return `Options for ${personalityForm.dimension} must include ${expected.join(" and ")}.`;
+      return copy.traitsRequired
+        .replace("{dimension}", personalityForm.dimension)
+        .replace("{traits}", expected.join(isKm ? " និង " : " and "));
     }
     if (
       personalityForm.options.some(
         (option) => !option.label_en.trim() || !option.label_km.trim()
       )
     ) {
-      return "Every option needs English and Khmer labels.";
+      return copy.optionLabels;
     }
     return null;
   };
 
   const validateRiasec = () => {
     if (!riasecForm.prompt_en.trim() || !riasecForm.prompt_km.trim()) {
-      return "Both English and Khmer prompts are required.";
+      return copy.promptsRequired;
     }
     return null;
   };
@@ -411,11 +570,11 @@ export function QuestionsManager() {
       queryClient.invalidateQueries({
         queryKey: ["admin", "questions", tab],
       });
-      toast.success(editingId ? "Question updated." : "Question added.");
+      toast.success(editingId ? copy.updated : copy.added);
       setDialogOpen(false);
     },
     onError: (err: unknown) =>
-      toast.error(getErrorMessage(err, "Could not save this question.")),
+      toast.error(getErrorMessage(err, copy.saveError)),
   });
 
   const { mutate: remove, isPending: deleting } = useMutation({
@@ -425,14 +584,14 @@ export function QuestionsManager() {
       queryClient.invalidateQueries({
         queryKey: ["admin", "questions", tab],
       });
-      toast.success("Question deleted.");
+      toast.success(copy.deleted);
     },
     onError: (err: unknown) => {
-      toast.error(getErrorMessage(err, "Could not delete this question."));
+      toast.error(getErrorMessage(err, copy.deleteError));
     },
   });
 
-  const tabLabel = tab === "personality" ? "Personality" : "RIASEC";
+  const tabLabel = tab === "personality" ? copy.personality : copy.riasec;
   const isLoading = tab === "personality" ? loadingPersonality : loadingRiasec;
 
   return (
@@ -440,21 +599,19 @@ export function QuestionsManager() {
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <h2 className="text-xl font-black tracking-tight text-[#111965] dark:text-white sm:text-2xl">
-            Add and manage assessment questions
+            {copy.title}
           </h2>
           <p className="mt-1 max-w-2xl text-xs leading-relaxed text-[#68708A] dark:text-slate-400">
-            Questions added here appear in the live student assessments. Personality
-            questions include scored answer options; RIASEC questions are rated on the
-            five-point interest scale.
+            {copy.subtitle}
           </p>
         </div>
         <button
           type="button"
           onClick={openCreate}
-          className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#111965] px-4 text-xs font-black text-white shadow-sm transition-colors hover:bg-[#1E277A] dark:bg-[#F7CE4D] dark:text-[#111965] dark:hover:bg-[#E5BD3B]"
+          className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#111965] px-4 text-xs font-black text-white shadow-sm transition-colors hover:bg-[#1E277A] dark:bg-[#F7CE4D] dark:text-white dark:hover:bg-[#E5BD3B]"
         >
           <Plus className="h-4 w-4" />
-          Add question
+          {copy.addQuestion}
         </button>
       </div>
 
@@ -465,12 +622,12 @@ export function QuestionsManager() {
           className={cn(
             "inline-flex h-9 items-center gap-2 rounded-xl border px-3.5 text-[11px] font-bold transition-colors",
             tab === "personality"
-              ? "border-[#111965] bg-[#111965] text-white dark:border-[#F7CE4D] dark:bg-[#F7CE4D] dark:text-[#111965]"
+              ? "border-[#111965] bg-[#111965] text-white dark:bg-[#F7CE4D]"
               : "border-[#E6E8F0] bg-white text-[#68708A] hover:border-slate-300 dark:border-white/10 dark:bg-[#090D24] dark:text-slate-400"
           )}
         >
           <BrainCircuit className="h-3.5 w-3.5" />
-          Personality ({personalityQuestions.length})
+          {copy.personality} ({personalityQuestions.length})
         </button>
         <button
           type="button"
@@ -478,15 +635,16 @@ export function QuestionsManager() {
           className={cn(
             "inline-flex h-9 items-center gap-2 rounded-xl border px-3.5 text-[11px] font-bold transition-colors",
             tab === "riasec"
-              ? "border-[#111965] bg-[#111965] text-white dark:border-[#F7CE4D] dark:bg-[#F7CE4D] dark:text-[#111965]"
+              ? "border-[#111965] bg-[#111965] text-white dark:bg-[#F7CE4D] dark:text-white"
               : "border-[#E6E8F0] bg-white text-[#68708A] hover:border-slate-300 dark:border-white/10 dark:bg-[#090D24] dark:text-slate-400"
           )}
         >
           <Compass className="h-3.5 w-3.5" />
-          RIASEC ({riasecQuestions.length})
+          {copy.riasec} ({riasecQuestions.length})
         </button>
         <span className="ml-auto text-[11px] font-semibold text-[#68708A] dark:text-slate-400">
-          {activeCount} active · {activeList.length - activeCount} inactive
+          {activeCount} {copy.activeSummary} ·{" "}
+          {activeList.length - activeCount} {copy.inactiveSummary}
         </span>
       </div>
 
@@ -500,7 +658,7 @@ export function QuestionsManager() {
                 setSearch(event.target.value);
                 setPage(1);
               }}
-              placeholder={`Search ${tabLabel.toLowerCase()} prompts…`}
+              placeholder={copy.searchPlaceholder}
               className="h-9 w-full rounded-xl border border-[#E6E8F0] bg-[#F5F6FA]/70 pl-9 pr-8 text-xs text-[#171A2C] outline-none transition-colors focus:border-[#111965] focus:bg-white dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 dark:focus:border-indigo-400 dark:focus:bg-slate-900"
             />
             {search && (
@@ -511,7 +669,7 @@ export function QuestionsManager() {
                   setPage(1);
                 }}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-1 text-[#68708A] hover:text-[#171A2C] dark:text-slate-400 dark:hover:text-white"
-                title="Clear search"
+                title={copy.clearSearch}
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -520,7 +678,7 @@ export function QuestionsManager() {
 
           <div className="flex flex-wrap items-center gap-2">
             <AdminFilterDropdown
-              label={tab === "personality" ? "Dimension" : "Category"}
+              label={tab === "personality" ? copy.dimension : copy.category}
               value={dimensionFilter}
               onChange={(value) => {
                 setDimensionFilter(value);
@@ -531,7 +689,7 @@ export function QuestionsManager() {
             />
 
             <AdminFilterDropdown
-              label="Status"
+              label={copy.status}
               value={statusFilter}
               onChange={(value) => {
                 setStatusFilter(value);
@@ -547,17 +705,17 @@ export function QuestionsManager() {
                 type="button"
                 onClick={resetFilters}
                 className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-dashed border-[#E6E8F0] px-2.5 text-xs font-bold text-[#68708A] transition-colors hover:border-slate-400 hover:text-[#111965] dark:border-slate-800 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-white"
-                title="Reset all active filters"
+                title={copy.resetTitle}
               >
                 <RotateCcw className="h-3 w-3" />
-                <span>Reset</span>
+                <span>{copy.reset}</span>
               </button>
             )}
 
             <span className="border-l border-[#E6E8F0] pl-2 text-[11px] font-semibold text-[#68708A] dark:border-slate-800 dark:text-slate-400">
-              Showing{" "}
+              {copy.showing}{" "}
               <strong className="text-[#111965] dark:text-slate-200">{filtered.length}</strong>{" "}
-              of {activeList.length}
+              {copy.of} {activeList.length}
             </span>
           </div>
         </div>
@@ -574,14 +732,14 @@ export function QuestionsManager() {
             </colgroup>
             <thead>
               <tr className="border-b border-[#E6E8F0] bg-[#F8FAFD] text-[10px] font-black uppercase tracking-[0.12em] text-[#68708A] dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-400">
-                <th className="px-3 py-3">Order</th>
+                <th className="px-3 py-3">{copy.order}</th>
                 <th className="px-3 py-3">
-                  {tab === "personality" ? "Dimension" : "Category"}
+                  {tab === "personality" ? copy.dimension : copy.category}
                 </th>
-                <th className="px-3 py-3">Prompt</th>
-                <th className="px-3 py-3">Options</th>
-                <th className="px-3 py-3">Status</th>
-                <th className="px-3 py-3 text-right">Actions</th>
+                <th className="px-3 py-3">{copy.prompt}</th>
+                <th className="px-3 py-3">{copy.options}</th>
+                <th className="px-3 py-3">{copy.status}</th>
+                <th className="px-3 py-3 text-right">{copy.actions}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E6E8F0] dark:divide-white/10">
@@ -597,8 +755,8 @@ export function QuestionsManager() {
                     <div className="flex flex-col items-center gap-3">
                       <span>
                         {activeList.length === 0
-                          ? "No questions in this bank yet."
-                          : "No questions match these filters."}
+                          ? copy.noQuestions
+                          : copy.noMatches}
                       </span>
                       {hasActiveFilters && (
                         <button
@@ -607,7 +765,7 @@ export function QuestionsManager() {
                           className="inline-flex items-center gap-1.5 rounded-xl bg-[#111965] px-3.5 py-2 text-xs font-bold text-white transition-colors hover:bg-[#1E277A] dark:bg-indigo-600 dark:hover:bg-indigo-500"
                         >
                           <RotateCcw className="h-3.5 w-3.5" />
-                          Reset all filters
+                          {copy.resetAll}
                         </button>
                       )}
                     </div>
@@ -622,7 +780,7 @@ export function QuestionsManager() {
                   const optionsSummary =
                     "dimension" in question
                       ? question.options.length
-                      : "5-point scale";
+                      : copy.fivePoint;
 
                   return (
                     <tr
@@ -640,10 +798,10 @@ export function QuestionsManager() {
                       </td>
                       <td className="px-3 py-3">
                         <div className="truncate text-[12px] font-semibold text-[#171A2C] dark:text-slate-200">
-                          {question.prompt_en}
+                          {isKm ? question.prompt_km : question.prompt_en}
                         </div>
                         <div className="truncate text-[10px] text-[#94A3B8]">
-                          {question.prompt_km}
+                          {isKm ? question.prompt_en : question.prompt_km}
                         </div>
                       </td>
                       <td className="px-3 py-3 text-[12px] font-semibold text-[#475569] dark:text-slate-300">
@@ -664,10 +822,10 @@ export function QuestionsManager() {
                           onDelete={() => {
                             void (async () => {
                               const confirmed = await confirm({
-                                title: "Delete this question?",
-                                description:
-                                  "This question will be removed from the live assessment immediately. This action cannot be undone.",
-                                confirmLabel: "Delete question",
+                                title: copy.deleteConfirmTitle,
+                                description: copy.deleteConfirmBody,
+                                confirmLabel: copy.deleteConfirmLabel,
+                                cancelLabel: copy.cancel,
                                 tone: "danger",
                               });
                               if (confirmed) remove(question.id);
@@ -691,8 +849,8 @@ export function QuestionsManager() {
             totalItems={filtered.length}
             pageSize={PAGE_SIZE}
             onPageChange={setPage}
-            itemLabel="questions"
-            itemSingular="question"
+            itemLabel={isKm ? "សំណួរ" : "questions"}
+            itemSingular={isKm ? "សំណួរ" : "question"}
           />
         )}
       </div>
@@ -702,7 +860,11 @@ export function QuestionsManager() {
           className="fixed inset-0 z-[80] flex items-center justify-center bg-[#050814]/70 p-4 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
-          aria-label={editingId ? `Edit ${tabLabel} question` : `Add ${tabLabel} question`}
+          aria-label={
+            editingId
+              ? copy.updateTitle.replace("{tab}", tabLabel)
+              : copy.addTitle.replace("{tab}", tabLabel)
+          }
           onClick={(event) => {
             if (event.target === event.currentTarget) closeDialog();
           }}
@@ -714,17 +876,19 @@ export function QuestionsManager() {
             <div className="mb-5 flex items-start justify-between gap-3">
               <div>
                 <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
-                  {editingId ? "Edit question" : "New question"}
+                  {editingId ? copy.editLabel : copy.newLabel}
                 </div>
                 <h3 className="mt-1 text-lg font-black text-[#111965] dark:text-white">
-                  {editingId ? `Update ${tabLabel} question` : `Add ${tabLabel} question`}
+                  {editingId
+                    ? copy.updateTitle.replace("{tab}", tabLabel)
+                    : copy.addTitle.replace("{tab}", tabLabel)}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={closeDialog}
                 className="rounded-lg p-1.5 text-[#68708A] transition-colors hover:bg-[#F0F2FA] dark:text-slate-400 dark:hover:bg-white/10"
-                aria-label="Close dialog"
+                aria-label={copy.closeDialog}
               >
                 <X className="h-4 w-4" />
               </button>
@@ -741,7 +905,7 @@ export function QuestionsManager() {
                 <>
                   <div className="grid gap-4 sm:grid-cols-3">
                     <label>
-                      <span className={labelClass}>Dimension</span>
+                      <span className={labelClass}>{copy.dimensionLabel}</span>
                       <Select
                         value={personalityForm.dimension}
                         onChange={(dimension) =>
@@ -755,13 +919,16 @@ export function QuestionsManager() {
                                 : prev.options,
                           }))
                         }
-                        options={DIMENSIONS}
-                        label="Dimension"
+                        options={DIMENSIONS.map((dimension) => ({
+                          value: dimension.value,
+                          label: isKm ? dimension.labelKm : dimension.label,
+                        }))}
+                        label={copy.dimensionLabel}
                         className="w-full"
                       />
                     </label>
                     <label>
-                      <span className={labelClass}>Order</span>
+                      <span className={labelClass}>{copy.orderLabel}</span>
                       <input
                         type="number"
                         min={1}
@@ -772,7 +939,7 @@ export function QuestionsManager() {
                             order_index: event.target.value,
                           }))
                         }
-                        placeholder="Auto"
+                        placeholder={copy.auto}
                         className={inputClass}
                       />
                     </label>
@@ -789,13 +956,13 @@ export function QuestionsManager() {
                           }
                           className="h-4 w-4 rounded border-[#D8D1C5] accent-[#111965] dark:accent-[#F7CE4D]"
                         />
-                        Active
+                        {copy.activeLabel}
                       </span>
                     </label>
                   </div>
 
                   <label>
-                    <span className={labelClass}>Prompt (English)</span>
+                    <span className={labelClass}>{copy.promptEn}</span>
                     <textarea
                       rows={2}
                       required
@@ -810,7 +977,7 @@ export function QuestionsManager() {
                     />
                   </label>
                   <label>
-                    <span className={labelClass}>Prompt (Khmer)</span>
+                    <span className={labelClass}>{copy.promptKm}</span>
                     <textarea
                       rows={2}
                       required
@@ -827,13 +994,13 @@ export function QuestionsManager() {
 
                   <div>
                     <div className="mb-2 flex items-center justify-between gap-2">
-                      <span className={labelClass}>Answer options & scoring</span>
+                      <span className={labelClass}>{copy.answerOptions}</span>
                       <button
                         type="button"
                         onClick={addPersonalityOption}
                         className="inline-flex items-center gap-1 text-[11px] font-bold text-[#111965] hover:underline dark:text-[#F7CE4D]"
                       >
-                        <Plus className="h-3 w-3" /> Add option
+                        <Plus className="h-3 w-3" /> {copy.addOption}
                       </button>
                     </div>
                     <div className="space-y-2">
@@ -849,7 +1016,7 @@ export function QuestionsManager() {
                                 label_en: event.target.value,
                               })
                             }
-                            placeholder="Label (EN)"
+                            placeholder={copy.labelEn}
                             className={inputClass}
                             required
                           />
@@ -860,7 +1027,7 @@ export function QuestionsManager() {
                                 label_km: event.target.value,
                               })
                             }
-                            placeholder="Label (KM)"
+                            placeholder={copy.labelKm}
                             className={inputClass}
                             required
                           />
@@ -872,7 +1039,7 @@ export function QuestionsManager() {
                             options={DIMENSION_TRAITS[
                               personalityForm.dimension
                             ].map((trait) => ({ value: trait, label: trait }))}
-                            label="Trait"
+                            label={copy.trait}
                             className="w-full"
                           />
                           <input
@@ -886,7 +1053,7 @@ export function QuestionsManager() {
                                 weight: Number(event.target.value),
                               })
                             }
-                            aria-label="Weight"
+                            aria-label={copy.weight}
                             className={inputClass}
                           />
                           <button
@@ -894,7 +1061,7 @@ export function QuestionsManager() {
                             onClick={() => removePersonalityOption(index)}
                             disabled={personalityForm.options.length <= 2}
                             className="inline-flex h-10 items-center justify-center rounded-lg text-[#68708A] transition-colors hover:bg-rose-50 hover:text-rose-600 disabled:opacity-30 dark:text-slate-400 dark:hover:bg-rose-500/10"
-                            aria-label="Remove option"
+                            aria-label={copy.removeOption}
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
@@ -902,8 +1069,10 @@ export function QuestionsManager() {
                       ))}
                     </div>
                     <p className="mt-1.5 text-[10px] text-[#94A3B8]">
-                      Cover both traits of {personalityForm.dimension}. Weight controls how
-                      strongly an answer contributes to the trait score.
+                      {copy.optionsHint.replace(
+                        "{dimension}",
+                        personalityForm.dimension
+                      )}
                     </p>
                   </div>
                 </>
@@ -911,19 +1080,22 @@ export function QuestionsManager() {
                 <>
                   <div className="grid gap-4 sm:grid-cols-3">
                     <label>
-                      <span className={labelClass}>Category</span>
+                      <span className={labelClass}>{copy.categoryLabel}</span>
                       <Select
                         value={riasecForm.category}
                         onChange={(category) =>
                           setRiasecForm((prev) => ({ ...prev, category }))
                         }
-                        options={RIASEC_CATEGORIES}
-                        label="RIASEC category"
+                        options={RIASEC_CATEGORIES.map((category) => ({
+                          value: category.value,
+                          label: isKm ? category.labelKm : category.label,
+                        }))}
+                        label={copy.riasecCategory}
                         className="w-full"
                       />
                     </label>
                     <label>
-                      <span className={labelClass}>Order</span>
+                      <span className={labelClass}>{copy.orderLabel}</span>
                       <input
                         type="number"
                         min={1}
@@ -934,7 +1106,7 @@ export function QuestionsManager() {
                             order_index: event.target.value,
                           }))
                         }
-                        placeholder="Auto"
+                        placeholder={copy.auto}
                         className={inputClass}
                       />
                     </label>
@@ -951,12 +1123,12 @@ export function QuestionsManager() {
                           }
                           className="h-4 w-4 rounded border-[#D8D1C5] accent-[#111965] dark:accent-[#F7CE4D]"
                         />
-                        Active
+                        {copy.activeLabel}
                       </span>
                     </label>
                   </div>
                   <label>
-                    <span className={labelClass}>Prompt (English)</span>
+                    <span className={labelClass}>{copy.promptEn}</span>
                     <textarea
                       rows={2}
                       required
@@ -971,7 +1143,7 @@ export function QuestionsManager() {
                     />
                   </label>
                   <label>
-                    <span className={labelClass}>Prompt (Khmer)</span>
+                    <span className={labelClass}>{copy.promptKm}</span>
                     <textarea
                       rows={2}
                       required
@@ -986,8 +1158,7 @@ export function QuestionsManager() {
                     />
                   </label>
                   <p className="rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3.5 py-2.5 text-[11px] leading-relaxed text-[#68708A] dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-400">
-                    Students answer this question on the standard 1–5 interest scale. No
-                    answer options are needed.
+                    {copy.riasecNote}
                   </p>
                 </>
               )}
@@ -998,7 +1169,7 @@ export function QuestionsManager() {
                   onClick={closeDialog}
                   className="h-10 rounded-xl border border-[#E6E8F0] px-4 text-xs font-bold text-[#475569] transition-colors hover:bg-[#F8FAFD] dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/10"
                 >
-                  Cancel
+                  {copy.cancel}
                 </button>
                 <button
                   type="submit"
@@ -1006,7 +1177,7 @@ export function QuestionsManager() {
                   className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#111965] px-5 text-xs font-black text-white transition-colors hover:bg-[#1E277A] disabled:opacity-60 dark:bg-[#F7CE4D] dark:text-[#111965] dark:hover:bg-[#E5BD3B]"
                 >
                   {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
-                  {editingId ? "Save changes" : "Add question"}
+                  {editingId ? copy.saveChanges : copy.addQuestion}
                 </button>
               </div>
             </form>
@@ -1018,13 +1189,15 @@ export function QuestionsManager() {
 }
 
 function StatusBadge({ active }: { active: boolean }) {
+  const { language } = useLanguage();
+  const copy = QUESTIONS_COPY[language];
   return active ? (
     <span className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] font-bold text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300">
-      <Check className="h-3 w-3" /> Active
+      <Check className="h-3 w-3" /> {copy.active}
     </span>
   ) : (
     <span className="rounded-full border border-[#E6E8F0] bg-[#F8FAFD] px-2 py-1 text-[10px] font-bold text-[#94A3B8] dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-400">
-      Inactive
+      {copy.inactive}
     </span>
   );
 }
@@ -1038,13 +1211,15 @@ function QuestionActions({
   onDelete: () => void;
   deleting: boolean;
 }) {
+  const { language } = useLanguage();
+  const copy = QUESTIONS_COPY[language];
   return (
     <div className="flex items-center justify-end gap-1">
       <button
         type="button"
         onClick={onEdit}
         className="rounded-lg p-1.5 text-[#68708A] transition-colors hover:bg-[#F0F2FA] hover:text-[#111965] dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
-        aria-label="Edit question"
+        aria-label={copy.editQuestion}
       >
         <Pencil className="h-3.5 w-3.5" />
       </button>
@@ -1053,7 +1228,7 @@ function QuestionActions({
         onClick={onDelete}
         disabled={deleting}
         className="rounded-lg p-1.5 text-[#68708A] transition-colors hover:bg-rose-50 hover:text-rose-600 disabled:opacity-50 dark:text-slate-400 dark:hover:bg-rose-500/10 dark:hover:text-rose-300"
-        aria-label="Delete question"
+        aria-label={copy.deleteQuestion}
       >
         <Trash2 className="h-3.5 w-3.5" />
       </button>
