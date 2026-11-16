@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   BrainCircuit,
   Check,
   Compass,
-  ListChecks,
   Loader2,
   Pencil,
   Plus,
+  RotateCcw,
+  Search,
   Trash2,
   X,
 } from "lucide-react";
@@ -17,6 +18,8 @@ import { apiFetch } from "@/lib/api-client";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast";
 import { cn, getErrorMessage } from "@/lib/utils";
+import { AdminFilterDropdown } from "./admin-filter-dropdown";
+import { AdminPagination } from "./admin-pagination";
 
 type QuestionTab = "personality" | "riasec";
 
@@ -70,6 +73,8 @@ const RIASEC_CATEGORIES = [
   { value: "E", label: "E — Enterprising" },
   { value: "C", label: "C — Conventional" },
 ];
+
+const PAGE_SIZE = 10;
 
 const inputClass =
   "h-10 w-full rounded-xl border border-[#E6E8F0] bg-white px-3 text-[12px] font-medium text-[#111965] outline-none transition-colors placeholder:text-[#94A3B8] focus:border-[#111965]/50 focus:ring-2 focus:ring-[#111965]/10 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-slate-500 dark:focus:border-[#F7CE4D]/60 dark:focus:ring-[#F7CE4D]/10";
@@ -126,6 +131,10 @@ export function QuestionsManager() {
   const queryClient = useQueryClient();
   const toast = useToast();
   const [tab, setTab] = useState<QuestionTab>("personality");
+  const [search, setSearch] = useState("");
+  const [dimensionFilter, setDimensionFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [page, setPage] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [personalityForm, setPersonalityForm] =
@@ -145,6 +154,85 @@ export function QuestionsManager() {
 
   const activeList = tab === "personality" ? personalityQuestions : riasecQuestions;
   const activeCount = activeList.filter((question) => question.is_active).length;
+
+  const dimensionFilterOptions = useMemo(() => {
+    const source = tab === "personality" ? personalityQuestions : riasecQuestions;
+    const categories =
+      tab === "personality"
+        ? DIMENSIONS.map(({ value }) => ({ value, label: value }))
+        : RIASEC_CATEGORIES;
+
+    return [
+      { value: "", label: "All", count: source.length },
+      ...categories.map((category) => ({
+        ...category,
+        count: source.filter(
+          (question) =>
+            (tab === "personality"
+              ? (question as PersonalityQuestion).dimension
+              : (question as RiasecQuestion).category) === category.value
+        ).length,
+      })),
+    ];
+  }, [tab, personalityQuestions, riasecQuestions]);
+
+  const statusFilterOptions = useMemo(
+    () => [
+      { value: "", label: "All", count: activeList.length },
+      {
+        value: "active",
+        label: "Active",
+        count: activeList.filter((question) => question.is_active).length,
+      },
+      {
+        value: "inactive",
+        label: "Inactive",
+        count: activeList.filter((question) => !question.is_active).length,
+      },
+    ],
+    [activeList]
+  );
+
+  const filtered = useMemo(() => {
+    const needle = search.trim().toLowerCase();
+    return activeList.filter((question) => {
+      const dimension =
+        tab === "personality"
+          ? (question as PersonalityQuestion).dimension
+          : (question as RiasecQuestion).category;
+      if (dimensionFilter && dimension !== dimensionFilter) return false;
+      if (statusFilter === "active" && !question.is_active) return false;
+      if (statusFilter === "inactive" && question.is_active) return false;
+      if (!needle) return true;
+      return (
+        question.prompt_en.toLowerCase().includes(needle) ||
+        question.prompt_km.toLowerCase().includes(needle)
+      );
+    });
+  }, [activeList, tab, search, dimensionFilter, statusFilter]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const visible = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
+  const hasActiveFilters = Boolean(search || dimensionFilter || statusFilter);
+
+  const selectTab = (nextTab: QuestionTab) => {
+    setTab(nextTab);
+    setSearch("");
+    setDimensionFilter("");
+    setStatusFilter("");
+    setPage(1);
+  };
+
+  const resetFilters = () => {
+    setSearch("");
+    setDimensionFilter("");
+    setStatusFilter("");
+    setPage(1);
+  };
 
   useEffect(() => {
     if (!dialogOpen) return;
@@ -371,7 +459,7 @@ export function QuestionsManager() {
       <div className="flex flex-wrap items-center gap-2">
         <button
           type="button"
-          onClick={() => setTab("personality")}
+          onClick={() => selectTab("personality")}
           className={cn(
             "inline-flex h-9 items-center gap-2 rounded-xl border px-3.5 text-[11px] font-bold transition-colors",
             tab === "personality"
@@ -384,7 +472,7 @@ export function QuestionsManager() {
         </button>
         <button
           type="button"
-          onClick={() => setTab("riasec")}
+          onClick={() => selectTab("riasec")}
           className={cn(
             "inline-flex h-9 items-center gap-2 rounded-xl border px-3.5 text-[11px] font-bold transition-colors",
             tab === "riasec"
@@ -401,6 +489,77 @@ export function QuestionsManager() {
       </div>
 
       <div className="overflow-hidden rounded-2xl border border-[#E6E8F0] bg-white dark:border-white/10 dark:bg-[#090D24]">
+        <div className="flex flex-col gap-2.5 border-b border-[#E6E8F0] p-3 dark:border-white/10 xl:flex-row xl:items-center xl:justify-between">
+          <div className="relative w-full xl:max-w-xs">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#68708A] dark:text-slate-400" />
+            <input
+              value={search}
+              onChange={(event) => {
+                setSearch(event.target.value);
+                setPage(1);
+              }}
+              placeholder={`Search ${tabLabel.toLowerCase()} prompts…`}
+              className="h-9 w-full rounded-xl border border-[#E6E8F0] bg-[#F5F6FA]/70 pl-9 pr-8 text-xs text-[#171A2C] outline-none transition-colors focus:border-[#111965] focus:bg-white dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 dark:focus:border-indigo-400 dark:focus:bg-slate-900"
+            />
+            {search && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  setPage(1);
+                }}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-1 text-[#68708A] hover:text-[#171A2C] dark:text-slate-400 dark:hover:text-white"
+                title="Clear search"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <AdminFilterDropdown
+              label={tab === "personality" ? "Dimension" : "Category"}
+              value={dimensionFilter}
+              onChange={(value) => {
+                setDimensionFilter(value);
+                setPage(1);
+              }}
+              options={dimensionFilterOptions}
+              menuWidth="w-64"
+            />
+
+            <AdminFilterDropdown
+              label="Status"
+              value={statusFilter}
+              onChange={(value) => {
+                setStatusFilter(value);
+                setPage(1);
+              }}
+              options={statusFilterOptions}
+              menuWidth="w-60"
+              align="end"
+            />
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-dashed border-[#E6E8F0] px-2.5 text-xs font-bold text-[#68708A] transition-colors hover:border-slate-400 hover:text-[#111965] dark:border-slate-800 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-white"
+                title="Reset all active filters"
+              >
+                <RotateCcw className="h-3 w-3" />
+                <span>Reset</span>
+              </button>
+            )}
+
+            <span className="border-l border-[#E6E8F0] pl-2 text-[11px] font-semibold text-[#68708A] dark:border-slate-800 dark:text-slate-400">
+              Showing{" "}
+              <strong className="text-[#111965] dark:text-slate-200">{filtered.length}</strong>{" "}
+              of {activeList.length}
+            </span>
+          </div>
+        </div>
+
         <div className="overflow-x-auto">
           <table className="w-full min-w-[780px] table-fixed border-collapse text-left">
             <colgroup>
@@ -430,98 +589,102 @@ export function QuestionsManager() {
                     <Loader2 className="mx-auto h-5 w-5 animate-spin text-[#111965] dark:text-[#F7CE4D]" />
                   </td>
                 </tr>
-              ) : activeList.length === 0 ? (
+              ) : filtered.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-4 py-14 text-center text-xs text-[#68708A] dark:text-slate-400">
-                    No questions in this bank yet.
+                    <div className="flex flex-col items-center gap-3">
+                      <span>
+                        {activeList.length === 0
+                          ? "No questions in this bank yet."
+                          : "No questions match these filters."}
+                      </span>
+                      {hasActiveFilters && (
+                        <button
+                          type="button"
+                          onClick={resetFilters}
+                          className="inline-flex items-center gap-1.5 rounded-xl bg-[#111965] px-3.5 py-2 text-xs font-bold text-white transition-colors hover:bg-[#1E277A] dark:bg-indigo-600 dark:hover:bg-indigo-500"
+                        >
+                          <RotateCcw className="h-3.5 w-3.5" />
+                          Reset all filters
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
-              ) : tab === "personality" ? (
-                personalityQuestions.map((question) => (
-                  <tr
-                    key={question.id}
-                    className="transition-colors hover:bg-[#F8FAFD] dark:hover:bg-white/[0.03]"
-                  >
-                    <td className="px-3 py-3 text-[12px] font-black text-[#94A3B8]">
-                      {question.order_index}
-                    </td>
-                    <td className="px-3 py-3">
-                      <span className="rounded-md border border-[#E6E8F0] bg-[#F8FAFD] px-2 py-1 text-[10px] font-black text-[#111965] dark:border-white/10 dark:bg-white/[0.04] dark:text-[#F7CE4D]">
-                        {question.dimension}
-                      </span>
-                    </td>
-                    <td className="px-3 py-3">
-                      <div className="truncate text-[12px] font-semibold text-[#171A2C] dark:text-slate-200">
-                        {question.prompt_en}
-                      </div>
-                      <div className="truncate text-[10px] text-[#94A3B8]">
-                        {question.prompt_km}
-                      </div>
-                    </td>
-                    <td className="px-3 py-3 text-[12px] font-semibold text-[#475569] dark:text-slate-300">
-                      {question.options.length}
-                    </td>
-                    <td className="px-3 py-3">
-                      <StatusBadge active={question.is_active} />
-                    </td>
-                    <td className="px-3 py-3">
-                      <QuestionActions
-                        onEdit={() => openEditPersonality(question)}
-                        onDelete={() => {
-                          if (window.confirm("Delete this personality question?")) {
-                            remove(question.id);
-                          }
-                        }}
-                        deleting={deleting}
-                      />
-                    </td>
-                  </tr>
-                ))
               ) : (
-                riasecQuestions.map((question) => (
-                  <tr
-                    key={question.id}
-                    className="transition-colors hover:bg-[#F8FAFD] dark:hover:bg-white/[0.03]"
-                  >
-                    <td className="px-3 py-3 text-[12px] font-black text-[#94A3B8]">
-                      {question.order_index}
-                    </td>
-                    <td className="px-3 py-3">
-                      <span className="rounded-md border border-[#E6E8F0] bg-[#F8FAFD] px-2 py-1 text-[10px] font-black text-[#111965] dark:border-white/10 dark:bg-white/[0.04] dark:text-[#F7CE4D]">
-                        {question.category}
-                      </span>
-                    </td>
-                    <td className="px-3 py-3">
-                      <div className="truncate text-[12px] font-semibold text-[#171A2C] dark:text-slate-200">
-                        {question.prompt_en}
-                      </div>
-                      <div className="truncate text-[10px] text-[#94A3B8]">
-                        {question.prompt_km}
-                      </div>
-                    </td>
-                    <td className="px-3 py-3 text-[12px] font-semibold text-[#475569] dark:text-slate-300">
-                      5-point scale
-                    </td>
-                    <td className="px-3 py-3">
-                      <StatusBadge active={question.is_active} />
-                    </td>
-                    <td className="px-3 py-3">
-                      <QuestionActions
-                        onEdit={() => openEditRiasec(question)}
-                        onDelete={() => {
-                          if (window.confirm("Delete this RIASEC question?")) {
-                            remove(question.id);
-                          }
-                        }}
-                        deleting={deleting}
-                      />
-                    </td>
-                  </tr>
-                ))
+                visible.map((question) => {
+                  const dimension =
+                    "dimension" in question
+                      ? question.dimension
+                      : question.category;
+                  const optionsSummary =
+                    "dimension" in question
+                      ? question.options.length
+                      : "5-point scale";
+
+                  return (
+                    <tr
+                      key={question.id}
+                      className="transition-colors hover:bg-[#F8FAFD] dark:hover:bg-white/[0.03]"
+                    >
+                      <td className="px-3 py-3 text-[12px] font-black text-[#94A3B8]">
+                        {question.order_index}
+                      </td>
+                      <td className="px-3 py-3">
+                        <span className="rounded-md border border-[#E6E8F0] bg-[#F8FAFD] px-2 py-1 text-[10px] font-black text-[#111965] dark:border-white/10 dark:bg-white/[0.04] dark:text-[#F7CE4D]">
+                          {dimension}
+                        </span>
+                      </td>
+                      <td className="px-3 py-3">
+                        <div className="truncate text-[12px] font-semibold text-[#171A2C] dark:text-slate-200">
+                          {question.prompt_en}
+                        </div>
+                        <div className="truncate text-[10px] text-[#94A3B8]">
+                          {question.prompt_km}
+                        </div>
+                      </td>
+                      <td className="px-3 py-3 text-[12px] font-semibold text-[#475569] dark:text-slate-300">
+                        {optionsSummary}
+                      </td>
+                      <td className="px-3 py-3">
+                        <StatusBadge active={question.is_active} />
+                      </td>
+                      <td className="px-3 py-3">
+                        <QuestionActions
+                          onEdit={() => {
+                            if ("dimension" in question) {
+                              openEditPersonality(question);
+                            } else {
+                              openEditRiasec(question);
+                            }
+                          }}
+                          onDelete={() => {
+                            if (window.confirm("Delete this question?")) {
+                              remove(question.id);
+                            }
+                          }}
+                          deleting={deleting}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
         </div>
+
+        {!isLoading && (
+          <AdminPagination
+            page={currentPage}
+            pageCount={pageCount}
+            totalItems={filtered.length}
+            pageSize={PAGE_SIZE}
+            onPageChange={setPage}
+            itemLabel="questions"
+            itemSingular="question"
+          />
+        )}
       </div>
 
       {dialogOpen && (

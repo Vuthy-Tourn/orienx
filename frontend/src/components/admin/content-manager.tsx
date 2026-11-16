@@ -7,6 +7,7 @@ import {
   Loader2,
   Pencil,
   Plus,
+  RotateCcw,
   Search,
   Trash2,
   Upload,
@@ -17,6 +18,8 @@ import { apiFetch } from "@/lib/api-client";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast";
 import { cn, getErrorMessage } from "@/lib/utils";
+import { AdminFilterDropdown } from "./admin-filter-dropdown";
+import { AdminPagination } from "./admin-pagination";
 
 export type AdminFieldType =
   | "text"
@@ -48,6 +51,15 @@ export interface AdminColumn {
   render?: (row: Record<string, any>) => React.ReactNode;
 }
 
+export interface AdminFilterConfig {
+  key: string;
+  label: string;
+  options?: { value: string; label: string }[];
+  type?: "boolean";
+  trueLabel?: string;
+  falseLabel?: string;
+}
+
 interface ContentManagerProps {
   resource: "universities" | "majors" | "careers" | "scholarships";
   title: string;
@@ -55,12 +67,14 @@ interface ContentManagerProps {
   fields: AdminField[];
   columns: AdminColumn[];
   searchKeys: string[];
+  filters?: AdminFilterConfig[];
 }
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const UPLOAD_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+const PAGE_SIZE = 10;
 
 function emptyForm(fields: AdminField[]): Record<string, any> {
   return Object.fromEntries(
@@ -217,10 +231,13 @@ export function ContentManager({
   fields,
   columns,
   searchKeys,
+  filters = [],
 }: ContentManagerProps) {
   const queryClient = useQueryClient();
   const toast = useToast();
   const [search, setSearch] = useState("");
+  const [filterValues, setFilterValues] = useState<Record<string, string>>({});
+  const [page, setPage] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Record<string, any>>(() => emptyForm(fields));
@@ -234,16 +251,71 @@ export function ContentManager({
     queryFn: async () => apiFetch<Record<string, any>[]>(`/admin/${resource}`),
   });
 
+  const filterGroups = useMemo(() => {
+    const allRows = rows ?? [];
+    return filters.map((filter) => {
+      const baseOptions =
+        filter.options ??
+        (filter.type === "boolean"
+          ? [
+              { value: "true", label: filter.trueLabel ?? "Yes" },
+              { value: "false", label: filter.falseLabel ?? "No" },
+            ]
+          : Array.from(
+              new Set(
+                allRows
+                  .map((row) => String(row[filter.key] ?? "").trim())
+                  .filter(Boolean)
+              )
+            )
+              .sort((left, right) => left.localeCompare(right))
+              .map((value) => ({ value, label: value })));
+
+      return {
+        ...filter,
+        options: [
+          { value: "", label: "All", count: allRows.length },
+          ...baseOptions.map((option) => ({
+            ...option,
+            count: allRows.filter(
+              (row) => String(row[filter.key] ?? "") === option.value
+            ).length,
+          })),
+        ],
+      };
+    });
+  }, [filters, rows]);
+
   const filtered = useMemo(() => {
     if (!rows) return [];
     const needle = search.trim().toLowerCase();
-    if (!needle) return rows;
-    return rows.filter((row) =>
-      searchKeys.some((key) =>
+    return rows.filter((row) => {
+      for (const filter of filters) {
+        const active = filterValues[filter.key];
+        if (!active) continue;
+        if (String(row[filter.key] ?? "") !== active) return false;
+      }
+      if (!needle) return true;
+      return searchKeys.some((key) =>
         String(row[key] ?? "").toLowerCase().includes(needle)
-      )
-    );
-  }, [rows, search, searchKeys]);
+      );
+    });
+  }, [rows, search, searchKeys, filters, filterValues]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const visible = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
+  const hasActiveFilters =
+    Boolean(search) || Boolean(Object.values(filterValues).find(Boolean));
+
+  const resetFilters = () => {
+    setSearch("");
+    setFilterValues({});
+    setPage(1);
+  };
 
   useEffect(() => {
     if (!dialogOpen) return;
@@ -438,20 +510,67 @@ export function ContentManager({
         </button>
       </div>
 
-      <div className="rounded-2xl border border-[#E6E8F0] bg-white shadow-2xs">
-        <div className="flex flex-col gap-3 border-b border-[#E6E8F0] p-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="relative w-full sm:max-w-xs">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#68708A]" />
+      <div className="rounded-2xl border border-[#E6E8F0] bg-white shadow-2xs dark:border-white/10 dark:bg-[#090D24]">
+        <div className="flex flex-col gap-2.5 border-b border-[#E6E8F0] p-3 dark:border-white/10 xl:flex-row xl:items-center xl:justify-between">
+          <div className="relative w-full xl:max-w-xs">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#68708A] dark:text-slate-400" />
             <input
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(event) => {
+                setSearch(event.target.value);
+                setPage(1);
+              }}
               placeholder={`Search ${title.toLowerCase()}...`}
-              className="h-9 w-full rounded-lg border border-[#E6E8F0] bg-[#F5F6FA]/70 pl-9 pr-3 text-xs text-[#171A2C] outline-none transition-colors focus:border-[#111965] focus:bg-white"
+              className="h-9 w-full rounded-xl border border-[#E6E8F0] bg-[#F5F6FA]/70 pl-9 pr-8 text-xs text-[#171A2C] outline-none transition-colors focus:border-[#111965] focus:bg-white dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 dark:focus:border-indigo-400 dark:focus:bg-slate-900"
             />
+            {search && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearch("");
+                  setPage(1);
+                }}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-1 text-[#68708A] hover:text-[#171A2C] dark:text-slate-400 dark:hover:text-white"
+                title="Clear search"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
           </div>
-          <span className="text-xs font-bold text-[#68708A]">
-            {filtered.length} {filtered.length === 1 ? "record" : "records"}
-          </span>
+
+          <div className="flex flex-wrap items-center gap-2">
+            {filterGroups.map((filter) => (
+              <AdminFilterDropdown
+                key={filter.key}
+                label={filter.label}
+                value={filterValues[filter.key] ?? ""}
+                onChange={(value) => {
+                  setFilterValues((prev) => ({ ...prev, [filter.key]: value }));
+                  setPage(1);
+                }}
+                options={filter.options}
+                menuWidth="w-60"
+              />
+            ))}
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-dashed border-[#E6E8F0] px-2.5 text-xs font-bold text-[#68708A] transition-colors hover:border-slate-400 hover:text-[#111965] dark:border-slate-800 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-white"
+                title="Reset all active filters"
+              >
+                <RotateCcw className="h-3 w-3" />
+                <span>Reset</span>
+              </button>
+            )}
+
+            <span className="border-l border-[#E6E8F0] pl-2 text-[11px] font-semibold text-[#68708A] dark:border-slate-800 dark:text-slate-400">
+              Showing{" "}
+              <strong className="text-[#111965] dark:text-slate-200">{filtered.length}</strong>{" "}
+              of {rows?.length || 0}
+            </span>
+          </div>
         </div>
 
         {isLoading ? (
@@ -460,14 +579,28 @@ export function ContentManager({
             Loading…
           </div>
         ) : filtered.length === 0 ? (
-          <div className="py-16 text-center text-xs text-[#68708A]">
-            No records found.
+          <div className="flex flex-col items-center justify-center gap-3 py-16 text-center text-xs text-[#68708A] dark:text-slate-400">
+            <span>
+              {hasActiveFilters
+                ? "No records match these filters."
+                : "No records found."}
+            </span>
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#111965] px-3.5 py-2 text-xs font-bold text-white transition-colors hover:bg-[#1E277A] dark:bg-indigo-600 dark:hover:bg-indigo-500"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                Reset all filters
+              </button>
+            )}
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-left text-xs">
               <thead>
-                <tr className="border-b border-[#E6E8F0] bg-[#F8FAFD] text-[11px] uppercase tracking-wider text-[#68708A]">
+                <tr className="border-b border-[#E6E8F0] bg-[#F8FAFD] text-[11px] uppercase tracking-wider text-[#68708A] dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-400">
                   {columns.map((column) => (
                     <th key={column.key} className="px-4 py-3 font-bold">
                       {column.label}
@@ -477,15 +610,18 @@ export function ContentManager({
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((row) => (
+                {visible.map((row) => (
                   <tr
                     key={row.id}
-                    className="border-b border-[#E6E8F0] last:border-b-0 hover:bg-[#F8FAFD]/70"
+                    className="border-b border-[#E6E8F0] last:border-b-0 hover:bg-[#F8FAFD]/70 dark:border-white/10 dark:hover:bg-white/[0.03]"
                   >
                     {columns.map((column) => (
                       <td
                         key={column.key}
-                        className={cn("px-4 py-3 text-[#171A2C]", column.className)}
+                        className={cn(
+                          "px-4 py-3 text-[#171A2C] dark:text-slate-200",
+                          column.className
+                        )}
                       >
                         {column.render ? column.render(row) : row[column.key] ?? "—"}
                       </td>
@@ -496,7 +632,7 @@ export function ContentManager({
                           type="button"
                           onClick={() => openEdit(row)}
                           title="Edit"
-                          className="rounded-lg p-1.5 text-[#68708A] transition-colors hover:bg-[#F0F2FA] hover:text-[#111965]"
+                          className="rounded-lg p-1.5 text-[#68708A] transition-colors hover:bg-[#F0F2FA] hover:text-[#111965] dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
                         >
                           <Pencil className="h-3.5 w-3.5" />
                         </button>
@@ -505,7 +641,7 @@ export function ContentManager({
                           onClick={() => handleDelete(row)}
                           disabled={deleting}
                           title="Delete"
-                          className="rounded-lg p-1.5 text-[#68708A] transition-colors hover:bg-rose-50 hover:text-rose-600 disabled:opacity-40"
+                          className="rounded-lg p-1.5 text-[#68708A] transition-colors hover:bg-rose-50 hover:text-rose-600 disabled:opacity-40 dark:text-slate-400 dark:hover:bg-rose-500/10 dark:hover:text-rose-300"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
@@ -516,6 +652,18 @@ export function ContentManager({
               </tbody>
             </table>
           </div>
+        )}
+
+        {!isLoading && (
+          <AdminPagination
+            page={currentPage}
+            pageCount={pageCount}
+            totalItems={filtered.length}
+            pageSize={PAGE_SIZE}
+            onPageChange={setPage}
+            itemLabel="records"
+            itemSingular="record"
+          />
         )}
       </div>
 

@@ -223,7 +223,7 @@ export function AdminFilterDropdown<T extends string = string>({
             </div>
 
             {/* Options List */}
-            <ul ref={listRef} role="listbox" aria-label={label} className="space-y-0.5">
+            <ul ref={listRef} role="listbox" aria-label={label} className="max-h-72 space-y-0.5 overflow-y-auto">
               {options.map((opt, index) => {
                 const isSelected = opt.value === value;
                 const isFocused = index === activeIndex;

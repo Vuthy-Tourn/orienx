@@ -2,14 +2,12 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  BookOpen,
   Building2,
   Check,
-  ChevronLeft,
-  ChevronRight,
   Loader2,
   Pencil,
   Plus,
+  RotateCcw,
   Search,
   Trash2,
   X,
@@ -19,6 +17,8 @@ import { apiFetch } from "@/lib/api-client";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast";
 import { cn, getErrorMessage } from "@/lib/utils";
+import { AdminFilterDropdown } from "./admin-filter-dropdown";
+import { AdminPagination } from "./admin-pagination";
 
 interface Offering {
   id: string;
@@ -99,6 +99,8 @@ export function OfferingsManager() {
   const toast = useToast();
   const [search, setSearch] = useState("");
   const [universityFilter, setUniversityFilter] = useState("");
+  const [degreeFilter, setDegreeFilter] = useState("");
+  const [verifiedFilter, setVerifiedFilter] = useState("");
   const [page, setPage] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Offering | null>(null);
@@ -130,6 +132,10 @@ export function OfferingsManager() {
     const needle = search.trim().toLowerCase();
     return offerings.filter((item) => {
       if (universityFilter && item.university_id !== universityFilter) return false;
+      if (degreeFilter && item.degree_level !== degreeFilter) return false;
+      if (verifiedFilter && String(item.is_tuition_verified) !== verifiedFilter) {
+        return false;
+      }
       if (!needle) return true;
       return [
         item.university_name_en,
@@ -142,10 +148,54 @@ export function OfferingsManager() {
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(needle));
     });
-  }, [offerings, search, universityFilter]);
+  }, [offerings, search, universityFilter, degreeFilter, verifiedFilter]);
+
+  const degreeFilterOptions = useMemo(
+    () => [
+      { value: "", label: "All", count: offerings.length },
+      ...DEGREE_OPTIONS.map((degree) => ({
+        value: degree,
+        label: degree.charAt(0) + degree.slice(1).toLowerCase(),
+        count: offerings.filter((item) => item.degree_level === degree).length,
+      })),
+    ],
+    [offerings]
+  );
+
+  const verifiedFilterOptions = useMemo(
+    () => [
+      { value: "", label: "All", count: offerings.length },
+      {
+        value: "true",
+        label: "Verified",
+        count: offerings.filter((item) => item.is_tuition_verified).length,
+      },
+      {
+        value: "false",
+        label: "Unverified",
+        count: offerings.filter((item) => !item.is_tuition_verified).length,
+      },
+    ],
+    [offerings]
+  );
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const visible = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const currentPage = Math.min(page, pageCount);
+  const visible = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
+  const hasActiveFilters = Boolean(
+    search || universityFilter || degreeFilter || verifiedFilter
+  );
+
+  const resetFilters = () => {
+    setSearch("");
+    setUniversityFilter("");
+    setDegreeFilter("");
+    setVerifiedFilter("");
+    setPage(1);
+  };
 
   const openCreate = () => {
     setEditing(null);
@@ -264,8 +314,8 @@ export function OfferingsManager() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 rounded-2xl border border-[#E6E8F0] bg-white p-3 dark:border-white/10 dark:bg-[#090D24] sm:flex-row sm:items-center">
-        <label className="relative flex-1">
+      <div className="flex flex-col gap-2 rounded-2xl border border-[#E6E8F0] bg-white p-3 dark:border-white/10 dark:bg-[#090D24] xl:flex-row xl:items-center">
+        <label className="relative min-w-[220px] flex-1">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]" />
           <input
             value={search}
@@ -277,25 +327,69 @@ export function OfferingsManager() {
             className={cn(inputClass, "pl-9")}
           />
         </label>
-        <Select
-          value={universityFilter}
-          onChange={(value) => {
-            setUniversityFilter(value);
-            setPage(1);
-          }}
-          options={[
-            { value: "", label: "All universities" },
-            ...universities.map((university) => ({
-              value: university.id,
-              label: `${university.name_en}${university.acronym_en ? ` (${university.acronym_en})` : ""}`,
-            })),
-          ]}
-          label="University"
-          searchable
-          align="end"
-          className="w-full sm:w-64"
-          menuClassName="min-w-[280px]"
-        />
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Select
+            value={universityFilter}
+            onChange={(value) => {
+              setUniversityFilter(value);
+              setPage(1);
+            }}
+            options={[
+              { value: "", label: "All universities" },
+              ...universities.map((university) => ({
+                value: university.id,
+                label: `${university.name_en}${university.acronym_en ? ` (${university.acronym_en})` : ""}`,
+              })),
+            ]}
+            label="University"
+            searchable
+            align="end"
+            className="w-full sm:w-64"
+            menuClassName="min-w-[280px]"
+          />
+
+          <AdminFilterDropdown
+            label="Degree"
+            value={degreeFilter}
+            onChange={(value) => {
+              setDegreeFilter(value);
+              setPage(1);
+            }}
+            options={degreeFilterOptions}
+            menuWidth="w-56"
+          />
+
+          <AdminFilterDropdown
+            label="Tuition"
+            value={verifiedFilter}
+            onChange={(value) => {
+              setVerifiedFilter(value);
+              setPage(1);
+            }}
+            options={verifiedFilterOptions}
+            menuWidth="w-56"
+            align="end"
+          />
+
+          {hasActiveFilters && (
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-dashed border-[#E6E8F0] px-2.5 text-xs font-bold text-[#68708A] transition-colors hover:border-slate-400 hover:text-[#111965] dark:border-slate-800 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-white"
+              title="Reset all active filters"
+            >
+              <RotateCcw className="h-3 w-3" />
+              <span>Reset</span>
+            </button>
+          )}
+
+          <span className="border-l border-[#E6E8F0] pl-2 text-[11px] font-semibold text-[#68708A] dark:border-slate-800 dark:text-slate-400">
+            Showing{" "}
+            <strong className="text-[#111965] dark:text-slate-200">{filtered.length}</strong>{" "}
+            of {offerings.length}
+          </span>
+        </div>
       </div>
 
       <div className="overflow-hidden rounded-2xl border border-[#E6E8F0] bg-white dark:border-white/10 dark:bg-[#090D24]">
@@ -333,7 +427,19 @@ export function OfferingsManager() {
               ) : visible.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="px-4 py-14 text-center text-xs text-[#68708A] dark:text-slate-400">
-                    No program links match these filters.
+                    <div className="flex flex-col items-center gap-3">
+                      <span>No program links match these filters.</span>
+                      {hasActiveFilters && (
+                        <button
+                          type="button"
+                          onClick={resetFilters}
+                          className="inline-flex items-center gap-1.5 rounded-xl bg-[#111965] px-3.5 py-2 text-xs font-bold text-white transition-colors hover:bg-[#1E277A] dark:bg-indigo-600 dark:hover:bg-indigo-500"
+                        >
+                          <RotateCcw className="h-3.5 w-3.5" />
+                          Reset all filters
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ) : (
@@ -421,35 +527,15 @@ export function OfferingsManager() {
           </table>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#E6E8F0] px-4 py-3 dark:border-white/10">
-          <span className="text-[11px] font-medium text-[#68708A] dark:text-slate-400">
-            Showing {filtered.length === 0 ? 0 : (page - 1) * PAGE_SIZE + 1}–
-            {Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length}
-          </span>
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => setPage((value) => Math.max(1, value - 1))}
-              disabled={page <= 1}
-              className="rounded-lg border border-[#E6E8F0] p-1.5 text-[#68708A] transition-colors hover:bg-[#F0F2FA] disabled:opacity-40 dark:border-white/10 dark:text-slate-400 dark:hover:bg-white/10"
-              aria-label="Previous page"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <span className="min-w-14 text-center text-[11px] font-bold text-[#111965] dark:text-white">
-              {page} / {pageCount}
-            </span>
-            <button
-              type="button"
-              onClick={() => setPage((value) => Math.min(pageCount, value + 1))}
-              disabled={page >= pageCount}
-              className="rounded-lg border border-[#E6E8F0] p-1.5 text-[#68708A] transition-colors hover:bg-[#F0F2FA] disabled:opacity-40 dark:border-white/10 dark:text-slate-400 dark:hover:bg-white/10"
-              aria-label="Next page"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </div>
-        </div>
+        <AdminPagination
+          page={currentPage}
+          pageCount={pageCount}
+          totalItems={filtered.length}
+          pageSize={PAGE_SIZE}
+          onPageChange={setPage}
+          itemLabel="programs"
+          itemSingular="program"
+        />
       </div>
 
       {dialogOpen && (

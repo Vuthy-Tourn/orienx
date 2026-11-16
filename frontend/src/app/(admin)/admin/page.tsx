@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -17,7 +17,9 @@ import {
   GraduationCap,
   Loader2,
   Menu,
+  RotateCcw,
   Save,
+  Search,
   ShieldCheck,
   Sliders,
   Sparkles,
@@ -48,10 +50,13 @@ import {
   ContentManager,
   type AdminColumn,
   type AdminField,
+  type AdminFilterConfig,
 } from "@/components/admin/content-manager";
 import { UsersManager } from "@/components/admin/users-manager";
 import { OfferingsManager } from "@/components/admin/offerings-manager";
 import { QuestionsManager } from "@/components/admin/questions-manager";
+import { AdminFilterDropdown } from "@/components/admin/admin-filter-dropdown";
+import { AdminPagination } from "@/components/admin/admin-pagination";
 import {
   AdminSidebar,
   ADMIN_TABS,
@@ -285,6 +290,70 @@ const SCHOLARSHIP_COLUMNS: AdminColumn[] = [
   },
 ];
 
+const UNIVERSITY_FILTERS: AdminFilterConfig[] = [
+  {
+    key: "university_type",
+    label: "Type",
+    options: [
+      { value: "PUBLIC", label: "Public" },
+      { value: "PRIVATE", label: "Private" },
+    ],
+  },
+  {
+    key: "is_verified",
+    label: "Verification",
+    type: "boolean",
+    trueLabel: "Verified",
+    falseLabel: "Unverified",
+  },
+];
+
+const MAJOR_FILTERS: AdminFilterConfig[] = [
+  { key: "category", label: "Category" },
+  {
+    key: "is_stem",
+    label: "STEM",
+    type: "boolean",
+    trueLabel: "STEM",
+    falseLabel: "Non-STEM",
+  },
+];
+
+const CAREER_FILTERS: AdminFilterConfig[] = [
+  { key: "industry", label: "Industry" },
+  {
+    key: "education_level",
+    label: "Education",
+    options: [
+      { value: "ASSOCIATE", label: "Associate" },
+      { value: "BACHELOR", label: "Bachelor" },
+      { value: "MASTER", label: "Master" },
+      { value: "DOCTORATE", label: "Doctorate" },
+      { value: "DIPLOMA", label: "Diploma" },
+    ],
+  },
+];
+
+const SCHOLARSHIP_FILTERS: AdminFilterConfig[] = [
+  {
+    key: "coverage_type",
+    label: "Coverage",
+    options: [
+      { value: "FULL_TUITION", label: "Full tuition" },
+      { value: "PARTIAL_TUITION", label: "Partial tuition" },
+      { value: "STIPEND_ONLY", label: "Stipend only" },
+      { value: "FULL_RIDE", label: "Full ride" },
+    ],
+  },
+  {
+    key: "is_verified",
+    label: "Verification",
+    type: "boolean",
+    trueLabel: "Verified",
+    falseLabel: "Unverified",
+  },
+];
+
 function PreviewCell({ src, label }: { src?: string | null; label?: string }) {
   if (!src) {
     return <span className="text-[10px] text-[#94A3B8]">—</span>;
@@ -440,6 +509,7 @@ export default function AdminConsolePage() {
               fields={UNIVERSITY_FIELDS}
               columns={UNIVERSITY_COLUMNS}
               searchKeys={["name_en", "name_km", "acronym_en", "slug", "province"]}
+              filters={UNIVERSITY_FILTERS}
             />
           )}
           {activeTab === "majors" && (
@@ -450,6 +520,7 @@ export default function AdminConsolePage() {
               fields={MAJOR_FIELDS}
               columns={MAJOR_COLUMNS}
               searchKeys={["name_en", "name_km", "category", "slug"]}
+              filters={MAJOR_FILTERS}
             />
           )}
           {activeTab === "offerings" && <OfferingsManager />}
@@ -462,6 +533,7 @@ export default function AdminConsolePage() {
               fields={CAREER_FIELDS}
               columns={CAREER_COLUMNS}
               searchKeys={["title_en", "title_km", "industry", "slug"]}
+              filters={CAREER_FILTERS}
             />
           )}
           {activeTab === "scholarships" && (
@@ -472,6 +544,7 @@ export default function AdminConsolePage() {
               fields={SCHOLARSHIP_FIELDS}
               columns={SCHOLARSHIP_COLUMNS}
               searchKeys={["title_en", "title_km", "provider_en", "country_or_institution", "slug"]}
+              filters={SCHOLARSHIP_FILTERS}
             />
           )}
           {activeTab === "engine" && <RulesPanel />}
@@ -1488,25 +1561,102 @@ function RuleEditor({ rule }: { rule: Record<string, any> }) {
   );
 }
 
+const AUDIT_PAGE_SIZE = 15;
+
 function AuditLogPanel() {
   const { data: logs, isLoading } = useQuery({
     queryKey: ["admin-audit"],
     queryFn: async () => apiFetch<any[]>("/admin/audit-logs?limit=100"),
   });
+  const [search, setSearch] = useState("");
+  const [actionFilter, setActionFilter] = useState("");
+  const [resourceFilter, setResourceFilter] = useState("");
+  const [page, setPage] = useState(1);
+
+  const allLogs = useMemo(() => logs ?? [], [logs]);
+
+  const actionFilterOptions = useMemo(() => {
+    const values = Array.from(
+      new Set(allLogs.map((log) => String(log.action ?? "")).filter(Boolean))
+    ).sort((left, right) => left.localeCompare(right));
+    return [
+      { value: "", label: "All", count: allLogs.length },
+      ...values.map((value) => ({
+        value,
+        label: value.replace(/_/g, " "),
+        count: allLogs.filter((log) => String(log.action ?? "") === value).length,
+      })),
+    ];
+  }, [allLogs]);
+
+  const resourceFilterOptions = useMemo(() => {
+    const values = Array.from(
+      new Set(
+        allLogs.map((log) => String(log.target_resource ?? "")).filter(Boolean)
+      )
+    ).sort((left, right) => left.localeCompare(right));
+    return [
+      { value: "", label: "All", count: allLogs.length },
+      ...values.map((value) => ({
+        value,
+        label: value.replace(/_/g, " "),
+        count: allLogs.filter(
+          (log) => String(log.target_resource ?? "") === value
+        ).length,
+      })),
+    ];
+  }, [allLogs]);
+
+  const filtered = useMemo(() => {
+    const needle = search.trim().toLowerCase();
+    return allLogs.filter((log) => {
+      if (actionFilter && String(log.action ?? "") !== actionFilter) return false;
+      if (
+        resourceFilter &&
+        String(log.target_resource ?? "") !== resourceFilter
+      ) {
+        return false;
+      }
+      if (!needle) return true;
+      return [
+        log.actor_email,
+        log.action,
+        log.target_resource,
+        log.target_id,
+      ]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(needle));
+    });
+  }, [allLogs, search, actionFilter, resourceFilter]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / AUDIT_PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const visible = filtered.slice(
+    (currentPage - 1) * AUDIT_PAGE_SIZE,
+    currentPage * AUDIT_PAGE_SIZE
+  );
+  const hasActiveFilters = Boolean(search || actionFilter || resourceFilter);
+
+  const resetFilters = () => {
+    setSearch("");
+    setActionFilter("");
+    setResourceFilter("");
+    setPage(1);
+  };
 
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-lg font-black text-[#111965]">Audit log</h2>
-        <p className="text-xs text-[#68708A]">
+        <h2 className="text-lg font-black text-[#111965] dark:text-white">Audit log</h2>
+        <p className="text-xs text-[#68708A] dark:text-slate-400">
           Recent administrator actions across content and accounts.
         </p>
       </div>
 
       {isLoading ? (
-        <div className="overflow-hidden rounded-2xl border border-[#E6E8F0] bg-white p-4 space-y-3">
+        <div className="space-y-3 overflow-hidden rounded-2xl border border-[#E6E8F0] bg-white p-4 dark:border-white/10 dark:bg-[#090D24]">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="flex items-center gap-4 py-2 border-b border-slate-100 last:border-b-0">
+            <div key={i} className="flex items-center gap-4 border-b border-slate-100 py-2 last:border-b-0 dark:border-white/10">
               <Skeleton className="h-4 w-28 rounded-md" />
               <Skeleton className="h-4 w-36 rounded-md" />
               <Skeleton className="h-4 w-24 rounded-md" />
@@ -1514,42 +1664,146 @@ function AuditLogPanel() {
             </div>
           ))}
         </div>
-      ) : (logs || []).length === 0 ? (
-        <div className="py-16 text-center text-xs text-[#68708A]">
-          No admin actions have been recorded yet.
-        </div>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-[#E6E8F0]">
-          <table className="w-full min-w-[720px] text-left text-xs">
-            <thead>
-              <tr className="border-b border-[#E6E8F0] bg-[#F8FAFD] text-[11px] uppercase tracking-wider text-[#68708A]">
-                <th className="px-4 py-3 font-bold">When</th>
-                <th className="px-4 py-3 font-bold">Actor</th>
-                <th className="px-4 py-3 font-bold">Action</th>
-                <th className="px-4 py-3 font-bold">Resource</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(logs || []).map((log) => (
-                <tr key={log.id} className="border-b border-[#E6E8F0] last:border-b-0">
-                  <td className="px-4 py-3 text-[11px] text-[#68708A]">
-                    {log.created_at ? new Date(log.created_at).toLocaleString() : "—"}
-                  </td>
-                  <td className="px-4 py-3 font-semibold text-[#171A2C]">
-                    {log.actor_email || "System"}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="rounded-md border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-black uppercase text-slate-600">
-                      {log.action}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 font-semibold text-[#111965]">
-                    {log.target_resource}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="overflow-hidden rounded-2xl border border-[#E6E8F0] bg-white dark:border-white/10 dark:bg-[#090D24]">
+          <div className="flex flex-col gap-2.5 border-b border-[#E6E8F0] p-3 dark:border-white/10 xl:flex-row xl:items-center xl:justify-between">
+            <div className="relative w-full xl:max-w-xs">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#68708A] dark:text-slate-400" />
+              <input
+                value={search}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setPage(1);
+                }}
+                placeholder="Search actor, action, resource…"
+                className="h-9 w-full rounded-xl border border-[#E6E8F0] bg-[#F5F6FA]/70 pl-9 pr-8 text-xs text-[#171A2C] outline-none transition-colors focus:border-[#111965] focus:bg-white dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 dark:focus:border-indigo-400 dark:focus:bg-slate-900"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearch("");
+                    setPage(1);
+                  }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-1 text-[#68708A] hover:text-[#171A2C] dark:text-slate-400 dark:hover:text-white"
+                  title="Clear search"
+                >
+                  <span className="text-xs font-bold">×</span>
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <AdminFilterDropdown
+                label="Action"
+                value={actionFilter}
+                onChange={(value) => {
+                  setActionFilter(value);
+                  setPage(1);
+                }}
+                options={actionFilterOptions}
+                menuWidth="w-60"
+              />
+
+              <AdminFilterDropdown
+                label="Resource"
+                value={resourceFilter}
+                onChange={(value) => {
+                  setResourceFilter(value);
+                  setPage(1);
+                }}
+                options={resourceFilterOptions}
+                menuWidth="w-60"
+                align="end"
+              />
+
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-dashed border-[#E6E8F0] px-2.5 text-xs font-bold text-[#68708A] transition-colors hover:border-slate-400 hover:text-[#111965] dark:border-slate-800 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-white"
+                  title="Reset all active filters"
+                >
+                  <RotateCcw className="h-3 w-3" />
+                  <span>Reset</span>
+                </button>
+              )}
+
+              <span className="border-l border-[#E6E8F0] pl-2 text-[11px] font-semibold text-[#68708A] dark:border-slate-800 dark:text-slate-400">
+                Showing{" "}
+                <strong className="text-[#111965] dark:text-slate-200">
+                  {filtered.length}
+                </strong>{" "}
+                of {allLogs.length}
+              </span>
+            </div>
+          </div>
+
+          {filtered.length === 0 ? (
+            <div className="flex flex-col items-center justify-center gap-3 py-16 text-center text-xs text-[#68708A] dark:text-slate-400">
+              <span>
+                {allLogs.length === 0
+                  ? "No admin actions have been recorded yet."
+                  : "No audit entries match these filters."}
+              </span>
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#111965] px-3.5 py-2 text-xs font-bold text-white transition-colors hover:bg-[#1E277A] dark:bg-indigo-600 dark:hover:bg-indigo-500"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  Reset all filters
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[720px] text-left text-xs">
+                <thead>
+                  <tr className="border-b border-[#E6E8F0] bg-[#F8FAFD] text-[11px] uppercase tracking-wider text-[#68708A] dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-400">
+                    <th className="px-4 py-3 font-bold">When</th>
+                    <th className="px-4 py-3 font-bold">Actor</th>
+                    <th className="px-4 py-3 font-bold">Action</th>
+                    <th className="px-4 py-3 font-bold">Resource</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {visible.map((log) => (
+                    <tr
+                      key={log.id}
+                      className="border-b border-[#E6E8F0] last:border-b-0 hover:bg-[#F8FAFD]/70 dark:border-white/10 dark:hover:bg-white/[0.03]"
+                    >
+                      <td className="px-4 py-3 text-[11px] text-[#68708A] dark:text-slate-400">
+                        {log.created_at ? new Date(log.created_at).toLocaleString() : "—"}
+                      </td>
+                      <td className="px-4 py-3 font-semibold text-[#171A2C] dark:text-slate-200">
+                        {log.actor_email || "System"}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="rounded-md border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-black uppercase text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300">
+                          {log.action}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 font-semibold text-[#111965] dark:text-[#F7CE4D]">
+                        {log.target_resource}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          <AdminPagination
+            page={currentPage}
+            pageCount={pageCount}
+            totalItems={filtered.length}
+            pageSize={AUDIT_PAGE_SIZE}
+            onPageChange={setPage}
+            itemLabel="entries"
+            itemSingular="entry"
+          />
         </div>
       )}
     </div>

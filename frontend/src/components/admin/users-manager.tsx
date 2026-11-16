@@ -23,6 +23,7 @@ import {
   AdminFilterDropdown,
   type FilterOption,
 } from "./admin-filter-dropdown";
+import { AdminPagination } from "./admin-pagination";
 
 interface AdminUser {
   id: string;
@@ -39,6 +40,7 @@ interface AdminUser {
 
 const ROLE_OPTIONS = ["STUDENT", "ADMIN", "SUPER_ADMIN"] as const;
 const STATUS_OPTIONS = ["ACTIVE", "SUSPENDED", "PENDING"] as const;
+const PAGE_SIZE = 10;
 
 function roleBadge(role: string) {
   if (role === "SUPER_ADMIN") return "bg-purple-50 text-purple-700 border-purple-200";
@@ -53,6 +55,7 @@ export function UsersManager() {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<AdminUser | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const [nextStatus, setNextStatus] = useState("ACTIVE");
@@ -81,6 +84,20 @@ export function UsersManager() {
   }, [users, search, roleFilter, statusFilter]);
 
   const hasActiveFilters = Boolean(search || roleFilter || statusFilter);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const visible = filtered.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  );
+
+  const resetFilters = () => {
+    setSearch("");
+    setRoleFilter("");
+    setStatusFilter("");
+    setPage(1);
+  };
 
   const roleCounts = useMemo(() => {
     if (!users) return { total: 0, STUDENT: 0, ADMIN: 0, SUPER_ADMIN: 0 };
@@ -246,7 +263,10 @@ export function UsersManager() {
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#68708A] dark:text-slate-400" />
             <input
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(event) => {
+                setSearch(event.target.value);
+                setPage(1);
+              }}
               placeholder="Search by name or email…"
               className="h-9 w-full rounded-xl border border-[#E6E8F0] bg-[#F5F6FA]/70 pl-9 pr-8 text-xs text-[#171A2C] outline-none transition-colors focus:border-[#111965] focus:bg-white dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 dark:focus:border-indigo-400 dark:focus:bg-slate-900"
             />
@@ -266,7 +286,10 @@ export function UsersManager() {
             <AdminFilterDropdown
               label="Role"
               value={roleFilter}
-              onChange={setRoleFilter}
+              onChange={(value) => {
+                setRoleFilter(value);
+                setPage(1);
+              }}
               options={roleFilterOptions}
               icon={Users}
               menuWidth="w-72"
@@ -275,7 +298,10 @@ export function UsersManager() {
             <AdminFilterDropdown
               label="Status"
               value={statusFilter}
-              onChange={setStatusFilter}
+              onChange={(value) => {
+                setStatusFilter(value);
+                setPage(1);
+              }}
               options={statusFilterOptions}
               icon={Activity}
               menuWidth="w-72"
@@ -284,11 +310,7 @@ export function UsersManager() {
             {hasActiveFilters && (
               <button
                 type="button"
-                onClick={() => {
-                  setSearch("");
-                  setRoleFilter("");
-                  setStatusFilter("");
-                }}
+                onClick={resetFilters}
                 className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-dashed border-[#E6E8F0] px-2.5 text-xs font-bold text-[#68708A] transition-colors hover:border-slate-400 hover:text-[#111965] dark:border-slate-800 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-white"
                 title="Reset all active filters"
               >
@@ -323,11 +345,7 @@ export function UsersManager() {
             {hasActiveFilters && (
               <button
                 type="button"
-                onClick={() => {
-                  setSearch("");
-                  setRoleFilter("");
-                  setStatusFilter("");
-                }}
+                onClick={resetFilters}
                 className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-[#111965] px-3.5 py-2 text-xs font-bold text-white transition-colors hover:bg-[#1E277A] dark:bg-indigo-600 dark:hover:bg-indigo-500"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
@@ -348,7 +366,7 @@ export function UsersManager() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((user) => {
+                {visible.map((user) => {
                   const isSelf = user.id === currentUser?.id;
                   const isTargetSuper = user.roles.includes("SUPER_ADMIN");
                   const locked = isSelf || (isTargetSuper && !isSuperAdmin);
@@ -415,6 +433,18 @@ export function UsersManager() {
               </tbody>
             </table>
           </div>
+        )}
+
+        {!isLoading && (
+          <AdminPagination
+            page={currentPage}
+            pageCount={pageCount}
+            totalItems={filtered.length}
+            pageSize={PAGE_SIZE}
+            onPageChange={setPage}
+            itemLabel="users"
+            itemSingular="user"
+          />
         )}
       </div>
 
