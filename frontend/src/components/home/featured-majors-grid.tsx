@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Code2,
   BrainCircuit,
@@ -605,19 +606,20 @@ export function FeaturedMajorsGrid() {
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
-                className="rounded-[20px] bg-white border border-[#E6E8F0] p-6 sm:p-7 min-h-[310px] sm:min-h-[330px] flex flex-col justify-between overflow-hidden shadow-2xs relative"
+                className="rounded-[20px] bg-white dark:bg-[#0c1236]/90 border border-[#E6E8F0] dark:border-white/10 p-6 sm:p-7 min-h-[310px] sm:min-h-[330px] flex flex-col justify-between overflow-hidden shadow-2xs relative"
               >
                 <div className="flex items-center justify-between">
-                  <div className="w-12 h-12 rounded-[14px] bg-slate-200/80 animate-pulse" />
-                  <div className="w-20 h-5 rounded-full bg-slate-100 animate-pulse" />
+                  <Skeleton className="w-12 h-12 rounded-[14px]" />
+                  <Skeleton className="w-20 h-5 rounded-full" />
                 </div>
-                <div className="space-y-2.5 my-auto py-3">
-                  <div className="w-24 h-3.5 bg-slate-100 rounded-md animate-pulse" />
-                  <div className="w-48 h-6 bg-slate-200/80 rounded-md animate-pulse" />
-                  <div className="w-32 h-4 bg-slate-100 rounded-md animate-pulse" />
+                <div className="space-y-3 my-auto py-3">
+                  <Skeleton className="w-24 h-4 rounded-md" />
+                  <Skeleton className="w-48 h-6 rounded-lg" />
+                  <Skeleton className="w-36 h-4 rounded-md" />
                 </div>
-                <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between">
-                  <div className="w-28 h-4 bg-slate-100 rounded-md animate-pulse" />
+                <div className="pt-3.5 border-t border-slate-100 dark:border-white/10 flex items-center justify-between">
+                  <Skeleton className="w-28 h-4 rounded-md" />
+                  <Skeleton className="w-16 h-4 rounded-md" />
                 </div>
               </div>
             ))}

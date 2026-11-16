@@ -43,6 +43,7 @@ import { apiFetch } from "@/lib/api-client";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   ContentManager,
   type AdminColumn,
@@ -556,9 +557,17 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center gap-3 py-24 text-xs font-bold text-[#68708A] dark:text-slate-400">
-        <Loader2 className="h-6 w-6 animate-spin text-[#F7CE4D]" />
-        <span>{isKm ? "កំពុងទាញយកទិន្នន័យវិភាគលើប្រព័ន្ធ…" : "Loading platform analytics…"}</span>
+      <div className="space-y-6 animate-pulse select-none">
+        <Skeleton className="h-44 w-full rounded-3xl" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-28 w-full rounded-2xl" />
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Skeleton className="h-80 w-full rounded-2xl lg:col-span-2" />
+          <Skeleton className="h-80 w-full rounded-2xl" />
+        </div>
       </div>
     );
   }
@@ -1487,9 +1496,15 @@ function AuditLogPanel() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center gap-2 py-16 text-xs text-[#68708A]">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          Loading audit log…
+        <div className="overflow-hidden rounded-2xl border border-[#E6E8F0] bg-white p-4 space-y-3">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="flex items-center gap-4 py-2 border-b border-slate-100 last:border-b-0">
+              <Skeleton className="h-4 w-28 rounded-md" />
+              <Skeleton className="h-4 w-36 rounded-md" />
+              <Skeleton className="h-4 w-24 rounded-md" />
+              <Skeleton className="h-4 flex-1 rounded-md" />
+            </div>
+          ))}
         </div>
       ) : (logs || []).length === 0 ? (
         <div className="py-16 text-center text-xs text-[#68708A]">

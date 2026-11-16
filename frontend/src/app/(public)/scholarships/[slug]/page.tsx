@@ -21,6 +21,7 @@ import {
   FileText,
 } from "lucide-react";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ScholarshipDetailPage() {
   const params = useParams();
@@ -51,10 +52,45 @@ export default function ScholarshipDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#F5F6FA] flex items-center justify-center text-sm text-[#68708A]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-3 border-[#111965] border-t-transparent rounded-full animate-spin" />
-          <span>{t("scholarshipDetail.loading")}</span>
+      <div className="min-h-screen bg-[#F8F9FC] py-8 lg:py-12">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 animate-pulse select-none">
+          <div className="flex items-center justify-between gap-4">
+            <Skeleton className="h-6 w-24 rounded-lg" />
+            <Skeleton className="h-4 w-48 rounded-md" />
+          </div>
+
+          <div className="bg-white rounded-3xl border border-[#E6E8F0] p-6 sm:p-10 space-y-6 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+              <div className="space-y-3 flex-1">
+                <Skeleton className="h-6 w-32 rounded-full" />
+                <Skeleton className="h-4 w-28 rounded-md" />
+                <Skeleton className="h-9 w-3/4 rounded-xl" />
+              </div>
+              <Skeleton className="h-10 w-36 rounded-2xl" />
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
+              {[1, 2, 3, 4].map((i) => (
+                <Skeleton key={i} className="h-16 w-full rounded-2xl" />
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-6">
+              <div className="p-6 sm:p-8 rounded-3xl bg-white border border-[#E6E8F0] space-y-4">
+                <Skeleton className="h-6 w-48 rounded-lg" />
+                <Skeleton className="h-24 w-full rounded-xl" />
+              </div>
+            </div>
+            <div className="space-y-6">
+              <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] space-y-4">
+                <Skeleton className="h-6 w-32 rounded-lg" />
+                <Skeleton className="h-10 w-full rounded-xl" />
+                <Skeleton className="h-10 w-full rounded-xl" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

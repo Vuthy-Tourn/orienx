@@ -20,6 +20,7 @@ import {
   FolderOpen,
 } from "lucide-react";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Image lookups matching public directory
 const MAJOR_IMAGES: Record<string, string> = {
@@ -148,9 +149,20 @@ export default function FavoritesPage() {
 
       {/* Tab Content Cards */}
       {isLoading ? (
-        <div className="py-24 text-center text-sm font-bold text-[#68708A] flex flex-col items-center justify-center space-y-3">
-          <div className="w-8 h-8 border-3 border-[#111965] border-t-transparent rounded-full animate-spin" />
-          <span>{t("favoritesPage.loading", "កំពុងទាញយកទំព័រដែលបានរក្សាទុក...")}</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 animate-pulse select-none">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div
+              key={i}
+              className="rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs p-5 space-y-4"
+            >
+              <Skeleton className="h-40 w-full rounded-xl" />
+              <div className="space-y-2">
+                <Skeleton className="h-5 w-3/4 rounded-lg" />
+                <Skeleton className="h-4 w-1/2 rounded-md" />
+              </div>
+              <Skeleton className="h-10 w-full rounded-xl" />
+            </div>
+          ))}
         </div>
       ) : (
         <div>

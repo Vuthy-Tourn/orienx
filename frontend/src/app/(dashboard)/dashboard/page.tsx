@@ -29,6 +29,7 @@ import {
   Bot,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function DashboardOverviewPage() {
   const { user } = useAuth();
@@ -247,7 +248,22 @@ export default function DashboardOverviewPage() {
             </Link>
           </div>
 
-          {topRec ? (
+          {isRecsLoading ? (
+            <div className="p-4 sm:p-5 rounded-[24px] bg-white border border-slate-200/90 shadow-2xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex items-center gap-4 flex-1 w-full">
+                <Skeleton className="w-24 h-18 sm:w-28 sm:h-20 rounded-2xl flex-shrink-0" />
+                <div className="space-y-2 flex-1">
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-5 w-24 rounded-full" />
+                    <Skeleton className="h-5 w-16 rounded-full" />
+                  </div>
+                  <Skeleton className="h-6 w-3/5 rounded-lg" />
+                  <Skeleton className="h-3.5 w-4/5 rounded-md" />
+                </div>
+              </div>
+              <Skeleton className="h-10 w-28 rounded-full" />
+            </div>
+          ) : topRec ? (
           <div className="p-4 sm:p-5 rounded-[24px] bg-white border border-slate-200/90 shadow-2xs hover:shadow-md transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             {/* Campus Thumbnail with Aspect Ratio & Subtle Match Badge */}
             <div className="flex items-center gap-4 flex-1 w-full">
@@ -577,7 +593,11 @@ export default function DashboardOverviewPage() {
           <div className="space-y-1.5">
             {isRecsLoading ? (
               Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-10 w-full rounded-2xl bg-slate-100 animate-pulse" />
+                <div key={i} className="flex items-center gap-3 px-3 py-2 rounded-2xl">
+                  <Skeleton className="w-5 h-5 rounded-full flex-shrink-0" />
+                  <Skeleton className="h-5 flex-1 rounded-md" />
+                  <Skeleton className="h-5 w-12 rounded-full flex-shrink-0" />
+                </div>
               ))
             ) : topRankedList.length > 0 ? (
               topRankedList.map((rec: any, idx: number) => {

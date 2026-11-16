@@ -16,6 +16,7 @@ import {
   Building,
 } from "lucide-react";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CareerDetailPage() {
   const params = useParams();
@@ -31,8 +32,40 @@ export default function CareerDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-sm text-[#68708A]">
-        {t("careerDetail.loading")}
+      <div className="min-h-screen bg-[#F5F6FA] py-8 lg:py-12">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 animate-pulse select-none">
+          <Skeleton className="h-6 w-24 rounded-lg" />
+          <div className="rounded-3xl bg-white border border-[#E6E8F0] p-6 sm:p-8 space-y-5 shadow-xs">
+            <div className="flex items-center gap-2">
+              <Skeleton className="h-6 w-28 rounded-full" />
+              <Skeleton className="h-6 w-32 rounded-full" />
+            </div>
+            <Skeleton className="h-9 w-3/5 rounded-xl" />
+            <div className="flex items-center gap-4">
+              <Skeleton className="h-4 w-40 rounded-md" />
+              <Skeleton className="h-4 w-40 rounded-md" />
+            </div>
+            <Skeleton className="h-20 w-full rounded-xl" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-6 rounded-2xl bg-white border border-[#E6E8F0] space-y-4">
+              <Skeleton className="h-5 w-36 rounded-md" />
+              <div className="space-y-2.5">
+                {[1, 2, 3, 4].map((i) => (
+                  <Skeleton key={i} className="h-4 w-full rounded-md" />
+                ))}
+              </div>
+            </div>
+            <div className="p-6 rounded-2xl bg-white border border-[#E6E8F0] space-y-4">
+              <Skeleton className="h-5 w-36 rounded-md" />
+              <div className="space-y-2.5">
+                {[1, 2, 3, 4].map((i) => (
+                  <Skeleton key={i} className="h-4 w-full rounded-md" />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

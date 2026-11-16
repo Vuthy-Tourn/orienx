@@ -15,6 +15,7 @@ import {
   BookOpen,
   Check,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AcademicPreferencesPage() {
   const router = useRouter();
@@ -107,6 +108,30 @@ export default function AcademicPreferencesPage() {
       setList([...list, item]);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div data-dashboard-page="sections" className="max-w-3xl mx-auto space-y-8 animate-pulse select-none">
+        <div className="space-y-2">
+          <Skeleton className="h-6 w-32 rounded-full" />
+          <Skeleton className="h-9 w-64 rounded-xl" />
+          <Skeleton className="h-4 w-96 max-w-full rounded-md" />
+        </div>
+        <div className="space-y-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-2xs space-y-4">
+              <Skeleton className="h-5 w-48 rounded-lg" />
+              <div className="flex flex-wrap gap-2 pt-2">
+                {[1, 2, 3, 4, 5, 6].map((j) => (
+                  <Skeleton key={j} className="h-10 w-28 rounded-full" />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div data-dashboard-page="sections" className="max-w-3xl mx-auto space-y-8 animate-in fade-in">

@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Menu } from "lucide-react";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -24,8 +25,28 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F4F7FC] text-sm text-[#68708A]">
-        {t("dashboardLayout.authenticating")}
+      <div className="min-h-screen bg-[#F4F7FC] flex animate-pulse select-none">
+        {/* Sidebar Skeleton */}
+        <div className="hidden lg:flex w-64 flex-col border-r border-[#E6E8F0] bg-white p-5 space-y-6 shrink-0">
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-9 w-9 rounded-xl" />
+            <Skeleton className="h-6 w-28 rounded-md" />
+          </div>
+          <div className="space-y-2.5 pt-4">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Skeleton key={i} className="h-10 w-full rounded-xl" />
+            ))}
+          </div>
+        </div>
+        {/* Main Content Area Skeleton */}
+        <div className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 max-w-[1560px] mx-auto w-full">
+          <Skeleton className="h-48 w-full rounded-[28px]" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Skeleton className="h-44 w-full rounded-2xl" />
+            <Skeleton className="h-44 w-full rounded-2xl" />
+            <Skeleton className="h-44 w-full rounded-2xl" />
+          </div>
+        </div>
       </div>
     );
   }

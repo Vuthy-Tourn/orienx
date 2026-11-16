@@ -203,9 +203,28 @@ export default function RiasecAssessmentPage() {
 
   if (loadingQuestions || loadingLatest) {
     return (
-      <div className="py-24 text-center text-sm text-[#68708A] flex flex-col items-center justify-center gap-3">
-        <div className="w-10 h-10 rounded-full border-3 border-[#111965] border-t-transparent animate-spin" />
-        <span className="font-semibold">{t("riasecAssessment.loading")}</span>
+      <div data-dashboard-page="sections" className="max-w-3xl mx-auto space-y-6 animate-pulse select-none">
+        <div className="space-y-2">
+          <Skeleton className="h-6 w-32 rounded-full" />
+          <Skeleton className="h-8 w-64 rounded-xl" />
+          <Skeleton className="h-4 w-96 max-w-full rounded-md" />
+        </div>
+        <div className="rounded-3xl border border-[#E6E8F0] bg-white p-6 sm:p-8 space-y-6 shadow-2xs">
+          <div className="flex justify-between items-center">
+            <Skeleton className="h-5 w-28 rounded-full" />
+            <Skeleton className="h-5 w-16 rounded-full" />
+          </div>
+          <Skeleton className="h-2 w-full rounded-full" />
+          <div className="space-y-3 pt-4">
+            <Skeleton className="h-7 w-4/5 rounded-xl" />
+            <Skeleton className="h-4 w-1/2 rounded-md" />
+          </div>
+          <div className="space-y-3 pt-2">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <Skeleton key={i} className="h-14 w-full rounded-2xl" />
+            ))}
+          </div>
+        </div>
       </div>
     );
   }

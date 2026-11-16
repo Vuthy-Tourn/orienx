@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import CardSwap, { Card, CardSwapHandle } from "@/components/ui/card-swap";
+import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Sparkles,
@@ -161,33 +162,33 @@ export function ScholarshipsShowcase() {
 
   if (isLoading) {
     return (
-      <section className="py-16 lg:py-24 bg-[#F8F9FC] border-b border-[#E6E8F0]">
+      <section className="py-16 lg:py-24 bg-[#F8F9FC] dark:bg-[#070B1E] border-b border-[#E6E8F0] dark:border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             {/* Left Column Skeleton */}
             <div className="lg:col-span-6 flex flex-col justify-between min-h-[420px] space-y-6">
               <div className="space-y-4">
-                <div className="w-48 h-7 rounded-full bg-slate-200 animate-pulse" />
-                <div className="w-3/4 h-10 rounded-xl bg-slate-200 animate-pulse" />
-                <div className="w-full h-14 rounded-xl bg-slate-100 animate-pulse" />
+                <Skeleton className="w-48 h-7 rounded-full" />
+                <Skeleton className="w-3/4 h-10 rounded-xl" />
+                <Skeleton className="w-full h-14 rounded-xl" />
               </div>
-              <div className="rounded-2xl bg-white border border-[#E6E8F0] p-6 space-y-4 shadow-xs animate-pulse">
-                <div className="w-full h-12 rounded-xl bg-slate-100" />
+              <div className="rounded-2xl bg-white dark:bg-[#0c1236]/90 border border-[#E6E8F0] dark:border-white/10 p-6 space-y-4 shadow-xs">
+                <Skeleton className="w-full h-12 rounded-xl" />
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="w-full h-5 rounded-md bg-slate-100" />
-                  <div className="w-full h-5 rounded-md bg-slate-100" />
+                  <Skeleton className="w-full h-5 rounded-md" />
+                  <Skeleton className="w-full h-5 rounded-md" />
                 </div>
               </div>
               <div className="flex gap-3">
-                <div className="w-36 h-11 rounded-xl bg-slate-200 animate-pulse" />
-                <div className="w-32 h-11 rounded-xl bg-slate-100 animate-pulse" />
+                <Skeleton className="w-36 h-11 rounded-xl" />
+                <Skeleton className="w-32 h-11 rounded-xl" />
               </div>
             </div>
             {/* Right Card Stack Skeleton */}
             <div className="lg:col-span-6 flex items-center justify-center min-h-[420px]">
               <div className="relative w-[340px] sm:w-[400px] h-[440px]">
-                <div className="absolute inset-0 rounded-3xl bg-slate-200/50 transform rotate-3 animate-pulse" />
-                <div className="absolute inset-0 rounded-3xl bg-slate-200 border border-slate-300 animate-pulse shadow-md" />
+                <div className="absolute inset-0 rounded-3xl bg-slate-200/50 dark:bg-white/5 transform rotate-3 animate-pulse" />
+                <Skeleton className="absolute inset-0 rounded-3xl border border-slate-300 dark:border-white/10 shadow-md" />
               </div>
             </div>
           </div>
