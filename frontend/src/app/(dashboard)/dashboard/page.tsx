@@ -27,6 +27,9 @@ import {
   Briefcase,
   Landmark,
   Bot,
+  CalendarDays,
+  ClipboardList,
+  Clock3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -60,6 +63,12 @@ export default function DashboardOverviewPage() {
   const { data: scholarships } = useQuery({
     queryKey: ["featured-scholarships-preview"],
     queryFn: async () => apiFetch<any[]>("/scholarships?limit=2"),
+  });
+
+  // 5. Application deadlines from the student's plan.
+  const { data: applicationPlans = [] } = useQuery({
+    queryKey: ["application-plans"],
+    queryFn: async () => apiFetch<any[]>("/plans"),
   });
 
   const status = summary?.assessments_status;
@@ -112,6 +121,19 @@ export default function DashboardOverviewPage() {
   const featuredScholarship = Array.isArray(scholarships) && scholarships.length > 0
     ? scholarships[0]
     : null;
+
+  const upcomingPlans = [...applicationPlans]
+    .filter((plan) => plan.deadline)
+    .sort((left, right) => String(left.deadline).localeCompare(String(right.deadline)))
+    .slice(0, 3);
+
+  const deadlineDays = (deadline: string) => {
+    const target = new Date(`${deadline}T00:00:00`);
+    target.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return Math.round((target.getTime() - today.getTime()) / 86400000);
+  };
 
   // Redesigned Popular Majors (Pic 2 Redesign): Clean capsules matching reference layout
   const isKhmer = language === "km";
@@ -232,6 +254,84 @@ export default function DashboardOverviewPage() {
               />
             </div>
           </div>
+        </div>
+
+        {/* APPLICATION DEADLINES */}
+        <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-2xs">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F0F2FA] text-[#111965]">
+                <CalendarDays className="h-4 w-4" />
+              </span>
+              <div>
+                <h2 className="text-xs font-black text-[#111965]">
+                  {t("planPage.upcomingDeadlines")}
+                </h2>
+                <p className="text-[10px] text-[#94A3B8]">
+                  {t("planPage.planCta")}
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/dashboard/plan"
+              className="inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#111965] hover:underline"
+            >
+              {t("planPage.viewPlan")}
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+
+          {upcomingPlans.length === 0 ? (
+            <p className="mt-3 text-[11px] text-[#68708A]">
+              {t("planPage.noUpcoming")}
+            </p>
+          ) : (
+            <div className="mt-3 grid gap-2 sm:grid-cols-3">
+              {upcomingPlans.map((plan) => {
+                const days = deadlineDays(plan.deadline);
+                const countdown =
+                  days < 0
+                    ? t("planPage.overdue")
+                    : days === 0
+                    ? t("planPage.dueToday")
+                    : days === 1
+                    ? t("planPage.dueTomorrow")
+                    : t("planPage.daysLeft").replace("{days}", String(days));
+                const title =
+                  getLocalized(plan.target_title) || plan.target_title?.en || "";
+                return (
+                  <Link
+                    href="/dashboard/plan"
+                    key={plan.id}
+                    className="rounded-xl border border-[#F0F2FA] bg-[#F8FAFD] p-2.5 transition-colors hover:border-[#D9DEEA] hover:bg-white"
+                  >
+                    <span
+                      className={cn(
+                        "inline-flex w-fit items-center gap-1 rounded-md border px-1.5 py-0.5 text-[10px] font-bold",
+                        days <= 14 && days >= 0
+                          ? "border-amber-200 bg-amber-50 text-amber-700"
+                          : days < 0
+                          ? "border-rose-200 bg-rose-50 text-rose-700"
+                          : "border-slate-200 bg-white text-slate-600"
+                      )}
+                    >
+                      <Clock3 className="h-2.5 w-2.5" />
+                      {countdown}
+                    </span>
+                    <div className="mt-1.5 line-clamp-1 text-[11px] font-bold text-[#111965]">
+                      {title}
+                    </div>
+                    <div className="mt-0.5 text-[10px] text-[#94A3B8]">
+                      {new Date(`${plan.deadline}T00:00:00`).toLocaleDateString(
+                        isKhmer ? "km-KH" : "en-US",
+                        { month: "short", day: "numeric", year: "numeric" }
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* 2. "CONTINUE LEARNING" / ACTIVE PROGRESS CARD */}

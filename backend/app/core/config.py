@@ -38,6 +38,13 @@ class Settings(BaseSettings):
     PASSWORD_RESET_EXPIRE_MINUTES: int = 30
     PASSWORD_RESET_DEBUG: bool = True
 
+    # Telegram deadline reminders
+    TELEGRAM_BOT_TOKEN: str = ""
+    TELEGRAM_BOT_USERNAME: str = ""
+    TELEGRAM_LINK_EXPIRE_MINUTES: int = 15
+    TELEGRAM_POLL_INTERVAL_SECONDS: int = 4
+    TELEGRAM_REMINDER_INTERVAL_SECONDS: int = 300
+
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost:3000",

@@ -23,6 +23,8 @@ from app.models.favorites import (
     FavoriteScholarship,
     UserActivity,
 )
+from app.models.plan import ApplicationPlan
+from app.models.notifications import NotificationPreference, NotificationLog
 
 __all__ = [
     "Base",
@@ -59,5 +61,8 @@ __all__ = [
     "FavoriteCareer",
     "FavoriteScholarship",
     "UserActivity",
+    "ApplicationPlan",
+    "NotificationPreference",
+    "NotificationLog",
 ]
 

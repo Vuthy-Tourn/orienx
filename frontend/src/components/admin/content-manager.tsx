@@ -16,6 +16,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { Select } from "@/components/ui/select";
+import { DatePicker } from "@/components/ui/date-picker";
 import { useToast } from "@/components/ui/toast";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { useLanguage } from "@/contexts/language-context";
@@ -1062,16 +1063,18 @@ export function ContentManager({
                             <Check className="h-3.5 w-3.5" />
                             {form[field.key] ? copy.enabled : copy.disabled}
                           </button>
+                        ) : field.type === "date" ? (
+                          <DatePicker
+                            id={fieldId}
+                            value={form[field.key] ?? ""}
+                            onChange={(value) => updateField(field.key, value)}
+                            label={fieldLabel}
+                            placeholder={fieldPlaceholder}
+                          />
                         ) : (
                           <input
                             id={fieldId}
-                            type={
-                              field.type === "number"
-                                ? "number"
-                                : field.type === "date"
-                                ? "date"
-                                : "text"
-                            }
+                            type={field.type === "number" ? "number" : "text"}
                             value={form[field.key] ?? ""}
                             onChange={(event) =>
                               updateField(field.key, event.target.value)

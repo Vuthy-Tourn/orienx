@@ -14,6 +14,7 @@ import {
   Sliders,
   Sparkles,
   Bookmark,
+  ClipboardList,
   ShieldCheck,
   Settings,
   LogOut,
@@ -64,6 +65,11 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
       href: "/dashboard/favorites",
       label: t("dashboardLayout.librarySaved"),
       icon: Bookmark,
+    },
+    {
+      href: "/dashboard/plan",
+      label: t("dashboardLayout.myPlan", "My Plan"),
+      icon: ClipboardList,
     },
   ];
 
