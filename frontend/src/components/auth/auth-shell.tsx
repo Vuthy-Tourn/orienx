@@ -1,12 +1,13 @@
 "use client";
 
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { gsap } from "gsap";
 
+import { AuthStarfield } from "@/components/auth/auth-starfield";
 import { Logo } from "@/components/layout/logo";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { useLanguage } from "@/contexts/language-context";
@@ -27,37 +28,6 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isRegister = pathname === "/register";
   const rootRef = useRef<HTMLDivElement>(null);
-  const [showAnimatedBackground, setShowAnimatedBackground] = useState(false);
-
-  useEffect(() => {
-    if (prefersReducedMotion()) return;
-    if (window.matchMedia("(max-width: 1023px)").matches) return;
-
-    const start = () => setShowAnimatedBackground(true);
-    let idleId: number | undefined;
-    let timeoutId: number | undefined;
-    const win = window as Window & {
-      requestIdleCallback?: (
-        callback: IdleRequestCallback,
-        options?: IdleRequestOptions
-      ) => number;
-      cancelIdleCallback?: (id: number) => void;
-    };
-
-    if (typeof win.requestIdleCallback === "function") {
-      idleId = win.requestIdleCallback(start, { timeout: 1200 });
-    } else {
-      timeoutId = win.setTimeout(start, 300);
-    }
-
-    return () => {
-      if (idleId !== undefined && typeof win.cancelIdleCallback === "function") {
-        win.cancelIdleCallback(idleId);
-      }
-      if (timeoutId !== undefined) win.clearTimeout(timeoutId);
-    };
-  }, []);
-
   // Coordinated entrance for the full-bleed background, brand and form card.
   useIsoLayoutEffect(() => {
     const root = rootRef.current;
@@ -102,31 +72,6 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
     if (!root || prefersReducedMotion()) return;
 
     const context = gsap.context(() => {
-      gsap.utils
-        .toArray<HTMLElement>("[data-auth-float]")
-        .forEach((element, index) => {
-          gsap.to(element, {
-            y: index % 2 === 0 ? -9 : 9,
-            duration: 4.2 + (index % 4) * 0.7,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-            delay: index * 0.16,
-          });
-        });
-
-      gsap.utils
-        .toArray<HTMLElement>("[data-auth-pulse]")
-        .forEach((element, index) => {
-          gsap.to(element, {
-            opacity: 0.42,
-            duration: 4 + (index % 3) * 0.6,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-            delay: index * 0.25,
-          });
-        });
     }, root);
 
     const layers = Array.from(
@@ -184,19 +129,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           />
         </picture>
 
-        {showAnimatedBackground && (
-          <img
-            src="/images/auth/auth-background-animated.webp"
-            alt=""
-            fetchPriority="low"
-            decoding="async"
-            draggable={false}
-            onLoad={(event) => {
-              event.currentTarget.style.opacity = "1";
-            }}
-            className="pointer-events-none absolute inset-0 hidden h-full w-full select-none object-cover object-center opacity-0 transition-opacity duration-700 lg:block"
-          />
-        )}
+        <AuthStarfield className="pointer-events-none absolute inset-0 h-full w-full" />
 
         <div className="absolute inset-0 bg-[#0A0F3D]/20" />
         <div
@@ -243,24 +176,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           />
         </div>
 
-        <div className="pointer-events-none absolute inset-0">
-          <span
-            data-auth-float
-            className="absolute left-[13%] top-[24%] h-1.5 w-1.5 rounded-full bg-[#FFF8E8]/80 shadow-[0_0_12px_rgba(255,248,232,0.7)]"
-          />
-          <span
-            data-auth-float
-            className="absolute right-[18%] top-[42%] h-1 w-1 rounded-full bg-[#FFE59A]/70"
-          />
-          <span
-            data-auth-pulse
-            className="absolute right-[12%] top-[62%] h-2 w-2 rounded-full bg-[#F7CE4D]/55"
-          />
-          <span
-            data-auth-pulse
-            className="absolute left-[22%] bottom-[22%] h-1.5 w-1.5 rounded-full bg-white/50"
-          />
-        </div>
+
       </div>
 
       {/* Top bar */}
