@@ -1222,8 +1222,8 @@ body {
       rgba(7, 11, 35, 0.55),
       rgba(7, 11, 35, 0.34)
     );
-    -webkit-backdrop-filter: blur(22px) saturate(130%);
-    backdrop-filter: blur(22px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    backdrop-filter: blur(12px) saturate(130%);
   }
 }
 
@@ -1243,8 +1243,8 @@ body {
       rgba(10, 15, 35, 0.6),
       rgba(5, 8, 20, 0.42)
     );
-    -webkit-backdrop-filter: blur(22px) saturate(125%);
-    backdrop-filter: blur(22px) saturate(125%);
+    -webkit-backdrop-filter: blur(12px) saturate(125%);
+    backdrop-filter: blur(12px) saturate(125%);
   }
 }
 
@@ -1255,8 +1255,8 @@ body {
       rgba(7, 11, 35, 0.64),
       rgba(7, 11, 35, 0.46)
     );
-    -webkit-backdrop-filter: blur(16px) saturate(130%);
-    backdrop-filter: blur(16px) saturate(130%);
+    -webkit-backdrop-filter: blur(8px) saturate(130%);
+    backdrop-filter: blur(8px) saturate(130%);
   }
 
   .dark .auth-glass-card {
@@ -1265,8 +1265,8 @@ body {
       rgba(10, 15, 35, 0.66),
       rgba(5, 8, 20, 0.48)
     );
-    -webkit-backdrop-filter: blur(16px) saturate(125%);
-    backdrop-filter: blur(16px) saturate(125%);
+    -webkit-backdrop-filter: blur(8px) saturate(125%);
+    backdrop-filter: blur(8px) saturate(125%);
   }
 }
 

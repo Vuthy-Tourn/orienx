@@ -39,8 +39,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       timeline
         .from("[data-auth-illustration]", {
           opacity: 0,
-          scale: 1.035,
-          duration: 1.15,
+          duration: 0.7,
         })
         .from(
           "[data-auth-decor] > *",
@@ -138,11 +137,6 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       <div
         data-auth-illustration
         className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[#0B124E]"
-        style={{
-          backgroundImage: "url('/images/auth/auth-background-poster.webp')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
       >
         <picture>
           <source
@@ -159,6 +153,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
             src="/images/auth/auth-background.webp"
             alt=""
             fetchPriority="high"
+            decoding="async"
             draggable={false}
             className="h-full w-full select-none object-cover object-center"
           />
