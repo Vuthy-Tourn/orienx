@@ -1,6 +1,6 @@
 import re
 import uuid
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from typing import List, Dict, Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -34,6 +34,7 @@ from app.schemas.admin import (
     RiasecQuestionAdminIn,
     RiasecQuestionUpdateIn,
     RuleUpdateIn,
+    AdmissionCoverageImportIn,
     ScholarshipAdminIn,
     UniversityAdminIn,
     UniversityOfferingCreateIn,
@@ -1154,7 +1155,33 @@ async def admin_update_offering(
 
     if "admission_notes" in body.model_fields_set:
         notes = (body.admission_notes or "").strip()
-        offering.admission_criteria = {"notes": notes} if notes else None
+        criteria = (
+            offering.admission_criteria
+            if isinstance(offering.admission_criteria, dict)
+            else {}
+        )
+        criteria = dict(criteria)
+        if notes:
+            criteria["notes"] = notes
+        else:
+            criteria.pop("notes", None)
+        offering.admission_criteria = criteria or None
+
+    if body.model_fields_set & {
+        "min_bacii_grade",
+        "required_subjects",
+        "admission_source_url",
+        "is_admission_verified",
+        "admission_notes",
+    }:
+        criteria = (
+            offering.admission_criteria
+            if isinstance(offering.admission_criteria, dict)
+            else {}
+        )
+        criteria = dict(criteria)
+        criteria["checked_at"] = date.today().isoformat()
+        offering.admission_criteria = criteria
 
     await _audit(db, admin_user, "update", "university_offering", before, _flat_offering(offering))
     await db.commit()
@@ -1859,4 +1886,267 @@ async def list_audit_logs(
             }
             for log in logs
         ],
+    )
+
+
+# =========================================================================
+# Admission data coverage
+# =========================================================================
+
+@router.get("/admission-coverage", response_model=ApiResponse[Dict[str, Any]])
+async def get_admission_coverage(
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    rows = (
+        await db.execute(
+            select(UniversityMajor)
+            .options(
+                selectinload(UniversityMajor.university),
+                selectinload(UniversityMajor.major),
+            )
+            .where(UniversityMajor.degree_level.in_(["BACHELOR", "ASSOCIATE"]))
+            .order_by(UniversityMajor.created_at.asc())
+        )
+    ).scalars().all()
+
+    programs: List[Dict[str, Any]] = []
+    institutions: Dict[str, Dict[str, Any]] = {}
+    verified_count = 0
+    missing_count = 0
+    unverified_count = 0
+    missing_source_count = 0
+    last_checked_any: Optional[str] = None
+
+    for offering in rows:
+        university = offering.university
+        major = offering.major
+        university_name = (
+            university.name if isinstance(university.name, dict) else {}
+        )
+        acronym = (
+            university.acronym if isinstance(university.acronym, dict) else {}
+        )
+        major_name = major.name if isinstance(major.name, dict) else {}
+        criteria = (
+            offering.admission_criteria
+            if isinstance(offering.admission_criteria, dict)
+            else {}
+        )
+        last_checked = criteria.get("checked_at")
+        if isinstance(last_checked, (date, datetime)):
+            last_checked = last_checked.isoformat()
+        notes = criteria.get("notes")
+        verified = bool(
+            offering.min_bacii_grade and offering.is_admission_verified
+        )
+        missing = offering.min_bacii_grade is None
+        unverified = bool(
+            offering.min_bacii_grade and not offering.is_admission_verified
+        )
+
+        if verified:
+            verified_count += 1
+            if not offering.admission_source_url:
+                missing_source_count += 1
+        elif missing:
+            missing_count += 1
+        else:
+            unverified_count += 1
+
+        if last_checked and (not last_checked_any or last_checked > last_checked_any):
+            last_checked_any = last_checked
+
+        program = {
+            "id": str(offering.id),
+            "university_id": str(university.id),
+            "university_slug": university.slug,
+            "university_name_en": university_name.get("en", ""),
+            "university_name_km": university_name.get("km", ""),
+            "university_acronym_en": acronym.get("en", ""),
+            "university_acronym_km": acronym.get("km", ""),
+            "university_type": university.university_type,
+            "province": university.province,
+            "major_slug": major.slug,
+            "major_name_en": major_name.get("en", ""),
+            "major_name_km": major_name.get("km", ""),
+            "major_category": major.category,
+            "degree_level": offering.degree_level,
+            "duration_years": float(offering.duration_years)
+            if offering.duration_years is not None
+            else None,
+            "min_bacii_grade": offering.min_bacii_grade,
+            "required_subjects": offering.required_subjects,
+            "is_admission_verified": bool(offering.is_admission_verified),
+            "admission_source_url": offering.admission_source_url,
+            "admission_notes": notes,
+            "last_checked": last_checked,
+            "status": "VERIFIED" if verified else "MISSING" if missing else "UNVERIFIED",
+        }
+        programs.append(program)
+
+        key = str(university.id)
+        bucket = institutions.get(key)
+        if not bucket:
+            bucket = {
+                "university_id": key,
+                "slug": university.slug,
+                "name_en": university_name.get("en", ""),
+                "name_km": university_name.get("km", ""),
+                "acronym_en": acronym.get("en", ""),
+                "acronym_km": acronym.get("km", ""),
+                "university_type": university.university_type,
+                "province": university.province,
+                "total_programs": 0,
+                "verified_programs": 0,
+                "missing_programs": 0,
+                "unverified_programs": 0,
+                "last_checked": None,
+            }
+            institutions[key] = bucket
+        bucket["total_programs"] += 1
+        if verified:
+            bucket["verified_programs"] += 1
+        elif missing:
+            bucket["missing_programs"] += 1
+        else:
+            bucket["unverified_programs"] += 1
+        if last_checked and (
+            not bucket["last_checked"] or last_checked > bucket["last_checked"]
+        ):
+            bucket["last_checked"] = last_checked
+
+    institution_rows = []
+    for bucket in institutions.values():
+        total = bucket["total_programs"]
+        bucket["coverage_percent"] = (
+            round((bucket["verified_programs"] / total) * 100) if total else 0
+        )
+        institution_rows.append(bucket)
+    institution_rows.sort(
+        key=lambda item: (
+            -item["missing_programs"],
+            -item["unverified_programs"],
+            item["name_en"].lower(),
+        )
+    )
+
+    total_programs = len(programs)
+    covered_institutions = sum(
+        1 for item in institution_rows if item["verified_programs"] > 0
+    )
+    summary = {
+        "total_programs": total_programs,
+        "verified_programs": verified_count,
+        "missing_programs": missing_count,
+        "unverified_programs": unverified_count,
+        "coverage_percent": round((verified_count / total_programs) * 100)
+        if total_programs
+        else 0,
+        "institutions_total": len(institution_rows),
+        "institutions_covered": covered_institutions,
+        "institutions_with_missing": sum(
+            1
+            for item in institution_rows
+            if item["missing_programs"] > 0 or item["unverified_programs"] > 0
+        ),
+        "missing_source_programs": missing_source_count,
+        "last_checked": last_checked_any,
+    }
+
+    return ApiResponse(
+        success=True,
+        data={
+            "summary": summary,
+            "institutions": institution_rows,
+            "programs": programs,
+        },
+    )
+
+
+@router.post("/admission-coverage/import", response_model=ApiResponse[Dict[str, Any]])
+async def import_admission_coverage(
+    body: AdmissionCoverageImportIn,
+    admin_user: User = Depends(get_current_admin),
+    db: AsyncSession = Depends(get_db),
+):
+    updated = 0
+    errors: List[Dict[str, Any]] = []
+    checked_at = date.today().isoformat()
+
+    for row in body.rows:
+        offering = (
+            await db.execute(
+                select(UniversityMajor).where(UniversityMajor.id == row.offering_id)
+            )
+        ).scalar_one_or_none()
+        if not offering:
+            errors.append(
+                {
+                    "offering_id": str(row.offering_id),
+                    "error": "Offering not found",
+                }
+            )
+            continue
+        if (
+            row.min_bacii_grade == "F"
+            and offering.degree_level != "ASSOCIATE"
+        ):
+            errors.append(
+                {
+                    "offering_id": str(row.offering_id),
+                    "error": "Grade F is only valid for associate programs",
+                }
+            )
+            continue
+
+        changed = False
+        fields = row.model_fields_set
+        if "min_bacii_grade" in fields:
+            offering.min_bacii_grade = row.min_bacii_grade
+            changed = True
+        if "is_admission_verified" in fields and row.is_admission_verified is not None:
+            offering.is_admission_verified = bool(row.is_admission_verified)
+            changed = True
+        if "admission_source_url" in fields:
+            offering.admission_source_url = (
+                row.admission_source_url.strip()
+                if row.admission_source_url
+                else None
+            )
+            changed = True
+
+        criteria = (
+            offering.admission_criteria
+            if isinstance(offering.admission_criteria, dict)
+            else {}
+        )
+        criteria = dict(criteria)
+        if "admission_notes" in fields:
+            notes = (row.admission_notes or "").strip()
+            if notes:
+                criteria["notes"] = notes
+            else:
+                criteria.pop("notes", None)
+            changed = True
+        if changed:
+            criteria["scope"] = "admin-import"
+            criteria["checked_at"] = checked_at
+            offering.admission_criteria = criteria
+            updated += 1
+
+    if updated:
+        await _audit(
+            db,
+            admin_user,
+            "import",
+            "admission_coverage",
+            None,
+            {"updated": updated, "errors": len(errors)},
+        )
+    await db.commit()
+    return ApiResponse(
+        success=True,
+        message=f"Updated {updated} program(s)",
+        data={"updated": updated, "errors": errors},
     )

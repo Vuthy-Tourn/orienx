@@ -14,6 +14,7 @@ import {
   GraduationCap,
   History,
   LogOut,
+  ShieldCheck,
   Sliders,
   Users,
 } from "lucide-react";
@@ -28,6 +29,7 @@ export type AdminTab =
   | "universities"
   | "majors"
   | "offerings"
+  | "admissions"
   | "questions"
   | "careers"
   | "scholarships"
@@ -46,6 +48,7 @@ export const ADMIN_TABS: {
   { id: "universities", label: "Universities", labelKm: "សាកលវិទ្យាល័យ", icon: Building2, group: "Directories" },
   { id: "majors", label: "Majors", labelKm: "មុខជំនាញ", icon: BookOpen, group: "Directories" },
   { id: "offerings", label: "University Programs", labelKm: "កម្មវិធីសិក្សា", icon: GraduationCap, group: "Directories" },
+  { id: "admissions", label: "Admission Coverage", labelKm: "គម្របទិន្នន័យចូលរៀន", icon: ShieldCheck, group: "Directories" },
   { id: "questions", label: "Assessment Questions", labelKm: "សំណួរវាយតម្លៃ", icon: ListChecks, group: "System" },
   { id: "careers", label: "Careers", labelKm: "អាជីពការងារ", icon: Briefcase, group: "Directories" },
   { id: "scholarships", label: "Scholarships", labelKm: "អាហារូបករណ៍", icon: Award, group: "Directories" },

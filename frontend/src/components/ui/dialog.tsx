@@ -56,13 +56,13 @@ export function Dialog({ open, onOpenChange, children, className, hideClose = fa
         role="dialog"
         aria-modal="true"
         tabIndex={-1}
-        className={cn("relative z-50 w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-[#E6E8F0] animate-in zoom-in-95 duration-200 focus:outline-none", className)}
+        className={cn("relative z-50 w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-[#E6E8F0] animate-in zoom-in-95 duration-200 focus:outline-none dark:border-white/10 dark:bg-[#090D24]", className)}
       >
         {!hideClose && (
           <button
             type="button"
             onClick={() => onOpenChange(false)}
-            className="absolute right-5 top-5 rounded-xl p-1.5 text-[#68708A] hover:bg-[#F0F2FA] hover:text-[#111965] transition-colors"
+            className="absolute right-5 top-5 rounded-xl p-1.5 text-[#68708A] hover:bg-[#F0F2FA] hover:text-[#111965] transition-colors dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
             aria-label="Close dialog"
           >
             <X className="h-5 w-5" />
@@ -79,14 +79,14 @@ export function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLD
 }
 
 export function DialogTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
-  return <h2 className={cn("text-lg sm:text-xl font-bold text-[#111965]", className)} {...props} />;
+  return <h2 className={cn("text-lg sm:text-xl font-bold text-[#111965] dark:text-white", className)} {...props} />;
 }
 
 export function DialogDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return <p className={cn("text-xs sm:text-sm text-[#68708A] leading-relaxed", className)} {...props} />;
+  return <p className={cn("text-xs sm:text-sm text-[#68708A] leading-relaxed dark:text-slate-400", className)} {...props} />;
 }
 
 export function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("flex flex-col sm:flex-row items-center justify-end gap-3 mt-6 pt-4 border-t border-[#E6E8F0]", className)} {...props} />;
+  return <div className={cn("flex flex-col sm:flex-row items-center justify-end gap-3 mt-6 pt-4 border-t border-[#E6E8F0] dark:border-white/10", className)} {...props} />;
 }
 

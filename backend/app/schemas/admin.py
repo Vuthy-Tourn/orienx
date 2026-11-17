@@ -462,3 +462,29 @@ class ScholarshipAdminIn(BaseModel):
         if value is not None and not 0 <= value <= 100:
             raise ValueError("Coverage percentage must be between 0 and 100.")
         return value
+
+
+class AdmissionCoverageImportRow(BaseModel):
+    offering_id: uuid.UUID
+    min_bacii_grade: Optional[Literal["A", "B", "C", "D", "E", "F"]] = None
+    is_admission_verified: Optional[bool] = None
+    admission_source_url: Optional[str] = Field(default=None, max_length=500)
+    admission_notes: Optional[str] = Field(default=None, max_length=1000)
+
+    model_config = ConfigDict(extra="ignore")
+
+    @field_validator("admission_source_url")
+    @classmethod
+    def validate_admission_source_url(cls, value: Optional[str]) -> Optional[str]:
+        if value is None or value.strip() == "":
+            return None
+        parsed = urlparse(value)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            raise ValueError("Admission source URL must be an http(s) URL.")
+        return value.strip()
+
+
+class AdmissionCoverageImportIn(BaseModel):
+    rows: List[AdmissionCoverageImportRow] = Field(min_length=1, max_length=2000)
+
+    model_config = ConfigDict(extra="forbid")

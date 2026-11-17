@@ -55,6 +55,7 @@ import {
 } from "@/components/admin/content-manager";
 import { UsersManager } from "@/components/admin/users-manager";
 import { OfferingsManager } from "@/components/admin/offerings-manager";
+import { AdmissionsCoverageManager } from "@/components/admin/admissions-coverage-manager";
 import { QuestionsManager } from "@/components/admin/questions-manager";
 import { AdminFilterDropdown } from "@/components/admin/admin-filter-dropdown";
 import { AdminPagination } from "@/components/admin/admin-pagination";
@@ -482,6 +483,8 @@ export default function AdminConsolePage() {
         ? "មុខជំនាញ"
         : activeTab === "offerings"
         ? "កម្មវិធីសិក្សា"
+        : activeTab === "admissions"
+        ? "គម្របទិន្នន័យចូលរៀន"
         : activeTab === "questions"
         ? "សំណួរវាយតម្លៃ"
         : activeTab === "careers"
@@ -636,6 +639,7 @@ export default function AdminConsolePage() {
             />
           )}
           {activeTab === "offerings" && <OfferingsManager />}
+          {activeTab === "admissions" && <AdmissionsCoverageManager />}
           {activeTab === "questions" && <QuestionsManager />}
           {activeTab === "careers" && (
             <ContentManager

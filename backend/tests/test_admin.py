@@ -364,3 +364,75 @@ async def test_admin_can_create_update_and_delete_user(client):
     listed = await client.get("/api/v1/admin/users?limit=500", headers=admin_headers)
     assert listed.status_code == 200
     assert all(row["id"] != user_id for row in listed.json()["data"])
+
+
+@pytest.mark.asyncio
+async def test_admin_admission_coverage_summary_and_import_validation(client):
+    admin_login = await client.post(
+        "/api/v1/auth/login",
+        json={"email": "admin@futera.edu.kh", "password": "AdminPass123!"},
+    )
+    admin_headers = {
+        "Authorization": f"Bearer {admin_login.json()['data']['access_token']}"
+    }
+
+    coverage_res = await client.get(
+        "/api/v1/admin/admission-coverage", headers=admin_headers
+    )
+    assert coverage_res.status_code == 200
+    coverage = coverage_res.json()["data"]
+    summary = coverage["summary"]
+    programs = coverage["programs"]
+    institutions = coverage["institutions"]
+
+    assert summary["total_programs"] == len(programs)
+    assert summary["institutions_total"] == len(institutions)
+    assert (
+        summary["verified_programs"]
+        + summary["missing_programs"]
+        + summary["unverified_programs"]
+        == summary["total_programs"]
+    )
+    assert summary["institutions_covered"] <= summary["institutions_total"]
+
+    for program in programs:
+        assert program["status"] in {"VERIFIED", "MISSING", "UNVERIFIED"}
+        if program["status"] == "VERIFIED":
+            assert program["min_bacii_grade"]
+            assert program["is_admission_verified"] is True
+
+    bachelor = next(
+        program for program in programs if program["degree_level"] == "BACHELOR"
+    )
+    before = {
+        "min_bacii_grade": bachelor["min_bacii_grade"],
+        "is_admission_verified": bachelor["is_admission_verified"],
+    }
+
+    import_res = await client.post(
+        "/api/v1/admin/admission-coverage/import",
+        json={
+            "rows": [
+                {"offering_id": "00000000-0000-4000-8000-000000000000"},
+                {
+                    "offering_id": bachelor["id"],
+                    "min_bacii_grade": "F",
+                    "is_admission_verified": True,
+                },
+            ]
+        },
+        headers=admin_headers,
+    )
+    assert import_res.status_code == 200
+    result = import_res.json()["data"]
+    assert result["updated"] == 0
+    assert len(result["errors"]) == 2
+    assert any("not found" in error["error"] for error in result["errors"])
+    assert any("Grade F" in error["error"] for error in result["errors"])
+
+    refreshed = (
+        await client.get("/api/v1/admin/admission-coverage", headers=admin_headers)
+    ).json()["data"]["programs"]
+    matching = next(program for program in refreshed if program["id"] == bachelor["id"])
+    assert matching["min_bacii_grade"] == before["min_bacii_grade"]
+    assert matching["is_admission_verified"] == before["is_admission_verified"]
