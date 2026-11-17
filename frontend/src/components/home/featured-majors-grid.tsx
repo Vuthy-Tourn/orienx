@@ -13,6 +13,13 @@ import {
   Coins,
   Briefcase,
   Globe2,
+  HeartPulse,
+  Cog,
+  Scale,
+  Palette,
+  Leaf,
+  FlaskConical,
+  DraftingCompass,
   ArrowRight,
   Compass,
   RefreshCw,
@@ -438,6 +445,71 @@ const MAJOR_VISUAL_MAP: Record<
     iconBg: "bg-[#EF4444]",
     graphic: StipplingDashesGraphic,
   },
+  "fine-arts": {
+    icon: Palette,
+    iconBg: "bg-[#DB2777]",
+    graphic: ContourWaveGraphic,
+  },
+  "graphic-design-multimedia": {
+    icon: Palette,
+    iconBg: "bg-[#DB2777]",
+    graphic: ContourWaveGraphic,
+  },
+  "architecture-urban-planning": {
+    icon: DraftingCompass,
+    iconBg: "bg-[#DB2777]",
+    graphic: ContourWaveGraphic,
+  },
+};
+
+const CATEGORY_VISUAL_MAP: Record<
+  string,
+  {
+    icon: React.ElementType;
+    iconBg: string;
+    graphic: React.FC;
+  }
+> = {
+  "Business & Economics": {
+    icon: Briefcase,
+    iconBg: "bg-[#F97316]",
+    graphic: DiagonalHatchGraphic,
+  },
+  "Health Sciences": {
+    icon: HeartPulse,
+    iconBg: "bg-[#E11D48]",
+    graphic: ParticleDotWaveGraphic,
+  },
+  Engineering: {
+    icon: Cog,
+    iconBg: "bg-[#0284C7]",
+    graphic: HalftoneClusterGraphic,
+  },
+  "Information Technology": {
+    icon: Code2,
+    iconBg: "bg-[#8B5CF6]",
+    graphic: ContourWaveGraphic,
+  },
+  "Law & Social Sciences": {
+    icon: Scale,
+    iconBg: "bg-[#DC2626]",
+    graphic: StipplingDashesGraphic,
+  },
+  "Architecture & Design": {
+    icon: DraftingCompass,
+    iconBg: "bg-[#DB2777]",
+    graphic: ContourWaveGraphic,
+  },
+  "Agriculture & Life Sciences": {
+    icon: Leaf,
+    iconBg: "bg-[#16A34A]",
+    graphic: HalftoneClusterGraphic,
+  },
+  "Natural Sciences": {
+    icon: FlaskConical,
+    iconBg: "bg-[#0D9488]",
+    graphic: ParticleDotWaveGraphic,
+  },
 };
 
 export function FeaturedMajorsGrid() {
@@ -663,11 +735,13 @@ export function FeaturedMajorsGrid() {
           /* 2 ROWS x 3 COLUMNS GRID OF CRISP WHITE CARDS */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {majors.map((m: any) => {
-              const visual = MAJOR_VISUAL_MAP[m.slug] || {
-                icon: Code2,
-                iconBg: "bg-[#8B5CF6]",
-                graphic: ContourWaveGraphic,
-              };
+              const visual =
+                MAJOR_VISUAL_MAP[m.slug] ||
+                CATEGORY_VISUAL_MAP[m.category] || {
+                  icon: Compass,
+                  iconBg: "bg-[#111965]",
+                  graphic: ContourWaveGraphic,
+                };
               const GraphicComponent = visual.graphic;
               const IconComponent = visual.icon;
               const tag = m.riasec_primary && m.riasec_secondary
