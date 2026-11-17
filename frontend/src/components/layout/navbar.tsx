@@ -107,6 +107,7 @@ export function Navbar() {
     pathname?.startsWith("/reset-password/") ||
     pathname?.startsWith("/auth") ||
     pathname?.startsWith("/dashboard") ||
+    pathname?.startsWith("/share") ||
     pathname?.startsWith("/admin");
 
   if (isAuthPage) {

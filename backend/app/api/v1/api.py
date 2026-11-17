@@ -11,6 +11,7 @@ from app.api.v1.endpoints import (
     favorites,
     plans,
     notifications,
+    reports,
     admissions,
     admin,
     uploads,
@@ -30,6 +31,9 @@ api_router.include_router(favorites.router, prefix="/favorites", tags=["Favorite
 api_router.include_router(plans.router, prefix="/plans", tags=["Application plans"])
 api_router.include_router(
     notifications.router, prefix="/notifications", tags=["Notifications"]
+)
+api_router.include_router(
+    reports.router, prefix="/reports", tags=["Reports"]
 )
 api_router.include_router(
     admissions.router, prefix="/admissions", tags=["Admissions"]

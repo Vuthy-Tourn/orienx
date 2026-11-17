@@ -24,6 +24,7 @@ from app.models.favorites import (
     UserActivity,
 )
 from app.models.plan import ApplicationPlan, ApplicationPlanDocument
+from app.models.report import SharedReport
 from app.models.notifications import (
     InAppNotification,
     NotificationLog,
@@ -67,6 +68,7 @@ __all__ = [
     "UserActivity",
     "ApplicationPlan",
     "ApplicationPlanDocument",
+    "SharedReport",
     "NotificationPreference",
     "NotificationLog",
     "InAppNotification",

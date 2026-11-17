@@ -13,12 +13,9 @@ import {
   BrainCircuit,
   Compass,
   ArrowRight,
-  GraduationCap,
   Play,
   Check,
-  Crown,
   Sliders,
-  ChevronRight,
   Target,
   Trophy,
   Star,
@@ -29,11 +26,12 @@ import {
   Landmark,
   Bot,
   CalendarDays,
-  ClipboardList,
   Clock3,
+  Share2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ShareReportDialog } from "@/components/reports/share-report-dialog";
 
 const DASHBOARD_EASE = [0.22, 1, 0.36, 1] as const;
 const DASHBOARD_STAGGER = {
@@ -53,6 +51,7 @@ export default function DashboardOverviewPage() {
   const { user } = useAuth();
   const { t, language, getLocalized } = useLanguage();
   const [taraCheer, setTaraCheer] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const reduceMotion = useReducedMotion();
 
   // 1. REAL Student Dashboard Summary
@@ -243,7 +242,7 @@ export default function DashboardOverviewPage() {
               {t("dashboardPage.heroSubtitle")}
             </p>
 
-            <div className="dashboard-hero-item pt-3" style={{ animationDelay: "210ms" }}>
+            <div className="dashboard-hero-item flex flex-wrap items-center gap-2 pt-3" style={{ animationDelay: "210ms" }}>
               <Link
                 href="/dashboard/recommendations"
                 className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-black text-xs sm:text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-md hover:shadow-lg transition-all active:scale-95 group cursor-pointer"
@@ -251,6 +250,14 @@ export default function DashboardOverviewPage() {
                 <span>{t("dashboardPage.continueJourney")}</span>
                 <ArrowRight className="w-4 h-4 text-[#111965] group-hover:translate-x-1 transition-transform" />
               </Link>
+              <button
+                type="button"
+                onClick={() => setShareOpen(true)}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full font-bold text-xs sm:text-sm text-white border border-white/25 bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all active:scale-95 cursor-pointer"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                <span>{isKhmer ? "ចែករំលែករបាយការណ៍" : "Share report"}</span>
+              </button>
             </div>
           </div>
 
@@ -830,6 +837,7 @@ export default function DashboardOverviewPage() {
           </div>
         </Link>
       </motion.div>
+      <ShareReportDialog open={shareOpen} onOpenChange={setShareOpen} />
     </motion.div>
   );
 }
