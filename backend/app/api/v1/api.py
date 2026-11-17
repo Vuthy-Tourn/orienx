@@ -12,6 +12,7 @@ from app.api.v1.endpoints import (
     plans,
     notifications,
     reports,
+    search,
     admissions,
     admin,
     uploads,
@@ -34,6 +35,9 @@ api_router.include_router(
 )
 api_router.include_router(
     reports.router, prefix="/reports", tags=["Reports"]
+)
+api_router.include_router(
+    search.router, prefix="/search", tags=["Search"]
 )
 api_router.include_router(
     admissions.router, prefix="/admissions", tags=["Admissions"]

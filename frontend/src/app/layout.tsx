@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/contexts/theme-context";
 import { AuthProvider } from "@/contexts/auth-context";
 import { QueryProvider } from "@/providers/query-provider";
 import { Navbar } from "@/components/layout/navbar";
+import { GlobalSearch } from "@/components/search/global-search";
 import { Footer } from "@/components/layout/footer";
 import { HeroUIProvider } from "@heroui/system";
 import { ToastProvider } from "@/components/ui/toast";
@@ -80,6 +81,7 @@ export default function RootLayout({
                       <Footer />
                       <ScrollReveal />
                       <SmoothAnchors />
+                      <GlobalSearch />
                     </AuthProvider>
                   </LanguageProvider>
                 </ThemeProvider>

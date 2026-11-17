@@ -58,6 +58,7 @@ import { OfferingsManager } from "@/components/admin/offerings-manager";
 import { AdmissionsCoverageManager } from "@/components/admin/admissions-coverage-manager";
 import { QuestionsManager } from "@/components/admin/questions-manager";
 import { AdminFilterDropdown } from "@/components/admin/admin-filter-dropdown";
+import { SearchTrigger } from "@/components/search/search-trigger";
 import { AdminPagination } from "@/components/admin/admin-pagination";
 import {
   AdminSidebar,
@@ -581,6 +582,7 @@ export default function AdminConsolePage() {
               <span className="hidden text-[11px] font-semibold text-[#68708A] dark:text-slate-400 md:inline">
                 {user?.email}
               </span>
+              <SearchTrigger />
               <LanguageSwitcher />
               <ThemeToggle />
               <Link

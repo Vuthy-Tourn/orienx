@@ -11,6 +11,7 @@ import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { NotificationBell } from "@/components/dashboard/notification-bell";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { SearchTrigger } from "@/components/search/search-trigger";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const PAGE_TITLES: Record<string, { en: string; km: string }> = {
@@ -155,6 +156,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <span className="hidden text-[11px] font-semibold text-[#68708A] dark:text-slate-400 md:inline">
                 {user.email}
               </span>
+              <SearchTrigger />
               <div className="hidden sm:block">
                 <LanguageSwitcher />
               </div>

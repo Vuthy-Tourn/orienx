@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Logo } from "@/components/layout/logo";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { SearchTrigger } from "@/components/search/search-trigger";
 import { useLanguage } from "@/contexts/language-context";
 import { useAuth } from "@/contexts/auth-context";
 import {
@@ -574,6 +575,7 @@ export function Navbar() {
 
         {/* Desktop Right Actions Cluster */}
         <div className="hidden lg:flex items-center gap-2 xl:gap-2.5">
+          <SearchTrigger variant="full" />
           <LanguageSwitcher />
           <ThemeToggle />
 
@@ -626,6 +628,7 @@ export function Navbar() {
 
         {/* Mobile Header Buttons (Language + Hamburger) */}
         <div className="flex items-center gap-2 lg:hidden">
+          <SearchTrigger />
           <LanguageSwitcher />
           <ThemeToggle />
           <button
