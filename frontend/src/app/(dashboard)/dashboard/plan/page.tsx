@@ -11,6 +11,7 @@ import {
   Download,
   ExternalLink,
   GraduationCap,
+  LayoutGrid,
   Loader2,
   Pencil,
   Plus,
@@ -26,54 +27,18 @@ import { useToast } from "@/components/ui/toast";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { Select } from "@/components/ui/select";
 import { DatePicker } from "@/components/ui/date-picker";
+import { PlanChecklist } from "@/components/plan/plan-checklist";
+import { PlanTimeline } from "@/components/plan/plan-timeline";
+import {
+  PLAN_STATUSES,
+  REMINDER_OPTIONS,
+  type Plan,
+  type PlanKind,
+  type PlanStatus,
+  type ScholarshipOption,
+  type UniversityOption,
+} from "@/lib/plan-types";
 import { cn, getErrorMessage } from "@/lib/utils";
-
-type PlanKind = "UNIVERSITY" | "SCHOLARSHIP";
-type PlanStatus =
-  | "RESEARCHING"
-  | "PREPARING"
-  | "SUBMITTED"
-  | "INTERVIEW"
-  | "ACCEPTED"
-  | "WAITLISTED"
-  | "REJECTED";
-
-interface Plan {
-  id: string;
-  kind: PlanKind;
-  target_id: string;
-  target_title: Record<string, string>;
-  target_subtitle?: string | null;
-  target_slug?: string | null;
-  target_image_url?: string | null;
-  target_url?: string | null;
-  status: PlanStatus;
-  deadline?: string | null;
-  reminder_days: number;
-  notes?: string | null;
-  next_action?: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-interface UniversityOption {
-  id: string;
-  slug: string;
-  name: Record<string, string>;
-  acronym?: Record<string, string> | null;
-  province?: string;
-  logo_url?: string | null;
-}
-
-interface ScholarshipOption {
-  id: string;
-  slug: string;
-  title: Record<string, string>;
-  provider: Record<string, string>;
-  country_or_institution?: string;
-  poster_url?: string | null;
-  application_deadline?: string | null;
-}
 
 interface NotificationSettings {
   bot_username: string;
@@ -88,17 +53,7 @@ interface TelegramLink {
   expires_at: string;
 }
 
-const STATUSES: PlanStatus[] = [
-  "RESEARCHING",
-  "PREPARING",
-  "SUBMITTED",
-  "INTERVIEW",
-  "ACCEPTED",
-  "WAITLISTED",
-  "REJECTED",
-];
-
-const REMINDER_OPTIONS = ["3", "7", "14", "30"];
+const STATUSES = PLAN_STATUSES;
 
 const STATUS_STYLES: Record<PlanStatus, string> = {
   RESEARCHING: "border-slate-200 bg-slate-50 text-slate-600",
@@ -160,6 +115,7 @@ export default function ApplicationPlanPage() {
   const queryClient = useQueryClient();
 
   const [filter, setFilter] = useState<"ALL" | PlanKind>("ALL");
+  const [view, setView] = useState<"cards" | "timeline">("cards");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Plan | null>(null);
   const [kind, setKind] = useState<PlanKind>("UNIVERSITY");
@@ -413,37 +369,26 @@ export default function ApplicationPlanPage() {
   };
 
   const exportCalendar = () => {
-    const dated = plans.filter((plan) => plan.deadline);
-    if (dated.length === 0) {
-      toast.warning(t("planPage.noDeadlineToExport"));
-      return;
-    }
-
     const stamp = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
-    const lines = [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "PRODID:-//OrienX//Application Plan//EN",
-      "CALSCALE:GREGORIAN",
-      "METHOD:PUBLISH",
-      ...dated.flatMap((plan) => {
-        const title =
-          getLocalized(plan.target_title) || plan.target_title?.en || "Application";
-        const description = [
-          kindLabel(plan.kind),
-          plan.next_action,
-          plan.notes,
-        ]
-          .filter(Boolean)
-          .join(" - ");
-        return [
+    const events: string[][] = [];
+
+    plans.forEach((plan) => {
+      const title =
+        getLocalized(plan.target_title) || plan.target_title?.en || "Application";
+      const kind = kindLabel(plan.kind);
+      const planDescription = [kind, plan.next_action, plan.notes]
+        .filter(Boolean)
+        .join(" - ");
+
+      if (plan.deadline) {
+        events.push([
           "BEGIN:VEVENT",
           `UID:plan-${plan.id}@orienx`,
           `DTSTAMP:${stamp}`,
-          `DTSTART;VALUE=DATE:${dateToIcs(plan.deadline!)}`,
-          `DTEND;VALUE=DATE:${dateToIcs(nextDay(plan.deadline!))}`,
+          `DTSTART;VALUE=DATE:${dateToIcs(plan.deadline)}`,
+          `DTEND;VALUE=DATE:${dateToIcs(nextDay(plan.deadline))}`,
           `SUMMARY:${escapeIcs(title)}`,
-          `DESCRIPTION:${escapeIcs(description)}`,
+          `DESCRIPTION:${escapeIcs(planDescription)}`,
           ...(plan.target_url ? [`URL:${escapeIcs(plan.target_url)}`] : []),
           "BEGIN:VALARM",
           `TRIGGER:-P${plan.reminder_days || 7}D`,
@@ -451,8 +396,61 @@ export default function ApplicationPlanPage() {
           `DESCRIPTION:${escapeIcs(title)}`,
           "END:VALARM",
           "END:VEVENT",
-        ];
-      }),
+        ]);
+      }
+
+      (plan.documents || []).forEach((document) => {
+        if (!document.due_date || document.is_completed) return;
+        const documentName =
+          isKm && document.name_km ? document.name_km : document.name_en;
+        const requirement = document.is_required
+          ? isKm
+            ? "ឯកសារចាំបាច់"
+            : "Required document"
+          : isKm
+          ? "ឯកសារស្រេចចិត្ត"
+          : "Optional document";
+        const description = [
+          title,
+          kind,
+          requirement,
+          document.notes,
+        ]
+          .filter(Boolean)
+          .join(" - ");
+        events.push([
+          "BEGIN:VEVENT",
+          `UID:plan-doc-${document.id}@orienx`,
+          `DTSTAMP:${stamp}`,
+          `DTSTART;VALUE=DATE:${dateToIcs(document.due_date)}`,
+          `DTEND;VALUE=DATE:${dateToIcs(nextDay(document.due_date))}`,
+          `SUMMARY:${escapeIcs(
+            `${isKm ? "ឯកសារ" : "Document"}: ${documentName} — ${title}`
+          )}`,
+          `DESCRIPTION:${escapeIcs(description)}`,
+          ...(plan.target_url ? [`URL:${escapeIcs(plan.target_url)}`] : []),
+          "BEGIN:VALARM",
+          `TRIGGER:-P${plan.reminder_days || 7}D`,
+          "ACTION:DISPLAY",
+          `DESCRIPTION:${escapeIcs(documentName)}`,
+          "END:VALARM",
+          "END:VEVENT",
+        ]);
+      });
+    });
+
+    if (events.length === 0) {
+      toast.warning(t("planPage.noDeadlineToExport"));
+      return;
+    }
+
+    const lines = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//OrienX//Application Plan//EN",
+      "CALSCALE:GREGORIAN",
+      "METHOD:PUBLISH",
+      ...events.flat(),
       "END:VCALENDAR",
     ];
 
@@ -705,6 +703,35 @@ export default function ApplicationPlanPage() {
             {option.label}
           </button>
         ))}
+
+        <div className="ml-auto flex items-center gap-1 rounded-xl border border-[#E6E8F0] bg-white p-1">
+          <button
+            type="button"
+            onClick={() => setView("cards")}
+            className={cn(
+              "inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-[10.5px] font-bold transition-colors",
+              view === "cards"
+                ? "bg-[#111965] text-white"
+                : "text-[#68708A] hover:text-[#111965]"
+            )}
+          >
+            <LayoutGrid className="h-3 w-3" />
+            {t("planPage.timeline.cards")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setView("timeline")}
+            className={cn(
+              "inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-[10.5px] font-bold transition-colors",
+              view === "timeline"
+                ? "bg-[#111965] text-white"
+                : "text-[#68708A] hover:text-[#111965]"
+            )}
+          >
+            <CalendarDays className="h-3 w-3" />
+            {t("planPage.timeline.timeline")}
+          </button>
+        </div>
       </div>
 
       {isLoading ? (
@@ -732,6 +759,8 @@ export default function ApplicationPlanPage() {
             {t("planPage.addFirst")}
           </button>
         </div>
+      ) : view === "timeline" ? (
+        <PlanTimeline plans={filtered} getLocalized={getLocalized} />
       ) : (
         <div className="grid gap-4 lg:grid-cols-2">
           {filtered.map((plan) => {
@@ -809,6 +838,8 @@ export default function ApplicationPlanPage() {
                     {plan.notes}
                   </p>
                 )}
+
+                <PlanChecklist plan={plan} onChanged={invalidate} />
 
                 <div className="mt-4 flex items-center justify-between gap-2 border-t border-[#F0F2FA] pt-3">
                   <div className="w-[170px]">

@@ -23,7 +23,7 @@ from app.models.favorites import (
     FavoriteScholarship,
     UserActivity,
 )
-from app.models.plan import ApplicationPlan
+from app.models.plan import ApplicationPlan, ApplicationPlanDocument
 from app.models.notifications import NotificationPreference, NotificationLog
 
 __all__ = [
@@ -62,6 +62,7 @@ __all__ = [
     "FavoriteScholarship",
     "UserActivity",
     "ApplicationPlan",
+    "ApplicationPlanDocument",
     "NotificationPreference",
     "NotificationLog",
 ]
