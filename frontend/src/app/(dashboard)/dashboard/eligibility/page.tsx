@@ -20,6 +20,7 @@ import {
   Search,
   ShieldAlert,
   ShieldCheck,
+  Sparkles,
   Table2,
 } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -70,6 +71,12 @@ interface EligibilityOffering {
   reason: string;
 }
 
+interface StudentProfileData {
+  bacii_grade?: string | null;
+  full_name_en?: string | null;
+  full_name_km?: string | null;
+}
+
 interface EligibilityData {
   grade: string;
   total_with_requirements: number;
@@ -94,6 +101,7 @@ function EligibilityCard({
   t: (path: string, fallback?: string) => string;
   getLocalized: (value?: { en?: string; km?: string } | null) => string;
 }) {
+  const [logoFailed, setLogoFailed] = useState(false);
   const Icon =
     tone === "eligible" ? BadgeCheck : tone === "below" ? ShieldAlert : AlertTriangle;
   const toneClass =
@@ -113,17 +121,17 @@ function EligibilityCard({
   return (
     <article className="rounded-2xl border border-[#E6E8F0] bg-white p-4 shadow-2xs transition-shadow hover:shadow-md">
       <div className="flex items-start gap-3">
-        <span className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] text-[#111965]">
-          <GraduationCap className="h-5 w-5" />
-          {offering.university_logo_url && (
+        <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#E6E8F0] bg-white text-[#111965] dark:border-white/10 dark:bg-white/5">
+          {offering.university_logo_url && !logoFailed ? (
             <img
               src={offering.university_logo_url}
               alt=""
-              className="absolute inset-0 h-full w-full object-cover"
-              onError={(event) => {
-                event.currentTarget.style.display = "none";
-              }}
+              loading="lazy"
+              className="h-full w-full object-contain p-1"
+              onError={() => setLogoFailed(true)}
             />
+          ) : (
+            <GraduationCap className="h-5 w-5" />
           )}
         </span>
         <div className="min-w-0 flex-1">
@@ -249,7 +257,7 @@ export default function EligibilityPage() {
 
   const { data: profile } = useQuery({
     queryKey: ["student-profile"],
-    queryFn: async () => apiFetch<any>("/students/profile"),
+    queryFn: async () => apiFetch<StudentProfileData>("/students/profile"),
   });
 
   useEffect(() => {
@@ -485,9 +493,67 @@ export default function EligibilityPage() {
         </p>
       </div>
 
+      <div className="overflow-hidden rounded-3xl border border-[#E6E8F0] bg-gradient-to-br from-[#F8FAFD] via-white to-[#FFF9E6] p-5 shadow-2xs sm:p-6">
+        <div className="flex items-start gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#111965] text-[#F7CE4D]">
+            <Sparkles className="h-5 w-5" />
+          </span>
+          <div>
+            <h2 className="text-sm font-black text-[#111965]">
+              {t("eligibilityPage.purposeTitle")}
+            </h2>
+            <p className="mt-1 max-w-3xl text-[11px] leading-relaxed text-[#68708A]">
+              {t("eligibilityPage.purposeBody")}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-2.5 sm:grid-cols-3">
+          {[
+            {
+              title: t("eligibilityPage.step1Title"),
+              body: t("eligibilityPage.step1Body"),
+            },
+            {
+              title: t("eligibilityPage.step2Title"),
+              body: t("eligibilityPage.step2Body"),
+            },
+            {
+              title: t("eligibilityPage.step3Title"),
+              body: t("eligibilityPage.step3Body"),
+            },
+          ].map((step, index) => (
+            <div
+              key={step.title}
+              className="rounded-2xl border border-[#E6E8F0] bg-white/80 p-3"
+            >
+              <div className="flex items-center gap-2">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#111965] text-[10px] font-black text-[#F7CE4D]">
+                  {index + 1}
+                </span>
+                <span className="text-[11px] font-black text-[#111965]">
+                  {step.title}
+                </span>
+              </div>
+              <p className="mt-1.5 text-[10px] leading-relaxed text-[#68708A]">
+                {step.body}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-3 flex items-start gap-2 rounded-xl border border-[#F7CE4D]/40 bg-white/80 px-3 py-2 text-[10px] leading-relaxed text-[#68708A]">
+          <GraduationCap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#B45309]" />
+          <span>{t("eligibilityPage.gradeScaleNote")}</span>
+        </div>
+      </div>
+
       <div className="rounded-2xl border border-[#E6E8F0] bg-white p-4 shadow-2xs">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex-1">
+            <div className="mb-1 inline-flex items-center gap-1 rounded-full bg-[#F0F2FA] px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#111965]">
+              {isKm ? "ជំហានទី ១" : "Step 1"}
+            </div>
             <div className="text-xs font-black text-[#111965]">
               {t("eligibilityPage.gradeLabel")}
             </div>
@@ -573,21 +639,21 @@ export default function EligibilityPage() {
                 value: below.length,
                 icon: ShieldAlert,
                 className: "bg-amber-50 text-amber-600",
-                hint: "",
+                hint: t("eligibilityPage.statBelowHint"),
               },
               {
                 label: t("eligibilityPage.unverified"),
                 value: unverified.length,
                 icon: AlertTriangle,
                 className: "bg-slate-100 text-slate-600",
-                hint: "",
+                hint: t("eligibilityPage.statUnverifiedHint"),
               },
               {
                 label: t("eligibilityPage.missing"),
                 value: data?.unverified_programs_count ?? 0,
                 icon: BookOpen,
                 className: "bg-[#F0F2FA] text-[#111965]",
-                hint: "",
+                hint: t("eligibilityPage.statMissingHint"),
               },
             ].map((stat) => {
               const Icon = stat.icon;
@@ -620,6 +686,22 @@ export default function EligibilityPage() {
             <p>{t("eligibilityPage.degreeNote")}</p>
           </div>
 
+          <div className="flex flex-wrap items-end justify-between gap-2">
+            <div>
+              <h2 className="text-base font-black text-[#111965]">
+                {t("eligibilityPage.resultsTitle")}
+              </h2>
+              <p className="text-[11px] text-[#68708A]">
+                {t("eligibilityPage.resultsSubtitle")}
+              </p>
+            </div>
+            <span className="rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-2.5 py-1 text-[10px] font-bold text-[#68708A]">
+              {eligible.length + below.length + unverified.length}{" "}
+              {t("eligibilityPage.programs")} ·{" "}
+              {t("eligibilityPage.gradeLabel")}: {grade}
+            </span>
+          </div>
+
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div className="relative w-full sm:max-w-md">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#68708A]" />
@@ -630,7 +712,11 @@ export default function EligibilityPage() {
                 className="h-10 w-full rounded-xl border border-[#E6E8F0] bg-white pl-9 pr-3 text-xs text-[#171A2C] outline-none focus:border-[#111965]"
               />
             </div>
-            <div className="flex flex-wrap items-center gap-1.5">
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[9px] font-black uppercase tracking-wider text-[#94A3B8]">
+                {t("eligibilityPage.filterLabel")}
+              </span>
+              <div className="flex flex-wrap items-center gap-1.5">
               {(["ALL", "BACHELOR", "ASSOCIATE", "F"] as const).map((level) => {
                 const label =
                   level === "ALL"
@@ -668,6 +754,7 @@ export default function EligibilityPage() {
                   </button>
                 );
               })}
+              </div>
             </div>
           </div>
 
