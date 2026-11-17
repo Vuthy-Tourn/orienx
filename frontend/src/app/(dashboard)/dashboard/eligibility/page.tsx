@@ -7,6 +7,7 @@ import {
   BadgeCheck,
   BookOpen,
   CheckCircle2,
+  Download,
   ExternalLink,
   GraduationCap,
   Info,
@@ -308,6 +309,136 @@ export default function EligibilityPage() {
     (offering) => offering.degree_level === "ASSOCIATE"
   ).length;
 
+  const handleExportReport = () => {
+    if (!data || !grade) return;
+
+    const rows: string[][] = [];
+    const addRow = (
+      ...cells: Array<string | number | null | undefined>
+    ) => {
+      rows.push(cells.map((cell) => (cell == null ? "" : String(cell))));
+    };
+    const csvCell = (value: unknown) => {
+      const text = value == null ? "" : String(value);
+      return `"${text.replace(/"/g, '""')}"`;
+    };
+    const generatedAt = new Date();
+    const scopeLabel =
+      degreeFilter === "ALL"
+        ? t("eligibilityPage.allLevels")
+        : degreeFilter === "F"
+        ? t("eligibilityPage.acceptsF")
+        : degreeFilter === "BACHELOR"
+        ? t("eligibilityPage.bachelor")
+        : t("eligibilityPage.associate");
+    const tableHeader = [
+      t("eligibilityPage.reportStatus"),
+      t("eligibilityPage.reportUniversity"),
+      t("eligibilityPage.reportAcronym"),
+      t("eligibilityPage.reportMajor"),
+      t("eligibilityPage.reportDegree"),
+      t("eligibilityPage.reportDuration"),
+      t("eligibilityPage.reportTuition"),
+      t("eligibilityPage.reportMinGrade"),
+      t("eligibilityPage.reportNotes"),
+      t("eligibilityPage.reportSource"),
+    ];
+    const degreeLabel = (level: string) =>
+      level === "ASSOCIATE"
+        ? t("eligibilityPage.associate")
+        : level === "BACHELOR"
+        ? t("eligibilityPage.bachelor")
+        : level;
+
+    addRow(t("eligibilityPage.reportTitle"));
+    addRow(t("eligibilityPage.reportGrade"), grade);
+    addRow(
+      t("eligibilityPage.reportGenerated"),
+      generatedAt.toLocaleString(isKm ? "km-KH" : "en-US")
+    );
+    addRow(t("eligibilityPage.reportScope"), scopeLabel);
+    if (search.trim()) {
+      addRow(t("eligibilityPage.reportSearch"), search.trim());
+    }
+    addRow("");
+    addRow(t("eligibilityPage.reportSummary"));
+    addRow(t("eligibilityPage.reportEligible"), filteredEligible.length);
+    addRow(t("eligibilityPage.reportBelow"), filteredBelow.length);
+    addRow(t("eligibilityPage.reportUnverified"), filteredUnverified.length);
+    addRow(
+      t("eligibilityPage.reportMissing"),
+      data.unverified_programs_count
+    );
+    addRow("");
+    addRow(t("eligibilityPage.degreeNote"));
+    addRow("");
+
+    const addSection = (
+      title: string,
+      items: EligibilityOffering[],
+      status: string
+    ) => {
+      if (items.length === 0) return;
+      addRow(title);
+      addRow(...tableHeader);
+      items.forEach((offering) => {
+        addRow(
+          status,
+          getLocalized(offering.university_name),
+          getLocalized(offering.university_acronym),
+          getLocalized(offering.major_name),
+          degreeLabel(offering.degree_level),
+          offering.duration_years,
+          offering.tuition_annual_usd ?? "",
+          offering.min_bacii_grade ?? "",
+          offering.admission_notes ?? "",
+          offering.admission_source_url ?? ""
+        );
+      });
+      addRow("");
+    };
+
+    addSection(
+      t("eligibilityPage.reportEligible"),
+      filteredEligible,
+      t("eligibilityPage.reportStatusEligible")
+    );
+    addSection(
+      t("eligibilityPage.reportBelow"),
+      filteredBelow,
+      t("eligibilityPage.reportStatusBelow")
+    );
+    addSection(
+      t("eligibilityPage.reportUnverified"),
+      filteredUnverified,
+      t("eligibilityPage.reportStatusUnverified")
+    );
+
+    if (
+      filteredEligible.length === 0 &&
+      filteredBelow.length === 0 &&
+      filteredUnverified.length === 0
+    ) {
+      addRow(t("eligibilityPage.noMatches"));
+    }
+
+    const csv = `\uFEFF${rows
+      .map((row) => row.map(csvCell).join(","))
+      .join("\r\n")}`;
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `orienx-bacii-report-${grade}-${generatedAt
+      .toISOString()
+      .slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    toast.success(t("eligibilityPage.reportExported"));
+  };
+
   return (
     <div data-dashboard-page="sections" className="space-y-6">
       <div>
@@ -347,21 +478,32 @@ export default function EligibilityPage() {
               />
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => saveGrade()}
-            disabled={!grade || savingGrade}
-            className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl bg-[#111965] px-4 text-xs font-black text-white transition-colors hover:bg-[#1E277A] disabled:opacity-50"
-          >
-            {savingGrade ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            ) : (
-              <Save className="h-3.5 w-3.5" />
-            )}
-            {savingGrade
-              ? t("eligibilityPage.savingGrade")
-              : t("eligibilityPage.saveGrade")}
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => saveGrade()}
+              disabled={!grade || savingGrade}
+              className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl bg-[#111965] px-4 text-xs font-black text-white transition-colors hover:bg-[#1E277A] disabled:opacity-50"
+            >
+              {savingGrade ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <Save className="h-3.5 w-3.5" />
+              )}
+              {savingGrade
+                ? t("eligibilityPage.savingGrade")
+                : t("eligibilityPage.saveGrade")}
+            </button>
+            <button
+              type="button"
+              onClick={handleExportReport}
+              disabled={!data || !grade}
+              className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-[#D9DEEA] bg-white px-4 text-xs font-black text-[#111965] transition-colors hover:border-[#111965]/40 hover:bg-[#F8FAFD] disabled:opacity-50"
+            >
+              <Download className="h-3.5 w-3.5" />
+              {t("eligibilityPage.exportReport")}
+            </button>
+          </div>
         </div>
       </div>
 
