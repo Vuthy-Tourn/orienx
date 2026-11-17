@@ -6,7 +6,18 @@ import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/components/ui/toast";
+import { AssessmentExportDialog } from "@/components/assessments/assessment-export-dialog";
+import {
+  downloadAssessmentCsv,
+  downloadAssessmentExcel,
+  downloadAssessmentJson,
+  openAssessmentPdf,
+  type AssessmentReportFormat,
+  type AssessmentReportLabels,
+  type AssessmentReportModel,
+} from "@/lib/assessment-report";
 import { AssessmentStage, AssessmentStepItem } from "@/components/assessments/assessment-stage";
 import { AssessmentViewSwitcher } from "@/components/assessments/assessment-view-switcher";
 import {
@@ -21,6 +32,7 @@ import {
   Target,
   Zap,
   Building2,
+  Download,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -32,6 +44,7 @@ import {
 
 export default function PersonalityAssessmentPage() {
   const { t, getLocalized, language } = useLanguage();
+  const { user } = useAuth();
   const toast = useToast();
   const queryClient = useQueryClient();
 
@@ -40,6 +53,9 @@ export default function PersonalityAssessmentPage() {
   const [answers, setAnswers] = useState<
     Record<string, { scaleLevel: number; selectedOptionId: string }>
   >({});
+  const [exportOpen, setExportOpen] = useState(false);
+  const [exportingFormat, setExportingFormat] =
+    useState<AssessmentReportFormat | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const DRAFT_STORAGE_KEY = "futera_personality_draft_v1";
@@ -262,6 +278,159 @@ export default function PersonalityAssessmentPage() {
     const isT = latestResult.thinking_score >= 50;
     const isJ = latestResult.judging_score >= 50;
 
+    const studentName =
+      getLocalized({ en: user?.full_name_en, km: user?.full_name_km }) ||
+      user?.full_name_en ||
+      user?.full_name_km ||
+      "";
+    const reportLabels: AssessmentReportLabels = {
+      preparedFor: t("assessmentReport.preparedFor"),
+      generated: t("assessmentReport.generated"),
+      summary: t("assessmentReport.summary"),
+      dimensions: t("assessmentReport.dimensions"),
+      highlights: t("assessmentReport.highlights"),
+      recommendedMajors: t("assessmentReport.recommendedMajors"),
+      archetype: t("assessmentReport.archetype"),
+      profile: t("assessmentReport.profile"),
+      eyebrow: t("assessmentReport.eyebrow"),
+      fitScore: t("assessmentReport.fitScore"),
+      universities: t("assessmentReport.universities"),
+      print: t("assessmentReport.print"),
+      close: t("assessmentReport.close"),
+      footer: t("assessmentReport.footer"),
+      noResult: t("assessmentReport.noResult"),
+    };
+    const exportIncludes = [
+      pType,
+      t("assessmentReport.personalityType"),
+      `${Math.min(unifiedRecs.length, 5)} ${t(
+        "assessmentReport.recommendedMajors"
+      )}`,
+    ];
+
+    const buildReport = (): AssessmentReportModel => {
+      const generatedAt = new Date();
+      const dimensions = [
+        {
+          label: language === "km" ? "ចិត្ត & ថាមពល" : "Mind",
+          value: Math.max(
+            latestResult.extraversion_score,
+            latestResult.introversion_score
+          ),
+          detail: `E ${Math.round(
+            latestResult.extraversion_score
+          )}% · I ${Math.round(latestResult.introversion_score)}%`,
+        },
+        {
+          label: language === "km" ? "ការទទួលព័ត៌មាន" : "Energy",
+          value: Math.max(
+            latestResult.sensing_score,
+            latestResult.intuition_score
+          ),
+          detail: `S ${Math.round(
+            latestResult.sensing_score
+          )}% · N ${Math.round(latestResult.intuition_score)}%`,
+        },
+        {
+          label: language === "km" ? "ការសម្រេចចិត្ត" : "Nature",
+          value: Math.max(
+            latestResult.thinking_score,
+            latestResult.feeling_score
+          ),
+          detail: `T ${Math.round(
+            latestResult.thinking_score
+          )}% · F ${Math.round(latestResult.feeling_score)}%`,
+        },
+        {
+          label: language === "km" ? "យុទ្ធសាស្ត្រជីវិត" : "Tactics",
+          value: Math.max(
+            latestResult.judging_score,
+            latestResult.perceiving_score
+          ),
+          detail: `J ${Math.round(
+            latestResult.judging_score
+          )}% · P ${Math.round(latestResult.perceiving_score)}%`,
+        },
+      ];
+      const highlights = [
+        {
+          title:
+            language === "km" ? "ចំណុចខ្លាំងចម្បង" : "Key Strengths",
+          items: strengths,
+        },
+        {
+          title:
+            language === "km" ? "រចនាប័ទ្មសិក្សា" : "Learning Style",
+          items: [learningStyle],
+        },
+        {
+          title:
+            language === "km" ? "វិស័យសិក្សាសាកសម" : "Best Fields",
+          items: bestFields,
+        },
+      ];
+      const recommendations = unifiedRecs.slice(0, 5).map((rec: any) => {
+        const major = rec.major || {};
+        const majorName =
+          getLocalized(major.name) || major.name_en || major.name || "—";
+        return {
+          major: String(majorName),
+          fit: Math.round(
+            rec.match_score || rec.personality_match_score || 0
+          ),
+          universities: Array.isArray(major.offering_universities)
+            ? major.offering_universities.length
+            : 0,
+        };
+      });
+      return {
+        kind: "personality",
+        title: t("assessmentReport.personalityTitle"),
+        subtitle: t("assessmentReport.personalitySubtitle"),
+        studentName,
+        generatedAt,
+        generatedLabel: generatedAt.toLocaleString(
+          language === "km" ? "km-KH" : "en-US"
+        ),
+        locale: language === "km" ? "km-KH" : "en-US",
+        headline: pType,
+        headlineLabel: t("assessmentReport.personalityType"),
+        archetype: getLocalized({ en: arch.nameEn, km: arch.nameKm }),
+        role: getLocalized({ en: arch.roleNameEn, km: arch.roleNameKm }),
+        tagline: getLocalized({ en: arch.taglineEn, km: arch.taglineKm }),
+        dimensions,
+        highlights,
+        recommendations,
+        labels: reportLabels,
+      };
+    };
+
+    const handleExport = async (format: AssessmentReportFormat) => {
+      setExportingFormat(format);
+      try {
+        const model = buildReport();
+        if (format === "pdf") {
+          const opened = openAssessmentPdf(model);
+          if (!opened) {
+            toast.error(t("assessmentReport.pdfBlocked"));
+            return;
+          }
+        } else if (format === "excel") {
+          await downloadAssessmentExcel(model);
+        } else if (format === "csv") {
+          downloadAssessmentCsv(model);
+        } else {
+          downloadAssessmentJson(model);
+        }
+        toast.success(t("assessmentReport.exported"));
+        setExportOpen(false);
+      } catch {
+        toast.error(t("assessmentReport.failed"));
+      } finally {
+        setExportingFormat(null);
+      }
+    };
+
     return (
       <div data-dashboard-page="sections" className="max-w-4xl mx-auto space-y-7 animate-in fade-in pb-16 select-none">
         {/* Top Breadcrumb & Switcher */}
@@ -282,15 +451,24 @@ export default function PersonalityAssessmentPage() {
             </h1>
           </div>
 
-          {/* View Switcher — Clean 2-State (Questions & Personal Profile) */}
-          <AssessmentViewSwitcher
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-            questionsLabel={t("personalityAssessment.questionsTab") || "ធ្វើតេស្ត"}
-            profileLabel={`${pType} Profile`}
-            profileIcon={Crown}
-            hasResult={!!latestResult}
-          />
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setExportOpen(true)}
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-[#D9DEEA] bg-white px-3.5 text-[11px] font-black text-[#111965] transition-colors hover:border-[#111965]/40 hover:bg-[#F8FAFD]"
+            >
+              <Download className="h-3.5 w-3.5" />
+              {t("assessmentReport.exportReport")}
+            </button>
+            <AssessmentViewSwitcher
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              questionsLabel={t("personalityAssessment.questionsTab") || "ធ្វើតេស្ត"}
+              profileLabel={`${pType} Profile`}
+              profileIcon={Crown}
+              hasResult={!!latestResult}
+            />
+          </div>
         </div>
 
         {/* 1. HERO BANNER — PLATFORM COLORS (Futera Deep Navy & Gold) */}
@@ -823,6 +1001,16 @@ export default function PersonalityAssessmentPage() {
           </div>
         </div>
 
+        <AssessmentExportDialog
+          open={exportOpen}
+          onOpenChange={setExportOpen}
+          title={t("assessmentReport.exportTitle")}
+          subtitle={t("assessmentReport.exportSubtitle")}
+          includes={exportIncludes}
+          exportingFormat={exportingFormat}
+          onExport={handleExport}
+          footer={t("assessmentReport.footer")}
+        />
       </div>
     );
   }

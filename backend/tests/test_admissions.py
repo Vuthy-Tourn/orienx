@@ -78,6 +78,12 @@ async def test_bacii_eligibility_checker(client):
     admin_headers = {"Authorization": f"Bearer {admin_token}"}
     student_headers = {"Authorization": f"Bearer {student_token}"}
 
+    profile_response = await client.get(
+        "/api/v1/students/profile", headers=student_headers
+    )
+    assert profile_response.status_code == 200, profile_response.text
+    original_grade = profile_response.json()["data"].get("bacii_grade")
+
     offerings = (
         await client.get("/api/v1/admin/offerings", headers=admin_headers)
     ).json()["data"]
@@ -141,12 +147,25 @@ async def test_bacii_eligibility_checker(client):
             for row in unverified_result.json()["data"]["unverified_requirements"]
         )
 
+        cleared_grade = await client.put(
+            "/api/v1/students/profile",
+            json={"bacii_grade": None},
+            headers=student_headers,
+        )
+        assert cleared_grade.status_code == 200, cleared_grade.text
+
         missing_grade = await client.get(
             "/api/v1/admissions/eligibility", headers=student_headers
         )
-        # The seeded student has no BACII grade saved.
         assert missing_grade.status_code == 400
     finally:
+        if original_grade:
+            restored_grade = await client.put(
+                "/api/v1/students/profile",
+                json={"bacii_grade": original_grade},
+                headers=student_headers,
+            )
+            assert restored_grade.status_code == 200, restored_grade.text
         restored = await client.patch(
             f"/api/v1/admin/offerings/{offering_id}",
             json=original,

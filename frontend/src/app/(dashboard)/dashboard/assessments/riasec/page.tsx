@@ -5,7 +5,18 @@ import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { useAuth } from "@/contexts/auth-context";
 import { useToast } from "@/components/ui/toast";
+import { AssessmentExportDialog } from "@/components/assessments/assessment-export-dialog";
+import {
+  downloadAssessmentCsv,
+  downloadAssessmentExcel,
+  downloadAssessmentJson,
+  openAssessmentPdf,
+  type AssessmentReportFormat,
+  type AssessmentReportLabels,
+  type AssessmentReportModel,
+} from "@/lib/assessment-report";
 import { useIsDarkMode } from "@/contexts/theme-context";
 import { FuteraMascot } from "@/components/brand/futera-mascot";
 import { AssessmentStage, AssessmentStepItem } from "@/components/assessments/assessment-stage";
@@ -33,6 +44,7 @@ import {
   Layers,
   ChevronRight,
   BookOpen,
+  Download,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -43,6 +55,7 @@ import {
 
 export default function RiasecAssessmentPage() {
   const { t, getLocalized, language } = useLanguage();
+  const { user } = useAuth();
   const toast = useToast();
   const isDark = useIsDarkMode();
   const queryClient = useQueryClient();
@@ -51,6 +64,9 @@ export default function RiasecAssessmentPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [ratings, setRatings] = useState<Record<string, number>>({});
   const [selectedDimension, setSelectedDimension] = useState<string | null>(null);
+  const [exportOpen, setExportOpen] = useState(false);
+  const [exportingFormat, setExportingFormat] =
+    useState<AssessmentReportFormat | null>(null);
 
   const DRAFT_STORAGE_KEY = "futera_riasec_draft_v1";
 
@@ -262,6 +278,155 @@ export default function RiasecAssessmentPage() {
     // Extract top 3 codes from holland_code letters
     const topLetters = hCode.split("").slice(0, 3);
 
+    const studentName =
+      getLocalized({ en: user?.full_name_en, km: user?.full_name_km }) ||
+      user?.full_name_en ||
+      user?.full_name_km ||
+      "";
+    const reportLabels: AssessmentReportLabels = {
+      preparedFor: t("assessmentReport.preparedFor"),
+      generated: t("assessmentReport.generated"),
+      summary: t("assessmentReport.summary"),
+      dimensions: t("assessmentReport.dimensions"),
+      highlights: t("assessmentReport.highlights"),
+      recommendedMajors: t("assessmentReport.recommendedMajors"),
+      archetype: t("assessmentReport.archetype"),
+      profile: t("assessmentReport.profile"),
+      eyebrow: t("assessmentReport.eyebrow"),
+      fitScore: t("assessmentReport.fitScore"),
+      universities: t("assessmentReport.universities"),
+      print: t("assessmentReport.print"),
+      close: t("assessmentReport.close"),
+      footer: t("assessmentReport.footer"),
+      noResult: t("assessmentReport.noResult"),
+    };
+    const exportIncludes = [
+      hCode,
+      t("assessmentReport.hollandCode"),
+      `${Math.min(unifiedRecs.length, 5)} ${t(
+        "assessmentReport.recommendedMajors"
+      )}`,
+    ];
+
+    const buildReport = (): AssessmentReportModel => {
+      const generatedAt = new Date();
+      const dimensions = Object.entries(RIASEC_DIMENSIONS).map(
+        ([code, meta]) => ({
+          label: `${code} — ${getLocalized({
+            en: meta.nameEn,
+            km: meta.nameKm,
+          })}`,
+          value: scoresMap[code] || 0,
+          detail: topLetters.includes(code)
+            ? language === "km"
+              ? "ចំណាប់អារម្មណ៍កំពូល"
+              : "Top interest"
+            : "",
+        })
+      );
+      const highlights = [
+        {
+          title: getLocalized({
+            en: "Core Motivators & Strengths",
+            km: "កម្លាំងជំរុញចិត្ត & ចំណុចខ្លាំង",
+          }),
+          items:
+            language === "km" ? archetype.strengths : archetype.strengthsEn,
+        },
+        {
+          title: getLocalized({
+            en: "Optimal Work Environment",
+            km: "បរិស្ថានការងារដែលរីកចម្រើន",
+          }),
+          items: [
+            getLocalized({
+              en: archetype.optimalWorkEnvironmentEn,
+              km: archetype.optimalWorkEnvironmentKm,
+            }),
+          ],
+        },
+        {
+          title: getLocalized({
+            en: "Target Career Clusters",
+            km: "វិស័យការងារគោលដៅ",
+          }),
+          items:
+            language === "km"
+              ? archetype.targetIndustriesKm
+              : archetype.targetIndustriesEn,
+        },
+      ];
+      const recommendations = unifiedRecs.slice(0, 5).map((rec: any) => {
+        const major = rec.major || {};
+        const majorName =
+          getLocalized(major.name) || major.name_en || major.name || "—";
+        return {
+          major: String(majorName),
+          fit: Math.round(rec.match_score || rec.riasec_match_score || 0),
+          universities: Array.isArray(major.offering_universities)
+            ? major.offering_universities.length
+            : 0,
+        };
+      });
+      return {
+        kind: "riasec",
+        title: t("assessmentReport.riasecTitle"),
+        subtitle: t("assessmentReport.riasecSubtitle"),
+        studentName,
+        generatedAt,
+        generatedLabel: generatedAt.toLocaleString(
+          language === "km" ? "km-KH" : "en-US"
+        ),
+        locale: language === "km" ? "km-KH" : "en-US",
+        headline: hCode,
+        headlineLabel: t("assessmentReport.hollandCode"),
+        archetype: getLocalized({
+          en: archetype.titleEn,
+          km: archetype.titleKm,
+        }),
+        role: getLocalized({ en: spelledOutEn, km: spelledOutKm }),
+        tagline:
+          getLocalized({
+            en: res?.analysis_en?.interpretation,
+            km: res?.analysis_km?.interpretation,
+          }) ||
+          getLocalized({
+            en: archetype.taglineEn,
+            km: archetype.taglineKm,
+          }),
+        dimensions,
+        highlights,
+        recommendations,
+        labels: reportLabels,
+      };
+    };
+
+    const handleExport = async (format: AssessmentReportFormat) => {
+      setExportingFormat(format);
+      try {
+        const model = buildReport();
+        if (format === "pdf") {
+          const opened = openAssessmentPdf(model);
+          if (!opened) {
+            toast.error(t("assessmentReport.pdfBlocked"));
+            return;
+          }
+        } else if (format === "excel") {
+          await downloadAssessmentExcel(model);
+        } else if (format === "csv") {
+          downloadAssessmentCsv(model);
+        } else {
+          downloadAssessmentJson(model);
+        }
+        toast.success(t("assessmentReport.exported"));
+        setExportOpen(false);
+      } catch {
+        toast.error(t("assessmentReport.failed"));
+      } finally {
+        setExportingFormat(null);
+      }
+    };
+
     return (
       <div data-dashboard-page="sections" className="max-w-4xl mx-auto space-y-7 animate-in fade-in pb-16 select-none">
         {/* Top Breadcrumb & Switcher */}
@@ -282,15 +447,24 @@ export default function RiasecAssessmentPage() {
             </h1>
           </div>
 
-          {/* View Switcher: Interactive Test vs Results */}
-          <AssessmentViewSwitcher
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-            questionsLabel={t("personalityAssessment.questionsTab") || "ធ្វើតេស្ត"}
-            profileLabel={`${hCode} Profile`}
-            profileIcon={Trophy}
-            hasResult={!!latestResult}
-          />
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setExportOpen(true)}
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl border border-[#D9DEEA] bg-white px-3.5 text-[11px] font-black text-[#111965] transition-colors hover:border-[#111965]/40 hover:bg-[#F8FAFD]"
+            >
+              <Download className="h-3.5 w-3.5" />
+              {t("assessmentReport.exportReport")}
+            </button>
+            <AssessmentViewSwitcher
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              questionsLabel={t("personalityAssessment.questionsTab") || "ធ្វើតេស្ត"}
+              profileLabel={`${hCode} Profile`}
+              profileIcon={Trophy}
+              hasResult={!!latestResult}
+            />
+          </div>
         </div>
 
         {/* 1. HERO CELEBRATION BANNER — FUTERA PLATFORM COLORS */}
@@ -803,6 +977,16 @@ export default function RiasecAssessmentPage() {
             </Link>
           </div>
         </div>
+        <AssessmentExportDialog
+          open={exportOpen}
+          onOpenChange={setExportOpen}
+          title={t("assessmentReport.exportTitle")}
+          subtitle={t("assessmentReport.exportSubtitle")}
+          includes={exportIncludes}
+          exportingFormat={exportingFormat}
+          onExport={handleExport}
+          footer={t("assessmentReport.footer")}
+        />
       </div>
     );
   }
