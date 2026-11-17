@@ -13,7 +13,6 @@ import {
   FileSpreadsheet,
   FileText,
   GraduationCap,
-  Info,
   Loader2,
   MapPin,
   Save,
@@ -83,6 +82,7 @@ interface EligibilityData {
   eligible: EligibilityOffering[];
   below_requirements: EligibilityOffering[];
   unverified_requirements: EligibilityOffering[];
+  missing_requirements: EligibilityOffering[];
   unverified_programs_count: number;
 }
 
@@ -96,14 +96,20 @@ function EligibilityCard({
   getLocalized,
 }: {
   offering: EligibilityOffering;
-  tone: "eligible" | "below" | "unverified";
+  tone: "eligible" | "below" | "unverified" | "missing";
   isKm: boolean;
   t: (path: string, fallback?: string) => string;
   getLocalized: (value?: { en?: string; km?: string } | null) => string;
 }) {
   const [logoFailed, setLogoFailed] = useState(false);
   const Icon =
-    tone === "eligible" ? BadgeCheck : tone === "below" ? ShieldAlert : AlertTriangle;
+    tone === "eligible"
+      ? BadgeCheck
+      : tone === "below"
+      ? ShieldAlert
+      : tone === "missing"
+      ? BookOpen
+      : AlertTriangle;
   const toneClass =
     tone === "eligible"
       ? "border-emerald-200 bg-emerald-50 text-emerald-700"
@@ -151,7 +157,7 @@ function EligibilityCard({
                   : `${t("eligibilityPage.minGrade")}: ${offering.min_bacii_grade}`
                 : t("eligibilityPage.program")}
             </span>
-            {!offering.is_admission_verified && (
+            {!offering.is_admission_verified && tone !== "missing" && (
               <span className="rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-700">
                 {t("eligibilityPage.unverifiedNote")}
               </span>
@@ -247,6 +253,8 @@ export default function EligibilityPage() {
   const queryClient = useQueryClient();
   const [grade, setGrade] = useState("");
   const [search, setSearch] = useState("");
+  const [showMissing, setShowMissing] = useState(false);
+  const [hideMissing, setHideMissing] = useState(false);
   const [degreeFilter, setDegreeFilter] = useState<
     "ALL" | "BACHELOR" | "ASSOCIATE" | "F"
   >("ALL");
@@ -292,16 +300,20 @@ export default function EligibilityPage() {
   const eligible = data?.eligible ?? [];
   const below = data?.below_requirements ?? [];
   const unverified = data?.unverified_requirements ?? [];
+  const missing = data?.missing_requirements ?? [];
   const needle = search.trim().toLowerCase();
   const matches = (offering: EligibilityOffering) => {
     if (!needle) return true;
     return [
-      getLocalized(offering.university_name),
-      getLocalized(offering.university_acronym),
+      ...Object.values(offering.university_name || {}),
+      ...Object.values(offering.university_acronym || {}),
+      ...Object.values(offering.major_name || {}),
       offering.university_slug,
-      getLocalized(offering.major_name),
+      offering.major_slug,
       offering.university_province,
       offering.major_category,
+      offering.degree_level,
+      offering.min_bacii_grade,
     ]
       .filter(Boolean)
       .some((value) => String(value).toLowerCase().includes(needle));
@@ -320,7 +332,13 @@ export default function EligibilityPage() {
   const filteredUnverified = unverified.filter(
     (offering) => matches(offering) && matchesDegree(offering)
   );
-  const allPrograms = [...eligible, ...below, ...unverified];
+  const filteredMissing = missing.filter(
+    (offering) => matches(offering) && matchesDegree(offering)
+  );
+  const showMissingResults =
+    filteredMissing.length > 0 &&
+    (showMissing || (Boolean(needle) && !hideMissing));
+  const allPrograms = [...eligible, ...below, ...unverified, ...missing];
   const degreeCounts = {
     ALL: allPrograms.length,
     BACHELOR: allPrograms.filter(
@@ -493,67 +511,41 @@ export default function EligibilityPage() {
         </p>
       </div>
 
-      <div className="overflow-hidden rounded-3xl border border-[#E6E8F0] bg-gradient-to-br from-[#F8FAFD] via-white to-[#FFF9E6] p-5 shadow-2xs sm:p-6">
-        <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#111965] text-[#F7CE4D]">
-            <Sparkles className="h-5 w-5" />
-          </span>
-          <div>
-            <h2 className="text-sm font-black text-[#111965]">
-              {t("eligibilityPage.purposeTitle")}
-            </h2>
-            <p className="mt-1 max-w-3xl text-[11px] leading-relaxed text-[#68708A]">
-              {t("eligibilityPage.purposeBody")}
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-4 grid gap-2.5 sm:grid-cols-3">
-          {[
-            {
-              title: t("eligibilityPage.step1Title"),
-              body: t("eligibilityPage.step1Body"),
-            },
-            {
-              title: t("eligibilityPage.step2Title"),
-              body: t("eligibilityPage.step2Body"),
-            },
-            {
-              title: t("eligibilityPage.step3Title"),
-              body: t("eligibilityPage.step3Body"),
-            },
-          ].map((step, index) => (
-            <div
-              key={step.title}
-              className="rounded-2xl border border-[#E6E8F0] bg-white/80 p-3"
-            >
-              <div className="flex items-center gap-2">
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#111965] text-[10px] font-black text-[#F7CE4D]">
-                  {index + 1}
-                </span>
-                <span className="text-[11px] font-black text-[#111965]">
-                  {step.title}
-                </span>
-              </div>
-              <p className="mt-1.5 text-[10px] leading-relaxed text-[#68708A]">
-                {step.body}
+      <div className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] px-4 py-3">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-2.5">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#111965] text-[#F7CE4D]">
+              <Sparkles className="h-4 w-4" />
+            </span>
+            <div>
+              <p className="text-[11px] font-black text-[#111965]">
+                {t("eligibilityPage.purposeTitle")}
+              </p>
+              <p className="mt-0.5 max-w-3xl text-[10.5px] leading-relaxed text-[#68708A]">
+                {t("eligibilityPage.purposeBody")}
               </p>
             </div>
-          ))}
-        </div>
-
-        <div className="mt-3 flex items-start gap-2 rounded-xl border border-[#F7CE4D]/40 bg-white/80 px-3 py-2 text-[10px] leading-relaxed text-[#68708A]">
-          <GraduationCap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#B45309]" />
-          <span>{t("eligibilityPage.gradeScaleNote")}</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-1 pl-10 text-[9.5px] font-bold text-[#68708A] sm:pl-0">
+            {[
+              t("eligibilityPage.step1Title"),
+              t("eligibilityPage.step2Title"),
+              t("eligibilityPage.step3Title"),
+            ].map((label, index) => (
+              <span key={label} className="inline-flex items-center gap-1">
+                {index > 0 && <span className="text-[#CBD5E1]">→</span>}
+                <span className="rounded-full border border-[#E6E8F0] bg-white px-2 py-0.5">
+                  {label}
+                </span>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
       <div className="rounded-2xl border border-[#E6E8F0] bg-white p-4 shadow-2xs">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex-1">
-            <div className="mb-1 inline-flex items-center gap-1 rounded-full bg-[#F0F2FA] px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#111965]">
-              {isKm ? "ជំហានទី ១" : "Step 1"}
-            </div>
             <div className="text-xs font-black text-[#111965]">
               {t("eligibilityPage.gradeLabel")}
             </div>
@@ -571,6 +563,9 @@ export default function EligibilityPage() {
                 label={t("eligibilityPage.gradeLabel")}
                 className="w-full"
               />
+              <p className="mt-1.5 text-[9.5px] leading-relaxed text-[#94A3B8]">
+                {t("eligibilityPage.gradeScaleNote")}
+              </p>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -681,11 +676,6 @@ export default function EligibilityPage() {
             })}
           </div>
 
-          <div className="flex items-start gap-2 rounded-2xl border border-[#E6E8F0] bg-white px-4 py-3 text-[11px] leading-relaxed text-[#68708A]">
-            <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#111965]" />
-            <p>{t("eligibilityPage.degreeNote")}</p>
-          </div>
-
           <div className="flex flex-wrap items-end justify-between gap-2">
             <div>
               <h2 className="text-base font-black text-[#111965]">
@@ -696,7 +686,7 @@ export default function EligibilityPage() {
               </p>
             </div>
             <span className="rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-2.5 py-1 text-[10px] font-bold text-[#68708A]">
-              {eligible.length + below.length + unverified.length}{" "}
+              {allPrograms.length}{" "}
               {t("eligibilityPage.programs")} ·{" "}
               {t("eligibilityPage.gradeLabel")}: {grade}
             </span>
@@ -707,7 +697,10 @@ export default function EligibilityPage() {
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#68708A]" />
               <input
                 value={search}
-                onChange={(event) => setSearch(event.target.value)}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setHideMissing(false);
+                }}
                 placeholder={t("eligibilityPage.searchPlaceholder")}
                 className="h-10 w-full rounded-xl border border-[#E6E8F0] bg-white pl-9 pr-3 text-xs text-[#171A2C] outline-none focus:border-[#111965]"
               />
@@ -853,10 +846,64 @@ export default function EligibilityPage() {
                 </section>
               )}
 
+              {filteredMissing.length > 0 && (
+                <section className="space-y-3">
+                  <div className="flex flex-col gap-2 rounded-2xl border border-dashed border-[#D9DEEA] bg-white p-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-start gap-2">
+                      <BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-[#94A3B8]" />
+                      <div>
+                        <h2 className="text-sm font-black text-[#111965]">
+                          {t("eligibilityPage.missing")}
+                        </h2>
+                        <p className="mt-0.5 text-[10.5px] leading-relaxed text-[#68708A]">
+                          {isKm
+                            ? "កម្មវិធីទាំងនេះមិនទាន់មានពិន្ទុ BACII អប្បបរមាដែលបានផ្សាយទេ ដូច្នេះមិនអាចប្រៀបធៀបបានឡើយ។"
+                            : "These programs do not have a published minimum BACII grade yet, so they cannot be compared."}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (showMissingResults) {
+                          setHideMissing(true);
+                          setShowMissing(false);
+                        } else {
+                          setShowMissing(true);
+                          setHideMissing(false);
+                        }
+                      }}
+                      className="inline-flex h-8 shrink-0 items-center justify-center rounded-lg border border-[#E6E8F0] bg-white px-3 text-[10px] font-bold text-[#111965] hover:bg-[#F8FAFD]"
+                    >
+                      {showMissingResults
+                        ? isKm
+                          ? "លាក់"
+                          : "Hide"
+                        : `${isKm ? "បង្ហាញ" : "Show"} ${filteredMissing.length}`}
+                    </button>
+                  </div>
+                  {showMissingResults && (
+                    <div className="grid gap-3 lg:grid-cols-2">
+                      {filteredMissing.map((offering) => (
+                        <EligibilityCard
+                          key={offering.id}
+                          offering={offering}
+                          tone="missing"
+                          isKm={isKm}
+                          t={t}
+                          getLocalized={getLocalized}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </section>
+              )}
+
               {(needle || degreeFilter !== "ALL") &&
                 filteredEligible.length === 0 &&
                 filteredBelow.length === 0 &&
-                filteredUnverified.length === 0 && (
+                filteredUnverified.length === 0 &&
+                filteredMissing.length === 0 && (
                   <div className="rounded-2xl border border-dashed border-[#D9DEEA] bg-white px-4 py-10 text-center text-xs text-[#68708A]">
                     {t("eligibilityPage.noMatches")}
                   </div>

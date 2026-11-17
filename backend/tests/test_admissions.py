@@ -119,6 +119,9 @@ async def test_bacii_eligibility_checker(client):
         assert eligible.status_code == 200, eligible.text
         eligible_data = eligible.json()["data"]
         assert eligible_data["grade"] == "B"
+        assert eligible_data["unverified_programs_count"] == len(
+            eligible_data["missing_requirements"]
+        )
         assert any(
             row["id"] == offering_id for row in eligible_data["eligible"]
         )

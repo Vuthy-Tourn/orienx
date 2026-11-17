@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -75,20 +75,28 @@ async def check_bacii_eligibility(
             detail="Provide a BACII grade from A to F",
         )
 
-    rows = (
+    all_rows = (
         await db.execute(
-            select(UniversityMajor)
-            .options(
+            select(UniversityMajor).options(
                 selectinload(UniversityMajor.university),
                 selectinload(UniversityMajor.major),
             )
-            .where(UniversityMajor.min_bacii_grade.is_not(None))
         )
     ).scalars().all()
+    rows = [row for row in all_rows if row.min_bacii_grade is not None]
+    missing_rows = [row for row in all_rows if row.min_bacii_grade is None]
 
     eligible = []
     below = []
     unverified = []
+    missing = [
+        _offering_out(
+            offering,
+            "MISSING",
+            "No published minimum BACII grade is available yet.",
+        )
+        for offering in missing_rows
+    ]
     student_rank = GRADE_RANK[effective_grade]
 
     for offering in rows:
@@ -127,14 +135,6 @@ async def check_bacii_eligibility(
                 )
             )
 
-    missing_count = (
-        await db.execute(
-            select(func.count())
-            .select_from(UniversityMajor)
-            .where(UniversityMajor.min_bacii_grade.is_(None))
-        )
-    ).scalar() or 0
-
     return ApiResponse(
         success=True,
         data=EligibilityOut(
@@ -143,6 +143,7 @@ async def check_bacii_eligibility(
             eligible=eligible,
             below_requirements=below,
             unverified_requirements=unverified,
-            unverified_programs_count=missing_count,
+            missing_requirements=missing,
+            unverified_programs_count=len(missing),
         ),
     )

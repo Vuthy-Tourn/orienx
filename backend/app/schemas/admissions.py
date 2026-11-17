@@ -38,6 +38,7 @@ class EligibilityOut(BaseModel):
     eligible: List[EligibilityOfferingOut] = []
     below_requirements: List[EligibilityOfferingOut] = []
     unverified_requirements: List[EligibilityOfferingOut] = []
+    missing_requirements: List[EligibilityOfferingOut] = []
     unverified_programs_count: int = 0
 
     model_config = ConfigDict(extra="ignore")
