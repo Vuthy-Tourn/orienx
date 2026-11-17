@@ -31,9 +31,20 @@ class StudentProfileUpdate(BaseModel):
     high_school: Optional[str] = None
     current_education_level: Optional[str] = None
     graduation_year: Optional[int] = None
+    bacii_grade: Optional[str] = None
     preferred_language: Optional[str] = None
     avatar_url: Optional[str] = None
     bio: Optional[str] = None
+
+    @field_validator("bacii_grade")
+    @classmethod
+    def validate_bacii_grade(cls, value: Optional[str]) -> Optional[str]:
+        if value is None or value == "":
+            return value
+        value = value.strip().upper()
+        if value not in {"A", "B", "C", "D", "E", "F"}:
+            raise ValueError("BACII grade must be A, B, C, D, E, or F.")
+        return value
 
     @field_validator("avatar_url")
     @classmethod
@@ -55,6 +66,7 @@ class StudentProfileOut(BaseModel):
     high_school: Optional[str] = None
     current_education_level: str
     graduation_year: Optional[int] = None
+    bacii_grade: Optional[str] = None
     preferred_language: str
     avatar_url: Optional[str] = None
     bio: Optional[str] = None

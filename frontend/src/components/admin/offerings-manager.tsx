@@ -38,6 +38,11 @@ interface Offering {
   is_tuition_verified: boolean;
   language_of_instruction: string;
   official_curriculum_url?: string | null;
+  min_bacii_grade?: string | null;
+  required_subjects?: string[] | null;
+  is_admission_verified?: boolean;
+  admission_source_url?: string | null;
+  admission_notes?: string | null;
 }
 
 interface UniversityOption {
@@ -64,6 +69,11 @@ type OfferingForm = {
   is_tuition_verified: boolean;
   language_of_instruction: string;
   official_curriculum_url: string;
+  min_bacii_grade: string;
+  required_subjects: string;
+  is_admission_verified: boolean;
+  admission_source_url: string;
+  admission_notes: string;
 };
 
 const EMPTY_FORM: OfferingForm = {
@@ -75,6 +85,11 @@ const EMPTY_FORM: OfferingForm = {
   is_tuition_verified: false,
   language_of_instruction: "BILINGUAL",
   official_curriculum_url: "",
+  min_bacii_grade: "",
+  required_subjects: "",
+  is_admission_verified: false,
+  admission_source_url: "",
+  admission_notes: "",
 };
 
 const DEGREE_OPTIONS = ["ASSOCIATE", "BACHELOR", "MASTER", "DOCTORATE"];
@@ -116,7 +131,16 @@ const OFFERINGS_COPY = {
     tableTuition: "Tuition",
     tableLanguage: "Language",
     tableStatus: "Status",
+    tableBacii: "BACII",
     tableActions: "Actions",
+    minBaciiGrade: "Minimum BACII grade",
+    noMinimum: "No minimum grade",
+    requiredSubjects: "Required subjects",
+    requiredSubjectsPlaceholder: "Mathematics, Physics, English",
+    admissionSourceUrl: "Admission source URL",
+    admissionNotes: "Admission notes",
+    admissionNotesPlaceholder: "e.g. Entrance exam in Mathematics, Physics and English proficiency required.",
+    admissionVerified: "Admission requirement verified against an official source",
     noMatches: "No program links match these filters.",
     resetAll: "Reset all filters",
     editProgram: "Edit program",
@@ -184,7 +208,16 @@ const OFFERINGS_COPY = {
     tableTuition: "តម្លៃសិក្សា",
     tableLanguage: "ភាសា",
     tableStatus: "ស្ថានភាព",
+    tableBacii: "BACII",
     tableActions: "សកម្មភាព",
+    minBaciiGrade: "ពិន្ទុ BACII អប្បបរមា",
+    noMinimum: "គ្មានពិន្ទុអប្បបរមា",
+    requiredSubjects: "មុខវិជ្ជាដែលត្រូវការ",
+    requiredSubjectsPlaceholder: "គណិតវិទ្យា, រូបវិទ្យា, អង់គ្លេស",
+    admissionSourceUrl: "URL ប្រភពចូលរៀន",
+    admissionNotes: "កំណត់ចំណាំចូលរៀន",
+    admissionNotesPlaceholder: "ឧ. ត្រូវប្រឡងគណិតវិទ្យា រូបវិទ្យា និងតម្រូវការភាសាអង់គ្លេស។",
+    admissionVerified: "លក្ខខណ្ឌចូលរៀនបានផ្ទៀងផ្ទាត់ជាមួយប្រភពផ្លូវការ",
     noMatches: "គ្មានតំណកម្មវិធីត្រូវនឹងតម្រងទាំងនេះទេ។",
     resetAll: "កំណត់តម្រងទាំងអស់ឡើងវិញ",
     editProgram: "កែប្រែកម្មវិធី",
@@ -360,6 +393,11 @@ export function OfferingsManager() {
       is_tuition_verified: offering.is_tuition_verified,
       language_of_instruction: offering.language_of_instruction,
       official_curriculum_url: offering.official_curriculum_url || "",
+      min_bacii_grade: offering.min_bacii_grade || "",
+      required_subjects: (offering.required_subjects || []).join(", "),
+      is_admission_verified: Boolean(offering.is_admission_verified),
+      admission_source_url: offering.admission_source_url || "",
+      admission_notes: offering.admission_notes || "",
     });
     setDialogOpen(true);
   };
@@ -380,6 +418,14 @@ export function OfferingsManager() {
         is_tuition_verified: form.is_tuition_verified,
         language_of_instruction: form.language_of_instruction,
         official_curriculum_url: form.official_curriculum_url.trim() || null,
+        min_bacii_grade: form.min_bacii_grade || null,
+        required_subjects: form.required_subjects
+          .split(",")
+          .map((subject) => subject.trim())
+          .filter(Boolean),
+        is_admission_verified: form.is_admission_verified,
+        admission_source_url: form.admission_source_url.trim() || null,
+        admission_notes: form.admission_notes.trim() || null,
       };
       return apiFetch(`/admin/offerings${editing ? `/${editing.id}` : ""}`, {
         method: editing ? "PATCH" : "POST",
@@ -537,16 +583,17 @@ export function OfferingsManager() {
 
       <div className="overflow-hidden rounded-2xl border border-[#E6E8F0] bg-white dark:border-white/10 dark:bg-[#090D24]">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[920px] table-fixed border-collapse text-left">
+          <table className="w-full min-w-[1000px] table-fixed border-collapse text-left">
             <colgroup>
-              <col style={{ width: "20%" }} />
-              <col style={{ width: "25%" }} />
+              <col style={{ width: "18%" }} />
+              <col style={{ width: "23%" }} />
+              <col style={{ width: "8%" }} />
+              <col style={{ width: "6%" }} />
+              <col style={{ width: "9%" }} />
               <col style={{ width: "9%" }} />
               <col style={{ width: "7%" }} />
-              <col style={{ width: "10%" }} />
-              <col style={{ width: "10%" }} />
               <col style={{ width: "12%" }} />
-              <col style={{ width: "7%" }} />
+              <col style={{ width: "8%" }} />
             </colgroup>
             <thead>
               <tr className="border-b border-[#E6E8F0] bg-[#F8FAFD] text-[10px] font-black uppercase tracking-[0.12em] text-[#68708A] dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-400">
@@ -556,6 +603,7 @@ export function OfferingsManager() {
                 <th className="px-4 py-3">{copy.tableDuration}</th>
                 <th className="px-4 py-3">{copy.tableTuition}</th>
                 <th className="px-4 py-3">{copy.tableLanguage}</th>
+                <th className="px-4 py-3">{copy.tableBacii}</th>
                 <th className="px-4 py-3">{copy.tableStatus}</th>
                 <th className="px-4 py-3 text-right">{copy.tableActions}</th>
               </tr>
@@ -563,13 +611,13 @@ export function OfferingsManager() {
             <tbody className="divide-y divide-[#E6E8F0] dark:divide-white/10">
               {isLoading ? (
                 <tr>
-                  <td colSpan={8} className="px-4 py-14 text-center">
+                  <td colSpan={9} className="px-4 py-14 text-center">
                     <Loader2 className="mx-auto h-5 w-5 animate-spin text-[#111965] dark:text-[#F7CE4D]" />
                   </td>
                 </tr>
               ) : visible.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-4 py-14 text-center text-xs text-[#68708A] dark:text-slate-400">
+                  <td colSpan={9} className="px-4 py-14 text-center text-xs text-[#68708A] dark:text-slate-400">
                     <div className="flex flex-col items-center gap-3">
                       <span>{copy.noMatches}</span>
                       {hasActiveFilters && (
@@ -641,6 +689,30 @@ export function OfferingsManager() {
                             : option.label
                           : offering.language_of_instruction;
                       })()}
+                    </td>
+                    <td className="px-4 py-3">
+                      {offering.min_bacii_grade ? (
+                        <span
+                          title={
+                            offering.is_admission_verified
+                              ? "Verified admission requirement"
+                              : "Admission requirement not verified"
+                          }
+                          className={cn(
+                            "inline-flex items-center gap-1 rounded-md border px-2 py-1 text-[10px] font-black",
+                            offering.is_admission_verified
+                              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                              : "border-amber-200 bg-amber-50 text-amber-700"
+                          )}
+                        >
+                          {offering.min_bacii_grade}
+                          {offering.is_admission_verified && (
+                            <Check className="h-3 w-3" />
+                          )}
+                        </span>
+                      ) : (
+                        <span className="text-[11px] text-[#94A3B8]">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       {offering.is_tuition_verified ? (
@@ -787,7 +859,15 @@ export function OfferingsManager() {
                   <Select
                     value={form.degree_level}
                     onChange={(value) =>
-                      setForm((prev) => ({ ...prev, degree_level: value }))
+                      setForm((prev) => ({
+                        ...prev,
+                        degree_level: value,
+                        min_bacii_grade:
+                          value !== "ASSOCIATE" &&
+                          prev.min_bacii_grade === "F"
+                            ? ""
+                            : prev.min_bacii_grade,
+                      }))
                     }
                     options={DEGREE_OPTIONS.map((degree) => ({
                       value: degree,
@@ -851,6 +931,76 @@ export function OfferingsManager() {
                 </label>
               </div>
 
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label>
+                  <span className={labelClass}>{copy.minBaciiGrade}</span>
+                  <Select
+                    value={form.min_bacii_grade}
+                    onChange={(value) =>
+                      setForm((prev) => ({ ...prev, min_bacii_grade: value }))
+                    }
+                    options={[
+                      { value: "", label: copy.noMinimum },
+                      ...(
+                        form.degree_level === "ASSOCIATE"
+                          ? ["A", "B", "C", "D", "E", "F"]
+                          : ["A", "B", "C", "D", "E"]
+                      ).map((grade) => ({
+                        value: grade,
+                        label: grade,
+                      })),
+                    ]}
+                    label={copy.minBaciiGrade}
+                    className="w-full"
+                  />
+                </label>
+                <label>
+                  <span className={labelClass}>{copy.requiredSubjects}</span>
+                  <input
+                    value={form.required_subjects}
+                    onChange={(event) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        required_subjects: event.target.value,
+                      }))
+                    }
+                    placeholder={copy.requiredSubjectsPlaceholder}
+                    className={inputClass}
+                  />
+                </label>
+              </div>
+
+              <label>
+                <span className={labelClass}>{copy.admissionSourceUrl}</span>
+                <input
+                  value={form.admission_source_url}
+                  onChange={(event) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      admission_source_url: event.target.value,
+                    }))
+                  }
+                  placeholder="https://…"
+                  className={inputClass}
+                />
+              </label>
+
+              <label>
+                <span className={labelClass}>{copy.admissionNotes}</span>
+                <textarea
+                  value={form.admission_notes}
+                  onChange={(event) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      admission_notes: event.target.value,
+                    }))
+                  }
+                  rows={2}
+                  placeholder={copy.admissionNotesPlaceholder}
+                  className="w-full rounded-xl border border-[#E6E8F0] bg-white px-3 py-2.5 text-[12px] font-medium text-[#111965] outline-none placeholder:text-[#94A3B8] focus:border-[#111965]/50 focus:ring-2 focus:ring-[#111965]/10 dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-slate-500 dark:focus:border-[#F7CE4D]/60 dark:focus:ring-[#F7CE4D]/10"
+                />
+              </label>
+
               <label>
                 <span className={labelClass}>{copy.curriculumUrl}</span>
                 <input
@@ -879,6 +1029,21 @@ export function OfferingsManager() {
                   className="h-4 w-4 rounded border-[#D8D1C5] accent-[#111965] dark:accent-[#F7CE4D]"
                 />
                 {copy.verifiedAgainstSource}
+              </label>
+
+              <label className="inline-flex cursor-pointer items-center gap-2 text-[12px] font-semibold text-[#475569] dark:text-slate-300">
+                <input
+                  type="checkbox"
+                  checked={form.is_admission_verified}
+                  onChange={(event) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      is_admission_verified: event.target.checked,
+                    }))
+                  }
+                  className="h-4 w-4 rounded border-[#D8D1C5] accent-[#111965] dark:accent-[#F7CE4D]"
+                />
+                {copy.admissionVerified}
               </label>
 
               <div className="flex items-center justify-end gap-2 border-t border-[#E6E8F0] pt-4 dark:border-white/10">

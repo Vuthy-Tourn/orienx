@@ -286,8 +286,31 @@ class UniversityOfferingCreateIn(BaseModel):
     is_tuition_verified: bool = False
     language_of_instruction: Literal["ENGLISH", "KHMER", "BILINGUAL", "FRENCH"] = "BILINGUAL"
     official_curriculum_url: Optional[str] = None
+    min_bacii_grade: Optional[Literal["A", "B", "C", "D", "E", "F"]] = None
+    required_subjects: Optional[List[str]] = None
+    is_admission_verified: bool = False
+    admission_source_url: Optional[str] = None
+    admission_notes: Optional[str] = Field(default=None, max_length=1000)
 
     model_config = ConfigDict(extra="forbid")
+
+    @field_validator("required_subjects")
+    @classmethod
+    def clean_required_subjects(cls, value: Optional[List[str]]) -> Optional[List[str]]:
+        if value is None:
+            return value
+        cleaned = [str(item).strip() for item in value if str(item).strip()]
+        return cleaned or None
+
+    @field_validator("admission_source_url")
+    @classmethod
+    def validate_admission_source_url(cls, value: Optional[str]) -> Optional[str]:
+        if value is None or value.strip() == "":
+            return None
+        parsed = urlparse(value)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            raise ValueError("Admission source URL must be an http(s) URL.")
+        return value
 
     @field_validator("duration_years")
     @classmethod
@@ -324,8 +347,31 @@ class UniversityOfferingUpdateIn(BaseModel):
     is_tuition_verified: Optional[bool] = None
     language_of_instruction: Optional[Literal["ENGLISH", "KHMER", "BILINGUAL", "FRENCH"]] = None
     official_curriculum_url: Optional[str] = None
+    min_bacii_grade: Optional[Literal["A", "B", "C", "D", "E", "F"]] = None
+    required_subjects: Optional[List[str]] = None
+    is_admission_verified: Optional[bool] = None
+    admission_source_url: Optional[str] = None
+    admission_notes: Optional[str] = Field(default=None, max_length=1000)
 
     model_config = ConfigDict(extra="forbid")
+
+    @field_validator("required_subjects")
+    @classmethod
+    def clean_required_subjects(cls, value: Optional[List[str]]) -> Optional[List[str]]:
+        if value is None:
+            return value
+        cleaned = [str(item).strip() for item in value if str(item).strip()]
+        return cleaned or None
+
+    @field_validator("admission_source_url")
+    @classmethod
+    def validate_admission_source_url(cls, value: Optional[str]) -> Optional[str]:
+        if value is None or value.strip() == "":
+            return None
+        parsed = urlparse(value)
+        if parsed.scheme not in ("http", "https") or not parsed.netloc:
+            raise ValueError("Admission source URL must be an http(s) URL.")
+        return value
 
     @field_validator("duration_years")
     @classmethod

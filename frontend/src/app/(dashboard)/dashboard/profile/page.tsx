@@ -31,6 +31,7 @@ export default function ProfileSettingsPage() {
   const [highSchool, setHighSchool] = useState("");
   const [educationLevel, setEducationLevel] = useState("GRADE_12");
   const [graduationYear, setGraduationYear] = useState(2026);
+  const [baciiGrade, setBaciiGrade] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
@@ -48,6 +49,7 @@ export default function ProfileSettingsPage() {
       setHighSchool(profile.high_school || "");
       setEducationLevel(profile.current_education_level || "GRADE_12");
       setGraduationYear(profile.graduation_year || 2026);
+      setBaciiGrade(profile.bacii_grade || "");
       setAvatarUrl(profile.avatar_url || "");
     }
   }, [profile]);
@@ -64,6 +66,7 @@ export default function ProfileSettingsPage() {
           high_school: highSchool || undefined,
           current_education_level: educationLevel,
           graduation_year: graduationYear,
+          bacii_grade: baciiGrade || null,
           avatar_url: avatarUrl || null,
         }),
       });
@@ -288,6 +291,30 @@ export default function ProfileSettingsPage() {
                   label={t("profileSettings.educationLevel")}
                   className="w-full"
                 />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-[#171A2C]">
+                  {t("profileSettings.baciiGrade")}
+                </label>
+                <Select
+                  value={baciiGrade}
+                  onChange={setBaciiGrade}
+                  options={[
+                    { value: "", label: t("profileSettings.baciiNotSet") },
+                    ...["A", "B", "C", "D", "E", "F"].map((grade) => ({
+                      value: grade,
+                      label: grade,
+                    })),
+                  ]}
+                  label={t("profileSettings.baciiGrade")}
+                  className="w-full"
+                />
+                <p className="text-[10px] text-[#94A3B8]">
+                  {t("profileSettings.baciiGradeHint")}
+                </p>
               </div>
             </div>
 

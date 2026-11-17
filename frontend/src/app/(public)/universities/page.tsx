@@ -80,6 +80,7 @@ function UniversitiesContent() {
       if (typeFilter) params.append("university_type", typeFilter);
       if (provinceFilter) params.append("province", provinceFilter);
       if (majorSlug) params.append("major", majorSlug);
+      params.append("limit", "100");
       return apiFetch<any[]>(`/universities?${params.toString()}`);
     },
     retry: 1,
@@ -418,7 +419,9 @@ function UniversitiesContent() {
               const isSelected = selectedForCompare.includes(uni.slug);
               const isPublic = uni.university_type === "PUBLIC";
               const coverImage =
-                uni.cover_image_url || UNIVERSITY_IMAGES[uni.slug] || "/images/universities/rupp.jpg";
+                uni.cover_image_url ||
+                UNIVERSITY_IMAGES[uni.slug] ||
+                "/images/cambodia-campuses-skyline-clean.png";
               const isFeatured = index === 0;
 
               return (

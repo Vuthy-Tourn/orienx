@@ -198,10 +198,10 @@ function emptyForm(fields: AdminField[]): Record<string, any> {
       field.defaultValue !== undefined
         ? field.defaultValue
         : field.type === "checkbox"
-        ? false
-        : field.type === "select"
-        ? field.options?.[0]?.value ?? ""
-        : "",
+          ? false
+          : field.type === "select"
+            ? field.options?.[0]?.value ?? ""
+            : "",
     ])
   );
 }
@@ -335,8 +335,8 @@ function ImagePreview({
     shape === "square"
       ? "h-16 w-16"
       : shape === "poster"
-      ? "h-20 w-14"
-      : "h-16 w-24";
+        ? "h-20 w-14"
+        : "h-16 w-24";
   const canPreview =
     typeof src === "string" && src.length > 0 && isImageSource(src);
 
@@ -404,28 +404,28 @@ export function ContentManager({
         configuredOptions ??
         (filter.type === "boolean"
           ? [
-              {
-                value: "true",
-                label: isKm
-                  ? filter.trueLabelKm ?? filter.trueLabel ?? "បាទ/ចាស"
-                  : filter.trueLabel ?? "Yes",
-              },
-              {
-                value: "false",
-                label: isKm
-                  ? filter.falseLabelKm ?? filter.falseLabel ?? "ទេ"
-                  : filter.falseLabel ?? "No",
-              },
-            ]
+            {
+              value: "true",
+              label: isKm
+                ? filter.trueLabelKm ?? filter.trueLabel ?? "បាទ/ចាស"
+                : filter.trueLabel ?? "Yes",
+            },
+            {
+              value: "false",
+              label: isKm
+                ? filter.falseLabelKm ?? filter.falseLabel ?? "ទេ"
+                : filter.falseLabel ?? "No",
+            },
+          ]
           : Array.from(
-              new Set(
-                allRows
-                  .map((row) => String(row[filter.key] ?? "").trim())
-                  .filter(Boolean)
-              )
+            new Set(
+              allRows
+                .map((row) => String(row[filter.key] ?? "").trim())
+                .filter(Boolean)
             )
-              .sort((left, right) => left.localeCompare(right))
-              .map((value) => ({ value, label: value })));
+          )
+            .sort((left, right) => left.localeCompare(right))
+            .map((value) => ({ value, label: value })));
 
       return {
         ...filter,
@@ -669,7 +669,7 @@ export function ContentManager({
         <button
           type="button"
           onClick={openNew}
-          className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-[#111965] px-4 py-2.5 text-xs font-black text-white transition-colors hover:bg-[#E5BD3B]"
+          className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#111965] px-4 text-xs font-black text-white shadow-sm transition-colors hover:bg-[#1E277A] dark:bg-[#F7CE4D] dark:text-white dark:hover:bg-[#E5BD3B]"
         >
           <Plus className="h-3.5 w-3.5" />
           <span>{copy.addNew}</span>
@@ -845,8 +845,8 @@ export function ContentManager({
                 ? `កែប្រែ${title}`
                 : `Edit ${title}`
               : isKm
-              ? `បន្ថែម${title}`
-              : `Add ${title}`
+                ? `បន្ថែម${title}`
+                : `Add ${title}`
           }
           onClick={(event) => {
             if (!dialogRef.current?.contains(event.target as Node)) closeDialog();
@@ -858,269 +858,269 @@ export function ContentManager({
               className="w-full max-w-3xl rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-2xl sm:p-6"
               onClick={(event) => event.stopPropagation()}
             >
-            <div className="flex items-start justify-between gap-3 border-b border-[#E6E8F0] pb-3">
-              <div>
-                <h3 className="text-base font-black text-[#111965]">
-                  {editingId
-                    ? isKm
-                      ? `កែប្រែ${title}`
-                      : `Edit ${title}`
-                    : isKm
-                    ? `បន្ថែម${title}`
-                    : `Add ${title}`}
-                </h3>
-                <p className="text-xs text-[#68708A]">{copy.modalHint}</p>
+              <div className="flex items-start justify-between gap-3 border-b border-[#E6E8F0] pb-3">
+                <div>
+                  <h3 className="text-base font-black text-[#111965]">
+                    {editingId
+                      ? isKm
+                        ? `កែប្រែ${title}`
+                        : `Edit ${title}`
+                      : isKm
+                        ? `បន្ថែម${title}`
+                        : `Add ${title}`}
+                  </h3>
+                  <p className="text-xs text-[#68708A]">{copy.modalHint}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={closeDialog}
+                  className="rounded-lg p-1.5 text-[#68708A] hover:bg-slate-100 hover:text-[#171A2C]"
+                  aria-label={copy.close}
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={closeDialog}
-                className="rounded-lg p-1.5 text-[#68708A] hover:bg-slate-100 hover:text-[#171A2C]"
-                aria-label={copy.close}
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
 
-            <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {fields.map((field) => {
-                const fieldId = `${resource}-${field.key}`;
-                const hasError = Boolean(fieldErrors[field.key]);
-                const fieldLabel = isKm ? field.labelKm ?? field.label : field.label;
-                const fieldPlaceholder = isKm
-                  ? field.placeholderKm ?? field.placeholder
-                  : field.placeholder;
-                const inputClass = cn(
-                  "w-full rounded-xl border bg-[#F8FAFD] px-3 text-xs text-[#171A2C] outline-none focus:bg-white",
-                  hasError
-                    ? "border-rose-400 focus:border-rose-500"
-                    : "border-[#E6E8F0] focus:border-[#111965]",
-                  field.type === "textarea" ? "py-2" : "h-10"
-                );
+              <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {fields.map((field) => {
+                  const fieldId = `${resource}-${field.key}`;
+                  const hasError = Boolean(fieldErrors[field.key]);
+                  const fieldLabel = isKm ? field.labelKm ?? field.label : field.label;
+                  const fieldPlaceholder = isKm
+                    ? field.placeholderKm ?? field.placeholder
+                    : field.placeholder;
+                  const inputClass = cn(
+                    "w-full rounded-xl border bg-[#F8FAFD] px-3 text-xs text-[#171A2C] outline-none focus:bg-white",
+                    hasError
+                      ? "border-rose-400 focus:border-rose-500"
+                      : "border-[#E6E8F0] focus:border-[#111965]",
+                    field.type === "textarea" ? "py-2" : "h-10"
+                  );
 
-                return (
-                  <div
-                    key={field.key}
-                    className={cn("space-y-1.5", field.wide && "sm:col-span-2")}
-                  >
-                    {field.type === "image" ? (
-                      <>
-                        <span className="block text-[11px] font-black uppercase tracking-wider text-[#68708A]">
-                          {fieldLabel}
-                          {field.required && <span className="text-rose-500"> *</span>}
-                        </span>
-                        <div
-                          className={cn(
-                            "rounded-xl border p-2.5",
-                            hasError
-                              ? "border-rose-300 bg-rose-50/40"
-                              : "border-[#E6E8F0] bg-[#F8FAFD]"
-                          )}
-                        >
-                          <div className="flex items-start gap-3">
-                            <ImagePreview
-                              src={form[field.key]}
-                              shape={field.imageShape}
-                            />
-                            <div className="min-w-0 flex-1 space-y-2">
-                              <input
-                                id={fieldId}
-                                type="text"
-                                value={form[field.key] ?? ""}
-                                onChange={(event) =>
-                                  updateField(field.key, event.target.value)
-                                }
-                                placeholder={
-                                  fieldPlaceholder ?? copy.imagePlaceholder
-                                }
-                                aria-label={fieldLabel}
-                                maxLength={500}
-                                className={cn(
-                                  "h-9 w-full rounded-lg border bg-white px-2.5 text-xs text-[#171A2C] outline-none",
-                                  hasError
-                                    ? "border-rose-400 focus:border-rose-500"
-                                    : "border-[#E6E8F0] focus:border-[#111965]"
-                                )}
+                  return (
+                    <div
+                      key={field.key}
+                      className={cn("space-y-1.5", field.wide && "sm:col-span-2")}
+                    >
+                      {field.type === "image" ? (
+                        <>
+                          <span className="block text-[11px] font-black uppercase tracking-wider text-[#68708A]">
+                            {fieldLabel}
+                            {field.required && <span className="text-rose-500"> *</span>}
+                          </span>
+                          <div
+                            className={cn(
+                              "rounded-xl border p-2.5",
+                              hasError
+                                ? "border-rose-300 bg-rose-50/40"
+                                : "border-[#E6E8F0] bg-[#F8FAFD]"
+                            )}
+                          >
+                            <div className="flex items-start gap-3">
+                              <ImagePreview
+                                src={form[field.key]}
+                                shape={field.imageShape}
                               />
-                              <div className="flex flex-wrap items-center gap-2">
-                                <label
+                              <div className="min-w-0 flex-1 space-y-2">
+                                <input
+                                  id={fieldId}
+                                  type="text"
+                                  value={form[field.key] ?? ""}
+                                  onChange={(event) =>
+                                    updateField(field.key, event.target.value)
+                                  }
+                                  placeholder={
+                                    fieldPlaceholder ?? copy.imagePlaceholder
+                                  }
+                                  aria-label={fieldLabel}
+                                  maxLength={500}
                                   className={cn(
-                                    "inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#E6E8F0] bg-white px-2.5 py-1.5 text-[11px] font-bold text-[#111965] transition-colors hover:border-[#111965]/30",
-                                    uploadingField === field.key &&
+                                    "h-9 w-full rounded-lg border bg-white px-2.5 text-xs text-[#171A2C] outline-none",
+                                    hasError
+                                      ? "border-rose-400 focus:border-rose-500"
+                                      : "border-[#E6E8F0] focus:border-[#111965]"
+                                  )}
+                                />
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <label
+                                    className={cn(
+                                      "inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#E6E8F0] bg-white px-2.5 py-1.5 text-[11px] font-bold text-[#111965] transition-colors hover:border-[#111965]/30",
+                                      uploadingField === field.key &&
                                       "pointer-events-none opacity-60"
-                                  )}
-                                >
-                                  {uploadingField === field.key ? (
-                                    <Loader2 className="h-3 w-3 animate-spin" />
-                                  ) : (
-                                    <Upload className="h-3 w-3" />
-                                  )}
-                                  <span>
-                                    {uploadingField === field.key
-                                      ? copy.uploading
-                                      : copy.uploadFromLaptop}
-                                  </span>
-                                  <input
-                                    type="file"
-                                    accept={UPLOAD_TYPES.join(",")}
-                                    className="sr-only"
-                                    disabled={uploadingField === field.key}
-                                    onChange={(event) => {
-                                      const file = event.target.files?.[0];
-                                      event.target.value = "";
-                                      if (file) handleImageFile(field, file);
-                                    }}
-                                  />
-                                </label>
-
-                                {form[field.key] && (
-                                  <button
-                                    type="button"
-                                    onClick={() => updateField(field.key, "")}
-                                    className="rounded-lg px-2 py-1.5 text-[11px] font-bold text-rose-600 transition-colors hover:bg-rose-50"
+                                    )}
                                   >
-                                    {copy.remove}
-                                  </button>
-                                )}
+                                    {uploadingField === field.key ? (
+                                      <Loader2 className="h-3 w-3 animate-spin" />
+                                    ) : (
+                                      <Upload className="h-3 w-3" />
+                                    )}
+                                    <span>
+                                      {uploadingField === field.key
+                                        ? copy.uploading
+                                        : copy.uploadFromLaptop}
+                                    </span>
+                                    <input
+                                      type="file"
+                                      accept={UPLOAD_TYPES.join(",")}
+                                      className="sr-only"
+                                      disabled={uploadingField === field.key}
+                                      onChange={(event) => {
+                                        const file = event.target.files?.[0];
+                                        event.target.value = "";
+                                        if (file) handleImageFile(field, file);
+                                      }}
+                                    />
+                                  </label>
 
-                                <span className="text-[10px] text-[#94A3B8]">
-                                  {copy.uploadMax}
-                                </span>
+                                  {form[field.key] && (
+                                    <button
+                                      type="button"
+                                      onClick={() => updateField(field.key, "")}
+                                      className="rounded-lg px-2 py-1.5 text-[11px] font-bold text-rose-600 transition-colors hover:bg-rose-50"
+                                    >
+                                      {copy.remove}
+                                    </button>
+                                  )}
+
+                                  <span className="text-[10px] text-[#94A3B8]">
+                                    {copy.uploadMax}
+                                  </span>
+                                </div>
+                                {uploadErrors[field.key] && (
+                                  <p className="text-[11px] font-semibold text-rose-600">
+                                    {uploadErrors[field.key]}
+                                  </p>
+                                )}
                               </div>
-                              {uploadErrors[field.key] && (
-                                <p className="text-[11px] font-semibold text-rose-600">
-                                  {uploadErrors[field.key]}
-                                </p>
-                              )}
                             </div>
+                            {hasError && (
+                              <p className="mt-1.5 text-[11px] font-semibold text-rose-600">
+                                {fieldErrors[field.key]}
+                              </p>
+                            )}
                           </div>
+                        </>
+                      ) : (
+                        <>
+                          {field.type === "checkbox" ? (
+                            <span className="block text-[11px] font-black uppercase tracking-wider text-[#68708A]">
+                              {fieldLabel}
+                              {field.required && (
+                                <span className="text-rose-500"> *</span>
+                              )}
+                            </span>
+                          ) : (
+                            <label
+                              htmlFor={fieldId}
+                              className="block text-[11px] font-black uppercase tracking-wider text-[#68708A]"
+                            >
+                              {fieldLabel}
+                              {field.required && (
+                                <span className="text-rose-500"> *</span>
+                              )}
+                            </label>
+                          )}
+
+                          {field.type === "textarea" ? (
+                            <textarea
+                              id={fieldId}
+                              value={form[field.key] ?? ""}
+                              onChange={(event) =>
+                                updateField(field.key, event.target.value)
+                              }
+                              placeholder={fieldPlaceholder}
+                              rows={3}
+                              className={inputClass}
+                            />
+                          ) : field.type === "select" ? (
+                            <Select
+                              id={fieldId}
+                              value={form[field.key] ?? ""}
+                              onChange={(value) => updateField(field.key, value)}
+                              options={(field.options ?? []).map((option) => ({
+                                value: option.value,
+                                label: isKm ? option.labelKm ?? option.label : option.label,
+                              }))}
+                              label={fieldLabel}
+                              searchable={(field.options?.length ?? 0) > 8}
+                              className="w-full"
+                            />
+                          ) : field.type === "checkbox" ? (
+                            <button
+                              type="button"
+                              role="switch"
+                              aria-checked={Boolean(form[field.key])}
+                              onClick={() =>
+                                updateField(field.key, !form[field.key])
+                              }
+                              className={cn(
+                                "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-bold transition-colors",
+                                form[field.key]
+                                  ? "border-[#111965] bg-[#111965] text-white"
+                                  : "border-[#E6E8F0] bg-white text-[#68708A]"
+                              )}
+                            >
+                              <Check className="h-3.5 w-3.5" />
+                              {form[field.key] ? copy.enabled : copy.disabled}
+                            </button>
+                          ) : field.type === "date" ? (
+                            <DatePicker
+                              id={fieldId}
+                              value={form[field.key] ?? ""}
+                              onChange={(value) => updateField(field.key, value)}
+                              label={fieldLabel}
+                              placeholder={fieldPlaceholder}
+                            />
+                          ) : (
+                            <input
+                              id={fieldId}
+                              type={field.type === "number" ? "number" : "text"}
+                              value={form[field.key] ?? ""}
+                              onChange={(event) =>
+                                updateField(field.key, event.target.value)
+                              }
+                              placeholder={fieldPlaceholder}
+                              min={field.min}
+                              max={field.max}
+                              maxLength={field.key.endsWith("_url") ? 500 : undefined}
+                              className={inputClass}
+                            />
+                          )}
+
                           {hasError && (
-                            <p className="mt-1.5 text-[11px] font-semibold text-rose-600">
+                            <p className="text-[11px] font-semibold text-rose-600">
                               {fieldErrors[field.key]}
                             </p>
                           )}
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        {field.type === "checkbox" ? (
-                          <span className="block text-[11px] font-black uppercase tracking-wider text-[#68708A]">
-                            {fieldLabel}
-                            {field.required && (
-                              <span className="text-rose-500"> *</span>
-                            )}
-                          </span>
-                        ) : (
-                          <label
-                            htmlFor={fieldId}
-                            className="block text-[11px] font-black uppercase tracking-wider text-[#68708A]"
-                          >
-                            {fieldLabel}
-                            {field.required && (
-                              <span className="text-rose-500"> *</span>
-                            )}
-                          </label>
-                        )}
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
 
-                        {field.type === "textarea" ? (
-                          <textarea
-                            id={fieldId}
-                            value={form[field.key] ?? ""}
-                            onChange={(event) =>
-                              updateField(field.key, event.target.value)
-                            }
-                            placeholder={fieldPlaceholder}
-                            rows={3}
-                            className={inputClass}
-                          />
-                        ) : field.type === "select" ? (
-                          <Select
-                            id={fieldId}
-                            value={form[field.key] ?? ""}
-                            onChange={(value) => updateField(field.key, value)}
-                            options={(field.options ?? []).map((option) => ({
-                              value: option.value,
-                              label: isKm ? option.labelKm ?? option.label : option.label,
-                            }))}
-                            label={fieldLabel}
-                            searchable={(field.options?.length ?? 0) > 8}
-                            className="w-full"
-                          />
-                        ) : field.type === "checkbox" ? (
-                          <button
-                            type="button"
-                            role="switch"
-                            aria-checked={Boolean(form[field.key])}
-                            onClick={() =>
-                              updateField(field.key, !form[field.key])
-                            }
-                            className={cn(
-                              "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-bold transition-colors",
-                              form[field.key]
-                                ? "border-[#111965] bg-[#111965] text-white"
-                                : "border-[#E6E8F0] bg-white text-[#68708A]"
-                            )}
-                          >
-                            <Check className="h-3.5 w-3.5" />
-                            {form[field.key] ? copy.enabled : copy.disabled}
-                          </button>
-                        ) : field.type === "date" ? (
-                          <DatePicker
-                            id={fieldId}
-                            value={form[field.key] ?? ""}
-                            onChange={(value) => updateField(field.key, value)}
-                            label={fieldLabel}
-                            placeholder={fieldPlaceholder}
-                          />
-                        ) : (
-                          <input
-                            id={fieldId}
-                            type={field.type === "number" ? "number" : "text"}
-                            value={form[field.key] ?? ""}
-                            onChange={(event) =>
-                              updateField(field.key, event.target.value)
-                            }
-                            placeholder={fieldPlaceholder}
-                            min={field.min}
-                            max={field.max}
-                            maxLength={field.key.endsWith("_url") ? 500 : undefined}
-                            className={inputClass}
-                          />
-                        )}
-
-                        {hasError && (
-                          <p className="text-[11px] font-semibold text-rose-600">
-                            {fieldErrors[field.key]}
-                          </p>
-                        )}
-                      </>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="mt-5 flex items-center justify-end gap-2 border-t border-[#E6E8F0] pt-4">
-              <button
-                type="button"
-                onClick={closeDialog}
-                className="rounded-xl border border-[#E6E8F0] px-4 py-2 text-xs font-bold text-[#68708A] hover:bg-slate-50"
-              >
-                {copy.cancel}
-              </button>
-              <button
-                type="button"
-                onClick={handleSave}
-                disabled={saving}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7CE4D] px-4 py-2 text-xs font-black text-[#111965] hover:bg-[#E5BD3B] disabled:opacity-50"
-              >
-                {saving ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                ) : (
-                  <Check className="h-3.5 w-3.5" />
-                )}
-                {saving ? copy.saving : copy.saveChanges}
-              </button>
-            </div>
+              <div className="mt-5 flex items-center justify-end gap-2 border-t border-[#E6E8F0] pt-4">
+                <button
+                  type="button"
+                  onClick={closeDialog}
+                  className="rounded-xl border border-[#E6E8F0] px-4 py-2 text-xs font-bold text-[#68708A] hover:bg-slate-50"
+                >
+                  {copy.cancel}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7CE4D] px-4 py-2 text-xs font-black text-[#111965] hover:bg-[#E5BD3B] disabled:opacity-50"
+                >
+                  {saving ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    <Check className="h-3.5 w-3.5" />
+                  )}
+                  {saving ? copy.saving : copy.saveChanges}
+                </button>
+              </div>
             </div>
           </div>
         </div>

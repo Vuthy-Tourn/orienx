@@ -15,6 +15,7 @@ import {
   Sparkles,
   Bookmark,
   ClipboardList,
+  GraduationCap,
   ShieldCheck,
   Settings,
   LogOut,
@@ -70,6 +71,11 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
       href: "/dashboard/plan",
       label: t("dashboardLayout.myPlan", "My Plan"),
       icon: ClipboardList,
+    },
+    {
+      href: "/dashboard/eligibility",
+      label: t("dashboardLayout.eligibility", "BACII Checker"),
+      icon: GraduationCap,
     },
   ];
 

@@ -1,0 +1,246 @@
+{
+  "scope": "Minimum published admission requirements for bachelor's programs. Verified against the listed official university page on 2026-11-17. Grade E is the minimum passing BACII grade.",
+  "universities": [
+    {
+      "slug": "rupp",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High School Diploma (BacII) or equivalent required. RUPP bachelor admission also requires its entrance examination (General Culture). Scholarship applicants may need at least grade D in Civics and Mathematics.",
+      "source_url": "https://rupp.edu.kh/index.php/academics/faculties_and_institutes/faculty_of_social_science_and_humanities/department_of_sociology/sociology_bachelor_programs",
+      "verified": true
+    },
+    {
+      "slug": "itc",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "BacII or equivalent certificate required. ITC entrance examination covers Mathematics, Physics, Chemistry and Logic; English proficiency is also required.",
+      "source_url": "https://itc.edu.kh/wp-content/uploads/2024/07/Booklet-University_2024.pdf",
+      "verified": true
+    },
+    {
+      "slug": "num",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High School Diploma (BacII) or equivalent and proof of English proficiency required.",
+      "source_url": "https://spp.num.edu.kh/en/apply-for-bachelor-s/",
+      "verified": true
+    },
+    {
+      "slug": "puc",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High School Certificate (BacII) or equivalent certified by MoEYS required, plus the PUC English admission requirement.",
+      "source_url": "https://www.puc.edu.kh/admissions/undergraduate-admission/",
+      "verified": true
+    },
+    {
+      "slug": "uc",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High school certificate or equivalent (pass) required. The University of Cambodia also requires its undergraduate entrance examination and English proficiency for the international track.",
+      "source_url": "https://www.uc.edu.kh/ucs/Admissions%20Requirements/4/14/",
+      "verified": true
+    },
+    {
+      "slug": "norton",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "Original BACC II (Grade 12 National Examination Certificate) or equivalent required. Applicants also take the Norton University entrance examination.",
+      "source_url": "https://www.norton-u.com/admission/under-graduate",
+      "verified": true,
+      "associate": {
+        "min_bacii_grade": "E",
+        "required_subjects": [],
+        "admission_notes": "Original BACC II (Grade 12 National Examination Certificate) or equivalent required for undergraduate admission, including associate programs. Applicants also take the Norton entrance test.",
+        "source_url": "https://www.norton-u.com/admission/under-graduate",
+        "verified": true
+      }
+    },
+    {
+      "slug": "sru",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "Applicants must have passed the national high school examination and earned a high school diploma. Case-by-case alternatives may be considered.",
+      "source_url": "https://sru.edu.kh/admissions/",
+      "verified": true
+    },
+    {
+      "slug": "ppiu",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "BAC II required for four-year bachelor's programs. PPIU also conducts an entrance assessment.",
+      "source_url": "https://ppiu.edu.kh/admissions/",
+      "verified": true
+    },
+    {
+      "slug": "eamu",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "Pass in the National BacII qualification required for the English programme. IB or an accredited Foundation Year certificate may also be accepted.",
+      "source_url": "https://eamu.edu.kh/programs/entry-requirements",
+      "verified": true
+    },
+    {
+      "slug": "up",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High School Exit Examination certificate verified by the Ministry of Education required. The University of Puthisastra also requires admissions essays.",
+      "source_url": "https://www.puthisastra.edu.kh/admissions/",
+      "verified": true,
+      "associate": {
+        "min_bacii_grade": "E",
+        "required_subjects": [],
+        "admission_notes": "High School Exit Examination certificate verified by the Ministry of Education required for undergraduate admission, including associate programs. Admissions essays are also required.",
+        "source_url": "https://www.puthisastra.edu.kh/admissions/",
+        "verified": true
+      }
+    },
+    {
+      "slug": "aeu",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High school diploma/transcript or an accepted equivalent certificate required. AEU also requires its English proficiency test unless an accepted alternative is provided.",
+      "source_url": "https://aeu.edu.kh/kh/how-to-enroll",
+      "verified": true
+    },
+    {
+      "slug": "paragoniu",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High school diploma or a school letter confirming graduation required, plus English proficiency or the university English placement process.",
+      "source_url": "https://www.paragoniu.edu.kh/admissions/admission-requirements/undergraduate/",
+      "verified": true
+    },
+    {
+      "slug": "aib",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High school diploma certificate, Level 4 TVET qualification, or an equivalent certificate recognized by a competent authority required for bachelor's programs. English and computer proficiency are also required; applicants may take an English entrance exam or bridging course.",
+      "source_url": "https://www.aub.edu.kh/tc/assets/pdf_zip/AIB_Catalog_2022_2023_Eng.pdf",
+      "verified": true,
+      "associate": {
+        "min_bacii_grade": "F",
+        "required_subjects": [],
+        "admission_notes": "Associate programs accept students who failed or passed high school, or who hold a Level 3 TVET qualification or an equivalent certificate. English and computer proficiency are also required.",
+        "source_url": "https://aub.edu.kh/tc/assets/pdf_zip/AIB_Catalog_2019_2020_Eng.pdf",
+        "verified": true
+      }
+    },
+    {
+      "slug": "aupp",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High school national diploma (or equivalent) and high school transcript required. All applicants take the AUPP English Placement Test or provide IELTS 6.0, TOEFL iBT 79, Duolingo 110, or an accepted equivalent.",
+      "source_url": "https://www.aupp.edu.kh/bachelors-admission/admission-criteria/",
+      "verified": true
+    },
+    {
+      "slug": "bbu",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High school certificate or foundation year certificate required for bachelor's programs. Applicants must also pass the entrance exam conducted by MoEYS.",
+      "source_url": "https://www.bbu.edu.kh/Admission-Requirements-433",
+      "verified": true
+    },
+    {
+      "slug": "cadt",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "Applicants must have passed the BacII examination (any grade, science or social science track) in 2021-2026. All applicants also take the CADT entrance test in Mathematics, Logic and English.",
+      "source_url": "https://cadt.edu.kh/academic/admission/",
+      "verified": true
+    },
+    {
+      "slug": "pcu",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "Admissions document checklist requires a copy of the National Exam Certificate.",
+      "source_url": "https://www.pcu.edu.kh/admissions",
+      "verified": true
+    },
+    {
+      "slug": "rufa",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "BacII or an equivalent certificate required. Architecture applicants take Mathematics and Physics entrance exams; Fine Arts applicants take drawing exams; Music applicants take specialty and music theory exams.",
+      "source_url": "https://www.rufa.edu.kh/kh_Admission.html",
+      "verified": true
+    },
+    {
+      "slug": "vanda",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High school diploma (BacII) or an equivalent certificate required for bachelor's programs. BacII grade-based scholarships are available.",
+      "source_url": "https://vanda.edu.kh/admission/",
+      "verified": true,
+      "associate": {
+        "min_bacii_grade": "F",
+        "required_subjects": [],
+        "admission_notes": "Associate programs require a grade 12 completion certificate or equivalent; a passing BacII certificate is not explicitly required. Bachelor programs require BacII or equivalent.",
+        "source_url": "https://vanda.edu.kh/admission/",
+        "verified": true
+      }
+    },
+    {
+      "slug": "iic",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "BacII or an equivalent certificate required for the foundation year. Bachelor's entry requires the IIC foundation year certificate or an equivalent qualification.",
+      "source_url": "https://www.iic.edu.kh/",
+      "verified": true
+    },
+    {
+      "slug": "ntti",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "BacII certificate or an equivalent certificate required for Engineering/Bachelor degree programs. Higher technical diplomas or associate degrees are also accepted.",
+      "source_url": "https://ntti.edu.kh/home/school_apply",
+      "verified": true,
+      "associate": {
+        "min_bacii_grade": "F",
+        "required_subjects": [],
+        "admission_notes": "Diploma/associate applicants may apply with a fail result in the high school examination (for school-fee-paying students), a Level 3 technical/vocational certificate, a diploma certificate, or an equivalent qualification.",
+        "source_url": "https://ntti.edu.kh/home/school_apply",
+        "verified": true
+      }
+    },
+    {
+      "slug": "camed",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High school certificate or an equivalent Cambodian high school diploma required. Applicants must pass the CamEd entrance exam in English, Mathematics, and an interview.",
+      "source_url": "https://cam-ed.edu.kh/admissions-department-faq/",
+      "verified": true
+    },
+    {
+      "slug": "istad",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "High school national diploma (BacII) or equivalent and high school transcript required. Applicants upload a BacII certificate or equivalent; no specific grade cutoff is published.",
+      "source_url": "https://istad.co/admission",
+      "verified": true,
+      "associate": {
+        "min_bacii_grade": "E",
+        "required_subjects": [],
+        "admission_notes": "Associate applicants follow the same high school graduation requirement: national diploma (BacII) or equivalent and transcript. No specific grade cutoff is published.",
+        "source_url": "https://istad.co/admission",
+        "verified": true
+      }
+    },
+    {
+      "slug": "uhst",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "admission_notes": "UHST's official admission tuition table lists grades A-E for bachelor's programs and grade F for associate programs. Bachelor applicants are expected to hold a BacII pass (grade E or higher).",
+      "source_url": "https://www.uhst.edu.kh/study/admission",
+      "verified": true,
+      "associate": {
+        "min_bacii_grade": "F",
+        "required_subjects": [],
+        "admission_notes": "UHST's official admission tuition table lists grade F for associate programs. Associate programs are two years.",
+        "source_url": "https://www.uhst.edu.kh/study/admission",
+        "verified": true
+      }
+    }
+  ]
+}

@@ -22,6 +22,7 @@ class StudentProfile(Base):
     high_school: Mapped[Optional[str]] = mapped_column(String(200))
     current_education_level: Mapped[str] = mapped_column(String(50), nullable=False, default="GRADE_12", index=True)
     graduation_year: Mapped[Optional[int]] = mapped_column(Integer)
+    bacii_grade: Mapped[Optional[str]] = mapped_column(String(1))
     preferred_language: Mapped[str] = mapped_column(String(5), nullable=False, default="km")
     avatar_url: Mapped[Optional[str]] = mapped_column(String(500))
     bio: Mapped[Optional[str]] = mapped_column(Text)

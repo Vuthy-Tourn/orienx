@@ -1,25 +1,38 @@
 {
   "rupp": {
     "name": "Royal University of Phnom Penh",
-    "aliases": ["Royal University of Phnom Penh", "RUPP"],
+    "aliases": [
+      "Royal University of Phnom Penh",
+      "RUPP"
+    ],
     "website": "https://www.rupp.edu.kh",
     "province": "Phnom Penh"
   },
   "itc": {
     "name": "Institute of Technology of Cambodia",
-    "aliases": ["Institute of Technology of Cambodia", "ITC", "Techno"],
+    "aliases": [
+      "Institute of Technology of Cambodia",
+      "ITC",
+      "Techno"
+    ],
     "website": "https://itc.edu.kh",
     "province": "Phnom Penh"
   },
   "aupp": {
     "name": "American University of Phnom Penh",
-    "aliases": ["American University of Phnom Penh", "AUPP"],
+    "aliases": [
+      "American University of Phnom Penh",
+      "AUPP"
+    ],
     "website": "https://www.aupp.edu.kh",
     "province": "Phnom Penh"
   },
   "paragoniu": {
     "name": "Paragon International University",
-    "aliases": ["Paragon International University", "ParagonIU"],
+    "aliases": [
+      "Paragon International University",
+      "ParagonIU"
+    ],
     "website": "https://paragoniu.edu.kh",
     "province": "Phnom Penh"
   },
@@ -35,242 +48,398 @@
   },
   "num": {
     "name": "National University of Management",
-    "aliases": ["National University of Management", "NUM"],
+    "aliases": [
+      "National University of Management",
+      "NUM"
+    ],
     "website": "https://num.edu.kh",
     "province": "Phnom Penh"
   },
   "rule": {
     "name": "Royal University of Law and Economics",
-    "aliases": ["Royal University of Law and Economics", "RULE"],
+    "aliases": [
+      "Royal University of Law and Economics",
+      "RULE"
+    ],
     "website": "https://rule.edu.kh",
     "province": "Phnom Penh"
   },
   "dmuc": {
     "name": "De Montfort University Cambodia",
-    "aliases": ["De Montfort University Cambodia", "DMUC"],
+    "aliases": [
+      "De Montfort University Cambodia",
+      "DMUC"
+    ],
     "website": "https://dmuc.edu.kh",
     "province": "Phnom Penh"
   },
   "camtech": {
     "name": "Cambodia University of Technology and Science",
-    "aliases": ["Cambodia University of Technology and Science", "CamTech"],
+    "aliases": [
+      "Cambodia University of Technology and Science",
+      "CamTech"
+    ],
     "website": "https://www.camtech.edu.kh",
     "province": "Phnom Penh"
   },
   "eamu": {
     "name": "East Asia Management University",
-    "aliases": ["East Asia Management University", "EAMU"],
+    "aliases": [
+      "East Asia Management University",
+      "EAMU"
+    ],
     "website": "https://www.eamu.edu.kh",
     "province": "Phnom Penh"
   },
   "iic": {
     "name": "IIC University of Technology",
-    "aliases": ["IIC University of Technology", "IIC"],
+    "aliases": [
+      "IIC University of Technology",
+      "IIC"
+    ],
     "website": "https://www.iic.edu.kh",
     "province": "Phnom Penh"
   },
   "ppiu": {
     "name": "Phnom Penh International University",
-    "aliases": ["Phnom Penh International University", "PPIU"],
+    "aliases": [
+      "Phnom Penh International University",
+      "PPIU"
+    ],
     "website": "https://www.ppiu.edu.kh",
     "province": "Phnom Penh"
   },
   "uc": {
     "name": "The University of Cambodia",
-    "aliases": ["The University of Cambodia", "University of Cambodia", "UC"],
+    "aliases": [
+      "The University of Cambodia",
+      "University of Cambodia",
+      "UC"
+    ],
     "website": "https://www.uc.edu.kh",
     "province": "Phnom Penh"
   },
   "puc": {
     "name": "Pannasastra University of Cambodia",
-    "aliases": ["Pannasastra University of Cambodia", "Pannasastra University Cambodia", "PUC"],
+    "aliases": [
+      "Pannasastra University of Cambodia",
+      "Pannasastra University Cambodia",
+      "PUC"
+    ],
     "website": "https://www.puc.edu.kh",
     "province": "Phnom Penh"
   },
   "bbu": {
     "name": "Build Bright University",
-    "aliases": ["Build Bright University", "BBU"],
+    "aliases": [
+      "Build Bright University",
+      "BBU"
+    ],
     "website": "https://www.bbu.edu.kh",
     "province": "Phnom Penh"
   },
   "cus": {
     "name": "Cambodian University for Specialties",
-    "aliases": ["Cambodian University for Specialties", "CUS"],
+    "aliases": [
+      "Cambodian University for Specialties",
+      "CUS"
+    ],
     "website": "https://www.cus.edu.kh",
     "province": "Phnom Penh"
   },
   "rua": {
     "name": "Royal University of Agriculture",
-    "aliases": ["Royal University of Agriculture", "RUA"],
+    "aliases": [
+      "Royal University of Agriculture",
+      "RUA"
+    ],
     "website": "https://www.rua.edu.kh",
     "province": "Phnom Penh"
   },
   "rufa": {
     "name": "Royal University of Fine Arts",
-    "aliases": ["Royal University of Fine Arts", "RUFA"],
+    "aliases": [
+      "Royal University of Fine Arts",
+      "RUFA"
+    ],
     "website": "https://www.rufa.edu.kh",
     "province": "Phnom Penh"
   },
   "western": {
     "name": "Western University",
-    "aliases": ["Western University", "WU"],
+    "aliases": [
+      "Western University",
+      "WU"
+    ],
     "website": "https://westernuniversity.edu.kh",
     "province": "Phnom Penh"
   },
   "norton": {
     "name": "Norton University",
-    "aliases": ["Norton University", "NU"],
+    "aliases": [
+      "Norton University",
+      "NU"
+    ],
     "website": "https://www.norton-u.com",
     "province": "Phnom Penh"
   },
   "camed": {
     "name": "CamEd Business School",
-    "aliases": ["CamEd Business School", "CamEd", "Cam-Ed"],
+    "aliases": [
+      "CamEd Business School",
+      "CamEd",
+      "Cam-Ed"
+    ],
     "website": "https://cam-ed.edu.kh",
     "province": "Phnom Penh"
   },
   "vanda": {
     "name": "Vanda Institute",
-    "aliases": ["Vanda Institute", "Vanda"],
+    "aliases": [
+      "Vanda Institute",
+      "Vanda"
+    ],
     "website": "https://www.vanda.edu.kh",
     "province": "Phnom Penh"
   },
   "aib": {
     "name": "ACLEDA University of Business",
-    "aliases": ["ACLEDA University of Business", "ACLEDA Institute of Business", "AUB", "AIB", "ACLEDA"],
+    "aliases": [
+      "ACLEDA University of Business",
+      "ACLEDA Institute of Business",
+      "AUB",
+      "AIB",
+      "ACLEDA"
+    ],
     "website": "https://www.aub.edu.kh",
     "province": "Phnom Penh"
   },
   "uhs": {
     "name": "University of Health Sciences",
-    "aliases": ["University of Health Sciences", "University of Health Science", "UHS", "SPU"],
+    "aliases": [
+      "University of Health Sciences",
+      "University of Health Science",
+      "UHS",
+      "SPU"
+    ],
     "website": "https://www.uhs.edu.kh",
     "province": "Phnom Penh"
   },
   "up": {
     "name": "The University of Puthisastra",
-    "aliases": ["The University of Puthisastra", "University of Puthisastra", "Puthisastra", "UP"],
+    "aliases": [
+      "The University of Puthisastra",
+      "University of Puthisastra",
+      "Puthisastra",
+      "UP"
+    ],
     "website": "https://www.puthisastra.edu.kh",
     "province": "Phnom Penh"
   },
   "aeu": {
     "name": "Asia Euro University",
-    "aliases": ["Asia Euro University", "AEU"],
+    "aliases": [
+      "Asia Euro University",
+      "AEU"
+    ],
     "website": "https://aeu.edu.kh",
     "province": "Phnom Penh"
   },
   "cmu": {
     "name": "Cambodian Mekong University",
-    "aliases": ["Cambodian Mekong University", "CMU", "Mekong University"],
+    "aliases": [
+      "Cambodian Mekong University",
+      "CMU",
+      "Mekong University"
+    ],
     "website": "https://mekong.edu.kh",
     "province": "Phnom Penh"
   },
   "angkor": {
     "name": "Angkor University",
-    "aliases": ["Angkor University"],
+    "aliases": [
+      "Angkor University"
+    ],
     "website": "https://www.angkor.edu.kh",
     "province": "Siem Reap"
   },
   "beltei": {
     "name": "BELTEI International University",
-    "aliases": ["BELTEI International University", "BELTEI", "Beltei"],
+    "aliases": [
+      "BELTEI International University",
+      "BELTEI",
+      "Beltei"
+    ],
     "website": "https://www.beltei.edu.kh",
     "province": "Phnom Penh"
   },
   "ntti": {
     "name": "National Technical Training Institute",
-    "aliases": ["National Technical Training Institute", "NTTI"],
+    "aliases": [
+      "National Technical Training Institute",
+      "NTTI"
+    ],
     "website": "https://ntti.edu.kh",
     "province": "Phnom Penh"
   },
   "npic": {
     "name": "National Polytechnic Institute of Cambodia",
-    "aliases": ["National Polytechnic Institute of Cambodia", "NPIC"],
+    "aliases": [
+      "National Polytechnic Institute of Cambodia",
+      "NPIC"
+    ],
     "website": "https://npic.edu.kh",
     "province": "Phnom Penh"
   },
   "iu": {
     "name": "International University",
-    "aliases": ["International University", "IU"],
+    "aliases": [
+      "International University",
+      "IU"
+    ],
     "website": "https://www.iu.edu.kh",
     "province": "Phnom Penh"
   },
   "uef": {
     "name": "University of Economics and Finance",
-    "aliases": ["University of Economics and Finance", "UEF"],
+    "aliases": [
+      "University of Economics and Finance",
+      "UEF"
+    ],
     "website": "https://uef.edu.kh",
     "province": "Phnom Penh"
   },
   "hru": {
     "name": "Human Resource University",
-    "aliases": ["Human Resource University", "HRU"],
+    "aliases": [
+      "Human Resource University",
+      "HRU"
+    ],
     "website": "https://www.hru.edu.kh",
     "province": "Phnom Penh"
   },
   "pcu": {
     "name": "Panha Chiet University",
-    "aliases": ["Panha Chiet University", "PCU"],
+    "aliases": [
+      "Panha Chiet University",
+      "PCU"
+    ],
     "website": "https://pcu.edu.kh",
     "province": "Phnom Penh"
   },
   "sru": {
     "name": "Svay Rieng University",
-    "aliases": ["Svay Rieng University", "SRU"],
+    "aliases": [
+      "Svay Rieng University",
+      "SRU"
+    ],
     "website": "https://www.sru.edu.kh",
     "province": "Svay Rieng"
   },
   "uhst": {
     "name": "University of Heng Samrin Thbongkhmum",
-    "aliases": ["University of Heng Samrin Thbongkhmum", "University of Heng SamrinThbongkhmum", "UHST"],
+    "aliases": [
+      "University of Heng Samrin Thbongkhmum",
+      "University of Heng SamrinThbongkhmum",
+      "UHST"
+    ],
     "website": "https://www.uhst.edu.kh",
     "province": "Tbong Khmum"
   },
   "acac": {
     "name": "Academy of Culinary Arts Cambodia",
-    "aliases": ["Academy of Culinary Arts Cambodia", "ACAC"],
+    "aliases": [
+      "Academy of Culinary Arts Cambodia",
+      "ACAC"
+    ],
     "website": "https://acac.edu.kh",
     "province": "Phnom Penh"
   },
   "ume": {
     "name": "University of Management and Economics",
-    "aliases": ["University of Management and Economics", "UME"],
+    "aliases": [
+      "University of Management and Economics",
+      "UME"
+    ],
     "website": "https://ume.edu.kh",
     "province": "Battambang"
   },
   "nmu": {
     "name": "National Meanchey University",
-    "aliases": ["National Meanchey University", "NMU"],
+    "aliases": [
+      "National Meanchey University",
+      "NMU"
+    ],
     "website": "https://nmu.edu.kh",
     "province": "Banteay Meanchey"
   },
   "kit": {
     "name": "Kirirom Institute of Technology",
-    "aliases": ["Kirirom Institute of Technology", "KIT"],
+    "aliases": [
+      "Kirirom Institute of Technology",
+      "KIT"
+    ],
     "website": "https://kit.edu.kh",
     "province": "Kampong Speu"
   },
   "usea": {
     "name": "University of South-East Asia",
-    "aliases": ["University of South-East Asia", "Southeast Asia University", "USEA"],
+    "aliases": [
+      "University of South-East Asia",
+      "Southeast Asia University",
+      "USEA"
+    ],
     "website": "https://usea.edu.kh",
     "province": "Siem Reap"
   },
   "nubb": {
     "name": "National University of Battambang",
-    "aliases": ["National University of Battambang", "NUBB"],
+    "aliases": [
+      "National University of Battambang",
+      "NUBB"
+    ],
     "website": "https://nubb.edu.kh",
     "province": "Battambang"
   },
   "plnia": {
     "name": "Prek Leap National Institute of Agriculture",
-    "aliases": ["Prek Leap National Institute of Agriculture", "Prek Leap National College of Agriculture", "PLNIA", "PNCA"],
+    "aliases": [
+      "Prek Leap National Institute of Agriculture",
+      "Prek Leap National College of Agriculture",
+      "PLNIA",
+      "PNCA"
+    ],
     "website": "https://plnia.edu.kh",
     "province": "Phnom Penh"
   },
   "pkpi": {
     "name": "Preah Kossomak Polytechnic Institute",
-    "aliases": ["Preah Kossomak Polytechnic Institute", "PKPI", "PPI"],
+    "aliases": [
+      "Preah Kossomak Polytechnic Institute",
+      "PKPI",
+      "PPI"
+    ],
     "website": "http://pkpi.edu.kh",
+    "province": "Phnom Penh"
+  },
+  "istad": {
+    "name": "Institute of Science and Technology Advanced Development",
+    "aliases": [
+      "Institute of Science and Technology Advanced Development",
+      "ISTAD",
+      "CSTAD"
+    ],
+    "website": "https://istad.co",
+    "province": "Phnom Penh"
+  },
+  "setec": {
+    "name": "SETEC Institute",
+    "aliases": [
+      "SETEC Institute",
+      "SETEC",
+      "វិទ្យាស្ថានស៊ីតិក"
+    ],
+    "website": "https://www.setecu.com",
     "province": "Phnom Penh"
   }
 }

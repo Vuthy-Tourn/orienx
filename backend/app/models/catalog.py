@@ -103,6 +103,10 @@ class UniversityMajor(Base):
     is_tuition_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     language_of_instruction: Mapped[str] = mapped_column(String(30), default="BILINGUAL")
     admission_criteria: Mapped[Optional[Any]] = mapped_column(JSONB)
+    min_bacii_grade: Mapped[Optional[str]] = mapped_column(String(1))
+    required_subjects: Mapped[Optional[Any]] = mapped_column(JSONB)
+    is_admission_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    admission_source_url: Mapped[Optional[str]] = mapped_column(String(500))
     official_curriculum_url: Mapped[Optional[str]] = mapped_column(String(500))
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))

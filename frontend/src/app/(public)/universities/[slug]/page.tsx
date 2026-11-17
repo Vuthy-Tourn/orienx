@@ -668,7 +668,7 @@ export default function UniversityDetailPage() {
                   : "Tuition N/A";
                 return (
                   <Link
-                    key={offering.major_id}
+                    key={`${offering.major_id}-${offering.degree_level}-${offering.language_of_instruction}`}
                     href={`/majors/${offering.major_slug}`}
                     className="group flex gap-3.5 rounded-2xl border border-[#E6E8F0] bg-white p-3.5 transition-all hover:-translate-y-0.5 hover:border-[#111965]/25 hover:shadow-[0_18px_40px_-30px_rgba(17,25,101,0.5)] sm:gap-4 sm:p-4"
                   >

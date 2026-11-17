@@ -443,6 +443,15 @@ def _flat_offering(offering: UniversityMajor) -> Dict[str, Any]:
         "is_tuition_verified": offering.is_tuition_verified,
         "language_of_instruction": offering.language_of_instruction,
         "official_curriculum_url": offering.official_curriculum_url,
+        "min_bacii_grade": offering.min_bacii_grade,
+        "required_subjects": offering.required_subjects,
+        "is_admission_verified": offering.is_admission_verified,
+        "admission_source_url": offering.admission_source_url,
+        "admission_notes": (
+            offering.admission_criteria.get("notes")
+            if isinstance(offering.admission_criteria, dict)
+            else None
+        ),
     }
 
 
@@ -1032,6 +1041,11 @@ async def admin_create_offering(
     university, major, faculty = await _load_offering_dependencies(
         db, body.university_id, body.major_id, body.faculty_id
     )
+    if body.min_bacii_grade == "F" and body.degree_level != "ASSOCIATE":
+        raise HTTPException(
+            status_code=400,
+            detail="Grade F is only accepted for associate/diploma programs",
+        )
     await _ensure_unique_offering(
         db,
         body.university_id,
@@ -1049,6 +1063,15 @@ async def admin_create_offering(
         is_tuition_verified=body.is_tuition_verified,
         language_of_instruction=body.language_of_instruction,
         official_curriculum_url=body.official_curriculum_url,
+        min_bacii_grade=body.min_bacii_grade,
+        required_subjects=body.required_subjects,
+        is_admission_verified=body.is_admission_verified,
+        admission_source_url=body.admission_source_url,
+        admission_criteria=(
+            {"notes": body.admission_notes.strip()}
+            if body.admission_notes and body.admission_notes.strip()
+            else None
+        ),
     )
     offering.university = university
     offering.major = major
@@ -1086,6 +1109,17 @@ async def admin_update_offering(
     degree_level = body.degree_level or offering.degree_level
     language = body.language_of_instruction or offering.language_of_instruction
 
+    next_bacii_grade = (
+        body.min_bacii_grade
+        if "min_bacii_grade" in body.model_fields_set
+        else offering.min_bacii_grade
+    )
+    if next_bacii_grade == "F" and degree_level != "ASSOCIATE":
+        raise HTTPException(
+            status_code=400,
+            detail="Grade F is only accepted for associate/diploma programs",
+        )
+
     if body.university_id or body.major_id or body.faculty_id is not None:
         university, major, faculty = await _load_offering_dependencies(
             db, university_id, major_id, faculty_id
@@ -1108,10 +1142,19 @@ async def admin_update_offering(
         "is_tuition_verified",
         "language_of_instruction",
         "official_curriculum_url",
+        "is_admission_verified",
     ):
         value = getattr(body, field)
         if value is not None:
             setattr(offering, field, value)
+
+    for field in ("min_bacii_grade", "required_subjects", "admission_source_url"):
+        if field in body.model_fields_set:
+            setattr(offering, field, getattr(body, field))
+
+    if "admission_notes" in body.model_fields_set:
+        notes = (body.admission_notes or "").strip()
+        offering.admission_criteria = {"notes": notes} if notes else None
 
     await _audit(db, admin_user, "update", "university_offering", before, _flat_offering(offering))
     await db.commit()

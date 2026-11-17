@@ -40,6 +40,7 @@ async def get_student_profile(
             high_school=profile.high_school,
             current_education_level=profile.current_education_level,
             graduation_year=profile.graduation_year,
+            bacii_grade=profile.bacii_grade,
             preferred_language=profile.preferred_language,
             avatar_url=profile.avatar_url,
             bio=profile.bio
@@ -81,6 +82,7 @@ async def update_student_profile(
             high_school=profile.high_school,
             current_education_level=profile.current_education_level,
             graduation_year=profile.graduation_year,
+            bacii_grade=profile.bacii_grade,
             preferred_language=profile.preferred_language,
             avatar_url=profile.avatar_url,
             bio=profile.bio

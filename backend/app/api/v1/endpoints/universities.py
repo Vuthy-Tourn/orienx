@@ -146,7 +146,16 @@ async def compare_universities(
                 duration_years=float(um.duration_years),
                 tuition_annual_usd=float(um.tuition_annual_usd) if um.tuition_annual_usd else None,
                 is_tuition_verified=um.is_tuition_verified,
-                language_of_instruction=um.language_of_instruction
+                language_of_instruction=um.language_of_instruction,
+                min_bacii_grade=um.min_bacii_grade,
+                required_subjects=um.required_subjects,
+                is_admission_verified=um.is_admission_verified,
+                admission_source_url=um.admission_source_url,
+                admission_notes=(
+                    um.admission_criteria.get("notes")
+                    if isinstance(um.admission_criteria, dict)
+                    else None
+                ),
             )
             for um in u.university_majors
         ]
@@ -214,7 +223,11 @@ async def get_university_detail(
             duration_years=float(um.duration_years),
             tuition_annual_usd=float(um.tuition_annual_usd) if um.tuition_annual_usd else None,
             is_tuition_verified=um.is_tuition_verified,
-            language_of_instruction=um.language_of_instruction
+            language_of_instruction=um.language_of_instruction,
+            min_bacii_grade=um.min_bacii_grade,
+            required_subjects=um.required_subjects,
+            is_admission_verified=um.is_admission_verified,
+            admission_source_url=um.admission_source_url,
         )
         for um in u.university_majors
     ]

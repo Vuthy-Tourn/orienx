@@ -35,6 +35,11 @@ class UniversityOfferingOut(BaseModel):
     tuition_annual_usd: Optional[float] = None
     is_tuition_verified: bool
     language_of_instruction: str
+    min_bacii_grade: Optional[str] = None
+    required_subjects: Optional[Any] = None
+    is_admission_verified: bool = False
+    admission_source_url: Optional[str] = None
+    admission_notes: Optional[str] = None
     
     model_config = ConfigDict(extra="ignore")
 
