@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
+import { NotificationBell } from "@/components/dashboard/notification-bell";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Menu } from "lucide-react";
 
@@ -73,14 +74,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           >
             <Menu className="w-6 h-6" />
           </button>
-          <span className="text-sm font-bold text-[#111965]">
+          <span className="text-sm font-bold text-[#111965] dark:text-white">
             {t("dashboardLayout.studentDashboard") || "Student Dashboard"}
           </span>
-          <div className="w-6" />
+          <NotificationBell />
         </div>
 
         {/* Content Body */}
         <div className="flex-1 p-3 sm:p-5 lg:p-7 max-w-[1560px] w-full mx-auto">
+          <div className="mb-3 hidden justify-end lg:flex">
+            <NotificationBell />
+          </div>
           {reduceMotion ? (
             children
           ) : (

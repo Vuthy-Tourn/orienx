@@ -9,6 +9,7 @@ import { Logo } from "@/components/layout/logo";
 import { SettingsModal } from "@/components/settings/settings-modal";
 import {
   LayoutDashboard,
+  Bell,
   BrainCircuit,
   Compass,
   Sliders,
@@ -76,6 +77,11 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
       href: "/dashboard/eligibility",
       label: t("dashboardLayout.eligibility", "BACII Checker"),
       icon: GraduationCap,
+    },
+    {
+      href: "/dashboard/notifications",
+      label: t("dashboardLayout.notifications", "Notifications"),
+      icon: Bell,
     },
   ];
 

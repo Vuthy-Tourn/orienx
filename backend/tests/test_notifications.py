@@ -77,3 +77,95 @@ async def test_telegram_settings_and_link_flow(client, monkeypatch):
         await client.delete(
             f"/api/v1/admin/users/{user_id}", headers=admin_headers
         )
+
+
+@pytest.mark.asyncio
+async def test_in_app_notification_center_flow(client):
+    from datetime import date, timedelta
+
+    admin_token = await _login(
+        client, "admin@futera.edu.kh", "AdminPass123!"
+    )
+    admin_headers = {"Authorization": f"Bearer {admin_token}"}
+
+    email = f"inapp-test-{uuid.uuid4().hex[:10]}@futera.edu.kh"
+    password = "InAppPass123!"
+    created = await client.post(
+        "/api/v1/admin/users",
+        json={
+            "email": email,
+            "password": password,
+            "full_name_en": "In-App Notification Test",
+            "roles": ["STUDENT"],
+        },
+        headers=admin_headers,
+    )
+    assert created.status_code == 200, created.text
+    user_id = created.json()["data"]["id"]
+
+    try:
+        token = await _login(client, email, password)
+        headers = {"Authorization": f"Bearer {token}"}
+
+        universities = await client.get("/api/v1/universities?limit=1")
+        assert universities.status_code == 200, universities.text
+        university_id = universities.json()["data"][0]["id"]
+
+        deadline = (date.today() + timedelta(days=2)).isoformat()
+        plan = await client.post(
+            "/api/v1/plans",
+            json={
+                "kind": "UNIVERSITY",
+                "target_id": university_id,
+                "deadline": deadline,
+                "reminder_days": 7,
+            },
+            headers=headers,
+        )
+        assert plan.status_code == 200, plan.text
+
+        summary = await client.get(
+            "/api/v1/notifications/summary", headers=headers
+        )
+        assert summary.status_code == 200, summary.text
+        summary_data = summary.json()["data"]
+        assert summary_data["unread_count"] >= 1
+
+        listing = await client.get(
+            "/api/v1/notifications?status=all&page_size=50",
+            headers=headers,
+        )
+        assert listing.status_code == 200, listing.text
+        listing_data = listing.json()["data"]
+        assert listing_data["total"] >= 1
+        deadline_item = next(
+            (
+                item
+                for item in listing_data["items"]
+                if item["category"] in {"DEADLINE", "SCHOLARSHIP"}
+            ),
+            None,
+        )
+        assert deadline_item is not None
+
+        marked = await client.patch(
+            f"/api/v1/notifications/{deadline_item['id']}",
+            json={"is_read": True},
+            headers=headers,
+        )
+        assert marked.status_code == 200, marked.text
+        assert marked.json()["data"]["is_read"] is True
+
+        read_all = await client.post(
+            "/api/v1/notifications/read-all", headers=headers
+        )
+        assert read_all.status_code == 200, read_all.text
+
+        after = await client.get(
+            "/api/v1/notifications/summary", headers=headers
+        )
+        assert after.json()["data"]["unread_count"] == 0
+    finally:
+        await client.delete(
+            f"/api/v1/admin/users/{user_id}", headers=admin_headers
+        )

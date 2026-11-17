@@ -1,22 +1,30 @@
 import secrets
+import uuid
 from datetime import datetime, timedelta, timezone
+from typing import Optional
 
 import httpx
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.database import get_db
 from app.core.dependencies import get_current_student
 from app.models.auth import User
-from app.models.notifications import NotificationPreference
+from app.models.notifications import InAppNotification, NotificationPreference
 from app.schemas.common import ApiResponse
 from app.schemas.notifications import (
+    InAppNotificationListOut,
+    InAppNotificationOut,
+    InAppNotificationReadAllOut,
+    InAppNotificationSummaryOut,
+    InAppNotificationUpdateIn,
     NotificationSettingsOut,
     NotificationSettingsUpdateIn,
     TelegramLinkOut,
 )
+from app.services.in_app_notifications import sync_user_notifications
 
 router = APIRouter()
 
@@ -156,3 +164,233 @@ async def send_telegram_test(
     if response.status_code != 200:
         raise HTTPException(status_code=502, detail="Telegram delivery failed")
     return ApiResponse(success=True, message="Test message sent", data={"sent": True})
+
+
+# =========================================================================
+# In-app notification center
+# =========================================================================
+
+NOTIFICATION_CATEGORIES = {
+    "DEADLINE",
+    "DOCUMENT",
+    "SCHOLARSHIP",
+    "SYSTEM",
+}
+
+
+def _notification_out(
+    notification: InAppNotification,
+) -> InAppNotificationOut:
+    return InAppNotificationOut(
+        id=notification.id,
+        category=notification.category,
+        title_en=notification.title_en,
+        title_km=notification.title_km,
+        message_en=notification.message_en,
+        message_km=notification.message_km,
+        href=notification.href,
+        is_read=notification.is_read,
+        read_at=notification.read_at,
+        created_at=notification.created_at,
+    )
+
+
+@router.get(
+    "/summary",
+    response_model=ApiResponse[InAppNotificationSummaryOut],
+)
+async def notification_summary(
+    current_user: User = Depends(get_current_student),
+    db: AsyncSession = Depends(get_db),
+):
+    await sync_user_notifications(db, current_user.id)
+
+    unread_count = (
+        await db.execute(
+            select(func.count())
+            .select_from(InAppNotification)
+            .where(
+                InAppNotification.user_id == current_user.id,
+                InAppNotification.is_read == False,
+            )
+        )
+    ).scalar_one()
+    items = (
+        await db.execute(
+            select(InAppNotification)
+            .where(InAppNotification.user_id == current_user.id)
+            .order_by(
+                InAppNotification.created_at.desc(),
+                InAppNotification.id.desc(),
+            )
+            .limit(5)
+        )
+    ).scalars().all()
+
+    return ApiResponse(
+        success=True,
+        data=InAppNotificationSummaryOut(
+            unread_count=int(unread_count or 0),
+            items=[_notification_out(item) for item in items],
+        ),
+    )
+
+
+@router.post(
+    "/read-all",
+    response_model=ApiResponse[InAppNotificationReadAllOut],
+)
+async def mark_all_notifications_read(
+    current_user: User = Depends(get_current_student),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        update(InAppNotification)
+        .where(
+            InAppNotification.user_id == current_user.id,
+            InAppNotification.is_read == False,
+        )
+        .values(
+            is_read=True,
+            read_at=datetime.now(timezone.utc),
+        )
+    )
+    await db.commit()
+    return ApiResponse(
+        success=True,
+        message="All notifications marked as read",
+        data=InAppNotificationReadAllOut(updated=result.rowcount or 0),
+    )
+
+
+@router.get("", response_model=ApiResponse[InAppNotificationListOut])
+async def list_notifications(
+    status_filter: str = Query("all", alias="status"),
+    category: Optional[str] = Query(None),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=50),
+    current_user: User = Depends(get_current_student),
+    db: AsyncSession = Depends(get_db),
+):
+    if status_filter not in {"all", "unread", "read"}:
+        raise HTTPException(status_code=400, detail="Invalid notification status")
+    normalized_category = category.upper() if category else None
+    if (
+        normalized_category
+        and normalized_category not in NOTIFICATION_CATEGORIES
+    ):
+        raise HTTPException(status_code=400, detail="Invalid notification category")
+
+    await sync_user_notifications(db, current_user.id)
+
+    conditions = [InAppNotification.user_id == current_user.id]
+    if status_filter == "unread":
+        conditions.append(InAppNotification.is_read == False)
+    elif status_filter == "read":
+        conditions.append(InAppNotification.is_read == True)
+    if normalized_category:
+        conditions.append(InAppNotification.category == normalized_category)
+
+    total = (
+        await db.execute(
+            select(func.count())
+            .select_from(InAppNotification)
+            .where(*conditions)
+        )
+    ).scalar_one()
+    unread_count = (
+        await db.execute(
+            select(func.count())
+            .select_from(InAppNotification)
+            .where(
+                InAppNotification.user_id == current_user.id,
+                InAppNotification.is_read == False,
+            )
+        )
+    ).scalar_one()
+    items = (
+        await db.execute(
+            select(InAppNotification)
+            .where(*conditions)
+            .order_by(
+                InAppNotification.created_at.desc(),
+                InAppNotification.id.desc(),
+            )
+            .offset((page - 1) * page_size)
+            .limit(page_size)
+        )
+    ).scalars().all()
+
+    return ApiResponse(
+        success=True,
+        data=InAppNotificationListOut(
+            items=[_notification_out(item) for item in items],
+            total=int(total or 0),
+            unread_count=int(unread_count or 0),
+            page=page,
+            page_size=page_size,
+            has_more=page * page_size < int(total or 0),
+        ),
+    )
+
+
+@router.patch(
+    "/{notification_id}",
+    response_model=ApiResponse[InAppNotificationOut],
+)
+async def update_notification(
+    notification_id: uuid.UUID,
+    body: InAppNotificationUpdateIn,
+    current_user: User = Depends(get_current_student),
+    db: AsyncSession = Depends(get_db),
+):
+    notification = (
+        await db.execute(
+            select(InAppNotification).where(
+                InAppNotification.id == notification_id,
+                InAppNotification.user_id == current_user.id,
+            )
+        )
+    ).scalar_one_or_none()
+    if not notification:
+        raise HTTPException(status_code=404, detail="Notification not found")
+
+    notification.is_read = body.is_read
+    notification.read_at = (
+        datetime.now(timezone.utc) if body.is_read else None
+    )
+    await db.commit()
+    await db.refresh(notification)
+    return ApiResponse(
+        success=True,
+        data=_notification_out(notification),
+    )
+
+
+@router.delete(
+    "/{notification_id}",
+    response_model=ApiResponse[dict],
+)
+async def delete_notification(
+    notification_id: uuid.UUID,
+    current_user: User = Depends(get_current_student),
+    db: AsyncSession = Depends(get_db),
+):
+    notification = (
+        await db.execute(
+            select(InAppNotification).where(
+                InAppNotification.id == notification_id,
+                InAppNotification.user_id == current_user.id,
+            )
+        )
+    ).scalar_one_or_none()
+    if not notification:
+        raise HTTPException(status_code=404, detail="Notification not found")
+
+    await db.delete(notification)
+    await db.commit()
+    return ApiResponse(
+        success=True,
+        message="Notification deleted",
+        data={"id": str(notification_id)},
+    )

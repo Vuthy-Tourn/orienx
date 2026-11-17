@@ -24,7 +24,11 @@ from app.models.favorites import (
     UserActivity,
 )
 from app.models.plan import ApplicationPlan, ApplicationPlanDocument
-from app.models.notifications import NotificationPreference, NotificationLog
+from app.models.notifications import (
+    InAppNotification,
+    NotificationLog,
+    NotificationPreference,
+)
 
 __all__ = [
     "Base",
@@ -65,5 +69,6 @@ __all__ = [
     "ApplicationPlanDocument",
     "NotificationPreference",
     "NotificationLog",
+    "InAppNotification",
 ]
 
