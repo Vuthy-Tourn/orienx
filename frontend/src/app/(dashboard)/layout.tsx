@@ -1,21 +1,53 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { Menu, ShieldCheck, UserRound } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { NotificationBell } from "@/components/dashboard/notification-bell";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Menu } from "lucide-react";
+
+const PAGE_TITLES: Record<string, { en: string; km: string }> = {
+  "/dashboard": { en: "Dashboard", km: "ផ្ទាំងគ្រប់គ្រង" },
+  "/dashboard/assessments/personality": {
+    en: "Personality assessment",
+    km: "ការវាយតម្លៃបុគ្គលិកលក្ខណៈ",
+  },
+  "/dashboard/assessments/riasec": {
+    en: "RIASEC assessment",
+    km: "ការវាយតម្លៃ RIASEC",
+  },
+  "/dashboard/assessments/preferences": {
+    en: "Academic preferences",
+    km: "ចំណូលចិត្តសិក្សា",
+  },
+  "/dashboard/recommendations": {
+    en: "Recommendations",
+    km: "ការណែនាំ",
+  },
+  "/dashboard/favorites": { en: "Favorites", km: "ចំណូលចិត្ត" },
+  "/dashboard/plan": { en: "My plan", km: "ផែនការរបស់ខ្ញុំ" },
+  "/dashboard/eligibility": { en: "BACII checker", km: "ការពិនិត្យ BACII" },
+  "/dashboard/notifications": {
+    en: "Notifications",
+    km: "ការជូនដំណឹង",
+  },
+  "/dashboard/profile": { en: "Profile", km: "ប្រវត្តិរូប" },
+};
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname() ?? "/dashboard";
   const reduceMotion = useReducedMotion();
   const { user, isLoading } = useAuth();
-  const { t } = useLanguage();
+  const { language } = useLanguage();
+  const isKm = language === "km";
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -56,6 +88,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return null;
   }
 
+  const isAdmin = user.roles?.some(
+    (role) => role === "ADMIN" || role === "SUPER_ADMIN"
+  );
+  const pageTitle = PAGE_TITLES[pathname] || {
+    en: "Student dashboard",
+    km: "ផ្ទាំងគ្រប់គ្រងសិស្ស",
+  };
+  const activeTitle = isKm ? pageTitle.km : pageTitle.en;
+  const profileHref = isAdmin ? "/admin" : "/dashboard/profile";
+  const profileLabel = isAdmin
+    ? isKm
+      ? "ផ្ទាំងអភិបាល"
+      : "Admin panel"
+    : isKm
+      ? "ប្រវត្តិរូប"
+      : "My profile";
+  const ProfileIcon = isAdmin ? ShieldCheck : UserRound;
+
   return (
     <div className="min-h-screen bg-[#F4F7FC] flex">
       {/* Fixed-Height Dashboard Sidebar Component (Fixed to h-screen, sticky top-0) */}
@@ -66,25 +116,65 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Mobile Header Bar */}
-        <div className="lg:hidden bg-white border-b border-[#E6E8F0] p-4 flex items-center justify-between">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-1.5 rounded-lg text-slate-600 hover:bg-slate-100"
-          >
-            <Menu className="w-6 h-6" />
-          </button>
-          <span className="text-sm font-bold text-[#111965] dark:text-white">
-            {t("dashboardLayout.studentDashboard") || "Student Dashboard"}
-          </span>
-          <NotificationBell />
-        </div>
+        <header className="sticky top-0 z-30 border-b border-[#E6E8F0] bg-white/90 backdrop-blur-md dark:border-white/10 dark:bg-[#090D24]/90">
+          <div className="flex h-16 items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+            <div className="flex min-w-0 items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => setSidebarOpen(true)}
+                className="rounded-lg p-2 text-[#64748B] transition-colors hover:bg-[#F0F2FA] dark:text-slate-400 dark:hover:bg-white/10 lg:hidden"
+                aria-label={isKm ? "បើកម៉ឺនុយសិស្ស" : "Open student menu"}
+              >
+                <Menu className="h-5 w-5" />
+              </button>
+              <div className="min-w-0">
+                <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8] dark:text-slate-400">
+                  {isKm ? "កន្លែងធ្វើការសិស្ស" : "Student workspace"}
+                </div>
+                <div className="min-w-0 overflow-hidden">
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.div
+                      key={pathname}
+                      initial={reduceMotion ? false : { opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={reduceMotion ? undefined : { opacity: 0, y: -5 }}
+                      transition={{
+                        duration: reduceMotion ? 0 : 0.18,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="truncate text-sm font-black text-[#111965] dark:text-white"
+                    >
+                      {activeTitle}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex shrink-0 items-center gap-2 sm:gap-2.5">
+              <span className="hidden text-[11px] font-semibold text-[#68708A] dark:text-slate-400 md:inline">
+                {user.email}
+              </span>
+              <div className="hidden sm:block">
+                <LanguageSwitcher />
+              </div>
+              <ThemeToggle />
+              <NotificationBell />
+              <Link
+                href={profileHref}
+                aria-label={profileLabel}
+                title={profileLabel}
+                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-[#E6E8F0] bg-white px-3 py-1.5 text-[11px] font-bold text-[#111965] transition-colors hover:bg-[#F0F2FA] dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
+              >
+                <ProfileIcon className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">{profileLabel}</span>
+              </Link>
+            </div>
+          </div>
+        </header>
 
         {/* Content Body */}
         <div className="flex-1 p-3 sm:p-5 lg:p-7 max-w-[1560px] w-full mx-auto">
-          <div className="mb-3 hidden justify-end lg:flex">
-            <NotificationBell />
-          </div>
           {reduceMotion ? (
             children
           ) : (
