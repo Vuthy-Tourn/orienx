@@ -242,7 +242,7 @@ export function ShareReportDialog({
       onOpenChange={(next) => {
         if (!creating) onOpenChange(next);
       }}
-      className="max-h-[92vh] max-w-2xl overflow-y-auto"
+      className="max-h-[92vh] max-w-2xl overflow-y-auto overscroll-contain [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
     >
       <DialogHeader>
         <div className="flex items-start gap-3 pr-8">

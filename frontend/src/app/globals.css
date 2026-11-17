@@ -1002,6 +1002,23 @@ body {
   display: none;
 }
 
+/* Dialogs and modals stay scrollable but never show a scrollbar. */
+[role="dialog"],
+[role="alertdialog"],
+[role="dialog"] .overflow-y-auto,
+[role="alertdialog"] .overflow-y-auto {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+[role="dialog"]::-webkit-scrollbar,
+[role="alertdialog"]::-webkit-scrollbar,
+[role="dialog"] .overflow-y-auto::-webkit-scrollbar,
+[role="alertdialog"] .overflow-y-auto::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
 /* MagicBento takes a numeric column count, so collapse it here:
    4 across on desktop, 2 on tablet, 1 on phones (auto-height there). */
 .bento-pillars.magic-bento {
