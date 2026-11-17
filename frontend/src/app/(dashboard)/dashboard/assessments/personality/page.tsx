@@ -398,6 +398,10 @@ export default function PersonalityAssessmentPage() {
         archetype: getLocalized({ en: arch.nameEn, km: arch.nameKm }),
         role: getLocalized({ en: arch.roleNameEn, km: arch.roleNameKm }),
         tagline: getLocalized({ en: arch.taglineEn, km: arch.taglineKm }),
+        characterImageUrl:
+          typeof window !== "undefined"
+            ? `${window.location.origin}/images/personality-types/${pType.toLowerCase()}.svg`
+            : undefined,
         dimensions,
         highlights,
         recommendations,

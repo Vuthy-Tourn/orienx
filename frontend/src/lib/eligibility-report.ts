@@ -453,6 +453,9 @@ export async function downloadExcelReport(model: EligibilityReportModel) {
 }
 
 function buildPdfHtml(model: EligibilityReportModel): string {
+  const origin =
+    typeof window !== "undefined" ? window.location.origin : "";
+  const logoUrl = `${origin}/images/orienx-mark.png`;
   const rowsFor = (section: EligibilityReportSection) => {
     if (section.rows.length === 0) return "";
     return section.rows
@@ -539,12 +542,7 @@ function buildPdfHtml(model: EligibilityReportModel): string {
     gap: 16px; border-bottom: 2px solid #111965; padding-bottom: 12px;
   }
   .brand { display: flex; align-items: center; gap: 8px; }
-  .brand-mark {
-    width: 32px; height: 32px; border-radius: 9px;
-    background: #111965; color: #F7CE4D;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px; font-weight: 900;
-  }
+  .brand-logo { width: 34px; height: 38px; object-fit: contain; flex-shrink: 0; }
   .brand-name { font-size: 20px; font-weight: 900; letter-spacing: -0.4px; color: #111965; }
   .brand-name span { color: #F69D0D; }
   .eyebrow { margin-top: 10px; font-size: 8.5px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #68708A; }
@@ -639,7 +637,7 @@ function buildPdfHtml(model: EligibilityReportModel): string {
     <header class="report-header">
       <div>
         <div class="brand">
-          <div class="brand-mark">O</div>
+          <img class="brand-logo" src="${escapeHtml(logoUrl)}" alt="OrienX" />
           <div class="brand-name">Orien<span>X</span></div>
         </div>
         <div class="eyebrow">${escapeHtml(model.labels.eyebrow)}</div>
@@ -694,6 +692,11 @@ function buildPdfHtml(model: EligibilityReportModel): string {
       <span>${escapeHtml(model.labels.generatedBy)}</span>
     </footer>
   </div>
+  <script>
+    window.addEventListener("load", function () {
+      setTimeout(function () { window.print(); }, 350);
+    });
+  </script>
 </body>
 </html>`;
 }
@@ -707,14 +710,6 @@ export function openPdfReport(model: EligibilityReportModel): boolean {
   reportWindow.document.write(buildPdfHtml(model));
   reportWindow.document.close();
   reportWindow.focus();
-
-  window.setTimeout(() => {
-    try {
-      reportWindow.print();
-    } catch {
-      // The user can still use the print button in the report window.
-    }
-  }, 500);
 
   return true;
 }

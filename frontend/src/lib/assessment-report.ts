@@ -48,6 +48,7 @@ export interface AssessmentReportModel {
   archetype: string;
   role?: string;
   tagline: string;
+  characterImageUrl?: string;
   dimensions: AssessmentDimension[];
   highlights: AssessmentHighlight[];
   recommendations: AssessmentRecommendation[];
@@ -279,6 +280,9 @@ export async function downloadAssessmentExcel(model: AssessmentReportModel) {
 }
 
 function buildAssessmentPdfHtml(model: AssessmentReportModel): string {
+  const origin =
+    typeof window !== "undefined" ? window.location.origin : "";
+  const logoUrl = `${origin}/images/orienx-mark.png`;
   const dimensions = model.dimensions
     .map(
       (dimension) => `<div class="dimension">
@@ -338,7 +342,9 @@ function buildAssessmentPdfHtml(model: AssessmentReportModel): string {
   .page { padding: 18px 22px 8px; }
   .report-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; border-bottom: 2px solid #111965; padding-bottom: 12px; }
   .brand { display: flex; align-items: center; gap: 8px; }
-  .brand-mark { width: 32px; height: 32px; border-radius: 9px; background: #111965; color: #F7CE4D; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; }
+  .brand-logo { width: 34px; height: 38px; object-fit: contain; flex-shrink: 0; }
+  .character-card { width: 112px; border-radius: 12px; background: linear-gradient(145deg, #111965, #1A2580); border: 1px solid #111965; display: flex; align-items: center; justify-content: center; padding: 6px; overflow: hidden; }
+  .character-card img { max-width: 100%; max-height: 120px; object-fit: contain; }
   .brand-name { font-size: 20px; font-weight: 900; letter-spacing: -0.4px; color: #111965; }
   .brand-name span { color: #F69D0D; }
   .eyebrow { margin-top: 10px; font-size: 8.5px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #68708A; }
@@ -389,7 +395,7 @@ function buildAssessmentPdfHtml(model: AssessmentReportModel): string {
     <header class="report-header">
       <div>
         <div class="brand">
-          <div class="brand-mark">O</div>
+          <img class="brand-logo" src="${escapeHtml(logoUrl)}" alt="OrienX" />
           <div class="brand-name">Orien<span>X</span></div>
         </div>
         <div class="eyebrow">${escapeHtml(model.labels.eyebrow)}</div>
@@ -406,6 +412,7 @@ function buildAssessmentPdfHtml(model: AssessmentReportModel): string {
         <div class="label">${escapeHtml(model.headlineLabel)}</div>
         <div class="value">${escapeHtml(model.headline)}</div>
       </div>
+      ${model.characterImageUrl ? `<div class="character-card"><img src="${escapeHtml(model.characterImageUrl)}" alt="" /></div>` : ""}
       <div class="info-card">
         <div class="info-row"><span>${escapeHtml(model.labels.preparedFor)}</span><b>${escapeHtml(model.studentName || "—")}</b></div>
         <div class="info-row"><span>${escapeHtml(model.labels.archetype)}</span><b>${escapeHtml(model.archetype)}</b></div>
@@ -437,6 +444,11 @@ function buildAssessmentPdfHtml(model: AssessmentReportModel): string {
       <span>OrienX</span>
     </footer>
   </div>
+  <script>
+    window.addEventListener("load", function () {
+      setTimeout(function () { window.print(); }, 350);
+    });
+  </script>
 </body>
 </html>`;
 }
@@ -450,14 +462,6 @@ export function openAssessmentPdf(model: AssessmentReportModel): boolean {
   reportWindow.document.write(buildAssessmentPdfHtml(model));
   reportWindow.document.close();
   reportWindow.focus();
-
-  window.setTimeout(() => {
-    try {
-      reportWindow.print();
-    } catch {
-      // The user can still use the print button in the report window.
-    }
-  }, 500);
 
   return true;
 }
