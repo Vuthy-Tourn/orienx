@@ -1,13 +1,12 @@
 "use client";
 
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { gsap } from "gsap";
 
-import { AuthStarfield } from "@/components/auth/auth-starfield";
 import { Logo } from "@/components/layout/logo";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { useLanguage } from "@/contexts/language-context";
@@ -28,6 +27,36 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isRegister = pathname === "/register";
   const rootRef = useRef<HTMLDivElement>(null);
+  const [showVideo, setShowVideo] = useState(false);
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    if (window.matchMedia("(max-width: 1023px)").matches) return;
+
+    let idleId: number | undefined;
+    let timeoutId: number | undefined;
+    const win = window as Window & {
+      requestIdleCallback?: (
+        callback: IdleRequestCallback,
+        options?: IdleRequestOptions
+      ) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    const start = () => setShowVideo(true);
+
+    if (typeof win.requestIdleCallback === "function") {
+      idleId = win.requestIdleCallback(start, { timeout: 1200 });
+    } else {
+      timeoutId = win.setTimeout(start, 300);
+    }
+
+    return () => {
+      if (idleId !== undefined && typeof win.cancelIdleCallback === "function") {
+        win.cancelIdleCallback(idleId);
+      }
+      if (timeoutId !== undefined) win.clearTimeout(timeoutId);
+    };
+  }, []);
   // Coordinated entrance for the full-bleed background, brand and form card.
   useIsoLayoutEffect(() => {
     const root = rootRef.current;
@@ -129,7 +158,22 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           />
         </picture>
 
-        <AuthStarfield className="pointer-events-none absolute inset-0 h-full w-full" />
+        {showVideo && (
+          <video
+            className="pointer-events-none absolute inset-0 hidden h-full w-full select-none object-cover object-center opacity-0 transition-opacity duration-700 lg:block"
+            src="/videos/auth-background.mp4"
+            poster="/images/auth/auth-background-poster.webp"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            onCanPlay={(event) => {
+              event.currentTarget.style.opacity = "1";
+              void event.currentTarget.play().catch(() => {});
+            }}
+          />
+        )}
 
         <div className="absolute inset-0 bg-[#0A0F3D]/20" />
         <div
