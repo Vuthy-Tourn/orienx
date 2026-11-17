@@ -1,5 +1,5 @@
 {
-  "scope": "Minimum published admission requirements for bachelor's programs. Verified against the listed official university page on 2026-11-17. Grade E is the minimum passing BACII grade.",
+  "scope": "Minimum published admission requirements for bachelor's programs, with separate associate rules where published. Verified against the listed official university page on 2026-11-17. Grade E is the minimum passing BACII grade; grade F is used only where an institution explicitly accepts a failed BacII for associate/diploma entry.",
   "universities": [
     {
       "slug": "rupp",
@@ -241,6 +241,100 @@
         "source_url": "https://www.uhst.edu.kh/study/admission",
         "verified": true
       }
+    },
+    {
+      "slug": "dmuc",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "verified": true,
+      "admission_notes": "Undergraduate Foundation Year entry requires a final overall pass in the Diploma of Upper Secondary Education (BacII) or equivalent. Direct entry requires a DMUC or recognised Foundation Certificate. English proficiency: IELTS 5.0 overall (no component below 5.0) for Foundation entry; IELTS 6.0 for direct entry. No higher BacII letter-grade cutoff is published.",
+      "source_url": "https://dmuc.edu.kh/entry-requirements/"
+    },
+    {
+      "slug": "beltei",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "verified": true,
+      "admission_notes": "National Program applicants must have completed Grade 12 and passed the BacII or hold an equivalent certificate. International Program applicants also take an English proficiency test; IELTS 5.0 or TOEFL iBT 45+ may qualify for automatic admission. No higher BacII letter-grade cutoff is published.",
+      "source_url": "https://www.beltei.edu.kh/biu/admission/register"
+    },
+    {
+      "slug": "camtech",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "verified": true,
+      "admission_notes": "High school diploma (BacII) required. All applicants take CamTech's Mathematics and English entrance exams and an interview. No higher BacII letter-grade cutoff is published.",
+      "source_url": "https://camtech.edu.kh/wp-content/uploads/2023/12/Academic_Info_ENG_proofread_with_Women_in_STEM_updated_2023_2024-2.pdf"
+    },
+    {
+      "slug": "hru",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "verified": true,
+      "admission_notes": "Bachelor's applicants must hold a Senior High School Certificate (BacII) or equivalent. HRU's associate programs also accept a failed national high school exam, but bachelor's programs require the certificate.",
+      "source_url": "https://hru.edu.kh/en/admissions"
+    },
+    {
+      "slug": "iu",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "verified": true,
+      "admission_notes": "Applicants must hold a certified high school diploma or equivalent for the Foundation Year; bachelor's entry requires the IU Foundation Diploma or equivalent and an entrance exam if required. Medical studies (Medicine, Dentistry, Nursing, Pharmacy) must also meet MoEYS/Ministry of Health requirements. No higher BacII letter-grade cutoff is published.",
+      "source_url": "https://web.archive.org/web/20251028175804/https://www.iu.edu.kh/academics/"
+    },
+    {
+      "slug": "uhs",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "verified": true,
+      "admission_notes": "The official UHS prospectus requires a high school certificate and a pass in the national entry examination for Medicine, Pharmacy and related health bachelor programs. Selection follows Ministry of Health and MoEYS policies; no higher BacII letter-grade cutoff is published.",
+      "source_url": "https://www.uhs.edu.kh/registrar/new_pdf/1732675365_UHS%20Prospectus%202023_B_14112023_1400.pdf"
+    },
+    {
+      "slug": "usea",
+      "min_bacii_grade": "E",
+      "required_subjects": [],
+      "verified": true,
+      "admission_notes": "High school certificate (BacII) required, plus an application form and a pass in the USEA entrance exam. No higher BacII letter-grade cutoff is published.",
+      "source_url": "https://usea.edu.kh/about/faq"
+    },
+    {
+      "slug": "acac",
+      "required_subjects": [],
+      "verified": true,
+      "admission_notes": "Associate/diploma applicants need 12 years of schooling (BacII pass or fail) or a technical certificate level 3, plus basic English. Supporting documents include high school/university certificates and transcripts.",
+      "associate": {
+        "min_bacii_grade": "F",
+        "required_subjects": [],
+        "verified": true,
+        "admission_notes": "Associate/diploma applicants need 12 years of schooling (BacII pass or fail) or a technical certificate level 3, plus basic English. Supporting documents include high school/university certificates and transcripts.",
+        "source_url": "https://acac.edu.kh/application-process"
+      }
+    },
+    {
+      "slug": "kit",
+      "required_subjects": [],
+      "verified": true,
+      "programs": [
+        {
+          "major_slug": "software-engineering",
+          "degree_level": "BACHELOR",
+          "min_bacii_grade": "D",
+          "required_subjects": [],
+          "verified": true,
+          "admission_notes": "Official KIT minimum entry requirement: national examination overall grade D. Software Engineering and Planning and Design applicants also need a minimum grade D in Mathematics and Physics; an E or F in either subject requires a preparatory course. Intermediate English proficiency is required, with a bridging course available.",
+          "source_url": "https://kit.edu.kh/requirements"
+        },
+        {
+          "major_slug": "architecture-urban-planning",
+          "degree_level": "BACHELOR",
+          "min_bacii_grade": "D",
+          "required_subjects": [],
+          "verified": true,
+          "admission_notes": "Official KIT minimum entry requirement: national examination overall grade D. Software Engineering and Planning and Design applicants also need a minimum grade D in Mathematics and Physics; an E or F in either subject requires a preparatory course. Intermediate English proficiency is required, with a bridging course available.",
+          "source_url": "https://kit.edu.kh/requirements"
+        }
+      ]
     }
   ]
 }
