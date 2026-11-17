@@ -9,6 +9,9 @@ import {
   CheckCircle2,
   Download,
   ExternalLink,
+  FileJson,
+  FileSpreadsheet,
+  FileText,
   GraduationCap,
   Info,
   Loader2,
@@ -17,12 +20,28 @@ import {
   Search,
   ShieldAlert,
   ShieldCheck,
+  Table2,
 } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import { useToast } from "@/components/ui/toast";
 import { Select } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  buildEligibilityReport,
+  downloadCsvReport,
+  downloadExcelReport,
+  downloadJsonReport,
+  openPdfReport,
+  type EligibilityReportFormat,
+  type EligibilityReportLabels,
+} from "@/lib/eligibility-report";
 import { cn, getErrorMessage } from "@/lib/utils";
 
 interface EligibilityOffering {
@@ -223,6 +242,9 @@ export default function EligibilityPage() {
   const [degreeFilter, setDegreeFilter] = useState<
     "ALL" | "BACHELOR" | "ASSOCIATE" | "F"
   >("ALL");
+  const [exportOpen, setExportOpen] = useState(false);
+  const [exportingFormat, setExportingFormat] =
+    useState<EligibilityReportFormat | null>(null);
   const didInitialize = useRef(false);
 
   const { data: profile } = useQuery({
@@ -309,135 +331,142 @@ export default function EligibilityPage() {
     (offering) => offering.degree_level === "ASSOCIATE"
   ).length;
 
-  const handleExportReport = () => {
-    if (!data || !grade) return;
+  const studentName = profile
+    ? (isKm ? profile.full_name_km : profile.full_name_en) ||
+      profile.full_name_en ||
+      profile.full_name_km ||
+      ""
+    : "";
 
-    const rows: string[][] = [];
-    const addRow = (
-      ...cells: Array<string | number | null | undefined>
-    ) => {
-      rows.push(cells.map((cell) => (cell == null ? "" : String(cell))));
-    };
-    const csvCell = (value: unknown) => {
-      const text = value == null ? "" : String(value);
-      return `"${text.replace(/"/g, '""')}"`;
-    };
-    const generatedAt = new Date();
-    const scopeLabel =
-      degreeFilter === "ALL"
-        ? t("eligibilityPage.allLevels")
-        : degreeFilter === "F"
-        ? t("eligibilityPage.acceptsF")
-        : degreeFilter === "BACHELOR"
-        ? t("eligibilityPage.bachelor")
-        : t("eligibilityPage.associate");
-    const tableHeader = [
-      t("eligibilityPage.reportStatus"),
-      t("eligibilityPage.reportUniversity"),
-      t("eligibilityPage.reportAcronym"),
-      t("eligibilityPage.reportMajor"),
-      t("eligibilityPage.reportDegree"),
-      t("eligibilityPage.reportDuration"),
-      t("eligibilityPage.reportTuition"),
-      t("eligibilityPage.reportMinGrade"),
-      t("eligibilityPage.reportNotes"),
-      t("eligibilityPage.reportSource"),
-    ];
-    const degreeLabel = (level: string) =>
-      level === "ASSOCIATE"
-        ? t("eligibilityPage.associate")
-        : level === "BACHELOR"
-        ? t("eligibilityPage.bachelor")
-        : level;
-
-    addRow(t("eligibilityPage.reportTitle"));
-    addRow(t("eligibilityPage.reportGrade"), grade);
-    addRow(
-      t("eligibilityPage.reportGenerated"),
-      generatedAt.toLocaleString(isKm ? "km-KH" : "en-US")
-    );
-    addRow(t("eligibilityPage.reportScope"), scopeLabel);
-    if (search.trim()) {
-      addRow(t("eligibilityPage.reportSearch"), search.trim());
-    }
-    addRow("");
-    addRow(t("eligibilityPage.reportSummary"));
-    addRow(t("eligibilityPage.reportEligible"), filteredEligible.length);
-    addRow(t("eligibilityPage.reportBelow"), filteredBelow.length);
-    addRow(t("eligibilityPage.reportUnverified"), filteredUnverified.length);
-    addRow(
-      t("eligibilityPage.reportMissing"),
-      data.unverified_programs_count
-    );
-    addRow("");
-    addRow(t("eligibilityPage.degreeNote"));
-    addRow("");
-
-    const addSection = (
-      title: string,
-      items: EligibilityOffering[],
-      status: string
-    ) => {
-      if (items.length === 0) return;
-      addRow(title);
-      addRow(...tableHeader);
-      items.forEach((offering) => {
-        addRow(
-          status,
-          getLocalized(offering.university_name),
-          getLocalized(offering.university_acronym),
-          getLocalized(offering.major_name),
-          degreeLabel(offering.degree_level),
-          offering.duration_years,
-          offering.tuition_annual_usd ?? "",
-          offering.min_bacii_grade ?? "",
-          offering.admission_notes ?? "",
-          offering.admission_source_url ?? ""
-        );
-      });
-      addRow("");
-    };
-
-    addSection(
-      t("eligibilityPage.reportEligible"),
-      filteredEligible,
-      t("eligibilityPage.reportStatusEligible")
-    );
-    addSection(
-      t("eligibilityPage.reportBelow"),
-      filteredBelow,
-      t("eligibilityPage.reportStatusBelow")
-    );
-    addSection(
-      t("eligibilityPage.reportUnverified"),
-      filteredUnverified,
-      t("eligibilityPage.reportStatusUnverified")
-    );
-
-    if (
-      filteredEligible.length === 0 &&
-      filteredBelow.length === 0 &&
-      filteredUnverified.length === 0
-    ) {
-      addRow(t("eligibilityPage.noMatches"));
-    }
-
-    const csv = `\uFEFF${rows
-      .map((row) => row.map(csvCell).join(","))
-      .join("\r\n")}`;
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `orienx-bacii-report-${grade}-${generatedAt
-      .toISOString()
-      .slice(0, 10)}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
-    toast.success(t("eligibilityPage.reportExported"));
+  const reportLabels: EligibilityReportLabels = {
+    title: t("eligibilityPage.reportTitle"),
+    grade: t("eligibilityPage.reportGrade"),
+    generated: t("eligibilityPage.reportGenerated"),
+    scope: t("eligibilityPage.reportScope"),
+    search: t("eligibilityPage.reportSearch"),
+    summary: t("eligibilityPage.reportSummary"),
+    eligible: t("eligibilityPage.reportEligible"),
+    below: t("eligibilityPage.reportBelow"),
+    unverified: t("eligibilityPage.reportUnverified"),
+    missing: t("eligibilityPage.reportMissing"),
+    status: t("eligibilityPage.reportStatus"),
+    university: t("eligibilityPage.reportUniversity"),
+    acronym: t("eligibilityPage.reportAcronym"),
+    major: t("eligibilityPage.reportMajor"),
+    degree: t("eligibilityPage.reportDegree"),
+    duration: t("eligibilityPage.reportDuration"),
+    tuition: t("eligibilityPage.reportTuition"),
+    minGrade: t("eligibilityPage.reportMinGrade"),
+    notes: t("eligibilityPage.reportNotes"),
+    source: t("eligibilityPage.reportSource"),
+    statusEligible: t("eligibilityPage.reportStatusEligible"),
+    statusBelow: t("eligibilityPage.reportStatusBelow"),
+    statusUnverified: t("eligibilityPage.reportStatusUnverified"),
+    bachelor: t("eligibilityPage.bachelor"),
+    associate: t("eligibilityPage.associate"),
+    degreeNote: t("eligibilityPage.degreeNote"),
+    disclaimer: t("eligibilityPage.disclaimer"),
+    preparedFor: t("eligibilityPage.reportPreparedFor"),
+    noPrograms: t("eligibilityPage.reportNoPrograms"),
+    print: t("eligibilityPage.reportPrint"),
+    close: t("eligibilityPage.reportClose"),
+    officialSource: t("eligibilityPage.reportOfficialSource"),
+    generatedBy: t("eligibilityPage.reportGeneratedBy"),
+    footer: t("eligibilityPage.reportFooter"),
+    subtitle: t("eligibilityPage.reportSubtitle"),
+    eyebrow: t("eligibilityPage.reportEyebrow"),
   };
+
+  const scopeLabel =
+    degreeFilter === "ALL"
+      ? t("eligibilityPage.allLevels")
+      : degreeFilter === "F"
+      ? t("eligibilityPage.acceptsF")
+      : degreeFilter === "BACHELOR"
+      ? t("eligibilityPage.bachelor")
+      : t("eligibilityPage.associate");
+
+  const handleExport = async (format: EligibilityReportFormat) => {
+    if (!data || !grade) return;
+    setExportingFormat(format);
+
+    try {
+      const model = buildEligibilityReport({
+        grade,
+        generatedAt: new Date(),
+        locale: isKm ? "km-KH" : "en-US",
+        studentName,
+        scopeLabel,
+        search,
+        missing: data.unverified_programs_count,
+        note: t("eligibilityPage.degreeNote"),
+        disclaimer: t("eligibilityPage.disclaimer"),
+        eligible: filteredEligible,
+        below: filteredBelow,
+        unverified: filteredUnverified,
+        labels: reportLabels,
+        getLocalized,
+      });
+
+      if (format === "pdf") {
+        const opened = openPdfReport(model);
+        if (!opened) {
+          toast.error(t("eligibilityPage.exportPdfBlocked"));
+          return;
+        }
+      } else if (format === "excel") {
+        await downloadExcelReport(model);
+      } else if (format === "csv") {
+        downloadCsvReport(model);
+      } else {
+        downloadJsonReport(model);
+      }
+
+      toast.success(t("eligibilityPage.reportExported"));
+      setExportOpen(false);
+    } catch {
+      toast.error(t("eligibilityPage.exportFailed"));
+    } finally {
+      setExportingFormat(null);
+    }
+  };
+
+  const exportFormats: Array<{
+    format: EligibilityReportFormat;
+    title: string;
+    description: string;
+    icon: React.ComponentType<{ className?: string }>;
+    iconClass: string;
+  }> = [
+    {
+      format: "pdf",
+      title: t("eligibilityPage.exportPdf"),
+      description: t("eligibilityPage.exportPdfDesc"),
+      icon: FileText,
+      iconClass: "bg-rose-50 text-rose-600",
+    },
+    {
+      format: "excel",
+      title: t("eligibilityPage.exportExcel"),
+      description: t("eligibilityPage.exportExcelDesc"),
+      icon: FileSpreadsheet,
+      iconClass: "bg-emerald-50 text-emerald-600",
+    },
+    {
+      format: "csv",
+      title: t("eligibilityPage.exportCsv"),
+      description: t("eligibilityPage.exportCsvDesc"),
+      icon: Table2,
+      iconClass: "bg-sky-50 text-sky-600",
+    },
+    {
+      format: "json",
+      title: t("eligibilityPage.exportJson"),
+      description: t("eligibilityPage.exportJsonDesc"),
+      icon: FileJson,
+      iconClass: "bg-amber-50 text-amber-600",
+    },
+  ];
 
   return (
     <div data-dashboard-page="sections" className="space-y-6">
@@ -496,7 +525,7 @@ export default function EligibilityPage() {
             </button>
             <button
               type="button"
-              onClick={handleExportReport}
+              onClick={() => setExportOpen(true)}
               disabled={!data || !grade}
               className="inline-flex h-10 items-center justify-center gap-1.5 rounded-xl border border-[#D9DEEA] bg-white px-4 text-xs font-black text-[#111965] transition-colors hover:border-[#111965]/40 hover:bg-[#F8FAFD] disabled:opacity-50"
             >
@@ -749,6 +778,100 @@ export default function EligibilityPage() {
           )}
         </>
       )}
+
+      <Dialog
+        open={exportOpen}
+        onOpenChange={(open) => {
+          if (!exportingFormat) setExportOpen(open);
+        }}
+        className="max-h-[90vh] max-w-2xl overflow-y-auto"
+      >
+        <DialogHeader>
+          <div className="flex items-start gap-3 pr-8">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#111965] text-[#F7CE4D]">
+              <Download className="h-5 w-5" />
+            </span>
+            <div>
+              <DialogTitle>{t("eligibilityPage.exportTitle")}</DialogTitle>
+              <DialogDescription>
+                {t("eligibilityPage.exportSubtitle")}
+              </DialogDescription>
+            </div>
+          </div>
+        </DialogHeader>
+
+        <div className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] px-4 py-3">
+          <div className="text-[10px] font-black uppercase tracking-[0.12em] text-[#68708A]">
+            {t("eligibilityPage.exportIncludes")}
+          </div>
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            <span className="rounded-lg border border-[#E6E8F0] bg-white px-2 py-1 text-[10.5px] font-bold text-[#111965]">
+              {t("eligibilityPage.reportGrade")}: {grade}
+            </span>
+            <span className="rounded-lg border border-[#E6E8F0] bg-white px-2 py-1 text-[10.5px] font-bold text-[#475569]">
+              {scopeLabel}
+            </span>
+            {search.trim() && (
+              <span className="rounded-lg border border-[#E6E8F0] bg-white px-2 py-1 text-[10.5px] font-bold text-[#475569]">
+                {t("eligibilityPage.reportSearch")}: {search.trim()}
+              </span>
+            )}
+            <span className="rounded-lg border border-[#E6E8F0] bg-white px-2 py-1 text-[10.5px] font-bold text-[#475569]">
+              {filteredEligible.length +
+                filteredBelow.length +
+                filteredUnverified.length}{" "}
+              {t("eligibilityPage.programs")}
+            </span>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          {exportFormats.map((option) => {
+            const Icon = option.icon;
+            const isBusy = exportingFormat === option.format;
+            return (
+              <button
+                key={option.format}
+                type="button"
+                onClick={() => handleExport(option.format)}
+                disabled={Boolean(exportingFormat)}
+                className="group flex min-h-[96px] items-start gap-3 rounded-2xl border border-[#E6E8F0] bg-white p-3.5 text-left transition-colors hover:border-[#111965]/30 hover:bg-[#F8FAFD] disabled:cursor-wait disabled:opacity-70"
+              >
+                <span
+                  className={cn(
+                    "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
+                    option.iconClass
+                  )}
+                >
+                  {isBusy ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Icon className="h-4 w-4" />
+                  )}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="flex flex-wrap items-center gap-1.5 text-xs font-black text-[#111965]">
+                    {option.title}
+                    {isBusy && (
+                      <span className="text-[9px] font-bold text-[#68708A]">
+                        {t("eligibilityPage.exporting")}
+                      </span>
+                    )}
+                  </span>
+                  <span className="mt-1 block text-[10.5px] leading-relaxed text-[#68708A]">
+                    {option.description}
+                  </span>
+                </span>
+                <Download className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#94A3B8] transition-colors group-hover:text-[#111965]" />
+              </button>
+            );
+          })}
+        </div>
+
+        <p className="mt-4 rounded-xl border border-[#E6E8F0] bg-white px-3 py-2 text-[10px] leading-relaxed text-[#68708A]">
+          {t("eligibilityPage.reportFooter")}
+        </p>
+      </Dialog>
     </div>
   );
 }
