@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion, useReducedMotion } from "motion/react";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useAuth } from "@/contexts/auth-context";
@@ -34,10 +35,25 @@ import {
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
+const DASHBOARD_EASE = [0.22, 1, 0.36, 1] as const;
+const DASHBOARD_STAGGER = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.03 } },
+};
+const DASHBOARD_ITEM = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.42, ease: DASHBOARD_EASE },
+  },
+};
+
 export default function DashboardOverviewPage() {
   const { user } = useAuth();
   const { t, language, getLocalized } = useLanguage();
   const [taraCheer, setTaraCheer] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   // 1. REAL Student Dashboard Summary
   const { data: summary } = useQuery({
@@ -181,11 +197,17 @@ export default function DashboardOverviewPage() {
   ];
 
   return (
-    <div data-dashboard-page="home" className="grid grid-cols-1 xl:grid-cols-12 gap-6 select-none">
+    <motion.div
+      data-dashboard-page="home"
+      className="grid grid-cols-1 xl:grid-cols-12 gap-6 select-none"
+      variants={DASHBOARD_STAGGER}
+      initial={reduceMotion ? false : "hidden"}
+      animate="show"
+    >
       {/* ========================================================
           LEFT / CENTER MAIN COLUMN (Span 8 on XL)
       ======================================================== */}
-      <div className="xl:col-span-8 space-y-6">
+      <motion.div variants={DASHBOARD_ITEM} className="xl:col-span-8 space-y-6">
         {/* 1. SCENIC HERO BANNER (Futera Primary Navy + Secondary Gold Accent) */}
         <div
           data-no-reveal
@@ -573,12 +595,12 @@ export default function DashboardOverviewPage() {
             })}
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* ========================================================
           RIGHT SIDEBAR: THREE CLEAN WIDGETS (Span 4 on XL)
       ======================================================== */}
-      <div className="xl:col-span-4 space-y-6">
+      <motion.div variants={DASHBOARD_ITEM} className="xl:col-span-4 space-y-6">
         {/* 1. "YOUR DAILY GOAL" / GUIDANCE PROGRESS WIDGET */}
         <div className="p-6 rounded-[28px] bg-white border border-slate-200 shadow-2xs space-y-5">
           <h2 className="text-sm font-black text-[#111965] tracking-tight">
@@ -807,7 +829,7 @@ export default function DashboardOverviewPage() {
             </div>
           </div>
         </Link>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

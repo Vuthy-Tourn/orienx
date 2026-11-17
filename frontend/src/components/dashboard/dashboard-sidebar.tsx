@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { Logo } from "@/components/layout/logo";
@@ -33,6 +34,7 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const { t, getLocalized } = useLanguage();
+  const reduceMotion = useReducedMotion();
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   if (!user) return null;
@@ -100,27 +102,53 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
           pathname === item.href ||
           (item.href !== "/dashboard" && pathname.startsWith(item.href));
         return (
-          <Link
+          <motion.div
             key={item.href}
-            href={item.href}
-            onClick={() => {
-              if (isMobile && onCloseMobile) onCloseMobile();
-            }}
-            className={cn(
-              "dashboard-nav-item flex items-center gap-3.5 px-4 py-2.5 rounded-2xl text-xs font-bold transition-all duration-150",
-              isActive
-                ? "bg-[#111965] text-white shadow-xs font-black"
-                : "text-[#64748B] hover:text-[#111965] hover:bg-[#F0F2FA]"
-            )}
+            className="dashboard-nav-item"
+            whileTap={reduceMotion ? undefined : { scale: 0.985 }}
           >
-            <item.icon
+            <Link
+              href={item.href}
+              onClick={() => {
+                if (isMobile && onCloseMobile) onCloseMobile();
+              }}
+              aria-current={isActive ? "page" : undefined}
               className={cn(
-                "w-4 h-4 flex-shrink-0",
-                isActive ? "text-[#F7CE4D]" : "text-[#94A3B8]"
+                "relative flex items-center gap-3.5 px-4 py-2.5 rounded-2xl text-xs font-bold transition-colors",
+                isActive
+                  ? "text-white font-black"
+                  : "text-[#64748B] hover:text-[#111965] hover:bg-[#F0F2FA] dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
               )}
-            />
-            <span className="truncate">{item.label}</span>
-          </Link>
+            >
+              {isActive && (
+                <motion.span
+                  layoutId={
+                    isMobile
+                      ? "dashboard-sidebar-active-mobile"
+                      : "dashboard-sidebar-active-desktop"
+                  }
+                  className="absolute inset-0 rounded-2xl bg-[#111965] shadow-xs dark:bg-blue-600"
+                  transition={
+                    reduceMotion
+                      ? { duration: 0 }
+                      : {
+                          type: "spring",
+                          stiffness: 420,
+                          damping: 38,
+                          mass: 0.7,
+                        }
+                  }
+                />
+              )}
+              <item.icon
+                className={cn(
+                  "relative z-10 w-4 h-4 flex-shrink-0 transition-colors",
+                  isActive ? "text-[#F7CE4D]" : "text-[#94A3B8] dark:text-slate-400"
+                )}
+              />
+              <span className="relative z-10 truncate">{item.label}</span>
+            </Link>
+          </motion.div>
         );
       })}
 
@@ -204,52 +232,76 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
       </aside>
 
       {/* Mobile Drawer */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div
-            className="fixed inset-0 bg-black/40 backdrop-blur-2xs"
-            onClick={onCloseMobile}
-          />
-          <div className="relative w-64 max-w-[80%] bg-white p-4 flex flex-col h-full shadow-2xl z-10">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E6E8F0] flex-shrink-0">
-              <Logo />
-              <button onClick={onCloseMobile} className="p-1 cursor-pointer">
-                <X className="w-5 h-5 text-slate-500" />
-              </button>
-            </div>
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            key="dashboard-mobile-drawer"
+            className="fixed inset-0 z-50 lg:hidden flex"
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={reduceMotion ? undefined : { opacity: 0 }}
+            transition={{ duration: reduceMotion ? 0 : 0.2 }}
+          >
+            <div
+              className="fixed inset-0 bg-black/40 backdrop-blur-2xs"
+              onClick={onCloseMobile}
+            />
+            <motion.div
+              className="relative w-64 max-w-[80%] bg-white p-4 flex flex-col h-full shadow-2xl z-10 dark:bg-[#090D24]"
+              initial={reduceMotion ? false : { x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={reduceMotion ? undefined : { x: "-100%" }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { type: "spring", stiffness: 380, damping: 36, mass: 0.8 }
+              }
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-[#E6E8F0] dark:border-white/10 flex-shrink-0">
+                <Logo />
+                <button
+                  type="button"
+                  onClick={onCloseMobile}
+                  aria-label={t("common.close", "Close")}
+                  className="p-1 cursor-pointer rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-white/10"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-            <nav className="flex-1 py-4 space-y-1 overflow-y-auto min-h-0">
-              {renderNavItems(true)}
-            </nav>
+              <nav className="flex-1 py-4 space-y-1 overflow-y-auto min-h-0">
+                {renderNavItems(true)}
+              </nav>
 
-            <div className="p-2 border-t border-[#E6E8F0] flex items-center justify-between flex-shrink-0">
-              <button
-                type="button"
-                onClick={() => {
-                  if (onCloseMobile) onCloseMobile();
-                  setSettingsOpen(true);
-                }}
-                className="flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-[#111965] cursor-pointer"
-              >
-                <Settings className="w-4 h-4" />
-                <span>{t("settings.openSettings", "Settings")}</span>
-              </button>
+              <div className="p-2 border-t border-[#E6E8F0] dark:border-white/10 flex items-center justify-between flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onCloseMobile) onCloseMobile();
+                    setSettingsOpen(true);
+                  }}
+                  className="flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-[#111965] cursor-pointer dark:text-slate-300 dark:hover:text-white"
+                >
+                  <Settings className="w-4 h-4" />
+                  <span>{t("settings.openSettings", "Settings")}</span>
+                </button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  logout();
-                  if (onCloseMobile) onCloseMobile();
-                }}
-                className="flex items-center gap-1.5 text-xs font-semibold text-rose-600 hover:text-rose-700 cursor-pointer"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>{t("dashboardLayout.logout")}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    if (onCloseMobile) onCloseMobile();
+                  }}
+                  className="flex items-center gap-1.5 text-xs font-semibold text-rose-600 hover:text-rose-700 cursor-pointer dark:text-rose-400 dark:hover:text-rose-300"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>{t("dashboardLayout.logout")}</span>
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Dedicated Language & Theme Settings Modal */}
       <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
