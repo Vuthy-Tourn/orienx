@@ -1,7 +1,7 @@
 "use client";
 
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -27,6 +27,36 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isRegister = pathname === "/register";
   const rootRef = useRef<HTMLDivElement>(null);
+  const [showAnimatedBackground, setShowAnimatedBackground] = useState(false);
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    if (window.matchMedia("(max-width: 1023px)").matches) return;
+
+    const start = () => setShowAnimatedBackground(true);
+    let idleId: number | undefined;
+    let timeoutId: number | undefined;
+    const win = window as Window & {
+      requestIdleCallback?: (
+        callback: IdleRequestCallback,
+        options?: IdleRequestOptions
+      ) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+
+    if (typeof win.requestIdleCallback === "function") {
+      idleId = win.requestIdleCallback(start, { timeout: 1200 });
+    } else {
+      timeoutId = win.setTimeout(start, 300);
+    }
+
+    return () => {
+      if (idleId !== undefined && typeof win.cancelIdleCallback === "function") {
+        win.cancelIdleCallback(idleId);
+      }
+      if (timeoutId !== undefined) win.clearTimeout(timeoutId);
+    };
+  }, []);
 
   // Coordinated entrance for the full-bleed background, brand and form card.
   useIsoLayoutEffect(() => {
@@ -140,11 +170,6 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       >
         <picture>
           <source
-            media="(prefers-reduced-motion: reduce)"
-            srcSet="/images/auth/auth-background-poster.webp"
-            type="image/webp"
-          />
-          <source
             media="(max-width: 1023px)"
             srcSet="/images/auth/auth-background-mobile.webp"
             type="image/webp"
@@ -158,6 +183,20 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
             className="h-full w-full select-none object-cover object-center"
           />
         </picture>
+
+        {showAnimatedBackground && (
+          <img
+            src="/images/auth/auth-background-animated.webp"
+            alt=""
+            fetchPriority="low"
+            decoding="async"
+            draggable={false}
+            onLoad={(event) => {
+              event.currentTarget.style.opacity = "1";
+            }}
+            className="pointer-events-none absolute inset-0 hidden h-full w-full select-none object-cover object-center opacity-0 transition-opacity duration-700 lg:block"
+          />
+        )}
 
         <div className="absolute inset-0 bg-[#0A0F3D]/20" />
         <div
