@@ -84,63 +84,23 @@ function cleanText(text: string): string {
 export function FloatingAssistant() {
   const pathname = usePathname();
   const { user } = useAuth();
-  const { language } = useLanguage();
-  const isKm = language === "km";
-
-  const copy = isKm
-    ? {
-        title: "ជំនួយការ OrienX",
-        subtitle: "សួរបានយ៉ាងរហ័ស",
-        open: "បើកជំនួយការ",
-        close: "បិទ",
-        welcome: "សួស្តី! ខ្ញុំអាចជួយរកសាកលវិទ្យាល័យ ជំនាញ អាហារូបករណ៍ និងលក្ខខណ្ឌចូលរៀន។",
-        placeholder: "សួរអំពីការសិក្សា...",
-        send: "ផ្ញើ",
-        thinking: "កំពុងគិត...",
-        sources: "ប្រភព",
-        signIn: "ចូលគណនីដើម្បីសាកសួរជំនួយការ OrienX។",
-        signInCta: "ចូលគណនី",
-        offline: "Gemini មិនទាន់បានកំណត់ទេ — ចម្លើយមកពីទិន្នន័យផ្ទៀងផ្ទាត់។",
-        error: "មិនអាចទទួលចម្លើយបានទេ។ សូមព្យាយាមម្តងទៀត។",
-        teaserMessages: [
-          "សួស្តី! ខ្ញុំគឺ Tara 👋 តើចង់រកជំនាញ ឬសាកលវិទ្យាល័យទេ?",
-          "សួរខ្ញុំអំពីថ្លៃសិក្សា អាហារូបករណ៍ ឬលក្ខខណ្ឌចូលរៀន។",
-          "ខ្ញុំអាចប្រៀបធៀបសាកលវិទ្យាល័យជូនអ្នកបាន។",
-        ],
-        suggestions: [
-          "ថ្លៃសិក្សានៅ ITC ប៉ុន្មាន?",
-          "តើសាកលវិទ្យាល័យណាខ្លះបង្រៀន software engineering?",
-          "មានអាហារូបករណ៍អ្វីខ្លះ?",
-          "តើខ្ញុំអាចចូលរៀនដោយនិទ្ទេស C បានទេ?",
-        ],
-      }
-    : {
-        title: "OrienX Assistant",
-        subtitle: "Quick answers",
-        open: "Open assistant",
-        close: "Close",
-        welcome:
-          "Hi! I can help with universities, majors, scholarships, and admission requirements.",
-        placeholder: "Ask about studying...",
-        send: "Send",
-        thinking: "Thinking...",
-        sources: "Sources",
-        signIn: "Sign in to chat with the OrienX Assistant.",
-        signInCta: "Sign in",
-        offline: "Gemini is not configured — answers come from verified records.",
-        error: "Could not get an answer. Please try again.",
-        teaserMessages: [
-          "Hi! I'm Tara 👋 Want help finding a major or university?",
-          "Ask me about tuition, scholarships, or admission requirements.",
-          "I can compare universities for you.",
-        ],
-        suggestions: [
-          "How much is ITC tuition?",
-          "Which universities offer software engineering?",
-          "What scholarships can I apply for?",
-          "Can I get in with a grade C?",
-        ],
-      };
+  const { language, t, tList, getLocalized } = useLanguage();
+  const copy = {
+    title: t("aiAssistant.title"),
+    subtitle: t("aiAssistant.subtitle"),
+    open: t("aiAssistant.open"),
+    close: t("aiAssistant.close"),
+    welcome: t("aiAssistant.welcome"),
+    placeholder: t("aiAssistant.placeholder"),
+    send: t("aiAssistant.send"),
+    thinking: t("aiAssistant.thinking"),
+    sources: t("aiAssistant.sources"),
+    signIn: t("aiAssistant.signIn"),
+    signInCta: t("aiAssistant.signInCta"),
+    offline: t("aiAssistant.offline"),
+    error: t("aiAssistant.error"),
+    suggestions: tList("aiAssistant.suggestions"),
+  };
 
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -155,26 +115,19 @@ export function FloatingAssistant() {
   const [pastHero, setPastHero] = useState(false);
 
   const contextualTeaser = pathname?.startsWith("/dashboard/eligibility")
-    ? isKm
-      ? "តើអ្នកចង់ដឹងថានិទ្ទេស BACII របស់អ្នកអាចចូលរៀនជំនាញណាបានទេ?"
-      : "Want to know which programs your BACII grade qualifies for?"
+    ? t("aiAssistant.context.eligibility")
     : pathname?.startsWith("/dashboard/recommendations")
-      ? isKm
-        ? "តើចង់យល់ពីអនុសាសន៍ជំនាញរបស់អ្នកទេ?"
-        : "Want help understanding your recommendations?"
+      ? t("aiAssistant.context.recommendations")
       : pathname?.startsWith("/scholarships")
-        ? isKm
-          ? "សួរខ្ញុំអំពីអាហារូបករណ៍ និងថ្ងៃផុតកំណត់។"
-          : "Ask me about scholarships and deadlines."
+        ? t("aiAssistant.context.scholarships")
         : pathname?.startsWith("/universities")
-          ? isKm
-            ? "សួរខ្ញុំអំពីសាកលវិទ្យាល័យដែលសមស្របនឹងថវិការបស់អ្នក។"
-            : "Ask me which universities fit your budget."
+          ? t("aiAssistant.context.universities")
           : null;
 
+  const defaultTeaserMessages = tList("aiAssistant.teaserMessages");
   const teaserMessages = contextualTeaser
-    ? [contextualTeaser, ...copy.teaserMessages]
-    : copy.teaserMessages;
+    ? [contextualTeaser, ...defaultTeaserMessages]
+    : defaultTeaserMessages;
 
   const [showTeaser, setShowTeaser] = useState(false);
   const [teaserIndex, setTeaserIndex] = useState(0);
@@ -199,6 +152,13 @@ export function FloatingAssistant() {
   }, [open]);
 
   useEffect(() => {
+    if (!isHome) return;
+    if (window.scrollY >= 100) return;
+    const timer = window.setTimeout(() => setPastHero(false), 0);
+    return () => window.clearTimeout(timer);
+  }, [isHome]);
+
+  useEffect(() => {
     const node = scrollRef.current;
     if (node) {
       node.scrollTop = node.scrollHeight;
@@ -221,23 +181,23 @@ export function FloatingAssistant() {
   }, [showTeaser, open, user, teaserMessages.length]);
 
   useEffect(() => {
-    if (!isHome) {
-      const frame = requestAnimationFrame(() => setPastHero(true));
-      return () => cancelAnimationFrame(frame);
-    }
+    const handler = (event: Event) => {
+      setPastHero(Boolean((event as CustomEvent<boolean>).detail));
+    };
+    window.addEventListener("orienx:mascot-handoff", handler);
 
-    const update = () => {
-      setPastHero(window.scrollY > window.innerHeight * 0.85);
-    };
-    const frame = requestAnimationFrame(update);
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
+    const timer = window.setTimeout(() => {
+      const globalWindow = window as Window & { __orienxHandoff?: boolean };
+      if (typeof globalWindow.__orienxHandoff === "boolean") {
+        setPastHero(globalWindow.__orienxHandoff);
+      }
+    }, 0);
+
     return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      window.clearTimeout(timer);
+      window.removeEventListener("orienx:mascot-handoff", handler);
     };
-  }, [isHome]);
+  }, []);
 
   if (!pathname || HIDDEN_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
     return null;
@@ -435,7 +395,7 @@ export function FloatingAssistant() {
 
           <div
             ref={scrollRef}
-            className="flex-1 space-y-3 overflow-y-auto bg-[#F8F9FC] px-3 py-3 dark:bg-[#080D22]"
+            className="flex-1 space-y-3 overflow-y-auto bg-[#F8F9FC] px-3 py-3 scrollbar-hide dark:bg-[#080D22]"
             aria-live="polite"
           >
             {!user ? (
@@ -456,7 +416,7 @@ export function FloatingAssistant() {
                 <div className="rounded-2xl border border-[#E6E8F0] bg-white p-3 dark:border-white/10 dark:bg-white/5">
                   <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
                     <Sparkles className="h-3 w-3 text-[#F7CE4D]" />
-                    OrienX AI
+                    {t("aiAssistant.kicker", "OrienX AI")}
                   </div>
                   <p className="text-xs leading-relaxed text-[#68708A] dark:text-slate-400">
                     {copy.welcome}
@@ -514,7 +474,10 @@ export function FloatingAssistant() {
                               className="inline-flex items-center gap-1 rounded-full bg-[#F0F2FA] px-1.5 py-0.5 text-[9px] font-bold text-[#111965] dark:bg-white/10 dark:text-slate-300"
                             >
                               <Icon className="h-2.5 w-2.5" />
-                              {tool.replaceAll("_", " ")}
+                              {t(
+                                `aiTools.${tool}`,
+                                tool.replaceAll("_", " ")
+                              )}
                             </span>
                           );
                         })}
@@ -533,9 +496,10 @@ export function FloatingAssistant() {
                               href={source.url}
                               className="block truncate text-[10px] font-semibold text-[#111965] hover:underline dark:text-[#F7CE4D]"
                             >
-                              {isKm
-                                ? source.title_km || source.title_en
-                                : source.title_en}
+                              {getLocalized({
+                                en: source.title_en,
+                                km: source.title_km,
+                              })}
                             </Link>
                           ))}
                         </div>
@@ -565,7 +529,7 @@ export function FloatingAssistant() {
           {user && (
             <div className="border-t border-[#E6E8F0] bg-white p-2.5 dark:border-white/10 dark:bg-[#0B102A]">
               {messages.length > 0 && visibleSuggestions.length > 0 && (
-                <div className="mb-2 flex gap-1.5 overflow-x-auto pb-1">
+                <div className="mb-2 flex flex-wrap gap-1.5">
                   {visibleSuggestions.slice(0, 4).map((question) => (
                     <button
                       key={question}

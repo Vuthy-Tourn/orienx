@@ -10,6 +10,7 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (path: string, fallback?: string) => string;
+  tList: (path: string) => string[];
   getLocalized: (obj?: { en?: string; km?: string } | null) => string;
 }
 
@@ -23,6 +24,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const saved = localStorage.getItem("futera_lang") as Language;
     if (saved === "en" || saved === "km") {
+      // Hydration-safe: the server always renders "km", so the saved
+      // preference can only be applied after mount.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLanguageState(saved);
     }
   }, []);
@@ -32,26 +36,33 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("futera_lang", lang);
   };
 
-  const t = (path: string, fallbackText?: string): string => {
+  const resolve = (path: string): unknown => {
     const keys = path.split(".");
-    let current: any = dictionaries[language];
-    for (const k of keys) {
-      if (current && typeof current === "object" && k in current) {
-        current = current[k];
-      } else {
-        // Fallback to English
-        let fallback: any = dictionaries["en"];
-        for (const fbK of keys) {
-          if (fallback && typeof fallback === "object" && fbK in fallback) {
-            fallback = fallback[fbK];
-          } else {
-            return fallbackText || path;
-          }
+    const read = (dictionary: unknown): unknown => {
+      let current: unknown = dictionary;
+      for (const key of keys) {
+        if (current && typeof current === "object" && key in current) {
+          current = (current as Record<string, unknown>)[key];
+        } else {
+          return undefined;
         }
-        return typeof fallback === "string" ? fallback : (fallbackText || path);
       }
-    }
-    return typeof current === "string" ? current : (fallbackText || path);
+      return current;
+    };
+
+    const localized = read(dictionaries[language]);
+    if (localized !== undefined) return localized;
+    return read(dictionaries.en);
+  };
+
+  const t = (path: string, fallbackText?: string): string => {
+    const value = resolve(path);
+    return typeof value === "string" ? value : (fallbackText || path);
+  };
+
+  const tList = (path: string): string[] => {
+    const value = resolve(path);
+    return Array.isArray(value) ? value.map(String) : [];
   };
 
   const getLocalized = (obj?: { en?: string; km?: string } | null): string => {
@@ -61,7 +72,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, getLocalized }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, tList, getLocalized }}>
       {children}
     </LanguageContext.Provider>
   );

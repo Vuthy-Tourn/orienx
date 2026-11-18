@@ -73,20 +73,6 @@ interface ChatMessage {
   toolsUsed?: string[];
 }
 
-const EN_SUGGESTIONS = [
-  "Which universities offer software engineering?",
-  "How much does ITC cost per year?",
-  "What scholarships can I apply for?",
-  "Which major suits a creative student?",
-];
-
-const KM_SUGGESTIONS = [
-  "តើសាកលវិទ្យាល័យណាខ្លះបង្រៀនវិស្វកម្មកុំព្យូទ័រ?",
-  "ថ្លៃសិក្សានៅ ITC ប៉ុន្មានក្នុងមួយឆ្នាំ?",
-  "មានអាហារូបករណ៍អ្វីខ្លះសម្រាប់និស្សិត?",
-  "តើជំនាញណាសមស្របនឹងមនុស្សចូលចិត្តបង្កើតរបស់ថ្មី?",
-];
-
 const SOURCE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   university: GraduationCap,
   major: BookOpen,
@@ -94,25 +80,10 @@ const SOURCE_ICONS: Record<string, React.ComponentType<{ className?: string }>> 
   scholarship: Award,
 };
 
-const TOOL_META: Record<
-  string,
-  { icon: React.ComponentType<{ className?: string }>; en: string; km: string }
-> = {
-  search_universities: {
-    icon: Search,
-    en: "University search",
-    km: "ស្វែងរកសាកលវិទ្យាល័យ",
-  },
-  compare_universities: {
-    icon: Scale,
-    en: "Tuition comparison",
-    km: "ប្រៀបធៀបថ្លៃសិក្សា",
-  },
-  check_eligibility: {
-    icon: BadgeCheck,
-    en: "Eligibility check",
-    km: "ពិនិត្យលក្ខខណ្ឌ",
-  },
+const TOOL_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  search_universities: Search,
+  compare_universities: Scale,
+  check_eligibility: BadgeCheck,
 };
 
 function formatAnswer(text: string): string {
@@ -145,60 +116,29 @@ async function fetchWithRefresh(
 }
 
 export function AdvisorChat() {
-  const { language } = useLanguage();
-  const isKm = language === "km";
-
-  const copy = isKm
-    ? {
-        kicker: "ជំនួយការតម្រង់ទិស",
-        title: "សួរ OrienX AI",
-        subtitle:
-          "ស្វែងរកសាកលវិទ្យាល័យ ជំនាញ អាហារូបករណ៍ និងអាជីព ដោយផ្អែកលើទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ OrienX។",
-        emptyTitle: "តើអ្នកចង់ដឹងអ្វី?",
-        emptyBody:
-          "សួរជាភាសាខ្មែរ ឬអង់គ្លេស។ ចម្លើយផ្អែកលើទិន្នន័យសាកលវិទ្យាល័យ និងអាហារូបករណ៍របស់ OrienX។",
-        placeholder: "សួរអំពីសាកលវិទ្យាល័យ ជំនាញ ឬអាហារូបករណ៍...",
-        send: "ផ្ញើ",
-        thinking: "កំពុងស្វែងរកទិន្នន័យ...",
-        sources: "ប្រភព",
-        feedback: "តើចម្លើយនេះមានប្រយោជន៍ទេ?",
-        error: "មិនអាចទទួលចម្លើយបានទេ។ សូមព្យាយាមម្តងទៀត។",
-        localMode: "ម៉ូដែល AI មូលដ្ឋាន",
-        retrievalMode: "ទិន្នន័យផ្ទៀងផ្ទាត់",
-        checking: "កំពុងពិនិត្យម៉ូដែល...",
-        offlineTitle: "ម៉ូដែល AI មូលដ្ឋានមិនទាន់ដំណើរការ",
-        offlineBody:
-          "ចម្លើយត្រូវបានបង្កើតដោយផ្ទាល់ពីទិន្នន័យដែលបានផ្ទៀងផ្ទាត់។ ដើម្បីទទួលបានចម្លើយសន្ទនា សូមដំណើរការ Ollama ក្នុងកុំព្យូទ័ររបស់អ្នក (ឥតគិតថ្លៃ)។",
-        you: "អ្នក",
-        advisor: "OrienX AI",
-        helpful: "មានប្រយោជន៍",
-        notHelpful: "មិនមានប្រយោជន៍",
-      }
-    : {
-        kicker: "Guidance assistant",
-        title: "Ask OrienX AI",
-        subtitle:
-          "Explore universities, majors, scholarships, and careers grounded in OrienX's verified records.",
-        emptyTitle: "What would you like to know?",
-        emptyBody:
-          "Ask in English or Khmer. Answers are grounded in OrienX's university, major, and scholarship data.",
-        placeholder: "Ask about a university, major, or scholarship...",
-        send: "Send",
-        thinking: "Searching verified records...",
-        sources: "Sources",
-        feedback: "Was this answer helpful?",
-        error: "Could not get an answer. Please try again.",
-        localMode: "Local AI model",
-        retrievalMode: "Verified records",
-        checking: "Checking local model...",
-        offlineTitle: "Local AI model is not running",
-        offlineBody:
-          "Answers are being assembled directly from verified records. To enable conversational replies, start Ollama on your computer (free).",
-        you: "You",
-        advisor: "OrienX AI",
-        helpful: "Helpful",
-        notHelpful: "Not helpful",
-      };
+  const { language, t, tList, getLocalized } = useLanguage();
+  const copy = {
+    kicker: t("aiAdvisor.kicker"),
+    title: t("aiAdvisor.title"),
+    subtitle: t("aiAdvisor.subtitle"),
+    emptyTitle: t("aiAdvisor.emptyTitle"),
+    emptyBody: t("aiAdvisor.emptyBody"),
+    placeholder: t("aiAdvisor.placeholder"),
+    send: t("aiAdvisor.send"),
+    thinking: t("aiAdvisor.thinking"),
+    sources: t("aiAdvisor.sources"),
+    feedback: t("aiAdvisor.feedback"),
+    error: t("aiAdvisor.error"),
+    localMode: t("aiAdvisor.localMode"),
+    retrievalMode: t("aiAdvisor.retrievalMode"),
+    checking: t("aiAdvisor.checking"),
+    offlineTitle: t("aiAdvisor.offlineTitle"),
+    offlineBody: t("aiAdvisor.offlineBody"),
+    you: t("aiAdvisor.you", "You"),
+    advisor: t("aiAdvisor.advisor", "OrienX AI"),
+    helpful: t("aiAdvisor.helpful"),
+    notHelpful: t("aiAdvisor.notHelpful"),
+  };
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -212,12 +152,11 @@ export function AdvisorChat() {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const messageCounter = useRef(0);
   const suggestions =
-    answerSuggestions?.language === language &&
+    answerSuggestions &&
+    answerSuggestions.language === language &&
     answerSuggestions.items.length > 0
       ? answerSuggestions.items
-      : isKm
-        ? KM_SUGGESTIONS
-        : EN_SUGGESTIONS;
+      : tList("aiAdvisor.suggestions");
 
   const { data: status } = useQuery({
     queryKey: ["ai-advisor-status"],
@@ -466,7 +405,7 @@ export function AdvisorChat() {
             </div>
             <div>
               <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/50">
-                {isKm ? "ស្ថានភាព" : "Status"}
+                {t("aiAdvisor.status", "Status")}
               </div>
               <div className="flex items-center gap-2 text-xs font-black">
                 <span
@@ -504,7 +443,7 @@ export function AdvisorChat() {
       <section className="overflow-hidden rounded-[28px] border border-[#E6E8F0] bg-white shadow-sm dark:border-white/10 dark:bg-[#0B102A]">
         <div
           ref={scrollRef}
-          className="max-h-[58vh] min-h-[360px] overflow-y-auto px-4 py-5 sm:px-6"
+          className="max-h-[58vh] min-h-[360px] overflow-y-auto px-4 py-5 sm:px-6 scrollbar-hide"
           aria-live="polite"
         >
           {messages.length === 0 ? (
@@ -523,7 +462,7 @@ export function AdvisorChat() {
               </p>
 
               <div className="mt-5 grid w-full gap-2 sm:grid-cols-2">
-                {(isKm ? KM_SUGGESTIONS : EN_SUGGESTIONS).map((question) => (
+                {tList("aiAdvisor.suggestions").map((question) => (
                   <button
                     key={question}
                     type="button"
@@ -602,16 +541,18 @@ export function AdvisorChat() {
                         {message.toolsUsed && message.toolsUsed.length > 0 && (
                           <div className="flex flex-wrap gap-1.5">
                             {message.toolsUsed.map((tool) => {
-                              const meta = TOOL_META[tool];
-                              if (!meta) return null;
-                              const Icon = meta.icon;
+                              const Icon = TOOL_ICONS[tool];
+                              if (!Icon) return null;
                               return (
                                 <span
                                   key={tool}
                                   className="inline-flex items-center gap-1 rounded-full border border-[#111965]/15 bg-[#F0F2FA] px-2 py-1 text-[10px] font-bold text-[#111965] dark:border-white/10 dark:bg-white/5 dark:text-slate-300"
                                 >
                                   <Icon className="h-3 w-3" />
-                                  {isKm ? meta.km : meta.en}
+                                  {t(
+                                    `aiTools.${tool}`,
+                                    tool.replaceAll("_", " ")
+                                  )}
                                 </span>
                               );
                             })}
@@ -638,14 +579,16 @@ export function AdvisorChat() {
                                     </span>
                                     <span className="min-w-0">
                                       <span className="block truncate text-[11px] font-bold text-[#111965] group-hover:underline dark:text-slate-200">
-                                        {isKm
-                                          ? source.title_km || source.title_en
-                                          : source.title_en}
+                                        {getLocalized({
+                                          en: source.title_en,
+                                          km: source.title_km,
+                                        })}
                                       </span>
                                       <span className="mt-0.5 line-clamp-2 block text-[10px] leading-snug text-[#68708A] dark:text-slate-400">
-                                        {isKm
-                                          ? source.snippet_km || source.snippet_en
-                                          : source.snippet_en}
+                                        {getLocalized({
+                                          en: source.snippet_en,
+                                          km: source.snippet_km,
+                                        })}
                                       </span>
                                     </span>
                                   </Link>
@@ -716,7 +659,7 @@ export function AdvisorChat() {
 
         <div className="border-t border-[#E6E8F0] bg-white px-3 py-3 sm:px-4 dark:border-white/10 dark:bg-[#0B102A]">
           {messages.length > 0 && suggestions.length > 0 && (
-            <div className="mb-2 flex gap-1.5 overflow-x-auto pb-1">
+            <div className="mb-2 flex flex-wrap gap-1.5">
               {suggestions.slice(0, 4).map((question) => (
                 <button
                   key={question}
