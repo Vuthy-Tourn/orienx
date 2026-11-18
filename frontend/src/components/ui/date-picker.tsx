@@ -57,10 +57,10 @@ function addMonths(date: Date, months: number) {
 function sameDay(left: Date | null, right: Date | null) {
   return Boolean(
     left &&
-      right &&
-      left.getFullYear() === right.getFullYear() &&
-      left.getMonth() === right.getMonth() &&
-      left.getDate() === right.getDate()
+    right &&
+    left.getFullYear() === right.getFullYear() &&
+    left.getMonth() === right.getMonth() &&
+    left.getDate() === right.getDate()
   );
 }
 
@@ -312,8 +312,8 @@ export function DatePicker({
           disabled
             ? "cursor-not-allowed border-[#E6E8F0] bg-[#F5F6FA] text-[#94A3B8] dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-500"
             : open
-            ? "border-[#111965] bg-white text-[#111965] ring-2 ring-[#111965]/10 dark:border-[#F7CE4D]/60 dark:bg-[#0B1028] dark:text-white dark:ring-[#F7CE4D]/10"
-            : "border-[#E6E8F0] bg-[#F8FAFD] text-[#171A2C] hover:border-slate-300 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-100 dark:hover:border-white/25"
+              ? "border-[#111965] bg-white text-[#111965] ring-2 ring-[#111965]/10 dark:border-[#F7CE4D]/60 dark:bg-[#0B1028] dark:text-white dark:ring-[#F7CE4D]/10"
+              : "border-[#E6E8F0] bg-[#F8FAFD] text-[#171A2C] hover:border-slate-300 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-100 dark:hover:border-white/25"
         )}
       >
         <span
@@ -419,10 +419,10 @@ export function DatePicker({
                       "flex h-8 w-full items-center justify-center rounded-lg text-[11px] font-semibold transition-colors",
                       !inMonth && "text-[#B8C0D0] dark:text-slate-600",
                       isSelected
-                        ? "bg-[#111965] text-white shadow-xs dark:bg-[#F7CE4D] dark:text-[#111965]"
+                        ? "bg-[#111965] text-white shadow-xs dark:bg-[#F7CE4D] dark:text-white"
                         : isToday
-                        ? "border border-[#F7CE4D] bg-[#FFF9E6] text-[#111965] dark:border-[#F7CE4D]/60 dark:bg-[#F7CE4D]/10 dark:text-[#F7CE4D]"
-                        : "text-[#475569] hover:bg-[#F0F2FA] dark:text-slate-300 dark:hover:bg-white/10",
+                          ? "border border-[#F7CE4D] bg-[#FFF9E6] text-[#111965] dark:border-[#F7CE4D]/60 dark:bg-[#F7CE4D]/10 dark:text-[#F7CE4D]"
+                          : "text-[#475569] hover:bg-[#F0F2FA] dark:text-slate-300 dark:hover:bg-white/10",
                       disabledDay && "cursor-not-allowed opacity-30"
                     )}
                   >

@@ -163,7 +163,7 @@ export default function UniversityDetailPage() {
             <Skeleton className="h-48 w-full rounded-none sm:h-64 lg:h-72" />
             <div className="space-y-5 p-5 sm:p-7 lg:p-8">
               <div className="-mt-12 flex items-end gap-4 sm:-mt-14">
-                <Skeleton className="h-20 w-20 rounded-2xl border-4 border-white sm:h-24 sm:w-24" />
+                <Skeleton className="h-20 w-20 rounded-2xl border-4 border-white dark:border-[#111827] sm:h-24 sm:w-24" />
                 <div className="flex-1 space-y-2">
                   <Skeleton className="h-8 w-2/3 rounded-lg" />
                   <Skeleton className="h-3 w-1/3 rounded-md" />
@@ -429,7 +429,7 @@ export default function UniversityDetailPage() {
 
           <div className="relative px-5 pb-6 sm:px-7 sm:pb-8 lg:px-8">
             <div className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-4">
-              <div className="-mt-12 flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-white shadow-lg sm:-mt-14 sm:h-24 sm:w-24">
+              <div className="-mt-12 flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-white dark:border-[#111827] bg-white dark:bg-[#111827] shadow-lg sm:-mt-14 sm:h-24 sm:w-24">
                 {uni.logo_url ? (
                   <img
                     src={uni.logo_url}

@@ -153,8 +153,8 @@ export function AdvisorChat() {
   const messageCounter = useRef(0);
   const suggestions =
     answerSuggestions &&
-    answerSuggestions.language === language &&
-    answerSuggestions.items.length > 0
+      answerSuggestions.language === language &&
+      answerSuggestions.items.length > 0
       ? answerSuggestions.items
       : tList("aiAdvisor.suggestions");
 
@@ -214,11 +214,11 @@ export function AdvisorChat() {
           previous.map((item) =>
             item.id === assistantId
               ? {
-                  ...item,
-                  mode: meta.mode,
-                  sources: meta.sources,
-                  toolsUsed: meta.tools_used,
-                }
+                ...item,
+                mode: meta.mode,
+                sources: meta.sources,
+                toolsUsed: meta.tools_used,
+              }
               : item
           )
         );
@@ -240,8 +240,8 @@ export function AdvisorChat() {
         const detail = payload?.detail;
         const message = Array.isArray(detail)
           ? detail
-              .map((item: { msg?: string }) => item?.msg || "Invalid value")
-              .join(" ")
+            .map((item: { msg?: string }) => item?.msg || "Invalid value")
+            .join(" ")
           : typeof detail === "string"
             ? detail
             : `${response.status} ${response.statusText}`;
@@ -303,12 +303,12 @@ export function AdvisorChat() {
               previous.map((item) =>
                 item.id === assistantId
                   ? {
-                      ...item,
-                      content: done.answer || item.content,
-                      interactionId: done.interaction_id,
-                      mode: done.mode,
-                      toolsUsed: done.tools_used,
-                    }
+                    ...item,
+                    content: done.answer || item.content,
+                    interactionId: done.interaction_id,
+                    mode: done.mode,
+                    toolsUsed: done.tools_used,
+                  }
                   : item
               )
             );
@@ -609,7 +609,7 @@ export function AdvisorChat() {
                               className={cn(
                                 "rounded-md p-1 transition-colors hover:bg-emerald-50 hover:text-emerald-600 dark:hover:bg-emerald-500/10",
                                 message.feedback === "up" &&
-                                  "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300"
+                                "bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300"
                               )}
                             >
                               <ThumbsUp className="h-3.5 w-3.5" />
@@ -622,7 +622,7 @@ export function AdvisorChat() {
                               className={cn(
                                 "rounded-md p-1 transition-colors hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-500/10",
                                 message.feedback === "down" &&
-                                  "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-300"
+                                "bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-300"
                               )}
                             >
                               <ThumbsDown className="h-3.5 w-3.5" />
@@ -692,7 +692,7 @@ export function AdvisorChat() {
               type="button"
               onClick={() => void send()}
               disabled={isSending || !input.trim()}
-              className="inline-flex h-[48px] shrink-0 items-center gap-2 rounded-2xl bg-[#111965] px-4 text-xs font-black text-white transition-colors hover:bg-[#1A247F] disabled:cursor-not-allowed disabled:opacity-40 dark:bg-[#F7CE4D] dark:text-[#111965] dark:hover:bg-[#F7CE4D]/90"
+              className="inline-flex h-[48px] shrink-0 items-center gap-2 rounded-2xl bg-[#111965] px-4 text-xs font-black text-white transition-colors hover:bg-[#1A247F] disabled:cursor-not-allowed disabled:opacity-40 dark:bg-[#F7CE4D] dark:text-white dark:hover:bg-[#F7CE4D]/90"
             >
               {isSending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

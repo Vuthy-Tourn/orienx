@@ -113,36 +113,36 @@ export function ShareReportDialog({
     title: string;
     description: string;
   }> = [
-    {
-      key: "profile",
-      title: isKm ? "ប្រវត្តិសិស្ស" : "Student profile",
-      description: isKm ? "សាលា ខេត្ត និងពិន្ទុ BACII" : "School, province, and BACII grade",
-    },
-    {
-      key: "assessments",
-      title: isKm ? "លទ្ធផលវាយតម្លៃ" : "Assessment results",
-      description: isKm ? "MBTI, RIASEC និងចំណូលចិត្ត" : "MBTI, RIASEC, and preferences",
-    },
-    {
-      key: "recommendations",
-      title: isKm ? "ការណែនាំជំនាញ" : "Major recommendations",
-      description: isKm ? "ជំនាញដែលសាកសមបំផុត" : "Top matching majors",
-    },
-    {
-      key: "plans",
-      title: isKm ? "ផែនការដាក់ពាក្យ" : "Application plans",
-      description: isKm
-        ? "កាលកំណត់ និងវឌ្ឍនភាពឯកសារ"
-        : "Deadlines and document progress",
-    },
-    {
-      key: "eligibility",
-      title: isKm ? "ឱកាសចូលរៀន" : "BACII eligibility",
-      description: isKm
-        ? "កម្មវិធីដែលស្ថិតក្នុងលទ្ធភាព"
-        : "Verified programs within reach",
-    },
-  ];
+      {
+        key: "profile",
+        title: isKm ? "ប្រវត្តិសិស្ស" : "Student profile",
+        description: isKm ? "សាលា ខេត្ត និងពិន្ទុ BACII" : "School, province, and BACII grade",
+      },
+      {
+        key: "assessments",
+        title: isKm ? "លទ្ធផលវាយតម្លៃ" : "Assessment results",
+        description: isKm ? "MBTI, RIASEC និងចំណូលចិត្ត" : "MBTI, RIASEC, and preferences",
+      },
+      {
+        key: "recommendations",
+        title: isKm ? "ការណែនាំជំនាញ" : "Major recommendations",
+        description: isKm ? "ជំនាញដែលសាកសមបំផុត" : "Top matching majors",
+      },
+      {
+        key: "plans",
+        title: isKm ? "ផែនការដាក់ពាក្យ" : "Application plans",
+        description: isKm
+          ? "កាលកំណត់ និងវឌ្ឍនភាពឯកសារ"
+          : "Deadlines and document progress",
+      },
+      {
+        key: "eligibility",
+        title: isKm ? "ឱកាសចូលរៀន" : "BACII eligibility",
+        description: isKm
+          ? "កម្មវិធីដែលស្ថិតក្នុងលទ្ធភាព"
+          : "Verified programs within reach",
+      },
+    ];
 
   const { data: shares = [], isLoading: loadingShares } = useQuery({
     queryKey: ["report-shares"],
@@ -315,7 +315,7 @@ export function ShareReportDialog({
                     className={cn(
                       "mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border",
                       selected
-                        ? "border-[#111965] bg-[#111965] text-white dark:border-[#F7CE4D] dark:bg-[#F7CE4D] dark:text-[#111965]"
+                        ? "border-[#111965] bg-[#111965] text-white dark:border-[#F7CE4D] dark:bg-[#F7CE4D] dark:text-white"
                         : "border-[#D9DEEA] bg-white dark:border-white/20 dark:bg-transparent"
                     )}
                   >

@@ -524,7 +524,7 @@ export default function AdminConsolePage() {
           </p>
           <Link
             href="/login"
-            className="inline-block rounded-xl bg-[#111965] dark:bg-[#F7CE4D] dark:text-[#111965] px-5 py-2 text-xs font-bold text-white shadow-xs"
+            className="inline-block rounded-xl bg-[#111965] dark:bg-[#F7CE4D] dark:text-white px-5 py-2 text-xs font-bold text-white shadow-xs"
           >
             {isKm ? "ចូលគណនីជាអភិបាល" : "Sign in as an administrator"}
           </Link>

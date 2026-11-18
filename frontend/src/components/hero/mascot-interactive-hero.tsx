@@ -15,12 +15,13 @@ import {
 import TechText from "@/components/react-bits/tech-text";
 
 export function MascotInteractiveHero() {
-  const { t, language, getLocalized } = useLanguage();
+  const { t, getLocalized } = useLanguage();
   const [currentIdx, setCurrentIdx] = useState(0);
   const [displayedSpeech, setDisplayedSpeech] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [taraBounce, setTaraBounce] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [assistantOpen, setAssistantOpen] = useState(false);
 
   const mascotPlaceholderRef = useRef<HTMLDivElement | null>(null);
   const [startRect, setStartRect] = useState<{
@@ -101,6 +102,23 @@ export function MascotInteractiveHero() {
     );
   }, [scrollProgress]);
 
+  useEffect(() => {
+    const handler = (event: Event) => {
+      setAssistantOpen(Boolean((event as CustomEvent<boolean>).detail));
+    };
+    window.addEventListener("orienx:assistant-visibility", handler);
+    const globalWindow = window as Window & {
+      __orienxAssistantOpen?: boolean;
+    };
+    if (typeof globalWindow.__orienxAssistantOpen === "boolean") {
+      // Hydration-safe: state lives on the client only.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setAssistantOpen(globalWindow.__orienxAssistantOpen);
+    }
+    return () =>
+      window.removeEventListener("orienx:assistant-visibility", handler);
+  }, []);
+
   const progress = startRect ? scrollProgress : 0;
   const endWidth = 96;
   const endHeight = 104;
@@ -155,6 +173,8 @@ export function MascotInteractiveHero() {
 
   // Smooth typewriter effect
   useEffect(() => {
+    if (assistantOpen) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsTyping(true);
     setDisplayedSpeech("");
 
@@ -170,11 +190,11 @@ export function MascotInteractiveHero() {
     }, 20);
 
     return () => clearInterval(typeInterval);
-  }, [targetText]);
+  }, [targetText, assistantOpen]);
 
   // Once typing completes, leave a moment for the user to read (4.2 seconds), then automatically rotate to next message
   useEffect(() => {
-    if (isTyping || isPaused) return;
+    if (isTyping || isPaused || assistantOpen) return;
 
     const readTimer = setTimeout(() => {
       setTaraBounce(true);
@@ -183,7 +203,7 @@ export function MascotInteractiveHero() {
     }, 4200);
 
     return () => clearTimeout(readTimer);
-  }, [isTyping, isPaused, currentIdx]);
+  }, [isTyping, isPaused, currentIdx, assistantOpen, greetings.length]);
 
   // Highlight Tara's name in speech
   const renderFormattedSpeech = (text: string) => {
@@ -312,6 +332,7 @@ export function MascotInteractiveHero() {
           <div className="lg:col-span-6 xl:col-span-6 flex flex-col items-center justify-center relative min-h-[440px] sm:min-h-[480px]">
             <div className="relative w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center">
               {/* Natural Conversational Speech Bubble (Floating to the upper-left of Tara - Exact Pic 1) */}
+              {!assistantOpen && (
               <div
                 className="w-full lg:absolute lg:-top-6 lg:-left-6 xl:-left-25 z-50 max-w-sm sm:max-w-[340px] mb-4 lg:mb-0 cursor-pointer"
                 onMouseEnter={() => setIsPaused(true)}
@@ -369,6 +390,7 @@ export function MascotInteractiveHero() {
                   </div>
                 </div>
               </div>
+              )}
 
               {/* Placeholder keeps the hero layout while the fixed mascot travels */}
               <div

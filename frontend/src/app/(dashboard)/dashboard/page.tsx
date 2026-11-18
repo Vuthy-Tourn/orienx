@@ -332,7 +332,7 @@ export default function DashboardOverviewPage() {
                   <Link
                     href="/dashboard/plan"
                     key={plan.id}
-                    className="rounded-xl border border-[#F0F2FA] bg-[#F8FAFD] p-2.5 transition-colors hover:border-[#D9DEEA] hover:bg-white"
+                    className="rounded-xl border border-[#F0F2FA] dark:border-white/10 bg-[#F8FAFD] dark:bg-white/[0.03] p-2.5 transition-colors hover:border-[#D9DEEA] dark:hover:border-white/20 hover:bg-white dark:hover:bg-white/[0.06]"
                   >
                     <span
                       className={cn(

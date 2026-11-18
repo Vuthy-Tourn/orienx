@@ -426,14 +426,16 @@ export default function PublicPersonalityGuidePage() {
               key={role.id}
               onClick={() => setSelectedRole(role.id === selectedRole ? "all" : role.id)}
               type="button"
-              className={`gsap-mbti-role-card p-5 rounded-2xl text-left transition-all border shadow-sm cursor-pointer ${
+              className={`gsap-mbti-role-card p-5 rounded-2xl text-left transition-all border border-[#E6E8F0] dark:border-white/10 shadow-sm cursor-pointer ${
                 selectedRole === role.id
-                  ? "bg-white ring-2 shadow-md"
-                  : "bg-white hover:shadow hover:-translate-y-0.5"
+                  ? "bg-white dark:bg-[#111827] shadow-md ring-2"
+                  : "bg-white dark:bg-[#111827] hover:shadow hover:-translate-y-0.5"
               }`}
-              style={{
-                borderColor: selectedRole === role.id ? role.color : "#E6E8F0",
-              }}
+              style={
+                selectedRole === role.id
+                  ? { borderColor: role.color, boxShadow: `0 0 0 2px ${role.color}40` }
+                  : undefined
+              }
             >
               <div className="flex items-center justify-between gap-2 mb-2">
                 <span

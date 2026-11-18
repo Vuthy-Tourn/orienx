@@ -131,11 +131,20 @@ export function FloatingAssistant() {
 
   const [showTeaser, setShowTeaser] = useState(false);
   const [teaserIndex, setTeaserIndex] = useState(0);
-  const [teaserDismissed, setTeaserDismissed] = useState(false);
   const reduceMotion = useReducedMotion();
   const messageCounter = useRef(0);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    const globalWindow = window as Window & {
+      __orienxAssistantOpen?: boolean;
+    };
+    globalWindow.__orienxAssistantOpen = open;
+    window.dispatchEvent(
+      new CustomEvent("orienx:assistant-visibility", { detail: open })
+    );
+  }, [open]);
 
   const { data: status } = useQuery({
     queryKey: ["assistant-status"],
@@ -166,10 +175,10 @@ export function FloatingAssistant() {
   }, [messages, isSending]);
 
   useEffect(() => {
-    if (!user || open || teaserDismissed) return;
+    if (!user || open) return;
     const timer = setTimeout(() => setShowTeaser(true), 1600);
     return () => clearTimeout(timer);
-  }, [user, open, teaserDismissed, pathname]);
+  }, [user, open, pathname]);
 
   useEffect(() => {
     if (!showTeaser || open || !user) return;
@@ -206,7 +215,6 @@ export function FloatingAssistant() {
   const openAssistant = () => {
     setOpen(true);
     setShowTeaser(false);
-    setTeaserDismissed(true);
   };
 
   const send = async (rawQuestion?: string) => {
@@ -273,78 +281,75 @@ export function FloatingAssistant() {
 
   return (
     <>
-      <AnimatePresence>
-        {assistantVisible && (
-          <motion.div
-            initial={reduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={reduceMotion ? undefined : { opacity: 0 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="fixed bottom-5 right-5 z-[70] h-[104px] w-[96px] origin-bottom-right"
-          >
-        <motion.button
-          type="button"
-          onClick={openAssistant}
-          aria-label={copy.open}
-          whileHover={reduceMotion ? undefined : { scale: 1.04 }}
-          whileTap={reduceMotion ? undefined : { scale: 0.96 }}
-          className="relative flex h-full w-full select-none items-end justify-center rounded-2xl bg-transparent p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7CE4D] focus-visible:ring-offset-2"
+      {assistantVisible && (
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="fixed bottom-5 right-5 z-[70] h-[104px] w-[96px] origin-bottom-right"
         >
-          <motion.span
-            animate={reduceMotion ? undefined : { y: [0, -6, 0] }}
-            transition={
-              reduceMotion
-                ? undefined
-                : { duration: 3.4, repeat: Infinity, ease: "easeInOut" }
-            }
-            className="block h-[104px] w-[96px]"
+          <motion.button
+            type="button"
+            onClick={openAssistant}
+            aria-label={copy.open}
+            whileHover={reduceMotion ? undefined : { scale: 1.04 }}
+            whileTap={reduceMotion ? undefined : { scale: 0.96 }}
+            className="relative flex h-full w-full select-none items-end justify-center rounded-2xl bg-transparent p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7CE4D] focus-visible:ring-offset-2"
           >
-            <Image
-              src="/images/welcome-hd.webp"
-              alt=""
-              width={96}
-              height={102}
-              priority={false}
-              className="h-full w-full object-contain drop-shadow-[0_18px_16px_rgba(17,25,101,0.28)]"
-            />
-          </motion.span>
-        </motion.button>
-
-      <AnimatePresence>
-        {user && !open && showTeaser && !teaserDismissed && (
-          <motion.div
-            initial={reduceMotion ? false : { opacity: 0, x: -8, scale: 0.96 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={reduceMotion ? undefined : { opacity: 0, x: -8, scale: 0.96 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute bottom-[calc(100%_+_0.5rem)] right-4 z-[59] w-[min(calc(100vw-3rem),260px)]"
-          >
-            <button
-              type="button"
-              onClick={openAssistant}
-              aria-label={copy.open}
-              className="group relative w-full rounded-[22px] border border-[#E6E8F0] bg-white px-4 py-3 text-left shadow-xl shadow-black/10 transition-colors hover:border-[#F7CE4D]/70 dark:border-white/10 dark:bg-[#0B102A]"
+            <motion.span
+              animate={reduceMotion ? undefined : { y: [0, -6, 0] }}
+              transition={
+                reduceMotion
+                  ? undefined
+                  : { duration: 3.4, repeat: Infinity, ease: "easeInOut" }
+              }
+              className="block h-[104px] w-[96px]"
             >
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.p
-                  key={teaserIndex}
-                  initial={reduceMotion ? false : { opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
-                  transition={{ duration: 0.2 }}
-                  className="text-[12.5px] font-semibold leading-relaxed text-[#111965] dark:text-slate-100"
+              <Image
+                src="/images/welcome-hd.webp"
+                alt=""
+                width={96}
+                height={102}
+                priority={false}
+                className="h-full w-full object-contain drop-shadow-[0_18px_16px_rgba(17,25,101,0.28)]"
+              />
+            </motion.span>
+          </motion.button>
+
+          <AnimatePresence>
+            {user && !open && showTeaser && (
+              <motion.div
+                initial={reduceMotion ? false : { opacity: 0, x: -8, scale: 0.96 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={reduceMotion ? undefined : { opacity: 0, x: -8, scale: 0.96 }}
+                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute bottom-[calc(100%_+_0.5rem)] right-4 z-[59] w-[min(calc(100vw-3rem),260px)]"
+              >
+                <button
+                  type="button"
+                  onClick={openAssistant}
+                  aria-label={copy.open}
+                  className="group relative w-full rounded-[22px] border border-[#E6E8F0] bg-white px-4 py-3 text-left shadow-xl shadow-black/10 transition-colors hover:border-[#F7CE4D]/70 dark:border-white/10 dark:bg-[#0B102A]"
                 >
-                  {teaserMessages[teaserIndex % teaserMessages.length]}
-                </motion.p>
-              </AnimatePresence>
-            </button>
-            <span className="absolute -bottom-2 right-8 h-4 w-4 rotate-45 border-b border-r border-[#E6E8F0] bg-white dark:border-white/10 dark:bg-[#0B102A]" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.p
+                      key={teaserIndex}
+                      initial={reduceMotion ? false : { opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
+                      transition={{ duration: 0.2 }}
+                      className="text-[12.5px] font-semibold leading-relaxed text-[#111965] dark:text-slate-100"
+                    >
+                      {teaserMessages[teaserIndex % teaserMessages.length]}
+                    </motion.p>
+                  </AnimatePresence>
+                </button>
+                <span className="absolute -bottom-2 right-8 h-4 w-4 rotate-45 border-b border-r border-[#E6E8F0] bg-white dark:border-white/10 dark:bg-[#0B102A]" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      )}
 
       {open && (
         <section
@@ -406,7 +411,7 @@ export function FloatingAssistant() {
                 </p>
                 <Link
                   href="/login"
-                  className="mt-4 rounded-xl bg-[#111965] px-4 py-2 text-xs font-black text-white dark:bg-[#F7CE4D] dark:text-[#111965]"
+                  className="mt-4 rounded-xl bg-[#111965] px-4 py-2 text-xs font-black text-white dark:bg-[#F7CE4D] dark:text-white"
                 >
                   {copy.signInCta}
                 </Link>
@@ -558,7 +563,7 @@ export function FloatingAssistant() {
                   onClick={() => void send()}
                   disabled={isSending || !input.trim()}
                   aria-label={copy.send}
-                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#111965] text-white transition-colors hover:bg-[#1A247F] disabled:cursor-not-allowed disabled:opacity-40 dark:bg-[#F7CE4D] dark:text-[#111965]"
+                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#111965] text-white transition-colors hover:bg-[#1A247F] disabled:cursor-not-allowed disabled:opacity-40 dark:bg-[#F7CE4D] dark:text-white"
                 >
                   {isSending ? (
                     <Loader2 className="h-4 w-4 animate-spin" />

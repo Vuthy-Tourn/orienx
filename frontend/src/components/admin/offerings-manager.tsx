@@ -864,7 +864,7 @@ export function OfferingsManager() {
                         degree_level: value,
                         min_bacii_grade:
                           value !== "ASSOCIATE" &&
-                          prev.min_bacii_grade === "F"
+                            prev.min_bacii_grade === "F"
                             ? ""
                             : prev.min_bacii_grade,
                       }))
@@ -873,7 +873,7 @@ export function OfferingsManager() {
                       value: degree,
                       label:
                         copy.degreeLabels[
-                          degree as keyof typeof copy.degreeLabels
+                        degree as keyof typeof copy.degreeLabels
                         ],
                     }))}
                     label={copy.degreeLevel}
@@ -1057,7 +1057,7 @@ export function OfferingsManager() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#111965] px-5 text-xs font-black text-white transition-colors hover:bg-[#1E277A] disabled:opacity-60 dark:bg-[#F7CE4D] dark:text-[#111965] dark:hover:bg-[#E5BD3B]"
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#111965] px-5 text-xs font-black text-white transition-colors hover:bg-[#1E277A] disabled:opacity-60 dark:bg-[#F7CE4D] dark:text-white dark:hover:bg-[#E5BD3B]"
                 >
                   {saving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                   {editing ? copy.saveChanges : copy.addProgram}

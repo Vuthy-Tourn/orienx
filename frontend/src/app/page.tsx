@@ -500,11 +500,10 @@ export default function HomePage() {
                         {/* Meta Badges */}
                         <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
                           <span
-                            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${
-                              activeUni.type === "PUBLIC"
+                            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${activeUni.type === "PUBLIC"
                                 ? "bg-blue-50 text-blue-700 border border-blue-200/70 dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-800/60"
                                 : "bg-purple-50 text-purple-700 border border-purple-200/70 dark:bg-purple-950/50 dark:text-purple-300 dark:border-purple-800/60"
-                            }`}
+                              }`}
                           >
                             <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70" />
                             <span>{activeUni.typeLabel}</span>
@@ -554,7 +553,7 @@ export default function HomePage() {
                       <div className="flex items-center gap-2.5">
                         <Link
                           href={`/universities/${activeUni.slug}`}
-                          className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#111965] hover:bg-[#1E277A] dark:bg-[#F7CE4D] dark:text-[#111965] dark:hover:bg-[#E5BD3B] shadow-md shadow-[#111965]/15 hover:shadow-lg active:scale-95 transition-all duration-200 cursor-pointer"
+                          className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#111965] hover:bg-[#1E277A] dark:bg-[#F7CE4D] dark:text-white dark:hover:bg-[#E5BD3B] shadow-md shadow-[#111965]/15 hover:shadow-lg active:scale-95 transition-all duration-200 cursor-pointer"
                         >
                           <span>{t("featuredUniversities.profile")}</span>
                           <ArrowRight className="w-4 h-4" />
@@ -614,14 +613,13 @@ export default function HomePage() {
                             }}
                             type="button"
                             onClick={() => setActiveUniIndex(idx)}
-                            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 shrink-0 cursor-pointer ${
-                              isActive
-                                ? "bg-[#111965] text-white dark:bg-[#F7CE4D] dark:text-[#111965] shadow-sm shadow-[#111965]/20 scale-[1.03]"
+                            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 shrink-0 cursor-pointer ${isActive
+                                ? "bg-[#111965] text-white dark:bg-[#F7CE4D] dark:text-white shadow-sm shadow-[#111965]/20 scale-[1.03]"
                                 : "bg-slate-100 dark:bg-white/5 text-[#68708A] dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-white/10 hover:text-[#111965] dark:hover:text-white"
-                            }`}
+                              }`}
                           >
                             {isActive ? (
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#F7CE4D] dark:bg-[#111965] animate-pulse" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#F7CE4D] animate-pulse" />
                             ) : (
                               <span className="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-600" />
                             )}
