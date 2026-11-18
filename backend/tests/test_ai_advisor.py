@@ -314,6 +314,43 @@ async def test_assistant_falls_back_when_gemini_is_not_configured(
 
 
 @pytest.mark.asyncio
+async def test_khmer_tool_query_lists_all_universities(client):
+    login = await client.post(
+        "/api/v1/auth/login",
+        json={
+            "email": "student@futera.edu.kh",
+            "password": "StudentPass123!",
+        },
+    )
+    assert login.status_code == 200, login.text
+    token = login.json()["data"]["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    question = (
+        "តើសាកលវិទ្យាល័យណាខ្លះបង្រៀន software engineering?"
+    )
+    response = await client.post(
+        "/api/v1/ai/advisor",
+        json={"question": question, "language": "km"},
+        headers=headers,
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()["data"]
+    assert data["mode"] == "tool"
+    assert data["answer"].count("•") >= 5
+
+    widget_response = await client.post(
+        "/api/v1/ai/assistant",
+        json={"question": question, "language": "km"},
+        headers=headers,
+    )
+    assert widget_response.status_code == 200, widget_response.text
+    widget_data = widget_response.json()["data"]
+    assert widget_data["mode"] == "tool"
+    assert widget_data["answer"].count("•") >= 5
+
+
+@pytest.mark.asyncio
 async def test_ai_advisor_returns_grounded_sources(client):
     login = await client.post(
         "/api/v1/auth/login",

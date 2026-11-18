@@ -615,7 +615,7 @@ async def run_relevant_tools(
 
     if _contains_any(query, SEARCH_WORDS) and majors and not run.names:
         result = await search_universities(
-            session, major=major_slug, limit=5
+            session, major=major_slug, limit=10
         )
         results.append(result)
         run.names.append("search_universities")

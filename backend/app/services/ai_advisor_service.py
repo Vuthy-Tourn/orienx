@@ -138,7 +138,7 @@ class AIAdvisorService:
                     if document.id not in seen_ids:
                         merged.append(document)
                         seen_ids.add(document.id)
-                relevant = merged[:8]
+                relevant = merged[:12]
 
         client = LocalModelClient()
         connected, model_name = (
@@ -193,6 +193,11 @@ class AIAdvisorService:
         question: str,
         language: str,
     ) -> tuple[str, str]:
+        # Structured tool queries already have a complete, authoritative answer.
+        # Do not let the model shorten a 5-university list to one bullet.
+        if prepared.tools_used:
+            return prepared.fallback_answer, "tool"
+
         if not prepared.model_name or not prepared.system_prompt:
             return prepared.fallback_answer, "retrieval_only"
 
@@ -261,7 +266,13 @@ class AIAdvisorService:
         prepared = await AIAdvisorService.prepare(
             session, question, language
         )
-        mode = "local_model" if prepared.model_name else "retrieval_only"
+        mode = (
+            "tool"
+            if prepared.tools_used
+            else "local_model"
+            if prepared.model_name
+            else "retrieval_only"
+        )
 
         yield {
             "event": "meta",
@@ -274,7 +285,11 @@ class AIAdvisorService:
         }
 
         answer = ""
-        if language == "km":
+        if prepared.tools_used:
+            answer = prepared.fallback_answer
+            mode = "tool"
+            yield {"event": "token", "data": {"text": answer}}
+        elif language == "km":
             # Khmer answers are generated first and script-checked before they
             # reach the browser, so Thai characters cannot leak into the UI.
             answer, mode = await AIAdvisorService._local_answer(

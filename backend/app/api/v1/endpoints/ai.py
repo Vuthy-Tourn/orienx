@@ -113,6 +113,8 @@ async def ask_advisor(
     message = (
         "Answered by the local AI model"
         if data.mode == "local_model"
+        else "Answered from verified records and tools"
+        if data.mode == "tool"
         else "Answered from verified records (local AI model offline)"
     )
     return ApiResponse(success=True, message=message, data=data)

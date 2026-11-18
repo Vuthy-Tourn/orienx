@@ -26,7 +26,7 @@ class AdvisorSourceOut(BaseModel):
 class AdvisorAnswerOut(BaseModel):
     interaction_id: uuid.UUID
     answer: str
-    mode: Literal["local_model", "retrieval_only", "gemini"]
+    mode: Literal["local_model", "retrieval_only", "gemini", "tool"]
     model_name: Optional[str] = None
     sources: List[AdvisorSourceOut]
     suggested_questions: List[str]

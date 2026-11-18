@@ -44,50 +44,54 @@ class GeminiAssistantService:
         mode = "retrieval_only"
         warning = None
 
-        try:
-            if not prepared.system_prompt:
-                raise GeminiUnavailable("No grounded prompt could be built.")
-            answer = await client.generate(
-                prepared.system_prompt, question.strip()
-            )
-            if answer:
-                mode = "gemini"
-                if language == "km" and contains_thai(answer):
-                    logger.warning(
-                        "Gemini emitted Thai characters in a Khmer answer; retrying."
-                    )
-                    repair_prompt = (
-                        prepared.system_prompt
-                        + "\n\nCRITICAL LANGUAGE CHECK: Your previous answer used "
-                        "Thai characters. Rewrite the entire answer using Khmer "
-                        "Unicode only (U+1780–U+17FF). Never use Thai script "
-                        "(U+0E00–U+0E7F). If you cannot write Khmer fluently, "
-                        "answer in English instead."
-                    )
-                    retry = await client.generate(
-                        repair_prompt, question.strip()
-                    )
-                    if retry and not contains_thai(retry):
-                        answer = retry
-                    else:
-                        answer = prepared.fallback_answer
-                        mode = "retrieval_only"
-                        warning = (
-                            "Khmer answer contained Thai script; answered from "
-                            "verified records."
+        if prepared.tools_used:
+            answer = prepared.fallback_answer
+            mode = "tool"
+        else:
+            try:
+                if not prepared.system_prompt:
+                    raise GeminiUnavailable("No grounded prompt could be built.")
+                answer = await client.generate(
+                    prepared.system_prompt, question.strip()
+                )
+                if answer:
+                    mode = "gemini"
+                    if language == "km" and contains_thai(answer):
+                        logger.warning(
+                            "Gemini emitted Thai characters in a Khmer answer; retrying."
                         )
-        except GeminiUnavailable as exc:
-            logger.warning("Gemini unavailable: %s", exc)
-            warning = (
-                "Gemini is not configured; answered from verified records."
-                if not client.configured
-                else "Gemini is unavailable; answered from verified records."
-            )
-            answer = prepared.fallback_answer
-        except Exception:
-            logger.exception("Unexpected Gemini assistant failure")
-            warning = "Gemini is unavailable; answered from verified records."
-            answer = prepared.fallback_answer
+                        repair_prompt = (
+                            prepared.system_prompt
+                            + "\n\nCRITICAL LANGUAGE CHECK: Your previous answer used "
+                            "Thai characters. Rewrite the entire answer using Khmer "
+                            "Unicode only (U+1780–U+17FF). Never use Thai script "
+                            "(U+0E00–U+0E7F). If you cannot write Khmer fluently, "
+                            "answer in English instead."
+                        )
+                        retry = await client.generate(
+                            repair_prompt, question.strip()
+                        )
+                        if retry and not contains_thai(retry):
+                            answer = retry
+                        else:
+                            answer = prepared.fallback_answer
+                            mode = "retrieval_only"
+                            warning = (
+                                "Khmer answer contained Thai script; answered from "
+                                "verified records."
+                            )
+            except GeminiUnavailable as exc:
+                logger.warning("Gemini unavailable: %s", exc)
+                warning = (
+                    "Gemini is not configured; answered from verified records."
+                    if not client.configured
+                    else "Gemini is unavailable; answered from verified records."
+                )
+                answer = prepared.fallback_answer
+            except Exception:
+                logger.exception("Unexpected Gemini assistant failure")
+                warning = "Gemini is unavailable; answered from verified records."
+                answer = prepared.fallback_answer
 
         if not answer:
             answer = prepared.fallback_answer

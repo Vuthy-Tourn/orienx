@@ -25,7 +25,7 @@ import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import { cn } from "@/lib/utils";
 
-type AdvisorMode = "local_model" | "retrieval_only";
+type AdvisorMode = "local_model" | "retrieval_only" | "tool";
 
 interface AdvisorSource {
   type: string;

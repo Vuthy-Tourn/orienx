@@ -8,6 +8,13 @@ from app.core.config import settings
 from app.core.database import get_db, Base
 
 
+@pytest.fixture(autouse=True)
+def no_ai_daily_limits(monkeypatch):
+    """AI tests should not fail just because the dev database has had a busy day."""
+    monkeypatch.setattr(settings, "AI_DAILY_QUESTION_LIMIT", 100000)
+    monkeypatch.setattr(settings, "ASSISTANT_DAILY_QUESTION_LIMIT", 100000)
+
+
 @pytest_asyncio.fixture(scope="session")
 async def db_session():
     engine = create_async_engine(settings.DATABASE_URL)

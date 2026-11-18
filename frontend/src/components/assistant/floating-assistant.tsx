@@ -22,7 +22,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { cn } from "@/lib/utils";
 
-type AssistantMode = "gemini" | "retrieval_only" | "local_model";
+type AssistantMode = "gemini" | "retrieval_only" | "local_model" | "tool";
 
 interface AssistantSource {
   type: string;
