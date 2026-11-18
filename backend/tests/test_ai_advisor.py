@@ -11,6 +11,11 @@ from app.services.ai_knowledge import (
     build_extractive_answer,
     retrieve_documents,
 )
+from app.services.ai_advisor_service import (
+    AIAdvisorService,
+    PreparedAnswer,
+    contains_thai,
+)
 from app.services.advisor_tools import (
     check_eligibility,
     compare_universities,
@@ -107,6 +112,67 @@ def test_retrieval_rejects_out_of_scope_questions():
     ]
     assert retrieve_documents(documents, "What is the weather in Phnom Penh?") == []
     assert retrieve_documents(documents, "Tell me a joke") == []
+
+
+def test_thai_script_detection():
+    assert contains_thai("សួស្តី! ខ្ញុំអាចជួយអ្វីបានบ้าง?") is True
+    assert contains_thai("សួស្តី! ខ្ញុំអាចជួយអ្វីបានខ្លះ?") is False
+
+
+@pytest.mark.asyncio
+async def test_khmer_answer_retries_when_thai_leaks():
+    class FakeClient:
+        def __init__(self) -> None:
+            self.calls = 0
+            self.answers = [
+                "សួស្តី! ខ្ញុំអាចជួយអ្វីបានบ้าง?",
+                "សួស្តី! ខ្ញុំអាចជួយអ្វីបានខ្លះ?",
+            ]
+
+        async def chat(self, model, system_prompt, user_prompt):
+            answer = self.answers[min(self.calls, len(self.answers) - 1)]
+            self.calls += 1
+            return answer
+
+    client = FakeClient()
+    prepared = PreparedAnswer(
+        client=client,
+        model_name="fake-model",
+        system_prompt="system",
+        sources=[],
+        tools_used=[],
+        fallback_answer="fallback",
+    )
+    answer, mode = await AIAdvisorService._local_answer(prepared, "hi", "km")
+    assert client.calls == 2
+    assert mode == "local_model"
+    assert contains_thai(answer) is False
+    assert "ខ្លះ" in answer
+
+
+@pytest.mark.asyncio
+async def test_khmer_answer_uses_fallback_when_thai_repeats():
+    class FakeClient:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        async def chat(self, model, system_prompt, user_prompt):
+            self.calls += 1
+            return "ខ្ញុំអាចជួយបានบ้าง?"
+
+    client = FakeClient()
+    prepared = PreparedAnswer(
+        client=client,
+        model_name="fake-model",
+        system_prompt="system",
+        sources=[],
+        tools_used=[],
+        fallback_answer="ខ្ញុំមិនបានរកឃើញព័ត៌មានត្រូវគ្នាទេ។",
+    )
+    answer, mode = await AIAdvisorService._local_answer(prepared, "hi", "km")
+    assert client.calls == 2
+    assert mode == "retrieval_only"
+    assert answer == prepared.fallback_answer
 
 
 def test_eval_set_contains_100_questions():

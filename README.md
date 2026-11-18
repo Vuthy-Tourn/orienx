@@ -213,6 +213,8 @@ AI_OLLAMA_MODEL=gemma3:12b
 
 The web UI uses the streaming endpoint, so the first words appear in about a second even when the full answer takes longer. On an M4 Pro with `gemma3:12b`, typical answers finish in 4–9 seconds after the model is loaded. Keeping the model warm (`AI_OLLAMA_KEEP_ALIVE`) removes the cold-start delay; use `gemma3:4b` if you prefer lower latency over reasoning quality.
 
+Khmer answers are script-checked before they reach the browser. If the local model leaks Thai characters, it is asked once to rewrite in Khmer Unicode only; if Thai remains, Futera returns the verified Khmer fallback. Khmer responses are therefore buffered rather than token-streamed.
+
 The Docker Compose stack uses the `pgvector/pgvector:pg16` image. The backend container already points at `host.docker.internal:11434`, so native Ollama on your Mac is detected automatically.
 
 ### Evaluation and training data

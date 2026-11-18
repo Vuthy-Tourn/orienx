@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+import re
 import time
 import uuid
 from dataclasses import dataclass
@@ -23,6 +25,19 @@ from app.services.advisor_tools import ToolRun, run_relevant_tools
 from app.services.knowledge_embeddings import load_query_similarities
 from app.services.local_model import LocalModelClient
 
+logger = logging.getLogger(__name__)
+
+THAI_SCRIPT_RE = re.compile(r"[\u0E00-\u0E7F]")
+KHMER_SCRIPT_RE = re.compile(r"[\u1780-\u17FF]")
+
+
+def contains_thai(text: str) -> bool:
+    return bool(THAI_SCRIPT_RE.search(text or ""))
+
+
+def contains_khmer(text: str) -> bool:
+    return bool(KHMER_SCRIPT_RE.search(text or ""))
+
 SYSTEM_PROMPT = """You are Futera's education and career advisor for students in Cambodia.
 Today is {today}.
 
@@ -31,6 +46,7 @@ Rules:
 - TOOL RESULTS are computed directly from Futera's database and are authoritative. If they contain a list, include every listed item; never add, remove, or replace universities/programs with ones not in the list.
 - If the context does not contain the answer, say you do not have that verified detail and point to the closest source. Never invent tuition, deadlines, scholarship eligibility, or admission requirements.
 - Reply in {language}. Keep the answer concise, around 70 words. Use up to 5 bullet points when listing TOOL RESULTS.
+- Khmer must use Khmer Unicode characters only (U+1780–U+17FF). Never use Thai characters (U+0E00–U+0E7F); Thai is a different language.
 - Do not repeat the context verbatim; summarize the useful facts.
 - If you cannot write the requested language fluently, answer in English and say so.
 - Be warm, practical, and specific to Cambodia. Do not mention the word CONTEXT.
@@ -172,6 +188,44 @@ class AIAdvisorService:
         )
 
     @staticmethod
+    async def _local_answer(
+        prepared: PreparedAnswer,
+        question: str,
+        language: str,
+    ) -> tuple[str, str]:
+        if not prepared.model_name or not prepared.system_prompt:
+            return prepared.fallback_answer, "retrieval_only"
+
+        answer = await prepared.client.chat(
+            prepared.model_name, prepared.system_prompt, question
+        )
+        if not answer:
+            return prepared.fallback_answer, "retrieval_only"
+
+        if language == "km" and contains_thai(answer):
+            logger.warning(
+                "Local model emitted Thai characters in a Khmer answer; retrying."
+            )
+            repair_prompt = (
+                prepared.system_prompt
+                + "\n\nCRITICAL LANGUAGE CHECK: Your previous answer used Thai "
+                "characters. Rewrite the entire answer using Khmer Unicode only "
+                "(U+1780–U+17FF). Never use Thai script (U+0E00–U+0E7F). If you "
+                "cannot write Khmer fluently, answer in English instead."
+            )
+            retry = await prepared.client.chat(
+                prepared.model_name, repair_prompt, question
+            )
+            if retry and not contains_thai(retry):
+                return retry, "local_model"
+            logger.warning(
+                "Khmer retry still contained Thai characters; using verified fallback."
+            )
+            return prepared.fallback_answer, "retrieval_only"
+
+        return answer, "local_model"
+
+    @staticmethod
     async def generate_answer(
         session: AsyncSession,
         question: str,
@@ -183,18 +237,9 @@ class AIAdvisorService:
         prepared = await AIAdvisorService.prepare(
             session, question, language, use_model, hybrid
         )
-
-        answer: Optional[str] = None
-        mode = "retrieval_only"
-        if prepared.model_name and prepared.system_prompt:
-            answer = await prepared.client.chat(
-                prepared.model_name, prepared.system_prompt, question.strip()
-            )
-            if answer:
-                mode = "local_model"
-
-        if not answer:
-            answer = prepared.fallback_answer
+        answer, mode = await AIAdvisorService._local_answer(
+            prepared, question.strip(), language
+        )
 
         return AdvisorDraft(
             answer=answer,
@@ -229,30 +274,38 @@ class AIAdvisorService:
         }
 
         answer = ""
-        if prepared.model_name and prepared.system_prompt:
-            chunks: List[str] = []
-            try:
-                async for chunk in prepared.client.chat_stream(
-                    prepared.model_name,
-                    prepared.system_prompt,
-                    question.strip(),
-                ):
-                    if not chunk:
-                        continue
-                    chunks.append(chunk)
-                    yield {"event": "token", "data": {"text": chunk}}
-            except Exception:
-                # Keep any tokens already shown; otherwise use the grounded
-                # fallback below.
-                pass
-            answer = "".join(chunks).strip()
-            if answer:
-                mode = "local_model"
-
-        if not answer:
-            answer = prepared.fallback_answer
-            mode = "retrieval_only"
+        if language == "km":
+            # Khmer answers are generated first and script-checked before they
+            # reach the browser, so Thai characters cannot leak into the UI.
+            answer, mode = await AIAdvisorService._local_answer(
+                prepared, question.strip(), language
+            )
             yield {"event": "token", "data": {"text": answer}}
+        else:
+            if prepared.model_name and prepared.system_prompt:
+                chunks: List[str] = []
+                try:
+                    async for chunk in prepared.client.chat_stream(
+                        prepared.model_name,
+                        prepared.system_prompt,
+                        question.strip(),
+                    ):
+                        if not chunk:
+                            continue
+                        chunks.append(chunk)
+                        yield {"event": "token", "data": {"text": chunk}}
+                except Exception:
+                    # Keep any tokens already shown; otherwise use the grounded
+                    # fallback below.
+                    pass
+                answer = "".join(chunks).strip()
+                if answer:
+                    mode = "local_model"
+
+            if not answer:
+                answer = prepared.fallback_answer
+                mode = "retrieval_only"
+                yield {"event": "token", "data": {"text": answer}}
 
         latency_ms = int((time.perf_counter() - started) * 1000)
         interaction_id = uuid.uuid4()
