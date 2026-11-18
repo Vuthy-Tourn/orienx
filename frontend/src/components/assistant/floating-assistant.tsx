@@ -147,7 +147,10 @@ export function FloatingAssistant() {
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [suggestions, setSuggestions] = useState<string[] | null>(null);
+  const [suggestions, setSuggestions] = useState<{
+    language: string;
+    items: string[];
+  } | null>(null);
   const isHome = pathname === "/";
   const [pastHero, setPastHero] = useState(false);
 
@@ -279,7 +282,10 @@ export function FloatingAssistant() {
         },
       ]);
       if (data.suggested_questions?.length) {
-        setSuggestions(data.suggested_questions);
+        setSuggestions({
+          language,
+          items: data.suggested_questions,
+        });
       }
     } catch (caught) {
       setError(
@@ -299,9 +305,10 @@ export function FloatingAssistant() {
     }
   };
 
-  const visibleSuggestions = suggestions?.length
-    ? suggestions
-    : copy.suggestions;
+  const visibleSuggestions =
+    suggestions?.language === language && suggestions.items.length > 0
+      ? suggestions.items
+      : copy.suggestions;
   const assistantVisible = !open && (isHome ? pastHero : true);
 
   return (

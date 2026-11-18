@@ -205,14 +205,16 @@ export function AdvisorChat() {
   const [isSending, setIsSending] = useState(false);
   const [streamingId, setStreamingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [answerSuggestions, setAnswerSuggestions] = useState<string[] | null>(
-    null
-  );
+  const [answerSuggestions, setAnswerSuggestions] = useState<{
+    language: string;
+    items: string[];
+  } | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const messageCounter = useRef(0);
   const suggestions =
-    answerSuggestions && answerSuggestions.length > 0
-      ? answerSuggestions
+    answerSuggestions?.language === language &&
+    answerSuggestions.items.length > 0
+      ? answerSuggestions.items
       : isKm
         ? KM_SUGGESTIONS
         : EN_SUGGESTIONS;
@@ -372,7 +374,10 @@ export function AdvisorChat() {
               )
             );
             if (done.suggested_questions?.length) {
-              setAnswerSuggestions(done.suggested_questions);
+              setAnswerSuggestions({
+                language,
+                items: done.suggested_questions,
+              });
             }
           }
         }
