@@ -14,7 +14,7 @@ interface FuteraBlobCharacterProps {
 }
 
 /**
- * Bespoke Futera Geometric Blob Characters
+ * Bespoke OrienX Geometric Blob Characters
  * Inspired by playful geometric feeling shapes:
  * - Sol (E - Extraversion): Golden Sun Flower, joyful arched eyes, rosy cheeks
  * - Luna (I - Introversion): Lavender Squircle with headphones, peaceful smile

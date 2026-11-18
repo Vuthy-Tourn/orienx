@@ -273,7 +273,7 @@ export function MascotInteractiveHero() {
                 {/* Big High-Definition Crisp Tara Mascot */}
                 <Image
                   src="/images/welcome-hd.webp"
-                  alt="Tara Futera Mascot"
+                  alt="Tara OrienX Mascot"
                   width={720}
                   height={760}
                   priority

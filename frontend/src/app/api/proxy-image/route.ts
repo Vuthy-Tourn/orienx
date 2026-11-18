@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
     console.log("[proxy-image] fetching remote:", targetUrl);
     const res = await fetch(targetUrl, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; FuteraImageProxy/1.0)",
+        "User-Agent": "Mozilla/5.0 (compatible; OrienXImageProxy/1.0)",
         Accept: "image/*,*/*;q=0.8",
       },
     });

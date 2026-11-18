@@ -207,7 +207,7 @@ export default function DashboardOverviewPage() {
           LEFT / CENTER MAIN COLUMN (Span 8 on XL)
       ======================================================== */}
       <motion.div variants={DASHBOARD_ITEM} className="xl:col-span-8 space-y-6">
-        {/* 1. SCENIC HERO BANNER (Futera Primary Navy + Secondary Gold Accent) */}
+        {/* 1. SCENIC HERO BANNER (OrienX Primary Navy + Secondary Gold Accent) */}
         <div
           data-no-reveal
           className="relative rounded-[28px] overflow-hidden bg-gradient-to-r from-[#0A0F3D] via-[#111965] to-[#1E277A] border border-[#111965]/40 p-7 sm:p-9 shadow-lg min-h-[225px] flex flex-col justify-between text-white"
@@ -275,7 +275,7 @@ export default function DashboardOverviewPage() {
             >
               <Image
                 src="/images/welcome-hd.webp"
-                alt="Tara Futera Mascot"
+                alt="Tara OrienX Mascot"
                 fill
                 priority
                 unoptimized
@@ -800,7 +800,7 @@ export default function DashboardOverviewPage() {
           </div>
         </div>
 
-        {/* 3. SCHOLARSHIP MILESTONE CARD (Futera Primary & Secondary Gold Accent) */}
+        {/* 3. SCHOLARSHIP MILESTONE CARD (OrienX Primary & Secondary Gold Accent) */}
         <Link
           href="/dashboard/favorites"
           className="block p-5 rounded-[26px] bg-gradient-to-br from-[#F0F2FA] via-[#FAFBFD] to-[#FFF9E6] border border-[#E6E8F0] hover:border-[#F7CE4D] shadow-xs hover:shadow-md transition-all relative overflow-hidden space-y-3 group cursor-pointer"

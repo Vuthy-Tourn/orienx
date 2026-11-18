@@ -1,4 +1,4 @@
-"""Zero-dependency retrieval layer for the Futera AI advisor.
+"""Zero-dependency retrieval layer for the OrienX AI advisor.
 
 The advisor must stay accurate and free to run. Instead of sending the whole
 catalogue to a model, this module turns verified database records into small
@@ -800,10 +800,10 @@ def build_extractive_answer(
     is_km = language == "km"
     if not documents:
         return (
-            "ខ្ញុំមិនបានរកឃើញព័ត៌មានត្រូវគ្នានៅក្នុងទិន្នន័យ Futera ទេ។ សូមសាកល្បងសួរអំពីសាកលវិទ្យាល័យ "
+            "ខ្ញុំមិនបានរកឃើញព័ត៌មានត្រូវគ្នានៅក្នុងទិន្នន័យ OrienX ទេ។ សូមសាកល្បងសួរអំពីសាកលវិទ្យាល័យ "
             "ជំនាញ អាហារូបករណ៍ ឬអាជីពជាក់លាក់មួយ។"
             if is_km
-            else "I could not find a matching record in Futera's verified data. "
+            else "I could not find a matching record in OrienX's verified data. "
             "Try asking about a specific university, major, scholarship, or career."
         )
 
@@ -814,9 +814,9 @@ def build_extractive_answer(
         "scholarship": ("អាហារូបករណ៍", "Scholarship"),
     }
     intro = (
-        "នេះជាព័ត៌មានដែលខ្ញុំរកឃើញក្នុងទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ Futera៖"
+        "នេះជាព័ត៌មានដែលខ្ញុំរកឃើញក្នុងទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ OrienX៖"
         if is_km
-        else "Here is what I found in Futera's verified records:"
+        else "Here is what I found in OrienX's verified records:"
     )
     lines = [intro]
     for document in documents[:5]:

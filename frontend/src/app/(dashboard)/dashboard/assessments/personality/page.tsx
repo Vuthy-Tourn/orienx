@@ -475,7 +475,7 @@ export default function PersonalityAssessmentPage() {
           </div>
         </div>
 
-        {/* 1. HERO BANNER — PLATFORM COLORS (Futera Deep Navy & Gold) */}
+        {/* 1. HERO BANNER — PLATFORM COLORS (OrienX Deep Navy & Gold) */}
         <div className="p-6 sm:p-9 rounded-3xl bg-gradient-to-r from-[#111965] via-[#1A2580] to-[#0D134E] text-white shadow-xl relative overflow-hidden border border-[#111965]/40">
           {/* Ambient Platform Brand Glows */}
           <div className="absolute -top-16 -right-16 w-72 h-72 bg-[#F7CE4D]/10 rounded-full blur-3xl pointer-events-none" />

@@ -593,7 +593,7 @@ export default function CareersPage() {
                 <span>{language === "km" ? "ក្របខ័ណ្ឌវិជ្ជាជីវៈ Holland RIASEC" : "Holland RIASEC Vocational Framework"}</span>
               </div>
               <h3 className="text-xl font-extrabold text-white">
-                {language === "km" ? "តើភាពស៊ីសង្វាក់អាជីពដំណើរការយ៉ាងណានៅ Futera" : "How Career Compatibility Works in Futera"}
+                {language === "km" ? "តើភាពស៊ីសង្វាក់អាជីពដំណើរការយ៉ាងណានៅ OrienX" : "How Career Compatibility Works in OrienX"}
               </h3>
               <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
                 {language === "km" ? "ចុចលើកូដខាងក្រោម ដើម្បីតម្រងអាជីពដែលត្រូវនឹងរបៀបធ្វើការនេះ:" : "Click any code below to filter careers matching that psychological work style:"}

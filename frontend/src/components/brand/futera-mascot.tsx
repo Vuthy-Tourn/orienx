@@ -49,7 +49,7 @@ const PLAYFUL_CHEERS = [
 ];
 
 /**
- * Futera Official Video Mascot: Tara (តារា / Little Star Buddy)
+ * OrienX Official Video Mascot: Tara (តារា / Little Star Buddy)
  * Clean Minimal White Speech Bubble — pure white, subtle slate border, crisp navy text, clean pointer tail.
  */
 export function FuteraMascot({

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   BadgeCheck,
   Loader2,
@@ -88,7 +89,7 @@ export function FloatingAssistant() {
 
   const copy = isKm
     ? {
-        title: "ជំនួយការ Futera",
+        title: "ជំនួយការ OrienX",
         subtitle: "សួរបានយ៉ាងរហ័ស",
         open: "បើកជំនួយការ",
         close: "បិទ",
@@ -97,10 +98,15 @@ export function FloatingAssistant() {
         send: "ផ្ញើ",
         thinking: "កំពុងគិត...",
         sources: "ប្រភព",
-        signIn: "ចូលគណនីដើម្បីសាកសួរជំនួយការ។",
+        signIn: "ចូលគណនីដើម្បីសាកសួរជំនួយការ OrienX។",
         signInCta: "ចូលគណនី",
         offline: "Gemini មិនទាន់បានកំណត់ទេ — ចម្លើយមកពីទិន្នន័យផ្ទៀងផ្ទាត់។",
         error: "មិនអាចទទួលចម្លើយបានទេ។ សូមព្យាយាមម្តងទៀត។",
+        teaserMessages: [
+          "សួស្តី! ខ្ញុំគឺ Tara 👋 តើចង់រកជំនាញ ឬសាកលវិទ្យាល័យទេ?",
+          "សួរខ្ញុំអំពីថ្លៃសិក្សា អាហារូបករណ៍ ឬលក្ខខណ្ឌចូលរៀន។",
+          "ខ្ញុំអាចប្រៀបធៀបសាកលវិទ្យាល័យជូនអ្នកបាន។",
+        ],
         suggestions: [
           "ថ្លៃសិក្សានៅ ITC ប៉ុន្មាន?",
           "តើសាកលវិទ្យាល័យណាខ្លះបង្រៀន software engineering?",
@@ -109,7 +115,7 @@ export function FloatingAssistant() {
         ],
       }
     : {
-        title: "Futera Assistant",
+        title: "OrienX Assistant",
         subtitle: "Quick answers",
         open: "Open assistant",
         close: "Close",
@@ -119,10 +125,15 @@ export function FloatingAssistant() {
         send: "Send",
         thinking: "Thinking...",
         sources: "Sources",
-        signIn: "Sign in to chat with the Futera Assistant.",
+        signIn: "Sign in to chat with the OrienX Assistant.",
         signInCta: "Sign in",
         offline: "Gemini is not configured — answers come from verified records.",
         error: "Could not get an answer. Please try again.",
+        teaserMessages: [
+          "Hi! I'm Tara 👋 Want help finding a major or university?",
+          "Ask me about tuition, scholarships, or admission requirements.",
+          "I can compare universities for you.",
+        ],
         suggestions: [
           "How much is ITC tuition?",
           "Which universities offer software engineering?",
@@ -137,6 +148,33 @@ export function FloatingAssistant() {
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<string[] | null>(null);
+
+  const contextualTeaser = pathname?.startsWith("/dashboard/eligibility")
+    ? isKm
+      ? "តើអ្នកចង់ដឹងថានិទ្ទេស BACII របស់អ្នកអាចចូលរៀនជំនាញណាបានទេ?"
+      : "Want to know which programs your BACII grade qualifies for?"
+    : pathname?.startsWith("/dashboard/recommendations")
+      ? isKm
+        ? "តើចង់យល់ពីអនុសាសន៍ជំនាញរបស់អ្នកទេ?"
+        : "Want help understanding your recommendations?"
+      : pathname?.startsWith("/scholarships")
+        ? isKm
+          ? "សួរខ្ញុំអំពីអាហារូបករណ៍ និងថ្ងៃផុតកំណត់។"
+          : "Ask me about scholarships and deadlines."
+        : pathname?.startsWith("/universities")
+          ? isKm
+            ? "សួរខ្ញុំអំពីសាកលវិទ្យាល័យដែលសមស្របនឹងថវិការបស់អ្នក។"
+            : "Ask me which universities fit your budget."
+          : null;
+
+  const teaserMessages = contextualTeaser
+    ? [contextualTeaser, ...copy.teaserMessages]
+    : copy.teaserMessages;
+
+  const [showTeaser, setShowTeaser] = useState(false);
+  const [teaserIndex, setTeaserIndex] = useState(0);
+  const [teaserDismissed, setTeaserDismissed] = useState(false);
+  const reduceMotion = useReducedMotion();
   const messageCounter = useRef(0);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -162,9 +200,30 @@ export function FloatingAssistant() {
     }
   }, [messages, isSending]);
 
+  useEffect(() => {
+    if (!user || open || teaserDismissed) return;
+    const timer = setTimeout(() => setShowTeaser(true), 1600);
+    return () => clearTimeout(timer);
+  }, [user, open, teaserDismissed, pathname]);
+
+  useEffect(() => {
+    if (!showTeaser || open || !user) return;
+    const interval = setInterval(
+      () => setTeaserIndex((index) => (index + 1) % teaserMessages.length),
+      9000
+    );
+    return () => clearInterval(interval);
+  }, [showTeaser, open, user, teaserMessages.length]);
+
   if (!pathname || HIDDEN_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
     return null;
   }
+
+  const openAssistant = () => {
+    setOpen(true);
+    setShowTeaser(false);
+    setTeaserDismissed(true);
+  };
 
   const send = async (rawQuestion?: string) => {
     const question = (rawQuestion ?? input).trim();
@@ -225,59 +284,96 @@ export function FloatingAssistant() {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen((value) => !value)}
-        aria-label={open ? copy.close : copy.open}
-        aria-expanded={open}
-        className={cn(
-          "fixed bottom-5 right-5 z-[60] flex h-16 w-16 items-center justify-center rounded-full",
-          "border-[3px] border-[#F7CE4D] bg-[#111965] shadow-2xl shadow-[#111965]/30",
-          "transition-transform hover:scale-105 active:scale-95",
-          open && "ring-4 ring-[#F7CE4D]/25"
+      {!open && (
+        <motion.button
+          type="button"
+          onClick={openAssistant}
+          aria-label={copy.open}
+          whileHover={reduceMotion ? undefined : { scale: 1.04 }}
+          whileTap={reduceMotion ? undefined : { scale: 0.96 }}
+          className="fixed bottom-5 right-5 z-[70] flex select-none items-end gap-1.5 rounded-2xl bg-transparent p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7CE4D] focus-visible:ring-offset-2"
+        >
+          <motion.span
+            animate={reduceMotion ? undefined : { y: [0, -6, 0] }}
+            transition={
+              reduceMotion
+                ? undefined
+                : { duration: 3.4, repeat: Infinity, ease: "easeInOut" }
+            }
+            className="block h-[104px] w-[96px]"
+          >
+            <Image
+              src="/images/welcome-hd.webp"
+              alt=""
+              width={96}
+              height={102}
+              priority={false}
+              className="h-full w-full object-contain drop-shadow-[0_18px_16px_rgba(17,25,101,0.28)]"
+            />
+          </motion.span>
+        </motion.button>
+      )}
+
+      <AnimatePresence>
+        {user && !open && showTeaser && !teaserDismissed && (
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, x: -8, scale: 0.96 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={reduceMotion ? undefined : { opacity: 0, x: -8, scale: 0.96 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            style={{ bottom: "calc(1.25rem + 7rem)" }}
+            className="fixed right-10 z-[59] w-[min(calc(100vw-3rem),260px)] sm:right-11"
+          >
+            <button
+              type="button"
+              onClick={openAssistant}
+              aria-label={copy.open}
+              className="group relative w-full rounded-[22px] border border-[#E6E8F0] bg-white px-4 py-3 text-left shadow-xl shadow-black/10 transition-colors hover:border-[#F7CE4D]/70 dark:border-white/10 dark:bg-[#0B102A]"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.p
+                  key={teaserIndex}
+                  initial={reduceMotion ? false : { opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-[12.5px] font-semibold leading-relaxed text-[#111965] dark:text-slate-100"
+                >
+                  {teaserMessages[teaserIndex % teaserMessages.length]}
+                </motion.p>
+              </AnimatePresence>
+            </button>
+            <span className="absolute -bottom-2 right-8 h-4 w-4 rotate-45 border-b border-r border-[#E6E8F0] bg-white dark:border-white/10 dark:bg-[#0B102A]" />
+          </motion.div>
         )}
-      >
-        {open ? (
-          <X className="h-6 w-6 text-white" />
-        ) : (
-          <Image
-            src="/images/welcome-hd.webp"
-            alt=""
-            width={62}
-            height={66}
-            className="h-[60px] w-[57px] object-contain drop-shadow"
-            priority={false}
-          />
-        )}
-        {!open && (
-          <span className="absolute -right-0.5 -top-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-emerald-400" />
-        )}
-      </button>
+      </AnimatePresence>
 
       {open && (
         <section
-          className="fixed bottom-24 right-3 z-[60] flex h-[min(72vh,540px)] w-[min(calc(100vw-1.5rem),380px)] flex-col overflow-hidden rounded-[26px] border border-[#E6E8F0] bg-white shadow-2xl shadow-black/20 sm:right-5 dark:border-white/10 dark:bg-[#0B102A]"
+          className="fixed bottom-4 right-3 z-[60] flex h-[min(78vh,580px)] w-[min(calc(100vw-1.5rem),380px)] flex-col overflow-hidden rounded-[26px] border border-[#E6E8F0] bg-white shadow-2xl shadow-black/20 sm:right-5 dark:border-white/10 dark:bg-[#0B102A]"
           aria-label={copy.title}
         >
-          <header className="flex items-center gap-3 bg-[#111965] px-4 py-3 text-white">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#F7CE4D]">
+          <header className="flex items-center gap-3 bg-gradient-to-r from-[#111965] via-[#18227A] to-[#111965] px-4 py-3 text-white">
+            <motion.div
+              className="relative h-12 w-10 shrink-0"
+              animate={reduceMotion ? undefined : { y: [0, -2, 0] }}
+              transition={
+                reduceMotion
+                  ? undefined
+                  : { duration: 3, repeat: Infinity, ease: "easeInOut" }
+              }
+            >
               <Image
                 src="/images/welcome-hd.webp"
                 alt=""
-                width={30}
-                height={32}
-                className="h-[30px] w-[28px] object-contain"
+                width={40}
+                height={48}
+                className="h-12 w-10 object-contain drop-shadow-md"
               />
-            </div>
+            </motion.div>
             <div className="min-w-0 flex-1">
               <div className="truncate text-sm font-black">{copy.title}</div>
               <div className="flex items-center gap-1.5 text-[10px] font-semibold text-white/60">
-                <span
-                  className={cn(
-                    "h-1.5 w-1.5 rounded-full",
-                    status?.configured ? "bg-emerald-400" : "bg-[#F7CE4D]"
-                  )}
-                />
                 {status?.configured
                   ? `Gemini · ${status.model}`
                   : copy.subtitle}
@@ -318,14 +414,29 @@ export function FloatingAssistant() {
                 </Link>
               </div>
             ) : messages.length === 0 ? (
-              <div className="rounded-2xl border border-[#E6E8F0] bg-white p-3 dark:border-white/10 dark:bg-white/5">
-                <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
-                  <Sparkles className="h-3 w-3 text-[#F7CE4D]" />
-                  Futera AI
+              <div className="space-y-2">
+                <div className="rounded-2xl border border-[#E6E8F0] bg-white p-3 dark:border-white/10 dark:bg-white/5">
+                  <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
+                    <Sparkles className="h-3 w-3 text-[#F7CE4D]" />
+                    OrienX AI
+                  </div>
+                  <p className="text-xs leading-relaxed text-[#68708A] dark:text-slate-400">
+                    {copy.welcome}
+                  </p>
                 </div>
-                <p className="text-xs leading-relaxed text-[#68708A] dark:text-slate-400">
-                  {copy.welcome}
-                </p>
+                <div className="space-y-1.5">
+                  {copy.suggestions.slice(0, 4).map((question) => (
+                    <button
+                      key={question}
+                      type="button"
+                      onClick={() => void send(question)}
+                      disabled={isSending}
+                      className="w-full rounded-xl border border-[#E6E8F0] bg-white px-3 py-2 text-left text-[11px] font-semibold text-[#111965] transition-colors hover:border-[#F7CE4D]/70 hover:bg-[#FFFDF5] disabled:opacity-50 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
+                    >
+                      {question}
+                    </button>
+                  ))}
+                </div>
               </div>
             ) : (
               messages.map((message) => (

@@ -425,7 +425,7 @@ export function Scale16p({
 }
 
 /**
- * 7 Expressive Tara Mascot Faces (Futera's Official Platform Buddy):
+ * 7 Expressive Tara Mascot Faces (OrienX's Official Platform Buddy):
  * 1. Strongly Agree (Sky Blue): Joyful laughing eyes, big happy smile, rosy cheeks & sparkle star
  * 2. Agree (Mint): Warm cheerful shining eyes, open curved smile & rosy cheeks
  * 3. Slightly Agree (Lime): Polite gentle smile, bright calm eyes & rosy cheeks

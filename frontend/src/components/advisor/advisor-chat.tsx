@@ -151,12 +151,12 @@ export function AdvisorChat() {
   const copy = isKm
     ? {
         kicker: "ជំនួយការតម្រង់ទិស",
-        title: "សួរ Futera AI",
+        title: "សួរ OrienX AI",
         subtitle:
-          "ស្វែងរកសាកលវិទ្យាល័យ ជំនាញ អាហារូបករណ៍ និងអាជីព ដោយផ្អែកលើទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ Futera។",
+          "ស្វែងរកសាកលវិទ្យាល័យ ជំនាញ អាហារូបករណ៍ និងអាជីព ដោយផ្អែកលើទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ OrienX។",
         emptyTitle: "តើអ្នកចង់ដឹងអ្វី?",
         emptyBody:
-          "សួរជាភាសាខ្មែរ ឬអង់គ្លេស។ ចម្លើយផ្អែកលើទិន្នន័យសាកលវិទ្យាល័យ និងអាហារូបករណ៍របស់ Futera។",
+          "សួរជាភាសាខ្មែរ ឬអង់គ្លេស។ ចម្លើយផ្អែកលើទិន្នន័យសាកលវិទ្យាល័យ និងអាហារូបករណ៍របស់ OrienX។",
         placeholder: "សួរអំពីសាកលវិទ្យាល័យ ជំនាញ ឬអាហារូបករណ៍...",
         send: "ផ្ញើ",
         thinking: "កំពុងស្វែងរកទិន្នន័យ...",
@@ -170,18 +170,18 @@ export function AdvisorChat() {
         offlineBody:
           "ចម្លើយត្រូវបានបង្កើតដោយផ្ទាល់ពីទិន្នន័យដែលបានផ្ទៀងផ្ទាត់។ ដើម្បីទទួលបានចម្លើយសន្ទនា សូមដំណើរការ Ollama ក្នុងកុំព្យូទ័ររបស់អ្នក (ឥតគិតថ្លៃ)។",
         you: "អ្នក",
-        advisor: "Futera AI",
+        advisor: "OrienX AI",
         helpful: "មានប្រយោជន៍",
         notHelpful: "មិនមានប្រយោជន៍",
       }
     : {
         kicker: "Guidance assistant",
-        title: "Ask Futera AI",
+        title: "Ask OrienX AI",
         subtitle:
-          "Explore universities, majors, scholarships, and careers grounded in Futera's verified records.",
+          "Explore universities, majors, scholarships, and careers grounded in OrienX's verified records.",
         emptyTitle: "What would you like to know?",
         emptyBody:
-          "Ask in English or Khmer. Answers are grounded in Futera's university, major, and scholarship data.",
+          "Ask in English or Khmer. Answers are grounded in OrienX's university, major, and scholarship data.",
         placeholder: "Ask about a university, major, or scholarship...",
         send: "Send",
         thinking: "Searching verified records...",
@@ -195,7 +195,7 @@ export function AdvisorChat() {
         offlineBody:
           "Answers are being assembled directly from verified records. To enable conversational replies, start Ollama on your computer (free).",
         you: "You",
-        advisor: "Futera AI",
+        advisor: "OrienX AI",
         helpful: "Helpful",
         notHelpful: "Not helpful",
       };

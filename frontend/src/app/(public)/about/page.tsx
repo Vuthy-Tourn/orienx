@@ -307,7 +307,7 @@ export default function AboutPage() {
       className="min-h-screen bg-[#F8FAFD] text-[#111965] selection:bg-[#F7CE4D] selection:text-[#111965] pb-28"
     >
       {/* ========================================================= */}
-      {/* 1. SIGNATURE FUTERA NAVY HERO WITH SEAMLESS SKYLINE MASK */}
+      {/* 1. SIGNATURE ORIENX NAVY HERO WITH SEAMLESS SKYLINE MASK */}
       {/* ========================================================= */}
       <section className="relative overflow-hidden bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white pt-24 pb-32 sm:pb-36 lg:pb-40 px-4 sm:px-6 lg:px-8 select-none">
         {/* Subtle Starlight / Dot Grid Texture */}
@@ -429,7 +429,7 @@ export default function AboutPage() {
                 >
                   <Image
                     src="/images/welcome-hd.webp"
-                    alt="Tara Futera Mascot"
+                    alt="Tara OrienX Mascot"
                     fill
                     sizes="(max-width: 768px) 144px, 176px"
                     className="object-contain drop-shadow-xl"

@@ -1,6 +1,6 @@
 """Gemini-powered assistant used by the floating mascot widget.
 
-The assistant reuses Futera's grounded retrieval + tools, then lets Gemini
+The assistant reuses OrienX's grounded retrieval + tools, then lets Gemini
 phrase the answer. If the key is missing or the API fails, it falls back to the
 deterministic verified-data answer instead of breaking the widget.
 """
