@@ -60,6 +60,14 @@ class Settings(BaseSettings):
     AI_VECTOR_MIN_SIMILARITY: float = 0.30
     AI_TOOLS_ENABLED: bool = True
 
+    # Optional Gemini provider for the floating assistant. Keep this key on the
+    # server only; it is never exposed to the Next.js client.
+    GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-3.1-flash-lite"
+    GEMINI_TIMEOUT_SECONDS: float = 45.0
+    GEMINI_MAX_OUTPUT_TOKENS: int = 400
+    ASSISTANT_DAILY_QUESTION_LIMIT: int = 40
+
     # Telegram deadline reminders
     TELEGRAM_BOT_TOKEN: str = ""
     TELEGRAM_BOT_USERNAME: str = ""

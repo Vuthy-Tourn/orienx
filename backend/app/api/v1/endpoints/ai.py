@@ -1,7 +1,7 @@
 import json
 import uuid
 from datetime import datetime, timezone
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
@@ -18,29 +18,40 @@ from app.schemas.ai import (
     AdvisorFeedbackIn,
     AdvisorQuestionIn,
     AdvisorStatusOut,
+    AssistantStatusOut,
 )
 from app.schemas.common import ApiResponse
 from app.services.ai_advisor_service import AIAdvisorService
+from app.services.gemini_assistant_service import GeminiAssistantService
+from app.services.gemini_client import GeminiClient
 
 router = APIRouter()
 
 
-async def _enforce_daily_limit(db: AsyncSession, current_user: User) -> None:
+async def _enforce_daily_limit(
+    db: AsyncSession,
+    current_user: User,
+    limit: Optional[int] = None,
+    model_name: Optional[str] = None,
+) -> None:
     start_of_day = datetime.now(timezone.utc).replace(
         hour=0, minute=0, second=0, microsecond=0
     )
+    conditions = [
+        AIInteraction.user_id == current_user.id,
+        AIInteraction.created_at >= start_of_day,
+    ]
+    if model_name:
+        conditions.append(AIInteraction.model_name == model_name)
     used_today = await db.scalar(
-        select(func.count(AIInteraction.id)).where(
-            AIInteraction.user_id == current_user.id,
-            AIInteraction.created_at >= start_of_day,
-        )
+        select(func.count(AIInteraction.id)).where(*conditions)
     )
-    if (used_today or 0) >= settings.AI_DAILY_QUESTION_LIMIT:
+    effective_limit = limit or settings.AI_DAILY_QUESTION_LIMIT
+    if (used_today or 0) >= effective_limit:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail=(
-                f"Daily AI advisor limit reached "
-                f"({settings.AI_DAILY_QUESTION_LIMIT} questions). "
+                f"Daily AI limit reached ({effective_limit} questions). "
                 "Please continue tomorrow."
             ),
         )
@@ -50,6 +61,42 @@ async def _enforce_daily_limit(db: AsyncSession, current_user: User) -> None:
 async def advisor_status() -> ApiResponse[AdvisorStatusOut]:
     data = await AIAdvisorService.get_status()
     return ApiResponse(success=True, data=data)
+
+
+@router.get("/assistant/status", response_model=ApiResponse[AssistantStatusOut])
+async def assistant_status() -> ApiResponse[AssistantStatusOut]:
+    client = GeminiClient()
+    return ApiResponse(
+        success=True,
+        data=AssistantStatusOut(
+            configured=client.configured,
+            model=client.model,
+        ),
+    )
+
+
+@router.post("/assistant", response_model=ApiResponse[AdvisorAnswerOut])
+async def ask_assistant(
+    body: AdvisorQuestionIn,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> ApiResponse[AdvisorAnswerOut]:
+    await _enforce_daily_limit(
+        db,
+        current_user,
+        limit=settings.ASSISTANT_DAILY_QUESTION_LIMIT,
+        model_name=settings.GEMINI_MODEL,
+    )
+    data = await GeminiAssistantService.ask(
+        db, current_user, body.question, body.language
+    )
+    if data.mode == "gemini":
+        message = "Answered by Gemini"
+    elif data.warning:
+        message = data.warning
+    else:
+        message = "Answered from verified records"
+    return ApiResponse(success=True, message=message, data=data)
 
 
 @router.post("/advisor", response_model=ApiResponse[AdvisorAnswerOut])

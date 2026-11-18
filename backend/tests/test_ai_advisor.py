@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import httpx
 import pytest
 
 from app.services.ai_knowledge import (
@@ -16,6 +17,7 @@ from app.services.advisor_tools import (
     run_relevant_tools,
     search_universities,
 )
+from app.services.gemini_client import GeminiClient, GeminiUnavailable
 
 
 def make_document(
@@ -180,6 +182,69 @@ async def test_relevant_tools_are_routed(db_session):
     )
     assert "check_eligibility" in eligibility.names
     assert "minimum grade" in eligibility.answer.lower()
+
+
+@pytest.mark.asyncio
+async def test_gemini_client_requires_a_key():
+    client = GeminiClient(api_key="")
+    with pytest.raises(GeminiUnavailable):
+        await client.generate("system", "question")
+
+
+@pytest.mark.asyncio
+async def test_gemini_client_parses_candidate_text():
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.headers["x-goog-api-key"] == "test-key"
+        assert "gemini-3.1-flash-lite" in str(request.url)
+        return httpx.Response(
+            200,
+            json={
+                "candidates": [
+                    {"content": {"parts": [{"text": "Verified answer"}]}}
+                ]
+            },
+        )
+
+    client = GeminiClient(
+        api_key="test-key",
+        transport=httpx.MockTransport(handler),
+    )
+    answer = await client.generate("system", "question")
+    assert answer == "Verified answer"
+
+
+@pytest.mark.asyncio
+async def test_assistant_falls_back_when_gemini_is_not_configured(
+    client, monkeypatch
+):
+    from app.core.config import settings
+
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "")
+
+    status_response = await client.get("/api/v1/ai/assistant/status")
+    assert status_response.status_code == 200, status_response.text
+    assert status_response.json()["data"]["configured"] is False
+
+    login = await client.post(
+        "/api/v1/auth/login",
+        json={
+            "email": "student@futera.edu.kh",
+            "password": "StudentPass123!",
+        },
+    )
+    assert login.status_code == 200, login.text
+    token = login.json()["data"]["access_token"]
+
+    response = await client.post(
+        "/api/v1/ai/assistant",
+        json={"question": "How much is ITC tuition?", "language": "en"},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 200, response.text
+    data = response.json()["data"]
+    assert data["mode"] == "retrieval_only"
+    assert data["answer"]
+    assert "not configured" in (data["warning"] or "").lower()
 
 
 @pytest.mark.asyncio

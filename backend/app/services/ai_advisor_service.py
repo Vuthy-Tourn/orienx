@@ -28,9 +28,9 @@ Today is {today}.
 
 Rules:
 - Answer ONLY with facts found in the TOOL RESULTS or CONTEXT below.
-- TOOL RESULTS are computed directly from Futera's database and take precedence for comparisons, eligibility, and university lists.
+- TOOL RESULTS are computed directly from Futera's database and are authoritative. If they contain a list, include every listed item; never add, remove, or replace universities/programs with ones not in the list.
 - If the context does not contain the answer, say you do not have that verified detail and point to the closest source. Never invent tuition, deadlines, scholarship eligibility, or admission requirements.
-- Reply in {language}. Keep the answer under 70 words and at most 3 bullet points.
+- Reply in {language}. Keep the answer concise, around 70 words. Use up to 5 bullet points when listing TOOL RESULTS.
 - Do not repeat the context verbatim; summarize the useful facts.
 - If you cannot write the requested language fluently, answer in English and say so.
 - Be warm, practical, and specific to Cambodia. Do not mention the word CONTEXT.
@@ -85,6 +85,7 @@ class AIAdvisorService:
         language: str,
         use_model: bool = True,
         hybrid: bool = True,
+        build_prompt: bool = False,
     ) -> PreparedAnswer:
         question = question.strip()
         documents = await load_knowledge_documents(session)
@@ -131,7 +132,7 @@ class AIAdvisorService:
         )
 
         system_prompt: Optional[str] = None
-        if connected and model_name:
+        if (connected and model_name) or build_prompt:
             context = build_context(
                 relevant[: 2 if tool_run.names else settings.AI_MAX_CONTEXT_DOCS],
                 language,

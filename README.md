@@ -206,6 +206,9 @@ AI_OLLAMA_MODEL=gemma3:12b
 # AI_MAX_CONTEXT_CHARS=3500
 # AI_MAX_OUTPUT_TOKENS=180
 # AI_OLLAMA_KEEP_ALIVE=2h
+# GEMINI_API_KEY=
+# GEMINI_MODEL=gemini-3.1-flash-lite
+# ASSISTANT_DAILY_QUESTION_LIMIT=40
 ```
 
 The web UI uses the streaming endpoint, so the first words appear in about a second even when the full answer takes longer. On an M4 Pro with `gemma3:12b`, typical answers finish in 4–9 seconds after the model is loaded. Keeping the model warm (`AI_OLLAMA_KEEP_ALIVE`) removes the cold-start delay; use `gemma3:4b` if you prefer lower latency over reasoning quality.
@@ -233,7 +236,25 @@ The included baseline report is `backend/data/eval/reports/advisor_eval_baseline
 | `GET` | `/api/v1/ai/status` | Detects whether a local model is available |
 | `POST` | `/api/v1/ai/advisor` | Ask a question (authenticated, full JSON response) |
 | `POST` | `/api/v1/ai/advisor/stream` | Same question, streamed as Server-Sent Events |
+| `GET` | `/api/v1/ai/assistant/status` | Whether the Gemini floating assistant is configured |
+| `POST` | `/api/v1/ai/assistant` | Grounded Gemini answer for the floating widget |
 | `POST` | `/api/v1/ai/interactions/{id}/feedback` | Record whether an answer helped |
+
+### Floating Gemini assistant
+
+A small mascot assistant appears at the bottom-right of public and dashboard pages (hidden on login, admin, and the full advisor page). It uses the same verified retrieval and tools, then asks Gemini to phrase the answer.
+
+1. Create an API key in Google AI Studio.
+2. Add it to `backend/.env` — **never** in a `NEXT_PUBLIC_*` variable:
+
+```env
+GEMINI_API_KEY=your-key-here
+GEMINI_MODEL=gemini-3.1-flash-lite
+```
+
+3. Restart the backend.
+
+The key is only read on the server. `backend/.env` is gitignored and excluded from Docker builds; Compose reads it at runtime. If the key is missing, invalid, or Gemini is temporarily down, the widget falls back to the deterministic verified-data answer and shows a warning instead of failing. Gemini usage is billed by Google; the local Ollama advisor remains free.
 
 ---
 

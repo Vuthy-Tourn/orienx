@@ -26,12 +26,20 @@ class AdvisorSourceOut(BaseModel):
 class AdvisorAnswerOut(BaseModel):
     interaction_id: uuid.UUID
     answer: str
-    mode: Literal["local_model", "retrieval_only"]
+    mode: Literal["local_model", "retrieval_only", "gemini"]
     model_name: Optional[str] = None
     sources: List[AdvisorSourceOut]
     suggested_questions: List[str]
     latency_ms: int
     tools_used: List[str] = []
+    warning: Optional[str] = None
+
+    model_config = ConfigDict(extra="ignore")
+
+
+class AssistantStatusOut(BaseModel):
+    configured: bool
+    model: str
 
     model_config = ConfigDict(extra="ignore")
 
