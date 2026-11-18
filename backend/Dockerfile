@@ -22,6 +22,7 @@ COPY . .
 # Expose port
 EXPOSE 8000
 
-# Start server
-CMD ["sh", "-c", "alembic upgrade head && python scripts/seed_data.py && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+# Start server. Embedding sync is best-effort: if Ollama/bge-m3 is not running
+# the advisor still works in keyword-only mode.
+CMD ["sh", "-c", "alembic upgrade head && python scripts/seed_data.py && (python scripts/sync_knowledge_embeddings.py || true) && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
 

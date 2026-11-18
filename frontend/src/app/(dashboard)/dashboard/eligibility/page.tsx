@@ -506,9 +506,6 @@ export default function EligibilityPage() {
         <p className="mt-1 text-xs text-[#68708A] sm:text-sm">
           {t("eligibilityPage.subtitle")}
         </p>
-        <p className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-relaxed text-amber-800">
-          {t("eligibilityPage.disclaimer")}
-        </p>
       </div>
 
       <div className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] px-4 py-3">

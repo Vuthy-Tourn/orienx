@@ -30,6 +30,7 @@ from app.models.notifications import (
     NotificationLog,
     NotificationPreference,
 )
+from app.models.ai import AIInteraction, KnowledgeEmbedding
 
 __all__ = [
     "Base",
@@ -72,5 +73,7 @@ __all__ = [
     "NotificationPreference",
     "NotificationLog",
     "InAppNotification",
+    "AIInteraction",
+    "KnowledgeEmbedding",
 ]
 

@@ -522,7 +522,8 @@
     "adminPanel": "Admin Panel",
     "levelGrade": "Level 12 • Grade 12",
     "studentDashboard": "Student Dashboard",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "aiAdvisor": "AI Advisor"
   },
   "dashboardPage": {
     "badge": "Personalized Guidance Dashboard",

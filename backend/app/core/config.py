@@ -38,6 +38,28 @@ class Settings(BaseSettings):
     PASSWORD_RESET_EXPIRE_MINUTES: int = 30
     PASSWORD_RESET_DEBUG: bool = True
 
+    # Local AI advisor (zero-cost). Uses Ollama on the developer's machine when
+    # it is running; otherwise the API answers directly from verified database
+    # records. No paid API keys are required.
+    AI_ADVISOR_ENABLED: bool = True
+    AI_OLLAMA_BASE_URL: str = "http://127.0.0.1:11434"
+    AI_OLLAMA_MODEL: str = ""  # empty = auto-detect an installed chat model
+    AI_OLLAMA_TIMEOUT_SECONDS: float = 45.0
+    AI_OLLAMA_KEEP_ALIVE: str = "2h"
+    AI_MAX_CONTEXT_CHARS: int = 3500
+    AI_MAX_CONTEXT_DOCS: int = 4
+    AI_MAX_OUTPUT_TOKENS: int = 180
+    AI_DAILY_QUESTION_LIMIT: int = 80
+
+    # Hybrid retrieval: local embeddings (Ollama) + pgvector, combined with the
+    # existing keyword scorer. Falls back to keyword-only if embeddings are
+    # unavailable.
+    AI_EMBEDDING_MODEL: str = "bge-m3"
+    AI_EMBEDDING_TIMEOUT_SECONDS: float = 60.0
+    AI_HYBRID_RETRIEVAL: bool = True
+    AI_VECTOR_MIN_SIMILARITY: float = 0.30
+    AI_TOOLS_ENABLED: bool = True
+
     # Telegram deadline reminders
     TELEGRAM_BOT_TOKEN: str = ""
     TELEGRAM_BOT_USERNAME: str = ""

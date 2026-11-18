@@ -16,6 +16,7 @@ from app.api.v1.endpoints import (
     admissions,
     admin,
     uploads,
+    ai,
 )
 
 api_router = APIRouter()
@@ -44,4 +45,5 @@ api_router.include_router(
 )
 api_router.include_router(admin.router, prefix="/admin", tags=["Administration"])
 api_router.include_router(uploads.router, prefix="/uploads", tags=["Content uploads"])
+api_router.include_router(ai.router, prefix="/ai", tags=["AI Advisor"])
 

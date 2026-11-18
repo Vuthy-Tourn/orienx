@@ -32,6 +32,7 @@ const PAGE_TITLES: Record<string, { en: string; km: string }> = {
     en: "Recommendations",
     km: "ការណែនាំ",
   },
+  "/dashboard/advisor": { en: "AI advisor", km: "ជំនួយការ AI" },
   "/dashboard/favorites": { en: "Favorites", km: "ចំណូលចិត្ត" },
   "/dashboard/plan": { en: "My plan", km: "ផែនការរបស់ខ្ញុំ" },
   "/dashboard/eligibility": { en: "BACII checker", km: "ការពិនិត្យ BACII" },

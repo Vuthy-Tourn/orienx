@@ -288,10 +288,6 @@ function UserAvatar({
   const [failed, setFailed] = React.useState(false);
   const initials = (name || "?").trim().slice(0, 2).toUpperCase();
 
-  React.useEffect(() => {
-    setFailed(false);
-  }, [src]);
-
   if (src && !failed) {
     return (
       <img
@@ -636,7 +632,7 @@ export function UsersManager() {
     try {
       const body = new FormData();
       body.append("file", file);
-      const uploaded = await apiFetch<{ url: string }>("/uploads/avatar", {
+      const uploaded = await apiFetch<{ url: string }>("/uploads", {
         method: "POST",
         body,
       });

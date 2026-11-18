@@ -22,6 +22,7 @@ import {
   Settings,
   LogOut,
   X,
+  Bot,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -64,6 +65,11 @@ export function DashboardSidebar({ mobileOpen, onCloseMobile }: DashboardSidebar
       href: "/dashboard/recommendations",
       label: t("dashboardLayout.progressFit"),
       icon: Sparkles,
+    },
+    {
+      href: "/dashboard/advisor",
+      label: t("dashboardLayout.aiAdvisor", "AI Advisor"),
+      icon: Bot,
     },
     {
       href: "/dashboard/favorites",

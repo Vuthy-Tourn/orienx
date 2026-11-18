@@ -1,0 +1,2971 @@
+{
+  "summary": {
+    "total": 100,
+    "mode": "hybrid",
+    "with_model": false,
+    "source_hit_rate": 1.0,
+    "source_recall": 1.0,
+    "must_include_rate": 1.0,
+    "tool_routing_rate": 1.0,
+    "refusal_accuracy": 1.0,
+    "avg_latency_ms": 118.43,
+    "failures": []
+  },
+  "results": [
+    {
+      "id": "q001",
+      "category": "tuition",
+      "question": "How much is the annual tuition at Academy of Culinary Arts Cambodia?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/acac"
+      ],
+      "sources": [
+        "/universities/acac",
+        "/majors/culinary-arts",
+        "/universities/cadt"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Academy of Culinary Arts Cambodia (ACAC) — Private university in Phnom Penh. Tuition $3,900 per year. Programs include Culinary Arts & Professional Kitchen Operations, Hospitality & International Tourism Management (2 total).\n• Major: Culinary Arts & Professional Kitchen Operations — Business & Economics major. Provides international standard culinary training in classical techniques, authentic Khmer royal gastronomy, pastry arts, kitchen cost control, food safety, and restaurant executive management. Offered at…\n• University: Cambodia Academy of Digital Technology (CADT) — Public university in Phnom Penh. Tuition $2,500 per year. Programs include Cybersecurity & Information Networks, Financial Technology (Fintech), Software Engineering & Application Development (6 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 327,
+      "error": null
+    },
+    {
+      "id": "q002",
+      "category": "tuition",
+      "question": "How much is the annual tuition at ACLEDA Institute of Business?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/aib"
+      ],
+      "sources": [
+        "/universities/aib",
+        "/majors/marketing-digital-media",
+        "/majors/international-business",
+        "/majors/supply-chain-logistics"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: ACLEDA Institute of Business (AIB) — Private university in Phnom Penh. Tuition $950–$1,200 per year. Programs include Supply Chain Management & Logistics, English Literature & TEFL / Education, Banking & Financial Markets (14 total).\n• Major: Marketing & Digital Media Strategy — Business & Economics major. Explores market research, brand building, digital campaign execution, consumer psychology, content marketing, and performance analytics across omnichannel platforms. Offered at University of Economics and…\n• Major: International Business & Global Trade — Business & Economics major. Covers multinational operations, cross-border customs regulations, international trade agreements (RCEP, ASEAN), foreign currency risk hedging, and international marketing. Offered at ACLEDA Institute of…\n• Major: Supply Chain Management & Logistics — Business & Economics major. Teaches the optimization of freight forwarding, automated warehousing, inventory holding models, port operations, and intermodal transport corridors connecting Cambodia with global markets. Offered at ACLEDA…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 138,
+      "error": null
+    },
+    {
+      "id": "q003",
+      "category": "tuition",
+      "question": "How much is the annual tuition at Build Bright University?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/bbu"
+      ],
+      "sources": [
+        "/universities/bbu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Build Bright University (BBU) — Private university in Phnom Penh. Tuition $500–$550 per year. Programs include Banking & Financial Markets, Law & Jurisprudence, Information Technology & Digital Infrastructure (5 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 139,
+      "error": null
+    },
+    {
+      "id": "q004",
+      "category": "tuition",
+      "question": "How much is the annual tuition at CamEd Business School?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/camed"
+      ],
+      "sources": [
+        "/universities/camed"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: CamEd Business School — Private university in Phnom Penh. Tuition $4,178 per year. Programs include Banking & Financial Markets, Accounting, Auditing & Taxation (ACCA/CAT) (3 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 114,
+      "error": null
+    },
+    {
+      "id": "q005",
+      "category": "tuition",
+      "question": "How much is the annual tuition at Cambodian University for Specialties?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/cus"
+      ],
+      "sources": [
+        "/universities/cus",
+        "/universities/cmu",
+        "/universities/puc",
+        "/universities/eamu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Cambodian University for Specialties (CUS) — Private university in Phnom Penh. Tuition $254 per year. Programs include Information Technology & Digital Infrastructure, Business Administration & Management, Banking & Financial Markets (9 total).\n• University: Cambodian Mekong University (CKU) — Private university in Phnom Penh. Tuition $500–$600 per year. Programs include Business Administration & Management, Banking & Financial Markets, Information Technology & Digital Infrastructure (4 total).\n• University: Pannasastra University of Cambodia (PUC) — Private university in Phnom Penh. Tuition $795 per year. Programs include Media, Journalism & Digital Communications, English Literature & TEFL / Education (5 total).\n• University: East Asia Management University (EAMU) — Private university in Phnom Penh. Tuition $4,000 per year. Programs include Business Administration & Management, Marketing & Digital Media Strategy, Hospitality & International Tourism Management (4 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 135,
+      "error": null
+    },
+    {
+      "id": "q006",
+      "category": "tuition",
+      "question": "How much is the annual tuition at Human Resource University?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/hru"
+      ],
+      "sources": [
+        "/universities/hru",
+        "/majors/human-resource-management"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Human Resource University (HRU) — Private university in Phnom Penh. Tuition $480 per year. Programs include Banking & Financial Markets, Law & Jurisprudence, Business Administration & Management (5 total).\n• Major: Human Resource Management & Talent Strategy — Business & Economics major. Focuses on strategic talent recruitment, compensation and benefits, Cambodian labor law compliance, performance appraisals, leadership development, and organizational workplace culture. Offered at Human Resource…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 113,
+      "error": null
+    },
+    {
+      "id": "q007",
+      "category": "tuition",
+      "question": "How much is the annual tuition at International University?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/iu"
+      ],
+      "sources": [
+        "/universities/paragoniu",
+        "/majors/international-relations",
+        "/universities/iu",
+        "/universities/ppiu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Paragon International University (ParagonIU) — Private university in Phnom Penh. Tuition $2,800–$4,500 per year. Programs include Computer Science & Theoretical Computing, Mathematics & Applied Statistics, Civil Engineering & Structural Design (12 total).\n• Major: International Relations & Diplomacy — Law & Social Sciences major. Examines geopolitics, ASEAN multilateral diplomacy, international treaty law, foreign policy formulation, bilateral conflict resolution, and international development organizations. Offered at Norton…\n• University: International University (IU) — Private university in Phnom Penh. Tuition $600–$4,500 per year. Programs include Medical Laboratory Technology, Nursing Science & Patient Care, Doctor of Pharmacy (PharmD) / Pharmacy (6 total).\n• University: Phnom Penh International University (PPIU) — Private university in Phnom Penh. Tuition $650–$700 per year. Programs include Banking & Financial Markets, Law & Jurisprudence, Information Technology & Digital Infrastructure (4 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 152,
+      "error": null
+    },
+    {
+      "id": "q008",
+      "category": "tuition",
+      "question": "How much is the annual tuition at Norton University?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/norton"
+      ],
+      "sources": [
+        "/universities/norton"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Norton University (NU) — Private university in Phnom Penh. Tuition $500–$2,500 per year. Programs include International Relations & Diplomacy, Cybersecurity & Information Networks, Computer Science & Theoretical Computing (20 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 110,
+      "error": null
+    },
+    {
+      "id": "q009",
+      "category": "tuition",
+      "question": "How much is the annual tuition at National University of Battambang?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/nubb"
+      ],
+      "sources": [
+        "/universities/nubb",
+        "/universities/nmu",
+        "/universities/num",
+        "/universities/eamu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: National University of Battambang (NUBB) — Private university in Battambang. Tuition $450–$500 per year. Programs include Data Science & Artificial Intelligence, Civil Engineering & Structural Design, Architecture & Urban Planning (10 total).\n• University: National Meanchey University (NMU) — Private university in Banteay Meanchey. Tuition $450–$500 per year. Programs include Agronomy & Crop Sciences, Business Administration & Management, Computer Science & Theoretical Computing (4 total).\n• University: National University of Management (NUM) — Public university in Phnom Penh. Tuition $650 per year. Programs include Supply Chain Management & Logistics, Banking & Financial Markets, Information Technology & Digital Infrastructure (7 total).\n• University: East Asia Management University (EAMU) — Private university in Phnom Penh. Tuition $4,000 per year. Programs include Business Administration & Management, Marketing & Digital Media Strategy, Hospitality & International Tourism Management (4 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 127,
+      "error": null
+    },
+    {
+      "id": "q010",
+      "category": "tuition",
+      "question": "How much is the annual tuition at Panha Chiet University?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/pcu"
+      ],
+      "sources": [
+        "/universities/pcu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Panha Chiet University (BPCU) — Private university in Phnom Penh. Tuition $500 per year. Programs include Information Technology & Digital Infrastructure, Banking & Financial Markets, Political Science & Public Affairs (5 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 112,
+      "error": null
+    },
+    {
+      "id": "q011",
+      "category": "tuition",
+      "question": "How much is the annual tuition at Phnom Penh International University?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/ppiu"
+      ],
+      "sources": [
+        "/universities/ppiu",
+        "/universities/paragoniu",
+        "/universities/rupp",
+        "/universities/aupp"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Phnom Penh International University (PPIU) — Private university in Phnom Penh. Tuition $650–$700 per year. Programs include Banking & Financial Markets, Law & Jurisprudence, Information Technology & Digital Infrastructure (4 total).\n• University: Paragon International University (ParagonIU) — Private university in Phnom Penh. Tuition $2,800–$4,500 per year. Programs include Computer Science & Theoretical Computing, Mathematics & Applied Statistics, Civil Engineering & Structural Design (12 total).\n• University: Royal University of Phnom Penh (RUPP) — Public university in Phnom Penh. Tuition $250–$1,000 per year. Programs include Environmental Science & Climate Resilience, Asian Languages & International Communication (Chinese, Japanese (20 total).\n• University: American University of Phnom Penh (AUPP) — Private university in Phnom Penh. Tuition $6,000–$9,000 per year. Programs include Business Administration & Management, Law & Jurisprudence, Computer Science & Theoretical Computing (7 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 108,
+      "error": null
+    },
+    {
+      "id": "q012",
+      "category": "tuition",
+      "question": "How much is the annual tuition at Royal University of Fine Arts?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/rufa"
+      ],
+      "sources": [
+        "/universities/rufa",
+        "/majors/fine-arts",
+        "/majors/graphic-design-multimedia",
+        "/universities/rule"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Royal University of Fine Arts (RUFA) — Public university in Phnom Penh. Tuition $400–$600 per year. Programs include Architecture & Urban Planning, Fine Arts & Traditional Sculpture/Painting, Interior Design & Space Architecture (5 total).\n• Major: Fine Arts & Traditional Sculpture/Painting — Architecture & Design major. Preserves and innovates classical Khmer mural painting, stone and wood sculpture, metal casting, ceramics, contemporary visual art, and cultural conservation. Offered at Royal University of Fine Arts. Tuition…\n• Major: Graphic Design & Multimedia Arts — Architecture & Design major. Develops visual communicators skilled in typography, brand identity, UI/UX design, motion graphics, package design, and digital creative advertising. Offered at De Montfort University Cambodia, SETEC Institute,…\n• University: Royal University of Law and Economics (RULE) — Public university in Phnom Penh. Tuition $550–$850 per year. Programs include Law & Jurisprudence, Public Administration & Governance, International Relations & Diplomacy (10 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 114,
+      "error": null
+    },
+    {
+      "id": "q013",
+      "category": "tuition",
+      "question": "How much is the annual tuition at Svay Rieng University?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/sru"
+      ],
+      "sources": [
+        "/universities/sru"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Svay Rieng University (SRU) — Public university in Svay Rieng. Tuition $450 per year. Programs include English Literature & TEFL / Education, Information Technology & Digital Infrastructure, Business Administration & Management (5 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 130,
+      "error": null
+    },
+    {
+      "id": "q014",
+      "category": "tuition",
+      "question": "How much is the annual tuition at University of Health Sciences?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/uhs"
+      ],
+      "sources": [
+        "/universities/uhs",
+        "/majors/public-health"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: University of Health Sciences (UHS) — Public university in Phnom Penh. Tuition $1,000–$2,500 per year. Programs include Doctor of Dental Surgery (DDS) / Dentistry, Nursing Science & Patient Care, Medical Laboratory Technology (6 total).\n• Major: Public Health & Epidemiology — Health Sciences major. Focuses on disease prevention, health education, epidemiology, maternal-child nutrition, clean water sanitation (WASH), and healthcare policy management in Cambodia and the ASEAN region. Offered at Angkor University,…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 142,
+      "error": null
+    },
+    {
+      "id": "q015",
+      "category": "tuition",
+      "question": "How much is the annual tuition at University of South-East Asia?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/usea"
+      ],
+      "sources": [
+        "/universities/usea",
+        "/universities/eamu",
+        "/universities/aeu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: University of South-East Asia (USEA) — Private university in Siem Reap. Tuition $550–$600 per year. Programs include Hospitality & International Tourism Management, Banking & Financial Markets, Business Administration & Management (5 total).\n• University: East Asia Management University (EAMU) — Private university in Phnom Penh. Tuition $4,000 per year. Programs include Business Administration & Management, Marketing & Digital Media Strategy, Hospitality & International Tourism Management (4 total).\n• University: Asia Euro University (AEU) — Private university in Phnom Penh. Tuition $600–$700 per year. Programs include International Relations & Diplomacy, Law & Jurisprudence, Banking & Financial Markets (6 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 183,
+      "error": null
+    },
+    {
+      "id": "q016",
+      "category": "university_info",
+      "question": "Where is Academy of Culinary Arts Cambodia located, and is it a public or private university?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/acac"
+      ],
+      "sources": [
+        "/universities/acac",
+        "/majors/culinary-arts",
+        "/universities/cadt",
+        "/universities/camtech"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Academy of Culinary Arts Cambodia (ACAC) — Private university in Phnom Penh. Tuition $3,900 per year. Programs include Culinary Arts & Professional Kitchen Operations, Hospitality & International Tourism Management (2 total).\n• Major: Culinary Arts & Professional Kitchen Operations — Business & Economics major. Provides international standard culinary training in classical techniques, authentic Khmer royal gastronomy, pastry arts, kitchen cost control, food safety, and restaurant executive management. Offered at…\n• University: Cambodia Academy of Digital Technology (CADT) — Public university in Phnom Penh. Tuition $2,500 per year. Programs include Cybersecurity & Information Networks, Financial Technology (Fintech), Software Engineering & Application Development (6 total).\n• University: Cambodia University of Technology and Science (CamTech) — Private university in Phnom Penh. Tuition $3,500–$4,000 per year. Programs include Risk Management & Insurance, Interior Design & Space Architecture, Architecture & Urban Planning (8 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 117,
+      "error": null
+    },
+    {
+      "id": "q017",
+      "category": "university_info",
+      "question": "Where is American University of Phnom Penh located, and is it a public or private university?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/aupp"
+      ],
+      "sources": [
+        "/universities/aupp",
+        "/universities/ppiu",
+        "/universities/iic",
+        "/universities/rupp"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: American University of Phnom Penh (AUPP) — Private university in Phnom Penh. Tuition $6,000–$9,000 per year. Programs include Business Administration & Management, Law & Jurisprudence, Computer Science & Theoretical Computing (7 total).\n• University: Phnom Penh International University (PPIU) — Private university in Phnom Penh. Tuition $650–$700 per year. Programs include Banking & Financial Markets, Law & Jurisprudence, Information Technology & Digital Infrastructure (4 total).\n• University: IIC University of Technology — Private university in Phnom Penh. Tuition $550–$600 per year. Programs include Law & Jurisprudence, Economics & Development Studies, Business Administration & Management (4 total).\n• University: Royal University of Phnom Penh (RUPP) — Public university in Phnom Penh. Tuition $250–$1,000 per year. Programs include Environmental Science & Climate Resilience, Asian Languages & International Communication (Chinese, Japanese (20 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 111,
+      "error": null
+    },
+    {
+      "id": "q018",
+      "category": "university_info",
+      "question": "Where is Cambodia University of Technology and Science located, and is it a public or private university?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/camtech"
+      ],
+      "sources": [
+        "/universities/camtech",
+        "/majors/information-technology",
+        "/universities/iic",
+        "/universities/itc"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Cambodia University of Technology and Science (CamTech) — Private university in Phnom Penh. Tuition $3,500–$4,000 per year. Programs include Risk Management & Insurance, Interior Design & Space Architecture, Architecture & Urban Planning (8 total).\n• Major: Information Technology & Digital Infrastructure — Information Technology major. Focuses on deploying, administering, and integrating enterprise IT infrastructure, virtualization platforms, corporate networks, and organizational software solutions. Offered at Institute of Science and…\n• University: IIC University of Technology — Private university in Phnom Penh. Tuition $550–$600 per year. Programs include Law & Jurisprudence, Economics & Development Studies, Business Administration & Management (4 total).\n• University: Institute of Technology of Cambodia (ITC) — Public university in Phnom Penh. Tuition $800–$2,500 per year. Programs include Software Engineering & Application Development, Food Technology & Chemical Engineering, Civil Engineering & Structural Design (13 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 105,
+      "error": null
+    },
+    {
+      "id": "q019",
+      "category": "university_info",
+      "question": "Where is East Asia Management University located, and is it a public or private university?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/eamu"
+      ],
+      "sources": [
+        "/universities/eamu",
+        "/universities/usea",
+        "/universities/aeu",
+        "/universities/iic"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: East Asia Management University (EAMU) — Private university in Phnom Penh. Tuition $4,000 per year. Programs include Business Administration & Management, Marketing & Digital Media Strategy, Hospitality & International Tourism Management (4 total).\n• University: University of South-East Asia (USEA) — Private university in Siem Reap. Tuition $550–$600 per year. Programs include Hospitality & International Tourism Management, Banking & Financial Markets, Business Administration & Management (5 total).\n• University: Asia Euro University (AEU) — Private university in Phnom Penh. Tuition $600–$700 per year. Programs include International Relations & Diplomacy, Law & Jurisprudence, Banking & Financial Markets (6 total).\n• University: IIC University of Technology — Private university in Phnom Penh. Tuition $550–$600 per year. Programs include Law & Jurisprudence, Economics & Development Studies, Business Administration & Management (4 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 111,
+      "error": null
+    },
+    {
+      "id": "q020",
+      "category": "university_info",
+      "question": "Where is International University located, and is it a public or private university?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/iu"
+      ],
+      "sources": [
+        "/universities/iu",
+        "/majors/international-relations",
+        "/universities/ppiu",
+        "/universities/paragoniu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: International University (IU) — Private university in Phnom Penh. Tuition $600–$4,500 per year. Programs include Medical Laboratory Technology, Nursing Science & Patient Care, Doctor of Pharmacy (PharmD) / Pharmacy (6 total).\n• Major: International Relations & Diplomacy — Law & Social Sciences major. Examines geopolitics, ASEAN multilateral diplomacy, international treaty law, foreign policy formulation, bilateral conflict resolution, and international development organizations. Offered at Norton…\n• University: Phnom Penh International University (PPIU) — Private university in Phnom Penh. Tuition $650–$700 per year. Programs include Banking & Financial Markets, Law & Jurisprudence, Information Technology & Digital Infrastructure (4 total).\n• University: Paragon International University (ParagonIU) — Private university in Phnom Penh. Tuition $2,800–$4,500 per year. Programs include Computer Science & Theoretical Computing, Mathematics & Applied Statistics, Civil Engineering & Structural Design (12 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 101,
+      "error": null
+    },
+    {
+      "id": "q021",
+      "category": "university_info",
+      "question": "Where is National Technical Training Institute located, and is it a public or private university?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/ntti"
+      ],
+      "sources": [
+        "/universities/ntti",
+        "/universities/npic",
+        "/universities/istad",
+        "/universities/itc"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: National Technical Training Institute (NTTI) — Public university in Phnom Penh. Tuition $395–$450 per year. Programs include Information Technology & Digital Infrastructure, Civil Engineering & Structural Design, Electrical & Electronic Engineering (6 total).\n• University: National Polytechnic Institute of Cambodia (NPIC) — Public university in Phnom Penh. Tuition $650–$700 per year. Programs include Civil Engineering & Structural Design, Electrical & Electronic Engineering, Mechanical Engineering & Manufacturing (5 total).\n• University: Institute of Science and Technology Advanced Development (ISTAD) — Private university in Phnom Penh. Tuition tuition not published. Programs include Information Technology & Digital Infrastructure, Information Technology & Digital Infrastructure (2 total).\n• University: Institute of Technology of Cambodia (ITC) — Public university in Phnom Penh. Tuition $800–$2,500 per year. Programs include Software Engineering & Application Development, Food Technology & Chemical Engineering, Civil Engineering & Structural Design (13 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 114,
+      "error": null
+    },
+    {
+      "id": "q022",
+      "category": "university_info",
+      "question": "Where is Panha Chiet University located, and is it a public or private university?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/pcu"
+      ],
+      "sources": [
+        "/universities/pcu",
+        "/universities/camtech"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Panha Chiet University (BPCU) — Private university in Phnom Penh. Tuition $500 per year. Programs include Information Technology & Digital Infrastructure, Banking & Financial Markets, Political Science & Public Affairs (5 total).\n• University: Cambodia University of Technology and Science (CamTech) — Private university in Phnom Penh. Tuition $3,500–$4,000 per year. Programs include Risk Management & Insurance, Interior Design & Space Architecture, Architecture & Urban Planning (8 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 103,
+      "error": null
+    },
+    {
+      "id": "q023",
+      "category": "university_info",
+      "question": "Where is Royal University of Agriculture located, and is it a public or private university?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/rua"
+      ],
+      "sources": [
+        "/universities/rua",
+        "/universities/plnia",
+        "/universities/rule",
+        "/universities/rupp"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: Royal University of Agriculture (RUA) — Public university in Phnom Penh. Tuition $370 per year. Programs include Animal Science & Veterinary Medicine, Environmental Science & Climate Resilience, Agronomy & Crop Sciences (5 total).\n• University: Prek Leap National Institute of Agriculture (PNCA) — Public university in Phnom Penh. Tuition $400 per year. Programs include Animal Science & Veterinary Medicine, Food Technology & Chemical Engineering, Agronomy & Crop Sciences (4 total).\n• University: Royal University of Law and Economics (RULE) — Public university in Phnom Penh. Tuition $550–$850 per year. Programs include Law & Jurisprudence, Public Administration & Governance, International Relations & Diplomacy (10 total).\n• University: Royal University of Phnom Penh (RUPP) — Public university in Phnom Penh. Tuition $250–$1,000 per year. Programs include Environmental Science & Climate Resilience, Asian Languages & International Communication (Chinese, Japanese (20 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 112,
+      "error": null
+    },
+    {
+      "id": "q024",
+      "category": "university_info",
+      "question": "Where is SETEC Institute located, and is it a public or private university?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/setec"
+      ],
+      "sources": [
+        "/universities/setec",
+        "/universities/istad"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: SETEC Institute — Private university in Phnom Penh. Tuition tuition not published. Programs include Management Information Systems (MIS), Graphic Design & Multimedia Arts, Information Technology & Digital Infrastructure (3 total).\n• University: Institute of Science and Technology Advanced Development (ISTAD) — Private university in Phnom Penh. Tuition tuition not published. Programs include Information Technology & Digital Infrastructure, Information Technology & Digital Infrastructure (2 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 126,
+      "error": null
+    },
+    {
+      "id": "q025",
+      "category": "university_info",
+      "question": "Where is University of Heng Samrin Thbongkhmum located, and is it a public or private university?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/uhst"
+      ],
+      "sources": [
+        "/universities/uhst"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: University of Heng Samrin Thbongkhmum (UHST) — Private university in Tbong Khmum. Tuition $450–$800 per year. Programs include Information Technology & Digital Infrastructure, Nursing Science & Patient Care, Business Administration & Management (9 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 131,
+      "error": null
+    },
+    {
+      "id": "q026",
+      "category": "major_info",
+      "question": "What does the Accounting, Auditing & Taxation (ACCA/CAT) major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/accounting-auditing"
+      ],
+      "sources": [
+        "/majors/accounting-auditing",
+        "/universities/cus"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Accounting, Auditing & Taxation (ACCA/CAT) — Business & Economics major. Delivers comprehensive training in international financial reporting standards (IFRS/CIFRS), cost accounting, corporate tax compliance (GDT Cambodia), internal control, and external auditing. Offered at Vanda…\n• University: Cambodian University for Specialties (CUS) — Private university in Phnom Penh. Tuition $254 per year. Programs include Information Technology & Digital Infrastructure, Business Administration & Management, Banking & Financial Markets (9 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 118,
+      "error": null
+    },
+    {
+      "id": "q027",
+      "category": "major_info",
+      "question": "What does the Archaeology & Cultural Heritage Management major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/archeology-cultural-heritage"
+      ],
+      "sources": [
+        "/majors/archeology-cultural-heritage"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Archaeology & Cultural Heritage Management — Law & Social Sciences major. Covers archaeological excavation techniques, ancient temple stone conservation (Angkor/Sambor Prei Kuk), museum curation, cultural anthropology, and UNESCO World Heritage protection. Offered at Royal University…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 105,
+      "error": null
+    },
+    {
+      "id": "q028",
+      "category": "major_info",
+      "question": "What does the Banking & Financial Markets major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/banking-finance"
+      ],
+      "sources": [
+        "/majors/banking-finance",
+        "/majors/fintech",
+        "/universities/cmu",
+        "/universities/cus"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Banking & Financial Markets — Business & Economics major. Prepares analysts and executives for commercial banking, investment analysis, microfinance institutions (MFIs), corporate capital allocation, and Central Bank (NBC) regulatory governance. Offered at Cambodian…\n• Major: Financial Technology (Fintech) — Information Technology major. Explores mobile payment architectures, blockchain technology, digital banking (Bakong QR standards), automated micro-lending, algorithmic trading, and financial cybersecurity. Offered at Cambodia Academy of…\n• University: Cambodian Mekong University (CKU) — Private university in Phnom Penh. Tuition $500–$600 per year. Programs include Business Administration & Management, Banking & Financial Markets, Information Technology & Digital Infrastructure (4 total).\n• University: Cambodian University for Specialties (CUS) — Private university in Phnom Penh. Tuition $254 per year. Programs include Information Technology & Digital Infrastructure, Business Administration & Management, Banking & Financial Markets (9 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 112,
+      "error": null
+    },
+    {
+      "id": "q029",
+      "category": "major_info",
+      "question": "What does the Civil Engineering & Structural Design major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/civil-engineering"
+      ],
+      "sources": [
+        "/majors/civil-engineering",
+        "/majors/graphic-design-multimedia",
+        "/majors/fine-arts",
+        "/majors/interior-design"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Civil Engineering & Structural Design — Engineering major. Prepares structural engineers to plan, design, calculate, and supervise the construction of high-rise buildings, bridges, highways, drainage networks, and smart infrastructure. Offered at National University of…\n• Major: Graphic Design & Multimedia Arts — Architecture & Design major. Develops visual communicators skilled in typography, brand identity, UI/UX design, motion graphics, package design, and digital creative advertising. Offered at De Montfort University Cambodia, SETEC Institute,…\n• Major: Fine Arts & Traditional Sculpture/Painting — Architecture & Design major. Preserves and innovates classical Khmer mural painting, stone and wood sculpture, metal casting, ceramics, contemporary visual art, and cultural conservation. Offered at Royal University of Fine Arts. Tuition…\n• Major: Interior Design & Space Architecture — Architecture & Design major. Focuses on commercial and residential interior planning, furniture design, lighting architecture, material specification, acoustics, and 3D interior spatial rendering. Offered at Cambodia University of…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 114,
+      "error": null
+    },
+    {
+      "id": "q030",
+      "category": "major_info",
+      "question": "What does the Data Science & Artificial Intelligence major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/data-science-ai"
+      ],
+      "sources": [
+        "/majors/data-science-ai",
+        "/universities/camtech"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Data Science & Artificial Intelligence — Information Technology major. Combines statistical modeling, machine learning, deep neural networks, and big data engineering to extract actionable insights and build autonomous predictive systems. Offered at National University of…\n• University: Cambodia University of Technology and Science (CamTech) — Private university in Phnom Penh. Tuition $3,500–$4,000 per year. Programs include Risk Management & Insurance, Interior Design & Space Architecture, Architecture & Urban Planning (8 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 114,
+      "error": null
+    },
+    {
+      "id": "q031",
+      "category": "major_info",
+      "question": "What does the Electrical & Electronic Engineering major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/electrical-electronic-engineering"
+      ],
+      "sources": [
+        "/majors/electrical-electronic-engineering",
+        "/majors/telecommunication-engineering",
+        "/majors/mechatronics-robotics",
+        "/majors/mechanical-engineering"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Electrical & Electronic Engineering — Engineering major. Spans power grid generation and transmission (EDC standards), renewable solar/hydro energy installations, industrial motor control, embedded circuits, and power electronics. Offered at National Polytechnic Institute of…\n• Major: Telecommunications & Electronic Engineering — Engineering major. Focuses on wireless communications, 4G/5G mobile cellular networks, optical fiber transmission, satellite systems, antenna design, and microwave frequency propagation. Offered at Royal University of Phnom Penh, Institute…\n• Major: Mechatronics & Robotics Engineering — Engineering major. Blends mechanical hardware, electronic sensors, microcontrollers, and intelligent software to build automated production lines, drones, and industrial robotics systems. Offered at Cambodia University of Technology and…\n• Major: Mechanical Engineering & Manufacturing — Engineering major. Focuses on the mechanics of machinery, thermodynamics, fluid power, heating/ventilation/AC (HVAC), industrial piping, and advanced precision manufacturing. Offered at National Polytechnic Institute of Cambodia, Preah…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 117,
+      "error": null
+    },
+    {
+      "id": "q032",
+      "category": "major_info",
+      "question": "What does the Environmental Science & Climate Resilience major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/environmental-science"
+      ],
+      "sources": [
+        "/majors/environmental-science",
+        "/universities/rupp"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Environmental Science & Climate Resilience — Agriculture & Life Sciences major. Explores ecology, biodiversity conservation (Mekong & Tonle Sap basins), environmental impact assessment (EIA), plastic waste management, and climate change adaptation. Offered at Royal University of…\n• University: Royal University of Phnom Penh (RUPP) — Public university in Phnom Penh. Tuition $250–$1,000 per year. Programs include Environmental Science & Climate Resilience, Asian Languages & International Communication (Chinese, Japanese (20 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 115,
+      "error": null
+    },
+    {
+      "id": "q033",
+      "category": "major_info",
+      "question": "What does the Forestry Science, Fisheries & Aquaculture major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/forestry-fisheries"
+      ],
+      "sources": [
+        "/majors/forestry-fisheries"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Forestry Science, Fisheries & Aquaculture — Agriculture & Life Sciences major. Covers sustainable forest inventory, timber concession management, freshwater aquaculture (catfish, tilapia), Tonle Sap fishery ecology, and mangrove ecosystem restoration. Offered at Royal University of…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 117,
+      "error": null
+    },
+    {
+      "id": "q034",
+      "category": "major_info",
+      "question": "What does the Human Resource Management & Talent Strategy major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/human-resource-management"
+      ],
+      "sources": [
+        "/majors/human-resource-management",
+        "/universities/hru"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Human Resource Management & Talent Strategy — Business & Economics major. Focuses on strategic talent recruitment, compensation and benefits, Cambodian labor law compliance, performance appraisals, leadership development, and organizational workplace culture. Offered at Human Resource…\n• University: Human Resource University (HRU) — Private university in Phnom Penh. Tuition $480 per year. Programs include Banking & Financial Markets, Law & Jurisprudence, Business Administration & Management (5 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 114,
+      "error": null
+    },
+    {
+      "id": "q035",
+      "category": "major_info",
+      "question": "What does the International Relations & Diplomacy major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/international-relations"
+      ],
+      "sources": [
+        "/majors/international-relations",
+        "/majors/hospitality-tourism-management",
+        "/majors/asian-languages-culture",
+        "/majors/international-business"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: International Relations & Diplomacy — Law & Social Sciences major. Examines geopolitics, ASEAN multilateral diplomacy, international treaty law, foreign policy formulation, bilateral conflict resolution, and international development organizations. Offered at Norton…\n• Major: Hospitality & International Tourism Management — Business & Economics major. Trains future leaders for world-class hotels, international eco-tourism resorts, airline operations, event management, and sustainable cultural tourism destinations across Cambodia. Offered at Academy of…\n• Major: Asian Languages & International Communication (Chinese, Japanese, Korean) — Law & Social Sciences major. Offers deep language mastery and cultural business competence in major Asian regional languages (Chinese Mandarin HSK, Japanese JLPT, or Korean TOPIK) for diplomacy, FDI, and trade. Offered at Royal University…\n• Major: International Business & Global Trade — Business & Economics major. Covers multinational operations, cross-border customs regulations, international trade agreements (RCEP, ASEAN), foreign currency risk hedging, and international marketing. Offered at ACLEDA Institute of…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 117,
+      "error": null
+    },
+    {
+      "id": "q036",
+      "category": "major_info",
+      "question": "What does the Marketing & Digital Media Strategy major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/marketing-digital-media"
+      ],
+      "sources": [
+        "/majors/marketing-digital-media",
+        "/majors/media-communications",
+        "/majors/e-commerce-logistics",
+        "/majors/human-resource-management"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Marketing & Digital Media Strategy — Business & Economics major. Explores market research, brand building, digital campaign execution, consumer psychology, content marketing, and performance analytics across omnichannel platforms. Offered at University of Economics and…\n• Major: Media, Journalism & Digital Communications — Law & Social Sciences major. Explores investigative journalism, news broadcasting, television and audio production, digital storytelling, photojournalism, and public corporate communications. Offered at The University of Cambodia, Cambodia…\n• Major: E-Commerce & Digital Business — Business & Economics major. Equips students with the expertise to launch, manage, and scale online retail operations, digital payment systems, omni-channel marketing, and fulfillment logistics in Cambodia's digital economy. Offered at…\n• Major: Human Resource Management & Talent Strategy — Business & Economics major. Focuses on strategic talent recruitment, compensation and benefits, Cambodian labor law compliance, performance appraisals, leadership development, and organizational workplace culture. Offered at Human Resource…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 110,
+      "error": null
+    },
+    {
+      "id": "q037",
+      "category": "major_info",
+      "question": "What does the Mechatronics & Robotics Engineering major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/mechatronics-robotics"
+      ],
+      "sources": [
+        "/majors/mechatronics-robotics",
+        "/universities/camtech"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Mechatronics & Robotics Engineering — Engineering major. Blends mechanical hardware, electronic sensors, microcontrollers, and intelligent software to build automated production lines, drones, and industrial robotics systems. Offered at Cambodia University of Technology and…\n• University: Cambodia University of Technology and Science (CamTech) — Private university in Phnom Penh. Tuition $3,500–$4,000 per year. Programs include Risk Management & Insurance, Interior Design & Space Architecture, Architecture & Urban Planning (8 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 113,
+      "error": null
+    },
+    {
+      "id": "q038",
+      "category": "major_info",
+      "question": "What does the Doctor of Pharmacy (PharmD) / Pharmacy major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/pharmacy"
+      ],
+      "sources": [
+        "/majors/pharmacy",
+        "/majors/general-medicine",
+        "/majors/medical-laboratory",
+        "/majors/animal-science-veterinary"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Doctor of Pharmacy (PharmD) / Pharmacy — Health Sciences major. A 5-year specialized healthcare program focusing on medicinal chemistry, pharmacology, drug formulation, pharmaceutical dispensary management, toxicology, and clinical patient counseling. Offered at University of…\n• Major: Doctor of Medicine (MD) / General Medicine — Health Sciences major. Comprehensive 8-year professional medical curriculum covering human anatomy, clinical pathology, internal medicine, surgery, pediatrics, and emergency patient care in Cambodian hospitals. Offered at University of…\n• Major: Medical Laboratory Technology — Health Sciences major. Trains laboratory scientists to perform diagnostic biochemical tests, hematology cell counts, microbiology cultures, blood banking cross-matches, and molecular genetic screening. Offered at University of Health…\n• Major: Animal Science & Veterinary Medicine — Agriculture & Life Sciences major. Focuses on commercial livestock breeding (cattle, swine, poultry), animal clinical health, disease diagnostics, vaccine administration, feed nutrition, and biosecurity. Offered at Royal University of…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 103,
+      "error": null
+    },
+    {
+      "id": "q039",
+      "category": "major_info",
+      "question": "What does the Public Administration & Governance major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/public-administration"
+      ],
+      "sources": [
+        "/majors/public-administration",
+        "/majors/political-science",
+        "/majors/business-administration",
+        "/majors/public-health"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Public Administration & Governance — Law & Social Sciences major. Prepares civil servants and governance professionals to design national public policies, manage ministry departments, lead decentralization reforms, and deliver public services effectively. Offered at Royal…\n• Major: Political Science & Public Affairs — Law & Social Sciences major. Examines comparative political systems, constitutional theory, political philosophy, public opinion research, election processes, and state-society relations. Offered at Panha Chiet University. Tuition $500 per…\n• Major: Business Administration & Management — Business & Economics major. Provides an all-round executive foundation covering general management, strategic planning, operations optimization, organizational leadership, and entrepreneurship. Offered at De Montfort University Cambodia,…\n• Major: Public Health & Epidemiology — Health Sciences major. Focuses on disease prevention, health education, epidemiology, maternal-child nutrition, clean water sanitation (WASH), and healthcare policy management in Cambodia and the ASEAN region. Offered at Angkor University,…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 102,
+      "error": null
+    },
+    {
+      "id": "q040",
+      "category": "major_info",
+      "question": "What does the Software Engineering & Application Development major cover at Cambodian universities?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/software-engineering"
+      ],
+      "sources": [
+        "/majors/software-engineering",
+        "/universities/camtech"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Major: Software Engineering & Application Development — Information Technology major. Focuses on the systematic design, development, testing, and maintenance of high-performance software systems, mobile apps, enterprise cloud platforms, and scalable backend architectures. Offered at Cambodia…\n• University: Cambodia University of Technology and Science (CamTech) — Private university in Phnom Penh. Tuition $3,500–$4,000 per year. Programs include Risk Management & Insurance, Interior Design & Space Architecture, Architecture & Urban Planning (8 total).\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 110,
+      "error": null
+    },
+    {
+      "id": "q041",
+      "category": "major_offerings",
+      "question": "Which universities offer the Accounting, Auditing & Taxation (ACCA/CAT) major?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/accounting-auditing"
+      ],
+      "sources": [
+        "/universities/cus",
+        "/universities/uhst",
+        "/universities/uef",
+        "/universities/rule",
+        "/universities/vanda",
+        "/majors/accounting-auditing"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "search_universities"
+      ],
+      "tools_used": [
+        "search_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Matching universities:\n• Cambodian University for Specialties (Phnom Penh, private, $254/year) — $254/year\n• University of Heng Samrin Thbongkhmum (Tbong Khmum, private, $450–$800/year) — $450/year, min BACII F\n• University of Economics and Finance (Phnom Penh, public, $500/year) — $500/year\n• Royal University of Law and Economics (Phnom Penh, public, $550–$850/year) — $580/year\n• Vanda Institute (Phnom Penh, private, $650/year) — $650/year, min BACII F",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "search_universities"
+      ],
+      "latency_ms": 120,
+      "error": null
+    },
+    {
+      "id": "q042",
+      "category": "major_offerings",
+      "question": "Which universities offer the Banking & Financial Markets major?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/banking-finance"
+      ],
+      "sources": [
+        "/universities/cus",
+        "/universities/hru",
+        "/universities/cmu",
+        "/universities/bbu",
+        "/universities/pcu",
+        "/majors/banking-finance",
+        "/universities/rule",
+        "/universities/uef"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "search_universities"
+      ],
+      "tools_used": [
+        "search_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Matching universities:\n• Cambodian University for Specialties (Phnom Penh, private, $254/year) — $254/year\n• Human Resource University (Phnom Penh, private, $480/year) — $480/year, min BACII E\n• Cambodian Mekong University (Phnom Penh, private, $500–$600/year) — $550/year\n• Build Bright University (Phnom Penh, private, $500–$550/year) — $510/year, min BACII E\n• Panha Chiet University (Phnom Penh, private, $500/year) — $500/year, min BACII E",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "search_universities"
+      ],
+      "latency_ms": 101,
+      "error": null
+    },
+    {
+      "id": "q043",
+      "category": "major_offerings",
+      "question": "Which universities offer the Cybersecurity & Information Networks major?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/cybersecurity-networking"
+      ],
+      "sources": [
+        "/universities/norton",
+        "/universities/itc",
+        "/universities/cadt",
+        "/universities/camtech",
+        "/universities/aupp",
+        "/majors/cybersecurity-networking",
+        "/majors/information-technology"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "search_universities"
+      ],
+      "tools_used": [
+        "search_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Matching universities:\n• Norton University (Phnom Penh, private, $500–$2,500/year) — $540/year, min BACII E\n• Institute of Technology of Cambodia (Phnom Penh, public, $800–$2,500/year) — $2,500/year, min BACII E\n• Cambodia Academy of Digital Technology (Phnom Penh, public, $2,500/year) — $2,500/year, min BACII E\n• Cambodia University of Technology and Science (Phnom Penh, private, $3,500–$4,000/year) — $4,000/year, min BACII E\n• American University of Phnom Penh (Phnom Penh, private, $6,000–$9,000/year) — $6,000/year, min BACII E",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "search_universities"
+      ],
+      "latency_ms": 107,
+      "error": null
+    },
+    {
+      "id": "q044",
+      "category": "major_offerings",
+      "question": "Which universities offer the Economics & Development Studies major?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/economics-development"
+      ],
+      "sources": [
+        "/universities/rupp",
+        "/universities/norton",
+        "/universities/uef",
+        "/universities/iic",
+        "/universities/rule",
+        "/majors/economics-development"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "search_universities"
+      ],
+      "tools_used": [
+        "search_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Matching universities:\n• Royal University of Phnom Penh (Phnom Penh, public, $250–$1,000/year) — $650/year, min BACII E\n• Norton University (Phnom Penh, private, $500–$2,500/year) — $500/year, min BACII E\n• University of Economics and Finance (Phnom Penh, public, $500/year) — $500/year\n• IIC University of Technology (Phnom Penh, private, $550–$600/year) — $550/year, min BACII E\n• Royal University of Law and Economics (Phnom Penh, public, $550–$850/year) — $580/year",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "search_universities"
+      ],
+      "latency_ms": 126,
+      "error": null
+    },
+    {
+      "id": "q045",
+      "category": "major_offerings",
+      "question": "Which universities offer the Financial Technology (Fintech) major?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/fintech"
+      ],
+      "sources": [
+        "/universities/aib",
+        "/universities/cadt",
+        "/majors/fintech"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "search_universities"
+      ],
+      "tools_used": [
+        "search_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Matching universities:\n• ACLEDA Institute of Business (Phnom Penh, private, $950–$1,200/year) — $1,200/year, min BACII E\n• Cambodia Academy of Digital Technology (Phnom Penh, public, $2,500/year) — $2,500/year, min BACII E",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "search_universities"
+      ],
+      "latency_ms": 149,
+      "error": null
+    },
+    {
+      "id": "q046",
+      "category": "major_offerings",
+      "question": "Which universities offer the Graphic Design & Multimedia Arts major?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/graphic-design-multimedia"
+      ],
+      "sources": [
+        "/universities/rufa",
+        "/universities/norton",
+        "/universities/paragoniu",
+        "/universities/dmuc",
+        "/universities/setec",
+        "/majors/graphic-design-multimedia"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "search_universities"
+      ],
+      "tools_used": [
+        "search_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Matching universities:\n• Royal University of Fine Arts (Phnom Penh, public, $400–$600/year) — $500/year, min BACII E\n• Norton University (Phnom Penh, private, $500–$2,500/year) — $540/year, min BACII E\n• Paragon International University (Phnom Penh, private, $2,800–$4,500/year) — $4,000/year, min BACII E\n• De Montfort University Cambodia (Phnom Penh, private, $4,500–$4,800/year) — $4,800/year, min BACII E\n• SETEC Institute (Phnom Penh, private, tuition not published)",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "search_universities"
+      ],
+      "latency_ms": 119,
+      "error": null
+    },
+    {
+      "id": "q047",
+      "category": "major_offerings",
+      "question": "Which universities offer the Law & Jurisprudence major?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/law-jurisprudence"
+      ],
+      "sources": [
+        "/universities/cus",
+        "/universities/nubb",
+        "/universities/hru",
+        "/universities/norton",
+        "/universities/bbu",
+        "/majors/law-jurisprudence",
+        "/universities/rule"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "search_universities"
+      ],
+      "tools_used": [
+        "search_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Matching universities:\n• Cambodian University for Specialties (Phnom Penh, private, $254/year) — $254/year\n• National University of Battambang (Battambang, private, $450–$500/year) — $450/year\n• Human Resource University (Phnom Penh, private, $480/year) — $480/year, min BACII E\n• Norton University (Phnom Penh, private, $500–$2,500/year) — $500/year, min BACII E\n• Build Bright University (Phnom Penh, private, $500–$550/year) — $510/year, min BACII E",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "search_universities"
+      ],
+      "latency_ms": 120,
+      "error": null
+    },
+    {
+      "id": "q048",
+      "category": "major_offerings",
+      "question": "Which universities offer the Mechanical Engineering & Manufacturing major?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/mechanical-engineering"
+      ],
+      "sources": [
+        "/universities/ntti",
+        "/universities/pkpi",
+        "/universities/npic",
+        "/universities/itc",
+        "/majors/mechanical-engineering"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "search_universities"
+      ],
+      "tools_used": [
+        "search_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Matching universities:\n• National Technical Training Institute (Phnom Penh, public, $395–$450/year) — $450/year, min BACII E\n• Preah Kossomak Polytechnic Institute (Phnom Penh, public, $400/year) — $400/year\n• National Polytechnic Institute of Cambodia (Phnom Penh, public, $650–$700/year) — $650/year\n• Institute of Technology of Cambodia (Phnom Penh, public, $800–$2,500/year) — $800/year, min BACII E",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "search_universities"
+      ],
+      "latency_ms": 132,
+      "error": null
+    },
+    {
+      "id": "q049",
+      "category": "major_offerings",
+      "question": "Which universities offer the Doctor of Pharmacy (PharmD) / Pharmacy major?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/pharmacy"
+      ],
+      "sources": [
+        "/universities/norton",
+        "/universities/iu",
+        "/universities/uhs",
+        "/universities/up",
+        "/majors/pharmacy",
+        "/majors/general-medicine",
+        "/majors/medical-laboratory"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "search_universities"
+      ],
+      "tools_used": [
+        "search_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Matching universities:\n• Norton University (Phnom Penh, private, $500–$2,500/year) — $1,500/year, min BACII E\n• International University (Phnom Penh, private, $600–$4,500/year) — $3,400/year, min BACII E\n• University of Health Sciences (Phnom Penh, public, $1,000–$2,500/year) — $1,800/year, min BACII E\n• The University of Puthisastra (Phnom Penh, private, $1,200–$2,500/year) — $2,500/year, min BACII E",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "search_universities"
+      ],
+      "latency_ms": 112,
+      "error": null
+    },
+    {
+      "id": "q050",
+      "category": "major_offerings",
+      "question": "Which universities offer the Risk Management & Insurance major?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/risk-management-insurance"
+      ],
+      "sources": [
+        "/universities/aib",
+        "/universities/camtech",
+        "/majors/risk-management-insurance"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "search_universities"
+      ],
+      "tools_used": [
+        "search_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Matching universities:\n• ACLEDA Institute of Business (Phnom Penh, private, $950–$1,200/year) — $1,200/year, min BACII E\n• Cambodia University of Technology and Science (Phnom Penh, private, $3,500–$4,000/year) — $3,500/year, min BACII E",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "search_universities"
+      ],
+      "latency_ms": 118,
+      "error": null
+    },
+    {
+      "id": "q051",
+      "category": "scholarship",
+      "question": "What does the AUPP Presidential & Merit Scholarship cover?",
+      "language": "en",
+      "expected_urls": [
+        "/scholarships/aupp-merit-scholarship"
+      ],
+      "sources": [
+        "/universities/aupp",
+        "/scholarships/aupp-merit-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: American University of Phnom Penh (AUPP) — Private university in Phnom Penh. Tuition $6,000–$9,000 per year. Programs include Business Administration & Management, Law & Jurisprudence, Computer Science & Theoretical Computing (7 total).\n• Scholarship: AUPP Presidential & Merit Scholarship — American University of Phnom Penh. Coverage: partial tuition (50%). Eligibility: BacII Grade A or B, Pass AUPP English & Math Scholarship Exam, Personal Essay & Interview. Deadline: 2026-08-30.\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 108,
+      "error": null
+    },
+    {
+      "id": "q052",
+      "category": "scholarship",
+      "question": "What does the MoEYS National State University Scholarship cover?",
+      "language": "en",
+      "expected_urls": [
+        "/scholarships/moeys-national-scholarship"
+      ],
+      "sources": [
+        "/scholarships/moeys-national-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Scholarship: MoEYS National State University Scholarship — Ministry of Education, Youth and Sport (MoEYS). Coverage: full tuition (100%). Eligibility: Cambodian Citizen, Grade 12 BacII Exam Passer (Grade A, B, or C), High national rank. Deadline: 2026-12-15.\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 110,
+      "error": null
+    },
+    {
+      "id": "q053",
+      "category": "scholarship",
+      "question": "What does the Techo Digital Talent Scholarship (Undergraduate) cover?",
+      "language": "en",
+      "expected_urls": [
+        "/scholarships/techo-digital-talent-scholarship"
+      ],
+      "sources": [
+        "/scholarships/techo-digital-talent-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Scholarship: Techo Digital Talent Scholarship (Undergraduate) — Ministry of Post and Telecommunications (MPTC) & CADT. Coverage: full tuition (100%). Eligibility: High School Graduate / BacII Passer, Pass Computer-Based Examination, Pass Oral Interview. Deadline: 2026-10-24.\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 117,
+      "error": null
+    },
+    {
+      "id": "q054",
+      "category": "scholarship",
+      "question": "When is the deadline for the AUPP Presidential & Merit Scholarship?",
+      "language": "en",
+      "expected_urls": [
+        "/scholarships/aupp-merit-scholarship"
+      ],
+      "sources": [
+        "/universities/aupp",
+        "/scholarships/aupp-merit-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: American University of Phnom Penh (AUPP) — Private university in Phnom Penh. Tuition $6,000–$9,000 per year. Programs include Business Administration & Management, Law & Jurisprudence, Computer Science & Theoretical Computing (7 total).\n• Scholarship: AUPP Presidential & Merit Scholarship — American University of Phnom Penh. Coverage: partial tuition (50%). Eligibility: BacII Grade A or B, Pass AUPP English & Math Scholarship Exam, Personal Essay & Interview. Deadline: 2026-08-30.\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 113,
+      "error": null
+    },
+    {
+      "id": "q055",
+      "category": "scholarship",
+      "question": "When is the deadline for the MoEYS National State University Scholarship?",
+      "language": "en",
+      "expected_urls": [
+        "/scholarships/moeys-national-scholarship"
+      ],
+      "sources": [
+        "/scholarships/moeys-national-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Scholarship: MoEYS National State University Scholarship — Ministry of Education, Youth and Sport (MoEYS). Coverage: full tuition (100%). Eligibility: Cambodian Citizen, Grade 12 BacII Exam Passer (Grade A, B, or C), High national rank. Deadline: 2026-12-15.\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 112,
+      "error": null
+    },
+    {
+      "id": "q056",
+      "category": "scholarship",
+      "question": "When is the deadline for the Techo Digital Talent Scholarship (Undergraduate)?",
+      "language": "en",
+      "expected_urls": [
+        "/scholarships/techo-digital-talent-scholarship"
+      ],
+      "sources": [
+        "/scholarships/techo-digital-talent-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Scholarship: Techo Digital Talent Scholarship (Undergraduate) — Ministry of Post and Telecommunications (MPTC) & CADT. Coverage: full tuition (100%). Eligibility: High School Graduate / BacII Passer, Pass Computer-Based Examination, Pass Oral Interview. Deadline: 2026-10-24.\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 109,
+      "error": null
+    },
+    {
+      "id": "q057",
+      "category": "scholarship",
+      "question": "Who provides the AUPP Presidential & Merit Scholarship?",
+      "language": "en",
+      "expected_urls": [
+        "/scholarships/aupp-merit-scholarship"
+      ],
+      "sources": [
+        "/universities/aupp",
+        "/scholarships/aupp-merit-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: American University of Phnom Penh (AUPP) — Private university in Phnom Penh. Tuition $6,000–$9,000 per year. Programs include Business Administration & Management, Law & Jurisprudence, Computer Science & Theoretical Computing (7 total).\n• Scholarship: AUPP Presidential & Merit Scholarship — American University of Phnom Penh. Coverage: partial tuition (50%). Eligibility: BacII Grade A or B, Pass AUPP English & Math Scholarship Exam, Personal Essay & Interview. Deadline: 2026-08-30.\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 108,
+      "error": null
+    },
+    {
+      "id": "q058",
+      "category": "scholarship",
+      "question": "Who provides the MoEYS National State University Scholarship?",
+      "language": "en",
+      "expected_urls": [
+        "/scholarships/moeys-national-scholarship"
+      ],
+      "sources": [
+        "/scholarships/moeys-national-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Scholarship: MoEYS National State University Scholarship — Ministry of Education, Youth and Sport (MoEYS). Coverage: full tuition (100%). Eligibility: Cambodian Citizen, Grade 12 BacII Exam Passer (Grade A, B, or C), High national rank. Deadline: 2026-12-15.\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 112,
+      "error": null
+    },
+    {
+      "id": "q059",
+      "category": "scholarship",
+      "question": "Who provides the Techo Digital Talent Scholarship (Undergraduate)?",
+      "language": "en",
+      "expected_urls": [
+        "/scholarships/techo-digital-talent-scholarship"
+      ],
+      "sources": [
+        "/scholarships/techo-digital-talent-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Scholarship: Techo Digital Talent Scholarship (Undergraduate) — Ministry of Post and Telecommunications (MPTC) & CADT. Coverage: full tuition (100%). Eligibility: High School Graduate / BacII Passer, Pass Computer-Based Examination, Pass Oral Interview. Deadline: 2026-10-24.\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 120,
+      "error": null
+    },
+    {
+      "id": "q060",
+      "category": "scholarship",
+      "question": "What are the eligibility criteria for the AUPP Presidential & Merit Scholarship?",
+      "language": "en",
+      "expected_urls": [
+        "/scholarships/aupp-merit-scholarship"
+      ],
+      "sources": [
+        "/universities/aupp",
+        "/scholarships/aupp-merit-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• University: American University of Phnom Penh (AUPP) — Private university in Phnom Penh. Tuition $6,000–$9,000 per year. Programs include Business Administration & Management, Law & Jurisprudence, Computer Science & Theoretical Computing (7 total).\n• Scholarship: AUPP Presidential & Merit Scholarship — American University of Phnom Penh. Coverage: partial tuition (50%). Eligibility: BacII Grade A or B, Pass AUPP English & Math Scholarship Exam, Personal Essay & Interview. Deadline: 2026-08-30.\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 109,
+      "error": null
+    },
+    {
+      "id": "q061",
+      "category": "career",
+      "question": "What does a Civil & Structural Engineer do?",
+      "language": "en",
+      "expected_urls": [
+        "/careers/civil-engineer"
+      ],
+      "sources": [
+        "/careers/civil-engineer",
+        "/majors/civil-engineering"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Career: Civil & Structural Engineer — Engineering & Construction career. Skills: AutoCAD / Revit, Structural Calculations, Site Project Supervision. Plans, calculates, designs, and oversees construction projects such as high-rise buildings, bridges, and municipal infrastructure.\n• Major: Civil Engineering & Structural Design — Engineering major. Prepares structural engineers to plan, design, calculate, and supervise the construction of high-rise buildings, bridges, highways, drainage networks, and smart infrastructure. Offered at National University of…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 109,
+      "error": null
+    },
+    {
+      "id": "q062",
+      "category": "career",
+      "question": "What does a Financial Analyst do?",
+      "language": "en",
+      "expected_urls": [
+        "/careers/financial-analyst"
+      ],
+      "sources": [
+        "/careers/financial-analyst",
+        "/majors/banking-finance"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Career: Financial Analyst — Finance & Banking career. Skills: Financial Modeling, Corporate Accounting, Data Analytics. Evaluates financial data, forecasts corporate performance, builds financial models, and provides investment guidance.\n• Major: Banking & Financial Markets — Business & Economics major. Prepares analysts and executives for commercial banking, investment analysis, microfinance institutions (MFIs), corporate capital allocation, and Central Bank (NBC) regulatory governance. Offered at Cambodian…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 103,
+      "error": null
+    },
+    {
+      "id": "q063",
+      "category": "career",
+      "question": "What does a Software Engineer do?",
+      "language": "en",
+      "expected_urls": [
+        "/careers/software-engineer"
+      ],
+      "sources": [
+        "/careers/software-engineer",
+        "/majors/software-engineering",
+        "/careers/civil-engineer"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Career: Software Engineer — Technology career. Skills: Python / JavaScript / Go, SQL & Database Design, Git & Problem Solving. Designs, writes, tests, and maintains software applications for cloud platforms, mobile devices, and enterprise systems.\n• Major: Software Engineering & Application Development — Information Technology major. Focuses on the systematic design, development, testing, and maintenance of high-performance software systems, mobile apps, enterprise cloud platforms, and scalable backend architectures. Offered at Cambodia…\n• Career: Civil & Structural Engineer — Engineering & Construction career. Skills: AutoCAD / Revit, Structural Calculations, Site Project Supervision. Plans, calculates, designs, and oversees construction projects such as high-rise buildings, bridges, and municipal infrastructure.\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 107,
+      "error": null
+    },
+    {
+      "id": "q064",
+      "category": "career",
+      "question": "What skills does a Civil & Structural Engineer need?",
+      "language": "en",
+      "expected_urls": [
+        "/careers/civil-engineer"
+      ],
+      "sources": [
+        "/careers/civil-engineer",
+        "/majors/civil-engineering",
+        "/careers/software-engineer"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Career: Civil & Structural Engineer — Engineering & Construction career. Skills: AutoCAD / Revit, Structural Calculations, Site Project Supervision. Plans, calculates, designs, and oversees construction projects such as high-rise buildings, bridges, and municipal infrastructure.\n• Major: Civil Engineering & Structural Design — Engineering major. Prepares structural engineers to plan, design, calculate, and supervise the construction of high-rise buildings, bridges, highways, drainage networks, and smart infrastructure. Offered at National University of…\n• Career: Software Engineer — Technology career. Skills: Python / JavaScript / Go, SQL & Database Design, Git & Problem Solving. Designs, writes, tests, and maintains software applications for cloud platforms, mobile devices, and enterprise systems.\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 118,
+      "error": null
+    },
+    {
+      "id": "q065",
+      "category": "career",
+      "question": "What skills does a Financial Analyst need?",
+      "language": "en",
+      "expected_urls": [
+        "/careers/financial-analyst"
+      ],
+      "sources": [
+        "/careers/financial-analyst",
+        "/majors/banking-finance"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Here is what I found in Futera's verified records:\n• Career: Financial Analyst — Finance & Banking career. Skills: Financial Modeling, Corporate Accounting, Data Analytics. Evaluates financial data, forecasts corporate performance, builds financial models, and provides investment guidance.\n• Major: Banking & Financial Markets — Business & Economics major. Prepares analysts and executives for commercial banking, investment analysis, microfinance institutions (MFIs), corporate capital allocation, and Central Bank (NBC) regulatory governance. Offered at Cambodian…\nNote: the local AI model is not running, so this answer was assembled directly from the database. Start Ollama for a conversational answer.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 98,
+      "error": null
+    },
+    {
+      "id": "q066",
+      "category": "comparison",
+      "question": "Compare annual tuition at Academy of Culinary Arts Cambodia and Human Resource University. Which is cheaper?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/acac",
+        "/universities/hru"
+      ],
+      "sources": [
+        "/universities/hru",
+        "/universities/acac",
+        "/majors/human-resource-management",
+        "/majors/culinary-arts"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "compare_universities"
+      ],
+      "tools_used": [
+        "compare_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Comparison:\n• Human Resource University — Phnom Penh, private, $480/year, 5 programs; program fee $480/year, min BACII E\n• Academy of Culinary Arts Cambodia — Phnom Penh, private, $3,900/year, 2 programs; program fee $3,900/year, min BACII F\n\nLowest published minimum: Human Resource University",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "compare_universities"
+      ],
+      "latency_ms": 129,
+      "error": null
+    },
+    {
+      "id": "q067",
+      "category": "comparison",
+      "question": "Compare annual tuition at ACLEDA Institute of Business and International University. Which is cheaper?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/aib",
+        "/universities/iu"
+      ],
+      "sources": [
+        "/universities/iu",
+        "/universities/aib",
+        "/majors/international-business",
+        "/majors/supply-chain-logistics",
+        "/majors/hospitality-tourism-management"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "compare_universities"
+      ],
+      "tools_used": [
+        "compare_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Comparison:\n• International University — Phnom Penh, private, $600–$4,500/year, 6 programs\n• ACLEDA Institute of Business — Phnom Penh, private, $950–$1,200/year, 14 programs\n\nLowest published minimum: International University",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "compare_universities"
+      ],
+      "latency_ms": 117,
+      "error": null
+    },
+    {
+      "id": "q068",
+      "category": "comparison",
+      "question": "Compare annual tuition at Build Bright University and Norton University. Which is cheaper?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/bbu",
+        "/universities/norton"
+      ],
+      "sources": [
+        "/universities/norton",
+        "/universities/bbu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "compare_universities"
+      ],
+      "tools_used": [
+        "compare_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Comparison:\n• Norton University — Phnom Penh, private, $500–$2,500/year, 20 programs\n• Build Bright University — Phnom Penh, private, $500–$550/year, 5 programs\n\nLowest published minimum: Norton University",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "compare_universities"
+      ],
+      "latency_ms": 117,
+      "error": null
+    },
+    {
+      "id": "q069",
+      "category": "comparison",
+      "question": "Compare annual tuition at CamEd Business School and National University of Battambang. Which is cheaper?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/camed",
+        "/universities/nubb"
+      ],
+      "sources": [
+        "/universities/nubb",
+        "/universities/camed",
+        "/majors/marketing-digital-media",
+        "/universities/num"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "compare_universities"
+      ],
+      "tools_used": [
+        "compare_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Comparison:\n• National University of Battambang — Battambang, private, $450–$500/year, 10 programs\n• CamEd Business School — Phnom Penh, private, $4,178/year, 3 programs\n\nLowest published minimum: National University of Battambang",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "compare_universities"
+      ],
+      "latency_ms": 104,
+      "error": null
+    },
+    {
+      "id": "q070",
+      "category": "comparison",
+      "question": "Compare annual tuition at Cambodian University for Specialties and Panha Chiet University. Which is cheaper?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/cus",
+        "/universities/pcu"
+      ],
+      "sources": [
+        "/universities/cus",
+        "/universities/pcu",
+        "/universities/cmu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "compare_universities"
+      ],
+      "tools_used": [
+        "compare_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Comparison:\n• Cambodian University for Specialties — Phnom Penh, private, $254/year, 9 programs\n• Panha Chiet University — Phnom Penh, private, $500/year, 5 programs\n\nLowest published minimum: Cambodian University for Specialties",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "compare_universities"
+      ],
+      "latency_ms": 116,
+      "error": null
+    },
+    {
+      "id": "q071",
+      "category": "comparison",
+      "question": "Compare annual tuition at Human Resource University and Phnom Penh International University. Which is cheaper?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/hru",
+        "/universities/ppiu"
+      ],
+      "sources": [
+        "/universities/hru",
+        "/universities/ppiu",
+        "/universities/iu",
+        "/majors/human-resource-management",
+        "/universities/rupp"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "compare_universities"
+      ],
+      "tools_used": [
+        "compare_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Comparison:\n• Human Resource University — Phnom Penh, private, $480/year, 5 programs; program fee $480/year, min BACII E\n• Phnom Penh International University — Phnom Penh, private, $650–$700/year, 4 programs; program fee $650/year, min BACII E\n• International University — Phnom Penh, private, $600–$4,500/year, 6 programs; program fee $1,600/year, min BACII E\n\nLowest published minimum: Human Resource University",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "compare_universities"
+      ],
+      "latency_ms": 120,
+      "error": null
+    },
+    {
+      "id": "q072",
+      "category": "comparison",
+      "question": "Compare annual tuition at International University and Royal University of Fine Arts. Which is cheaper?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/iu",
+        "/universities/rufa"
+      ],
+      "sources": [
+        "/universities/iu",
+        "/universities/rufa",
+        "/majors/fine-arts",
+        "/majors/graphic-design-multimedia",
+        "/universities/paragoniu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "compare_universities"
+      ],
+      "tools_used": [
+        "compare_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Comparison:\n• International University — Phnom Penh, private, $600–$4,500/year, 6 programs; program fee $1,600/year, min BACII E\n• Royal University of Fine Arts — Phnom Penh, public, $400–$600/year, 5 programs; program fee $500/year, min BACII E\n\nLowest published minimum: Royal University of Fine Arts",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "compare_universities"
+      ],
+      "latency_ms": 118,
+      "error": null
+    },
+    {
+      "id": "q073",
+      "category": "comparison",
+      "question": "Compare annual tuition at Norton University and Svay Rieng University. Which is cheaper?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/norton",
+        "/universities/sru"
+      ],
+      "sources": [
+        "/universities/sru",
+        "/universities/norton"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "compare_universities"
+      ],
+      "tools_used": [
+        "compare_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Comparison:\n• Svay Rieng University — Svay Rieng, public, $450/year, 5 programs\n• Norton University — Phnom Penh, private, $500–$2,500/year, 20 programs\n\nLowest published minimum: Svay Rieng University",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "compare_universities"
+      ],
+      "latency_ms": 126,
+      "error": null
+    },
+    {
+      "id": "q074",
+      "category": "comparison",
+      "question": "Compare annual tuition at National University of Battambang and University of Health Sciences. Which is cheaper?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/nubb",
+        "/universities/uhs"
+      ],
+      "sources": [
+        "/universities/nubb",
+        "/universities/uhs",
+        "/majors/public-health",
+        "/universities/nmu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "compare_universities"
+      ],
+      "tools_used": [
+        "compare_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Comparison:\n• National University of Battambang — Battambang, private, $450–$500/year, 10 programs; program fee $500/year\n• University of Health Sciences — Phnom Penh, public, $1,000–$2,500/year, 6 programs; program fee $1,200/year, min BACII E\n\nLowest published minimum: National University of Battambang",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "compare_universities"
+      ],
+      "latency_ms": 123,
+      "error": null
+    },
+    {
+      "id": "q075",
+      "category": "comparison",
+      "question": "Compare annual tuition at Panha Chiet University and University of South-East Asia. Which is cheaper?",
+      "language": "en",
+      "expected_urls": [
+        "/universities/pcu",
+        "/universities/usea"
+      ],
+      "sources": [
+        "/universities/pcu",
+        "/universities/usea",
+        "/universities/eamu",
+        "/universities/aeu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "compare_universities"
+      ],
+      "tools_used": [
+        "compare_universities"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Comparison:\n• Panha Chiet University — Phnom Penh, private, $500/year, 5 programs\n• University of South-East Asia — Siem Reap, private, $550–$600/year, 5 programs\n\nLowest published minimum: Panha Chiet University",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "compare_universities"
+      ],
+      "latency_ms": 126,
+      "error": null
+    },
+    {
+      "id": "q076",
+      "category": "khmer",
+      "question": "តើថ្លៃសិក្សានៅ វិទ្យាស្ថានម្ហូបអាហារកម្ពុជា​ ប៉ុន្មានក្នុងមួយឆ្នាំ?",
+      "language": "km",
+      "expected_urls": [
+        "/universities/acac"
+      ],
+      "sources": [
+        "/universities/acac",
+        "/majors/culinary-arts",
+        "/universities/itc",
+        "/universities/npic"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "នេះជាព័ត៌មានដែលខ្ញុំរកឃើញក្នុងទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ Futera៖\n• សាកលវិទ្យាល័យ: វិទ្យាស្ថានម្ហូបអាហារកម្ពុជា​ (ACAC) — សាកលវិទ្យាល័យប្រភេទ private នៅ Phnom Penh។ ថ្លៃសិក្សា $3,900 per year។ មានកម្មវិធីសិក្សា 2។\n• ជំនាញ: សិល្បៈធ្វើម្ហូប និងការគ្រប់គ្រងផ្ទះបាយវិជ្ជាជីវៈ — ជំនាញផ្នែក Business & Economics។ បណ្តុះបណ្តាលសិល្បៈធ្វើម្ហូបកម្រិតអន្តរជាតិ (ស្តង់ដារស្វីស/បារាំង) ម្ហូបខ្មែរប្រណីត ការធ្វើនំ ការគ្រប់គ្រងថ្លៃដើមផ្ទះបាយ និងការគ្រប់គ្រងភោជនីយដ្ឋាន។ បង្រៀននៅ វិទ្យាស្ថានម្ហូបអាហារកម្ពុជា​។\n• សាកលវិទ្យាល័យ: វិទ្យាស្ថានបច្ចេកវិទ្យាកម្ពុជា (តិចណូ) — សាកលវិទ្យាល័យប្រភេទ public នៅ Phnom Penh។ ថ្លៃសិក្សា $800–$2,500 per year។ មានកម្មវិធីសិក្សា 13។\n• សាកលវិទ្យាល័យ: វិទ្យាស្ថានជាតិពហុ​បច្ចេកវិទ្យាកម្ពុជា (NPIC) — សាកលវិទ្យាល័យប្រភេទ public នៅ Phnom Penh។ ថ្លៃសិក្សា $650–$700 per year។ មានកម្មវិធីសិក្សា 5។\nចំណាំ៖ ម៉ូដែល AI មូលដ្ឋានមិនទាន់ដំណើរការ ដូច្នេះចម្លើយនេះបង្កើតដោយផ្ទាល់ពីទិន្នន័យ។ ដំណើរការ Ollama ដើម្បីទទួលបានចម្លើយសន្ទនាបន្ថែម។",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 116,
+      "error": null
+    },
+    {
+      "id": "q077",
+      "category": "khmer",
+      "question": "តើថ្លៃសិក្សានៅ វិទ្យាស្ថានពាណិជ្ជសាស្រ្តអេស៊ីលីដា ប៉ុន្មានក្នុងមួយឆ្នាំ?",
+      "language": "km",
+      "expected_urls": [
+        "/universities/aib"
+      ],
+      "sources": [
+        "/universities/aib",
+        "/universities/camed"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "នេះជាព័ត៌មានដែលខ្ញុំរកឃើញក្នុងទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ Futera៖\n• សាកលវិទ្យាល័យ: វិទ្យាស្ថានពាណិជ្ជសាស្រ្តអេស៊ីលីដា (AIB) — សាកលវិទ្យាល័យប្រភេទ private នៅ Phnom Penh។ ថ្លៃសិក្សា $950–$1,200 per year។ មានកម្មវិធីសិក្សា 14។\n• សាកលវិទ្យាល័យ: វិទ្យាស្ថានពាណិជ្ជកម្មខេមអ៊ែត (CamEd) — សាកលវិទ្យាល័យប្រភេទ private នៅ Phnom Penh។ ថ្លៃសិក្សា $4,178 per year។ មានកម្មវិធីសិក្សា 3។\nចំណាំ៖ ម៉ូដែល AI មូលដ្ឋានមិនទាន់ដំណើរការ ដូច្នេះចម្លើយនេះបង្កើតដោយផ្ទាល់ពីទិន្នន័យ។ ដំណើរការ Ollama ដើម្បីទទួលបានចម្លើយសន្ទនាបន្ថែម។",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 112,
+      "error": null
+    },
+    {
+      "id": "q078",
+      "category": "khmer",
+      "question": "តើថ្លៃសិក្សានៅ សាកលវិទ្យាល័យបៀលប្រាយ ប៉ុន្មានក្នុងមួយឆ្នាំ?",
+      "language": "km",
+      "expected_urls": [
+        "/universities/bbu"
+      ],
+      "sources": [
+        "/universities/bbu",
+        "/universities/aupp",
+        "/universities/puc",
+        "/universities/beltei"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "នេះជាព័ត៌មានដែលខ្ញុំរកឃើញក្នុងទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ Futera៖\n• សាកលវិទ្យាល័យ: សាកលវិទ្យាល័យបៀលប្រាយ (BBU) — សាកលវិទ្យាល័យប្រភេទ private នៅ Phnom Penh។ ថ្លៃសិក្សា $500–$550 per year។ មានកម្មវិធីសិក្សា 5។\n• សាកលវិទ្យាល័យ: សាកលវិទ្យាល័យអាមេរិកាំងភ្នំពេញ (អេយូប៊ីភី) — សាកលវិទ្យាល័យប្រភេទ private នៅ Phnom Penh។ ថ្លៃសិក្សា $6,000–$9,000 per year។ មានកម្មវិធីសិក្សា 7។\n• សាកលវិទ្យាល័យ: សាកលវិទ្យាល័យបញ្ញាសាស្ត្រ (PUC) — សាកលវិទ្យាល័យប្រភេទ private នៅ Phnom Penh។ ថ្លៃសិក្សា $795 per year។ មានកម្មវិធីសិក្សា 5។\n• សាកលវិទ្យាល័យ: សាកលវិទ្យាល័យប៊ែលធីអន្តរជាតិ (BIU) — សាកលវិទ្យាល័យប្រភេទ private នៅ Phnom Penh។ ថ្លៃសិក្សា $600–$700 per year។ មានកម្មវិធីសិក្សា 7។\nចំណាំ៖ ម៉ូដែល AI មូលដ្ឋានមិនទាន់ដំណើរការ ដូច្នេះចម្លើយនេះបង្កើតដោយផ្ទាល់ពីទិន្នន័យ។ ដំណើរការ Ollama ដើម្បីទទួលបានចម្លើយសន្ទនាបន្ថែម។",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 120,
+      "error": null
+    },
+    {
+      "id": "q079",
+      "category": "khmer",
+      "question": "តើថ្លៃសិក្សានៅ វិទ្យាស្ថានពាណិជ្ជកម្មខេមអ៊ែត ប៉ុន្មានក្នុងមួយឆ្នាំ?",
+      "language": "km",
+      "expected_urls": [
+        "/universities/camed"
+      ],
+      "sources": [
+        "/universities/camed",
+        "/universities/aib"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "នេះជាព័ត៌មានដែលខ្ញុំរកឃើញក្នុងទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ Futera៖\n• សាកលវិទ្យាល័យ: វិទ្យាស្ថានពាណិជ្ជកម្មខេមអ៊ែត (CamEd) — សាកលវិទ្យាល័យប្រភេទ private នៅ Phnom Penh។ ថ្លៃសិក្សា $4,178 per year។ មានកម្មវិធីសិក្សា 3។\n• សាកលវិទ្យាល័យ: វិទ្យាស្ថានពាណិជ្ជសាស្រ្តអេស៊ីលីដា (AIB) — សាកលវិទ្យាល័យប្រភេទ private នៅ Phnom Penh។ ថ្លៃសិក្សា $950–$1,200 per year។ មានកម្មវិធីសិក្សា 14។\nចំណាំ៖ ម៉ូដែល AI មូលដ្ឋានមិនទាន់ដំណើរការ ដូច្នេះចម្លើយនេះបង្កើតដោយផ្ទាល់ពីទិន្នន័យ។ ដំណើរការ Ollama ដើម្បីទទួលបានចម្លើយសន្ទនាបន្ថែម។",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 117,
+      "error": null
+    },
+    {
+      "id": "q080",
+      "category": "khmer",
+      "question": "តើជំនាញ គណនេយ្យ សវនកម្ម និងពន្ធដារ សិក្សាអំពីអ្វី?",
+      "language": "km",
+      "expected_urls": [
+        "/majors/accounting-auditing"
+      ],
+      "sources": [
+        "/majors/accounting-auditing"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "នេះជាព័ត៌មានដែលខ្ញុំរកឃើញក្នុងទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ Futera៖\n• ជំនាញ: គណនេយ្យ សវនកម្ម និងពន្ធដារ — ជំនាញផ្នែក Business & Economics។ ផ្តល់ចំណេះដឹងស៊ីជម្រៅលើស្តង់ដារគណនេយ្យអន្តរជាតិ (CIFRS) ការគ្រប់គ្រងថ្លៃដើម ពន្ធដារកម្ពុជា សវនកម្មផ្ទៃក្នុង និងសវនកម្មឯករាជ្យស្របតាមស្ដង់ដារ ACCA។ បង្រៀននៅ វិទ្យាស្ថានវ៉ាន់ដា, សាកលវិទ្យាល័យ ឌឹ ម៉ុនហ្វត…\nចំណាំ៖ ម៉ូដែល AI មូលដ្ឋានមិនទាន់ដំណើរការ ដូច្នេះចម្លើយនេះបង្កើតដោយផ្ទាល់ពីទិន្នន័យ។ ដំណើរការ Ollama ដើម្បីទទួលបានចម្លើយសន្ទនាបន្ថែម។",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 122,
+      "error": null
+    },
+    {
+      "id": "q081",
+      "category": "khmer",
+      "question": "តើជំនាញ បុរាណវិទ្យា និងការគ្រប់គ្រងបេតិកភណ្ឌវប្បធម៌ សិក្សាអំពីអ្វី?",
+      "language": "km",
+      "expected_urls": [
+        "/majors/archeology-cultural-heritage"
+      ],
+      "sources": [
+        "/majors/archeology-cultural-heritage"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "នេះជាព័ត៌មានដែលខ្ញុំរកឃើញក្នុងទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ Futera៖\n• ជំនាញ: បុរាណវិទ្យា និងការគ្រប់គ្រងបេតិកភណ្ឌវប្បធម៌ — ជំនាញផ្នែក Law & Social Sciences។ គ្របដណ្តប់លើបច្ចេកទេសកំណាយបុរាណវិទ្យា ការអភិរក្សថ្មប្រាសាទបុរាណ (អង្គរ សំបូរព្រៃគុក) ការគ្រប់គ្រងសារមន្ទីរ និងការការពារបេតិកភណ្ឌពិភពលោកយូណេស្កូ។ បង្រៀននៅ សាកលវិទ្យាល័យភូមិន្ទវិចិត្រសិល្បៈ។\nចំណាំ៖ ម៉ូដែល AI មូលដ្ឋានមិនទាន់ដំណើរការ ដូច្នេះចម្លើយនេះបង្កើតដោយផ្ទាល់ពីទិន្នន័យ។ ដំណើរការ Ollama ដើម្បីទទួលបានចម្លើយសន្ទនាបន្ថែម។",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 116,
+      "error": null
+    },
+    {
+      "id": "q082",
+      "category": "khmer",
+      "question": "តើជំនាញ ធនាគារ និងទីផ្សារហិរញ្ញវត្ថុ សិក្សាអំពីអ្វី?",
+      "language": "km",
+      "expected_urls": [
+        "/majors/banking-finance"
+      ],
+      "sources": [
+        "/majors/banking-finance",
+        "/careers/financial-analyst",
+        "/majors/fintech",
+        "/majors/marketing-digital-media"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "នេះជាព័ត៌មានដែលខ្ញុំរកឃើញក្នុងទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ Futera៖\n• ជំនាញ: ធនាគារ និងទីផ្សារហិរញ្ញវត្ថុ — ជំនាញផ្នែក Business & Economics។ បណ្តុះបណ្តាលអ្នកវិភាគហិរញ្ញវត្ថុ និងមន្ត្រីធនាគារពាណិជ្ជ មីក្រូហិរញ្ញវត្ថុ ទីផ្សារមូលបត្រកម្ពុជា និងការគ្រប់គ្រងហានិភ័យឥណទាន។ បង្រៀននៅ សាកលវិទ្យាល័យមេគង្គកម្ពុជា, សាកលវិទ្យាល័យ សៅអុីសថ៏អេយសៀ។\n• អាជីព: អ្នកវិភាគហិរញ្ញវត្ថុ — វិភាគទិន្នន័យហិរញ្ញវត្ថុ ព្យាករណ៍ចំណូលចំណាយ និងផ្តល់អនុសាសន៍លើការវិនិយោគដល់ក្រុមហ៊ុន ឬធនាគារ។\n• ជំនាញ: បច្ចេកវិទ្យាហិរញ្ញវត្ថុ — ជំនាញផ្នែក Information Technology។ សិក្សាអំពីប្រព័ន្ធទូទាត់ចល័ត បច្ចេកវិទ្យា Blockchain ធនាគារឌីជីថល (ស្តង់ដារ KHQR/Bakong) ប្រព័ន្ធឥណទានស្វ័យប្រវត្តិ និងសុវត្ថិភាពសេវាកម្មហិរញ្ញវត្ថុ។ បង្រៀននៅ បណ្ឌិត្យសភាបច្ចេកវិទ្យាឌីជីថលកម្ពុជា,…\n• ជំនាញ: ទីផ្សារ និងយុទ្ធសាស្ត្រប្រព័ន្ធផ្សព្វផ្សាយឌីជីថល — ជំនាញផ្នែក Business & Economics។ សិក្សាអំពីការស្រាវជ្រាវទីផ្សារ ការកសាងម៉ាកយីហោ (Branding) យុទ្ធនាការផ្សព្វផ្សាយឌីជីថល ចិត្តវិទ្យាអ្នកប្រើប្រាស់ និងការវិភាគទិន្នន័យទីផ្សារ។ បង្រៀននៅ សាកលវិទ្យាល័យសេដ្ឋកិច្ចនិងហិរញ្ញវត្ថុ, សាកលវិទ្យាល័យ⁣…\nចំណាំ៖ ម៉ូដែល AI មូលដ្ឋានមិនទាន់ដំណើរការ ដូច្នេះចម្លើយនេះបង្កើតដោយផ្ទាល់ពីទិន្នន័យ។ ដំណើរការ Ollama ដើម្បីទទួលបានចម្លើយសន្ទនាបន្ថែម។",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 131,
+      "error": null
+    },
+    {
+      "id": "q083",
+      "category": "khmer",
+      "question": "តើអាហារូបករណ៍ អាហារូបករណ៍ឧត្តមភាព និងទេពកោសល្យ AUPP ផ្តល់អ្វី និងផុតកំណត់ពេលណា?",
+      "language": "km",
+      "expected_urls": [
+        "/scholarships/aupp-merit-scholarship"
+      ],
+      "sources": [
+        "/universities/aupp",
+        "/scholarships/aupp-merit-scholarship",
+        "/scholarships/techo-digital-talent-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "នេះជាព័ត៌មានដែលខ្ញុំរកឃើញក្នុងទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ Futera៖\n• សាកលវិទ្យាល័យ: សាកលវិទ្យាល័យអាមេរិកាំងភ្នំពេញ (អេយូប៊ីភី) — សាកលវិទ្យាល័យប្រភេទ private នៅ Phnom Penh។ ថ្លៃសិក្សា $6,000–$9,000 per year។ មានកម្មវិធីសិក្សា 7។\n• អាហារូបករណ៍: អាហារូបករណ៍ឧត្តមភាព និងទេពកោសល្យ AUPP — សាកលវិទ្យាល័យអាមេរិកាំងភ្នំពេញ។ ការគាំទ្រ៖ partial tuition (50%)។ ផុតកំណត់៖ 2026-08-30។\n• អាហារូបករណ៍: អាហារូបករណ៍ទេពកោសល្យឌីជីថលតេជោ (ថ្នាក់បរិញ្ញាបត្រ) — ក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍ (MPTC) & CADT។ ការគាំទ្រ៖ full tuition (100%)។ ផុតកំណត់៖ 2026-10-24។\nចំណាំ៖ ម៉ូដែល AI មូលដ្ឋានមិនទាន់ដំណើរការ ដូច្នេះចម្លើយនេះបង្កើតដោយផ្ទាល់ពីទិន្នន័យ។ ដំណើរការ Ollama ដើម្បីទទួលបានចម្លើយសន្ទនាបន្ថែម។",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 120,
+      "error": null
+    },
+    {
+      "id": "q084",
+      "category": "khmer",
+      "question": "តើអាហារូបករណ៍ អាហារូបករណ៍ថ្នាក់ជាតិនៃក្រសួងអប់រំ យុវជន និងកីឡា ផ្តល់អ្វី និងផុតកំណត់ពេលណា?",
+      "language": "km",
+      "expected_urls": [
+        "/scholarships/moeys-national-scholarship"
+      ],
+      "sources": [
+        "/scholarships/moeys-national-scholarship",
+        "/scholarships/techo-digital-talent-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "នេះជាព័ត៌មានដែលខ្ញុំរកឃើញក្នុងទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ Futera៖\n• អាហារូបករណ៍: អាហារូបករណ៍ថ្នាក់ជាតិនៃក្រសួងអប់រំ យុវជន និងកីឡា — ក្រសួងអប់រំ យុវជន និងកីឡា។ ការគាំទ្រ៖ full tuition (100%)។ ផុតកំណត់៖ 2026-12-15។\n• អាហារូបករណ៍: អាហារូបករណ៍ទេពកោសល្យឌីជីថលតេជោ (ថ្នាក់បរិញ្ញាបត្រ) — ក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍ (MPTC) & CADT។ ការគាំទ្រ៖ full tuition (100%)។ ផុតកំណត់៖ 2026-10-24។\nចំណាំ៖ ម៉ូដែល AI មូលដ្ឋានមិនទាន់ដំណើរការ ដូច្នេះចម្លើយនេះបង្កើតដោយផ្ទាល់ពីទិន្នន័យ។ ដំណើរការ Ollama ដើម្បីទទួលបានចម្លើយសន្ទនាបន្ថែម។",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 105,
+      "error": null
+    },
+    {
+      "id": "q085",
+      "category": "khmer",
+      "question": "តើអាហារូបករណ៍ អាហារូបករណ៍ទេពកោសល្យឌីជីថលតេជោ (ថ្នាក់បរិញ្ញាបត្រ) ផ្តល់អ្វី និងផុតកំណត់ពេលណា?",
+      "language": "km",
+      "expected_urls": [
+        "/scholarships/techo-digital-talent-scholarship"
+      ],
+      "sources": [
+        "/scholarships/techo-digital-talent-scholarship"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "នេះជាព័ត៌មានដែលខ្ញុំរកឃើញក្នុងទិន្នន័យដែលបានផ្ទៀងផ្ទាត់របស់ Futera៖\n• អាហារូបករណ៍: អាហារូបករណ៍ទេពកោសល្យឌីជីថលតេជោ (ថ្នាក់បរិញ្ញាបត្រ) — ក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍ (MPTC) & CADT។ ការគាំទ្រ៖ full tuition (100%)។ ផុតកំណត់៖ 2026-10-24។\nចំណាំ៖ ម៉ូដែល AI មូលដ្ឋានមិនទាន់ដំណើរការ ដូច្នេះចម្លើយនេះបង្កើតដោយផ្ទាល់ពីទិន្នន័យ។ ដំណើរការ Ollama ដើម្បីទទួលបានចម្លើយសន្ទនាបន្ថែម។",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 111,
+      "error": null
+    },
+    {
+      "id": "q086",
+      "category": "eligibility",
+      "question": "What BACII grade do I need for Accounting, Auditing & Taxation (ACCA/CAT) at Vanda Institute?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/accounting-auditing",
+        "/universities/vanda"
+      ],
+      "sources": [
+        "/universities/vanda",
+        "/majors/accounting-auditing"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "check_eligibility"
+      ],
+      "tools_used": [
+        "check_eligibility"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Vanda Institute — Accounting, Auditing & Taxation (ACCA/CAT): The published minimum BACII grade is F.",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "check_eligibility"
+      ],
+      "latency_ms": 108,
+      "error": null
+    },
+    {
+      "id": "q087",
+      "category": "eligibility",
+      "question": "What BACII grade do I need for Banking & Financial Markets at ACLEDA Institute of Business?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/banking-finance",
+        "/universities/aib"
+      ],
+      "sources": [
+        "/universities/aib",
+        "/majors/banking-finance",
+        "/majors/marketing-digital-media",
+        "/majors/international-business"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "check_eligibility"
+      ],
+      "tools_used": [
+        "check_eligibility"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "ACLEDA Institute of Business — Banking & Financial Markets: The published minimum BACII grade is E.",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "check_eligibility"
+      ],
+      "latency_ms": 111,
+      "error": null
+    },
+    {
+      "id": "q088",
+      "category": "eligibility",
+      "question": "What BACII grade do I need for Business Administration & Management at Phnom Penh International University?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/business-administration",
+        "/universities/ppiu"
+      ],
+      "sources": [
+        "/universities/ppiu",
+        "/majors/business-administration",
+        "/universities/aupp",
+        "/universities/eamu"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "check_eligibility"
+      ],
+      "tools_used": [
+        "check_eligibility"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Phnom Penh International University — Business Administration & Management: The published minimum BACII grade is E.",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "check_eligibility"
+      ],
+      "latency_ms": 127,
+      "error": null
+    },
+    {
+      "id": "q089",
+      "category": "eligibility",
+      "question": "What BACII grade do I need for Data Science & Artificial Intelligence at Institute of Technology of Cambodia?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/data-science-ai",
+        "/universities/itc"
+      ],
+      "sources": [
+        "/universities/itc",
+        "/majors/data-science-ai",
+        "/universities/camtech",
+        "/universities/cadt"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "check_eligibility"
+      ],
+      "tools_used": [
+        "check_eligibility"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Institute of Technology of Cambodia — Data Science & Artificial Intelligence: The published minimum BACII grade is E.",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "check_eligibility"
+      ],
+      "latency_ms": 116,
+      "error": null
+    },
+    {
+      "id": "q090",
+      "category": "eligibility",
+      "question": "What BACII grade do I need for Financial Technology (Fintech) at ACLEDA Institute of Business?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/fintech",
+        "/universities/aib"
+      ],
+      "sources": [
+        "/universities/aib",
+        "/majors/fintech",
+        "/majors/marketing-digital-media",
+        "/majors/international-business"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "check_eligibility"
+      ],
+      "tools_used": [
+        "check_eligibility"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "ACLEDA Institute of Business — Financial Technology (Fintech): The published minimum BACII grade is E.",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "check_eligibility"
+      ],
+      "latency_ms": 112,
+      "error": null
+    },
+    {
+      "id": "q091",
+      "category": "eligibility",
+      "question": "What BACII grade do I need for Information Technology & Digital Infrastructure at Build Bright University?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/information-technology",
+        "/universities/bbu"
+      ],
+      "sources": [
+        "/universities/bbu",
+        "/majors/information-technology",
+        "/majors/cybersecurity-networking",
+        "/universities/cadt"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "check_eligibility"
+      ],
+      "tools_used": [
+        "check_eligibility"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Build Bright University — Information Technology & Digital Infrastructure: The published minimum BACII grade is E.",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "check_eligibility"
+      ],
+      "latency_ms": 118,
+      "error": null
+    },
+    {
+      "id": "q092",
+      "category": "eligibility",
+      "question": "What BACII grade do I need for Law & Jurisprudence at Norton University?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/law-jurisprudence",
+        "/universities/norton"
+      ],
+      "sources": [
+        "/universities/norton",
+        "/majors/law-jurisprudence",
+        "/universities/rule",
+        "/universities/aupp"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "check_eligibility"
+      ],
+      "tools_used": [
+        "check_eligibility"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "Norton University — Law & Jurisprudence: The published minimum BACII grade is E.",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "check_eligibility"
+      ],
+      "latency_ms": 110,
+      "error": null
+    },
+    {
+      "id": "q093",
+      "category": "eligibility",
+      "question": "What BACII grade do I need for Doctor of Pharmacy (PharmD) / Pharmacy at University of Health Sciences?",
+      "language": "en",
+      "expected_urls": [
+        "/majors/pharmacy",
+        "/universities/uhs"
+      ],
+      "sources": [
+        "/universities/uhs",
+        "/majors/pharmacy",
+        "/majors/general-medicine",
+        "/majors/medical-laboratory"
+      ],
+      "missing_facts": [],
+      "must_refuse": false,
+      "refusal": false,
+      "expected_tools": [
+        "check_eligibility"
+      ],
+      "tools_used": [
+        "check_eligibility"
+      ],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 1.0,
+      "passed": true,
+      "answer": "University of Health Sciences — Doctor of Pharmacy (PharmD) / Pharmacy: The published minimum BACII grade is E.",
+      "mode": "retrieval_only",
+      "tool_names": [
+        "check_eligibility"
+      ],
+      "latency_ms": 119,
+      "error": null
+    },
+    {
+      "id": "q094",
+      "category": "refusal",
+      "question": "What is the weather in Phnom Penh today?",
+      "language": "en",
+      "expected_urls": [],
+      "sources": [],
+      "missing_facts": [],
+      "must_refuse": true,
+      "refusal": true,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 0.0,
+      "passed": true,
+      "answer": "I could not find a matching record in Futera's verified data. Try asking about a specific university, major, scholarship, or career.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 97,
+      "error": null
+    },
+    {
+      "id": "q095",
+      "category": "refusal",
+      "question": "Who won the 2022 FIFA World Cup?",
+      "language": "en",
+      "expected_urls": [],
+      "sources": [],
+      "missing_facts": [],
+      "must_refuse": true,
+      "refusal": true,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 0.0,
+      "passed": true,
+      "answer": "I could not find a matching record in Futera's verified data. Try asking about a specific university, major, scholarship, or career.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 114,
+      "error": null
+    },
+    {
+      "id": "q096",
+      "category": "refusal",
+      "question": "What is the capital of France?",
+      "language": "en",
+      "expected_urls": [],
+      "sources": [],
+      "missing_facts": [],
+      "must_refuse": true,
+      "refusal": true,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 0.0,
+      "passed": true,
+      "answer": "I could not find a matching record in Futera's verified data. Try asking about a specific university, major, scholarship, or career.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 124,
+      "error": null
+    },
+    {
+      "id": "q097",
+      "category": "refusal",
+      "question": "Can you write me a Python sorting function?",
+      "language": "en",
+      "expected_urls": [],
+      "sources": [],
+      "missing_facts": [],
+      "must_refuse": true,
+      "refusal": true,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 0.0,
+      "passed": true,
+      "answer": "I could not find a matching record in Futera's verified data. Try asking about a specific university, major, scholarship, or career.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 108,
+      "error": null
+    },
+    {
+      "id": "q098",
+      "category": "refusal",
+      "question": "What is the price of an iPhone 17?",
+      "language": "en",
+      "expected_urls": [],
+      "sources": [],
+      "missing_facts": [],
+      "must_refuse": true,
+      "refusal": true,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 0.0,
+      "passed": true,
+      "answer": "I could not find a matching record in Futera's verified data. Try asking about a specific university, major, scholarship, or career.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 95,
+      "error": null
+    },
+    {
+      "id": "q099",
+      "category": "refusal",
+      "question": "Tell me a joke.",
+      "language": "en",
+      "expected_urls": [],
+      "sources": [],
+      "missing_facts": [],
+      "must_refuse": true,
+      "refusal": true,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 0.0,
+      "passed": true,
+      "answer": "I could not find a matching record in Futera's verified data. Try asking about a specific university, major, scholarship, or career.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 101,
+      "error": null
+    },
+    {
+      "id": "q100",
+      "category": "refusal",
+      "question": "How do I cook spaghetti?",
+      "language": "en",
+      "expected_urls": [],
+      "sources": [],
+      "missing_facts": [],
+      "must_refuse": true,
+      "refusal": true,
+      "expected_tools": [],
+      "tools_used": [],
+      "tool_hit": true,
+      "source_hit": true,
+      "recall": 0.0,
+      "passed": true,
+      "answer": "I could not find a matching record in Futera's verified data. Try asking about a specific university, major, scholarship, or career.",
+      "mode": "retrieval_only",
+      "tool_names": [],
+      "latency_ms": 104,
+      "error": null
+    }
+  ]
+}
