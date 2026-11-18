@@ -148,6 +148,8 @@ export function FloatingAssistant() {
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<string[] | null>(null);
+  const isHome = pathname === "/";
+  const [pastHero, setPastHero] = useState(false);
 
   const contextualTeaser = pathname?.startsWith("/dashboard/eligibility")
     ? isKm
@@ -215,6 +217,25 @@ export function FloatingAssistant() {
     return () => clearInterval(interval);
   }, [showTeaser, open, user, teaserMessages.length]);
 
+  useEffect(() => {
+    if (!isHome) {
+      const frame = requestAnimationFrame(() => setPastHero(true));
+      return () => cancelAnimationFrame(frame);
+    }
+
+    const update = () => {
+      setPastHero(window.scrollY > window.innerHeight * 0.85);
+    };
+    const frame = requestAnimationFrame(update);
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [isHome]);
+
   if (!pathname || HIDDEN_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
     return null;
   }
@@ -281,17 +302,26 @@ export function FloatingAssistant() {
   const visibleSuggestions = suggestions?.length
     ? suggestions
     : copy.suggestions;
+  const assistantVisible = !open && (isHome ? pastHero : true);
 
   return (
     <>
-      {!open && (
+      <AnimatePresence>
+        {assistantVisible && (
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={reduceMotion ? undefined : { opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="fixed bottom-5 right-5 z-[70] h-[104px] w-[96px] origin-bottom-right"
+          >
         <motion.button
           type="button"
           onClick={openAssistant}
           aria-label={copy.open}
           whileHover={reduceMotion ? undefined : { scale: 1.04 }}
           whileTap={reduceMotion ? undefined : { scale: 0.96 }}
-          className="fixed bottom-5 right-5 z-[70] flex select-none items-end gap-1.5 rounded-2xl bg-transparent p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7CE4D] focus-visible:ring-offset-2"
+          className="relative flex h-full w-full select-none items-end justify-center rounded-2xl bg-transparent p-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7CE4D] focus-visible:ring-offset-2"
         >
           <motion.span
             animate={reduceMotion ? undefined : { y: [0, -6, 0] }}
@@ -312,7 +342,6 @@ export function FloatingAssistant() {
             />
           </motion.span>
         </motion.button>
-      )}
 
       <AnimatePresence>
         {user && !open && showTeaser && !teaserDismissed && (
@@ -321,8 +350,7 @@ export function FloatingAssistant() {
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={reduceMotion ? undefined : { opacity: 0, x: -8, scale: 0.96 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            style={{ bottom: "calc(1.25rem + 7rem)" }}
-            className="fixed right-10 z-[59] w-[min(calc(100vw-3rem),260px)] sm:right-11"
+            className="absolute bottom-[calc(100%_+_0.5rem)] right-4 z-[59] w-[min(calc(100vw-3rem),260px)]"
           >
             <button
               type="button"
@@ -347,10 +375,13 @@ export function FloatingAssistant() {
           </motion.div>
         )}
       </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {open && (
         <section
-          className="fixed bottom-4 right-3 z-[60] flex h-[min(78vh,580px)] w-[min(calc(100vw-1.5rem),380px)] flex-col overflow-hidden rounded-[26px] border border-[#E6E8F0] bg-white shadow-2xl shadow-black/20 sm:right-5 dark:border-white/10 dark:bg-[#0B102A]"
+          className="fixed bottom-4 right-3 z-[80] flex h-[min(78vh,580px)] w-[min(calc(100vw-1.5rem),380px)] flex-col overflow-hidden rounded-[26px] border border-[#E6E8F0] bg-white shadow-2xl shadow-black/20 sm:right-5 dark:border-white/10 dark:bg-[#0B102A]"
           aria-label={copy.title}
         >
           <header className="flex items-center gap-3 bg-gradient-to-r from-[#111965] via-[#18227A] to-[#111965] px-4 py-3 text-white">

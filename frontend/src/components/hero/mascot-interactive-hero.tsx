@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
@@ -20,6 +21,81 @@ export function MascotInteractiveHero() {
   const [isTyping, setIsTyping] = useState(false);
   const [taraBounce, setTaraBounce] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+
+  const mascotPlaceholderRef = useRef<HTMLDivElement | null>(null);
+  const [startRect, setStartRect] = useState<{
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+    vw: number;
+    vh: number;
+  } | null>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const measure = () => {
+      const node = mascotPlaceholderRef.current;
+      if (node) {
+        const rect = node.getBoundingClientRect();
+        setStartRect({
+          left: rect.left,
+          top: rect.top + window.scrollY,
+          width: rect.width,
+          height: rect.height,
+          vw: window.innerWidth,
+          vh: window.innerHeight,
+        });
+      }
+      setScrollProgress((previous) => {
+        const next = Math.min(
+          1,
+          Math.max(0, window.scrollY / (window.innerHeight * 0.85))
+        );
+        return Math.abs(next - previous) < 0.002 ? previous : next;
+      });
+    };
+    const updateProgress = () => {
+      setScrollProgress((previous) => {
+        const next = Math.min(
+          1,
+          Math.max(0, window.scrollY / (window.innerHeight * 0.85))
+        );
+        return Math.abs(next - previous) < 0.002 ? previous : next;
+      });
+    };
+
+    const timer = window.setTimeout(measure, 0);
+    window.addEventListener("resize", measure);
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("scroll", updateProgress);
+    };
+  }, []);
+
+  const progress = startRect ? scrollProgress : 0;
+  const endWidth = 96;
+  const endHeight = 104;
+  const endLeft = startRect ? startRect.vw - 20 - endWidth : 0;
+  const endTop = startRect ? startRect.vh - 20 - endHeight : 0;
+  const portalLeft = startRect
+    ? startRect.left + progress * (endLeft - startRect.left)
+    : 0;
+  const portalTop = startRect
+    ? startRect.top + progress * (endTop - startRect.top)
+    : 0;
+  const portalWidth = startRect
+    ? startRect.width + progress * (endWidth - startRect.width)
+    : endWidth;
+  const portalHeight = startRect
+    ? startRect.height + progress * (endHeight - startRect.height)
+    : endHeight;
+  const portalRotate = progress * -8;
+  const portalOpacity = progress <= 0.92
+    ? 1
+    : Math.max(0, 1 - (progress - 0.92) / 0.08);
 
   // Conversational dialogues from Tara (rotating automatically)
   const greetings = [
@@ -137,10 +213,10 @@ export function MascotInteractiveHero() {
             </div>
 
             {/* PIC 2: Interactive TechText OrienX Wordmark (Single Bold Headline Piece) */}
-            <div className="w-full max-w-[340px] sm:max-w-[400px] h-20 sm:h-24 -ml-1">
+            <div className="w-full max-w-[340px] sm:max-w-[400px] h-20 sm:h-30 -ml-1">
               <TechText
                 text="OrienX"
-                fontSize={105}
+                fontSize={150}
                 fontWeight={800}
                 color="#FFFFFF"
                 accentColor="#F69D0D"
@@ -204,7 +280,7 @@ export function MascotInteractiveHero() {
             <div className="relative w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center">
               {/* Natural Conversational Speech Bubble (Floating to the upper-left of Tara - Exact Pic 1) */}
               <div
-                className="w-full lg:absolute lg:-top-6 lg:-left-6 xl:-left-12 z-20 max-w-sm sm:max-w-[340px] mb-4 lg:mb-0 cursor-pointer"
+                className="w-full lg:absolute lg:-top-6 lg:-left-6 xl:-left-25 z-50 max-w-sm sm:max-w-[340px] mb-4 lg:mb-0 cursor-pointer"
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
                 onClick={advanceDialogue}
@@ -261,7 +337,7 @@ export function MascotInteractiveHero() {
                 </div>
               </div>
 
-              {/* Large Crisp Tara Mascot (Pic 1 Style) */}
+              {/* Placeholder keeps the hero layout while the fixed mascot travels */}
               <div
                 onClick={advanceDialogue}
                 className="relative flex flex-col items-center group cursor-pointer select-none lg:ml-20 xl:ml-28"
@@ -270,22 +346,52 @@ export function MascotInteractiveHero() {
                 {/* Soft Contact Ground Shadow */}
                 <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-64 sm:w-72 md:w-80 h-5 rounded-[100%] bg-black/40 blur-md pointer-events-none transition-all group-hover:scale-95" />
 
-                {/* Big High-Definition Crisp Tara Mascot */}
-                <Image
-                  src="/images/welcome-hd.webp"
-                  alt="Tara OrienX Mascot"
-                  width={720}
-                  height={760}
-                  priority
-                  className={`relative z-10 w-72 sm:w-80 md:w-88 lg:w-[350px] xl:w-[380px] h-auto object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)] transition-all duration-300 ease-out group-hover:scale-105 active:scale-95 ${
-                    taraBounce ? "scale-110 -translate-y-4" : ""
-                  }`}
+                <div
+                  ref={mascotPlaceholderRef}
+                  aria-hidden
+                  className="relative z-10 w-72 sm:w-80 md:w-88 lg:w-[350px] xl:w-[380px] aspect-[720/760]"
                 />
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {typeof document !== "undefined" && startRect
+        ? createPortal(
+            <div
+              aria-hidden
+              style={{
+                position: "fixed",
+                left: portalLeft,
+                top: portalTop,
+                width: portalWidth,
+                height: portalHeight,
+                opacity: portalOpacity,
+                zIndex: 40,
+                pointerEvents: "none",
+              }}
+              className="select-none"
+            >
+              <div
+                style={{ transform: `rotate(${portalRotate}deg)` }}
+                className="h-full w-full origin-center"
+              >
+                <Image
+                  src="/images/welcome-hd.webp"
+                  alt=""
+                  width={720}
+                  height={760}
+                  priority
+                  className={`h-full w-full object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)] transition-transform duration-300 ease-out ${
+                    taraBounce ? "scale-110 -translate-y-4" : ""
+                  }`}
+                />
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
     </section>
   );
 }
