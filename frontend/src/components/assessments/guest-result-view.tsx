@@ -5,15 +5,19 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
+  AlertTriangle,
   ArrowRight,
   Brain,
+  Briefcase,
   Building2,
   CheckCircle2,
   Compass,
   Copy,
   Download,
   GraduationCap,
+  Lightbulb,
   Link2,
+  ListChecks,
   RotateCcw,
   Share2,
   Sparkles,
@@ -202,6 +206,74 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
 
   const recommendations = (record.result.majorMatches ?? []).slice(0, 6);
 
+  const overview =
+    personality && archetype
+      ? getLocalized({
+          en: archetype.overviewEn,
+          km: archetype.overviewKm,
+        }) || tagline
+      : riasec && holland
+        ? getLocalized({
+            en: holland.taglineEn,
+            km: holland.taglineKm,
+          }) || tagline
+        : tagline;
+
+  const growthAreas =
+    personality && archetype
+      ? ((isKm ? archetype.growthAreasKm : archetype.growthAreasEn) ?? [])
+      : [];
+
+  const personalityCareers =
+    personality && archetype
+      ? ((isKm ? archetype.careersKm : archetype.careersEn) ?? [])
+      : [];
+
+  const cognitiveDimensions = personality
+    ? getCognitiveDimensions(personality.type)
+    : [];
+
+  const topCodes = riasec
+    ? riasec.ranked.slice(0, 3).map((item) => item.code)
+    : [];
+  const topRiasecMeta = topCodes
+    .map((code) => RIASEC_DIMENSIONS[code])
+    .filter((meta): meta is NonNullable<typeof meta> => Boolean(meta));
+  const riasecStrengths = Array.from(
+    new Set(
+      topRiasecMeta.flatMap((meta) =>
+        meta.strengths.map((item) => (isKm ? item.km : item.en))
+      )
+    )
+  ).slice(0, 6);
+  const riasecCareers = Array.from(
+    new Set(
+      topRiasecMeta.flatMap((meta) =>
+        meta.sampleCareers.map((item) => (isKm ? item.km : item.en))
+      )
+    )
+  ).slice(0, 6);
+  const primaryRiasec = topCodes[0] ? RIASEC_DIMENSIONS[topCodes[0]] : null;
+  const riasecWorkEnvironment = holland
+    ? getLocalized({
+        en: holland.optimalWorkEnvironmentEn,
+        km: holland.optimalWorkEnvironmentKm,
+      })
+    : "";
+  const riasecIndustries = holland
+    ? isKm
+      ? holland.targetIndustriesKm
+      : holland.targetIndustriesEn
+    : [];
+  const displayCareers =
+    personalityCareers.length > 0
+      ? personalityCareers
+      : riasecCareers.length > 0
+        ? riasecCareers
+        : personality && archetype
+          ? ((isKm ? archetype.bestFieldsKm : archetype.bestFieldsEn) ?? [])
+          : riasecIndustries;
+
   const labels: AssessmentReportLabels = {
     preparedFor: t("assessmentReport.preparedFor"),
     generated: t("assessmentReport.generated"),
@@ -250,8 +322,10 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
       role: roleName,
       tagline,
       characterImageUrl:
-        personality && typeof window !== "undefined"
-          ? `${window.location.origin}/images/personality-types/${personality.type.toLowerCase()}.svg`
+        typeof window !== "undefined"
+          ? personality
+            ? `${window.location.origin}/images/personality-types/${personality.type.toLowerCase()}.svg`
+            : `${window.location.origin}/images/tara-emotion-cheer.webp`
           : undefined,
       dimensions,
       highlights,
@@ -323,7 +397,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
         <div className="flex flex-wrap items-center justify-between gap-2">
           <Link
             href="/assessments"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#68708A] transition-colors hover:text-[#111965]"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-[#68708A] transition-colors hover:text-[#111965]"
           >
             <ArrowRight className="h-3.5 w-3.5 rotate-180" />
             {getLocalized({ en: "All assessments", km: "ការវាយតម្លៃទាំងអស់" })}
@@ -331,7 +405,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
           <div className="flex items-center gap-2">
             <Link
               href="/assessments/results"
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-[#D9DEEA] bg-white px-3 text-[11px] font-black text-[#111965] transition-colors hover:border-[#111965]/40 hover:bg-[#F8FAFD]"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-[#D9DEEA] bg-white px-3 text-sm font-black text-[#111965] transition-colors hover:border-[#111965]/40 hover:bg-[#F8FAFD]"
             >
               <Trophy className="h-3.5 w-3.5" />
               {getLocalized({ en: "My results", km: "លទ្ធផលរបស់ខ្ញុំ" })}
@@ -339,7 +413,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
             <button
               type="button"
               onClick={() => setExportOpen(true)}
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-[#111965] px-3 text-[11px] font-black text-white transition-colors hover:bg-[#1A2580]"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-[#111965] px-3 text-sm font-black text-white transition-colors hover:bg-[#1A2580]"
             >
               <Download className="h-3.5 w-3.5 text-[#F7CE4D]" />
               {t("assessmentReport.exportReport")}
@@ -352,7 +426,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
           <div className="absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl" />
           <div className="relative flex flex-col gap-7 sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0 space-y-3">
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#F7CE4D]">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-black uppercase tracking-[0.14em] text-[#F7CE4D]">
                 <Sparkles className="h-3.5 w-3.5" />
                 {record.kind === "personality"
                   ? getLocalized({
@@ -371,25 +445,25 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                 <h1 className="mt-1 text-xl font-extrabold leading-snug sm:text-2xl">
                   {archetypeName}
                 </h1>
-                <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-white/60">
+                <p className="mt-1 text-sm font-bold uppercase tracking-[0.12em] text-white/60">
                   {roleName}
                 </p>
               </div>
-              <p className="max-w-xl text-xs leading-relaxed text-white/85 sm:text-sm">
+              <p className="max-w-xl text-sm leading-relaxed text-white/85 sm:text-base">
                 {tagline}
               </p>
               <div className="flex flex-wrap gap-2 pt-1">
                 <button
                   type="button"
                   onClick={() => setExportOpen(true)}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7CE4D] px-3.5 py-2 text-xs font-black text-[#111965] transition-transform hover:bg-[#F5C430] active:scale-95"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7CE4D] px-3.5 py-2 text-sm font-black text-[#111965] transition-transform hover:bg-[#F5C430] active:scale-95"
                 >
                   <Download className="h-3.5 w-3.5" />
                   {t("assessmentReport.exportReport")}
                 </button>
                 <Link
                   href={`/assessments/${record.kind}/test?retake=1`}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2 text-xs font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2 text-sm font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
                 >
                   <RotateCcw className="h-3.5 w-3.5 text-[#F7CE4D]" />
                   {getLocalized({ en: "Retake", km: "ធ្វើតេស្តឡើងវិញ" })}
@@ -400,7 +474,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                       ? "/assessments/riasec/test"
                       : "/assessments/personality/test"
                   }
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2 text-xs font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2 text-sm font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
                 >
                   <Compass className="h-3.5 w-3.5 text-[#F7CE4D]" />
                   {record.kind === "personality"
@@ -436,7 +510,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                   <div className="mt-1 text-2xl font-black text-white">
                     {riasec.hollandCode}
                   </div>
-                  <div className="text-[9px] font-bold uppercase tracking-[0.16em] text-white/60">
+                  <div className="text-sm font-bold uppercase tracking-[0.16em] text-white/60">
                     Holland
                   </div>
                 </div>
@@ -445,10 +519,206 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
           </div>
         </section>
 
+        <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-7">
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#F0F2FA] text-[#111965]">
+              {personality ? (
+                <Brain className="h-5 w-5" />
+              ) : (
+                <Compass className="h-5 w-5" />
+              )}
+            </span>
+            <div>
+              <h2 className="text-base font-black text-[#111965] sm:text-lg">
+                {personality
+                  ? getLocalized({
+                      en: "About your personality type",
+                      km: "អំពីប្រភេទបុគ្គលិកលក្ខណៈរបស់អ្នក",
+                    })
+                  : getLocalized({
+                      en: "About your Holland code",
+                      km: "អំពីកូដ Holland របស់អ្នក",
+                    })}
+              </h2>
+              <p className="mt-1 text-sm font-semibold text-[#94A3B8]">
+                {roleName}
+              </p>
+            </div>
+          </div>
+          <p className="mt-4 text-sm leading-7 text-[#475569]">
+            {overview}
+          </p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            {personality ? (
+              <>
+                <InfoTile
+                  label={getLocalized({ en: "Role", km: "តួនាទី" })}
+                  value={roleName}
+                />
+                <InfoTile
+                  label={getLocalized({
+                    en: "Learning style",
+                    km: "រចនាប័ទ្មសិក្សា",
+                  })}
+                  value={
+                    getLocalized({
+                      en: archetype?.learningStyleEn,
+                      km: archetype?.learningStyleKm,
+                    }) || "—"
+                  }
+                />
+                <InfoTile
+                  label={getLocalized({
+                    en: "Best fields",
+                    km: "វិស័យសាកសម",
+                  })}
+                  value={
+                    (isKm
+                      ? archetype?.bestFieldsKm
+                      : archetype?.bestFieldsEn
+                    )?.join(", ") || "—"
+                  }
+                />
+              </>
+            ) : (
+              <>
+                <InfoTile
+                  label={getLocalized({
+                    en: "Primary interest",
+                    km: "ចំណាប់អារម្មណ៍ចម្បង",
+                  })}
+                  value={
+                    primaryRiasec
+                      ? getLocalized({
+                          en: primaryRiasec.shortNameEn,
+                          km: primaryRiasec.shortNameKm,
+                        })
+                      : "—"
+                  }
+                />
+                <InfoTile
+                  label={getLocalized({
+                    en: "Work environment",
+                    km: "បរិស្ថានការងារ",
+                  })}
+                  value={riasecWorkEnvironment || "—"}
+                />
+                <InfoTile
+                  label={getLocalized({
+                    en: "Target industries",
+                    km: "វិស័យការងារគោលដៅ",
+                  })}
+                  value={riasecIndustries.slice(0, 3).join(", ") || "—"}
+                />
+              </>
+            )}
+          </div>
+        </section>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <DetailList
+            title={getLocalized({
+              en: "Your strengths",
+              km: "ចំណុចខ្លាំងរបស់អ្នក",
+            })}
+            items={highlights[0]?.items ?? []}
+            icon={CheckCircle2}
+            tone="emerald"
+          />
+          {personality ? (
+            <DetailList
+              title={getLocalized({
+                en: "Growth areas",
+                km: "ចំណុចដែលគួរអភិវឌ្ឍ",
+              })}
+              items={growthAreas}
+              icon={AlertTriangle}
+              tone="amber"
+            />
+          ) : (
+            <DetailList
+              title={getLocalized({
+                en: "How to thrive",
+                km: "របៀបរីកចម្រើន",
+              })}
+              items={[riasecWorkEnvironment, ...riasecIndustries.slice(0, 3)].filter(
+                Boolean
+              )}
+              icon={Lightbulb}
+              tone="amber"
+            />
+          )}
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+            <h3 className="text-base font-black text-[#111965] sm:text-lg">
+              {personality
+                ? getLocalized({
+                    en: "How you learn best",
+                    km: "របៀបដែលអ្នករៀនបានល្អបំផុត",
+                  })
+                : getLocalized({
+                    en: "Your strongest interest",
+                    km: "ចំណាប់អារម្មណ៍ខ្លាំងបំផុតរបស់អ្នក",
+                  })}
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-[#475569]">
+              {personality
+                ? getLocalized({
+                    en: archetype?.learningStyleEn,
+                    km: archetype?.learningStyleKm,
+                  }) || "—"
+                : primaryRiasec
+                  ? getLocalized({
+                      en: primaryRiasec.descEn,
+                      km: primaryRiasec.descKm,
+                    })
+                  : "—"}
+            </p>
+          </section>
+          <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+            <h3 className="text-base font-black text-[#111965] sm:text-lg">
+              {personality
+                ? getLocalized({
+                    en: "Where you can thrive",
+                    km: "កន្លែងដែលអ្នកអាចរីកចម្រើន",
+                  })
+                : getLocalized({
+                    en: "Your work environment",
+                    km: "បរិស្ថានការងាររបស់អ្នក",
+                  })}
+            </h3>
+            <p className="mt-3 text-sm leading-7 text-[#475569]">
+              {personality
+                ? (isKm
+                    ? archetype?.bestFieldsKm
+                    : archetype?.bestFieldsEn
+                  )?.join(" · ") || "—"
+                : riasecWorkEnvironment || "—"}
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {(personality
+                ? (isKm ? archetype?.bestFieldsKm : archetype?.bestFieldsEn) ?? []
+                : riasecIndustries
+              )
+                .slice(0, 4)
+                .map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-2.5 py-1 text-xs font-semibold text-[#475569]"
+                  >
+                    {item}
+                  </span>
+                ))}
+            </div>
+          </section>
+        </div>
+
         <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
           <div className="flex flex-wrap items-end justify-between gap-2">
             <div>
-              <h2 className="text-sm font-black text-[#111965] sm:text-base">
+              <h2 className="text-base font-black text-[#111965] sm:text-lg">
                 {record.kind === "personality"
                   ? getLocalized({
                       en: "Your four preference dimensions",
@@ -459,7 +729,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                       km: "វិមាត្រចំណាប់អារម្មណ៍ទាំង ៦ របស់អ្នក",
                     })}
               </h2>
-              <p className="mt-1 text-[11px] leading-relaxed text-[#68708A]">
+              <p className="mt-1 text-sm leading-relaxed text-[#68708A]">
                 {record.kind === "personality"
                   ? getLocalized({
                       en: "Each pair shows the stronger side and the balance between both traits.",
@@ -478,7 +748,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                   .map((dimension) => (
                     <span
                       key={dimension.code}
-                      className="rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-2 py-1 text-[10px] font-bold text-[#111965]"
+                      className="rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-2 py-1 text-xs font-bold text-[#111965]"
                     >
                       {dimension.letter} · {dimension.dimension}
                     </span>
@@ -490,7 +760,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
           <div className="mt-5 space-y-3">
             {dimensions.map((dimension) => (
               <div key={dimension.label}>
-                <div className="mb-1 flex items-center justify-between gap-3 text-[11px] font-bold">
+                <div className="mb-1 flex items-center justify-between gap-3 text-sm font-bold">
                   <span className="text-[#111965]">{dimension.label}</span>
                   <span className="text-[#68708A]">
                     {percent(dimension.value)}%
@@ -503,7 +773,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                   />
                 </div>
                 {dimension.detail && (
-                  <div className="mt-1 text-[9.5px] font-semibold text-[#94A3B8]">
+                  <div className="mt-1 text-sm font-semibold text-[#94A3B8]">
                     {dimension.detail}
                   </div>
                 )}
@@ -512,52 +782,166 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
           </div>
         </section>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          {highlights.map((highlight, index) => {
-            const Icon = index === 0 ? Target : index === 1 ? Brain : GraduationCap;
-            return (
-              <section
-                key={highlight.title}
-                className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F0F2FA] text-[#111965]">
-                    <Icon className="h-4 w-4" />
-                  </span>
-                  <h3 className="text-[11px] font-black uppercase tracking-[0.08em] text-[#111965]">
-                    {highlight.title}
-                  </h3>
-                </div>
-                <ul className="mt-3 space-y-2">
-                  {highlight.items.slice(0, 4).map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-1.5 text-[11px] leading-relaxed text-[#475569]"
-                    >
-                      <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-emerald-500" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            );
-          })}
-        </div>
+                {personality && (
+          <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-7">
+            <SectionHeading
+              icon={Brain}
+              title={getLocalized({
+                en: "Your four dimensions explained",
+                km: "វិមាត្រទាំង ៤ របស់អ្នក ត្រូវបានពន្យល់",
+              })}
+              subtitle={getLocalized({
+                en: "Each preference pair shapes how you study, communicate, and make decisions.",
+                km: "គូចំណូលចិត្តនីមួយៗកំណត់របៀបដែលអ្នករៀន ប្រាស្រ័យទាក់ទង និងសម្រេចចិត្ត។",
+              })}
+            />
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              {cognitiveDimensions.map((dimension) => {
+                const score =
+                  personality.scores[
+                    dimension.letter as keyof typeof personality.scores
+                  ] ?? 0;
+                return (
+                  <div
+                    key={dimension.code}
+                    className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#111965] text-xs font-black text-[#F7CE4D]">
+                          {dimension.letter}
+                        </span>
+                        <h3 className="text-sm font-black leading-snug text-[#111965]">
+                          {getLocalized({
+                            en: dimension.nameEn,
+                            km: dimension.nameKm,
+                          })}
+                        </h3>
+                      </div>
+                      <span className="shrink-0 text-xs font-black text-[#111965]">
+                        {percent(score)}%
+                      </span>
+                    </div>
+                    <p className="mt-2.5 text-sm leading-6 text-[#475569]">
+                      {getLocalized({
+                        en: dimension.traitEn,
+                        km: dimension.traitKm,
+                      })}
+                    </p>
+                    <div className="mt-2 text-xs font-black uppercase tracking-[0.12em] text-[#94A3B8]">
+                      {dimension.scoreLabel}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
-        <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+        {riasec && (
+          <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-7">
+            <SectionHeading
+              icon={Compass}
+              title={getLocalized({
+                en: "What your Holland code means",
+                km: "អត្ថន័យនៃកូដ Holland របស់អ្នក",
+              })}
+              subtitle={getLocalized({
+                en: "Your top three interest areas, in order. The first letter is your strongest driver.",
+                km: "វិស័យចំណាប់អារម្មណ៍កំពូលទាំង ៣ តាមលំដាប់។ អក្សរទីមួយជាកម្លាំងជំរុញខ្លាំងបំផុតរបស់អ្នក។",
+              })}
+            />
+            <div className="mt-5 space-y-3">
+              {topRiasecMeta.map((meta, index) => (
+                <div
+                  key={meta.code}
+                  className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4 sm:p-5"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#111965] text-xs font-black text-[#F7CE4D]">
+                        {meta.code}
+                      </span>
+                      <h3 className="text-base font-black text-[#111965]">
+                        {getLocalized({
+                          en: meta.shortNameEn,
+                          km: meta.shortNameKm,
+                        })}
+                      </h3>
+                    </div>
+                    <span className="text-xs font-black uppercase tracking-[0.12em] text-[#94A3B8]">
+                      #{index + 1}
+                    </span>
+                  </div>
+                  <p className="mt-2.5 text-sm leading-6 text-[#475569]">
+                    {getLocalized({ en: meta.descEn, km: meta.descKm })}
+                  </p>
+                  <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+                    {meta.keyActivities.map((activity) => (
+                      <li
+                        key={activity.en}
+                        className="flex items-start gap-2 text-sm leading-6 text-[#475569]"
+                      >
+                        <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-emerald-500" />
+                        <span>{getLocalized(activity)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-3 text-sm leading-relaxed text-[#68708A]">
+                    <strong className="text-[#111965]">
+                      {getLocalized({
+                        en: "Work environment:",
+                        km: "បរិស្ថានការងារ៖",
+                      })}
+                    </strong>{" "}
+                    {getLocalized(meta.workEnvironment)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {displayCareers.length > 0 && (
+          <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+            <SectionHeading
+              icon={Briefcase}
+              title={getLocalized({
+                en: "Careers to explore",
+                km: "អាជីពដែលអ្នកអាចស្វែងយល់",
+              })}
+              subtitle={getLocalized({
+                en: "These are examples, not a fixed path. Use them to start exploring.",
+                km: "ទាំងនេះជាឧទាហរណ៍ មិនមែនជាផ្លូវកំណត់តែមួយទេ។ ប្រើពួកវាដើម្បីចាប់ផ្តើមស្វែងយល់។",
+              })}
+            />
+            <div className="mt-4 flex flex-wrap gap-2">
+              {displayCareers.slice(0, 8).map((career) => (
+                <span
+                  key={career}
+                  className="rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3 py-1.5 text-sm font-semibold text-[#475569]"
+                >
+                  {career}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
+<section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
           <div className="flex flex-wrap items-end justify-between gap-2">
             <div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-amber-800">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-sm font-black uppercase tracking-[0.12em] text-amber-800">
                 <Target className="h-3 w-3" />
                 {getLocalized({ en: "Interest fit", km: "ភាពត្រូវគ្នានៃចំណាប់អារម្មណ៍" })}
               </div>
-              <h2 className="mt-2 text-sm font-black text-[#111965] sm:text-base">
+              <h2 className="mt-2 text-base font-black text-[#111965] sm:text-lg">
                 {getLocalized({
                   en: "Majors that match your profile",
                   km: "ជំនាញដែលត្រូវនឹងប្រវត្តិរូបរបស់អ្នក",
                 })}
               </h2>
-              <p className="mt-1 max-w-xl text-[11px] leading-relaxed text-[#68708A]">
+              <p className="mt-1 max-w-xl text-sm leading-relaxed text-[#68708A]">
                 {getLocalized({
                   en: "This score compares your interests and personality affinity with each major. It is not an admission decision or a guarantee.",
                   km: "ពិន្ទុនេះប្រៀបធៀបចំណាប់អារម្មណ៍ និងភាពត្រូវគ្នានៃបុគ្គលិកលក្ខណៈរបស់អ្នកជាមួយជំនាញនីមួយៗ។ វាមិនមែនជាការសម្រេចចិត្តចូលរៀន ឬការធានាទេ។",
@@ -566,7 +950,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
             </div>
             <Link
               href="/majors"
-              className="inline-flex items-center gap-1.5 text-[11px] font-black text-[#111965] hover:underline"
+              className="inline-flex items-center gap-1.5 text-sm font-black text-[#111965] hover:underline"
             >
               {getLocalized({ en: "Explore all majors", km: "រកមើលជំនាញទាំងអស់" })}
               <ArrowRight className="h-3.5 w-3.5" />
@@ -582,13 +966,13 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="text-[10px] font-black uppercase tracking-[0.1em] text-[#D4A017]">
+                    <div className="text-xs font-black uppercase tracking-[0.1em] text-[#D4A017]">
                       {major.fit}% {getLocalized({ en: "fit", km: "ត្រូវគ្នា" })}
                     </div>
-                    <h3 className="mt-1 line-clamp-2 text-xs font-black leading-snug text-[#111965] group-hover:text-[#1A2580]">
+                    <h3 className="mt-1 line-clamp-2 text-sm font-black leading-snug text-[#111965] group-hover:text-[#1A2580]">
                       {getLocalized(major.name)}
                     </h3>
-                    <div className="mt-1.5 text-[10px] font-semibold text-[#68708A]">
+                    <div className="mt-1.5 text-xs font-semibold text-[#68708A]">
                       {major.category}
                     </div>
                   </div>
@@ -596,7 +980,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                     <GraduationCap className="h-4 w-4" />
                   </span>
                 </div>
-                <div className="mt-2.5 flex flex-wrap gap-x-3 gap-y-1 border-t border-[#E6E8F0] pt-2 text-[9.5px] font-bold text-[#68708A]">
+                <div className="mt-2.5 flex flex-wrap gap-x-3 gap-y-1 border-t border-[#E6E8F0] pt-2 text-sm font-bold text-[#68708A]">
                   <span className="inline-flex items-center gap-1">
                     <Building2 className="h-3 w-3" />
                     {major.universities}{" "}
@@ -615,7 +999,59 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
           </div>
         </section>
 
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#E6E8F0] bg-white px-4 py-3 text-[10.5px] font-semibold text-[#68708A]">
+        <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+          <SectionHeading
+            icon={ListChecks}
+            title={getLocalized({
+              en: "How to use this result",
+              km: "របៀបប្រើលទ្ធផលនេះ",
+            })}
+            subtitle={getLocalized({
+              en: "Turn the profile into a shortlist, then compare the facts before you apply.",
+              km: "បំប្លែងប្រវត្តិរូបទៅជាបញ្ជីជម្រើស រួចប្រៀបធៀបព័ត៌មានជាក់ស្តែងមុនពេលដាក់ពាក្យ។",
+            })}
+          />
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <StepCard
+              number="01"
+              title={getLocalized({
+                en: "Shortlist majors",
+                km: "ជ្រើសរើសជំនាញ",
+              })}
+              body={getLocalized({
+                en: "Open your top matches and read the subjects, skills, and tuition.",
+                km: "បើកជំនាញកំពូល ហើយអានមុខវិជ្ជា ជំនាញ និងថ្លៃសិក្សា។",
+              })}
+              href="/majors"
+            />
+            <StepCard
+              number="02"
+              title={getLocalized({
+                en: "Compare universities",
+                km: "ប្រៀបធៀបសាកលវិទ្យាល័យ",
+              })}
+              body={getLocalized({
+                en: "Check location, tuition, and the programs offered by each university.",
+                km: "ពិនិត្យទីតាំង ថ្លៃសិក្សា និងកម្មវិធីដែលសាកលវិទ្យាល័យនីមួយៗផ្តល់ជូន។",
+              })}
+              href="/universities"
+            />
+            <StepCard
+              number="03"
+              title={getLocalized({
+                en: "Save or share",
+                km: "រក្សាទុក ឬចែករំលែក",
+              })}
+              body={getLocalized({
+                en: "Export a PDF, spreadsheet, or share card to discuss with family or a counselor.",
+                km: "នាំចេញ PDF តារាង ឬកាតចែករំលែក ដើម្បីពិភាក្សាជាមួយគ្រួសារ ឬអ្នកប្រឹក្សា។",
+              })}
+              onClick={() => setExportOpen(true)}
+            />
+          </div>
+        </section>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#E6E8F0] bg-white px-4 py-3 text-xs font-semibold text-[#68708A]">
           <span>
             {getLocalized({
               en: "Saved on this device only. Export a copy before clearing browser data.",
@@ -687,7 +1123,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
             readOnly
             value={shareUrl}
             onFocus={(event) => event.currentTarget.select()}
-            className="h-10 w-full rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3 text-[10.5px] font-semibold text-[#111965] outline-none focus:border-[#111965]/40"
+            className="h-10 w-full rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3 text-xs font-semibold text-[#111965] outline-none focus:border-[#111965]/40"
             aria-label={getLocalized({
               en: "Share link",
               km: "តំណចែករំលែក",
@@ -701,7 +1137,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
             <Copy className="h-3.5 w-3.5 text-[#F7CE4D]" />
             {getLocalized({ en: "Copy link", km: "ចម្លងតំណ" })}
           </button>
-          <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[10px] leading-relaxed text-amber-900">
+          <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
             {getLocalized({
               en: "Privacy note: the result is encoded inside the link. Do not share it publicly if you do not want others to see your scores.",
               km: "ចំណាំឯកជនភាព៖ លទ្ធផលត្រូវបានអ៊ិនកូដក្នុងតំណ។ សូមកុំចែករំលែកជាសាធារណៈ ប្រសិនបើអ្នកមិនចង់ឱ្យអ្នកដទៃឃើញពិន្ទុរបស់អ្នក។",
@@ -710,5 +1146,123 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
         </div>
       </Dialog>
     </div>
+  );
+}
+
+function InfoTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-3.5">
+      <div className="text-xs font-black uppercase tracking-[0.12em] text-[#94A3B8]">
+        {label}
+      </div>
+      <div className="mt-1.5 text-sm font-semibold leading-relaxed text-[#111965]">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function DetailList({
+  title,
+  items,
+  icon: Icon,
+  tone,
+}: {
+  title: string;
+  items: string[];
+  icon: React.ElementType;
+  tone: "emerald" | "amber";
+}) {
+  const toneClass =
+    tone === "emerald"
+      ? "bg-emerald-50 text-emerald-700"
+      : "bg-amber-50 text-amber-700";
+  const bulletClass =
+    tone === "emerald" ? "text-emerald-500" : "text-amber-500";
+  return (
+    <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+      <div className="flex items-center gap-2.5">
+        <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${toneClass}`}>
+          <Icon className="h-4 w-4" />
+        </span>
+        <h3 className="text-base font-black text-[#111965]">{title}</h3>
+      </div>
+      <ul className="mt-4 space-y-3">
+        {items.map((item) => (
+          <li
+            key={item}
+            className="flex items-start gap-2 text-sm leading-6 text-[#475569]"
+          >
+            <CheckCircle2 className={`mt-1 h-4 w-4 shrink-0 ${bulletClass}`} />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function SectionHeading({
+  icon: Icon,
+  title,
+  subtitle,
+}: {
+  icon: React.ElementType;
+  title: string;
+  subtitle?: string;
+}) {
+  return (
+    <div className="flex items-start gap-3">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#F0F2FA] text-[#111965]">
+        <Icon className="h-5 w-5" />
+      </span>
+      <div>
+        <h2 className="text-base font-black text-[#111965] sm:text-lg">{title}</h2>
+        {subtitle && (
+          <p className="mt-1 text-sm leading-relaxed text-[#68708A]">{subtitle}</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function StepCard({
+  number,
+  title,
+  body,
+  href,
+  onClick,
+}: {
+  number: string;
+  title: string;
+  body: string;
+  href?: string;
+  onClick?: () => void;
+}) {
+  const content = (
+    <>
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs font-black uppercase tracking-[0.14em] text-[#D4A017]">
+          {number}
+        </span>
+        <ArrowRight className="h-4 w-4 text-[#111965]" />
+      </div>
+      <h3 className="mt-2 text-base font-black text-[#111965]">{title}</h3>
+      <p className="mt-1.5 text-sm leading-6 text-[#68708A]">{body}</p>
+    </>
+  );
+  const className =
+    "block rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4 text-left transition-colors hover:border-[#111965]/30 hover:bg-white";
+  if (href) {
+    return (
+      <Link href={href} className={className}>
+        {content}
+      </Link>
+    );
+  }
+  return (
+    <button type="button" onClick={onClick} className={className}>
+      {content}
+    </button>
   );
 }

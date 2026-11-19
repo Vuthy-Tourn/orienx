@@ -632,6 +632,15 @@ function roundedRect(
   ctx.closePath();
 }
 
+function loadCanvasImage(src: string): Promise<HTMLImageElement | null> {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => resolve(null);
+    image.src = src;
+  });
+}
+
 export async function downloadAssessmentPng(model: AssessmentReportModel) {
   if (typeof document === "undefined") return;
   const canvas = document.createElement("canvas");
@@ -662,6 +671,43 @@ export async function downloadAssessmentPng(model: AssessmentReportModel) {
   const fontFamily = "'Plus Jakarta Sans', 'Noto Sans Khmer', Arial, sans-serif";
   ctx.textBaseline = "alphabetic";
 
+  const characterUrl =
+    model.kind === "personality" && model.characterImageUrl
+      ? model.characterImageUrl
+      : `${window.location.origin}/images/tara-emotion-cheer.webp`;
+  const character = await loadCanvasImage(characterUrl);
+  if (character) {
+    const maxWidth = 340;
+    const maxHeight = 420;
+    const scale = Math.min(
+      maxWidth / character.width,
+      maxHeight / character.height,
+      1
+    );
+    const width = character.width * scale;
+    const height = character.height * scale;
+    const x = 1016 - width;
+    const y = 130 + (maxHeight - height) / 2;
+    const aura = ctx.createRadialGradient(
+      x + width / 2,
+      y + height / 2,
+      20,
+      x + width / 2,
+      y + height / 2,
+      210
+    );
+    aura.addColorStop(0, "rgba(247,206,77,0.16)");
+    aura.addColorStop(1, "rgba(247,206,77,0)");
+    ctx.fillStyle = aura;
+    ctx.fillRect(x - 80, y - 80, width + 160, height + 160);
+    ctx.save();
+    ctx.shadowColor = "rgba(0,0,0,0.35)";
+    ctx.shadowBlur = 28;
+    ctx.shadowOffsetY = 12;
+    ctx.drawImage(character, x, y, width, height);
+    ctx.restore();
+  }
+
   ctx.fillStyle = "#FFFFFF";
   ctx.font = `900 34px ${fontFamily}`;
   ctx.fillText("Orien", 64, 92);
@@ -690,7 +736,7 @@ export async function downloadAssessmentPng(model: AssessmentReportModel) {
 
   let headlineSize = 150;
   ctx.font = `900 ${headlineSize}px ${fontFamily}`;
-  while (ctx.measureText(model.headline).width > 760 && headlineSize > 92) {
+  while (ctx.measureText(model.headline).width > 620 && headlineSize > 92) {
     headlineSize -= 6;
     ctx.font = `900 ${headlineSize}px ${fontFamily}`;
   }
@@ -699,7 +745,7 @@ export async function downloadAssessmentPng(model: AssessmentReportModel) {
 
   ctx.fillStyle = "#FFFFFF";
   ctx.font = `800 31px ${fontFamily}`;
-  const archetypeLines = wrapCanvasText(ctx, model.archetype, 780, 2);
+  const archetypeLines = wrapCanvasText(ctx, model.archetype, 600, 2);
   archetypeLines.forEach((line, index) => {
     ctx.fillText(line, 64, 420 + index * 40);
   });
@@ -713,7 +759,7 @@ export async function downloadAssessmentPng(model: AssessmentReportModel) {
   ctx.fillStyle = "rgba(255,255,255,0.72)";
   ctx.font = `500 18px ${fontFamily}`;
   const taglineY = model.role ? 526 : 500;
-  wrapCanvasText(ctx, model.tagline, 700, 2).forEach((line, index) => {
+  wrapCanvasText(ctx, model.tagline, 560, 2).forEach((line, index) => {
     ctx.fillText(line, 64, taglineY + index * 27);
   });
 
@@ -798,6 +844,27 @@ export async function downloadAssessmentPng(model: AssessmentReportModel) {
     ctx.fillStyle = "rgba(255,255,255,0.55)";
     ctx.font = `500 15px ${fontFamily}`;
     ctx.fillText(model.labels.noResult, cardX + 24, cardY + 90);
+  }
+
+  const strengths = model.highlights[0]?.items.slice(0, 4) ?? [];
+  if (strengths.length > 0) {
+    ctx.fillStyle = "rgba(255,255,255,0.45)";
+    ctx.font = `800 13px ${fontFamily}`;
+    ctx.fillText(
+      (model.highlights[0]?.title || model.labels.highlights).toUpperCase(),
+      64,
+      1080
+    );
+    strengths.forEach((item, index) => {
+      const y = 1116 + index * 30;
+      ctx.fillStyle = "#F7CE4D";
+      ctx.beginPath();
+      ctx.arc(70, y - 5, 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,0.9)";
+      ctx.font = `600 16px ${fontFamily}`;
+      ctx.fillText(item, 88, y);
+    });
   }
 
   ctx.fillStyle = "rgba(255,255,255,0.12)";

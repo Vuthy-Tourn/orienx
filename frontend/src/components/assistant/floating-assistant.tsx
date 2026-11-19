@@ -385,7 +385,7 @@ export function FloatingAssistant() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
                       transition={{ duration: 0.2 }}
-                      className="text-[12.5px] font-semibold leading-relaxed text-[#111965] dark:text-slate-100"
+                      className="text-sm font-semibold leading-relaxed text-[#111965] dark:text-slate-100"
                     >
                       {teaserMessages[teaserIndex % teaserMessages.length]}
                     </motion.p>
@@ -400,7 +400,7 @@ export function FloatingAssistant() {
 
       {open && (
         <section
-          className="fixed bottom-4 right-3 z-[80] flex h-[min(78vh,580px)] w-[min(calc(100vw-1.5rem),380px)] flex-col overflow-hidden rounded-[26px] border border-[#E6E8F0] bg-white shadow-2xl shadow-black/20 sm:right-5 dark:border-white/10 dark:bg-[#0B102A]"
+          className="fixed bottom-4 right-3 z-[80] flex h-[min(80vh,620px)] w-[min(calc(100vw-1.5rem),420px)] flex-col overflow-hidden rounded-[26px] border border-[#E6E8F0] bg-white shadow-2xl shadow-black/20 sm:right-5 dark:border-white/10 dark:bg-[#0B102A]"
           aria-label={copy.title}
         >
           <header className="flex items-center gap-3 bg-gradient-to-r from-[#111965] via-[#18227A] to-[#111965] px-4 py-3 text-white">
@@ -422,8 +422,8 @@ export function FloatingAssistant() {
               />
             </motion.div>
             <div className="min-w-0 flex-1">
-              <div className="truncate text-sm font-black">{copy.title}</div>
-              <div className="flex items-center gap-1.5 text-[10px] font-semibold text-white/60">
+              <div className="truncate text-base font-black">{copy.title}</div>
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-white/60">
                 {IS_STATIC_MODE
                   ? copy.staticLabel
                   : status?.configured
@@ -442,7 +442,7 @@ export function FloatingAssistant() {
           </header>
 
           {!IS_STATIC_MODE && user && status && !status.configured && (
-            <div className="border-b border-[#F7CE4D]/40 bg-[#FFF9E6] px-3 py-2 text-[10px] leading-snug text-[#7A5A00] dark:border-[#F7CE4D]/20 dark:bg-[#F7CE4D]/10 dark:text-[#F7CE4D]">
+            <div className="border-b border-[#F7CE4D]/40 bg-[#FFF9E6] px-3 py-2 text-xs leading-snug text-[#7A5A00] dark:border-[#F7CE4D]/20 dark:bg-[#F7CE4D]/10 dark:text-[#F7CE4D]">
               {copy.offline}
             </div>
           )}
@@ -455,12 +455,12 @@ export function FloatingAssistant() {
             {!canChat ? (
               <div className="flex h-full flex-col items-center justify-center px-6 text-center">
                 <LogIn className="mb-3 h-8 w-8 text-[#111965] dark:text-[#F7CE4D]" />
-                <p className="text-xs leading-relaxed text-[#68708A] dark:text-slate-400">
+                <p className="text-sm leading-relaxed text-[#68708A] dark:text-slate-400">
                   {copy.signIn}
                 </p>
                 <Link
                   href="/login"
-                  className="mt-4 rounded-xl bg-[#111965] px-4 py-2 text-xs font-black text-white dark:bg-[#F7CE4D] dark:text-white"
+                  className="mt-4 rounded-xl bg-[#111965] px-4 py-2 text-sm font-black text-white dark:bg-[#F7CE4D] dark:text-white"
                 >
                   {copy.signInCta}
                 </Link>
@@ -468,18 +468,18 @@ export function FloatingAssistant() {
             ) : messages.length === 0 ? (
               <div className="space-y-2">
                 <div className="rounded-2xl border border-[#E6E8F0] bg-white p-3 dark:border-white/10 dark:bg-white/5">
-                  <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
+                  <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
                     <Sparkles className="h-3 w-3 text-[#F7CE4D]" />
                     {IS_STATIC_MODE
                       ? copy.staticKicker
                       : t("aiAssistant.kicker", "OrienX AI")}
                   </div>
-                  <p className="text-xs leading-relaxed text-[#68708A] dark:text-slate-400">
+                  <p className="text-sm leading-relaxed text-[#68708A] dark:text-slate-400">
                     {copy.welcome}
                   </p>
                 </div>
                 {IS_STATIC_MODE && (
-                  <p className="rounded-xl border border-[#E6E8F0] bg-white px-3 py-2 text-[10px] leading-relaxed text-[#68708A] dark:border-white/10 dark:bg-white/5 dark:text-slate-400">
+                  <p className="rounded-xl border border-[#E6E8F0] bg-white px-3 py-2 text-xs leading-relaxed text-[#68708A] dark:border-white/10 dark:bg-white/5 dark:text-slate-400">
                     {copy.staticNote}
                   </p>
                 )}
@@ -490,7 +490,7 @@ export function FloatingAssistant() {
                       type="button"
                       onClick={() => void send(question)}
                       disabled={isSending}
-                      className="w-full rounded-xl border border-[#E6E8F0] bg-white px-3 py-2 text-left text-[11px] font-semibold text-[#111965] transition-colors hover:border-[#F7CE4D]/70 hover:bg-[#FFFDF5] disabled:opacity-50 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
+                      className="w-full rounded-xl border border-[#E6E8F0] bg-white px-3 py-2 text-left text-[13px] font-semibold text-[#111965] transition-colors hover:border-[#F7CE4D]/70 hover:bg-[#FFFDF5] disabled:opacity-50 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
                     >
                       {question}
                     </button>
@@ -508,7 +508,7 @@ export function FloatingAssistant() {
                 >
                   <div
                     className={cn(
-                      "max-w-[88%] rounded-2xl px-3 py-2 text-xs leading-relaxed",
+                      "max-w-[88%] rounded-2xl px-3 py-2 text-sm leading-relaxed",
                       message.role === "user"
                         ? "rounded-br-md bg-[#111965] text-white"
                         : "rounded-bl-md border border-[#E6E8F0] bg-white text-[#171A2C] dark:border-white/10 dark:bg-white/5 dark:text-slate-100"
@@ -519,7 +519,7 @@ export function FloatingAssistant() {
                     </div>
 
                     {message.warning && (
-                      <div className="mt-2 rounded-lg bg-[#FFF9E6] px-2 py-1.5 text-[10px] leading-snug text-[#7A5A00] dark:bg-[#F7CE4D]/10 dark:text-[#F7CE4D]">
+                      <div className="mt-2 rounded-lg bg-[#FFF9E6] px-2 py-1.5 text-xs leading-snug text-[#7A5A00] dark:bg-[#F7CE4D]/10 dark:text-[#F7CE4D]">
                         {message.warning}
                       </div>
                     )}
@@ -532,7 +532,7 @@ export function FloatingAssistant() {
                           return (
                             <span
                               key={tool}
-                              className="inline-flex items-center gap-1 rounded-full bg-[#F0F2FA] px-1.5 py-0.5 text-[9px] font-bold text-[#111965] dark:bg-white/10 dark:text-slate-300"
+                              className="inline-flex items-center gap-1 rounded-full bg-[#F0F2FA] px-1.5 py-0.5 text-[11px] font-bold text-[#111965] dark:bg-white/10 dark:text-slate-300"
                             >
                               <Icon className="h-2.5 w-2.5" />
                               {t(
@@ -547,7 +547,7 @@ export function FloatingAssistant() {
 
                     {message.sources && message.sources.length > 0 && (
                       <div className="mt-2 border-t border-[#E6E8F0] pt-2 dark:border-white/10">
-                        <div className="mb-1 text-[8px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
+                        <div className="mb-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
                           {copy.sources}
                         </div>
                         <div className="space-y-1">
@@ -555,7 +555,7 @@ export function FloatingAssistant() {
                             <Link
                               key={`${message.id}-${source.url}`}
                               href={source.url}
-                              className="block truncate text-[10px] font-semibold text-[#111965] hover:underline dark:text-[#F7CE4D]"
+                              className="block truncate text-xs font-semibold text-[#111965] hover:underline dark:text-[#F7CE4D]"
                             >
                               {getLocalized({
                                 en: source.title_en,
@@ -573,7 +573,7 @@ export function FloatingAssistant() {
 
             {isSending && (
               <div className="flex justify-start">
-                <div className="inline-flex items-center gap-2 rounded-2xl rounded-bl-md border border-[#E6E8F0] bg-white px-3 py-2 text-[10px] font-semibold text-[#68708A] dark:border-white/10 dark:bg-white/5 dark:text-slate-400">
+                <div className="inline-flex items-center gap-2 rounded-2xl rounded-bl-md border border-[#E6E8F0] bg-white px-3 py-2 text-xs font-semibold text-[#68708A] dark:border-white/10 dark:bg-white/5 dark:text-slate-400">
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
                   {copy.thinking}
                 </div>
@@ -582,7 +582,7 @@ export function FloatingAssistant() {
           </div>
 
           {error && (
-            <div className="bg-rose-50 px-3 py-2 text-[10px] font-semibold text-rose-600 dark:bg-rose-500/10 dark:text-rose-300">
+            <div className="bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-600 dark:bg-rose-500/10 dark:text-rose-300">
               {error}
             </div>
           )}
@@ -597,7 +597,7 @@ export function FloatingAssistant() {
                       type="button"
                       onClick={() => void send(question)}
                       disabled={isSending}
-                      className="shrink-0 rounded-full border border-[#E6E8F0] bg-[#F8F9FC] px-2.5 py-1 text-[9px] font-bold text-[#111965] transition-colors hover:bg-[#F0F2FA] disabled:opacity-50 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10"
+                      className="shrink-0 rounded-full border border-[#E6E8F0] bg-[#F8F9FC] px-2.5 py-1 text-[11px] font-bold text-[#111965] transition-colors hover:bg-[#F0F2FA] disabled:opacity-50 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10"
                     >
                       {question}
                     </button>
@@ -612,7 +612,7 @@ export function FloatingAssistant() {
                   onKeyDown={handleKeyDown}
                   placeholder={copy.placeholder}
                   maxLength={500}
-                  className="h-10 min-w-0 flex-1 rounded-xl border border-[#E6E8F0] bg-[#F8F9FC] px-3 text-xs text-[#171A2C] outline-none transition-colors placeholder:text-[#94A3B8] focus:border-[#111965]/40 focus:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-[#F7CE4D]/40"
+                  className="h-10 min-w-0 flex-1 rounded-xl border border-[#E6E8F0] bg-[#F8F9FC] px-3 text-sm text-[#171A2C] outline-none transition-colors placeholder:text-[#94A3B8] focus:border-[#111965]/40 focus:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-[#F7CE4D]/40"
                 />
                 <button
                   type="button"

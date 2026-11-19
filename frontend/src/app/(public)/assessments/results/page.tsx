@@ -175,7 +175,7 @@ export default function GuestResultsPage() {
             <h1 className="mt-2 text-2xl font-black tracking-tight text-[#111965] sm:text-3xl">
               {getLocalized({ en: "My results", km: "លទ្ធផលរបស់ខ្ញុំ" })}
             </h1>
-            <p className="mt-1 max-w-xl text-xs leading-relaxed text-[#68708A]">
+            <p className="mt-1 max-w-xl text-sm leading-relaxed text-[#68708A]">
               {getLocalized({
                 en: "Your drafts and results are stored only in this browser. Nothing is sent to a server.",
                 km: "សេចក្តីព្រាង និងលទ្ធផលរបស់អ្នករក្សាទុកក្នុងកម្មវិធីរុករកនេះប៉ុណ្ណោះ។ គ្មានអ្វីត្រូវផ្ញើទៅម៉ាស៊ីនមេទេ។",
@@ -209,13 +209,13 @@ export default function GuestResultsPage() {
                 <UserRound className="h-4 w-4" />
               </span>
               <div>
-                <div className="text-xs font-black text-[#111965]">
+                <div className="text-base font-black text-[#111965]">
                   {getLocalized({
                     en: "Name on your reports",
                     km: "ឈ្មោះនៅលើរបាយការណ៍របស់អ្នក",
                   })}
                 </div>
-                <div className="text-[10px] font-semibold text-[#68708A]">
+                <div className="text-xs font-semibold text-[#68708A]">
                   {getLocalized({
                     en: "Optional. Stored only in this browser.",
                     km: "ស្រេចចិត្ត។ រក្សាទុកក្នុងកម្មវិធីរុករកនេះប៉ុណ្ណោះ។",
@@ -232,7 +232,7 @@ export default function GuestResultsPage() {
                   km: "ឈ្មោះរបស់អ្នក (ស្រេចចិត្ត)",
                 })}
                 maxLength={80}
-                className="h-9 w-full min-w-0 rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3 text-[11px] font-semibold text-[#111965] outline-none focus:border-[#111965]/40 sm:w-56"
+                className="h-9 w-full min-w-0 rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3 text-sm font-semibold text-[#111965] outline-none focus:border-[#111965]/40 sm:w-56"
               />
               <button
                 type="button"
@@ -246,7 +246,7 @@ export default function GuestResultsPage() {
                     })
                   );
                 }}
-                className="inline-flex h-9 shrink-0 items-center rounded-xl bg-[#111965] px-3 text-[10.5px] font-black text-white hover:bg-[#1A2580]"
+                className="inline-flex h-9 shrink-0 items-center rounded-xl bg-[#111965] px-3 text-xs font-black text-white hover:bg-[#1A2580]"
               >
                 {savedName.length > 0 && displayName.trim() === savedName
                   ? getLocalized({ en: "Saved", km: "បានរក្សាទុក" })
@@ -276,7 +276,7 @@ export default function GuestResultsPage() {
                 km: "មិនទាន់មានលទ្ធផលរក្សាទុកទេ",
               })}
             </h2>
-            <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-[#68708A]">
+            <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-[#68708A]">
               {getLocalized({
                 en: "Take one or both free tests. Your result will appear here immediately and stay available on this device.",
                 km: "សូមធ្វើតេស្តឥតគិតថ្លៃមួយ ឬទាំងពីរ។ លទ្ធផលរបស់អ្នកនឹងបង្ហាញនៅទីនេះភ្លាមៗ និងអាចប្រើបាននៅលើឧបករណ៍នេះ។",
@@ -323,14 +323,14 @@ export default function GuestResultsPage() {
               <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
                 <div className="flex flex-wrap items-end justify-between gap-2">
                   <div>
-                    <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-amber-800">
+                    <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-amber-800">
                       <Trophy className="h-3 w-3" />
                       {getLocalized({
                         en: "Combined interest fit",
                         km: "ភាពត្រូវគ្នារួមបញ្ចូល",
                       })}
                     </div>
-                    <h2 className="mt-2 text-sm font-black text-[#111965] sm:text-base">
+                    <h2 className="mt-2 text-base font-black text-[#111965] sm:text-lg">
                       {getLocalized({
                         en: "Your strongest major matches",
                         km: "ជំនាញដែលត្រូវគ្នាខ្លាំងបំផុតរបស់អ្នក",
@@ -353,10 +353,10 @@ export default function GuestResultsPage() {
                       className="group flex items-center justify-between gap-3 rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] px-3.5 py-3 transition-all hover:border-[#111965]/30 hover:bg-white"
                     >
                       <div className="min-w-0">
-                        <div className="line-clamp-1 text-xs font-black text-[#111965]">
+                        <div className="line-clamp-1 text-base font-black text-[#111965]">
                           {getLocalized(major.name)}
                         </div>
-                        <div className="mt-0.5 text-[10px] font-semibold text-[#68708A]">
+                        <div className="mt-0.5 text-xs font-semibold text-[#68708A]">
                           {major.category} · {major.universities}{" "}
                           {getLocalized({
                             en: "universities",
@@ -364,7 +364,7 @@ export default function GuestResultsPage() {
                           })}
                         </div>
                       </div>
-                      <span className="shrink-0 rounded-lg bg-white px-2 py-1 text-[10px] font-black text-[#111965] shadow-2xs">
+                      <span className="shrink-0 rounded-lg bg-white px-2 py-1 text-sm font-black text-[#111965] shadow-2xs">
                         {major.fit}%
                       </span>
                     </Link>
@@ -379,10 +379,10 @@ export default function GuestResultsPage() {
                   <History className="h-4 w-4" />
                 </span>
                 <div>
-                  <h2 className="text-sm font-black text-[#111965]">
+                  <h2 className="text-base font-black text-[#111965]">
                     {getLocalized({ en: "Result history", km: "ប្រវត្តិលទ្ធផល" })}
                   </h2>
-                  <p className="text-[10px] font-semibold text-[#68708A]">
+                  <p className="text-xs font-semibold text-[#68708A]">
                     {getLocalized({
                       en: "Up to 10 attempts per test are kept on this device.",
                       km: "រក្សាទុករហូតដល់ ១០ ការប៉ុនប៉ងក្នុងមួយតេស្ត នៅលើឧបករណ៍នេះ។",
@@ -413,19 +413,19 @@ export default function GuestResultsPage() {
                       className="flex flex-wrap items-center justify-between gap-3 py-3"
                     >
                       <div className="flex min-w-0 items-center gap-3">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#F0F2FA] text-xs font-black text-[#111965]">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#F0F2FA] text-sm font-black text-[#111965]">
                           {headline.slice(0, 2)}
                         </span>
                         <div className="min-w-0">
                           <div className="flex flex-wrap items-center gap-1.5">
-                            <span className="text-xs font-black text-[#111965]">
+                            <span className="text-base font-black text-[#111965]">
                               {headline}
                             </span>
-                            <span className="rounded-md border border-[#E6E8F0] bg-[#F8FAFD] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#68708A]">
+                            <span className="rounded-md border border-[#E6E8F0] bg-[#F8FAFD] px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#68708A]">
                               {label}
                             </span>
                           </div>
-                          <div className="mt-0.5 flex items-center gap-1 text-[10px] font-semibold text-[#94A3B8]">
+                          <div className="mt-0.5 flex items-center gap-1 text-xs font-semibold text-[#94A3B8]">
                             <CalendarDays className="h-3 w-3" />
                             {formatDate(row.completedAt, locale)}
                           </div>
@@ -434,7 +434,7 @@ export default function GuestResultsPage() {
                       <div className="flex items-center gap-1.5">
                         <Link
                           href={`/assessments/${row.kind}/result?id=${row.id}`}
-                          className="inline-flex h-8 items-center rounded-lg border border-[#E6E8F0] bg-white px-2.5 text-[10px] font-black text-[#111965] hover:bg-[#F8FAFD]"
+                          className="inline-flex h-8 items-center rounded-lg border border-[#E6E8F0] bg-white px-2.5 text-xs font-black text-[#111965] hover:bg-[#F8FAFD]"
                         >
                           {getLocalized({ en: "View", km: "មើល" })}
                         </Link>
@@ -456,7 +456,7 @@ export default function GuestResultsPage() {
               </div>
             </section>
 
-            <p className="text-center text-[10px] font-semibold text-[#94A3B8]">
+            <p className="text-center text-xs font-semibold text-[#94A3B8]">
               {getLocalized({
                 en: `Data version ${STATIC_META.dataVersion} · Stored locally in this browser`,
                 km: `កំណែទិន្នន័យ ${STATIC_META.dataVersion} · រក្សាទុកក្នុងកម្មវិធីរុករកនេះ`,
@@ -508,12 +508,12 @@ function ResultCard({
             )}
           </span>
           <div>
-            <div className="text-[9px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
+            <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
               {isPersonality
                 ? getLocalized({ en: "16-Personality", km: "បុគ្គលិកលក្ខណៈ ១៦" })
                 : "RIASEC"}
             </div>
-            <div className="text-[10px] font-semibold text-[#68708A]">
+            <div className="text-xs font-semibold text-[#68708A]">
               {record
                 ? formatDate(record.completedAt, locale)
                 : getLocalized({ en: "Not taken yet", km: "មិនទាន់ធ្វើតេស្ត" })}
@@ -533,7 +533,7 @@ function ResultCard({
             <div className="text-3xl font-black tracking-tight text-[#111965]">
               {headline}
             </div>
-            <div className="pb-1 text-[11px] font-bold leading-snug text-[#68708A]">
+            <div className="pb-1 text-sm font-bold leading-snug text-[#68708A]">
               {isPersonality
                 ? getLocalized({
                     en: (archetype as { nameEn?: string }).nameEn,
@@ -548,14 +548,14 @@ function ResultCard({
           <div className="mt-3 flex flex-wrap gap-2">
             <Link
               href={`/assessments/${kind}/result?id=${record.id}`}
-              className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-[#111965] px-3 text-[10px] font-black text-white hover:bg-[#1A2580]"
+              className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-[#111965] px-3 text-xs font-black text-white hover:bg-[#1A2580]"
             >
               {getLocalized({ en: "View result", km: "មើលលទ្ធផល" })}
               <ArrowRight className="h-3 w-3 text-[#F7CE4D]" />
             </Link>
             <Link
               href={`/assessments/${kind}/test?retake=1`}
-              className="inline-flex h-8 items-center rounded-lg border border-[#E6E8F0] bg-white px-3 text-[10px] font-bold text-[#111965] hover:bg-[#F8FAFD]"
+              className="inline-flex h-8 items-center rounded-lg border border-[#E6E8F0] bg-white px-3 text-xs font-bold text-[#111965] hover:bg-[#F8FAFD]"
             >
               {getLocalized({ en: "Retake", km: "ធ្វើឡើងវិញ" })}
             </Link>
@@ -576,7 +576,7 @@ function ResultCard({
           </p>
           <Link
             href={`/assessments/${kind}/test`}
-            className="mt-4 inline-flex h-8 items-center gap-1.5 rounded-lg bg-[#111965] px-3 text-[10px] font-black text-white hover:bg-[#1A2580]"
+            className="mt-4 inline-flex h-8 items-center gap-1.5 rounded-lg bg-[#111965] px-3 text-xs font-black text-white hover:bg-[#1A2580]"
           >
             {getLocalized({ en: "Take the test", km: "ធ្វើតេស្ត" })}
             <ArrowRight className="h-3 w-3 text-[#F7CE4D]" />
