@@ -19,7 +19,7 @@ import {
 
 import { apiFetch } from "@/lib/api-client";
 import { IS_STATIC_MODE } from "@/lib/app-mode";
-import { answerLocalQuestion } from "@/lib/guest/assistant";
+import { answerLocalQuestion, detectResponseLanguage } from "@/lib/guest/assistant";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { cn } from "@/lib/utils";
@@ -258,9 +258,11 @@ export function FloatingAssistant() {
     ]);
     setIsSending(true);
 
+    const responseLanguage = detectResponseLanguage(question, language);
+
     try {
       if (IS_STATIC_MODE) {
-        const data = answerLocalQuestion(question, language);
+        const data = answerLocalQuestion(question, responseLanguage);
         setMessages((previous) => [
           ...previous,
           {
@@ -273,7 +275,7 @@ export function FloatingAssistant() {
         ]);
         if (data.suggested_questions.length) {
           setSuggestions({
-            language,
+            language: responseLanguage,
             items: data.suggested_questions,
           });
         }
@@ -281,7 +283,7 @@ export function FloatingAssistant() {
       }
       const data = await apiFetch<AssistantAnswer>("/ai/assistant", {
         method: "POST",
-        body: JSON.stringify({ question, language }),
+        body: JSON.stringify({ question, language: responseLanguage }),
       });
       setMessages((previous) => [
         ...previous,
@@ -296,7 +298,7 @@ export function FloatingAssistant() {
       ]);
       if (data.suggested_questions?.length) {
         setSuggestions({
-          language,
+          language: responseLanguage,
           items: data.suggested_questions,
         });
       }
@@ -319,7 +321,7 @@ export function FloatingAssistant() {
   };
 
   const visibleSuggestions =
-    suggestions?.language === language && suggestions.items.length > 0
+    suggestions && suggestions.items.length > 0
       ? suggestions.items
       : IS_STATIC_MODE
         ? staticSuggestions

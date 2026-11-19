@@ -1,4 +1,5 @@
 import {
+  STATIC_CAREERS,
   STATIC_MAJORS,
   STATIC_OFFERINGS,
   STATIC_SCHOLARSHIPS,
@@ -104,6 +105,17 @@ const STOP_WORDS = new Set([
 
 function pick(language: AssistantLanguage, en: string, km: string): string {
   return language === "km" ? km : en;
+}
+
+function getLocalizedText(value: unknown, language: AssistantLanguage): string {
+  if (typeof value === "string") return value;
+  if (value && typeof value === "object") {
+    const record = value as { en?: string; km?: string };
+    return language === "km"
+      ? record.km || record.en || ""
+      : record.en || record.km || "";
+  }
+  return "";
 }
 
 function usd(value: number | null | undefined): string {
@@ -436,6 +448,226 @@ function answerScholarships(language: AssistantLanguage): StaticAssistantAnswer 
   };
 }
 
+function includesEntity(text: string, value: string): boolean {
+  const needle = value.toLowerCase().trim();
+  if (!needle) return false;
+  if (/[\u1780-\u17FF]/.test(needle)) {
+    return text.includes(needle);
+  }
+  const escaped = needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(^|[^a-z0-9])${escaped}([^a-z0-9]|$)`, "i").test(text);
+}
+
+function namePrefixScore(text: string, value: string): number {
+  const words = value
+    .toLowerCase()
+    .replace(/[&/,]/g, " ")
+    .split(/\s+/)
+    .filter((word) => word.length > 2);
+  for (let count = Math.min(words.length, 4); count >= 1; count -= 1) {
+    const phrase = words.slice(0, count).join(" ");
+    if (phrase.length >= 4 && includesEntity(text, phrase)) {
+      return phrase.length;
+    }
+  }
+  return 0;
+}
+
+function answerEntityDetail(
+  question: string,
+  language: AssistantLanguage
+): StaticAssistantAnswer | null {
+  if (
+    !has(question, [
+      "what is",
+      "what are",
+      "tell me about",
+      "detail",
+      "details",
+      "more about",
+      "information about",
+      "explain",
+      "អំពី",
+      "លម្អិត",
+      "ពន្យល់",
+    ])
+  ) {
+    return null;
+  }
+
+  const asksUniversity = has(question, ["university", "សាកលវិទ្យាល័យ"]);
+
+  const universityMatches = STATIC_UNIVERSITIES.map((university) => {
+    const values = [
+      university.slug,
+      university.acronym.en,
+      university.acronym.km,
+      university.name.en,
+      university.name.km,
+    ];
+    const matched = values.filter((value) => includesEntity(question, value));
+    return {
+      university,
+      score: matched.length
+        ? Math.max(...matched.map((value) => value.length))
+        : 0,
+    };
+  })
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score);
+  const university = universityMatches[0]?.university;
+
+  const majorMatches = STATIC_MAJORS.map((major) => {
+    const values = [major.slug, major.name.en, major.name.km];
+    const matched = values.filter((value) => includesEntity(question, value));
+    return {
+      major,
+      score: Math.max(
+        matched.length ? Math.max(...matched.map((value) => value.length)) : 0,
+        namePrefixScore(question, major.name.en),
+        namePrefixScore(question, major.name.km)
+      ),
+    };
+  })
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score);
+  const major = majorMatches[0]?.major;
+
+  // Prefer an explicit university question. Otherwise prefer a major match,
+  // so "what is law" returns the major, not a university containing "law".
+  const chosenUniversity = asksUniversity ? university : major ? null : university;
+  const chosenMajor = asksUniversity ? null : major;
+
+  if (chosenUniversity) {
+    const description = getLocalizedText(
+      chosenUniversity.description,
+      language
+    );
+    const summary = description
+      .split(/\n+/)
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .slice(0, 2)
+      .join(" ")
+      .slice(0, 620);
+    const tuitionValues = chosenUniversity.offerings
+      .map((offering) => offering.tuition_annual_usd)
+      .filter((value): value is number => value != null);
+    const minTuition =
+      chosenUniversity.tuition_range_min_usd ??
+      (tuitionValues.length ? Math.min(...tuitionValues) : null);
+    const maxTuition =
+      chosenUniversity.tuition_range_max_usd ??
+      (tuitionValues.length ? Math.max(...tuitionValues) : null);
+    const uniquePrograms = Array.from(
+      new Map(
+        chosenUniversity.offerings.map((offering) => [
+          offering.major_slug,
+          offering,
+        ])
+      ).values()
+    );
+    const topPrograms = uniquePrograms.slice(0, 5).map((offering) =>
+      getLocalizedText(offering.major_name, language)
+    );
+    const typeLabel =
+      chosenUniversity.university_type === "PUBLIC"
+        ? pick(language, "public", "សាធារណៈ")
+        : pick(language, "private", "ឯកជន");
+
+    return {
+      answer: pick(
+        language,
+        `${chosenUniversity.name.en} (${chosenUniversity.acronym.en}) is a ${typeLabel} university in ${chosenUniversity.province}. ${summary}\n\nPrograms: ${uniquePrograms.length}\nAnnual tuition: ${usd(minTuition)} – ${usd(maxTuition)}\nPopular programs: ${topPrograms.join(", ") || "—"}\nWebsite: ${chosenUniversity.website_url}`,
+        `${chosenUniversity.name.km} (${chosenUniversity.acronym.km}) គឺជាសាកលវិទ្យាល័យ${typeLabel} នៅ ${chosenUniversity.province}។ ${summary}\n\nកម្មវិធីសិក្សា៖ ${uniquePrograms.length}\nថ្លៃសិក្សាប្រចាំឆ្នាំ៖ ${usd(minTuition)} – ${usd(maxTuition)}\nកម្មវិធីពេញនិយម៖ ${topPrograms.join(", ") || "—"}\nគេហទំព័រ៖ ${chosenUniversity.website_url}`
+      ),
+      sources: [
+        sourceForUniversity(chosenUniversity.slug),
+        ...uniquePrograms
+          .slice(0, 2)
+          .map((offering) => sourceForMajor(offering.major_slug)),
+      ].filter((item): item is StaticAssistantSource => Boolean(item)),
+      suggested_questions: suggestions(language).slice(0, 4),
+      tools_used: ["search_universities"],
+    };
+  }
+
+  if (chosenMajor) {
+    const description = getLocalizedText(chosenMajor.description, language);
+    const topUniversities = chosenMajor.universities.slice(0, 5);
+    const careers = chosenMajor.careers
+      .slice(0, 4)
+      .map((career) => getLocalizedText(career.title, language));
+    return {
+      answer: pick(
+        language,
+        `${chosenMajor.name.en} is in ${chosenMajor.category}. ${description}\n\nOffered by ${chosenMajor.universities_count} universities. Lowest published annual tuition: ${usd(chosenMajor.min_tuition_usd)}.\nUniversities: ${topUniversities.map((item) => item.university_name.en).join(", ") || "—"}\nRelated careers: ${careers.join(", ") || "—"}`,
+        `${chosenMajor.name.km} ស្ថិតក្នុងវិស័យ ${chosenMajor.category}។ ${description}\n\nមាន ${chosenMajor.universities_count} សាកលវិទ្យាល័យបង្រៀន។ ថ្លៃសិក្សាប្រចាំឆ្នាំទាបបំផុតដែលបានផ្សាយ៖ ${usd(chosenMajor.min_tuition_usd)}។\nសាកលវិទ្យាល័យ៖ ${topUniversities.map((item) => item.university_name.km).join(", ") || "—"}\nអាជីពពាក់ព័ន្ធ៖ ${careers.join(", ") || "—"}`
+      ),
+      sources: [
+        sourceForMajor(chosenMajor.slug),
+        ...topUniversities
+          .slice(0, 2)
+          .map((item) => sourceForUniversity(item.university_slug)),
+      ].filter((item): item is StaticAssistantSource => Boolean(item)),
+      suggested_questions: suggestions(language).slice(0, 4),
+      tools_used: [],
+    };
+  }
+
+  const career = STATIC_CAREERS.find((item) =>
+    includesEntity(question, item.title.en) ||
+    includesEntity(question, item.title.km)
+  );
+  if (career) {
+    return {
+      answer: pick(
+        language,
+        `${career.title.en} is a career in ${career.industry}. ${career.description.en || ""}\n\nTypical responsibilities: ${career.responsibilities.slice(0, 4).join(", ")}\nSkills to build: ${career.required_skills.slice(0, 4).join(", ")}\nRelated majors: ${career.related_majors.map((major) => major.name.en).join(", ")}`,
+        `${career.title.km} គឺជាអាជីពក្នុងវិស័យ ${career.industry}។ ${career.description.km || ""}\n\nភារកិច្ចសំខាន់៖ ${career.responsibilities.slice(0, 4).join(", ")}\nជំនាញដែលត្រូវបង្កើត៖ ${career.required_skills.slice(0, 4).join(", ")}\nជំនាញសិក្សាពាក់ព័ន្ធ៖ ${career.related_majors.map((major) => major.name.km).join(", ")}`
+      ),
+      sources: [
+        {
+          type: "career",
+          title_en: career.title.en,
+          title_km: career.title.km,
+          url: `/careers/${career.slug}`,
+          snippet_en: career.industry,
+          snippet_km: career.industry,
+        },
+      ],
+      suggested_questions: suggestions(language).slice(0, 4),
+      tools_used: [],
+    };
+  }
+
+  const scholarship = STATIC_SCHOLARSHIPS.find(
+    (item) =>
+      includesEntity(question, item.title.en) ||
+      includesEntity(question, item.title.km) ||
+      includesEntity(question, item.provider.en) ||
+      includesEntity(question, item.provider.km)
+  );
+  if (scholarship) {
+    const eligibility =
+      (scholarship.eligibility_criteria as { en?: string[] } | null)?.en ?? [];
+    return {
+      answer: pick(
+        language,
+        `${scholarship.title.en} is provided by ${scholarship.provider.en}. ${scholarship.description.en || ""}\n\nCoverage: ${scholarship.coverage_type.replaceAll("_", " ").toLowerCase()}\nDeadline: ${scholarship.application_deadline || "Not published"}\nEligibility: ${eligibility.slice(0, 4).join("; ") || "See the official page"}\nOfficial link: ${scholarship.official_url}`,
+        `${scholarship.title.km} ផ្តល់ដោយ ${scholarship.provider.km}។ ${scholarship.description.km || ""}\n\nកម្រិតជំនួយ៖ ${scholarship.coverage_type.replaceAll("_", " ").toLowerCase()}\nផុតកំណត់៖ ${scholarship.application_deadline || "មិនទាន់ផ្សាយ"}\nលក្ខខណ្ឌ៖ ${eligibility.slice(0, 4).join("; ") || "សូមមើលទំព័រផ្លូវការ"}\nតំណផ្លូវការ៖ ${scholarship.official_url}`
+      ),
+      sources: [
+        sourceForScholarship(scholarship.slug),
+      ].filter((item): item is StaticAssistantSource => Boolean(item)),
+      suggested_questions: suggestions(language).slice(0, 4),
+      tools_used: [],
+    };
+  }
+
+  return null;
+}
+
 function answerSearch(
   question: string,
   language: AssistantLanguage
@@ -514,6 +746,17 @@ function answerSearch(
     suggested_questions: suggestions(language).slice(0, 4),
     tools_used: [],
   };
+}
+
+export function detectResponseLanguage(
+  question: string,
+  fallback: AssistantLanguage
+): AssistantLanguage {
+  const khmer = (question.match(/[\u1780-\u17FF]/g) || []).length;
+  const latin = (question.match(/[A-Za-z]/g) || []).length;
+  if (khmer === 0 && latin > 0) return "en";
+  if (latin === 0 && khmer > 0) return "km";
+  return khmer > latin ? "km" : latin > khmer ? "en" : fallback;
 }
 
 export function answerLocalQuestion(
@@ -702,6 +945,9 @@ export function answerLocalQuestion(
 
   const tuition = answerTuition(normalized, language);
   if (tuition) return tuition;
+
+  const detail = answerEntityDetail(normalized, language);
+  if (detail) return detail;
 
   if (has(normalized, ["scholarship", "អាហារូបករណ៍"])) {
     return answerScholarships(language);
