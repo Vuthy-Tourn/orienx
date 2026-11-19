@@ -56,6 +56,10 @@ curl -X POST http://localhost:3000/api/public-assistant \
   -d '{"question":"what is western university","language":"en"}'
 ```
 
+## Conversation memory
+
+The browser sends the last six chat messages with each request. The Gemini route includes them as conversation turns, so follow-ups such as “tell me more”, “what about its tuition?”, and “which one is cheaper?” keep the previous subject.
+
 ## Cost and abuse protection
 
 - `maxOutputTokens` is capped at 380.
@@ -86,4 +90,4 @@ It is instructed not to invent admission requirements, tuition, or deadlines. It
 2. Local rule-based guide if Gemini is unavailable or over quota
 3. Friendly fallback with suggested questions
 
-The mascot header shows `Gemini · <model>` when Gemini answered, or the local guide label when it fell back.
+The public UI does not label which path answered. Both paths are presented as the same OrienX assistant. The route returns `mode` and `model` internally for debugging.

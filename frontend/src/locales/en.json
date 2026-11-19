@@ -1122,7 +1122,7 @@
     "subtitle": "Quick answers",
     "staticKicker": "OrienX guide",
     "staticLabel": "Local guide",
-    "staticNote": "Answers come from OrienX's verified static directory. No AI model is called.",
+    "staticNote": "Answers are grounded in OrienX's verified directory. Always confirm official details with the university.",
     "open": "Open assistant",
     "close": "Close",
     "kicker": "OrienX AI",

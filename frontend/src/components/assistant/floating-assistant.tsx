@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   BadgeCheck,
@@ -44,11 +43,6 @@ interface AssistantAnswer {
   suggested_questions: string[];
   tools_used?: string[];
   warning?: string | null;
-}
-
-interface AssistantStatus {
-  configured: boolean;
-  model: string;
 }
 
 interface PublicAssistantResponse {
@@ -111,10 +105,8 @@ export function FloatingAssistant() {
     sources: t("aiAssistant.sources"),
     signIn: t("aiAssistant.signIn"),
     signInCta: t("aiAssistant.signInCta"),
-    offline: t("aiAssistant.offline"),
     error: t("aiAssistant.error"),
     suggestions: tList("aiAssistant.suggestions"),
-    staticLabel: t("aiAssistant.staticLabel", "Local guide"),
     staticKicker: t("aiAssistant.staticKicker", "OrienX guide"),
     staticNote: t(
       "aiAssistant.staticNote",
@@ -142,8 +134,6 @@ export function FloatingAssistant() {
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [aiMode, setAiMode] = useState<"local" | "gemini">("local");
-  const [aiModel, setAiModel] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<{
     language: string;
     items: string[];
@@ -182,14 +172,6 @@ export function FloatingAssistant() {
       new CustomEvent("orienx:assistant-visibility", { detail: open })
     );
   }, [open]);
-
-  const { data: status } = useQuery({
-    queryKey: ["assistant-status"],
-    queryFn: () => apiFetch<AssistantStatus>("/ai/assistant/status"),
-    enabled: open && Boolean(user) && !IS_STATIC_MODE,
-    staleTime: 60_000,
-    refetchOnWindowFocus: false,
-  });
 
   useEffect(() => {
     if (open) {
@@ -271,10 +253,12 @@ export function FloatingAssistant() {
     setIsSending(true);
 
     const responseLanguage = detectResponseLanguage(question, language);
+    const history = messages
+      .slice(-6)
+      .map((message) => ({ role: message.role, content: message.content }));
 
     try {
       if (IS_STATIC_MODE) {
-        let fallbackWarning: string | null = null;
         try {
           const response = await fetch("/api/public-assistant", {
             method: "POST",
@@ -283,13 +267,12 @@ export function FloatingAssistant() {
               question,
               language: responseLanguage,
               profile: buildStudentAssistantContext(),
+              history,
             }),
             signal: AbortSignal.timeout(35_000),
           });
           if (response.ok) {
             const data = (await response.json()) as PublicAssistantResponse;
-            setAiMode(data.mode === "gemini" ? "gemini" : "local");
-            setAiModel(data.mode === "gemini" ? data.model ?? null : null);
             setMessages((previous) => [
               ...previous,
               {
@@ -309,19 +292,10 @@ export function FloatingAssistant() {
             }
             return;
           }
-          const errorBody = (await response.json().catch(() => null)) as {
-            message?: string;
-          } | null;
-          fallbackWarning =
-            errorBody?.message ||
-            "Gemini is unavailable; answered by the local guide.";
         } catch {
-          fallbackWarning =
-            "Gemini is unavailable; answered by the local guide.";
+          // Fall through to the local guide without exposing technical details.
         }
 
-        setAiMode("local");
-        setAiModel(null);
         const data = answerLocalQuestion(question, responseLanguage);
         setMessages((previous) => [
           ...previous,
@@ -331,7 +305,6 @@ export function FloatingAssistant() {
             content: data.answer,
             sources: data.sources,
             toolsUsed: data.tools_used,
-            warning: fallbackWarning,
           },
         ]);
         if (data.suggested_questions.length) {
@@ -487,13 +460,7 @@ export function FloatingAssistant() {
             <div className="min-w-0 flex-1">
               <div className="truncate text-base font-black">{copy.title}</div>
               <div className="flex items-center gap-1.5 text-xs font-semibold text-white/60">
-                {IS_STATIC_MODE
-                  ? aiMode === "gemini"
-                    ? `Gemini · ${aiModel ?? "flash"}`
-                    : copy.staticLabel
-                  : status?.configured
-                    ? `Gemini · ${status.model}`
-                    : copy.subtitle}
+                {copy.subtitle}
               </div>
             </div>
             <button
@@ -505,12 +472,6 @@ export function FloatingAssistant() {
               <X className="h-4 w-4" />
             </button>
           </header>
-
-          {!IS_STATIC_MODE && user && status && !status.configured && (
-            <div className="border-b border-[#F7CE4D]/40 bg-[#FFF9E6] px-3 py-2 text-xs leading-snug text-[#7A5A00] dark:border-[#F7CE4D]/20 dark:bg-[#F7CE4D]/10 dark:text-[#F7CE4D]">
-              {copy.offline}
-            </div>
-          )}
 
           <div
             ref={scrollRef}

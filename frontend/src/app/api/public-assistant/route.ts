@@ -33,6 +33,11 @@ interface StudentProfile {
   topMajors?: string[];
 }
 
+interface HistoryMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
 interface AssistantSource {
   type: string;
   title_en: string;
@@ -181,6 +186,74 @@ function extractSearchQuery(question: string): string {
   return words.join(" ").trim() || question;
 }
 
+function sanitizeHistory(value: unknown): HistoryMessage[] {
+  if (!Array.isArray(value)) return [];
+  const messages = value
+    .filter(
+      (item): item is { role: string; content: string } =>
+        Boolean(item) &&
+        typeof item === "object" &&
+        typeof (item as { role?: unknown }).role === "string" &&
+        typeof (item as { content?: unknown }).content === "string"
+    )
+    .map((item) => ({
+      role: item.role === "assistant" ? ("assistant" as const) : ("user" as const),
+      content: item.content.trim().slice(0, 800),
+    }))
+    .filter((item) => item.content.length > 0)
+    .slice(-6);
+
+  while (messages.length > 0 && messages[0].role !== "user") {
+    messages.shift();
+  }
+  return messages;
+}
+
+function includesEntity(text: string, value: string): boolean {
+  const needle = value.toLowerCase().trim();
+  if (!needle) return false;
+  if (/[\u1780-\u17FF]/.test(needle)) return text.includes(needle);
+  const escaped = needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(^|[^a-z0-9])${escaped}([^a-z0-9]|$)`, "i").test(text);
+}
+
+function namePrefixScore(text: string, value: string): number {
+  const words = value
+    .toLowerCase()
+    .replace(/[&/,]/g, " ")
+    .split(/\s+/)
+    .filter((word) => word.length > 2);
+  for (let count = Math.min(words.length, 4); count >= 1; count -= 1) {
+    const phrase = words.slice(0, count).join(" ");
+    if (phrase.length >= 4 && includesEntity(text, phrase)) return phrase.length;
+  }
+  return 0;
+}
+
+function findReferencedUniversity(text: string) {
+  return STATIC_UNIVERSITIES.find((university) =>
+    [
+      university.slug,
+      university.acronym.en,
+      university.acronym.km,
+      university.name.en,
+      university.name.km,
+    ].some((value) => includesEntity(text, value))
+  );
+}
+
+function findReferencedMajor(text: string) {
+  return STATIC_MAJORS.map((major) => ({
+    major,
+    score: Math.max(
+      namePrefixScore(text, major.name.en),
+      namePrefixScore(text, major.name.km)
+    ),
+  }))
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score)[0]?.major;
+}
+
 function compactDescription(value: { en?: string; km?: string } | null | undefined): string {
   if (!value) return "";
   return (value.en || "").replace(/\s+/g, " ").trim().slice(0, 480);
@@ -189,7 +262,8 @@ function compactDescription(value: { en?: string; km?: string } | null | undefin
 function buildCatalogContext(
   question: string,
   language: Language,
-  profile: StudentProfile | null
+  profile: StudentProfile | null,
+  history: HistoryMessage[]
 ): string {
   const lines: string[] = [];
   lines.push("VERIFIED ORIENX CATALOG (Cambodia):");
@@ -226,7 +300,8 @@ function buildCatalogContext(
     );
   });
 
-  const search = staticSearch(extractSearchQuery(question), 4);
+  const searchText = [...history.map((item) => item.content), question].join(" ");
+  const search = staticSearch(extractSearchQuery(searchText), 4);
   if (search.total > 0) {
     lines.push("");
     lines.push("MATCHED RECORDS FOR THIS QUESTION:");
@@ -260,6 +335,50 @@ function buildCatalogContext(
     });
   }
 
+  const combinedText = `${history.map((item) => item.content).join(" ")} ${question}`;
+  const referencedUniversity = findReferencedUniversity(combinedText);
+  if (referencedUniversity) {
+    const tuition =
+      referencedUniversity.tuition_range_min_usd != null
+        ? `$${Math.round(referencedUniversity.tuition_range_min_usd)}-$${Math.round(
+            referencedUniversity.tuition_range_max_usd ??
+              referencedUniversity.tuition_range_min_usd
+          )}/year`
+        : "not published";
+    const programs = Array.from(
+      new Set(
+        referencedUniversity.offerings.map(
+          (offering) => offering.major_name.en
+        )
+      )
+    );
+    lines.push("");
+    lines.push(`REFERENCED UNIVERSITY: ${referencedUniversity.name.en}`);
+    lines.push(
+      `Description: ${compactDescription(referencedUniversity.description)}`
+    );
+    lines.push(
+      `Type: ${referencedUniversity.university_type}. Province: ${referencedUniversity.province}. Tuition: ${tuition}.`
+    );
+    lines.push(`Programs: ${programs.join(", ")}`);
+    lines.push(`Website: ${referencedUniversity.website_url}`);
+  }
+
+  const referencedMajor = findReferencedMajor(combinedText);
+  if (referencedMajor) {
+    lines.push("");
+    lines.push(`REFERENCED MAJOR: ${referencedMajor.name.en}`);
+    lines.push(
+      `Description: ${compactDescription(referencedMajor.description)}`
+    );
+    lines.push(
+      `Category: ${referencedMajor.category}. Universities offering it: ${referencedMajor.universities
+        .slice(0, 8)
+        .map((item) => item.university_name.en)
+        .join(", ")}`
+    );
+  }
+
   if (profile) {
     lines.push("");
     lines.push("STUDENT'S LOCAL RESULT CONTEXT (no name or contact data):");
@@ -279,9 +398,36 @@ function buildCatalogContext(
   return lines.join("\n");
 }
 
-function buildSources(question: string): AssistantSource[] {
-  const search = staticSearch(extractSearchQuery(question), 5);
+function buildSources(
+  question: string,
+  history: HistoryMessage[]
+): AssistantSource[] {
+  const searchText = [...history.map((item) => item.content), question].join(" ");
+  const search = staticSearch(extractSearchQuery(searchText), 5);
   const sources: AssistantSource[] = [];
+  const combinedText = [...history.map((item) => item.content), question].join(" ");
+  const referencedUniversity = findReferencedUniversity(combinedText);
+  if (referencedUniversity) {
+    sources.push({
+      type: "university",
+      title_en: referencedUniversity.name.en,
+      title_km: referencedUniversity.name.km,
+      url: `/universities/${referencedUniversity.slug}`,
+      snippet_en: `${referencedUniversity.acronym.en} · ${referencedUniversity.province}`,
+      snippet_km: `${referencedUniversity.acronym.km} · ${referencedUniversity.province}`,
+    });
+  }
+  const referencedMajor = findReferencedMajor(combinedText);
+  if (referencedMajor) {
+    sources.push({
+      type: "major",
+      title_en: referencedMajor.name.en,
+      title_km: referencedMajor.name.km,
+      url: `/majors/${referencedMajor.slug}`,
+      snippet_en: `${referencedMajor.category} · ${referencedMajor.universities_count} universities`,
+      snippet_km: `${referencedMajor.category} · ${referencedMajor.universities_count} សាកលវិទ្យាល័យ`,
+    });
+  }
   search.universities.forEach((university) => {
     sources.push({
       type: "university",
@@ -342,7 +488,9 @@ function buildSources(question: string): AssistantSource[] {
       }
     );
   }
-  return sources.slice(0, 5);
+  return Array.from(
+    new Map(sources.map((source) => [source.url, source])).values()
+  ).slice(0, 5);
 }
 
 function containsThai(text: string): boolean {
@@ -353,7 +501,8 @@ async function callGemini(
   apiKey: string,
   systemPrompt: string,
   question: string,
-  language: Language
+  language: Language,
+  history: HistoryMessage[]
 ): Promise<{ text: string; model: string }> {
   const models = [
     process.env.GEMINI_MODEL?.trim() || DEFAULT_MODEL,
@@ -363,13 +512,20 @@ async function callGemini(
   let lastError = "Gemini request failed.";
   for (const model of models) {
     try {
-      let text = await generateOnce(apiKey, model, systemPrompt, question);
+      let text = await generateOnce(
+        apiKey,
+        model,
+        systemPrompt,
+        question,
+        history
+      );
       if (language === "km" && containsThai(text)) {
         text = await generateOnce(
           apiKey,
           model,
           `${systemPrompt}\n\nCRITICAL: Write Khmer Unicode only (U+1780–U+17FF). Never use Thai characters. If you cannot write natural Khmer, answer in English.`,
-          question
+          question,
+          history
         );
       }
       if (text) return { text, model };
@@ -384,7 +540,8 @@ async function generateOnce(
   apiKey: string,
   model: string,
   systemPrompt: string,
-  question: string
+  question: string,
+  history: HistoryMessage[]
 ): Promise<string> {
   const response = await fetch(
     `${GEMINI_API_BASE}/models/${encodeURIComponent(model)}:generateContent`,
@@ -396,7 +553,13 @@ async function generateOnce(
       },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: systemPrompt }] },
-        contents: [{ role: "user", parts: [{ text: question }] }],
+        contents: [
+          ...history.map((message) => ({
+            role: message.role === "assistant" ? "model" : "user",
+            parts: [{ text: message.content }],
+          })),
+          { role: "user", parts: [{ text: question }] },
+        ],
         generationConfig: {
           temperature: 0.2,
           topP: 0.9,
@@ -490,6 +653,7 @@ export async function POST(request: Request) {
   }
   const language: Language = body?.language === "km" ? "km" : "en";
   const profile = sanitizeProfile(body?.profile);
+  const history = sanitizeHistory(body?.history);
 
   if (isGreetingMessage(question)) {
     return Response.json(
@@ -525,19 +689,26 @@ export async function POST(request: Request) {
   const catalogContext = buildCatalogContext(
     question,
     language,
-    profileRelevant ? profile : null
+    profileRelevant ? profile : null,
+    history
   );
-  const systemPrompt = `You are Tara, the OrienX student guidance assistant for Cambodian high school and university-bound students.
+  const systemPrompt = `You are Tara, a friendly and knowledgeable Cambodian university guidance counselor.
 
 Answer in ${language === "km" ? "natural Khmer Unicode" : "clear English"}.
-Keep the answer warm, practical, and concise: 120-180 words, short paragraphs or bullets.
-Do not start with "Hello", "Hi", "សួស្តី", or introduce yourself. Start directly with the answer.
-If the student only greets you or says thanks, reply in 1-2 sentences and ask what they need. Do not list majors or personalise from their profile for small talk.
-Use ONLY the verified context below. If the context does not contain the answer, say so and suggest a next step.
-Never invent tuition, deadlines, admission requirements, program names, or university facts.
-When discussing fit, say "interest fit" or "published minimum", never guarantee admission.
-Do not claim to be a therapist or provide medical advice.
-Do not use markdown headings. Plain text with simple bullet points is fine.
+Answer the student's actual question in the first sentence, then add 2-4 useful details or a short list, and end with one practical next step.
+Sound conversational and natural, not like a brochure or a form. Match the student's level of detail.
+When the student asks a follow-up, use the conversation history and refer naturally to the previous subject.
+Use the student's saved profile only when it directly helps answer the question. Mention it at most once, and never dump the whole profile or a list of majors unless the student asks for recommendations.
+For a simple greeting or thanks, reply briefly and ask what they need. Do not list majors for small talk.
+For questions unrelated to studying in Cambodia, answer briefly if harmless, then offer a study-related next step.
+Use only the verified catalog below for university, major, tuition, scholarship, and admission facts. If the catalog lacks the answer, say so clearly and suggest checking the official university page.
+Never invent cutoff scores, deadlines, admission requirements, program names, or university facts. Never guarantee admission.
+When discussing fit, say "interest fit" or "published minimum".
+Do not claim to be a therapist or give medical advice.
+Do not mention that you are an AI or that you are reading a catalog.
+Do not use markdown headings or repeat a self-introduction. Plain text with simple bullet points is fine.
+Aim for 120-200 words unless the student asks for a shorter or longer answer.
+Vary your phrasing and next steps. Do not end every answer by telling the student to visit the official website.
 
 ${catalogContext}`;
 
@@ -546,14 +717,15 @@ ${catalogContext}`;
       apiKey,
       systemPrompt,
       question,
-      language
+      language,
+      history
     );
     return Response.json(
       {
         answer: text,
         mode: "gemini",
         model,
-        sources: buildSources(question),
+        sources: buildSources(question, history),
         suggested_questions: suggestedQuestions(language),
         tools_used: [],
         warning: null,
