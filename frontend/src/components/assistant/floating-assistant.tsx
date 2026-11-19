@@ -288,8 +288,8 @@ export function FloatingAssistant() {
           });
           if (response.ok) {
             const data = (await response.json()) as PublicAssistantResponse;
-            setAiMode("gemini");
-            setAiModel(data.model ?? null);
+            setAiMode(data.mode === "gemini" ? "gemini" : "local");
+            setAiModel(data.mode === "gemini" ? data.model ?? null : null);
             setMessages((previous) => [
               ...previous,
               {

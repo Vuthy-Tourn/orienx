@@ -1,3 +1,4 @@
+import { greetingAnswer, isGreetingMessage } from "@/lib/guest/greeting";
 import {
   STATIC_MAJORS,
   STATIC_SCHOLARSHIPS,
@@ -490,6 +491,21 @@ export async function POST(request: Request) {
   const language: Language = body?.language === "km" ? "km" : "en";
   const profile = sanitizeProfile(body?.profile);
 
+  if (isGreetingMessage(question)) {
+    return Response.json(
+      {
+        answer: greetingAnswer(language),
+        mode: "local",
+        model: null,
+        sources: [],
+        suggested_questions: suggestedQuestions(language),
+        tools_used: [],
+        warning: null,
+      },
+      { headers: { "Cache-Control": "no-store" } }
+    );
+  }
+
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) {
     return Response.json(
@@ -502,12 +518,21 @@ export async function POST(request: Request) {
     );
   }
 
-  const catalogContext = buildCatalogContext(question, language, profile);
+  const profileRelevant =
+    /(major|result|recommend|fit|career|university|tuition|scholarship|study|ជំនាញ|លទ្ធផល|ណែនាំ|អាជីព|សាកលវិទ្យាល័យ|ថ្លៃ|អាហារូបករណ៍|រៀន)/i.test(
+      question
+    );
+  const catalogContext = buildCatalogContext(
+    question,
+    language,
+    profileRelevant ? profile : null
+  );
   const systemPrompt = `You are Tara, the OrienX student guidance assistant for Cambodian high school and university-bound students.
 
 Answer in ${language === "km" ? "natural Khmer Unicode" : "clear English"}.
 Keep the answer warm, practical, and concise: 120-180 words, short paragraphs or bullets.
 Do not start with "Hello", "Hi", "សួស្តី", or introduce yourself. Start directly with the answer.
+If the student only greets you or says thanks, reply in 1-2 sentences and ask what they need. Do not list majors or personalise from their profile for small talk.
 Use ONLY the verified context below. If the context does not contain the answer, say so and suggest a next step.
 Never invent tuition, deadlines, admission requirements, program names, or university facts.
 When discussing fit, say "interest fit" or "published minimum", never guarantee admission.

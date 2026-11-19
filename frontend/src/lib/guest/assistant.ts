@@ -9,6 +9,7 @@ import {
   staticSearch,
 } from "@/lib/data/catalog";
 import { readLatestResult } from "@/lib/guest/storage";
+import { greetingAnswer, isGreetingMessage } from "@/lib/guest/greeting";
 import { recommendMajorMatches } from "@/lib/guest/recommendations";
 import type {
   PersonalityResult,
@@ -785,6 +786,32 @@ export function answerLocalQuestion(
   question: string,
   language: AssistantLanguage
 ): StaticAssistantAnswer {
+  if (isGreetingMessage(question)) {
+    return {
+      answer: greetingAnswer(language),
+      sources: [
+        {
+          type: "page",
+          title_en: "Personality test",
+          title_km: "តេស្តបុគ្គលិកលក្ខណៈ",
+          url: "/assessments/personality/test",
+          snippet_en: "Free · no account needed",
+          snippet_km: "ឥតគិតថ្លៃ · មិនត្រូវការគណនី",
+        },
+        {
+          type: "page",
+          title_en: "My results",
+          title_km: "លទ្ធផលរបស់ខ្ញុំ",
+          url: "/assessments/results",
+          snippet_en: "Saved in this browser",
+          snippet_km: "រក្សាទុកក្នុងកម្មវិធីរុករកនេះ",
+        },
+      ],
+      suggested_questions: suggestions(language),
+      tools_used: [],
+    };
+  }
+
   const normalized = question.toLowerCase().trim();
 
   const eligibility = answerEligibility(normalized, language);
