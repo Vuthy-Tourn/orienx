@@ -392,7 +392,7 @@ export default function AboutPage() {
               {/* Action Buttons */}
               <div className="gsap-hero-anim pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3.5">
                 <Link
-                  href="/dashboard/assessments/personality"
+                  href="/assessments/personality/test"
                   className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl text-xs sm:text-sm font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-xl hover:scale-105 active:scale-95 transition-transform duration-200 cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-[#111965]" />
@@ -588,7 +588,7 @@ export default function AboutPage() {
                 <span>{language === "km" ? "មើលតេស្តទាំងអស់" : "View All Assessments"}</span>
               </Link>
               <Link
-                href="/dashboard/assessments/riasec"
+                href="/assessments/riasec/test"
                 className="px-5 py-2.5 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#F5C430] transition-transform active:scale-95 text-center shadow-md flex items-center justify-center gap-1.5"
               >
                 <span>{language === "km" ? "ចាប់ផ្តើមធ្វើតេស្ត" : "Start Free Assessment"}</span>

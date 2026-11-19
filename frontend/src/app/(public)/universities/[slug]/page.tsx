@@ -4,9 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { getStaticUniversity } from "@/lib/data/catalog";
 import {
   ArrowLeft,
   ArrowRight,
@@ -141,18 +140,11 @@ export default function UniversityDetailPage() {
   const { t, getLocalized, language } = useLanguage();
   const [linkCopied, setLinkCopied] = useState(false);
 
-  const {
-    data: uni,
-    isLoading,
-    error,
-    refetch,
-    isFetching,
-  } = useQuery({
-    queryKey: ["university", slug],
-    queryFn: async () => apiFetch<any>(`/universities/${slug}`),
-    enabled: !!slug,
-    retry: 1,
-  });
+  const uni = getStaticUniversity(slug);
+  const isLoading = false;
+  const error = uni ? null : new Error("University not found");
+  const isFetching = false;
+  const refetch = () => {};
 
   if (isLoading) {
     return (
@@ -285,14 +277,14 @@ export default function UniversityDetailPage() {
         )}`
     : "—";
 
-  const reqs =
-    getLocalized(uni.admission_requirements) ||
-    uni.admission_requirements?.en ||
-    [];
-  const reqList: string[] = Array.isArray(reqs) ? reqs : [];
-  const facs =
-    getLocalized(uni.facilities) || uni.facilities?.en || [];
-  const facList: string[] = Array.isArray(facs) ? facs : [];
+  const admissionRequirements = uni.admission_requirements as
+    | { en?: string[]; km?: string[] }
+    | null;
+  const reqList = admissionRequirements?.en ?? [];
+  const facilities = uni.facilities as
+    | { en?: string[]; km?: string[] }
+    | null;
+  const facList = facilities?.en ?? [];
 
   const handleShare = async () => {
     const url = window.location.href;

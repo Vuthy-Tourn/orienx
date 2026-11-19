@@ -16,14 +16,15 @@ import {
   LayoutDashboard,
   Loader2,
   Search,
+  Compass,
+  FileCheck2,
   Sparkles,
   X,
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { IS_STATIC_MODE } from "@/lib/app-mode";
+import { staticSearch } from "@/lib/data/catalog";
 import { cn } from "@/lib/utils";
-import type { GlobalSearchResults } from "@/lib/global-search-types";
 
 type GroupKey =
   | "universities"
@@ -48,6 +49,33 @@ interface ResultGroup {
 }
 
 const QUICK_LINKS = [
+  {
+    id: "personality-test",
+    href: "/assessments/personality/test",
+    labelEn: "Personality test",
+    labelKm: "តេស្តបុគ្គលិកលក្ខណៈ",
+    descriptionEn: "Free, no account needed",
+    descriptionKm: "ឥតគិតថ្លៃ មិនត្រូវការគណនី",
+    icon: Sparkles,
+  },
+  {
+    id: "riasec-test",
+    href: "/assessments/riasec/test",
+    labelEn: "RIASEC test",
+    labelKm: "តេស្ត RIASEC",
+    descriptionEn: "Find your Holland code",
+    descriptionKm: "ស្វែងរកកូដ Holland របស់អ្នក",
+    icon: Compass,
+  },
+  {
+    id: "my-results",
+    href: "/assessments/results",
+    labelEn: "My results",
+    labelKm: "លទ្ធផលរបស់ខ្ញុំ",
+    descriptionEn: "Saved on this device",
+    descriptionKm: "រក្សាទុកលើឧបករណ៍នេះ",
+    icon: FileCheck2,
+  },
   {
     id: "dashboard",
     href: "/dashboard",
@@ -196,15 +224,8 @@ export function GlobalSearch() {
     return () => clearTimeout(timer);
   }, [query]);
 
-  const { data, isFetching } = useQuery({
-    queryKey: ["global-search", debounced],
-    queryFn: async () =>
-      apiFetch<GlobalSearchResults>(
-        `/search?q=${encodeURIComponent(debounced)}&limit=5`
-      ),
-    enabled: open && debounced.length > 0,
-    staleTime: 60_000,
-  });
+  const data = debounced ? staticSearch(debounced, 5) : undefined;
+  const isFetching = false;
 
   const localize = useCallback(
     (value?: { en?: string; km?: string } | null) =>
@@ -212,18 +233,24 @@ export function GlobalSearch() {
     [isKm]
   );
 
-  const quickItems = useMemo<ResultItem[]>(
-    () =>
-      QUICK_LINKS.map((link) => ({
-        id: `page:${link.id}`,
-        group: "pages",
-        title: isKm ? link.labelKm : link.labelEn,
-        subtitle: isKm ? link.descriptionKm : link.descriptionEn,
-        href: link.href,
-        icon: link.icon,
-      })),
-    [isKm]
-  );
+  const quickItems = useMemo<ResultItem[]>(() => {
+    const links = IS_STATIC_MODE
+      ? QUICK_LINKS.filter(
+          (link) =>
+            !["dashboard", "plan", "notifications", "eligibility"].includes(
+              link.id
+            )
+        )
+      : QUICK_LINKS;
+    return links.map((link) => ({
+      id: `page:${link.id}`,
+      group: "pages",
+      title: isKm ? link.labelKm : link.labelEn,
+      subtitle: isKm ? link.descriptionKm : link.descriptionEn,
+      href: link.href,
+      icon: link.icon,
+    }));
+  }, [isKm]);
 
   const groups = useMemo<ResultGroup[]>(() => {
     const needle = query.trim().toLowerCase();

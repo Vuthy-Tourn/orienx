@@ -6,9 +6,8 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { STATIC_UNIVERSITIES } from "@/lib/data/catalog";
 import { MascotInteractiveHero } from "@/components/hero/mascot-interactive-hero";
 import { HowItWorksFlow } from "@/components/home/how-it-works-flow";
 import { FeaturedMajorsGrid } from "@/components/home/featured-majors-grid";
@@ -140,23 +139,13 @@ export default function HomePage() {
     return () => ctx.revert();
   }, []);
 
-  // Real Cambodian Universities fetched from backend API
-  const {
-    data: universitiesData,
-    isLoading: isUniLoading,
-    isError: isUniError,
-    error: uniError,
-    refetch: refetchUnis,
-    isFetching: isUniFetching,
-  } = useQuery({
-    queryKey: ["landing-universities"],
-    queryFn: async () => {
-      return apiFetch<any[]>("/universities");
-    },
-    staleTime: 0,
-    refetchOnMount: "always",
-    retry: 1,
-  });
+  // Public landing page reads the bundled static catalogue.
+  const universitiesData = STATIC_UNIVERSITIES;
+  const isUniLoading = false;
+  const isUniError = false;
+  const uniError = null;
+  const isUniFetching = false;
+  const refetchUnis = () => {};
 
   const featuredUniversities = useMemo(() => {
     const list = universitiesData && universitiesData.length > 0 ? universitiesData : [];

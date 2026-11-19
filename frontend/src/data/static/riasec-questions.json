@@ -1,0 +1,164 @@
+[
+  {
+    "id": "c3b58331-a339-4147-9a2b-3369b08851a0",
+    "category": "R",
+    "prompt": {
+      "en": "Assembling, repairing, or troubleshooting mechanical devices or electronic circuits",
+      "km": "ការតម្លើង ជួសជុល ឬដោះស្រាយបញ្ហាគ្រឿងម៉ាស៊ីន និងសៀគ្វីអេឡិចត្រូនិក"
+    },
+    "order_index": 1
+  },
+  {
+    "id": "43412b78-77a4-4f9d-9a5d-7b4eb252a221",
+    "category": "R",
+    "prompt": {
+      "en": "Working outdoors with hands-on tools, building physical structures or equipment",
+      "km": "ការធ្វើការនៅទីវាលជាមួយឧបករណ៍ជាង ឬការសាងសង់ហេដ្ឋារចនាសម្ព័ន្ធរូបវន្ត"
+    },
+    "order_index": 2
+  },
+  {
+    "id": "43a4397b-6f62-4df2-9c7f-daaad898fe2c",
+    "category": "R",
+    "prompt": {
+      "en": "Operating technical machinery, drones, or computer hardware diagnostics",
+      "km": "ការបញ្ជាគ្រឿងយន្តបច្ចេកវិទ្យា ដ្រូន ឬការដំឡើងគ្រឿងបន្លាស់កុំព្យូទ័រ"
+    },
+    "order_index": 3
+  },
+  {
+    "id": "a1a91a2b-d7e6-447d-b834-c46b35761953",
+    "category": "I",
+    "prompt": {
+      "en": "Analyzing complex scientific data, statistics, and solving mathematical equations",
+      "km": "ការវិភាគទិន្នន័យវិទ្យាសាស្ត្រ ស្ថិតិ និងការដោះស្រាយលំហាត់គណិតវិទ្យាស្មុគស្មាញ"
+    },
+    "order_index": 4
+  },
+  {
+    "id": "b85aeb5c-d87d-4d4c-9781-5901f2cc90c0",
+    "category": "I",
+    "prompt": {
+      "en": "Investigating how computer algorithms, artificial intelligence, or software programs work",
+      "km": "ការស្រាវជ្រាវស្វែងយល់ពីរបៀបដំណើរការនៃក្បួនដោះស្រាយកុំព្យូទ័រ និងបញ្ញាសិប្បនិម្មិត"
+    },
+    "order_index": 5
+  },
+  {
+    "id": "db61e2fe-ed72-4e5e-a29b-18ce5fec7ef9",
+    "category": "I",
+    "prompt": {
+      "en": "Conducting laboratory experiments or research to discover underlying causes of problems",
+      "km": "ការធ្វើពិសោធន៍ក្នុងបន្ទប់ពិសោធន៍ ឬការស្រាវជ្រាវដើម្បីរកឫសគល់នៃបញ្ហា"
+    },
+    "order_index": 6
+  },
+  {
+    "id": "5b19f07f-aec6-4a5e-98f0-1a6f2b91b052",
+    "category": "A",
+    "prompt": {
+      "en": "Designing logos, user interfaces, digital graphics, or aesthetic layouts",
+      "km": "ការរចនាឡូហ្គោ ទម្រង់កម្មវិធីទូរស័ព្ទ (UI) រូបភាពឌីជីថល ឬផ្ទាំងផ្សាយពាណិជ្ជកម្ម"
+    },
+    "order_index": 7
+  },
+  {
+    "id": "ab57aed3-5553-467c-8951-2bd40406a275",
+    "category": "A",
+    "prompt": {
+      "en": "Expressing ideas through creative writing, storytelling, poetry, or screenplays",
+      "km": "ការបញ្ចេញគំនិតតាមរយៈការសរសេរប្រលោមលោក រឿងរ៉ាវច្នៃប្រឌិត ឬស្គ្រីបវីដេអូ"
+    },
+    "order_index": 8
+  },
+  {
+    "id": "2c91b348-9ed4-4fff-a93f-1f7b89cec8b7",
+    "category": "A",
+    "prompt": {
+      "en": "Composing music, creating digital media, photography, or video editing",
+      "km": "ការតាក់តែងតន្ត្រី ការថតរូបសិល្បៈ ឬការកាត់តវីដេអូប្រកបដោយភាពច្នៃប្រឌិត"
+    },
+    "order_index": 9
+  },
+  {
+    "id": "9f35c584-83dd-472b-bf26-4173246c5fb7",
+    "category": "S",
+    "prompt": {
+      "en": "Teaching, mentoring, or explaining difficult subjects to fellow students",
+      "km": "ការបង្រៀន ការបង្ហាត់បង្ហាញ ឬការពន្យល់មេរៀនពិបាកៗដល់មិត្តរួមថ្នាក់"
+    },
+    "order_index": 10
+  },
+  {
+    "id": "1cc7e338-0bfb-46c0-9e63-975fbbab3799",
+    "category": "S",
+    "prompt": {
+      "en": "Volunteering in community development projects to help underprivileged people",
+      "km": "ការស្ម័គ្រចិត្តក្នុងសកម្មភាពអភិវឌ្ឍន៍សហគមន៍ ដើម្បីជួយដល់ជនងាយរងគ្រោះ"
+    },
+    "order_index": 11
+  },
+  {
+    "id": "8dc6a901-f98f-4dc9-95ca-da395ef47305",
+    "category": "S",
+    "prompt": {
+      "en": "Counseling peers and offering empathetic support when they face personal issues",
+      "km": "ការស្តាប់ ផ្តល់ប្រឹក្សា និងលើកទឹកចិត្តដល់អ្នកដទៃនៅពេលពួកគេជួបបញ្ហាផ្លូវចិត្ត"
+    },
+    "order_index": 12
+  },
+  {
+    "id": "1980a90f-06e9-40e6-bac0-d7f207530dd2",
+    "category": "E",
+    "prompt": {
+      "en": "Leading a student association, organizing campus events, and motivating people",
+      "km": "ការដឹកនាំសមាគមសិស្ស ការរៀបចំកម្មវិធីសាលា និងការជំរុញទឹកចិត្តមនុស្ស"
+    },
+    "order_index": 13
+  },
+  {
+    "id": "c23c4621-d824-4c0b-a907-47ed228b7e59",
+    "category": "E",
+    "prompt": {
+      "en": "Starting a business, selling a product or service, and negotiating deals",
+      "km": "ការចាប់ផ្តើមអាជីវកម្ម ការលក់ផលិតផល ឬសេវាកម្ម និងការចរចាស្វែងរកផលចំណេញ"
+    },
+    "order_index": 14
+  },
+  {
+    "id": "24f8fb39-cf0e-486f-9aa8-fd9eb07719f9",
+    "category": "E",
+    "prompt": {
+      "en": "Persuading others to adopt an innovative proposal through public speaking",
+      "km": "ការបញ្ចុះបញ្ចូលអ្នកដទៃឱ្យគាំទ្រគម្រោងថ្មី តាមរយៈការឡើងថ្លែងសុន្ទរកថាសាធារណៈ"
+    },
+    "order_index": 15
+  },
+  {
+    "id": "ea5e757d-c5d3-4428-a1f5-b9e9cae1c4b6",
+    "category": "C",
+    "prompt": {
+      "en": "Organizing detailed spreadsheets, tracking expenditures, and financial records",
+      "km": "ការរៀបចំឯកសារតារាង Excel ការតាមដានចំណូលចំណាយ និងបញ្ជីគណនេយ្យ"
+    },
+    "order_index": 16
+  },
+  {
+    "id": "da916520-01dc-4f66-9a16-1c72ce8618db",
+    "category": "C",
+    "prompt": {
+      "en": "Developing step-by-step operating checklists and ensuring systematic compliance",
+      "km": "ការបង្កើតបញ្ជីត្រួតពិនិត្យការងារជាប្រព័ន្ធ និងការធានាភាពត្រឹមត្រូវតាមច្បាប់"
+    },
+    "order_index": 17
+  },
+  {
+    "id": "cb5812ce-7bad-471c-a6dd-a4f2d240e8a4",
+    "category": "C",
+    "prompt": {
+      "en": "Managing database registries, structured records, and archived documents",
+      "km": "ការគ្រប់គ្រងទិន្នន័យក្នុងប្រព័ន្ធ ការរក្សាទុកកំណត់ត្រាឱ្យមានរបៀបរៀបរយ"
+    },
+    "order_index": 18
+  }
+]

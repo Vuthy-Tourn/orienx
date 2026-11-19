@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
+import { IS_STATIC_MODE } from "@/lib/app-mode";
 
 export interface User {
   id: string;
@@ -65,6 +66,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const fetchCurrentUser = useCallback(async () => {
+    if (IS_STATIC_MODE) {
+      setUser(null);
+      setIsLoading(false);
+      return null;
+    }
     try {
       // The hint cookie only says a session *may* exist; it is not a token.
       // Signed-out visitors skip the /auth/me round-trip entirely.
@@ -130,6 +136,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password: string,
     rememberMe = true
   ) => {
+    if (IS_STATIC_MODE) {
+      throw new Error("Accounts are not available in this build.");
+    }
     // The backend sets httpOnly access + refresh cookies on this response.
     await apiFetch("/auth/login?cookie_only=true", {
       method: "POST",
@@ -140,6 +149,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const register = async (data: any) => {
+    if (IS_STATIC_MODE) {
+      throw new Error("Accounts are not available in this build.");
+    }
     await apiFetch("/auth/register?cookie_only=true", {
       method: "POST",
       body: JSON.stringify(data),

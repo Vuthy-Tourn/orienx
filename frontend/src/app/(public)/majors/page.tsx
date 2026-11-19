@@ -3,9 +3,8 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { STATIC_MAJORS, getStaticMajorCategories, listStaticMajors } from "@/lib/data/catalog";
 import { cn } from "@/lib/utils";
 import {
   ArrowRight,
@@ -187,36 +186,20 @@ export default function MajorsPage() {
     },
   ];
 
-  const { data: categories } = useQuery({
-    queryKey: ["major-categories"],
-    queryFn: async () => apiFetch<string[]>("/majors/categories"),
-  });
+  const categories = getStaticMajorCategories();
 
-  // Unfiltered catalogue: drives the hero figures and per-category counts, so
-  // they stay stable while the user filters the result list.
-  const { data: catalog } = useQuery({
-    queryKey: ["majors-catalog"],
-    queryFn: async () => apiFetch<Major[]>("/majors?limit=100"),
-    staleTime: 5 * 60 * 1000,
-  });
-
-  const {
-    data: majors,
-    isLoading,
-    isError,
-    refetch,
-    isFetching,
-  } = useQuery({
-    queryKey: ["majors", searchTerm, selectedCategory, stemOnly],
-    queryFn: async () => {
-      const params = new URLSearchParams();
-      if (searchTerm) params.append("q", searchTerm);
-      if (selectedCategory) params.append("category", selectedCategory);
-      if (stemOnly) params.append("is_stem", "true");
-      return apiFetch<Major[]>(`/majors?${params.toString()}`);
-    },
-    retry: 1,
-  });
+  // The public directory is bundled as static JSON so it works on Vercel
+  // without the FastAPI backend.
+  const catalog = STATIC_MAJORS as unknown as Major[];
+  const majors = listStaticMajors({
+    search: searchTerm,
+    category: selectedCategory || undefined,
+    stemOnly,
+  }) as unknown as Major[];
+  const isLoading = false;
+  const isError = false;
+  const isFetching = false;
+  const refetch = () => {};
 
   const sortedMajors = useMemo(() => {
     if (!majors) return [];

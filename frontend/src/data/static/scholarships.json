@@ -1,0 +1,153 @@
+[
+  {
+    "id": "87b3b53c-0f82-42a7-b5fb-41043cfde2bc",
+    "slug": "aupp-merit-scholarship",
+    "title": {
+      "en": "AUPP Presidential & Merit Scholarship",
+      "km": "អាហារូបករណ៍ឧត្តមភាព និងទេពកោសល្យ AUPP"
+    },
+    "provider": {
+      "en": "American University of Phnom Penh",
+      "km": "សាកលវិទ្យាល័យអាមេរិកាំងភ្នំពេញ"
+    },
+    "description": {
+      "en": "Merit scholarships covering up to 100% of undergraduate tuition for Grade 12 Grade A/B graduates to earn accredited US Dual Degrees with Fort Hays State and University of Arizona.",
+      "km": "អាហារូបករណ៍ ២៥% ទៅ ១០០% សម្រាប់សិស្សឆ្នើមនិទ្ទេស A និង B ក្នុងបាក់ឌុប ដើម្បីសិក្សាកម្មវិធីសញ្ញាបត្រពីរអាមេរិក (Dual Degree) ជាមួយ University of Arizona និង Fort Hays State។"
+    },
+    "coverage_type": "PARTIAL_TUITION",
+    "coverage_percentage": 50,
+    "country_or_institution": "AUPP • Univ of Arizona • Fort Hays State",
+    "application_deadline": "2026-08-30",
+    "official_url": "https://www.aupp.edu.kh/admissions/scholarships/",
+    "source_name": "AUPP Admissions Office",
+    "last_verified_at": "2026-09-15",
+    "poster_url": "/images/scholarships/aupp-scholarship-poster.jpg",
+    "is_verified": true,
+    "eligibility_criteria": {
+      "en": [
+        "BacII Grade A or B",
+        "Pass AUPP English & Math Scholarship Exam",
+        "Personal Essay & Interview"
+      ],
+      "km": [
+        "និទ្ទេស A ឬ B ក្នុងបាក់ឌុប",
+        "ប្រឡងជាប់តេស្តអាហារូបករណ៍ AUPP",
+        "សរសេរតែងសេចក្តី និងឆ្លងកាត់ការសម្ភាសន៍"
+      ]
+    },
+    "academic_requirements": null,
+    "application_process": {
+      "en": [
+        "Apply online via AUPP admissions portal",
+        "Take in-person scholarship test"
+      ],
+      "km": [
+        "ដាក់ពាក្យតាមអនឡាញលើគេហទំព័រ AUPP",
+        "ចូលរួមការប្រឡងអាហារូបករណ៍ផ្ទាល់"
+      ]
+    },
+    "eligible_majors": []
+  },
+  {
+    "id": "4b4f1fdb-d7e5-4838-8235-32e3ca2219d9",
+    "slug": "moeys-national-scholarship",
+    "title": {
+      "en": "MoEYS National State University Scholarship",
+      "km": "អាហារូបករណ៍ថ្នាក់ជាតិនៃក្រសួងអប់រំ យុវជន និងកីឡា"
+    },
+    "provider": {
+      "en": "Ministry of Education, Youth and Sport (MoEYS)",
+      "km": "ក្រសួងអប់រំ យុវជន និងកីឡា"
+    },
+    "description": {
+      "en": "100% full-tuition government scholarship awarded annually to top-performing Grade 12 BacII graduates across Cambodian state universities.",
+      "km": "អាហារូបករណ៍រដ្ឋ ១០០% ផ្តល់ជូនសិស្សនិទ្ទេស A, B, C ដែលប្រឡងជាប់សញ្ញាបត្របាក់ឌុបឆ្នើម ដើម្បីសិក្សានៅសាកលវិទ្យាល័យរដ្ឋទូទាំងប្រទេស។"
+    },
+    "coverage_type": "FULL_TUITION",
+    "coverage_percentage": 100,
+    "country_or_institution": "RUPP, ITC (តិចណូ), NUM, UHS, RULE",
+    "application_deadline": "2026-12-15",
+    "official_url": "http://www.moeys.gov.kh",
+    "source_name": "MoEYS Higher Education Portal",
+    "last_verified_at": "2026-10-01",
+    "poster_url": "/images/scholarships/MoEYS-scholarship.png",
+    "is_verified": true,
+    "eligibility_criteria": {
+      "en": [
+        "Cambodian Citizen",
+        "Grade 12 BacII Exam Passer (Grade A, B, or C)",
+        "High national rank"
+      ],
+      "km": [
+        "សញ្ជាតិខ្មែរ",
+        "ប្រឡងជាប់បាក់ឌុប (និទ្ទេស A, B, ឬ C)",
+        "ពិន្ទុចំណាត់ថ្នាក់ខ្ពស់"
+      ]
+    },
+    "academic_requirements": null,
+    "application_process": {
+      "en": [
+        "Apply through High School Principal or Provincial Department of Education",
+        "Submit BacII result slip"
+      ],
+      "km": [
+        "ដាក់ពាក្យតាមរយៈវិទ្យាល័យ ឬមន្ទីរអប់រំខេត្ត",
+        "ភ្ជាប់មកជាមួយនូវលិខិតបញ្ជាក់ពិន្ទុបាក់ឌុប"
+      ]
+    },
+    "eligible_majors": []
+  },
+  {
+    "id": "61ae40c2-7f33-44bb-9529-834225b9b401",
+    "slug": "techo-digital-talent-scholarship",
+    "title": {
+      "en": "Techo Digital Talent Scholarship (Undergraduate)",
+      "km": "អាហារូបករណ៍ទេពកោសល្យឌីជីថលតេជោ (ថ្នាក់បរិញ្ញាបត្រ)"
+    },
+    "provider": {
+      "en": "Ministry of Post and Telecommunications (MPTC) & CADT",
+      "km": "ក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍ (MPTC) & CADT"
+    },
+    "description": {
+      "en": "Fully funded 100% undergraduate scholarship with monthly living stipends and laptop grants for students pursuing digital technology, software, and AI degrees.",
+      "km": "ការផ្តល់ជូនអាហារូបករណ៍ថ្នាក់បរិញ្ញាបត្រពេញលេញ ១០០% រួមជាមួយប្រាក់ឧបត្ថម្ភប្រចាំខែ និងកុំព្យូទ័រយួរដៃ សម្រាប់សិក្សាជំនាញបច្ចេកវិទ្យាឌីជីថល AI និងសន្តិសុខសាយប័រ។"
+    },
+    "coverage_type": "FULL_TUITION",
+    "coverage_percentage": 100,
+    "country_or_institution": "CADT, RUPP, ITC, NUM, Paragon, AUPP",
+    "application_deadline": "2026-10-24",
+    "official_url": "https://www.cadt.edu.kh/scholarship",
+    "source_name": "MPTC & CADT Official Announcement",
+    "last_verified_at": "2026-10-15",
+    "poster_url": "/images/scholarships/techo-scholarship-poster.jpg",
+    "is_verified": true,
+    "eligibility_criteria": {
+      "en": [
+        "High School Graduate / BacII Passer",
+        "Pass Computer-Based Examination",
+        "Pass Oral Interview"
+      ],
+      "km": [
+        "ប្រឡងជាប់សញ្ញាបត្របាក់ឌុប",
+        "ចូលរួមប្រឡងប្រជែងតាមប្រព័ន្ធកុំព្យូទ័រ",
+        "ឆ្លងកាត់វិញ្ញាសាសម្ភាសន៍ផ្ទាល់មាត់"
+      ]
+    },
+    "academic_requirements": null,
+    "application_process": {
+      "en": [
+        "Register online via www.cadt.edu.kh/scholarship or scan QR code",
+        "Receive examination announcement and schedule",
+        "Take computer-based test and oral interview",
+        "Receive final scholarship results announcement"
+      ],
+      "km": [
+        "ចូលទៅកាន់តំណភ្ជាប់ www.cadt.edu.kh/scholarship និងបំពេញពាក្យប្រឡងតាមប្រព័ន្ធអនឡាញ",
+        "ទទួលបានសេចក្តីជូនដំណឹងពាក់ព័ន្ធនឹងការប្រឡងប្រជែង",
+        "ចូលរួមប្រឡងប្រជែងតាមប្រព័ន្ធកុំព្យូទ័រ និងវិញ្ញាសាសម្ភាសន៍ផ្ទាល់មាត់",
+        "ទទួលបានសេចក្តីជូនដំណឹងអំពីលទ្ធផលប្រឡងអាហារូបករណ៍"
+      ]
+    },
+    "eligible_majors": []
+  }
+]

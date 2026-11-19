@@ -3,9 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { getStaticMajor } from "@/lib/data/catalog";
 import {
   ArrowLeft,
   BookOpen,
@@ -25,18 +24,11 @@ export default function MajorDetailPage() {
   const router = useRouter();
   const { t, getLocalized } = useLanguage();
 
-  const {
-    data: major,
-    isLoading,
-    error,
-    refetch,
-    isFetching,
-  } = useQuery({
-    queryKey: ["major", slug],
-    queryFn: async () => apiFetch<any>(`/majors/${slug}`),
-    enabled: !!slug,
-    retry: 1,
-  });
+  const major = getStaticMajor(slug);
+  const isLoading = false;
+  const error = major ? null : new Error("Major not found");
+  const isFetching = false;
+  const refetch = () => {};
 
   if (isLoading) {
     return (
@@ -230,7 +222,7 @@ export default function MajorDetailPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {major.universities?.map((u: any) => (
               <div
-                key={u.university_id}
+                key={`${u.university_id}-${u.degree_level}-${u.duration_years}`}
                 className="p-5 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3 flex flex-col justify-between"
               >
                 <div className="space-y-2">

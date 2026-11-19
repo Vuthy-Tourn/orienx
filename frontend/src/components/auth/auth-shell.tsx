@@ -10,6 +10,7 @@ import { gsap } from "gsap";
 import { Logo } from "@/components/layout/logo";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { useLanguage } from "@/contexts/language-context";
+import { IS_STATIC_MODE } from "@/lib/app-mode";
 import { cn } from "@/lib/utils";
 
 const useIsoLayoutEffect =
@@ -131,6 +132,46 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       context.revert();
     };
   }, []);
+
+  if (IS_STATIC_MODE) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#0B124E] px-4 py-16 text-center text-white">
+        <Logo isLight className="mb-8" />
+        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-[#F7CE4D]">
+          <span className="text-2xl font-black">X</span>
+        </span>
+        <h1 className="mt-5 text-2xl font-black">
+          {language === "km"
+            ? "គណនីមិនទាន់បើកនៅឡើយទេ"
+            : "Accounts are not open yet"}
+        </h1>
+        <p className="mt-2 max-w-md text-sm leading-relaxed text-white/70">
+          {language === "km"
+            ? "អ្នកអាចធ្វើតេស្ត និងនាំចេញលទ្ធផលបានដោយមិនចាំបាច់ចូលគណនី។ លទ្ធផលរក្សាទុកក្នុងកម្មវិធីរុករករបស់អ្នក។"
+            : "You can take the free tests and export your results without an account. Everything stays in your browser."}
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          <Link
+            href="/assessments/personality/test"
+            className="rounded-xl bg-[#F7CE4D] px-4 py-2.5 text-xs font-black text-[#111965] hover:bg-[#F5C430]"
+          >
+            {language === "km"
+              ? "ធ្វើតេស្តបុគ្គលិកលក្ខណៈ"
+              : "Take the Personality test"}
+          </Link>
+          <Link
+            href="/assessments/results"
+            className="rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-bold text-white hover:bg-white/20"
+          >
+            {language === "km" ? "លទ្ធផលរបស់ខ្ញុំ" : "My results"}
+          </Link>
+        </div>
+        <div className="mt-8">
+          <LanguageSwitcher />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

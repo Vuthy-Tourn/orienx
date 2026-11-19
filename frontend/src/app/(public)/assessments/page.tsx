@@ -65,7 +65,7 @@ const ENGINES = [
     color: "#D97706",
     badgeClass: "bg-amber-50 text-amber-700 border-amber-200",
     primaryLink: "/riasec",
-    testLink: "/dashboard/assessments/riasec",
+    testLink: "/assessments/riasec/test",
     linkTextEn: "Explore RIASEC Details",
     linkTextKm: "ស្វែងយល់លម្អិតអំពី RIASEC",
     startTextEn: "Start RIASEC Test",
@@ -101,7 +101,7 @@ const ENGINES = [
     color: "#2563EB",
     badgeClass: "bg-blue-50 text-blue-700 border-blue-200",
     primaryLink: "/personality",
-    testLink: "/dashboard/assessments/personality",
+    testLink: "/assessments/personality/test",
     linkTextEn: "Explore 16 Personalities",
     linkTextKm: "ស្វែងយល់បុគ្គលិកលក្ខណៈ",
     startTextEn: "Start Personality Test",
@@ -470,7 +470,7 @@ export default function PublicAssessmentsHubPage() {
 
               <div className="gsap-assess-hero-anim flex flex-col items-stretch gap-3 pt-1 sm:flex-row sm:items-center sm:gap-4">
                 <Link
-                  href="/dashboard/assessments/riasec"
+                  href="/assessments/riasec/test"
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#F7CE4D] px-6 py-3.5 text-sm font-black text-[#111965] shadow-[0_4px_24px_rgba(247,206,77,0.28)] transition-all hover:bg-[#E5BD3B] hover:shadow-[0_6px_28px_rgba(247,206,77,0.4)] active:scale-[0.98]"
                 >
                   <Sparkles className="h-4 w-4 text-[#111965]" />
@@ -879,7 +879,7 @@ export default function PublicAssessmentsHubPage() {
             : "Begin with the 10-minute Holland RIASEC assessment, followed by 16 Personalities and BACII stream validation for 100% precision matching."
         }
         primaryButtonText={isKm ? "ចាប់ផ្តើមធ្វើតេស្ត RIASEC (១០ នាទី)" : "Start Free Assessment (10 Mins)"}
-        primaryButtonHref="/dashboard/assessments/riasec"
+        primaryButtonHref="/assessments/riasec/test"
         secondaryButtonText={isKm ? "ស្វែងរកជំនាញសាកលវិទ្យាល័យ" : "Explore University Majors"}
         secondaryButtonHref="/majors"
         mascotSpeech={isKm ? "តោះស្វែងរកអនាគតជាមួយគ្នា! 🚀" : "Let's discover your future! 🚀"}

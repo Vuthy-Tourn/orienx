@@ -13,6 +13,7 @@ import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { SearchTrigger } from "@/components/search/search-trigger";
 import { Skeleton } from "@/components/ui/skeleton";
+import { IS_STATIC_MODE } from "@/lib/app-mode";
 
 const PAGE_TITLES: Record<string, { en: string; km: string }> = {
   "/dashboard": { en: "Dashboard", km: "ផ្ទាំងគ្រប់គ្រង" },
@@ -53,10 +54,43 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
+    if (IS_STATIC_MODE) return;
     if (!isLoading && !user) {
       router.push("/login");
     }
   }, [user, isLoading, router]);
+
+  if (IS_STATIC_MODE) {
+    return (
+      <div className="mx-auto flex min-h-[70vh] max-w-2xl flex-col items-center justify-center px-4 text-center">
+        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#111965] text-[#F7CE4D]">
+          <ShieldCheck className="h-6 w-6" />
+        </span>
+        <h1 className="mt-4 text-xl font-black text-[#111965] dark:text-white">
+          {isKm ? "គណនីមិនទាន់បើកនៅឡើយទេ" : "Accounts are not open yet"}
+        </h1>
+        <p className="mt-2 max-w-md text-sm leading-relaxed text-[#68708A] dark:text-slate-400">
+          {isKm
+            ? "កំណែនេះគឺជាការចាប់ផ្តើមបែបសាធារណៈ។ អ្នកអាចធ្វើតេស្ត និងនាំចេញលទ្ធផលបានដោយមិនចាំបាច់ចូលគណនី។"
+            : "This public launch is guest-only. You can take the tests and export your results without an account."}
+        </p>
+        <div className="mt-5 flex flex-wrap justify-center gap-2">
+          <Link
+            href="/assessments/personality/test"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-[#111965] px-4 py-2.5 text-xs font-black text-white hover:bg-[#1A2580]"
+          >
+            {isKm ? "ធ្វើតេស្តបុគ្គលិកលក្ខណៈ" : "Take the Personality test"}
+          </Link>
+          <Link
+            href="/assessments/results"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-[#D9DEEA] bg-white px-4 py-2.5 text-xs font-bold text-[#111965] hover:bg-[#F8FAFD]"
+          >
+            {isKm ? "លទ្ធផលរបស់ខ្ញុំ" : "My results"}
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

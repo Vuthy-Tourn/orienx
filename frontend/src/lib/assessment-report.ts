@@ -1,4 +1,15 @@
-export type AssessmentReportFormat = "pdf" | "excel" | "csv" | "json";
+import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
+
+export type AssessmentReportFormat =
+  | "pdf"
+  | "excel"
+  | "csv"
+  | "json"
+  | "markdown"
+  | "html"
+  | "text"
+  | "png"
+  | "share";
 
 export interface AssessmentDimension {
   label: string;
@@ -197,6 +208,7 @@ export async function downloadAssessmentExcel(model: AssessmentReportModel) {
     borderStyle: "thin" as const,
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const summaryRows: any[][] = [
     [{ value: model.title, columnSpan: 4, ...titleStyle }, null, null, null],
     [{ value: model.subtitle, columnSpan: 4, ...valueStyle, textColor: "#68708A" }, null, null, null],
@@ -235,6 +247,7 @@ export async function downloadAssessmentExcel(model: AssessmentReportModel) {
     [{ value: model.labels.footer, columnSpan: 4, ...valueStyle, textColor: "#94A3B8" }, null, null, null],
   ];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recommendationRows: any[][] = [
     [
       { value: `${model.labels.recommendedMajors} — ${model.title}`, columnSpan: 3, ...titleStyle },
@@ -268,6 +281,7 @@ export async function downloadAssessmentExcel(model: AssessmentReportModel) {
         stickyRowsCount: 2,
         showGridLines: false,
       },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ] as any,
     { fontFamily: "Calibri", fontSize: 10 }
   ).toBlob();
@@ -279,7 +293,10 @@ export async function downloadAssessmentExcel(model: AssessmentReportModel) {
   );
 }
 
-function buildAssessmentPdfHtml(model: AssessmentReportModel): string {
+function buildAssessmentPdfHtml(
+  model: AssessmentReportModel,
+  autoPrint = true
+): string {
   const origin =
     typeof window !== "undefined" ? window.location.origin : "";
   const logoUrl = `${origin}/images/orienx-mark.png`;
@@ -444,11 +461,15 @@ function buildAssessmentPdfHtml(model: AssessmentReportModel): string {
       <span>OrienX</span>
     </footer>
   </div>
-  <script>
+  ${
+    autoPrint
+      ? `<script>
     window.addEventListener("load", function () {
       setTimeout(function () { window.print(); }, 350);
     });
-  </script>
+  </script>`
+      : ""
+  }
 </body>
 </html>`;
 }
@@ -464,4 +485,436 @@ export function openAssessmentPdf(model: AssessmentReportModel): boolean {
   reportWindow.focus();
 
   return true;
+}
+export function downloadAssessmentMarkdown(model: AssessmentReportModel) {
+  const lines: string[] = [
+    `# ${model.title}`,
+    "",
+    model.subtitle,
+    "",
+    `**${model.labels.preparedFor}:** ${model.studentName || "—"}  `,
+    `**${model.labels.generated}:** ${model.generatedLabel}  `,
+    `**${model.headlineLabel}:** ${model.headline}  `,
+    `**${model.labels.archetype}:** ${model.archetype}`,
+  ];
+  if (model.role) lines.push(`**${model.labels.profile}:** ${model.role}`);
+  lines.push("", `> ${model.tagline}`, "");
+  lines.push(`## ${model.labels.dimensions}`, "");
+  lines.push("| Dimension | Score | Detail |");
+  lines.push("| --- | ---: | --- |");
+  model.dimensions.forEach((dimension) => {
+    lines.push(
+      `| ${dimension.label.replace(/\|/g, "\\|")} | ${Math.round(
+        dimension.value
+      )}% | ${(dimension.detail || "—").replace(/\|/g, "\\|")} |`
+    );
+  });
+  lines.push("", `## ${model.labels.highlights}`, "");
+  model.highlights.forEach((highlight) => {
+    lines.push(`### ${highlight.title}`, "");
+    highlight.items.forEach((item) => lines.push(`- ${item}`));
+    lines.push("");
+  });
+  lines.push(`## ${model.labels.recommendedMajors}`, "");
+  lines.push(
+    `| Major | ${model.labels.fitScore} | ${model.labels.universities} |`
+  );
+  lines.push("| --- | ---: | ---: |");
+  model.recommendations.forEach((recommendation) => {
+    lines.push(
+      `| ${recommendation.major.replace(/\|/g, "\\|")} | ${Math.round(
+        recommendation.fit
+      )}% | ${recommendation.universities} |`
+    );
+  });
+  lines.push("", "---", "", model.labels.footer);
+
+  downloadBlob(
+    `\uFEFF${lines.join("\n")}`,
+    "text/markdown;charset=utf-8;",
+    fileBase(model, "md")
+  );
+}
+
+export function downloadAssessmentHtml(model: AssessmentReportModel) {
+  const html = buildAssessmentPdfHtml(model, false);
+  downloadBlob(html, "text/html;charset=utf-8;", fileBase(model, "html"));
+}
+
+export function downloadAssessmentText(model: AssessmentReportModel) {
+  const lines: string[] = [
+    model.title,
+    model.subtitle,
+    "",
+    `${model.labels.preparedFor}: ${model.studentName || "—"}`,
+    `${model.labels.generated}: ${model.generatedLabel}`,
+    `${model.headlineLabel}: ${model.headline}`,
+    `${model.labels.archetype}: ${model.archetype}`,
+  ];
+  if (model.role) lines.push(`${model.labels.profile}: ${model.role}`);
+  lines.push("", model.tagline, "", model.labels.dimensions);
+  model.dimensions.forEach((dimension) => {
+    lines.push(
+      `- ${dimension.label}: ${Math.round(dimension.value)}%${
+        dimension.detail ? ` (${dimension.detail})` : ""
+      }`
+    );
+  });
+  lines.push("", model.labels.highlights);
+  model.highlights.forEach((highlight) => {
+    lines.push(highlight.title);
+    highlight.items.forEach((item) => lines.push(`  - ${item}`));
+  });
+  lines.push("", model.labels.recommendedMajors);
+  model.recommendations.forEach((recommendation) => {
+    lines.push(
+      `- ${recommendation.major}: ${Math.round(recommendation.fit)}% (${
+        recommendation.universities
+      } ${model.labels.universities})`
+    );
+  });
+  lines.push("", model.labels.footer);
+
+  downloadBlob(
+    `\uFEFF${lines.join("\n")}`,
+    "text/plain;charset=utf-8;",
+    fileBase(model, "txt")
+  );
+}
+
+function wrapCanvasText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  maxWidth: number,
+  maxLines = 3
+): string[] {
+  const words = text.split(/\s+/).filter(Boolean);
+  const lines: string[] = [];
+  let current = "";
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (ctx.measureText(candidate).width <= maxWidth || !current) {
+      current = candidate;
+    } else {
+      lines.push(current);
+      current = word;
+      if (lines.length >= maxLines) break;
+    }
+  }
+  if (current && lines.length < maxLines) lines.push(current);
+  if (lines.length === maxLines) {
+    const last = lines[maxLines - 1];
+    if (ctx.measureText(last).width > maxWidth) {
+      let trimmed = last;
+      while (trimmed.length > 1 && ctx.measureText(`${trimmed}…`).width > maxWidth) {
+        trimmed = trimmed.slice(0, -1);
+      }
+      lines[maxLines - 1] = `${trimmed}…`;
+    }
+  }
+  return lines;
+}
+
+function roundedRect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number
+) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.arcTo(x + width, y, x + width, y + height, radius);
+  ctx.arcTo(x + width, y + height, x, y + height, radius);
+  ctx.arcTo(x, y + height, x, y, radius);
+  ctx.arcTo(x, y, x + width, y, radius);
+  ctx.closePath();
+}
+
+export async function downloadAssessmentPng(model: AssessmentReportModel) {
+  if (typeof document === "undefined") return;
+  const canvas = document.createElement("canvas");
+  canvas.width = 1080;
+  canvas.height = 1350;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  const background = ctx.createLinearGradient(0, 0, 1080, 1350);
+  background.addColorStop(0, "#111965");
+  background.addColorStop(0.5, "#1A2580");
+  background.addColorStop(1, "#0D134E");
+  ctx.fillStyle = background;
+  ctx.fillRect(0, 0, 1080, 1350);
+
+  const glow = ctx.createRadialGradient(980, 100, 10, 980, 100, 420);
+  glow.addColorStop(0, "rgba(247,206,77,0.22)");
+  glow.addColorStop(1, "rgba(247,206,77,0)");
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, 1080, 600);
+
+  const glow2 = ctx.createRadialGradient(80, 1200, 10, 80, 1200, 460);
+  glow2.addColorStop(0, "rgba(96,165,250,0.18)");
+  glow2.addColorStop(1, "rgba(96,165,250,0)");
+  ctx.fillStyle = glow2;
+  ctx.fillRect(0, 700, 700, 650);
+
+  const fontFamily = "'Plus Jakarta Sans', 'Noto Sans Khmer', Arial, sans-serif";
+  ctx.textBaseline = "alphabetic";
+
+  ctx.fillStyle = "#FFFFFF";
+  ctx.font = `900 34px ${fontFamily}`;
+  ctx.fillText("Orien", 64, 92);
+  ctx.fillStyle = "#F7CE4D";
+  ctx.fillText("X", 64 + ctx.measureText("Orien").width, 92);
+
+  ctx.fillStyle = "rgba(255,255,255,0.55)";
+  ctx.font = `800 13px ${fontFamily}`;
+  ctx.fillText(model.labels.eyebrow.toUpperCase(), 64, 122);
+
+  ctx.textAlign = "right";
+  ctx.fillStyle = "rgba(255,255,255,0.65)";
+  ctx.font = `700 14px ${fontFamily}`;
+  ctx.fillText(model.generatedLabel, 1016, 92);
+  ctx.textAlign = "left";
+
+  ctx.fillStyle = "rgba(255,255,255,0.12)";
+  ctx.strokeStyle = "rgba(255,255,255,0.18)";
+  ctx.lineWidth = 1;
+  roundedRect(ctx, 64, 176, 360, 42, 21);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = "#F7CE4D";
+  ctx.font = `800 13px ${fontFamily}`;
+  ctx.fillText(model.headlineLabel.toUpperCase(), 82, 203);
+
+  let headlineSize = 150;
+  ctx.font = `900 ${headlineSize}px ${fontFamily}`;
+  while (ctx.measureText(model.headline).width > 760 && headlineSize > 92) {
+    headlineSize -= 6;
+    ctx.font = `900 ${headlineSize}px ${fontFamily}`;
+  }
+  ctx.fillStyle = "#F7CE4D";
+  ctx.fillText(model.headline, 60, 356);
+
+  ctx.fillStyle = "#FFFFFF";
+  ctx.font = `800 31px ${fontFamily}`;
+  const archetypeLines = wrapCanvasText(ctx, model.archetype, 780, 2);
+  archetypeLines.forEach((line, index) => {
+    ctx.fillText(line, 64, 420 + index * 40);
+  });
+
+  if (model.role) {
+    ctx.fillStyle = "rgba(255,255,255,0.55)";
+    ctx.font = `700 14px ${fontFamily}`;
+    ctx.fillText(model.role.toUpperCase(), 64, 490);
+  }
+
+  ctx.fillStyle = "rgba(255,255,255,0.72)";
+  ctx.font = `500 18px ${fontFamily}`;
+  const taglineY = model.role ? 526 : 500;
+  wrapCanvasText(ctx, model.tagline, 700, 2).forEach((line, index) => {
+    ctx.fillText(line, 64, taglineY + index * 27);
+  });
+
+  // Dimensions column
+  ctx.fillStyle = "rgba(255,255,255,0.45)";
+  ctx.font = `800 13px ${fontFamily}`;
+  ctx.fillText(model.labels.dimensions.toUpperCase(), 64, 620);
+
+  const dimensions = model.dimensions.slice(0, 6);
+  dimensions.forEach((dimension, index) => {
+    const y = 660 + index * 66;
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.font = `700 16px ${fontFamily}`;
+    const label = wrapCanvasText(ctx, dimension.label, 420, 1)[0] ?? "";
+    ctx.fillText(label, 64, y);
+
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#F7CE4D";
+    ctx.font = `800 16px ${fontFamily}`;
+    ctx.fillText(`${Math.round(dimension.value)}%`, 560, y);
+    ctx.textAlign = "left";
+
+    ctx.fillStyle = "rgba(255,255,255,0.14)";
+    roundedRect(ctx, 64, y + 12, 496, 9, 5);
+    ctx.fill();
+
+    const bar = ctx.createLinearGradient(64, 0, 560, 0);
+    bar.addColorStop(0, "#F7CE4D");
+    bar.addColorStop(1, "#FDE68A");
+    ctx.fillStyle = bar;
+    roundedRect(
+      ctx,
+      64,
+      y + 12,
+      Math.max(6, (496 * Math.max(0, Math.min(100, dimension.value))) / 100),
+      9,
+      5
+    );
+    ctx.fill();
+  });
+
+  // Recommendations card
+  const cardX = 620;
+  const cardY = 620;
+  const cardW = 396;
+  const cardH = 430;
+  ctx.fillStyle = "rgba(255,255,255,0.07)";
+  ctx.strokeStyle = "rgba(255,255,255,0.14)";
+  roundedRect(ctx, cardX, cardY, cardW, cardH, 24);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = "rgba(255,255,255,0.45)";
+  ctx.font = `800 13px ${fontFamily}`;
+  ctx.fillText(model.labels.recommendedMajors.toUpperCase(), cardX + 24, cardY + 36);
+
+  const recommendations = model.recommendations.slice(0, 3);
+  recommendations.forEach((recommendation, index) => {
+    const y = cardY + 78 + index * 108;
+    if (index > 0) {
+      ctx.fillStyle = "rgba(255,255,255,0.12)";
+      ctx.fillRect(cardX + 24, y - 22, cardW - 48, 1);
+    }
+    ctx.fillStyle = "#F7CE4D";
+    ctx.font = `900 18px ${fontFamily}`;
+    ctx.fillText(`${index + 1}`, cardX + 24, y + 8);
+
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = `700 17px ${fontFamily}`;
+    wrapCanvasText(ctx, recommendation.major, cardW - 110, 2).forEach((line, lineIndex) => {
+      ctx.fillText(line, cardX + 54, y + 2 + lineIndex * 23);
+    });
+
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#F7CE4D";
+    ctx.font = `800 17px ${fontFamily}`;
+    ctx.fillText(`${Math.round(recommendation.fit)}%`, cardX + cardW - 24, y + 8);
+    ctx.textAlign = "left";
+  });
+
+  if (recommendations.length === 0) {
+    ctx.fillStyle = "rgba(255,255,255,0.55)";
+    ctx.font = `500 15px ${fontFamily}`;
+    ctx.fillText(model.labels.noResult, cardX + 24, cardY + 90);
+  }
+
+  ctx.fillStyle = "rgba(255,255,255,0.12)";
+  ctx.fillRect(64, 1240, 952, 1);
+
+  ctx.fillStyle = "rgba(255,255,255,0.55)";
+  ctx.font = `600 14px ${fontFamily}`;
+  ctx.fillText(model.studentName || "—", 64, 1280);
+
+  ctx.textAlign = "right";
+  ctx.fillStyle = "rgba(255,255,255,0.45)";
+  ctx.font = `600 13px ${fontFamily}`;
+  ctx.fillText(model.labels.footer, 1016, 1280);
+  ctx.fillStyle = "#F7CE4D";
+  ctx.font = `800 15px ${fontFamily}`;
+  ctx.fillText("orienx", 1016, 1305);
+  ctx.textAlign = "left";
+
+  const link = document.createElement("a");
+  link.href = canvas.toDataURL("image/png");
+  link.download = fileBase(model, "png");
+  link.click();
+}
+
+export interface SharedAssessmentPayload {
+  version: 1;
+  kind: "personality" | "riasec";
+  headline: string;
+  headlineLabel: string;
+  archetype: string;
+  role?: string;
+  tagline: string;
+  studentName?: string;
+  generatedAt: string;
+  dimensions: AssessmentDimension[];
+  highlights: AssessmentHighlight[];
+  recommendations: AssessmentRecommendation[];
+}
+
+function toSharePayload(model: AssessmentReportModel): SharedAssessmentPayload {
+  return {
+    version: 1,
+    kind: model.kind,
+    headline: model.headline,
+    headlineLabel: model.headlineLabel,
+    archetype: model.archetype,
+    role: model.role,
+    tagline: model.tagline,
+    studentName: model.studentName,
+    generatedAt: model.generatedAt.toISOString(),
+    dimensions: model.dimensions.map((dimension) => ({
+      label: dimension.label,
+      value: Math.round(dimension.value),
+      detail: dimension.detail,
+    })),
+    highlights: model.highlights,
+    recommendations: model.recommendations,
+  };
+}
+
+export function encodeAssessmentShareUrl(model: AssessmentReportModel): string {
+  const payload = toSharePayload(model);
+  const encoded = compressToEncodedURIComponent(JSON.stringify(payload));
+  const origin =
+    typeof window !== "undefined" ? window.location.origin : "";
+  return `${origin}/assessments/shared#r=${encoded}`;
+}
+
+export function decodeAssessmentShare(
+  encoded: string
+): SharedAssessmentPayload | null {
+  if (!encoded) return null;
+  try {
+    const raw = decompressFromEncodedURIComponent(encoded);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as SharedAssessmentPayload;
+    if (parsed.version !== 1 || !parsed.headline) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+export async function exportAssessmentReport(
+  model: AssessmentReportModel,
+  format: AssessmentReportFormat
+): Promise<{ shareUrl?: string } | void> {
+  switch (format) {
+    case "pdf": {
+      const opened = openAssessmentPdf(model);
+      if (!opened) throw new Error("PDF popup blocked");
+      return;
+    }
+    case "excel":
+      await downloadAssessmentExcel(model);
+      return;
+    case "csv":
+      downloadAssessmentCsv(model);
+      return;
+    case "json":
+      downloadAssessmentJson(model);
+      return;
+    case "markdown":
+      downloadAssessmentMarkdown(model);
+      return;
+    case "html":
+      downloadAssessmentHtml(model);
+      return;
+    case "text":
+      downloadAssessmentText(model);
+      return;
+    case "png":
+      await downloadAssessmentPng(model);
+      return;
+    case "share":
+      return { shareUrl: encodeAssessmentShareUrl(model) };
+    default:
+      return;
+  }
 }

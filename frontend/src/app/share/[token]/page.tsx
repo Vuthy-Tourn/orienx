@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
+import { IS_STATIC_MODE } from "@/lib/app-mode";
 import { Logo } from "@/components/layout/logo";
 import type {
   SharedReport,
@@ -70,9 +71,41 @@ export default function SharedReportPage() {
   const { data: report, isLoading, error } = useQuery({
     queryKey: ["shared-report", token],
     queryFn: async () => apiFetch<SharedReport>(`/reports/shared/${token}`),
-    enabled: Boolean(token),
+    enabled: Boolean(token) && !IS_STATIC_MODE,
     retry: false,
   });
+
+  if (IS_STATIC_MODE) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#F4F7FC] px-4">
+        <div className="w-full max-w-md rounded-3xl border border-[#E6E8F0] bg-white p-8 text-center shadow-xl">
+          <ShieldCheck className="mx-auto h-10 w-10 text-[#111965]" />
+          <h1 className="mt-3 text-lg font-black text-[#111965]">
+            Hosted report links are unavailable
+          </h1>
+          <p className="mt-1 text-xs leading-relaxed text-[#68708A]">
+            This public build stores results in the browser and does not run the
+            report server. Use the share link from a guest assessment result
+            instead.
+          </p>
+          <div className="mt-5 flex flex-wrap justify-center gap-2">
+            <Link
+              href="/assessments/results"
+              className="rounded-xl bg-[#111965] px-4 py-2.5 text-xs font-black text-white hover:bg-[#1A2580]"
+            >
+              My results
+            </Link>
+            <Link
+              href="/assessments"
+              className="rounded-xl border border-[#D9DEEA] bg-white px-4 py-2.5 text-xs font-bold text-[#111965] hover:bg-[#F8FAFD]"
+            >
+              Free assessments
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

@@ -1,0 +1,374 @@
+[
+  {
+    "id": "d68ff250-dd50-4084-8c76-1cef22af9bb8",
+    "dimension": "EI",
+    "prompt": {
+      "en": "You feel energized after spending time with a large group of people or collaborating on team projects.",
+      "km": "អ្នកមានកម្លាំងចិត្ត និងស្រស់ស្រាយក្រោយពេលចំណាយពេលជាមួយមនុស្សច្រើន ឬធ្វើការជាក្រុម។"
+    },
+    "order_index": 1,
+    "options": [
+      {
+        "id": "860a34c4-fd0c-47ca-9bd9-3439ede50b4e",
+        "label": {
+          "en": "Agree",
+          "km": "យល់ស្រប"
+        },
+        "target_trait": "E",
+        "weight": 1.0,
+        "order_index": 1
+      },
+      {
+        "id": "4b135685-f5e3-4044-aa42-c94afbcba102",
+        "label": {
+          "en": "Disagree",
+          "km": "មិនយល់ស្រប"
+        },
+        "target_trait": "I",
+        "weight": 1.0,
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "id": "c9077246-b133-4eb6-891e-32d148fa7cd7",
+    "dimension": "EI",
+    "prompt": {
+      "en": "After a busy week, you prefer going out to social events rather than spending quiet time alone.",
+      "km": "បន្ទាប់ពីសប្តាហ៍ដ៏មមាញឹក អ្នកចូលចិត្តចេញក្រៅជួបជុំមិត្តភក្តិ ជាជាងចំណាយពេលស្ងប់ស្ងាត់ម្នាក់ឯង។"
+    },
+    "order_index": 2,
+    "options": [
+      {
+        "id": "878d3b5e-c0d4-4655-b5f7-1a04a5733f64",
+        "label": {
+          "en": "Agree",
+          "km": "យល់ស្រប"
+        },
+        "target_trait": "E",
+        "weight": 1.0,
+        "order_index": 1
+      },
+      {
+        "id": "1f9cb382-e4bf-45f4-8030-bff38e5aab06",
+        "label": {
+          "en": "Disagree",
+          "km": "មិនយល់ស្រប"
+        },
+        "target_trait": "I",
+        "weight": 1.0,
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "id": "08d19193-5c96-4267-8e8c-db7a81f62797",
+    "dimension": "EI",
+    "prompt": {
+      "en": "In a new room or gathering, you comfortably initiate conversations and make new friends right away.",
+      "km": "នៅកន្លែងថ្មី ឬកម្មវិធីជួបជុំ អ្នកតែងតែចាប់ផ្តើមជជែក និងបង្កើតមិត្តភក្តិថ្មីៗបានយ៉ាងងាយស្រួល។"
+    },
+    "order_index": 3,
+    "options": [
+      {
+        "id": "801ecbfa-9409-49cc-9879-988edf42a762",
+        "label": {
+          "en": "Agree",
+          "km": "យល់ស្រប"
+        },
+        "target_trait": "E",
+        "weight": 1.0,
+        "order_index": 1
+      },
+      {
+        "id": "f6d8248b-c527-4142-aaaa-5bd99ef66682",
+        "label": {
+          "en": "Disagree",
+          "km": "មិនយល់ស្រប"
+        },
+        "target_trait": "I",
+        "weight": 1.0,
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "id": "0ee3958b-55e3-4a70-9cba-52505f14ad90",
+    "dimension": "SN",
+    "prompt": {
+      "en": "You are more drawn to practical facts and real-world examples than to abstract theories and future possibilities.",
+      "km": "អ្នកចាប់អារម្មណ៍លើការពិតជាក់ស្តែង និងឧទាហរណ៍ក្នុងជីវិត ជាជាងទ្រឹស្តីអរូបី និងការស្រមើស្រមៃ។"
+    },
+    "order_index": 4,
+    "options": [
+      {
+        "id": "8d88ff6c-7f60-4d5f-ac4f-cf65702aaa53",
+        "label": {
+          "en": "Agree",
+          "km": "យល់ស្រប"
+        },
+        "target_trait": "S",
+        "weight": 1.0,
+        "order_index": 1
+      },
+      {
+        "id": "5fcedfc5-5949-45b8-8b4e-19ec16ac1378",
+        "label": {
+          "en": "Disagree",
+          "km": "មិនយល់ស្រប"
+        },
+        "target_trait": "N",
+        "weight": 1.0,
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "id": "25577b01-6d77-4d30-bb67-bf3c68a972aa",
+    "dimension": "SN",
+    "prompt": {
+      "en": "When solving problems, you rely on proven methods and practical experience rather than untested novel ideas.",
+      "km": "នៅពេលដោះស្រាយបញ្ហា អ្នកចូលចិត្តពឹងលើវិធីសាស្ត្រដែលធ្លាប់បានបញ្ជាក់ ជាជាងគំនិតថ្មីៗដែលមិនទាន់បានសាកល្បង។"
+    },
+    "order_index": 5,
+    "options": [
+      {
+        "id": "61f566fd-bc52-4da5-9e00-123211f91ab6",
+        "label": {
+          "en": "Agree",
+          "km": "យល់ស្រប"
+        },
+        "target_trait": "S",
+        "weight": 1.0,
+        "order_index": 1
+      },
+      {
+        "id": "8693663e-fb7e-441f-b16c-b640d667fbbb",
+        "label": {
+          "en": "Disagree",
+          "km": "មិនយល់ស្រប"
+        },
+        "target_trait": "N",
+        "weight": 1.0,
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "id": "86191a8c-a250-4e5a-8215-e3d9424fb169",
+    "dimension": "SN",
+    "prompt": {
+      "en": "You prefer specific, step-by-step instructions with clear criteria rather than open-ended creative freedom.",
+      "km": "អ្នកចូលចិត្តការណែនាំលម្អិតមួយជំហានៗដែលមានលក្ខណៈវិនិច្ឆ័យច្បាស់ ជាជាងការទុកសេរីភាពបើកទូលាយ។"
+    },
+    "order_index": 6,
+    "options": [
+      {
+        "id": "c1c0af29-99bd-436d-8cb7-feabf5af2e54",
+        "label": {
+          "en": "Agree",
+          "km": "យល់ស្រប"
+        },
+        "target_trait": "S",
+        "weight": 1.0,
+        "order_index": 1
+      },
+      {
+        "id": "72175fcf-8cf5-4ad4-a341-868f25403352",
+        "label": {
+          "en": "Disagree",
+          "km": "មិនយល់ស្រប"
+        },
+        "target_trait": "N",
+        "weight": 1.0,
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "id": "44ee003a-869e-4d5f-a343-f7a8c8783eaf",
+    "dimension": "TF",
+    "prompt": {
+      "en": "You prioritize objective logic and evidence over personal feelings when making important decisions.",
+      "km": "អ្នកផ្តល់អាទិភាពលើតក្កវិជ្ជា និងភស្តុតាងជាក់ស្តែង ជាជាងអារម្មណ៍ផ្ទាល់ខ្លួន នៅពេលធ្វើការសម្រេចចិត្តសំខាន់ៗ។"
+    },
+    "order_index": 7,
+    "options": [
+      {
+        "id": "21c0a80d-1b37-46d5-830b-a41fb83119ed",
+        "label": {
+          "en": "Agree",
+          "km": "យល់ស្រប"
+        },
+        "target_trait": "T",
+        "weight": 1.0,
+        "order_index": 1
+      },
+      {
+        "id": "39095ad2-9087-4346-a6dd-8281e471e2c0",
+        "label": {
+          "en": "Disagree",
+          "km": "មិនយល់ស្រប"
+        },
+        "target_trait": "F",
+        "weight": 1.0,
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "id": "e19e06c5-8720-4b31-9949-d09c7e627cfb",
+    "dimension": "TF",
+    "prompt": {
+      "en": "If someone makes a mistake, your instinct is to point out the factual flaws directly so they can be fixed.",
+      "km": "ប្រសិនបើនរណាម្នាក់ធ្វើខុស អ្នកចូលចិត្តចង្អុលបង្ហាញកំហុសជាក់ស្តែងដោយត្រង់ៗ ដើម្បីកែលម្អបានទាន់ពេល។"
+    },
+    "order_index": 8,
+    "options": [
+      {
+        "id": "12fd65a9-3e26-48d8-a477-1835d0f96ad3",
+        "label": {
+          "en": "Agree",
+          "km": "យល់ស្រប"
+        },
+        "target_trait": "T",
+        "weight": 1.0,
+        "order_index": 1
+      },
+      {
+        "id": "57e00087-b931-4b1e-ba79-04f94df6296d",
+        "label": {
+          "en": "Disagree",
+          "km": "មិនយល់ស្រប"
+        },
+        "target_trait": "F",
+        "weight": 1.0,
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "id": "efb8b510-e6b7-411f-a291-81e2b6dc40be",
+    "dimension": "TF",
+    "prompt": {
+      "en": "You value praise for rigorous reasoning and analytical excellence more than praise for warmth and harmony.",
+      "km": "អ្នកឱ្យតម្លៃការសរសើរលើការវិភាគឆ្លាតវៃ និងសុក្រឹតភាព ច្រើនជាងការសរសើរលើភាពកក់ក្តៅ និងសាមគ្គីភាព។"
+    },
+    "order_index": 9,
+    "options": [
+      {
+        "id": "abfac0ed-89d3-4ccd-b23d-d5df6030a4af",
+        "label": {
+          "en": "Agree",
+          "km": "យល់ស្រប"
+        },
+        "target_trait": "T",
+        "weight": 1.0,
+        "order_index": 1
+      },
+      {
+        "id": "f10e7069-00ea-48cd-8f93-b1658b313518",
+        "label": {
+          "en": "Disagree",
+          "km": "មិនយល់ស្រប"
+        },
+        "target_trait": "F",
+        "weight": 1.0,
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "id": "2b9292a1-83ca-4501-9fd4-06a87c3d0941",
+    "dimension": "JP",
+    "prompt": {
+      "en": "You like to plan a detailed schedule and stick closely to deadlines rather than keeping things open-ended.",
+      "km": "អ្នកចូលចិត្តរៀបចំកាលវិភាគច្បាស់លាស់ និងគោរពតាមពេលវេលាកំណត់ ជាជាងទុកឱ្យអ្វីៗបត់បែនតាមអារម្មណ៍។"
+    },
+    "order_index": 10,
+    "options": [
+      {
+        "id": "fd2209a8-9b1b-4f2a-9a1b-192ffed5b30a",
+        "label": {
+          "en": "Agree",
+          "km": "យល់ស្រប"
+        },
+        "target_trait": "J",
+        "weight": 1.0,
+        "order_index": 1
+      },
+      {
+        "id": "642e4782-f09d-4163-8c53-201a4bfff587",
+        "label": {
+          "en": "Disagree",
+          "km": "មិនយល់ស្រប"
+        },
+        "target_trait": "P",
+        "weight": 1.0,
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "id": "c8b5c223-44cd-42ee-8416-a5dffd170cd5",
+    "dimension": "JP",
+    "prompt": {
+      "en": "You prefer to have a structured, organized plan before traveling or starting an activity rather than being spontaneous.",
+      "km": "អ្នកចូលចិត្តមានផែនការរៀបរយជាមុនសម្រាប់ការដើរកម្សាន្ត ឬសកម្មភាពនានា ជាជាងធ្វើតាមការនឹកឃើញភ្លាមៗ។"
+    },
+    "order_index": 11,
+    "options": [
+      {
+        "id": "2ba46149-8c21-4fec-b101-6fcd75d6b914",
+        "label": {
+          "en": "Agree",
+          "km": "យល់ស្រប"
+        },
+        "target_trait": "J",
+        "weight": 1.0,
+        "order_index": 1
+      },
+      {
+        "id": "bc29dacc-32ef-4285-8725-cd773c958050",
+        "label": {
+          "en": "Disagree",
+          "km": "មិនយល់ស្រប"
+        },
+        "target_trait": "P",
+        "weight": 1.0,
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "id": "2204f013-4aac-41d7-ae36-dd37c93a876d",
+    "dimension": "JP",
+    "prompt": {
+      "en": "You feel most at ease when tasks and assignments are completely finished well ahead of their deadline.",
+      "km": "អ្នកមានអារម្មណ៍ធូរស្រាល និងស្ងប់ចិត្តបំផុត នៅពេលកិច្ចការត្រូវបានបញ្ចប់រួចរាល់មុនថ្ងៃកំណត់។"
+    },
+    "order_index": 12,
+    "options": [
+      {
+        "id": "09a69d2f-7fb3-4479-8121-2e37377e1a83",
+        "label": {
+          "en": "Agree",
+          "km": "យល់ស្រប"
+        },
+        "target_trait": "J",
+        "weight": 1.0,
+        "order_index": 1
+      },
+      {
+        "id": "f6715c49-a95a-4963-a7ae-424266f99e73",
+        "label": {
+          "en": "Disagree",
+          "km": "មិនយល់ស្រប"
+        },
+        "target_trait": "P",
+        "weight": 1.0,
+        "order_index": 2
+      }
+    ]
+  }
+]

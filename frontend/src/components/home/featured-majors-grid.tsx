@@ -2,9 +2,8 @@
 
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { STATIC_MAJORS } from "@/lib/data/catalog";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Code2,
@@ -515,20 +514,12 @@ const CATEGORY_VISUAL_MAP: Record<
 export function FeaturedMajorsGrid() {
   const { t, getLocalized, language } = useLanguage();
 
-  const {
-    data: majorsData,
-    isLoading,
-    isError,
-    error,
-    refetch,
-    isFetching,
-  } = useQuery({
-    queryKey: ["featured-majors-landing"],
-    queryFn: async () => {
-      return apiFetch<any[]>("/majors");
-    },
-    retry: 1,
-  });
+  const majorsData = STATIC_MAJORS;
+  const isLoading = false;
+  const isError = false;
+  const error = null;
+  const isFetching = false;
+  const refetch = () => {};
 
   const majors = useMemo(() => {
     return (majorsData || []).slice(0, 6);

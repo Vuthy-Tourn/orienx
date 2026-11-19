@@ -349,6 +349,24 @@ export function AssessmentStage({
   const steps = scaleType === "5-point" ? steps5 : SCALE_STEPS_7;
   const totalSteps = steps.length;
 
+  useEffect(() => {
+    if (!currentQ) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      if (target && ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)) {
+        return;
+      }
+      const value = Number(event.key);
+      if (Number.isInteger(value) && value >= 1 && value <= totalSteps) {
+        event.preventDefault();
+        onAnswer(currentQ.id, value);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [currentQ, onAnswer, totalSteps]);
+
   const activeLevel = hovered ?? currentValue;
   const currentStep = steps.find((s) => s.level === activeLevel);
   const thumbLevel = activeLevel ?? Math.ceil(totalSteps / 2);

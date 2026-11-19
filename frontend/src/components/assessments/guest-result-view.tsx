@@ -1,0 +1,714 @@
+"use client";
+/* eslint-disable react-hooks/set-state-in-effect */
+
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import {
+  ArrowRight,
+  Brain,
+  Building2,
+  CheckCircle2,
+  Compass,
+  Copy,
+  Download,
+  GraduationCap,
+  Link2,
+  RotateCcw,
+  Share2,
+  Sparkles,
+  Target,
+  Trophy,
+} from "lucide-react";
+import { useLanguage } from "@/contexts/language-context";
+import { useToast } from "@/components/ui/toast";
+import {
+  Dialog,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { AssessmentExportDialog } from "@/components/assessments/assessment-export-dialog";
+import {
+  exportAssessmentReport,
+  type AssessmentReportFormat,
+  type AssessmentReportLabels,
+  type AssessmentReportModel,
+} from "@/lib/assessment-report";
+import {
+  ARCHETYPE_META,
+  getCognitiveDimensions,
+} from "@/lib/personality-meta";
+import {
+  RIASEC_DIMENSIONS,
+  getHollandArchetype,
+} from "@/lib/riasec-meta";
+import type {
+  GuestResultRecord,
+  PersonalityResult,
+  RiasecResult,
+} from "@/lib/guest/types";
+import { readProfile } from "@/lib/guest/storage";
+
+function percent(value: number): number {
+  return Math.round(Math.max(0, Math.min(100, value)));
+}
+
+function currency(value: number | null): string {
+  if (value == null) return "—";
+  return `$${Math.round(value).toLocaleString("en-US")}`;
+}
+
+export function GuestResultView({ record }: { record: GuestResultRecord }) {
+  const { t, getLocalized, language } = useLanguage();
+  const toast = useToast();
+  const isKm = language === "km";
+  const [exportOpen, setExportOpen] = useState(false);
+  const [exportingFormat, setExportingFormat] =
+    useState<AssessmentReportFormat | null>(null);
+  const [studentName, setStudentName] = useState("");
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareUrl, setShareUrl] = useState("");
+
+  useEffect(() => {
+    const profile = readProfile();
+    setStudentName(
+      profile?.displayName?.trim() ||
+        getLocalized({ en: "Guest", km: "ភ្ញៀវ" })
+    );
+  }, [getLocalized]);
+
+  const personality =
+    record.kind === "personality"
+      ? (record.result as PersonalityResult)
+      : null;
+  const riasec = record.kind === "riasec" ? (record.result as RiasecResult) : null;
+
+  const archetype = personality
+    ? ARCHETYPE_META[personality.type]
+    : null;
+  const holland = riasec ? getHollandArchetype(riasec.hollandCode) : null;
+
+  const headline = personality?.type ?? riasec?.hollandCode ?? "";
+  const archetypeName = personality
+    ? getLocalized({ en: archetype?.nameEn, km: archetype?.nameKm })
+    : getLocalized({ en: holland?.titleEn, km: holland?.titleKm });
+  const roleName = personality
+    ? getLocalized({ en: archetype?.roleNameEn, km: archetype?.roleNameKm })
+    : getLocalized({ en: holland?.subtitleEn, km: holland?.subtitleKm });
+  const tagline = personality
+    ? getLocalized({ en: archetype?.taglineEn, km: archetype?.taglineKm })
+    : getLocalized({ en: holland?.taglineEn, km: holland?.taglineKm });
+
+  const dimensions = personality
+    ? [
+        {
+          label: isKm ? "ចិត្ត & ថាមពល" : "Mind",
+          value: Math.max(
+            personality.scores.E,
+            personality.scores.I
+          ),
+          detail: `E ${percent(personality.scores.E)}% · I ${percent(
+            personality.scores.I
+          )}%`,
+        },
+        {
+          label: isKm ? "ការទទួលព័ត៌មាន" : "Energy",
+          value: Math.max(
+            personality.scores.S,
+            personality.scores.N
+          ),
+          detail: `S ${percent(personality.scores.S)}% · N ${percent(
+            personality.scores.N
+          )}%`,
+        },
+        {
+          label: isKm ? "ការសម្រេចចិត្ត" : "Nature",
+          value: Math.max(
+            personality.scores.T,
+            personality.scores.F
+          ),
+          detail: `T ${percent(personality.scores.T)}% · F ${percent(
+            personality.scores.F
+          )}%`,
+        },
+        {
+          label: isKm ? "យុទ្ធសាស្ត្រជីវិត" : "Tactics",
+          value: Math.max(
+            personality.scores.J,
+            personality.scores.P
+          ),
+          detail: `J ${percent(personality.scores.J)}% · P ${percent(
+            personality.scores.P
+          )}%`,
+        },
+      ]
+    : Object.entries(RIASEC_DIMENSIONS).map(([code, meta]) => ({
+        label: `${code} — ${getLocalized({
+          en: meta.shortNameEn,
+          km: meta.shortNameKm,
+        })}`,
+        value: riasec?.scores[code as keyof typeof riasec.scores] ?? 0,
+        detail: riasec?.hollandCode.includes(code)
+          ? isKm
+            ? "ចំណាប់អារម្មណ៍កំពូល"
+            : "Top interest"
+          : "",
+      }));
+
+  const highlights = personality && archetype
+    ? [
+        {
+          title: isKm ? "ចំណុចខ្លាំងចម្បង" : "Key strengths",
+          items: (isKm ? archetype.strengthsKm : archetype.strengthsEn) ?? [],
+        },
+        {
+          title: isKm ? "រចនាប័ទ្មសិក្សា" : "Learning style",
+          items: [
+            getLocalized({
+              en: archetype.learningStyleEn,
+              km: archetype.learningStyleKm,
+            }),
+          ].filter(Boolean),
+        },
+        {
+          title: isKm ? "វិស័យសិក្សាសាកសម" : "Best fields",
+          items: (isKm ? archetype.bestFieldsKm : archetype.bestFieldsEn) ?? [],
+        },
+      ]
+    : holland
+    ? [
+        {
+          title: isKm ? "ចំណុចខ្លាំង" : "Key strengths",
+          items: (isKm ? holland.strengths : holland.strengthsEn) ?? [],
+        },
+        {
+          title: isKm ? "បរិស្ថានការងារ" : "Work environment",
+          items: [
+            getLocalized({
+              en: holland.optimalWorkEnvironmentEn,
+              km: holland.optimalWorkEnvironmentKm,
+            }),
+          ].filter(Boolean),
+        },
+        {
+          title: isKm ? "វិស័យការងារគោលដៅ" : "Target industries",
+          items:
+            (isKm ? holland.targetIndustriesKm : holland.targetIndustriesEn) ??
+            [],
+        },
+      ]
+    : [];
+
+  const recommendations = (record.result.majorMatches ?? []).slice(0, 6);
+
+  const labels: AssessmentReportLabels = {
+    preparedFor: t("assessmentReport.preparedFor"),
+    generated: t("assessmentReport.generated"),
+    summary: t("assessmentReport.summary"),
+    dimensions: t("assessmentReport.dimensions"),
+    highlights: t("assessmentReport.highlights"),
+    recommendedMajors: t("assessmentReport.recommendedMajors"),
+    archetype: t("assessmentReport.archetype"),
+    profile: t("assessmentReport.profile"),
+    eyebrow: t("assessmentReport.eyebrow"),
+    fitScore: t("assessmentReport.fitScore"),
+    universities: t("assessmentReport.universities"),
+    print: t("assessmentReport.print"),
+    close: t("assessmentReport.close"),
+    footer: t("assessmentReport.footer"),
+    noResult: t("assessmentReport.noResult"),
+  };
+
+  const buildReport = (): AssessmentReportModel => {
+    const generatedAt = new Date(record.completedAt);
+    return {
+      kind: record.kind,
+      title: t(
+        record.kind === "personality"
+          ? "assessmentReport.personalityTitle"
+          : "assessmentReport.riasecTitle"
+      ),
+      subtitle: t(
+        record.kind === "personality"
+          ? "assessmentReport.personalitySubtitle"
+          : "assessmentReport.riasecSubtitle"
+      ),
+      studentName,
+      generatedAt,
+      generatedLabel: generatedAt.toLocaleString(
+        language === "km" ? "km-KH" : "en-US"
+      ),
+      locale: language === "km" ? "km-KH" : "en-US",
+      headline,
+      headlineLabel: t(
+        record.kind === "personality"
+          ? "assessmentReport.personalityType"
+          : "assessmentReport.hollandCode"
+      ),
+      archetype: archetypeName,
+      role: roleName,
+      tagline,
+      characterImageUrl:
+        personality && typeof window !== "undefined"
+          ? `${window.location.origin}/images/personality-types/${personality.type.toLowerCase()}.svg`
+          : undefined,
+      dimensions,
+      highlights,
+      recommendations: recommendations.map((item) => ({
+        major: getLocalized(item.name),
+        fit: item.fit,
+        universities: item.universities,
+      })),
+      labels,
+    };
+  };
+
+  const handleExport = async (format: AssessmentReportFormat) => {
+    setExportingFormat(format);
+    try {
+      const model = buildReport();
+      const result = await exportAssessmentReport(model, format);
+      if (format === "share" && result?.shareUrl) {
+        setShareUrl(result.shareUrl);
+        setShareOpen(true);
+        try {
+          await navigator.clipboard.writeText(result.shareUrl);
+          toast.success(t("assessmentReport.shareCopied"));
+        } catch {
+          // The dialog shows the link for manual copying when the clipboard
+          // permission is unavailable.
+        }
+      } else {
+        toast.success(t("assessmentReport.exported"));
+      }
+      setExportOpen(false);
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("popup")) {
+        toast.error(t("assessmentReport.pdfBlocked"));
+      } else {
+        toast.error(t("assessmentReport.failed"));
+      }
+    } finally {
+      setExportingFormat(null);
+    }
+  };
+
+  const exportIncludes = (
+    record.kind === "personality"
+      ? [
+          personality?.type,
+          t("assessmentReport.personalityType"),
+          `${recommendations.length} ${t("assessmentReport.recommendedMajors")}`,
+        ]
+      : [
+          riasec?.hollandCode,
+          t("assessmentReport.hollandCode"),
+          `${recommendations.length} ${t("assessmentReport.recommendedMajors")}`,
+        ]
+  ).filter((item): item is string => Boolean(item));
+
+  const handleCopyShare = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success(t("assessmentReport.shareCopied"));
+    } catch {
+      toast.error(t("assessmentReport.shareFailed"));
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#F5F6FA] px-4 pb-16 pt-6 sm:pt-10">
+      <div className="mx-auto max-w-4xl space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <Link
+            href="/assessments"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#68708A] transition-colors hover:text-[#111965]"
+          >
+            <ArrowRight className="h-3.5 w-3.5 rotate-180" />
+            {getLocalized({ en: "All assessments", km: "ការវាយតម្លៃទាំងអស់" })}
+          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/assessments/results"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-[#D9DEEA] bg-white px-3 text-[11px] font-black text-[#111965] transition-colors hover:border-[#111965]/40 hover:bg-[#F8FAFD]"
+            >
+              <Trophy className="h-3.5 w-3.5" />
+              {getLocalized({ en: "My results", km: "លទ្ធផលរបស់ខ្ញុំ" })}
+            </Link>
+            <button
+              type="button"
+              onClick={() => setExportOpen(true)}
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-[#111965] px-3 text-[11px] font-black text-white transition-colors hover:bg-[#1A2580]"
+            >
+              <Download className="h-3.5 w-3.5 text-[#F7CE4D]" />
+              {t("assessmentReport.exportReport")}
+            </button>
+          </div>
+        </div>
+
+        <section className="relative overflow-hidden rounded-3xl border border-[#111965]/40 bg-gradient-to-br from-[#111965] via-[#1A2580] to-[#0D134E] px-6 py-8 text-white shadow-xl sm:px-9 sm:py-10">
+          <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[#F7CE4D]/15 blur-3xl" />
+          <div className="absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl" />
+          <div className="relative flex flex-col gap-7 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0 space-y-3">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#F7CE4D]">
+                <Sparkles className="h-3.5 w-3.5" />
+                {record.kind === "personality"
+                  ? getLocalized({
+                      en: "16-Personality result",
+                      km: "លទ្ធផលបុគ្គលិកលក្ខណៈ ១៦",
+                    })
+                  : getLocalized({
+                      en: "RIASEC result",
+                      km: "លទ្ធផល RIASEC",
+                    })}
+              </div>
+              <div>
+                <div className="text-4xl font-black tracking-tight text-[#F7CE4D] sm:text-6xl">
+                  {headline}
+                </div>
+                <h1 className="mt-1 text-xl font-extrabold leading-snug sm:text-2xl">
+                  {archetypeName}
+                </h1>
+                <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-white/60">
+                  {roleName}
+                </p>
+              </div>
+              <p className="max-w-xl text-xs leading-relaxed text-white/85 sm:text-sm">
+                {tagline}
+              </p>
+              <div className="flex flex-wrap gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setExportOpen(true)}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7CE4D] px-3.5 py-2 text-xs font-black text-[#111965] transition-transform hover:bg-[#F5C430] active:scale-95"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  {t("assessmentReport.exportReport")}
+                </button>
+                <Link
+                  href={`/assessments/${record.kind}/test?retake=1`}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2 text-xs font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                >
+                  <RotateCcw className="h-3.5 w-3.5 text-[#F7CE4D]" />
+                  {getLocalized({ en: "Retake", km: "ធ្វើតេស្តឡើងវិញ" })}
+                </Link>
+                <Link
+                  href={
+                    record.kind === "personality"
+                      ? "/assessments/riasec/test"
+                      : "/assessments/personality/test"
+                  }
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-3.5 py-2 text-xs font-bold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                >
+                  <Compass className="h-3.5 w-3.5 text-[#F7CE4D]" />
+                  {record.kind === "personality"
+                    ? getLocalized({ en: "Take RIASEC", km: "ធ្វើតេស្ត RIASEC" })
+                    : getLocalized({
+                        en: "Take Personality",
+                        km: "ធ្វើតេស្តបុគ្គលិកលក្ខណៈ",
+                      })}
+                </Link>
+              </div>
+            </div>
+
+            {personality && (
+              <div className="relative flex shrink-0 items-center justify-center self-center sm:self-auto">
+                <div
+                  className="absolute inset-0 scale-125 rounded-full opacity-30 blur-3xl"
+                  style={{ backgroundColor: archetype?.roleColor ?? "#F7CE4D" }}
+                />
+                <Image
+                  src={`/images/personality-types/${personality.type.toLowerCase()}.svg`}
+                  alt={`${personality.type} character`}
+                  width={180}
+                  height={230}
+                  priority
+                  className="relative z-10 h-44 w-32 object-contain drop-shadow-[0_16px_32px_rgba(0,0,0,0.5)] sm:h-56 sm:w-44"
+                />
+              </div>
+            )}
+            {riasec && (
+              <div className="relative flex h-32 w-32 shrink-0 items-center justify-center self-center rounded-full border border-white/20 bg-white/10 text-center backdrop-blur-md sm:h-40 sm:w-40">
+                <div>
+                  <Trophy className="mx-auto h-6 w-6 text-[#F7CE4D]" />
+                  <div className="mt-1 text-2xl font-black text-white">
+                    {riasec.hollandCode}
+                  </div>
+                  <div className="text-[9px] font-bold uppercase tracking-[0.16em] text-white/60">
+                    Holland
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+          <div className="flex flex-wrap items-end justify-between gap-2">
+            <div>
+              <h2 className="text-sm font-black text-[#111965] sm:text-base">
+                {record.kind === "personality"
+                  ? getLocalized({
+                      en: "Your four preference dimensions",
+                      km: "វិមាត្រចំណូលចិត្តទាំង ៤ របស់អ្នក",
+                    })
+                  : getLocalized({
+                      en: "Your six interest dimensions",
+                      km: "វិមាត្រចំណាប់អារម្មណ៍ទាំង ៦ របស់អ្នក",
+                    })}
+              </h2>
+              <p className="mt-1 text-[11px] leading-relaxed text-[#68708A]">
+                {record.kind === "personality"
+                  ? getLocalized({
+                      en: "Each pair shows the stronger side and the balance between both traits.",
+                      km: "គូនីមួយៗបង្ហាញពីផ្នែកខ្លាំង និងតុល្យភាពរវាងលក្ខណៈទាំងពីរ។",
+                    })
+                  : getLocalized({
+                      en: "Your top three letters form your Holland code.",
+                      km: "អក្សរកំពូលទាំង ៣ បង្កើតបានជាកូដ Holland របស់អ្នក។",
+                    })}
+              </p>
+            </div>
+            {record.kind === "personality" && (
+              <div className="flex flex-wrap gap-1.5">
+                {getCognitiveDimensions(personality?.type ?? "INTJ")
+                  .slice(0, 4)
+                  .map((dimension) => (
+                    <span
+                      key={dimension.code}
+                      className="rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-2 py-1 text-[10px] font-bold text-[#111965]"
+                    >
+                      {dimension.letter} · {dimension.dimension}
+                    </span>
+                  ))}
+              </div>
+            )}
+          </div>
+
+          <div className="mt-5 space-y-3">
+            {dimensions.map((dimension) => (
+              <div key={dimension.label}>
+                <div className="mb-1 flex items-center justify-between gap-3 text-[11px] font-bold">
+                  <span className="text-[#111965]">{dimension.label}</span>
+                  <span className="text-[#68708A]">
+                    {percent(dimension.value)}%
+                  </span>
+                </div>
+                <div className="h-2 overflow-hidden rounded-full bg-[#EEF1F7]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-[#111965] via-[#26338F] to-[#F7CE4D] transition-all duration-700"
+                    style={{ width: `${percent(dimension.value)}%` }}
+                  />
+                </div>
+                {dimension.detail && (
+                  <div className="mt-1 text-[9.5px] font-semibold text-[#94A3B8]">
+                    {dimension.detail}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {highlights.map((highlight, index) => {
+            const Icon = index === 0 ? Target : index === 1 ? Brain : GraduationCap;
+            return (
+              <section
+                key={highlight.title}
+                className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F0F2FA] text-[#111965]">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <h3 className="text-[11px] font-black uppercase tracking-[0.08em] text-[#111965]">
+                    {highlight.title}
+                  </h3>
+                </div>
+                <ul className="mt-3 space-y-2">
+                  {highlight.items.slice(0, 4).map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-1.5 text-[11px] leading-relaxed text-[#475569]"
+                    >
+                      <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-emerald-500" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            );
+          })}
+        </div>
+
+        <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+          <div className="flex flex-wrap items-end justify-between gap-2">
+            <div>
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-amber-800">
+                <Target className="h-3 w-3" />
+                {getLocalized({ en: "Interest fit", km: "ភាពត្រូវគ្នានៃចំណាប់អារម្មណ៍" })}
+              </div>
+              <h2 className="mt-2 text-sm font-black text-[#111965] sm:text-base">
+                {getLocalized({
+                  en: "Majors that match your profile",
+                  km: "ជំនាញដែលត្រូវនឹងប្រវត្តិរូបរបស់អ្នក",
+                })}
+              </h2>
+              <p className="mt-1 max-w-xl text-[11px] leading-relaxed text-[#68708A]">
+                {getLocalized({
+                  en: "This score compares your interests and personality affinity with each major. It is not an admission decision or a guarantee.",
+                  km: "ពិន្ទុនេះប្រៀបធៀបចំណាប់អារម្មណ៍ និងភាពត្រូវគ្នានៃបុគ្គលិកលក្ខណៈរបស់អ្នកជាមួយជំនាញនីមួយៗ។ វាមិនមែនជាការសម្រេចចិត្តចូលរៀន ឬការធានាទេ។",
+                })}
+              </p>
+            </div>
+            <Link
+              href="/majors"
+              className="inline-flex items-center gap-1.5 text-[11px] font-black text-[#111965] hover:underline"
+            >
+              {getLocalized({ en: "Explore all majors", km: "រកមើលជំនាញទាំងអស់" })}
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {recommendations.map((major) => (
+              <Link
+                key={major.slug}
+                href={`/majors/${major.slug}`}
+                className="group rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4 transition-all hover:-translate-y-0.5 hover:border-[#111965]/30 hover:bg-white hover:shadow-sm"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="text-[10px] font-black uppercase tracking-[0.1em] text-[#D4A017]">
+                      {major.fit}% {getLocalized({ en: "fit", km: "ត្រូវគ្នា" })}
+                    </div>
+                    <h3 className="mt-1 line-clamp-2 text-xs font-black leading-snug text-[#111965] group-hover:text-[#1A2580]">
+                      {getLocalized(major.name)}
+                    </h3>
+                    <div className="mt-1.5 text-[10px] font-semibold text-[#68708A]">
+                      {major.category}
+                    </div>
+                  </div>
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white text-[#111965] shadow-2xs">
+                    <GraduationCap className="h-4 w-4" />
+                  </span>
+                </div>
+                <div className="mt-2.5 flex flex-wrap gap-x-3 gap-y-1 border-t border-[#E6E8F0] pt-2 text-[9.5px] font-bold text-[#68708A]">
+                  <span className="inline-flex items-center gap-1">
+                    <Building2 className="h-3 w-3" />
+                    {major.universities}{" "}
+                    {getLocalized({ en: "universities", km: "សាកលវិទ្យាល័យ" })}
+                  </span>
+                  <span>RIASEC {major.riasecPrimary}{major.riasecSecondary}</span>
+                  {major.minTuitionUsd != null && (
+                    <span>
+                      {getLocalized({ en: "from", km: "ចាប់ពី" })}{" "}
+                      {currency(major.minTuitionUsd)}/{getLocalized({ en: "yr", km: "ឆ្នាំ" })}
+                    </span>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#E6E8F0] bg-white px-4 py-3 text-[10.5px] font-semibold text-[#68708A]">
+          <span>
+            {getLocalized({
+              en: "Saved on this device only. Export a copy before clearing browser data.",
+              km: "រក្សាទុកលើឧបករណ៍នេះប៉ុណ្ណោះ។ សូមនាំចេញច្បាប់ចម្លងមុនពេលលុបទិន្នន័យកម្មវិធីរុករក។",
+            })}
+          </span>
+          <button
+            type="button"
+            onClick={() => setExportOpen(true)}
+            className="inline-flex items-center gap-1.5 font-black text-[#111965] hover:underline"
+          >
+            <Share2 className="h-3.5 w-3.5" />
+            {getLocalized({ en: "Export or share", km: "នាំចេញ ឬចែករំលែក" })}
+          </button>
+        </div>
+      </div>
+
+      <AssessmentExportDialog
+        open={exportOpen}
+        onOpenChange={setExportOpen}
+        title={t("assessmentReport.exportTitle")}
+        subtitle={t("assessmentReport.exportSubtitle")}
+        includes={exportIncludes}
+        exportingFormat={exportingFormat}
+        onExport={handleExport}
+        footer={t("assessmentReport.footer")}
+        formats={[
+          "pdf",
+          "excel",
+          "csv",
+          "json",
+          "markdown",
+          "html",
+          "text",
+          "png",
+          "share",
+        ]}
+      />
+
+      <Dialog
+        open={shareOpen}
+        onOpenChange={setShareOpen}
+        className="max-w-xl"
+      >
+        <DialogHeader>
+          <div className="flex items-start gap-3 pr-8">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#111965] text-[#F7CE4D]">
+              <Link2 className="h-5 w-5" />
+            </span>
+            <div>
+              <DialogTitle>
+                {getLocalized({
+                  en: "Share this result",
+                  km: "ចែករំលែកលទ្ធផលនេះ",
+                })}
+              </DialogTitle>
+              <DialogDescription>
+                {getLocalized({
+                  en: "Anyone with this link can read a read-only copy of the result. It is not connected to your browser storage.",
+                  km: "អ្នកណាមានតំណនេះអាចអានច្បាប់ចម្លងលទ្ធផលបែបអានតែប៉ុណ្ណោះ។ វាមិនភ្ជាប់ទៅការរក្សាទុកក្នុងកម្មវិធីរុករករបស់អ្នកទេ។",
+                })}
+              </DialogDescription>
+            </div>
+          </div>
+        </DialogHeader>
+
+        <div className="mt-4 space-y-3">
+          <input
+            readOnly
+            value={shareUrl}
+            onFocus={(event) => event.currentTarget.select()}
+            className="h-10 w-full rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3 text-[10.5px] font-semibold text-[#111965] outline-none focus:border-[#111965]/40"
+            aria-label={getLocalized({
+              en: "Share link",
+              km: "តំណចែករំលែក",
+            })}
+          />
+          <button
+            type="button"
+            onClick={handleCopyShare}
+            className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#111965] px-4 text-xs font-black text-white hover:bg-[#1A2580]"
+          >
+            <Copy className="h-3.5 w-3.5 text-[#F7CE4D]" />
+            {getLocalized({ en: "Copy link", km: "ចម្លងតំណ" })}
+          </button>
+          <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[10px] leading-relaxed text-amber-900">
+            {getLocalized({
+              en: "Privacy note: the result is encoded inside the link. Do not share it publicly if you do not want others to see your scores.",
+              km: "ចំណាំឯកជនភាព៖ លទ្ធផលត្រូវបានអ៊ិនកូដក្នុងតំណ។ សូមកុំចែករំលែកជាសាធារណៈ ប្រសិនបើអ្នកមិនចង់ឱ្យអ្នកដទៃឃើញពិន្ទុរបស់អ្នក។",
+            })}
+          </p>
+        </div>
+      </Dialog>
+    </div>
+  );
+}

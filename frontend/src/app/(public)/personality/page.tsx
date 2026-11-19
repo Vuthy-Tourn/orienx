@@ -402,7 +402,7 @@ export default function PublicPersonalityGuidePage() {
 
           <div className="gsap-mbti-hero-anim pt-2 sm:pt-3">
             <Link
-              href="/dashboard/assessments/personality"
+              href="/assessments/personality/test"
               className="inline-flex items-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-2xl text-xs sm:text-sm font-black bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-2xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
             >
               <Compass className="w-4 h-4 text-[#111965]" />
@@ -743,7 +743,7 @@ export default function PublicPersonalityGuidePage() {
                       </div>
 
                       <Link
-                        href="/dashboard/assessments/personality"
+                        href="/assessments/personality/test"
                         onClick={(e) => e.stopPropagation()}
                         className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-[#111965] hover:bg-[#1A2580] text-white shadow-2xs transition-colors shrink-0"
                       >
@@ -783,7 +783,7 @@ export default function PublicPersonalityGuidePage() {
 
           <div className="relative z-10 shrink-0">
             <Link
-              href="/dashboard/assessments/personality"
+              href="/assessments/personality/test"
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl text-sm font-black bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
             >
               <Compass className="w-4 h-4 text-[#111965]" />
@@ -1070,7 +1070,7 @@ export default function PublicPersonalityGuidePage() {
                 </Link>
 
                 <Link
-                  href="/dashboard/assessments/personality"
+                  href="/assessments/personality/test"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-[#111965] hover:bg-[#1A2580] text-white shadow-xs transition-all hover:scale-102"
                 >
                   <Compass className="w-3.5 h-3.5 text-[#F7CE4D]" />

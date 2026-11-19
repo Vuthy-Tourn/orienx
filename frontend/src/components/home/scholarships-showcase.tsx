@@ -3,9 +3,8 @@
 import React, { useState, useRef, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { STATIC_SCHOLARSHIPS } from "@/lib/data/catalog";
 import CardSwap, { Card, CardSwapHandle } from "@/components/ui/card-swap";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "motion/react";
@@ -51,18 +50,12 @@ export function ScholarshipsShowcase() {
   const cardSwapRef = useRef<CardSwapHandle>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
-  // Fetch real verified scholarships directly from PostgreSQL backend API
-  const {
-    data: rawScholarships,
-    isLoading,
-    isError,
-    refetch,
-    isFetching,
-  } = useQuery<ScholarshipApiItem[]>({
-    queryKey: ["scholarships-showcase"],
-    queryFn: async () => apiFetch<ScholarshipApiItem[]>("/scholarships"),
-    retry: 1,
-  });
+  // Public showcase uses the bundled static catalogue.
+  const rawScholarships = STATIC_SCHOLARSHIPS as ScholarshipApiItem[];
+  const isLoading = false;
+  const isError = false;
+  const isFetching = false;
+  const refetch = () => {};
 
   // Sort and prioritize featured scholarships (Techo -> AUPP -> MoEYS)
   const scholarships = useMemo(() => {

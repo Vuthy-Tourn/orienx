@@ -4,12 +4,14 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
 import { DirectoryControls } from "@/components/directory/directory-controls";
 import { DirectoryHeroStats } from "@/components/directory/directory-hero-stats";
 import { useAuth } from "@/contexts/auth-context";
+import { IS_STATIC_MODE } from "@/lib/app-mode";
+import { listStaticScholarships } from "@/lib/data/catalog";
 import {
   Award,
   Calendar,
@@ -70,22 +72,14 @@ export default function ScholarshipsPage() {
   const [targetBaciiGrade, setTargetBaciiGrade] = useState<string>("ALL");
   const [targetStudyField, setTargetStudyField] = useState<string>("ALL");
 
-  const {
-    data: scholarships,
-    isLoading,
-    isError,
-    refetch,
-    isFetching,
-  } = useQuery({
-    queryKey: ["scholarships", searchTerm, coverageFilter],
-    queryFn: async () => {
-      const params = new URLSearchParams();
-      if (searchTerm) params.append("q", searchTerm);
-      if (coverageFilter) params.append("coverage_type", coverageFilter);
-      return apiFetch<any[]>(`/scholarships?${params.toString()}`);
-    },
-    retry: 1,
+  const scholarships = listStaticScholarships({
+    search: searchTerm,
+    coverage: coverageFilter || undefined,
   });
+  const isLoading = false;
+  const isError = false;
+  const isFetching = false;
+  const refetch = () => {};
 
   const { mutate: toggleTrack } = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
@@ -570,15 +564,17 @@ export default function ScholarshipsPage() {
                   {/* Actions */}
                   <div className="mt-auto border-t border-[#E6E8F0] px-5 py-3 sm:px-6">
                     <div className="grid grid-cols-2 items-center gap-2 xl:flex xl:justify-end">
-                      <BookmarkButton
-                        entityType="scholarship"
-                        entityId={s.id}
-                        variant="ghost"
-                        showText
-                        textActive={t("scholarshipsPage.trackedScholarship")}
-                        textInactive={t("scholarshipsPage.trackScholarship")}
-                        className="justify-self-start text-[12px] font-bold xl:mr-auto"
-                      />
+                      {!IS_STATIC_MODE && (
+                        <BookmarkButton
+                          entityType="scholarship"
+                          entityId={s.id}
+                          variant="ghost"
+                          showText
+                          textActive={t("scholarshipsPage.trackedScholarship")}
+                          textInactive={t("scholarshipsPage.trackScholarship")}
+                          className="justify-self-start text-[12px] font-bold xl:mr-auto"
+                        />
+                      )}
 
                       <Link
                         href={`${linkPrefix}/scholarships/${s.slug}`}

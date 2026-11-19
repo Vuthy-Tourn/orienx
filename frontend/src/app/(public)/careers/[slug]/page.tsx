@@ -3,9 +3,8 @@
 import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { getStaticCareer } from "@/lib/data/catalog";
 import {
   Briefcase,
   ArrowLeft,
@@ -24,11 +23,9 @@ export default function CareerDetailPage() {
   const router = useRouter();
   const { t, getLocalized } = useLanguage();
 
-  const { data: career, isLoading, error } = useQuery({
-    queryKey: ["career", slug],
-    queryFn: async () => apiFetch<any>(`/careers/${slug}`),
-    enabled: !!slug,
-  });
+  const career = getStaticCareer(slug);
+  const isLoading = false;
+  const error = career ? null : new Error("Career not found");
 
   if (isLoading) {
     return (

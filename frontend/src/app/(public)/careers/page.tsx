@@ -3,9 +3,8 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { listStaticCareers } from "@/lib/data/catalog";
 import { DirectoryControls } from "@/components/directory/directory-controls";
 import { DirectoryHeroStats } from "@/components/directory/directory-hero-stats";
 import {
@@ -108,22 +107,14 @@ export default function CareersPage() {
   const [seniorityLevel, setSeniorityLevel] = useState<"junior" | "mid" | "senior">("junior");
   const [selectedRiasec, setSelectedRiasec] = useState<string | null>(null);
 
-  const {
-    data: careers,
-    isLoading,
-    isError,
-    refetch,
-    isFetching,
-  } = useQuery({
-    queryKey: ["careers", searchTerm, industryFilter],
-    queryFn: async () => {
-      const params = new URLSearchParams();
-      if (searchTerm) params.append("q", searchTerm);
-      if (industryFilter) params.append("industry", industryFilter);
-      return apiFetch<any[]>(`/careers?${params.toString()}`);
-    },
-    retry: 1,
+  const careers = listStaticCareers({
+    search: searchTerm,
+    industry: industryFilter || undefined,
   });
+  const isLoading = false;
+  const isError = false;
+  const isFetching = false;
+  const refetch = () => {};
 
   const filteredCareers = useMemo(() => {
     if (!careers) return [];
@@ -601,7 +592,7 @@ export default function CareersPage() {
             </div>
 
             <Link
-              href="/dashboard/assessments/riasec"
+              href="/assessments/riasec/test"
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all shadow-md shrink-0 self-start sm:self-auto"
             >
               <span>{language === "km" ? "ធ្វើតេស្ត RIASEC" : "Take RIASEC Test"}</span>

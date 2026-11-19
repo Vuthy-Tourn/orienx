@@ -408,7 +408,7 @@ export default function RiasecPublicGuidePage() {
               {/* Action CTAs */}
               <div className="gsap-riasec-hero-anim pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
                 <Link
-                  href="/dashboard/assessments/riasec"
+                  href="/assessments/riasec/test"
                   className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-[0_4px_24px_rgba(247,206,77,0.3)] hover:shadow-[0_6px_28px_rgba(247,206,77,0.45)] transition-all active:scale-98 cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-[#111965]" />
@@ -660,7 +660,7 @@ export default function RiasecPublicGuidePage() {
                     {language === "km" ? "អាជីព:" : "Careers:"} {meta.sampleCareers.slice(0, 2).map((c) => (language === "km" ? c.km : c.en)).join(", ")}
                   </div>
                   <Link
-                    href="/dashboard/assessments/riasec"
+                    href="/assessments/riasec/test"
                     className="inline-flex items-center gap-1 text-[12px] font-black text-[#111965] hover:text-[#0284C7] transition-colors shrink-0 ml-2"
                   >
                     <span>{language === "km" ? "ធ្វើតេស្ត" : "Test"}</span>
@@ -986,7 +986,7 @@ export default function RiasecPublicGuidePage() {
             : "Takes only 10–12 minutes. Receive your instant personalized Holland Code, 6-dimension radar profile, and verified Cambodian university matches."
         }
         primaryButtonText={language === "km" ? "ចាប់ផ្តើមធ្វើតេស្ត RIASEC" : "Take Assessment Now"}
-        primaryButtonHref="/dashboard/assessments/riasec"
+        primaryButtonHref="/assessments/riasec/test"
         secondaryButtonText={language === "km" ? "ស្វែងយល់ពីវិមាត្រទាំង ៦" : "Explore 6 Dimensions"}
         secondaryButtonHref="#dimensions-grid"
         mascotSpeech={language === "km" ? "តោះស្វែងរកកូដ Holland របស់អ្នក! 🚀" : "Let's find your Holland Code! 🚀"}
@@ -1125,7 +1125,7 @@ export default function RiasecPublicGuidePage() {
                   {language === "km" ? "បិទ" : "Close"}
                 </button>
                 <Link
-                  href="/dashboard/assessments/riasec"
+                  href="/assessments/riasec/test"
                   className="px-5 py-2.5 rounded-xl bg-[#111965] hover:bg-[#1A2580] text-white text-xs font-black transition-colors shadow-xs flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto whitespace-nowrap"
                 >
                   <span>{language === "km" ? "ធ្វើតេស្ត RIASEC" : "Take Assessment"}</span>

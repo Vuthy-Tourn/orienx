@@ -1,0 +1,2021 @@
+[
+  {
+    "type": "university",
+    "id": "2b8a2450-ffff-4dbf-a560-042d0122adab",
+    "slug": "acac",
+    "title": {
+      "en": "Academy of Culinary Arts Cambodia",
+      "km": "វិទ្យាស្ថានម្ហូបអាហារកម្ពុជា​"
+    },
+    "subtitle": {
+      "en": "ACAC",
+      "km": "ACAC"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/acac"
+  },
+  {
+    "type": "university",
+    "id": "eb1600ec-c13f-4d53-9cff-fddbc5957106",
+    "slug": "aeu",
+    "title": {
+      "en": "Asia Euro University",
+      "km": "សាកលវិទ្យាល័យអាស៊ីអ៊ឺរ៉ុប"
+    },
+    "subtitle": {
+      "en": "AEU",
+      "km": "AEU"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/aeu"
+  },
+  {
+    "type": "university",
+    "id": "c89eaee8-2dc6-4620-956b-0fb24affd8c0",
+    "slug": "aib",
+    "title": {
+      "en": "ACLEDA Institute of Business",
+      "km": "វិទ្យាស្ថានពាណិជ្ជសាស្រ្តអេស៊ីលីដា"
+    },
+    "subtitle": {
+      "en": "AIB",
+      "km": "AIB"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/aib"
+  },
+  {
+    "type": "university",
+    "id": "1584696c-8784-4e6c-a39b-c670b937a298",
+    "slug": "angkor",
+    "title": {
+      "en": "Angkor University",
+      "km": "សាកលវិទ្យាល័យ អង្គរ"
+    },
+    "subtitle": {
+      "en": "AU",
+      "km": "AU"
+    },
+    "keywords": [
+      "Siem Reap",
+      "PRIVATE"
+    ],
+    "href": "/universities/angkor"
+  },
+  {
+    "type": "university",
+    "id": "44e1e808-8303-47d0-a2a6-0bcc44561d95",
+    "slug": "aupp",
+    "title": {
+      "en": "American University of Phnom Penh",
+      "km": "សាកលវិទ្យាល័យអាមេរិកាំងភ្នំពេញ"
+    },
+    "subtitle": {
+      "en": "AUPP",
+      "km": "អេយូប៊ីភី"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/aupp"
+  },
+  {
+    "type": "university",
+    "id": "c365d62b-58c3-4c18-93c9-d91c8afbe844",
+    "slug": "bbu",
+    "title": {
+      "en": "Build Bright University",
+      "km": "សាកលវិទ្យាល័យបៀលប្រាយ"
+    },
+    "subtitle": {
+      "en": "BBU",
+      "km": "BBU"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/bbu"
+  },
+  {
+    "type": "university",
+    "id": "7fa5e952-2a73-47d0-8bb7-571ee9b5f127",
+    "slug": "beltei",
+    "title": {
+      "en": "BELTEI International University",
+      "km": "សាកលវិទ្យាល័យប៊ែលធីអន្តរជាតិ"
+    },
+    "subtitle": {
+      "en": "BIU",
+      "km": "BIU"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/beltei"
+  },
+  {
+    "type": "university",
+    "id": "5c3fa283-60e8-43b3-91bd-5be1f2892a9f",
+    "slug": "cadt",
+    "title": {
+      "en": "Cambodia Academy of Digital Technology",
+      "km": "បណ្ឌិត្យសភាបច្ចេកវិទ្យាឌីជីថលកម្ពុជា"
+    },
+    "subtitle": {
+      "en": "CADT",
+      "km": "ប.ប.ឌ.ក"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/cadt"
+  },
+  {
+    "type": "university",
+    "id": "0f3e0a26-a7a9-4d12-8ece-855c496eacbf",
+    "slug": "camed",
+    "title": {
+      "en": "CamEd Business School",
+      "km": "វិទ្យាស្ថានពាណិជ្ជកម្មខេមអ៊ែត"
+    },
+    "subtitle": {
+      "en": "CamEd",
+      "km": "CamEd"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/camed"
+  },
+  {
+    "type": "university",
+    "id": "53eb4ab1-33cf-4c25-9957-9f53b74befea",
+    "slug": "camtech",
+    "title": {
+      "en": "Cambodia University of Technology and Science",
+      "km": "សាកលវិទ្យាល័យបច្ចេកវិទ្យា និងវិទ្យាសាស្រ្តកម្ពុជា"
+    },
+    "subtitle": {
+      "en": "CamTech",
+      "km": "CamTech"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/camtech"
+  },
+  {
+    "type": "university",
+    "id": "80fa0a29-767d-463b-a7e8-e705a77087d7",
+    "slug": "cmu",
+    "title": {
+      "en": "Cambodian Mekong University",
+      "km": "សាកលវិទ្យាល័យមេគង្គកម្ពុជា"
+    },
+    "subtitle": {
+      "en": "CKU",
+      "km": "CKU"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/cmu"
+  },
+  {
+    "type": "university",
+    "id": "855f8f62-86bb-4d6d-a8da-c5de23157f4c",
+    "slug": "cus",
+    "title": {
+      "en": "Cambodian University for Specialties",
+      "km": "សាកលវិទ្យាល័យ⁣ ឯកទេស⁣ នៃកម្ពុជា"
+    },
+    "subtitle": {
+      "en": "CUS",
+      "km": "CUS"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/cus"
+  },
+  {
+    "type": "university",
+    "id": "34e2bfcc-162e-4cf0-b886-07ec6cd353df",
+    "slug": "dmuc",
+    "title": {
+      "en": "De Montfort University Cambodia",
+      "km": "សាកលវិទ្យាល័យ ឌឹ ម៉ុនហ្វត កម្ពុជា"
+    },
+    "subtitle": {
+      "en": "DMUC",
+      "km": "DMUC"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/dmuc"
+  },
+  {
+    "type": "university",
+    "id": "e9fad5e2-9aa3-471a-8c63-9eec8f4b1083",
+    "slug": "eamu",
+    "title": {
+      "en": "East Asia Management University",
+      "km": "សាកលវិទ្យាល័យគ្រប់គ្រងអាស៊ីបូព៌ា"
+    },
+    "subtitle": {
+      "en": "EAMU",
+      "km": "EAMU"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/eamu"
+  },
+  {
+    "type": "university",
+    "id": "6dab0fb9-c9c0-4f93-abfd-58d14f2b10aa",
+    "slug": "hru",
+    "title": {
+      "en": "Human Resource University",
+      "km": "សាកលវិទ្យាល័យធនធានមនុស្ស"
+    },
+    "subtitle": {
+      "en": "HRU",
+      "km": "HRU"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/hru"
+  },
+  {
+    "type": "university",
+    "id": "b93ee361-95ad-40c0-93bd-037145d8b524",
+    "slug": "iic",
+    "title": {
+      "en": "IIC University of Technology",
+      "km": "សាកលវិទ្យាល័យ អាយអាយស៊ីនៃបច្ចេកវិទ្យា"
+    },
+    "subtitle": {
+      "en": "IIC",
+      "km": "IIC"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/iic"
+  },
+  {
+    "type": "university",
+    "id": "11ff6f0a-8426-40fa-81bf-9f6fcdc60b94",
+    "slug": "istad",
+    "title": {
+      "en": "Institute of Science and Technology Advanced Development",
+      "km": "វិទ្យាស្ថាន សាយអិនស៍ អេន ថេកណឡជី អ៊ែតវ៉ានស៍ ឌីវេឡុបម៉ិន (ISTAD)"
+    },
+    "subtitle": {
+      "en": "ISTAD",
+      "km": "ISTAD"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/istad"
+  },
+  {
+    "type": "university",
+    "id": "ac5cab7f-d3ee-4587-801f-df536d6c1b34",
+    "slug": "itc",
+    "title": {
+      "en": "Institute of Technology of Cambodia",
+      "km": "វិទ្យាស្ថានបច្ចេកវិទ្យាកម្ពុជា"
+    },
+    "subtitle": {
+      "en": "ITC",
+      "km": "តិចណូ"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/itc"
+  },
+  {
+    "type": "university",
+    "id": "b8f44cd1-f7e2-4e15-83f1-173535f0ba63",
+    "slug": "iu",
+    "title": {
+      "en": "International University",
+      "km": "សាកលវិទ្យាល័យអន្តរជាតិ"
+    },
+    "subtitle": {
+      "en": "IU",
+      "km": "IU"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/iu"
+  },
+  {
+    "type": "university",
+    "id": "28cc6ce1-683f-4f98-8bf5-e4d73b6a92b0",
+    "slug": "kit",
+    "title": {
+      "en": "Kirirom Institute of Technology",
+      "km": "វិទ្យាស្ថានបច្ចេកវិទ្យាគីរីរម្យ"
+    },
+    "subtitle": {
+      "en": "KIT",
+      "km": "KIT"
+    },
+    "keywords": [
+      "Kampong Speu",
+      "PRIVATE"
+    ],
+    "href": "/universities/kit"
+  },
+  {
+    "type": "university",
+    "id": "d687306c-33b1-4992-b05e-1ac18a990167",
+    "slug": "nmu",
+    "title": {
+      "en": "National Meanchey University",
+      "km": "សាកលវិទ្យាល័យជាតិមានជ័យ"
+    },
+    "subtitle": {
+      "en": "NMU",
+      "km": "NMU"
+    },
+    "keywords": [
+      "Banteay Meanchey",
+      "PRIVATE"
+    ],
+    "href": "/universities/nmu"
+  },
+  {
+    "type": "university",
+    "id": "b75fdb4e-55a0-4973-83ac-ee855b1a9a2f",
+    "slug": "norton",
+    "title": {
+      "en": "Norton University",
+      "km": "សាកលវិទ្យាល័យន័រតុន"
+    },
+    "subtitle": {
+      "en": "NU",
+      "km": "NU"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/norton"
+  },
+  {
+    "type": "university",
+    "id": "808b006a-e1a3-4af0-a396-c379f6b701a0",
+    "slug": "npic",
+    "title": {
+      "en": "National Polytechnic Institute of Cambodia",
+      "km": "វិទ្យាស្ថានជាតិពហុ​បច្ចេកវិទ្យាកម្ពុជា"
+    },
+    "subtitle": {
+      "en": "NPIC",
+      "km": "NPIC"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/npic"
+  },
+  {
+    "type": "university",
+    "id": "2bcfd39c-9a43-4649-a1e2-5f07f6b9a0f9",
+    "slug": "ntti",
+    "title": {
+      "en": "National Technical Training Institute",
+      "km": "វិទ្យាស្ថានជាតិបណ្ដុះបណ្ដាលបច្ចេកទេស"
+    },
+    "subtitle": {
+      "en": "NTTI",
+      "km": "NTTI"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/ntti"
+  },
+  {
+    "type": "university",
+    "id": "50cb1bf2-f20e-47c8-bbfb-1ebe14676501",
+    "slug": "nubb",
+    "title": {
+      "en": "National University of Battambang",
+      "km": "សាកលវិទ្យាល័យជាតិបាត់ដំបង"
+    },
+    "subtitle": {
+      "en": "NUBB",
+      "km": "NUBB"
+    },
+    "keywords": [
+      "Battambang",
+      "PRIVATE"
+    ],
+    "href": "/universities/nubb"
+  },
+  {
+    "type": "university",
+    "id": "fbb8ab2b-6362-44ed-a026-f0d779426440",
+    "slug": "num",
+    "title": {
+      "en": "National University of Management",
+      "km": "សាកលវិទ្យាល័យជាតិគ្រប់គ្រង"
+    },
+    "subtitle": {
+      "en": "NUM",
+      "km": "ស.ជ.គ"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/num"
+  },
+  {
+    "type": "university",
+    "id": "ef6d5128-7eab-48c4-843c-b1a619fe7a74",
+    "slug": "paragoniu",
+    "title": {
+      "en": "Paragon International University",
+      "km": "សាកលវិទ្យាល័យអន្តរជាតិផារ៉ាហ្គន"
+    },
+    "subtitle": {
+      "en": "ParagonIU",
+      "km": "ផារ៉ាហ្គន"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/paragoniu"
+  },
+  {
+    "type": "university",
+    "id": "d3b65972-179c-4ca4-a24c-846d923a17ac",
+    "slug": "pcu",
+    "title": {
+      "en": "Panha Chiet University",
+      "km": "សាកលវិទ្យាល័យបញ្ញាជាតិ"
+    },
+    "subtitle": {
+      "en": "BPCU",
+      "km": "BPCU"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/pcu"
+  },
+  {
+    "type": "university",
+    "id": "6727015e-2288-4a14-94c7-e043e73968da",
+    "slug": "pkpi",
+    "title": {
+      "en": "Preah Kossomak Polytechnic Institute",
+      "km": "វិទ្យាស្ថានពហុបច្ចេកទេសព្រះកុសុមៈ"
+    },
+    "subtitle": {
+      "en": "PPI",
+      "km": "PPI"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/pkpi"
+  },
+  {
+    "type": "university",
+    "id": "b2bb462b-1938-49de-89f2-62c253a82548",
+    "slug": "plnia",
+    "title": {
+      "en": "Prek Leap National Institute of Agriculture",
+      "km": "សាកលវិទ្យាល័យជាតិកសិកម្មព្រែកលៀប"
+    },
+    "subtitle": {
+      "en": "PNCA",
+      "km": "PNCA"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/plnia"
+  },
+  {
+    "type": "university",
+    "id": "299cd414-9d84-4b31-8f9a-589940e36dce",
+    "slug": "ppiu",
+    "title": {
+      "en": "Phnom Penh International University",
+      "km": "សាកលវិទ្យាល័យភ្នំពេញអន្តរជាតិ"
+    },
+    "subtitle": {
+      "en": "PPIU",
+      "km": "PPIU"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/ppiu"
+  },
+  {
+    "type": "university",
+    "id": "53f0782c-936b-432f-8237-9fdbc4c5634f",
+    "slug": "puc",
+    "title": {
+      "en": "Pannasastra University of Cambodia",
+      "km": "សាកលវិទ្យាល័យបញ្ញាសាស្ត្រ"
+    },
+    "subtitle": {
+      "en": "PUC",
+      "km": "PUC"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/puc"
+  },
+  {
+    "type": "university",
+    "id": "3fcca75d-4c60-4bb7-94db-035b855277b3",
+    "slug": "rua",
+    "title": {
+      "en": "Royal University of Agriculture",
+      "km": "សាកលវិទ្យាល័យភូមិន្ទកសិកម្ម"
+    },
+    "subtitle": {
+      "en": "RUA",
+      "km": "RUA"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/rua"
+  },
+  {
+    "type": "university",
+    "id": "3c11cb1c-49ea-4c12-91cb-10427d9cc86a",
+    "slug": "rufa",
+    "title": {
+      "en": "Royal University of Fine Arts",
+      "km": "សាកលវិទ្យាល័យភូមិន្ទវិចិត្រសិល្បៈ"
+    },
+    "subtitle": {
+      "en": "RUFA",
+      "km": "RUFA"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/rufa"
+  },
+  {
+    "type": "university",
+    "id": "32f281c2-8645-46aa-b333-1d090d6396be",
+    "slug": "rule",
+    "title": {
+      "en": "Royal University of Law and Economics",
+      "km": "សាកលវិទ្យាល័យភូមិន្ទនីតិសាស្ត្រ និងវិទ្យាសាស្ត្រសេដ្ឋកិច្ច"
+    },
+    "subtitle": {
+      "en": "RULE",
+      "km": "RULE"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/rule"
+  },
+  {
+    "type": "university",
+    "id": "e6c5b4a2-cfcf-40cd-9379-806699d16836",
+    "slug": "rupp",
+    "title": {
+      "en": "Royal University of Phnom Penh",
+      "km": "សាកលវិទ្យាល័យភូមិន្ទភ្នំពេញ"
+    },
+    "subtitle": {
+      "en": "RUPP",
+      "km": "ស.ភ.ភ"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/rupp"
+  },
+  {
+    "type": "university",
+    "id": "341554f5-05b0-45c0-ac96-961bd989264b",
+    "slug": "setec",
+    "title": {
+      "en": "SETEC Institute",
+      "km": "វិទ្យាស្ថានស៊ីតិក"
+    },
+    "subtitle": {
+      "en": "SETEC",
+      "km": "ស៊ីតិក"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/setec"
+  },
+  {
+    "type": "university",
+    "id": "8b3dedd7-8a9c-4611-bafe-769d41ca7472",
+    "slug": "sru",
+    "title": {
+      "en": "Svay Rieng University",
+      "km": "សាកលវិទ្យាល័យស្វាយរៀង"
+    },
+    "subtitle": {
+      "en": "SRU",
+      "km": "SRU"
+    },
+    "keywords": [
+      "Svay Rieng",
+      "PUBLIC"
+    ],
+    "href": "/universities/sru"
+  },
+  {
+    "type": "university",
+    "id": "e21c3f24-f51c-4336-b763-a9d34f31576d",
+    "slug": "uc",
+    "title": {
+      "en": "The University of Cambodia",
+      "km": "សាកលវិទ្យាល័យកម្ពុជា"
+    },
+    "subtitle": {
+      "en": "UC",
+      "km": "UC"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/uc"
+  },
+  {
+    "type": "university",
+    "id": "5195e397-f14f-418c-a608-75daa8e8f49b",
+    "slug": "uef",
+    "title": {
+      "en": "University of Economics and Finance",
+      "km": "សាកលវិទ្យាល័យសេដ្ឋកិច្ចនិងហិរញ្ញវត្ថុ"
+    },
+    "subtitle": {
+      "en": "UEF",
+      "km": "UEF"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/uef"
+  },
+  {
+    "type": "university",
+    "id": "b88357f7-f226-493c-b2fb-0a22b6f2b9cc",
+    "slug": "uhs",
+    "title": {
+      "en": "University of Health Sciences",
+      "km": "សាកលវិទ្យាវិទ្យាសាស្ត្រសុខាភិបាល"
+    },
+    "subtitle": {
+      "en": "UHS",
+      "km": "UHS"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PUBLIC"
+    ],
+    "href": "/universities/uhs"
+  },
+  {
+    "type": "university",
+    "id": "06490017-4257-41f4-92ff-843729cdbf3a",
+    "slug": "uhst",
+    "title": {
+      "en": "University of Heng Samrin Thbongkhmum",
+      "km": "សាកលវិទ្យាល័យ ហេងសំរិន ត្បូងឃ្មុំ"
+    },
+    "subtitle": {
+      "en": "UHST",
+      "km": "UHST"
+    },
+    "keywords": [
+      "Tbong Khmum",
+      "PRIVATE"
+    ],
+    "href": "/universities/uhst"
+  },
+  {
+    "type": "university",
+    "id": "ac46d4ec-e5e4-4ff1-bb8b-6912d13c2951",
+    "slug": "up",
+    "title": {
+      "en": "The University of Puthisastra",
+      "km": "សាកលវិទ្យាល័យពុទ្ធិសាស្ត្រ"
+    },
+    "subtitle": {
+      "en": "UP",
+      "km": "UP"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/up"
+  },
+  {
+    "type": "university",
+    "id": "e65927d5-ed31-45c2-b3b7-a66d7ce9706e",
+    "slug": "usea",
+    "title": {
+      "en": "University of South-East Asia",
+      "km": "សាកលវិទ្យាល័យ សៅអុីសថ៏អេយសៀ"
+    },
+    "subtitle": {
+      "en": "USEA",
+      "km": "USEA"
+    },
+    "keywords": [
+      "Siem Reap",
+      "PRIVATE"
+    ],
+    "href": "/universities/usea"
+  },
+  {
+    "type": "university",
+    "id": "d3026462-9fcf-4828-bfe0-e01ad85b7d77",
+    "slug": "vanda",
+    "title": {
+      "en": "Vanda Institute",
+      "km": "វិទ្យាស្ថានវ៉ាន់ដា"
+    },
+    "subtitle": {
+      "en": "VI",
+      "km": "VI"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/vanda"
+  },
+  {
+    "type": "university",
+    "id": "3bb31cad-2f0d-4540-b69b-18da1013646a",
+    "slug": "western",
+    "title": {
+      "en": "Western University",
+      "km": "សាកលវិទ្យាល័យវេស្ទើន"
+    },
+    "subtitle": {
+      "en": "WU",
+      "km": "WU"
+    },
+    "keywords": [
+      "Phnom Penh",
+      "PRIVATE"
+    ],
+    "href": "/universities/western"
+  },
+  {
+    "type": "major",
+    "id": "3212e65e-b02e-4acb-b27a-7a496234c586",
+    "slug": "accounting-auditing",
+    "title": {
+      "en": "Accounting, Auditing & Taxation (ACCA/CAT)",
+      "km": "គណនេយ្យ សវនកម្ម និងពន្ធដារ"
+    },
+    "subtitle": {
+      "en": "Business & Economics",
+      "km": "Business & Economics"
+    },
+    "keywords": [
+      "Business & Economics",
+      "C",
+      "E"
+    ],
+    "href": "/majors/accounting-auditing"
+  },
+  {
+    "type": "major",
+    "id": "40dbf190-21cc-4630-9dae-83167a8d1ce3",
+    "slug": "agronomy-agricultural-sciences",
+    "title": {
+      "en": "Agronomy & Crop Sciences",
+      "km": "ក្សេត្រសាស្ត្រ និងវិទ្យាសាស្ត្រដំណាំ"
+    },
+    "subtitle": {
+      "en": "Agriculture & Life Sciences",
+      "km": "Agriculture & Life Sciences"
+    },
+    "keywords": [
+      "Agriculture & Life Sciences",
+      "R",
+      "I"
+    ],
+    "href": "/majors/agronomy-agricultural-sciences"
+  },
+  {
+    "type": "major",
+    "id": "591779f4-477a-4e29-b43d-44cb1747df2b",
+    "slug": "animal-science-veterinary",
+    "title": {
+      "en": "Animal Science & Veterinary Medicine",
+      "km": "វិទ្យាសាស្ត្រសត្វ និងបសុព្យាបាល"
+    },
+    "subtitle": {
+      "en": "Agriculture & Life Sciences",
+      "km": "Agriculture & Life Sciences"
+    },
+    "keywords": [
+      "Agriculture & Life Sciences",
+      "R",
+      "I"
+    ],
+    "href": "/majors/animal-science-veterinary"
+  },
+  {
+    "type": "major",
+    "id": "012a8b28-6395-4a0e-94c2-405687ce5dd2",
+    "slug": "archeology-cultural-heritage",
+    "title": {
+      "en": "Archaeology & Cultural Heritage Management",
+      "km": "បុរាណវិទ្យា និងការគ្រប់គ្រងបេតិកភណ្ឌវប្បធម៌"
+    },
+    "subtitle": {
+      "en": "Law & Social Sciences",
+      "km": "Law & Social Sciences"
+    },
+    "keywords": [
+      "Law & Social Sciences",
+      "I",
+      "R"
+    ],
+    "href": "/majors/archeology-cultural-heritage"
+  },
+  {
+    "type": "major",
+    "id": "b0b317b1-002d-49d0-8b6c-6d0832616f0e",
+    "slug": "architecture-urban-planning",
+    "title": {
+      "en": "Architecture & Urban Planning",
+      "km": "ស្ថាបត្យកម្ម និងនគរូបនីយវិទ្យា"
+    },
+    "subtitle": {
+      "en": "Architecture & Design",
+      "km": "Architecture & Design"
+    },
+    "keywords": [
+      "Architecture & Design",
+      "A",
+      "I"
+    ],
+    "href": "/majors/architecture-urban-planning"
+  },
+  {
+    "type": "major",
+    "id": "0f68ade1-1509-4d5c-a4cb-0ec4bfdf43b3",
+    "slug": "asian-languages-culture",
+    "title": {
+      "en": "Asian Languages & International Communication (Chinese, Japanese, Korean)",
+      "km": "ភាសាអាស៊ី និងទំនាក់ទំនងអន្តរជាតិ (ចិន ជប៉ុន កូរ៉េ)"
+    },
+    "subtitle": {
+      "en": "Law & Social Sciences",
+      "km": "Law & Social Sciences"
+    },
+    "keywords": [
+      "Law & Social Sciences",
+      "A",
+      "S"
+    ],
+    "href": "/majors/asian-languages-culture"
+  },
+  {
+    "type": "major",
+    "id": "6d197adb-e6d1-4550-ba80-bb3fcbe65a35",
+    "slug": "automotive-technology-mechanics",
+    "title": {
+      "en": "Automotive Technology & Heavy Machinery",
+      "km": "បច្ចេកវិទ្យារថយន្ត និងគ្រឿងចក្រធុនធ្ងន់"
+    },
+    "subtitle": {
+      "en": "Engineering",
+      "km": "Engineering"
+    },
+    "keywords": [
+      "Engineering",
+      "R",
+      "I"
+    ],
+    "href": "/majors/automotive-technology-mechanics"
+  },
+  {
+    "type": "major",
+    "id": "96cc69b0-ec1a-4ffd-b353-76104ddf9058",
+    "slug": "banking-finance",
+    "title": {
+      "en": "Banking & Financial Markets",
+      "km": "ធនាគារ និងទីផ្សារហិរញ្ញវត្ថុ"
+    },
+    "subtitle": {
+      "en": "Business & Economics",
+      "km": "Business & Economics"
+    },
+    "keywords": [
+      "Business & Economics",
+      "C",
+      "E"
+    ],
+    "href": "/majors/banking-finance"
+  },
+  {
+    "type": "major",
+    "id": "4db4c24b-da17-43c2-be2a-3ae5d9866652",
+    "slug": "biology-biotechnology",
+    "title": {
+      "en": "Biology & Applied Biotechnology",
+      "km": "វិទ្យាសាស្ត្រជីវសាស្រ្ត និងបច្ចេកវិទ្យាជីវៈ"
+    },
+    "subtitle": {
+      "en": "Natural Sciences",
+      "km": "Natural Sciences"
+    },
+    "keywords": [
+      "Natural Sciences",
+      "I",
+      "R"
+    ],
+    "href": "/majors/biology-biotechnology"
+  },
+  {
+    "type": "major",
+    "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+    "slug": "business-administration",
+    "title": {
+      "en": "Business Administration & Management",
+      "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+    },
+    "subtitle": {
+      "en": "Business & Economics",
+      "km": "Business & Economics"
+    },
+    "keywords": [
+      "Business & Economics",
+      "E",
+      "S"
+    ],
+    "href": "/majors/business-administration"
+  },
+  {
+    "type": "major",
+    "id": "4e2a8b2f-02f5-4945-ad19-bcfd136dddf8",
+    "slug": "chemistry-chemical-analysis",
+    "title": {
+      "en": "Chemistry & Applied Chemical Analysis",
+      "km": "គីមីវិទ្យា និងការវិភាគគីមីអនុវត្ត"
+    },
+    "subtitle": {
+      "en": "Natural Sciences",
+      "km": "Natural Sciences"
+    },
+    "keywords": [
+      "Natural Sciences",
+      "I",
+      "R"
+    ],
+    "href": "/majors/chemistry-chemical-analysis"
+  },
+  {
+    "type": "major",
+    "id": "10a386a5-3976-4af8-81f9-53eddf01a29d",
+    "slug": "civil-engineering",
+    "title": {
+      "en": "Civil Engineering & Structural Design",
+      "km": "វិស្វកម្មសំណង់ស៊ីវិល និងការរចនាគ្រោងបង្គុំ"
+    },
+    "subtitle": {
+      "en": "Engineering",
+      "km": "Engineering"
+    },
+    "keywords": [
+      "Engineering",
+      "R",
+      "I"
+    ],
+    "href": "/majors/civil-engineering"
+  },
+  {
+    "type": "major",
+    "id": "57e44287-8cb0-492c-aa44-b644b9a9386f",
+    "slug": "computer-science",
+    "title": {
+      "en": "Computer Science & Theoretical Computing",
+      "km": "វិទ្យាសាស្ត្រកុំព្យូទ័រ និងទ្រឹស្តីគណនា"
+    },
+    "subtitle": {
+      "en": "Information Technology",
+      "km": "Information Technology"
+    },
+    "keywords": [
+      "Information Technology",
+      "I",
+      "R"
+    ],
+    "href": "/majors/computer-science"
+  },
+  {
+    "type": "major",
+    "id": "cd6fed61-2aab-48bb-8101-ad3d9eb5ef41",
+    "slug": "culinary-arts",
+    "title": {
+      "en": "Culinary Arts & Professional Kitchen Operations",
+      "km": "សិល្បៈធ្វើម្ហូប និងការគ្រប់គ្រងផ្ទះបាយវិជ្ជាជីវៈ"
+    },
+    "subtitle": {
+      "en": "Business & Economics",
+      "km": "Business & Economics"
+    },
+    "keywords": [
+      "Business & Economics",
+      "E",
+      "R"
+    ],
+    "href": "/majors/culinary-arts"
+  },
+  {
+    "type": "major",
+    "id": "f436465b-2e34-45f9-a302-e65dca71f927",
+    "slug": "cybersecurity-networking",
+    "title": {
+      "en": "Cybersecurity & Information Networks",
+      "km": "សន្តិសុខសាយប័រ និងបណ្តាញព័ត៌មាន"
+    },
+    "subtitle": {
+      "en": "Information Technology",
+      "km": "Information Technology"
+    },
+    "keywords": [
+      "Information Technology",
+      "R",
+      "C"
+    ],
+    "href": "/majors/cybersecurity-networking"
+  },
+  {
+    "type": "major",
+    "id": "8a7ce897-a090-4f80-9eed-fe7e864e59f9",
+    "slug": "data-science-ai",
+    "title": {
+      "en": "Data Science & Artificial Intelligence",
+      "km": "វិទ្យាសាស្ត្រទិន្នន័យ និងបញ្ញាសិប្បនិម្មិត"
+    },
+    "subtitle": {
+      "en": "Information Technology",
+      "km": "Information Technology"
+    },
+    "keywords": [
+      "Information Technology",
+      "I",
+      "C"
+    ],
+    "href": "/majors/data-science-ai"
+  },
+  {
+    "type": "major",
+    "id": "fa04a05b-2180-4012-8b60-001da59da951",
+    "slug": "dentistry",
+    "title": {
+      "en": "Doctor of Dental Surgery (DDS) / Dentistry",
+      "km": "ទន្តវទ្យាសាស្ត្រ / ពេទ្យធ្មេញ"
+    },
+    "subtitle": {
+      "en": "Health Sciences",
+      "km": "Health Sciences"
+    },
+    "keywords": [
+      "Health Sciences",
+      "I",
+      "R"
+    ],
+    "href": "/majors/dentistry"
+  },
+  {
+    "type": "major",
+    "id": "43c373de-dcc2-4cde-b37f-9e66a5e707ae",
+    "slug": "e-commerce-logistics",
+    "title": {
+      "en": "E-Commerce & Digital Business",
+      "km": "ពាណិជ្ជកម្មអេឡិចត្រូនិក និងអាជីវកម្មឌីជីថល"
+    },
+    "subtitle": {
+      "en": "Business & Economics",
+      "km": "Business & Economics"
+    },
+    "keywords": [
+      "Business & Economics",
+      "E",
+      "C"
+    ],
+    "href": "/majors/e-commerce-logistics"
+  },
+  {
+    "type": "major",
+    "id": "ea64d77e-900c-45ee-94c4-e36d3fc01b4c",
+    "slug": "economics-development",
+    "title": {
+      "en": "Economics & Development Studies",
+      "km": "សេដ្ឋកិច្ច និងការអភិវឌ្ឍ"
+    },
+    "subtitle": {
+      "en": "Business & Economics",
+      "km": "Business & Economics"
+    },
+    "keywords": [
+      "Business & Economics",
+      "I",
+      "E"
+    ],
+    "href": "/majors/economics-development"
+  },
+  {
+    "type": "major",
+    "id": "4237233d-4760-4a41-9a4a-0ef8cc44c620",
+    "slug": "electrical-electronic-engineering",
+    "title": {
+      "en": "Electrical & Electronic Engineering",
+      "km": "វិស្វកម្មអគ្គិសនី និងអេឡិចត្រូនិក"
+    },
+    "subtitle": {
+      "en": "Engineering",
+      "km": "Engineering"
+    },
+    "keywords": [
+      "Engineering",
+      "R",
+      "I"
+    ],
+    "href": "/majors/electrical-electronic-engineering"
+  },
+  {
+    "type": "major",
+    "id": "59aef490-d851-418d-b102-f1c2c44f21ba",
+    "slug": "english-teaching-tefl",
+    "title": {
+      "en": "English Literature & TEFL / Education",
+      "km": "អក្សរសាស្ត្រអង់គ្លេស និងគរុកោសល្យភាសាអង់គ្លេស"
+    },
+    "subtitle": {
+      "en": "Law & Social Sciences",
+      "km": "Law & Social Sciences"
+    },
+    "keywords": [
+      "Law & Social Sciences",
+      "S",
+      "A"
+    ],
+    "href": "/majors/english-teaching-tefl"
+  },
+  {
+    "type": "major",
+    "id": "8623c508-8ad3-44e0-80ad-eb0003596bdf",
+    "slug": "english-translation-interpreting",
+    "title": {
+      "en": "English for Translation & Interpreting",
+      "km": "ភាសាអង់គ្លេសសម្រាប់បកប្រែផ្ទាល់មាត់និងឯកសារ"
+    },
+    "subtitle": {
+      "en": "Law & Social Sciences",
+      "km": "Law & Social Sciences"
+    },
+    "keywords": [
+      "Law & Social Sciences",
+      "A",
+      "S"
+    ],
+    "href": "/majors/english-translation-interpreting"
+  },
+  {
+    "type": "major",
+    "id": "cc3d0d2d-0a29-4026-8bc4-0c98f518a495",
+    "slug": "environmental-science",
+    "title": {
+      "en": "Environmental Science & Climate Resilience",
+      "km": "វិទ្យាសាស្ត្របរិស្ថាន និងការគ្រប់គ្រងធនធានធម្មជាតិ"
+    },
+    "subtitle": {
+      "en": "Agriculture & Life Sciences",
+      "km": "Agriculture & Life Sciences"
+    },
+    "keywords": [
+      "Agriculture & Life Sciences",
+      "I",
+      "R"
+    ],
+    "href": "/majors/environmental-science"
+  },
+  {
+    "type": "major",
+    "id": "122c84d9-24d7-4f8b-be52-023e6f73b802",
+    "slug": "fine-arts",
+    "title": {
+      "en": "Fine Arts & Traditional Sculpture/Painting",
+      "km": "វិចិត្រសិល្បៈ និងគំនូរ/ចម្លាក់ប្រពៃណី"
+    },
+    "subtitle": {
+      "en": "Architecture & Design",
+      "km": "Architecture & Design"
+    },
+    "keywords": [
+      "Architecture & Design",
+      "A",
+      "R"
+    ],
+    "href": "/majors/fine-arts"
+  },
+  {
+    "type": "major",
+    "id": "c38e7a00-38c0-4d9c-bd85-2ca19ffb53f5",
+    "slug": "fintech",
+    "title": {
+      "en": "Financial Technology (Fintech)",
+      "km": "បច្ចេកវិទ្យាហិរញ្ញវត្ថុ"
+    },
+    "subtitle": {
+      "en": "Information Technology",
+      "km": "Information Technology"
+    },
+    "keywords": [
+      "Information Technology",
+      "C",
+      "E"
+    ],
+    "href": "/majors/fintech"
+  },
+  {
+    "type": "major",
+    "id": "a907fcd2-5aa9-4790-9091-98257ba82aea",
+    "slug": "food-technology-engineering",
+    "title": {
+      "en": "Food Technology & Chemical Engineering",
+      "km": "បច្ចេកវិទ្យាអាហារ និងវិស្វកម្មគីមី"
+    },
+    "subtitle": {
+      "en": "Engineering",
+      "km": "Engineering"
+    },
+    "keywords": [
+      "Engineering",
+      "I",
+      "R"
+    ],
+    "href": "/majors/food-technology-engineering"
+  },
+  {
+    "type": "major",
+    "id": "6f9f8b42-fe25-4401-815f-70458a35b28d",
+    "slug": "forestry-fisheries",
+    "title": {
+      "en": "Forestry Science, Fisheries & Aquaculture",
+      "km": "វិទ្យាសាស្ត្រព្រៃឈើ និងជលផល"
+    },
+    "subtitle": {
+      "en": "Agriculture & Life Sciences",
+      "km": "Agriculture & Life Sciences"
+    },
+    "keywords": [
+      "Agriculture & Life Sciences",
+      "R",
+      "I"
+    ],
+    "href": "/majors/forestry-fisheries"
+  },
+  {
+    "type": "major",
+    "id": "6a84c382-993f-45aa-b21b-77d0dd9b4c62",
+    "slug": "general-medicine",
+    "title": {
+      "en": "Doctor of Medicine (MD) / General Medicine",
+      "km": "វេជ្ជបណ្ឌិតទូទៅ / វេជ្ជសាស្ត្រ"
+    },
+    "subtitle": {
+      "en": "Health Sciences",
+      "km": "Health Sciences"
+    },
+    "keywords": [
+      "Health Sciences",
+      "I",
+      "S"
+    ],
+    "href": "/majors/general-medicine"
+  },
+  {
+    "type": "major",
+    "id": "916d800d-48fd-41f0-ae52-371abb75e1bd",
+    "slug": "graphic-design-multimedia",
+    "title": {
+      "en": "Graphic Design & Multimedia Arts",
+      "km": "រចនាក្រាហ្វិក និងសិល្បៈពហុព័ត៌មាន"
+    },
+    "subtitle": {
+      "en": "Architecture & Design",
+      "km": "Architecture & Design"
+    },
+    "keywords": [
+      "Architecture & Design",
+      "A",
+      "R"
+    ],
+    "href": "/majors/graphic-design-multimedia"
+  },
+  {
+    "type": "major",
+    "id": "b486d5f8-d21b-4ee4-8f17-65738183091f",
+    "slug": "hospitality-tourism-management",
+    "title": {
+      "en": "Hospitality & International Tourism Management",
+      "km": "ការគ្រប់គ្រងបដិសណ្ឋារកិច្ច និងទេសចរណ៍អន្តរជាតិ"
+    },
+    "subtitle": {
+      "en": "Business & Economics",
+      "km": "Business & Economics"
+    },
+    "keywords": [
+      "Business & Economics",
+      "E",
+      "S"
+    ],
+    "href": "/majors/hospitality-tourism-management"
+  },
+  {
+    "type": "major",
+    "id": "4a0283c4-8a55-47bc-ab6f-fa6a4fcbeecc",
+    "slug": "human-resource-management",
+    "title": {
+      "en": "Human Resource Management & Talent Strategy",
+      "km": "ការគ្រប់គ្រងធនធានមនុស្ស និងយុទ្ធសាស្ត្រទេពកោសល្យ"
+    },
+    "subtitle": {
+      "en": "Business & Economics",
+      "km": "Business & Economics"
+    },
+    "keywords": [
+      "Business & Economics",
+      "S",
+      "E"
+    ],
+    "href": "/majors/human-resource-management"
+  },
+  {
+    "type": "major",
+    "id": "fc895e41-dff1-432d-a6e2-d132756b740a",
+    "slug": "information-technology",
+    "title": {
+      "en": "Information Technology & Digital Infrastructure",
+      "km": "បច្ចេកវិទ្យាព័ត៌មាន និងហេដ្ឋារចនាសម្ព័ន្ធឌីជីថល"
+    },
+    "subtitle": {
+      "en": "Information Technology",
+      "km": "Information Technology"
+    },
+    "keywords": [
+      "Information Technology",
+      "R",
+      "I"
+    ],
+    "href": "/majors/information-technology"
+  },
+  {
+    "type": "major",
+    "id": "bbd7c379-7804-4262-858b-a395e9faf282",
+    "slug": "interior-design",
+    "title": {
+      "en": "Interior Design & Space Architecture",
+      "km": "ការរចនាផ្ទៃខាងក្នុង"
+    },
+    "subtitle": {
+      "en": "Architecture & Design",
+      "km": "Architecture & Design"
+    },
+    "keywords": [
+      "Architecture & Design",
+      "A",
+      "R"
+    ],
+    "href": "/majors/interior-design"
+  },
+  {
+    "type": "major",
+    "id": "d25b502b-b0cf-4df3-be26-7bf592f09431",
+    "slug": "international-business",
+    "title": {
+      "en": "International Business & Global Trade",
+      "km": "ពាណិជ្ជកម្មអន្តរជាតិ"
+    },
+    "subtitle": {
+      "en": "Business & Economics",
+      "km": "Business & Economics"
+    },
+    "keywords": [
+      "Business & Economics",
+      "E",
+      "C"
+    ],
+    "href": "/majors/international-business"
+  },
+  {
+    "type": "major",
+    "id": "9835dcaa-9ed8-43c9-a695-0ee56e084ffc",
+    "slug": "international-relations",
+    "title": {
+      "en": "International Relations & Diplomacy",
+      "km": "ទំនាក់ទំនងអន្តរជាតិ និងការទូត"
+    },
+    "subtitle": {
+      "en": "Law & Social Sciences",
+      "km": "Law & Social Sciences"
+    },
+    "keywords": [
+      "Law & Social Sciences",
+      "S",
+      "E"
+    ],
+    "href": "/majors/international-relations"
+  },
+  {
+    "type": "major",
+    "id": "701ad0fa-69a1-4b69-b2f9-2b22a4053bf0",
+    "slug": "khmer-literature-linguistics",
+    "title": {
+      "en": "Khmer Literature, Linguistics & Culture",
+      "km": "អក្សរសាស្ត្រខ្មែរ ភាសាវិទ្យា និងវប្បធម៌"
+    },
+    "subtitle": {
+      "en": "Law & Social Sciences",
+      "km": "Law & Social Sciences"
+    },
+    "keywords": [
+      "Law & Social Sciences",
+      "A",
+      "S"
+    ],
+    "href": "/majors/khmer-literature-linguistics"
+  },
+  {
+    "type": "major",
+    "id": "1166448e-1f54-4b90-bb76-5ab215981b2e",
+    "slug": "law-jurisprudence",
+    "title": {
+      "en": "Law & Jurisprudence",
+      "km": "ច្បាប់ និងនីតិសាស្ត្រ"
+    },
+    "subtitle": {
+      "en": "Law & Social Sciences",
+      "km": "Law & Social Sciences"
+    },
+    "keywords": [
+      "Law & Social Sciences",
+      "E",
+      "S"
+    ],
+    "href": "/majors/law-jurisprudence"
+  },
+  {
+    "type": "major",
+    "id": "cebda3fe-425e-4117-833e-7a54be4dc7db",
+    "slug": "management-information-systems",
+    "title": {
+      "en": "Management Information Systems (MIS)",
+      "km": "ប្រព័ន្ធព័ត៌មានគ្រប់គ្រង"
+    },
+    "subtitle": {
+      "en": "Information Technology",
+      "km": "Information Technology"
+    },
+    "keywords": [
+      "Information Technology",
+      "C",
+      "E"
+    ],
+    "href": "/majors/management-information-systems"
+  },
+  {
+    "type": "major",
+    "id": "17149fb9-a4ba-4496-8040-ce4e24829d0e",
+    "slug": "marketing-digital-media",
+    "title": {
+      "en": "Marketing & Digital Media Strategy",
+      "km": "ទីផ្សារ និងយុទ្ធសាស្ត្រប្រព័ន្ធផ្សព្វផ្សាយឌីជីថល"
+    },
+    "subtitle": {
+      "en": "Business & Economics",
+      "km": "Business & Economics"
+    },
+    "keywords": [
+      "Business & Economics",
+      "E",
+      "A"
+    ],
+    "href": "/majors/marketing-digital-media"
+  },
+  {
+    "type": "major",
+    "id": "f57d579c-ab09-40be-aeb9-753a9d1a9230",
+    "slug": "mathematics-statistics",
+    "title": {
+      "en": "Mathematics & Applied Statistics",
+      "km": "គណិតវិទ្យា និងស្ថិតិអនុវត្ត"
+    },
+    "subtitle": {
+      "en": "Natural Sciences",
+      "km": "Natural Sciences"
+    },
+    "keywords": [
+      "Natural Sciences",
+      "I",
+      "C"
+    ],
+    "href": "/majors/mathematics-statistics"
+  },
+  {
+    "type": "major",
+    "id": "43ef7887-47fa-478e-945c-218f372d7129",
+    "slug": "mechanical-engineering",
+    "title": {
+      "en": "Mechanical Engineering & Manufacturing",
+      "km": "វិស្វកម្មមេកានិក និងការផលិត"
+    },
+    "subtitle": {
+      "en": "Engineering",
+      "km": "Engineering"
+    },
+    "keywords": [
+      "Engineering",
+      "R",
+      "I"
+    ],
+    "href": "/majors/mechanical-engineering"
+  },
+  {
+    "type": "major",
+    "id": "ae424f08-a6a6-4b1d-9b96-db80e5393027",
+    "slug": "mechatronics-robotics",
+    "title": {
+      "en": "Mechatronics & Robotics Engineering",
+      "km": "វិស្វកម្មមេកាត្រូនិក និងរ៉ូបូត"
+    },
+    "subtitle": {
+      "en": "Engineering",
+      "km": "Engineering"
+    },
+    "keywords": [
+      "Engineering",
+      "R",
+      "I"
+    ],
+    "href": "/majors/mechatronics-robotics"
+  },
+  {
+    "type": "major",
+    "id": "a55da9ad-c6a8-4623-aa01-527d7971ec73",
+    "slug": "media-communications",
+    "title": {
+      "en": "Media, Journalism & Digital Communications",
+      "km": "ប្រព័ន្ធផ្សព្វផ្សាយ សារព័ត៌មាន និងទំនាក់ទំនង"
+    },
+    "subtitle": {
+      "en": "Law & Social Sciences",
+      "km": "Law & Social Sciences"
+    },
+    "keywords": [
+      "Law & Social Sciences",
+      "A",
+      "E"
+    ],
+    "href": "/majors/media-communications"
+  },
+  {
+    "type": "major",
+    "id": "949b1f86-0743-4a5b-920b-cba822eb2ca4",
+    "slug": "medical-laboratory",
+    "title": {
+      "en": "Medical Laboratory Technology",
+      "km": "បច្ចេកវិទ្យាមន្ទីរពិសោធន៍វេជ្ជសាស្ត្រ"
+    },
+    "subtitle": {
+      "en": "Health Sciences",
+      "km": "Health Sciences"
+    },
+    "keywords": [
+      "Health Sciences",
+      "I",
+      "R"
+    ],
+    "href": "/majors/medical-laboratory"
+  },
+  {
+    "type": "major",
+    "id": "ccac94eb-042e-447b-86ff-17cc52680441",
+    "slug": "nursing-science",
+    "title": {
+      "en": "Nursing Science & Patient Care",
+      "km": "គិលានុបដ្ឋាកវិទ្យា"
+    },
+    "subtitle": {
+      "en": "Health Sciences",
+      "km": "Health Sciences"
+    },
+    "keywords": [
+      "Health Sciences",
+      "S",
+      "I"
+    ],
+    "href": "/majors/nursing-science"
+  },
+  {
+    "type": "major",
+    "id": "78957e31-289f-4a20-81e6-bf183ea3b6bb",
+    "slug": "pharmacy",
+    "title": {
+      "en": "Doctor of Pharmacy (PharmD) / Pharmacy",
+      "km": "ឱសថសាស្ត្រ"
+    },
+    "subtitle": {
+      "en": "Health Sciences",
+      "km": "Health Sciences"
+    },
+    "keywords": [
+      "Health Sciences",
+      "I",
+      "C"
+    ],
+    "href": "/majors/pharmacy"
+  },
+  {
+    "type": "major",
+    "id": "d0430db2-7236-4c72-b090-696e5a1cadc7",
+    "slug": "physics-electronics",
+    "title": {
+      "en": "Physics & Applied Electronics",
+      "km": "រូបវិទ្យា និងអេឡិចត្រូនិកអនុវត្ត"
+    },
+    "subtitle": {
+      "en": "Natural Sciences",
+      "km": "Natural Sciences"
+    },
+    "keywords": [
+      "Natural Sciences",
+      "I",
+      "R"
+    ],
+    "href": "/majors/physics-electronics"
+  },
+  {
+    "type": "major",
+    "id": "44481705-430c-44d8-9572-6a0becccc0ae",
+    "slug": "political-science",
+    "title": {
+      "en": "Political Science & Public Affairs",
+      "km": "វិទ្យាសាស្ត្រនយោបាយ និងកិច្ចការសាធារណៈ"
+    },
+    "subtitle": {
+      "en": "Law & Social Sciences",
+      "km": "Law & Social Sciences"
+    },
+    "keywords": [
+      "Law & Social Sciences",
+      "E",
+      "S"
+    ],
+    "href": "/majors/political-science"
+  },
+  {
+    "type": "major",
+    "id": "4ea020fa-f4d3-43c0-aaeb-5fe56fbf74ce",
+    "slug": "psychology-counseling",
+    "title": {
+      "en": "Psychology & Counseling",
+      "km": "ចិត្តវិទ្យា និងការប្រឹក្សាយោបល់"
+    },
+    "subtitle": {
+      "en": "Law & Social Sciences",
+      "km": "Law & Social Sciences"
+    },
+    "keywords": [
+      "Law & Social Sciences",
+      "S",
+      "I"
+    ],
+    "href": "/majors/psychology-counseling"
+  },
+  {
+    "type": "major",
+    "id": "b49d733c-62dd-4b78-bb91-29c58b2880db",
+    "slug": "public-administration",
+    "title": {
+      "en": "Public Administration & Governance",
+      "km": "រដ្ឋបាលសាធារណៈ និងអភិបាលកិច្ច"
+    },
+    "subtitle": {
+      "en": "Law & Social Sciences",
+      "km": "Law & Social Sciences"
+    },
+    "keywords": [
+      "Law & Social Sciences",
+      "E",
+      "S"
+    ],
+    "href": "/majors/public-administration"
+  },
+  {
+    "type": "major",
+    "id": "82f9fc12-e7fd-43b1-8645-148500425709",
+    "slug": "public-health",
+    "title": {
+      "en": "Public Health & Epidemiology",
+      "km": "សុខភាពសាធារណៈ និងរោគរាតត្បាត"
+    },
+    "subtitle": {
+      "en": "Health Sciences",
+      "km": "Health Sciences"
+    },
+    "keywords": [
+      "Health Sciences",
+      "I",
+      "S"
+    ],
+    "href": "/majors/public-health"
+  },
+  {
+    "type": "major",
+    "id": "a5db3c34-11e9-4dfa-b9e8-261c9494757d",
+    "slug": "risk-management-insurance",
+    "title": {
+      "en": "Risk Management & Insurance",
+      "km": "ការគ្រប់គ្រងហានិភ័យ និងការធានារ៉ាប់រង"
+    },
+    "subtitle": {
+      "en": "Business & Economics",
+      "km": "Business & Economics"
+    },
+    "keywords": [
+      "Business & Economics",
+      "C",
+      "E"
+    ],
+    "href": "/majors/risk-management-insurance"
+  },
+  {
+    "type": "major",
+    "id": "f5187802-512c-423e-b7a1-60876a3f4605",
+    "slug": "sociology-social-work",
+    "title": {
+      "en": "Sociology & Community Social Work",
+      "km": "សង្គមវិទ្យា និងការងារសង្គម"
+    },
+    "subtitle": {
+      "en": "Law & Social Sciences",
+      "km": "Law & Social Sciences"
+    },
+    "keywords": [
+      "Law & Social Sciences",
+      "S",
+      "E"
+    ],
+    "href": "/majors/sociology-social-work"
+  },
+  {
+    "type": "major",
+    "id": "d87d5ab9-9bd5-44b9-8f57-b62d338790f8",
+    "slug": "software-engineering",
+    "title": {
+      "en": "Software Engineering & Application Development",
+      "km": "វិស្វកម្មសូហ្វវែរ និងការអភិវឌ្ឍកម្មវិធី"
+    },
+    "subtitle": {
+      "en": "Information Technology",
+      "km": "Information Technology"
+    },
+    "keywords": [
+      "Information Technology",
+      "I",
+      "R"
+    ],
+    "href": "/majors/software-engineering"
+  },
+  {
+    "type": "major",
+    "id": "1a17d086-4a5e-41f1-893c-a94a7bd6a563",
+    "slug": "supply-chain-logistics",
+    "title": {
+      "en": "Supply Chain Management & Logistics",
+      "km": "ការគ្រប់គ្រងខ្សែច្រវាក់ផ្គត់ផ្គង់ និងភស្តុភារកម្ម"
+    },
+    "subtitle": {
+      "en": "Business & Economics",
+      "km": "Business & Economics"
+    },
+    "keywords": [
+      "Business & Economics",
+      "E",
+      "R"
+    ],
+    "href": "/majors/supply-chain-logistics"
+  },
+  {
+    "type": "major",
+    "id": "7f87251c-b2ba-42ac-aa7f-55c9cbba9cab",
+    "slug": "telecommunication-engineering",
+    "title": {
+      "en": "Telecommunications & Electronic Engineering",
+      "km": "វិស្វកម្មទូរគមនាគមន៍ និងបណ្តាញឥតខ្សែ"
+    },
+    "subtitle": {
+      "en": "Engineering",
+      "km": "Engineering"
+    },
+    "keywords": [
+      "Engineering",
+      "R",
+      "I"
+    ],
+    "href": "/majors/telecommunication-engineering"
+  },
+  {
+    "type": "major",
+    "id": "b9a0c167-e2ab-42b7-9dfb-cee8384c35ff",
+    "slug": "water-environmental-engineering",
+    "title": {
+      "en": "Water Resources Engineering & Rural Infrastructure",
+      "km": "វិស្វកម្មធនធានទឹក និងហេដ្ឋារចនាសម្ព័ន្ធជនបទ"
+    },
+    "subtitle": {
+      "en": "Engineering",
+      "km": "Engineering"
+    },
+    "keywords": [
+      "Engineering",
+      "R",
+      "I"
+    ],
+    "href": "/majors/water-environmental-engineering"
+  },
+  {
+    "type": "career",
+    "id": "ea79d47b-0711-4507-8bb8-822f56772c58",
+    "slug": "civil-engineer",
+    "title": {
+      "en": "Civil & Structural Engineer",
+      "km": "វិស្វករសំណង់ស៊ីវិល"
+    },
+    "subtitle": {
+      "en": "Engineering & Construction",
+      "km": "Engineering & Construction"
+    },
+    "keywords": [
+      "Engineering & Construction",
+      "RIC"
+    ],
+    "href": "/careers/civil-engineer"
+  },
+  {
+    "type": "career",
+    "id": "25757364-db8b-4fe2-ba40-b6eff413c750",
+    "slug": "financial-analyst",
+    "title": {
+      "en": "Financial Analyst",
+      "km": "អ្នកវិភាគហិរញ្ញវត្ថុ"
+    },
+    "subtitle": {
+      "en": "Finance & Banking",
+      "km": "Finance & Banking"
+    },
+    "keywords": [
+      "Finance & Banking",
+      "CEI"
+    ],
+    "href": "/careers/financial-analyst"
+  },
+  {
+    "type": "career",
+    "id": "973432bf-e7c8-4957-aad3-b626ecdc856b",
+    "slug": "software-engineer",
+    "title": {
+      "en": "Software Engineer",
+      "km": "វិស្វករកម្មវិធី"
+    },
+    "subtitle": {
+      "en": "Technology",
+      "km": "Technology"
+    },
+    "keywords": [
+      "Technology",
+      "IRE"
+    ],
+    "href": "/careers/software-engineer"
+  },
+  {
+    "type": "scholarship",
+    "id": "87b3b53c-0f82-42a7-b5fb-41043cfde2bc",
+    "slug": "aupp-merit-scholarship",
+    "title": {
+      "en": "AUPP Presidential & Merit Scholarship",
+      "km": "អាហារូបករណ៍ឧត្តមភាព និងទេពកោសល្យ AUPP"
+    },
+    "subtitle": {
+      "en": "American University of Phnom Penh",
+      "km": "សាកលវិទ្យាល័យអាមេរិកាំងភ្នំពេញ"
+    },
+    "keywords": [
+      "PARTIAL_TUITION",
+      "AUPP • Univ of Arizona • Fort Hays State"
+    ],
+    "href": "/scholarships/aupp-merit-scholarship"
+  },
+  {
+    "type": "scholarship",
+    "id": "4b4f1fdb-d7e5-4838-8235-32e3ca2219d9",
+    "slug": "moeys-national-scholarship",
+    "title": {
+      "en": "MoEYS National State University Scholarship",
+      "km": "អាហារូបករណ៍ថ្នាក់ជាតិនៃក្រសួងអប់រំ យុវជន និងកីឡា"
+    },
+    "subtitle": {
+      "en": "Ministry of Education, Youth and Sport (MoEYS)",
+      "km": "ក្រសួងអប់រំ យុវជន និងកីឡា"
+    },
+    "keywords": [
+      "FULL_TUITION",
+      "RUPP, ITC (តិចណូ), NUM, UHS, RULE"
+    ],
+    "href": "/scholarships/moeys-national-scholarship"
+  },
+  {
+    "type": "scholarship",
+    "id": "61ae40c2-7f33-44bb-9529-834225b9b401",
+    "slug": "techo-digital-talent-scholarship",
+    "title": {
+      "en": "Techo Digital Talent Scholarship (Undergraduate)",
+      "km": "អាហារូបករណ៍ទេពកោសល្យឌីជីថលតេជោ (ថ្នាក់បរិញ្ញាបត្រ)"
+    },
+    "subtitle": {
+      "en": "Ministry of Post and Telecommunications (MPTC) & CADT",
+      "km": "ក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍ (MPTC) & CADT"
+    },
+    "keywords": [
+      "FULL_TUITION",
+      "CADT, RUPP, ITC, NUM, Paragon, AUPP"
+    ],
+    "href": "/scholarships/techo-digital-talent-scholarship"
+  }
+]

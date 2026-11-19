@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "dataVersion": "2026-11-19+8a23bd13",
+  "generatedAt": "2026-11-19T05:07:54.157894+00:00",
+  "source": "FastAPI/Postgres catalog snapshot",
+  "counts": {
+    "universities": 46,
+    "majors": 57,
+    "offerings": 304,
+    "careers": 3,
+    "scholarships": 3,
+    "personalityQuestions": 12,
+    "riasecQuestions": 18
+  }
+}

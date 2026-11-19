@@ -4,11 +4,9 @@ import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
-import { useToast } from "@/components/ui/toast";
-import { useAuth } from "@/contexts/auth-context";
+import { IS_STATIC_MODE } from "@/lib/app-mode";
+import { getStaticScholarship } from "@/lib/data/catalog";
 import {
   GraduationCap,
   Calendar,
@@ -29,28 +27,10 @@ export default function ScholarshipDetailPage() {
   const slug = params?.slug as string;
   const router = useRouter();
   const { t, getLocalized } = useLanguage();
-  const toast = useToast();
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
 
-  const { data: scholarship, isLoading, error } = useQuery({
-    queryKey: ["scholarship", slug],
-    queryFn: async () => apiFetch<any>(`/scholarships/${slug}`),
-    enabled: !!slug,
-  });
-
-  const { mutate: toggleTrack, isPending: isTracking } = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      return apiFetch(`/scholarships/${id}/track`, {
-        method: "PUT",
-        body: JSON.stringify({ status }),
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["scholarship", slug] });
-      toast.success(t("scholarshipDetail.savedAlert"));
-    },
-  });
+  const scholarship = getStaticScholarship(slug);
+  const isLoading = false;
+  const error = scholarship ? null : new Error("Scholarship not found");
 
   if (isLoading) {
     return (
@@ -130,15 +110,11 @@ export default function ScholarshipDetailPage() {
 
   const posterImage = scholarship.poster_url || posterMap[scholarship.slug];
 
-  const applicationSteps: string[] =
-    (getLocalized(scholarship.application_process) as unknown as string[]) ||
-    scholarship.application_process?.en ||
-    [];
+  const applicationSteps =
+    (scholarship.application_process as { en?: string[] } | null)?.en ?? [];
 
-  const eligibilityCriteria: string[] =
-    (getLocalized(scholarship.eligibility_criteria) as unknown as string[]) ||
-    scholarship.eligibility_criteria?.en ||
-    [];
+  const eligibilityCriteria =
+    (scholarship.eligibility_criteria as { en?: string[] } | null)?.en ?? [];
 
   return (
     <div className="min-h-screen bg-[#F8F9FC] py-8 lg:py-12 text-[#111965]">
@@ -255,15 +231,19 @@ export default function ScholarshipDetailPage() {
                 </a>
               )}
 
-              <BookmarkButton
-                entityType="scholarship"
-                entityId={scholarship.id}
-                variant="pill"
-                size="md"
-                showText
-                textActive="បានរក្សាទុក (Saved)"
-                textInactive={t("scholarshipDetail.track") || "រក្សាទុកអាហារូបករណ៍"}
-              />
+              {!IS_STATIC_MODE && (
+                <BookmarkButton
+                  entityType="scholarship"
+                  entityId={scholarship.id}
+                  variant="pill"
+                  size="md"
+                  showText
+                  textActive="បានរក្សាទុក (Saved)"
+                  textInactive={
+                    t("scholarshipDetail.track") || "រក្សាទុកអាហារូបករណ៍"
+                  }
+                />
+              )}
             </div>
 
             <Link

@@ -4,9 +4,8 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { getStaticMajor, listStaticUniversities } from "@/lib/data/catalog";
 import { DirectoryControls } from "@/components/directory/directory-controls";
 import { DirectoryHeroStats } from "@/components/directory/directory-hero-stats";
 import {
@@ -59,32 +58,17 @@ function UniversitiesContent() {
   // Estimator track state
   const [estimatorType, setEstimatorType] = useState<"PUBLIC" | "PRIVATE">("PUBLIC");
 
-  // Query major info if major filter is active
-  const { data: majorInfo } = useQuery({
-    queryKey: ["major-info", majorSlug],
-    queryFn: async () => apiFetch<any>(`/majors/${majorSlug}`),
-    enabled: !!majorSlug,
+  const majorInfo = majorSlug ? getStaticMajor(majorSlug) : null;
+  const universities = listStaticUniversities({
+    search: searchTerm,
+    type: typeFilter || undefined,
+    province: provinceFilter || undefined,
+    major: majorSlug || undefined,
   });
-
-  const {
-    data: universities,
-    isLoading,
-    error,
-    refetch,
-    isFetching,
-  } = useQuery({
-    queryKey: ["universities", searchTerm, typeFilter, provinceFilter, majorSlug],
-    queryFn: async () => {
-      const params = new URLSearchParams();
-      if (searchTerm) params.append("q", searchTerm);
-      if (typeFilter) params.append("university_type", typeFilter);
-      if (provinceFilter) params.append("province", provinceFilter);
-      if (majorSlug) params.append("major", majorSlug);
-      params.append("limit", "100");
-      return apiFetch<any[]>(`/universities?${params.toString()}`);
-    },
-    retry: 1,
-  });
+  const isLoading = false;
+  const error = null;
+  const isFetching = false;
+  const refetch = () => {};
 
   const toggleCompare = (slug: string) => {
     if (selectedForCompare.includes(slug)) {

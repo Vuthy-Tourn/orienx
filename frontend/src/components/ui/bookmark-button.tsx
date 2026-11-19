@@ -6,6 +6,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Bookmark, Loader2 } from "lucide-react";
 import { apiFetch } from "@/lib/api-client";
 import { useAuth } from "@/contexts/auth-context";
+import { IS_STATIC_MODE } from "@/lib/app-mode";
 
 export type EntityType = "major" | "university" | "career" | "scholarship";
 
@@ -104,6 +105,10 @@ export function BookmarkButton({
     }
     toggleFavorite();
   };
+
+  if (IS_STATIC_MODE) {
+    return null;
+  }
 
   const iconSizes = {
     sm: "w-3.5 h-3.5",

@@ -1,0 +1,857 @@
+[
+  {
+    "slug": "accounting-auditing",
+    "name": {
+      "en": "Accounting, Auditing & Taxation (ACCA/CAT)",
+      "km": "គណនេយ្យ សវនកម្ម និងពន្ធដារ"
+    },
+    "category": "Business & Economics",
+    "riasec_primary": "C",
+    "riasec_secondary": "E",
+    "personality_affinity": "ISTJ,ISFJ,ESTJ",
+    "is_stem": false,
+    "universities_count": 10,
+    "min_tuition_usd": 254.0,
+    "image_url": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "agronomy-agricultural-sciences",
+    "name": {
+      "en": "Agronomy & Crop Sciences",
+      "km": "ក្សេត្រសាស្ត្រ និងវិទ្យាសាស្ត្រដំណាំ"
+    },
+    "category": "Agriculture & Life Sciences",
+    "riasec_primary": "R",
+    "riasec_secondary": "I",
+    "personality_affinity": "ISTJ,ISFP,ESTJ",
+    "is_stem": true,
+    "universities_count": 7,
+    "min_tuition_usd": 370.0,
+    "image_url": "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "animal-science-veterinary",
+    "name": {
+      "en": "Animal Science & Veterinary Medicine",
+      "km": "វិទ្យាសាស្ត្រសត្វ និងបសុព្យាបាល"
+    },
+    "category": "Agriculture & Life Sciences",
+    "riasec_primary": "R",
+    "riasec_secondary": "I",
+    "personality_affinity": "ISFP,ISTP,ISFJ",
+    "is_stem": true,
+    "universities_count": 3,
+    "min_tuition_usd": 370.0,
+    "image_url": "https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "archeology-cultural-heritage",
+    "name": {
+      "en": "Archaeology & Cultural Heritage Management",
+      "km": "បុរាណវិទ្យា និងការគ្រប់គ្រងបេតិកភណ្ឌវប្បធម៌"
+    },
+    "category": "Law & Social Sciences",
+    "riasec_primary": "I",
+    "riasec_secondary": "R",
+    "personality_affinity": "INTP,INFJ,ISTJ",
+    "is_stem": false,
+    "universities_count": 1,
+    "min_tuition_usd": 400.0,
+    "image_url": "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "architecture-urban-planning",
+    "name": {
+      "en": "Architecture & Urban Planning",
+      "km": "ស្ថាបត្យកម្ម និងនគរូបនីយវិទ្យា"
+    },
+    "category": "Architecture & Design",
+    "riasec_primary": "A",
+    "riasec_secondary": "I",
+    "personality_affinity": "INFJ,INFP,INTJ",
+    "is_stem": true,
+    "universities_count": 7,
+    "min_tuition_usd": 500.0,
+    "image_url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "asian-languages-culture",
+    "name": {
+      "en": "Asian Languages & International Communication (Chinese, Japanese, Korean)",
+      "km": "ភាសាអាស៊ី និងទំនាក់ទំនងអន្តរជាតិ (ចិន ជប៉ុន កូរ៉េ)"
+    },
+    "category": "Law & Social Sciences",
+    "riasec_primary": "A",
+    "riasec_secondary": "S",
+    "personality_affinity": "INFJ,ISFJ,ENFJ",
+    "is_stem": false,
+    "universities_count": 1,
+    "min_tuition_usd": 500.0,
+    "image_url": "https://images.unsplash.com/photo-1528164344705-475426879c0d?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "automotive-technology-mechanics",
+    "name": {
+      "en": "Automotive Technology & Heavy Machinery",
+      "km": "បច្ចេកវិទ្យារថយន្ត និងគ្រឿងចក្រធុនធ្ងន់"
+    },
+    "category": "Engineering",
+    "riasec_primary": "R",
+    "riasec_secondary": "I",
+    "personality_affinity": "ISTP,ESTP",
+    "is_stem": true,
+    "universities_count": 1,
+    "min_tuition_usd": 450.0,
+    "image_url": "https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "banking-finance",
+    "name": {
+      "en": "Banking & Financial Markets",
+      "km": "ធនាគារ និងទីផ្សារហិរញ្ញវត្ថុ"
+    },
+    "category": "Business & Economics",
+    "riasec_primary": "C",
+    "riasec_secondary": "E",
+    "personality_affinity": "ESTJ,ISTJ,ENTJ",
+    "is_stem": false,
+    "universities_count": 20,
+    "min_tuition_usd": 254.0,
+    "image_url": "/images/majors/banking-finance.webp"
+  },
+  {
+    "slug": "biology-biotechnology",
+    "name": {
+      "en": "Biology & Applied Biotechnology",
+      "km": "វិទ្យាសាស្ត្រជីវសាស្រ្ត និងបច្ចេកវិទ្យាជីវៈ"
+    },
+    "category": "Natural Sciences",
+    "riasec_primary": "I",
+    "riasec_secondary": "R",
+    "personality_affinity": "INTP,INTJ,INFJ",
+    "is_stem": true,
+    "universities_count": 1,
+    "min_tuition_usd": 300.0,
+    "image_url": "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "business-administration",
+    "name": {
+      "en": "Business Administration & Management",
+      "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+    },
+    "category": "Business & Economics",
+    "riasec_primary": "E",
+    "riasec_secondary": "S",
+    "personality_affinity": "ENTJ,ESTJ,ENFJ",
+    "is_stem": false,
+    "universities_count": 31,
+    "min_tuition_usd": 254.0,
+    "image_url": "/images/majors/business-administration.webp"
+  },
+  {
+    "slug": "chemistry-chemical-analysis",
+    "name": {
+      "en": "Chemistry & Applied Chemical Analysis",
+      "km": "គីមីវិទ្យា និងការវិភាគគីមីអនុវត្ត"
+    },
+    "category": "Natural Sciences",
+    "riasec_primary": "I",
+    "riasec_secondary": "R",
+    "personality_affinity": "INTP,ISTJ,INTJ",
+    "is_stem": true,
+    "universities_count": 2,
+    "min_tuition_usd": 300.0,
+    "image_url": "https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "civil-engineering",
+    "name": {
+      "en": "Civil Engineering & Structural Design",
+      "km": "វិស្វកម្មសំណង់ស៊ីវិល និងការរចនាគ្រោងបង្គុំ"
+    },
+    "category": "Engineering",
+    "riasec_primary": "R",
+    "riasec_secondary": "I",
+    "personality_affinity": "ISTJ,ESTJ,INTJ",
+    "is_stem": true,
+    "universities_count": 12,
+    "min_tuition_usd": 254.0,
+    "image_url": "/images/majors/civil-engineering.webp"
+  },
+  {
+    "slug": "computer-science",
+    "name": {
+      "en": "Computer Science & Theoretical Computing",
+      "km": "វិទ្យាសាស្ត្រកុំព្យូទ័រ និងទ្រឹស្តីគណនា"
+    },
+    "category": "Information Technology",
+    "riasec_primary": "I",
+    "riasec_secondary": "R",
+    "personality_affinity": "INTP,INTJ",
+    "is_stem": true,
+    "universities_count": 15,
+    "min_tuition_usd": 254.0,
+    "image_url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "culinary-arts",
+    "name": {
+      "en": "Culinary Arts & Professional Kitchen Operations",
+      "km": "សិល្បៈធ្វើម្ហូប និងការគ្រប់គ្រងផ្ទះបាយវិជ្ជាជីវៈ"
+    },
+    "category": "Business & Economics",
+    "riasec_primary": "E",
+    "riasec_secondary": "R",
+    "personality_affinity": "ESTP,ESFP,ISTP",
+    "is_stem": false,
+    "universities_count": 1,
+    "min_tuition_usd": 3900.0,
+    "image_url": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "cybersecurity-networking",
+    "name": {
+      "en": "Cybersecurity & Information Networks",
+      "km": "សន្តិសុខសាយប័រ និងបណ្តាញព័ត៌មាន"
+    },
+    "category": "Information Technology",
+    "riasec_primary": "R",
+    "riasec_secondary": "C",
+    "personality_affinity": "ISTP,INTJ,ESTJ",
+    "is_stem": true,
+    "universities_count": 5,
+    "min_tuition_usd": 540.0,
+    "image_url": "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "data-science-ai",
+    "name": {
+      "en": "Data Science & Artificial Intelligence",
+      "km": "វិទ្យាសាស្ត្រទិន្នន័យ និងបញ្ញាសិប្បនិម្មិត"
+    },
+    "category": "Information Technology",
+    "riasec_primary": "I",
+    "riasec_secondary": "C",
+    "personality_affinity": "INTJ,INTP,ENTP",
+    "is_stem": true,
+    "universities_count": 6,
+    "min_tuition_usd": 500.0,
+    "image_url": "/images/majors/data-science-ai.webp"
+  },
+  {
+    "slug": "dentistry",
+    "name": {
+      "en": "Doctor of Dental Surgery (DDS) / Dentistry",
+      "km": "ទន្តវទ្យាសាស្ត្រ / ពេទ្យធ្មេញ"
+    },
+    "category": "Health Sciences",
+    "riasec_primary": "I",
+    "riasec_secondary": "R",
+    "personality_affinity": "ISTJ,ISFJ,ISTP",
+    "is_stem": true,
+    "universities_count": 4,
+    "min_tuition_usd": 1800.0,
+    "image_url": "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "e-commerce-logistics",
+    "name": {
+      "en": "E-Commerce & Digital Business",
+      "km": "ពាណិជ្ជកម្មអេឡិចត្រូនិក និងអាជីវកម្មឌីជីថល"
+    },
+    "category": "Business & Economics",
+    "riasec_primary": "E",
+    "riasec_secondary": "C",
+    "personality_affinity": "ENTP,ESTP,ENFP",
+    "is_stem": false,
+    "universities_count": 2,
+    "min_tuition_usd": 650.0,
+    "image_url": "https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "economics-development",
+    "name": {
+      "en": "Economics & Development Studies",
+      "km": "សេដ្ឋកិច្ច និងការអភិវឌ្ឍ"
+    },
+    "category": "Business & Economics",
+    "riasec_primary": "I",
+    "riasec_secondary": "E",
+    "personality_affinity": "INTJ,ENTJ,INTP",
+    "is_stem": false,
+    "universities_count": 6,
+    "min_tuition_usd": 500.0,
+    "image_url": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "electrical-electronic-engineering",
+    "name": {
+      "en": "Electrical & Electronic Engineering",
+      "km": "វិស្វកម្មអគ្គិសនី និងអេឡិចត្រូនិក"
+    },
+    "category": "Engineering",
+    "riasec_primary": "R",
+    "riasec_secondary": "I",
+    "personality_affinity": "ISTP,INTJ,ISTJ",
+    "is_stem": true,
+    "universities_count": 5,
+    "min_tuition_usd": 400.0,
+    "image_url": "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "english-teaching-tefl",
+    "name": {
+      "en": "English Literature & TEFL / Education",
+      "km": "អក្សរសាស្ត្រអង់គ្លេស និងគរុកោសល្យភាសាអង់គ្លេស"
+    },
+    "category": "Law & Social Sciences",
+    "riasec_primary": "S",
+    "riasec_secondary": "A",
+    "personality_affinity": "ENFJ,INFJ,ENFP",
+    "is_stem": false,
+    "universities_count": 12,
+    "min_tuition_usd": 450.0,
+    "image_url": "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "english-translation-interpreting",
+    "name": {
+      "en": "English for Translation & Interpreting",
+      "km": "ភាសាអង់គ្លេសសម្រាប់បកប្រែផ្ទាល់មាត់និងឯកសារ"
+    },
+    "category": "Law & Social Sciences",
+    "riasec_primary": "A",
+    "riasec_secondary": "S",
+    "personality_affinity": "INFP,INFJ,ENFJ",
+    "is_stem": false,
+    "universities_count": 2,
+    "min_tuition_usd": 650.0,
+    "image_url": "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "environmental-science",
+    "name": {
+      "en": "Environmental Science & Climate Resilience",
+      "km": "វិទ្យាសាស្ត្របរិស្ថាន និងការគ្រប់គ្រងធនធានធម្មជាតិ"
+    },
+    "category": "Agriculture & Life Sciences",
+    "riasec_primary": "I",
+    "riasec_secondary": "R",
+    "personality_affinity": "INFP,INFJ,INTJ",
+    "is_stem": true,
+    "universities_count": 2,
+    "min_tuition_usd": 300.0,
+    "image_url": "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "fine-arts",
+    "name": {
+      "en": "Fine Arts & Traditional Sculpture/Painting",
+      "km": "វិចិត្រសិល្បៈ និងគំនូរ/ចម្លាក់ប្រពៃណី"
+    },
+    "category": "Architecture & Design",
+    "riasec_primary": "A",
+    "riasec_secondary": "R",
+    "personality_affinity": "ISFP,INFP",
+    "is_stem": false,
+    "universities_count": 1,
+    "min_tuition_usd": 500.0,
+    "image_url": "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "fintech",
+    "name": {
+      "en": "Financial Technology (Fintech)",
+      "km": "បច្ចេកវិទ្យាហិរញ្ញវត្ថុ"
+    },
+    "category": "Information Technology",
+    "riasec_primary": "C",
+    "riasec_secondary": "E",
+    "personality_affinity": "INTJ,ENTJ,ISTJ",
+    "is_stem": true,
+    "universities_count": 2,
+    "min_tuition_usd": 1200.0,
+    "image_url": "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "food-technology-engineering",
+    "name": {
+      "en": "Food Technology & Chemical Engineering",
+      "km": "បច្ចេកវិទ្យាអាហារ និងវិស្វកម្មគីមី"
+    },
+    "category": "Engineering",
+    "riasec_primary": "I",
+    "riasec_secondary": "R",
+    "personality_affinity": "ISTJ,ISFJ,INTP",
+    "is_stem": true,
+    "universities_count": 2,
+    "min_tuition_usd": 400.0,
+    "image_url": "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "forestry-fisheries",
+    "name": {
+      "en": "Forestry Science, Fisheries & Aquaculture",
+      "km": "វិទ្យាសាស្ត្រព្រៃឈើ និងជលផល"
+    },
+    "category": "Agriculture & Life Sciences",
+    "riasec_primary": "R",
+    "riasec_secondary": "I",
+    "personality_affinity": "ISFP,ISTP,ISTJ",
+    "is_stem": true,
+    "universities_count": 2,
+    "min_tuition_usd": 370.0,
+    "image_url": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "general-medicine",
+    "name": {
+      "en": "Doctor of Medicine (MD) / General Medicine",
+      "km": "វេជ្ជបណ្ឌិតទូទៅ / វេជ្ជសាស្ត្រ"
+    },
+    "category": "Health Sciences",
+    "riasec_primary": "I",
+    "riasec_secondary": "S",
+    "personality_affinity": "INFJ,ISFJ,INTJ,ENFJ",
+    "is_stem": true,
+    "universities_count": 4,
+    "min_tuition_usd": 2200.0,
+    "image_url": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "graphic-design-multimedia",
+    "name": {
+      "en": "Graphic Design & Multimedia Arts",
+      "km": "រចនាក្រាហ្វិក និងសិល្បៈពហុព័ត៌មាន"
+    },
+    "category": "Architecture & Design",
+    "riasec_primary": "A",
+    "riasec_secondary": "R",
+    "personality_affinity": "INFP,ISFP,ENFP",
+    "is_stem": false,
+    "universities_count": 5,
+    "min_tuition_usd": 500.0,
+    "image_url": "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "hospitality-tourism-management",
+    "name": {
+      "en": "Hospitality & International Tourism Management",
+      "km": "ការគ្រប់គ្រងបដិសណ្ឋារកិច្ច និងទេសចរណ៍អន្តរជាតិ"
+    },
+    "category": "Business & Economics",
+    "riasec_primary": "E",
+    "riasec_secondary": "S",
+    "personality_affinity": "ESFJ,ENFJ,ESFP",
+    "is_stem": false,
+    "universities_count": 10,
+    "min_tuition_usd": 254.0,
+    "image_url": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "human-resource-management",
+    "name": {
+      "en": "Human Resource Management & Talent Strategy",
+      "km": "ការគ្រប់គ្រងធនធានមនុស្ស និងយុទ្ធសាស្ត្រទេពកោសល្យ"
+    },
+    "category": "Business & Economics",
+    "riasec_primary": "S",
+    "riasec_secondary": "E",
+    "personality_affinity": "ENFJ,ESFJ,ISFJ",
+    "is_stem": false,
+    "universities_count": 1,
+    "min_tuition_usd": 480.0,
+    "image_url": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "information-technology",
+    "name": {
+      "en": "Information Technology & Digital Infrastructure",
+      "km": "បច្ចេកវិទ្យាព័ត៌មាន និងហេដ្ឋារចនាសម្ព័ន្ធឌីជីថល"
+    },
+    "category": "Information Technology",
+    "riasec_primary": "R",
+    "riasec_secondary": "I",
+    "personality_affinity": "ISTJ,ESTJ,ISTP",
+    "is_stem": true,
+    "universities_count": 23,
+    "min_tuition_usd": 254.0,
+    "image_url": "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "interior-design",
+    "name": {
+      "en": "Interior Design & Space Architecture",
+      "km": "ការរចនាផ្ទៃខាងក្នុង"
+    },
+    "category": "Architecture & Design",
+    "riasec_primary": "A",
+    "riasec_secondary": "R",
+    "personality_affinity": "ISFP,ESFP,INFJ",
+    "is_stem": false,
+    "universities_count": 4,
+    "min_tuition_usd": 540.0,
+    "image_url": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "international-business",
+    "name": {
+      "en": "International Business & Global Trade",
+      "km": "ពាណិជ្ជកម្មអន្តរជាតិ"
+    },
+    "category": "Business & Economics",
+    "riasec_primary": "E",
+    "riasec_secondary": "C",
+    "personality_affinity": "ENTJ,ESTJ,ENFJ",
+    "is_stem": false,
+    "universities_count": 1,
+    "min_tuition_usd": 1200.0,
+    "image_url": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "international-relations",
+    "name": {
+      "en": "International Relations & Diplomacy",
+      "km": "ទំនាក់ទំនងអន្តរជាតិ និងការទូត"
+    },
+    "category": "Law & Social Sciences",
+    "riasec_primary": "S",
+    "riasec_secondary": "E",
+    "personality_affinity": "ENFJ,ENTJ,INFJ",
+    "is_stem": false,
+    "universities_count": 9,
+    "min_tuition_usd": 500.0,
+    "image_url": "/images/majors/international-relations.webp"
+  },
+  {
+    "slug": "khmer-literature-linguistics",
+    "name": {
+      "en": "Khmer Literature, Linguistics & Culture",
+      "km": "អក្សរសាស្ត្រខ្មែរ ភាសាវិទ្យា និងវប្បធម៌"
+    },
+    "category": "Law & Social Sciences",
+    "riasec_primary": "A",
+    "riasec_secondary": "S",
+    "personality_affinity": "INFP,INFJ,ISFJ",
+    "is_stem": false,
+    "universities_count": 1,
+    "min_tuition_usd": 250.0,
+    "image_url": "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "law-jurisprudence",
+    "name": {
+      "en": "Law & Jurisprudence",
+      "km": "ច្បាប់ និងនីតិសាស្ត្រ"
+    },
+    "category": "Law & Social Sciences",
+    "riasec_primary": "E",
+    "riasec_secondary": "S",
+    "personality_affinity": "ENTJ,INTJ,ESTJ",
+    "is_stem": false,
+    "universities_count": 17,
+    "min_tuition_usd": 254.0,
+    "image_url": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "management-information-systems",
+    "name": {
+      "en": "Management Information Systems (MIS)",
+      "km": "ប្រព័ន្ធព័ត៌មានគ្រប់គ្រង"
+    },
+    "category": "Information Technology",
+    "riasec_primary": "C",
+    "riasec_secondary": "E",
+    "personality_affinity": "ENTJ,ESTJ,INTJ",
+    "is_stem": true,
+    "universities_count": 3,
+    "min_tuition_usd": 500.0,
+    "image_url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "marketing-digital-media",
+    "name": {
+      "en": "Marketing & Digital Media Strategy",
+      "km": "ទីផ្សារ និងយុទ្ធសាស្ត្រប្រព័ន្ធផ្សព្វផ្សាយឌីជីថល"
+    },
+    "category": "Business & Economics",
+    "riasec_primary": "E",
+    "riasec_secondary": "A",
+    "personality_affinity": "ENFP,ENTP,ESFP",
+    "is_stem": false,
+    "universities_count": 6,
+    "min_tuition_usd": 254.0,
+    "image_url": "https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "mathematics-statistics",
+    "name": {
+      "en": "Mathematics & Applied Statistics",
+      "km": "គណិតវិទ្យា និងស្ថិតិអនុវត្ត"
+    },
+    "category": "Natural Sciences",
+    "riasec_primary": "I",
+    "riasec_secondary": "C",
+    "personality_affinity": "INTP,INTJ",
+    "is_stem": true,
+    "universities_count": 2,
+    "min_tuition_usd": 300.0,
+    "image_url": "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "mechanical-engineering",
+    "name": {
+      "en": "Mechanical Engineering & Manufacturing",
+      "km": "វិស្វកម្មមេកានិក និងការផលិត"
+    },
+    "category": "Engineering",
+    "riasec_primary": "R",
+    "riasec_secondary": "I",
+    "personality_affinity": "ISTP,ESTP,ISTJ",
+    "is_stem": true,
+    "universities_count": 4,
+    "min_tuition_usd": 400.0,
+    "image_url": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "mechatronics-robotics",
+    "name": {
+      "en": "Mechatronics & Robotics Engineering",
+      "km": "វិស្វកម្មមេកាត្រូនិក និងរ៉ូបូត"
+    },
+    "category": "Engineering",
+    "riasec_primary": "R",
+    "riasec_secondary": "I",
+    "personality_affinity": "INTP,INTJ,ISTP",
+    "is_stem": true,
+    "universities_count": 3,
+    "min_tuition_usd": 700.0,
+    "image_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "media-communications",
+    "name": {
+      "en": "Media, Journalism & Digital Communications",
+      "km": "ប្រព័ន្ធផ្សព្វផ្សាយ សារព័ត៌មាន និងទំនាក់ទំនង"
+    },
+    "category": "Law & Social Sciences",
+    "riasec_primary": "A",
+    "riasec_secondary": "E",
+    "personality_affinity": "ENFP,ENTP,INFP",
+    "is_stem": false,
+    "universities_count": 4,
+    "min_tuition_usd": 650.0,
+    "image_url": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "medical-laboratory",
+    "name": {
+      "en": "Medical Laboratory Technology",
+      "km": "បច្ចេកវិទ្យាមន្ទីរពិសោធន៍វេជ្ជសាស្ត្រ"
+    },
+    "category": "Health Sciences",
+    "riasec_primary": "I",
+    "riasec_secondary": "R",
+    "personality_affinity": "ISTJ,INTP,ISFJ",
+    "is_stem": true,
+    "universities_count": 5,
+    "min_tuition_usd": 700.0,
+    "image_url": "https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "nursing-science",
+    "name": {
+      "en": "Nursing Science & Patient Care",
+      "km": "គិលានុបដ្ឋាកវិទ្យា"
+    },
+    "category": "Health Sciences",
+    "riasec_primary": "S",
+    "riasec_secondary": "I",
+    "personality_affinity": "ISFJ,ESFJ,INFJ",
+    "is_stem": true,
+    "universities_count": 7,
+    "min_tuition_usd": 800.0,
+    "image_url": "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "pharmacy",
+    "name": {
+      "en": "Doctor of Pharmacy (PharmD) / Pharmacy",
+      "km": "ឱសថសាស្ត្រ"
+    },
+    "category": "Health Sciences",
+    "riasec_primary": "I",
+    "riasec_secondary": "C",
+    "personality_affinity": "ISTJ,INTJ,ISFJ",
+    "is_stem": true,
+    "universities_count": 4,
+    "min_tuition_usd": 1500.0,
+    "image_url": "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "physics-electronics",
+    "name": {
+      "en": "Physics & Applied Electronics",
+      "km": "រូបវិទ្យា និងអេឡិចត្រូនិកអនុវត្ត"
+    },
+    "category": "Natural Sciences",
+    "riasec_primary": "I",
+    "riasec_secondary": "R",
+    "personality_affinity": "INTP,INTJ,ISTP",
+    "is_stem": true,
+    "universities_count": 1,
+    "min_tuition_usd": 300.0,
+    "image_url": "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "political-science",
+    "name": {
+      "en": "Political Science & Public Affairs",
+      "km": "វិទ្យាសាស្ត្រនយោបាយ និងកិច្ចការសាធារណៈ"
+    },
+    "category": "Law & Social Sciences",
+    "riasec_primary": "E",
+    "riasec_secondary": "S",
+    "personality_affinity": "ENTJ,ENFJ,INTP",
+    "is_stem": false,
+    "universities_count": 1,
+    "min_tuition_usd": 500.0,
+    "image_url": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "psychology-counseling",
+    "name": {
+      "en": "Psychology & Counseling",
+      "km": "ចិត្តវិទ្យា និងការប្រឹក្សាយោបល់"
+    },
+    "category": "Law & Social Sciences",
+    "riasec_primary": "S",
+    "riasec_secondary": "I",
+    "personality_affinity": "INFJ,INFP,ENFJ",
+    "is_stem": false,
+    "universities_count": 3,
+    "min_tuition_usd": 250.0,
+    "image_url": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "public-administration",
+    "name": {
+      "en": "Public Administration & Governance",
+      "km": "រដ្ឋបាលសាធារណៈ និងអភិបាលកិច្ច"
+    },
+    "category": "Law & Social Sciences",
+    "riasec_primary": "E",
+    "riasec_secondary": "S",
+    "personality_affinity": "ESTJ,ENTJ,ENFJ",
+    "is_stem": false,
+    "universities_count": 2,
+    "min_tuition_usd": 450.0,
+    "image_url": "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "public-health",
+    "name": {
+      "en": "Public Health & Epidemiology",
+      "km": "សុខភាពសាធារណៈ និងរោគរាតត្បាត"
+    },
+    "category": "Health Sciences",
+    "riasec_primary": "I",
+    "riasec_secondary": "S",
+    "personality_affinity": "ENFJ,INFJ,INTJ",
+    "is_stem": true,
+    "universities_count": 2,
+    "min_tuition_usd": 1000.0,
+    "image_url": "https://images.unsplash.com/photo-1584432810601-6c7f27d2362b?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "risk-management-insurance",
+    "name": {
+      "en": "Risk Management & Insurance",
+      "km": "ការគ្រប់គ្រងហានិភ័យ និងការធានារ៉ាប់រង"
+    },
+    "category": "Business & Economics",
+    "riasec_primary": "C",
+    "riasec_secondary": "E",
+    "personality_affinity": "ISTJ,ESTJ,INTJ",
+    "is_stem": false,
+    "universities_count": 2,
+    "min_tuition_usd": 1200.0,
+    "image_url": "https://images.unsplash.com/photo-1450133064473-71024230f91b?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "sociology-social-work",
+    "name": {
+      "en": "Sociology & Community Social Work",
+      "km": "សង្គមវិទ្យា និងការងារសង្គម"
+    },
+    "category": "Law & Social Sciences",
+    "riasec_primary": "S",
+    "riasec_secondary": "E",
+    "personality_affinity": "ENFJ,INFJ,ESFJ",
+    "is_stem": false,
+    "universities_count": 1,
+    "min_tuition_usd": 250.0,
+    "image_url": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "software-engineering",
+    "name": {
+      "en": "Software Engineering & Application Development",
+      "km": "វិស្វកម្មសូហ្វវែរ និងការអភិវឌ្ឍកម្មវិធី"
+    },
+    "category": "Information Technology",
+    "riasec_primary": "I",
+    "riasec_secondary": "R",
+    "personality_affinity": "INTJ,INTP,ISTP",
+    "is_stem": true,
+    "universities_count": 8,
+    "min_tuition_usd": 540.0,
+    "image_url": "/images/majors/software-engineering.webp"
+  },
+  {
+    "slug": "supply-chain-logistics",
+    "name": {
+      "en": "Supply Chain Management & Logistics",
+      "km": "ការគ្រប់គ្រងខ្សែច្រវាក់ផ្គត់ផ្គង់ និងភស្តុភារកម្ម"
+    },
+    "category": "Business & Economics",
+    "riasec_primary": "E",
+    "riasec_secondary": "R",
+    "personality_affinity": "ESTJ,ISTJ,INTJ",
+    "is_stem": false,
+    "universities_count": 4,
+    "min_tuition_usd": 650.0,
+    "image_url": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "telecommunication-engineering",
+    "name": {
+      "en": "Telecommunications & Electronic Engineering",
+      "km": "វិស្វកម្មទូរគមនាគមន៍ និងបណ្តាញឥតខ្សែ"
+    },
+    "category": "Engineering",
+    "riasec_primary": "R",
+    "riasec_secondary": "I",
+    "personality_affinity": "ISTJ,INTJ,ISTP",
+    "is_stem": true,
+    "universities_count": 2,
+    "min_tuition_usd": 700.0,
+    "image_url": "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "slug": "water-environmental-engineering",
+    "name": {
+      "en": "Water Resources Engineering & Rural Infrastructure",
+      "km": "វិស្វកម្មធនធានទឹក និងហេដ្ឋារចនាសម្ព័ន្ធជនបទ"
+    },
+    "category": "Engineering",
+    "riasec_primary": "R",
+    "riasec_secondary": "I",
+    "personality_affinity": "ISTJ,INTJ,ISTP",
+    "is_stem": true,
+    "universities_count": 2,
+    "min_tuition_usd": 540.0,
+    "image_url": "https://images.unsplash.com/photo-1574482620811-1aa16ffe3c82?auto=format&fit=crop&w=800&q=80"
+  }
+]

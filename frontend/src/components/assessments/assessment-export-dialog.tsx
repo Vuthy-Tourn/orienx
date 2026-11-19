@@ -3,9 +3,13 @@
 import React from "react";
 import {
   Download,
+  FileCode2,
   FileJson,
   FileSpreadsheet,
   FileText,
+  FileType2,
+  Image as ImageIcon,
+  Link2,
   Loader2,
   Table2,
 } from "lucide-react";
@@ -28,7 +32,15 @@ interface AssessmentExportDialogProps {
   exportingFormat: AssessmentReportFormat | null;
   onExport: (format: AssessmentReportFormat) => void;
   footer: string;
+  formats?: AssessmentReportFormat[];
 }
+
+const DEFAULT_FORMATS: AssessmentReportFormat[] = [
+  "pdf",
+  "excel",
+  "csv",
+  "json",
+];
 
 export function AssessmentExportDialog({
   open,
@@ -39,10 +51,11 @@ export function AssessmentExportDialog({
   exportingFormat,
   onExport,
   footer,
+  formats: allowedFormats = DEFAULT_FORMATS,
 }: AssessmentExportDialogProps) {
   const { t } = useLanguage();
 
-  const formats: Array<{
+  const allFormats: Array<{
     format: AssessmentReportFormat;
     title: string;
     description: string;
@@ -77,7 +90,45 @@ export function AssessmentExportDialog({
       icon: FileJson,
       iconClass: "bg-amber-50 text-amber-600",
     },
+    {
+      format: "markdown",
+      title: t("assessmentReport.markdown"),
+      description: t("assessmentReport.markdownDesc"),
+      icon: FileType2,
+      iconClass: "bg-violet-50 text-violet-600",
+    },
+    {
+      format: "html",
+      title: t("assessmentReport.html"),
+      description: t("assessmentReport.htmlDesc"),
+      icon: FileCode2,
+      iconClass: "bg-orange-50 text-orange-600",
+    },
+    {
+      format: "text",
+      title: t("assessmentReport.text"),
+      description: t("assessmentReport.textDesc"),
+      icon: FileText,
+      iconClass: "bg-slate-100 text-slate-600",
+    },
+    {
+      format: "png",
+      title: t("assessmentReport.png"),
+      description: t("assessmentReport.pngDesc"),
+      icon: ImageIcon,
+      iconClass: "bg-pink-50 text-pink-600",
+    },
+    {
+      format: "share",
+      title: t("assessmentReport.share"),
+      description: t("assessmentReport.shareDesc"),
+      icon: Link2,
+      iconClass: "bg-cyan-50 text-cyan-600",
+    },
   ];
+  const formats = allFormats.filter((option) =>
+    allowedFormats.includes(option.format)
+  );
 
   return (
     <Dialog

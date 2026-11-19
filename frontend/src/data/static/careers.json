@@ -1,0 +1,152 @@
+[
+  {
+    "id": "ea79d47b-0711-4507-8bb8-822f56772c58",
+    "slug": "civil-engineer",
+    "title": {
+      "en": "Civil & Structural Engineer",
+      "km": "វិស្វករសំណង់ស៊ីវិល"
+    },
+    "industry": "Engineering & Construction",
+    "description": {
+      "en": "Plans, calculates, designs, and oversees construction projects such as high-rise buildings, bridges, and municipal infrastructure.",
+      "km": "រៀបចំផែនការ គណនាគ្រឿងផ្គុំ និងត្រួតពិនិត្យការសាងសង់អគារ ស្ពាន ថ្នល់ និងហេដ្ឋារចនាសម្ព័ន្ធ។"
+    },
+    "education_level": "BACHELOR",
+    "riasec_code": "RIC",
+    "responsibilities": [
+      "Calculate structural loads",
+      "Review architectural blueprints with AutoCAD",
+      "Inspect on-site concrete and steel quality"
+    ],
+    "required_skills": [
+      "AutoCAD / Revit",
+      "Structural Calculations",
+      "Site Project Supervision"
+    ],
+    "work_environments": [
+      "Construction Sites",
+      "Engineering Design Firms",
+      "Ministry of Public Works"
+    ],
+    "career_progression": [
+      "Site Engineer -> Project Engineer -> Structural Design Lead -> Project Director"
+    ],
+    "related_majors": [
+      {
+        "id": "10a386a5-3976-4af8-81f9-53eddf01a29d",
+        "slug": "civil-engineering",
+        "name": {
+          "en": "Civil Engineering & Structural Design",
+          "km": "វិស្វកម្មសំណង់ស៊ីវិល និងការរចនាគ្រោងបង្គុំ"
+        },
+        "category": "Engineering"
+      }
+    ]
+  },
+  {
+    "id": "25757364-db8b-4fe2-ba40-b6eff413c750",
+    "slug": "financial-analyst",
+    "title": {
+      "en": "Financial Analyst",
+      "km": "អ្នកវិភាគហិរញ្ញវត្ថុ"
+    },
+    "industry": "Finance & Banking",
+    "description": {
+      "en": "Evaluates financial data, forecasts corporate performance, builds financial models, and provides investment guidance.",
+      "km": "វិភាគទិន្នន័យហិរញ្ញវត្ថុ ព្យាករណ៍ចំណូលចំណាយ និងផ្តល់អនុសាសន៍លើការវិនិយោគដល់ក្រុមហ៊ុន ឬធនាគារ។"
+    },
+    "education_level": "BACHELOR",
+    "riasec_code": "CEI",
+    "responsibilities": [
+      "Build Excel DCF models",
+      "Assess market risks and balance sheets",
+      "Draft investment memorandums"
+    ],
+    "required_skills": [
+      "Financial Modeling",
+      "Corporate Accounting",
+      "Data Analytics"
+    ],
+    "work_environments": [
+      "Commercial Banks",
+      "Investment Funds",
+      "Corporate Finance Offices"
+    ],
+    "career_progression": [
+      "Junior Analyst -> Senior Financial Analyst -> Finance Manager -> CFO"
+    ],
+    "related_majors": [
+      {
+        "id": "96cc69b0-ec1a-4ffd-b353-76104ddf9058",
+        "slug": "banking-finance",
+        "name": {
+          "en": "Banking & Financial Markets",
+          "km": "ធនាគារ និងទីផ្សារហិរញ្ញវត្ថុ"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      }
+    ]
+  },
+  {
+    "id": "973432bf-e7c8-4957-aad3-b626ecdc856b",
+    "slug": "software-engineer",
+    "title": {
+      "en": "Software Engineer",
+      "km": "វិស្វករកម្មវិធី"
+    },
+    "industry": "Technology",
+    "description": {
+      "en": "Designs, writes, tests, and maintains software applications for cloud platforms, mobile devices, and enterprise systems.",
+      "km": "រចនា សរសេរកូដ និងថែទាំប្រព័ន្ធកម្មវិធីកុំព្យូទ័រ និងទូរស័ព្ទដៃសម្រាប់ស្ថាប័ននានា។"
+    },
+    "education_level": "BACHELOR",
+    "riasec_code": "IRE",
+    "responsibilities": [
+      "Develop clean, tested code",
+      "Design backend APIs and database schemas",
+      "Collaborate with UI/UX designers"
+    ],
+    "required_skills": [
+      "Python / JavaScript / Go",
+      "SQL & Database Design",
+      "Git & Problem Solving"
+    ],
+    "work_environments": [
+      "Tech Companies",
+      "Startups",
+      "Remote / Hybrid"
+    ],
+    "career_progression": [
+      "Junior Developer -> Mid-Level -> Senior Engineer -> Tech Lead / Software Architect"
+    ],
+    "related_majors": [
+      {
+        "id": "8a7ce897-a090-4f80-9eed-fe7e864e59f9",
+        "slug": "data-science-ai",
+        "name": {
+          "en": "Data Science & Artificial Intelligence",
+          "km": "វិទ្យាសាស្ត្រទិន្នន័យ និងបញ្ញាសិប្បនិម្មិត"
+        },
+        "category": "Information Technology"
+      },
+      {
+        "id": "d87d5ab9-9bd5-44b9-8f57-b62d338790f8",
+        "slug": "software-engineering",
+        "name": {
+          "en": "Software Engineering & Application Development",
+          "km": "វិស្វកម្មសូហ្វវែរ និងការអភិវឌ្ឍកម្មវិធី"
+        },
+        "category": "Information Technology"
+      }
+    ]
+  }
+]

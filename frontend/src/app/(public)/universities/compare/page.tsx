@@ -3,9 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api-client";
 import { useLanguage } from "@/contexts/language-context";
+import { getStaticUniversity } from "@/lib/data/catalog";
 import {
   ArrowLeft,
   Scale,
@@ -25,23 +24,19 @@ function UniversityCompareContent() {
   const ids = searchParams.get("ids") || "";
   const { t, getLocalized } = useLanguage();
 
-  const {
-    data,
-    isLoading,
-    error,
-    refetch,
-    isFetching,
-  } = useQuery({
-    queryKey: ["universities-compare", ids],
-    queryFn: async () => {
-      if (!ids) return { universities: [] };
-      return apiFetch<{ universities: any[] }>(`/universities/compare?ids=${ids}`);
-    },
-    enabled: !!ids,
-    retry: 1,
-  });
-
-  const universities = data?.universities || [];
+  const universities = ids
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean)
+    .slice(0, 4)
+    .map((id) => getStaticUniversity(id))
+    .filter((university): university is NonNullable<typeof university> =>
+      Boolean(university)
+    );
+  const isLoading = false;
+  const error = universities.length === 0 ? new Error("No universities") : null;
+  const isFetching = false;
+  const refetch = () => {};
 
   return (
     <div className="min-h-screen bg-[#F5F6FA] py-8 lg:py-12">
