@@ -22,6 +22,7 @@ import { answerLocalQuestion, buildStudentAssistantContext, detectResponseLangua
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { cn } from "@/lib/utils";
+import { AssistantMessage } from "@/components/assistant/assistant-message";
 
 type AssistantMode = "gemini" | "retrieval_only" | "local_model" | "tool" | "static";
 
@@ -81,13 +82,6 @@ const TOOL_ICONS: Record<string, React.ComponentType<{ className?: string }>> = 
   compare_universities: Scale,
   check_eligibility: BadgeCheck,
 };
-
-function cleanText(text: string): string {
-  return text
-    .replace(/\*\*(.*?)\*\*/g, "$1")
-    .replace(/^#{1,6}\s+/gm, "")
-    .replace(/^\s*[-*]\s+/gm, "• ");
-}
 
 export function FloatingAssistant() {
   const pathname = usePathname();
@@ -534,15 +528,13 @@ export function FloatingAssistant() {
                 >
                   <div
                     className={cn(
-                      "max-w-[88%] rounded-2xl px-3 py-2 text-sm leading-relaxed",
+                      "min-w-0 max-w-[92%] rounded-2xl px-4 py-3 text-[15px] leading-7",
                       message.role === "user"
                         ? "rounded-br-md bg-[#111965] text-white"
-                        : "rounded-bl-md border border-[#E6E8F0] bg-white text-[#171A2C] dark:border-white/10 dark:bg-white/5 dark:text-slate-100"
+                        : "rounded-bl-md border border-[#E6E8F0] bg-white text-[#334155] shadow-2xs dark:border-white/10 dark:bg-white/5 dark:text-slate-200"
                     )}
                   >
-                    <div className="whitespace-pre-wrap break-words">
-                      {cleanText(message.content)}
-                    </div>
+                    <AssistantMessage content={message.content} />
 
                     {message.warning && (
                       <div className="mt-2 rounded-lg bg-[#FFF9E6] px-2 py-1.5 text-xs leading-snug text-[#7A5A00] dark:bg-[#F7CE4D]/10 dark:text-[#F7CE4D]">
