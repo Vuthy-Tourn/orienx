@@ -19,7 +19,7 @@ import {
 
 import { apiFetch } from "@/lib/api-client";
 import { IS_STATIC_MODE } from "@/lib/app-mode";
-import { answerLocalQuestion, detectResponseLanguage } from "@/lib/guest/assistant";
+import { answerLocalQuestion, buildStudentAssistantContext, detectResponseLanguage } from "@/lib/guest/assistant";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { cn } from "@/lib/utils";
@@ -49,6 +49,16 @@ interface AssistantAnswer {
 interface AssistantStatus {
   configured: boolean;
   model: string;
+}
+
+interface PublicAssistantResponse {
+  answer: string;
+  mode: string;
+  model?: string;
+  sources?: AssistantSource[];
+  suggested_questions?: string[];
+  tools_used?: string[];
+  warning?: string | null;
 }
 
 interface ChatMessage {
@@ -132,6 +142,8 @@ export function FloatingAssistant() {
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [aiMode, setAiMode] = useState<"local" | "gemini">("local");
+  const [aiModel, setAiModel] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<{
     language: string;
     items: string[];
@@ -262,6 +274,54 @@ export function FloatingAssistant() {
 
     try {
       if (IS_STATIC_MODE) {
+        let fallbackWarning: string | null = null;
+        try {
+          const response = await fetch("/api/public-assistant", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              question,
+              language: responseLanguage,
+              profile: buildStudentAssistantContext(),
+            }),
+            signal: AbortSignal.timeout(35_000),
+          });
+          if (response.ok) {
+            const data = (await response.json()) as PublicAssistantResponse;
+            setAiMode("gemini");
+            setAiModel(data.model ?? null);
+            setMessages((previous) => [
+              ...previous,
+              {
+                id: `gemini-${messageCounter.current++}`,
+                role: "assistant",
+                content: data.answer,
+                sources: data.sources,
+                toolsUsed: data.tools_used,
+                warning: data.warning,
+              },
+            ]);
+            if (data.suggested_questions?.length) {
+              setSuggestions({
+                language: responseLanguage,
+                items: data.suggested_questions,
+              });
+            }
+            return;
+          }
+          const errorBody = (await response.json().catch(() => null)) as {
+            message?: string;
+          } | null;
+          fallbackWarning =
+            errorBody?.message ||
+            "Gemini is unavailable; answered by the local guide.";
+        } catch {
+          fallbackWarning =
+            "Gemini is unavailable; answered by the local guide.";
+        }
+
+        setAiMode("local");
+        setAiModel(null);
         const data = answerLocalQuestion(question, responseLanguage);
         setMessages((previous) => [
           ...previous,
@@ -271,6 +331,7 @@ export function FloatingAssistant() {
             content: data.answer,
             sources: data.sources,
             toolsUsed: data.tools_used,
+            warning: fallbackWarning,
           },
         ]);
         if (data.suggested_questions.length) {
@@ -427,7 +488,9 @@ export function FloatingAssistant() {
               <div className="truncate text-base font-black">{copy.title}</div>
               <div className="flex items-center gap-1.5 text-xs font-semibold text-white/60">
                 {IS_STATIC_MODE
-                  ? copy.staticLabel
+                  ? aiMode === "gemini"
+                    ? `Gemini · ${aiModel ?? "flash"}`
+                    : copy.staticLabel
                   : status?.configured
                     ? `Gemini · ${status.model}`
                     : copy.subtitle}

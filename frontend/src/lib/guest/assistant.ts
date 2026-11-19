@@ -748,6 +748,28 @@ function answerSearch(
   };
 }
 
+export function buildStudentAssistantContext(): {
+  personalityType?: string;
+  hollandCode?: string;
+  topMajors?: string[];
+} | null {
+  const personality = readLatestResult("personality")?.result as
+    | PersonalityResult
+    | undefined;
+  const riasec = readLatestResult("riasec")?.result as RiasecResult | undefined;
+  if (!personality && !riasec) return null;
+  const matches = recommendMajorMatches({
+    personality,
+    riasec,
+    limit: 5,
+  });
+  return {
+    personalityType: personality?.type,
+    hollandCode: riasec?.hollandCode,
+    topMajors: matches.map((match) => match.name.en),
+  };
+}
+
 export function detectResponseLanguage(
   question: string,
   fallback: AssistantLanguage
