@@ -18,11 +18,13 @@ import {
 } from "lucide-react";
 
 import { apiFetch } from "@/lib/api-client";
+import { IS_STATIC_MODE } from "@/lib/app-mode";
+import { answerLocalQuestion } from "@/lib/guest/assistant";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
 import { cn } from "@/lib/utils";
 
-type AssistantMode = "gemini" | "retrieval_only" | "local_model" | "tool";
+type AssistantMode = "gemini" | "retrieval_only" | "local_model" | "tool" | "static";
 
 interface AssistantSource {
   type: string;
@@ -66,6 +68,8 @@ const HIDDEN_PREFIXES = [
   "/dashboard/advisor",
   "/admin",
   "/share",
+  "/assessments/personality/test",
+  "/assessments/riasec/test",
 ];
 
 const TOOL_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -100,7 +104,28 @@ export function FloatingAssistant() {
     offline: t("aiAssistant.offline"),
     error: t("aiAssistant.error"),
     suggestions: tList("aiAssistant.suggestions"),
+    staticLabel: t("aiAssistant.staticLabel", "Local guide"),
+    staticKicker: t("aiAssistant.staticKicker", "OrienX guide"),
+    staticNote: t(
+      "aiAssistant.staticNote",
+      "Answers come from OrienX's verified static directory. No AI model is called."
+    ),
   };
+  const staticSuggestions =
+    language === "km"
+      ? [
+          "តើខ្ញុំគួរធ្វើតេស្តមួយណា?",
+          "បង្ហាញជំនាញកំពូលរបស់ខ្ញុំ",
+          "តើខ្ញុំនាំចេញលទ្ធផលដោយរបៀបណា?",
+          "ថ្លៃសិក្សានៅ ITC ប៉ុន្មាន?",
+        ]
+      : [
+          "Which test should I take?",
+          "Show my top majors",
+          "How do I export my result?",
+          "How much is ITC tuition?",
+        ];
+  const canChat = Boolean(user) || IS_STATIC_MODE;
 
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -149,7 +174,7 @@ export function FloatingAssistant() {
   const { data: status } = useQuery({
     queryKey: ["assistant-status"],
     queryFn: () => apiFetch<AssistantStatus>("/ai/assistant/status"),
-    enabled: open && Boolean(user),
+    enabled: open && Boolean(user) && !IS_STATIC_MODE,
     staleTime: 60_000,
     refetchOnWindowFocus: false,
   });
@@ -175,19 +200,19 @@ export function FloatingAssistant() {
   }, [messages, isSending]);
 
   useEffect(() => {
-    if (!user || open) return;
+    if (!canChat || open) return;
     const timer = setTimeout(() => setShowTeaser(true), 1600);
     return () => clearTimeout(timer);
-  }, [user, open, pathname]);
+  }, [canChat, open, pathname]);
 
   useEffect(() => {
-    if (!showTeaser || open || !user) return;
+    if (!showTeaser || open || !canChat) return;
     const interval = setInterval(
       () => setTeaserIndex((index) => (index + 1) % teaserMessages.length),
       9000
     );
     return () => clearInterval(interval);
-  }, [showTeaser, open, user, teaserMessages.length]);
+  }, [showTeaser, open, canChat, teaserMessages.length]);
 
   useEffect(() => {
     const handler = (event: Event) => {
@@ -219,7 +244,7 @@ export function FloatingAssistant() {
 
   const send = async (rawQuestion?: string) => {
     const question = (rawQuestion ?? input).trim();
-    if (!question || isSending || !user) return;
+    if (!question || isSending || !canChat) return;
 
     setInput("");
     setError(null);
@@ -234,6 +259,26 @@ export function FloatingAssistant() {
     setIsSending(true);
 
     try {
+      if (IS_STATIC_MODE) {
+        const data = answerLocalQuestion(question, language);
+        setMessages((previous) => [
+          ...previous,
+          {
+            id: `static-${messageCounter.current++}`,
+            role: "assistant",
+            content: data.answer,
+            sources: data.sources,
+            toolsUsed: data.tools_used,
+          },
+        ]);
+        if (data.suggested_questions.length) {
+          setSuggestions({
+            language,
+            items: data.suggested_questions,
+          });
+        }
+        return;
+      }
       const data = await apiFetch<AssistantAnswer>("/ai/assistant", {
         method: "POST",
         body: JSON.stringify({ question, language }),
@@ -276,7 +321,9 @@ export function FloatingAssistant() {
   const visibleSuggestions =
     suggestions?.language === language && suggestions.items.length > 0
       ? suggestions.items
-      : copy.suggestions;
+      : IS_STATIC_MODE
+        ? staticSuggestions
+        : copy.suggestions;
   const assistantVisible = !open && (isHome ? pastHero : true);
 
   return (
@@ -317,7 +364,7 @@ export function FloatingAssistant() {
           </motion.button>
 
           <AnimatePresence>
-            {user && !open && showTeaser && (
+            {canChat && !open && showTeaser && (
               <motion.div
                 initial={reduceMotion ? false : { opacity: 0, x: -8, scale: 0.96 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -377,9 +424,11 @@ export function FloatingAssistant() {
             <div className="min-w-0 flex-1">
               <div className="truncate text-sm font-black">{copy.title}</div>
               <div className="flex items-center gap-1.5 text-[10px] font-semibold text-white/60">
-                {status?.configured
-                  ? `Gemini · ${status.model}`
-                  : copy.subtitle}
+                {IS_STATIC_MODE
+                  ? copy.staticLabel
+                  : status?.configured
+                    ? `Gemini · ${status.model}`
+                    : copy.subtitle}
               </div>
             </div>
             <button
@@ -392,7 +441,7 @@ export function FloatingAssistant() {
             </button>
           </header>
 
-          {user && status && !status.configured && (
+          {!IS_STATIC_MODE && user && status && !status.configured && (
             <div className="border-b border-[#F7CE4D]/40 bg-[#FFF9E6] px-3 py-2 text-[10px] leading-snug text-[#7A5A00] dark:border-[#F7CE4D]/20 dark:bg-[#F7CE4D]/10 dark:text-[#F7CE4D]">
               {copy.offline}
             </div>
@@ -403,7 +452,7 @@ export function FloatingAssistant() {
             className="flex-1 space-y-3 overflow-y-auto bg-[#F8F9FC] px-3 py-3 scrollbar-hide dark:bg-[#080D22]"
             aria-live="polite"
           >
-            {!user ? (
+            {!canChat ? (
               <div className="flex h-full flex-col items-center justify-center px-6 text-center">
                 <LogIn className="mb-3 h-8 w-8 text-[#111965] dark:text-[#F7CE4D]" />
                 <p className="text-xs leading-relaxed text-[#68708A] dark:text-slate-400">
@@ -421,14 +470,21 @@ export function FloatingAssistant() {
                 <div className="rounded-2xl border border-[#E6E8F0] bg-white p-3 dark:border-white/10 dark:bg-white/5">
                   <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
                     <Sparkles className="h-3 w-3 text-[#F7CE4D]" />
-                    {t("aiAssistant.kicker", "OrienX AI")}
+                    {IS_STATIC_MODE
+                      ? copy.staticKicker
+                      : t("aiAssistant.kicker", "OrienX AI")}
                   </div>
                   <p className="text-xs leading-relaxed text-[#68708A] dark:text-slate-400">
                     {copy.welcome}
                   </p>
                 </div>
+                {IS_STATIC_MODE && (
+                  <p className="rounded-xl border border-[#E6E8F0] bg-white px-3 py-2 text-[10px] leading-relaxed text-[#68708A] dark:border-white/10 dark:bg-white/5 dark:text-slate-400">
+                    {copy.staticNote}
+                  </p>
+                )}
                 <div className="space-y-1.5">
-                  {copy.suggestions.slice(0, 4).map((question) => (
+                  {(IS_STATIC_MODE ? staticSuggestions : copy.suggestions).slice(0, 4).map((question) => (
                     <button
                       key={question}
                       type="button"
@@ -531,7 +587,7 @@ export function FloatingAssistant() {
             </div>
           )}
 
-          {user && (
+          {canChat && (
             <div className="border-t border-[#E6E8F0] bg-white p-2.5 dark:border-white/10 dark:bg-[#0B102A]">
               {messages.length > 0 && visibleSuggestions.length > 0 && (
                 <div className="mb-2 flex flex-wrap gap-1.5">

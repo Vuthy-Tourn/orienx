@@ -1120,6 +1120,9 @@
   "aiAssistant": {
     "title": "ជំនួយការ OrienX",
     "subtitle": "សួរបានយ៉ាងរហ័ស",
+    "staticKicker": "មគ្គុទ្ទេសក៍ OrienX",
+    "staticLabel": "ណែនាំក្នុងឧបករណ៍",
+    "staticNote": "ចម្លើយមកពីបញ្ជីទិន្នន័យផ្ទៀងផ្ទាត់របស់ OrienX។ គ្មានម៉ូឌែល AI ត្រូវបានហៅទេ។",
     "open": "បើកជំនួយការ",
     "close": "បិទ",
     "kicker": "OrienX AI",

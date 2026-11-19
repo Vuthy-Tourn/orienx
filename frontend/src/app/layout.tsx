@@ -9,7 +9,6 @@ import { QueryProvider } from "@/providers/query-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { GlobalSearch } from "@/components/search/global-search";
 import { FloatingAssistant } from "@/components/assistant/floating-assistant";
-import { IS_STATIC_MODE } from "@/lib/app-mode";
 import { Footer } from "@/components/layout/footer";
 import { HeroUIProvider } from "@heroui/system";
 import { ToastProvider } from "@/components/ui/toast";
@@ -84,7 +83,7 @@ export default function RootLayout({
                       <ScrollReveal />
                       <SmoothAnchors />
                       <GlobalSearch />
-                      {!IS_STATIC_MODE && <FloatingAssistant />}
+                      <FloatingAssistant />
                     </AuthProvider>
                   </LanguageProvider>
                 </ThemeProvider>

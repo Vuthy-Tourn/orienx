@@ -13,6 +13,7 @@ Built in this pass:
 - Public guest Personality and RIASEC tests with `localStorage` drafts/results/history
 - Results page with combined top majors, profile name, backup JSON, and clear-data controls
 - Export dialog with PDF, XLSX, CSV, JSON, Markdown, HTML, TXT, PNG share card, and share link
+- Public mascot guide with local, rule-based answers from the static catalogue (no AI model or API call)
 - Static mode (`NEXT_PUBLIC_APP_MODE=static`) gating for auth, dashboard, admin, share routes, and assistant
 - Public catalog/search pages now read bundled JSON instead of the FastAPI API
 - Backend tests: 46 passing; frontend TypeScript and production builds passing

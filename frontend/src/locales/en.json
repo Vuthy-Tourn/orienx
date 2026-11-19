@@ -1120,6 +1120,9 @@
   "aiAssistant": {
     "title": "OrienX Assistant",
     "subtitle": "Quick answers",
+    "staticKicker": "OrienX guide",
+    "staticLabel": "Local guide",
+    "staticNote": "Answers come from OrienX's verified static directory. No AI model is called.",
     "open": "Open assistant",
     "close": "Close",
     "kicker": "OrienX AI",
