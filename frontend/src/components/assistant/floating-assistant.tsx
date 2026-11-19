@@ -534,7 +534,10 @@ export function FloatingAssistant() {
                         : "rounded-bl-md border border-[#E6E8F0] bg-white text-[#334155] shadow-2xs dark:border-white/10 dark:bg-white/5 dark:text-slate-200"
                     )}
                   >
-                    <AssistantMessage content={message.content} />
+                    <AssistantMessage
+                      content={message.content}
+                      tone={message.role === "user" ? "user" : "assistant"}
+                    />
 
                     {message.warning && (
                       <div className="mt-2 rounded-lg bg-[#FFF9E6] px-2 py-1.5 text-xs leading-snug text-[#7A5A00] dark:bg-[#F7CE4D]/10 dark:text-[#F7CE4D]">

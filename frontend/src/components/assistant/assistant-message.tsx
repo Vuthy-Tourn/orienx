@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { cn } from "@/lib/utils";
 
 type Block =
   | { type: "paragraph"; text: string }
@@ -72,7 +73,11 @@ function parseBlocks(content: string): Block[] {
   return blocks;
 }
 
-function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
+function renderInline(
+  text: string,
+  keyPrefix: string,
+  isUser: boolean
+): React.ReactNode[] {
   const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`|https?:\/\/[^\s]+)/g);
   return parts.filter(Boolean).map((part, index) => {
     const key = `${keyPrefix}-${index}`;
@@ -80,7 +85,11 @@ function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
       return (
         <strong
           key={key}
-          className="font-bold text-[#111965] dark:text-white"
+          className={
+            isUser
+              ? "font-bold text-white"
+              : "font-bold text-[#111965] dark:text-white"
+          }
         >
           {part.slice(2, -2)}
         </strong>
@@ -90,7 +99,12 @@ function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
       return (
         <code
           key={key}
-          className="rounded-md bg-[#F0F2FA] px-1.5 py-0.5 font-mono text-[13px] text-[#111965] dark:bg-white/10 dark:text-slate-200"
+          className={cn(
+            "rounded-md px-1.5 py-0.5 font-mono text-[13px]",
+            isUser
+              ? "bg-white/15 text-white"
+              : "bg-[#F0F2FA] text-[#111965] dark:bg-white/10 dark:text-slate-200"
+          )}
         >
           {part.slice(1, -1)}
         </code>
@@ -105,7 +119,11 @@ function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="break-all font-semibold text-[#111965] underline decoration-[#F7CE4D] decoration-2 underline-offset-2 hover:text-[#1A2580] dark:text-[#F7CE4D]"
+            className={
+              isUser
+                ? "break-all font-semibold text-[#F7CE4D] underline decoration-[#F7CE4D] decoration-2 underline-offset-2 hover:text-white"
+                : "break-all font-semibold text-[#111965] underline decoration-[#F7CE4D] decoration-2 underline-offset-2 hover:text-[#1A2580] dark:text-[#F7CE4D]"
+            }
           >
             {url}
           </a>
@@ -117,20 +135,38 @@ function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
   });
 }
 
-export function AssistantMessage({ content }: { content: string }) {
+export function AssistantMessage({
+  content,
+  tone = "assistant",
+}: {
+  content: string;
+  tone?: "user" | "assistant";
+}) {
   const blocks = React.useMemo(() => parseBlocks(content), [content]);
+  const isUser = tone === "user";
 
   return (
-    <div className="space-y-3 text-[15px] leading-7 text-[#334155] text-pretty break-words dark:text-slate-200">
+    <div
+      className={cn(
+        "space-y-3 text-[15px] leading-7 text-pretty break-words",
+        isUser
+          ? "text-white"
+          : "text-[#334155] dark:text-slate-200"
+      )}
+    >
       {blocks.map((block, blockIndex) => {
         const key = `block-${blockIndex}`;
         if (block.type === "heading") {
           return (
             <p
               key={key}
-              className="text-[15px] font-black leading-6 text-[#111965] dark:text-white"
+              className={
+                isUser
+                  ? "text-[15px] font-black leading-6 text-white"
+                  : "text-[15px] font-black leading-6 text-[#111965] dark:text-white"
+              }
             >
-              {renderInline(block.text, key)}
+              {renderInline(block.text, key, isUser)}
             </p>
           );
         }
@@ -140,11 +176,18 @@ export function AssistantMessage({ content }: { content: string }) {
               <ol key={key} className="space-y-2.5">
                 {block.items.map((item, itemIndex) => (
                   <li key={`${key}-${itemIndex}`} className="flex items-start gap-2.5">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F0F2FA] text-[11px] font-black text-[#111965] dark:bg-white/10 dark:text-[#F7CE4D]">
+                    <span
+                      className={cn(
+                        "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-black",
+                        isUser
+                          ? "bg-white/15 text-white"
+                          : "bg-[#F0F2FA] text-[#111965] dark:bg-white/10 dark:text-[#F7CE4D]"
+                      )}
+                    >
                       {itemIndex + 1}
                     </span>
                     <span className="min-w-0">
-                      {renderInline(item, `${key}-${itemIndex}`)}
+                      {renderInline(item, `${key}-${itemIndex}`, isUser)}
                     </span>
                   </li>
                 ))}
@@ -157,7 +200,7 @@ export function AssistantMessage({ content }: { content: string }) {
                 <li key={`${key}-${itemIndex}`} className="flex items-start gap-2.5">
                   <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#F7CE4D]" />
                   <span className="min-w-0">
-                    {renderInline(item, `${key}-${itemIndex}`)}
+                    {renderInline(item, `${key}-${itemIndex}`, isUser)}
                   </span>
                 </li>
               ))}
@@ -166,7 +209,7 @@ export function AssistantMessage({ content }: { content: string }) {
         }
         return (
           <p key={key} className="leading-7">
-            {renderInline(block.text, key)}
+            {renderInline(block.text, key, isUser)}
           </p>
         );
       })}
