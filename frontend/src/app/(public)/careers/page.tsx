@@ -255,36 +255,98 @@ const SALARY_TIERS: Record<string, SalaryTier> = {
   ),
 };
 
-const INDUSTRY_KM: Record<string, string> = {
-  Technology: "បច្ចេកវិទ្យា",
-  "Finance & Banking": "ហិរញ្ញវត្ថុ & ធនាគារ",
-  "Engineering & Construction": "វិស្វកម្ម & សំណង់",
-  "Technology & Data": "បច្ចេកវិទ្យា និងទិន្នន័យ",
-  "Technology & Security": "បច្ចេកវិទ្យា និងសន្តិសុខ",
-  "Engineering & Manufacturing": "វិស្វកម្ម និងការផលិត",
-  "Creative & Media": "ច្នៃប្រឌិត និងមេឌា",
-  "Design & Construction": "រចនា និងសំណង់",
-  "Health Care": "ថែទាំសុខភាព",
-  Education: "ការអប់រំ",
-  "Business & Marketing": "អាជីវកម្ម និងទីផ្សារ",
-  "Finance & Business": "ហិរញ្ញវត្ថុ និងអាជីវកម្ម",
-  "Sales & Business Development": "ការលក់ និងអភិវឌ្ឍន៍អាជីវកម្ម",
-  "Marketing & Media": "ទីផ្សារ និងមេឌា",
-  "Human Resources": "ធនធានមនុស្ស",
-  "Logistics & Supply Chain": "ដឹកជញ្ជូន និងខ្សែចង្វាក់ផ្គត់ផ្គង់",
-  "Procurement & Supply Chain": "លទ្ធកម្ម និងខ្សែចង្វាក់ផ្គត់ផ្គង់",
-  "Customer Service": "សេវាអតិថិជន",
-  "Legal & Compliance": "ច្បាប់ និងការអនុលោម",
-  "Hospitality & Tourism": "បដិសណ្ឋារកិច្ច និងទេសចរណ៍",
-  "Translation & Languages": "ការបកប្រែ និងភាសា",
-  "PR & Communications": "ទំនាក់ទំនងសាធារណៈ និងទំនាក់ទំនង",
-  "Research & Development": "ការស្រាវជ្រាវ និងអភិវឌ្ឍន៍",
-  Administrative: "រដ្ឋបាល",
-  "Management & Operations": "ការគ្រប់គ្រង និងប្រតិបត្តិការ",
-  "Food & Beverage": "អាហារ និងភេសជ្ជៈ",
-  "Construction & Skilled Trades": "សំណង់ និងជាងជំនាញ",
-  "Quality Assurance": "ការធានាគុណភាព",
-};
+const INDUSTRY_GROUPS = [
+  {
+    name: "Technology",
+    km: "បច្ចេកវិទ្យា",
+    industries: ["Technology", "Technology & Data", "Technology & Security"],
+  },
+  {
+    name: "Engineering & Construction",
+    km: "វិស្វកម្ម និងសំណង់",
+    industries: [
+      "Engineering & Construction",
+      "Design & Construction",
+      "Construction & Skilled Trades",
+      "Engineering & Manufacturing",
+    ],
+  },
+  {
+    name: "Finance & Accounting",
+    km: "ហិរញ្ញវត្ថុ និងគណនេយ្យ",
+    industries: ["Finance & Banking", "Finance & Business"],
+  },
+  {
+    name: "Business & Management",
+    km: "អាជីវកម្ម និងការគ្រប់គ្រង",
+    industries: ["Management & Operations", "Administrative"],
+  },
+  {
+    name: "Marketing & Media",
+    km: "ទីផ្សារ និងមេឌា",
+    industries: [
+      "Marketing & Media",
+      "Creative & Media",
+      "PR & Communications",
+      "Business & Marketing",
+    ],
+  },
+  {
+    name: "Sales & Customer Service",
+    km: "ការលក់ និងសេវាអតិថិជន",
+    industries: ["Sales & Business Development", "Customer Service"],
+  },
+  {
+    name: "Health Care",
+    km: "ថែទាំសុខភាព",
+    industries: ["Health Care"],
+  },
+  {
+    name: "Education",
+    km: "ការអប់រំ",
+    industries: ["Education"],
+  },
+  {
+    name: "Hospitality & Tourism",
+    km: "បដិសណ្ឋារកិច្ច និងទេសចរណ៍",
+    industries: ["Hospitality & Tourism", "Food & Beverage"],
+  },
+  {
+    name: "Human Resources",
+    km: "ធនធានមនុស្ស",
+    industries: ["Human Resources"],
+  },
+  {
+    name: "Legal & Compliance",
+    km: "ច្បាប់ និងការអនុលោម",
+    industries: ["Legal & Compliance"],
+  },
+  {
+    name: "Logistics & Supply Chain",
+    km: "ដឹកជញ្ជូន និងខ្សែចង្វាក់ផ្គត់ផ្គង់",
+    industries: ["Logistics & Supply Chain", "Procurement & Supply Chain"],
+  },
+  {
+    name: "Science & Research",
+    km: "វិទ្យាសាស្ត្រ និងការស្រាវជ្រាវ",
+    industries: ["Research & Development", "Quality Assurance"],
+  },
+  {
+    name: "Languages & Translation",
+    km: "ភាសា និងការបកប្រែ",
+    industries: ["Translation & Languages"],
+  },
+] as const;
+
+function getIndustryGroup(industry: string) {
+  return INDUSTRY_GROUPS.find((group) =>
+    (group.industries as readonly string[]).includes(industry)
+  );
+}
+
+function getIndustryGroupName(industry: string) {
+  return getIndustryGroup(industry)?.name ?? industry;
+}
 
 const SENIORITY_LABELS = {
   junior: { en: "Junior benchmark", km: "ប្រាក់ខែយោងកម្រិតដំបូង" },
@@ -317,17 +379,21 @@ export default function CareersPage() {
     const allCareers = listStaticCareers();
     const counts = new Map<string, number>();
     for (const career of allCareers) {
-      counts.set(career.industry, (counts.get(career.industry) ?? 0) + 1);
+      const group = getIndustryGroupName(career.industry);
+      counts.set(group, (counts.get(group) ?? 0) + 1);
     }
     const industries = Array.from(counts.entries())
-      .map(([industry, count]) => ({
-        value: industry,
-        label: language === "km" ? INDUSTRY_KM[industry] || industry : industry,
-        description:
-          language === "km"
-            ? `${count} អាជីព`
-            : `${count} ${count === 1 ? "career" : "careers"}`,
-      }))
+      .map(([groupName, count]) => {
+        const group = INDUSTRY_GROUPS.find((item) => item.name === groupName);
+        return {
+          value: groupName,
+          label: language === "km" ? group?.km ?? groupName : groupName,
+          description:
+            language === "km"
+              ? `${count} អាជីព`
+              : `${count} ${count === 1 ? "career" : "careers"}`,
+        };
+      })
       .sort((a, b) => a.label.localeCompare(b.label, language));
 
     return [
@@ -343,10 +409,7 @@ export default function CareersPage() {
     ];
   }, [language, t]);
 
-  const careers = listStaticCareers({
-    search: searchTerm,
-    industry: industryFilter || undefined,
-  });
+  const careers = listStaticCareers({ search: searchTerm });
   const isLoading = false;
   const isError = false;
   const isFetching = false;
@@ -354,14 +417,19 @@ export default function CareersPage() {
 
   const filteredCareers = useMemo(() => {
     if (!careers) return [];
+    const industryCareers = industryFilter
+      ? careers.filter(
+          (career) => getIndustryGroupName(career.industry) === industryFilter
+        )
+      : careers;
     const list = selectedRiasec
-      ? careers.filter((c) => c.riasec_code?.includes(selectedRiasec))
-      : [...careers];
+      ? industryCareers.filter((c) => c.riasec_code?.includes(selectedRiasec))
+      : [...industryCareers];
     if (sortBy === "title") {
       list.sort((a, b) => getLocalized(a.title).localeCompare(getLocalized(b.title)));
     }
     return list;
-  }, [careers, selectedRiasec, sortBy, getLocalized]);
+  }, [careers, industryFilter, selectedRiasec, sortBy, getLocalized]);
 
   const hasActiveFilters = Boolean(searchTerm || industryFilter || selectedRiasec);
 
@@ -394,8 +462,14 @@ export default function CareersPage() {
     }
   };
 
-  const statsSource = careers || [];
-  const industryCount = new Set(statsSource.map((c) => c.industry)).size;
+  const statsSource = industryFilter
+    ? careers.filter(
+        (career) => getIndustryGroupName(career.industry) === industryFilter
+      )
+    : careers;
+  const industryCount = new Set(
+    statsSource.map((career) => getIndustryGroupName(career.industry))
+  ).size;
   const entrySalaries = Object.values(SALARY_TIERS)
     .map((tier) => {
       const match = tier.junior.match(/\d+/);
@@ -652,15 +726,17 @@ export default function CareersPage() {
                 language === "km"
                   ? meta.growthRateKm.split(" ")[0]
                   : `${meta.growthRate.split(" ")[0]} YoY`;
-              const industry =
-                language === "km"
-                  ? INDUSTRY_KM[c.industry] || c.industry
-                  : c.industry;
+              const industryGroup = getIndustryGroup(c.industry);
+              const industry = industryGroup
+                ? language === "km"
+                  ? industryGroup.km
+                  : industryGroup.name
+                : c.industry;
 
               return (
                 <article
                   key={c.id}
-                  className="group relative flex flex-col overflow-hidden rounded-[22px] bg-white ring-1 ring-[#E6E8F0] transition-all duration-300 hover:ring-[#111965]/25 hover:shadow-[0_26px_60px_-34px_rgba(17,25,101,0.45)] motion-reduce:transition-none"
+                  className="group relative flex flex-col overflow-hidden rounded-[22px] bg-white ring-1 ring-[#E6E8F0] transition-shadow duration-200 hover:ring-[#111965]/20 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] motion-reduce:transition-none"
                 >
                   {/* Industry + demand + save */}
                   <div className="flex items-center justify-between gap-3 px-5 pt-4">

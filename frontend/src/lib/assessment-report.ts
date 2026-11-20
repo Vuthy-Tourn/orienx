@@ -178,6 +178,14 @@ export function downloadAssessmentJson(model: AssessmentReportModel) {
 export async function downloadAssessmentExcel(model: AssessmentReportModel) {
   const { default: writeExcelFile } = await import("write-excel-file/universal");
 
+  let logoBlob: Blob | null = null;
+  try {
+    const logoResponse = await fetch("/images/orienx-mark.png");
+    if (logoResponse.ok) logoBlob = await logoResponse.blob();
+  } catch {
+    // The spreadsheet still exports without the logo.
+  }
+
   const titleStyle = {
     fontWeight: "bold" as const,
     fontSize: 16,
@@ -215,6 +223,7 @@ export async function downloadAssessmentExcel(model: AssessmentReportModel) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const summaryRows: any[][] = [
+    [{ value: "", height: 58 }, null, null, null],
     [{ value: model.title, columnSpan: 4, ...titleStyle }, null, null, null],
     [{ value: model.subtitle, columnSpan: 4, ...valueStyle, textColor: "#68708A" }, null, null, null],
     [],
@@ -278,6 +287,21 @@ export async function downloadAssessmentExcel(model: AssessmentReportModel) {
         sheet: "Summary",
         columns: [{ width: 30 }, { width: 24 }, { width: 42 }, { width: 6 }],
         showGridLines: false,
+        ...(logoBlob
+          ? {
+              images: [
+                {
+                  content: logoBlob,
+                  contentType: "image/png",
+                  width: 44,
+                  height: 49,
+                  dpi: 96,
+                  anchor: { row: 1, column: 1 },
+                  title: "OrienX",
+                },
+              ],
+            }
+          : {}),
       },
       {
         data: recommendationRows,
@@ -470,7 +494,16 @@ function buildAssessmentPdfHtml(
     autoPrint
       ? `<script>
     window.addEventListener("load", function () {
-      setTimeout(function () { window.print(); }, 350);
+      var images = Array.prototype.slice.call(document.images);
+      Promise.all(images.map(function (image) {
+        if (image.complete) return Promise.resolve();
+        return new Promise(function (resolve) {
+          image.onload = resolve;
+          image.onerror = resolve;
+        });
+      })).then(function () {
+        setTimeout(function () { window.print(); }, 250);
+      });
     });
   </script>`
       : ""
@@ -680,7 +713,10 @@ export async function downloadAssessmentPng(model: AssessmentReportModel) {
     model.kind === "personality" && model.characterImageUrl
       ? model.characterImageUrl
       : `${window.location.origin}/images/tara-emotion-cheer.webp`;
-  const character = await loadCanvasImage(characterUrl);
+  const [character, logo] = await Promise.all([
+    loadCanvasImage(characterUrl),
+    loadCanvasImage(`${window.location.origin}/images/orienx-mark-dark.png`),
+  ]);
   if (character) {
     const maxWidth = 340;
     const maxHeight = 420;
@@ -713,11 +749,18 @@ export async function downloadAssessmentPng(model: AssessmentReportModel) {
     ctx.restore();
   }
 
+  let brandX = 64;
+  if (logo) {
+    const logoHeight = 44;
+    const logoWidth = (logo.width / logo.height) * logoHeight;
+    ctx.drawImage(logo, 64, 50, logoWidth, logoHeight);
+    brandX = 64 + logoWidth + 14;
+  }
   ctx.fillStyle = "#FFFFFF";
   ctx.font = `900 34px ${fontFamily}`;
-  ctx.fillText("Orien", 64, 92);
+  ctx.fillText("Orien", brandX, 92);
   ctx.fillStyle = "#F7CE4D";
-  ctx.fillText("X", 64 + ctx.measureText("Orien").width, 92);
+  ctx.fillText("X", brandX + ctx.measureText("Orien").width, 92);
 
   ctx.fillStyle = "rgba(255,255,255,0.55)";
   ctx.font = `800 13px ${fontFamily}`;
