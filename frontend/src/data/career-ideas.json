@@ -1,0 +1,425 @@
+[
+  {
+    "slug": "data-scientist",
+    "title": {
+      "en": "Data Scientist",
+      "km": "អ្នកវិទ្យាសាស្ត្រទិន្នន័យ"
+    },
+    "industry": "Technology & Data",
+    "riasec_codes": [
+      "I",
+      "C"
+    ],
+    "summary": {
+      "en": "Uses data, statistics, and programming to find patterns and help organizations make better decisions.",
+      "km": "ប្រើទិន្នន័យ ស្ថិតិ និងការសរសេរកូដ ដើម្បីរកលំនាំ និងជួយឱ្យអង្គការសម្រេចចិត្តបានកាន់តែល្អ។"
+    },
+    "skills": [
+      {
+        "en": "Python or R",
+        "km": "Python ឬ R"
+      },
+      {
+        "en": "Statistics",
+        "km": "ស្ថិតិ"
+      },
+      {
+        "en": "Data visualization",
+        "km": "ការបង្ហាញទិន្នន័យ"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "data-science-ai",
+      "computer-science",
+      "mathematics-statistics"
+    ],
+    "source_name": "O*NET OnLine",
+    "source_url": "https://www.onetonline.org/link/summary/15-2051.00",
+    "industry_km": "បច្ចេកវិទ្យា និងទិន្នន័យ"
+  },
+  {
+    "slug": "cybersecurity-analyst",
+    "title": {
+      "en": "Cybersecurity Analyst",
+      "km": "អ្នកវិភាគសន្តិសុខសាយប័រ"
+    },
+    "industry": "Technology & Security",
+    "riasec_codes": [
+      "C",
+      "I"
+    ],
+    "summary": {
+      "en": "Protects computer systems and networks from attacks, watches for threats, and helps fix security problems.",
+      "km": "ការពារប្រព័ន្ធកុំព្យូទ័រ និងបណ្តាញពីការវាយប្រហារ ឃ្លាំមើលគ្រោះថ្នាក់ និងជួយដោះស្រាយបញ្ហាសន្តិសុខ។"
+    },
+    "skills": [
+      {
+        "en": "Network security",
+        "km": "សន្តិសុខបណ្តាញ"
+      },
+      {
+        "en": "Threat analysis",
+        "km": "ការវិភាគគ្រោះថ្នាក់"
+      },
+      {
+        "en": "Linux basics",
+        "km": "មូលដ្ឋាន Linux"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "cybersecurity-networking",
+      "information-technology",
+      "computer-science"
+    ],
+    "source_name": "O*NET OnLine",
+    "source_url": "https://www.onetonline.org/link/summary/15-1212.00",
+    "industry_km": "បច្ចេកវិទ្យា និងសន្តិសុខ"
+  },
+  {
+    "slug": "civil-engineer",
+    "title": {
+      "en": "Civil Engineer",
+      "km": "វិស្វករសំណង់ស៊ីវិល"
+    },
+    "industry": "Engineering & Construction",
+    "riasec_codes": [
+      "R",
+      "I",
+      "C"
+    ],
+    "summary": {
+      "en": "Designs and supervises roads, bridges, buildings, water systems, and other public infrastructure.",
+      "km": "រចនា និងត្រួតពិនិត្យផ្លូវ ស្ពាន អគារ ប្រព័ន្ធទឹក និងហេដ្ឋារចនាសម្ព័ន្ធសាធារណៈផ្សេងទៀត។"
+    },
+    "skills": [
+      {
+        "en": "Structural analysis",
+        "km": "ការវិភាគរចនាសម្ព័ន្ធ"
+      },
+      {
+        "en": "AutoCAD",
+        "km": "AutoCAD"
+      },
+      {
+        "en": "Project planning",
+        "km": "ការរៀបចំគម្រោង"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "civil-engineering",
+      "architecture-urban-planning"
+    ],
+    "source_name": "O*NET OnLine",
+    "source_url": "https://www.onetonline.org/link/summary/17-2051.00",
+    "industry_km": "វិស្វកម្ម និងសំណង់"
+  },
+  {
+    "slug": "mechanical-engineer",
+    "title": {
+      "en": "Mechanical Engineer",
+      "km": "វិស្វករមេកានិច"
+    },
+    "industry": "Engineering & Manufacturing",
+    "riasec_codes": [
+      "R",
+      "I",
+      "C"
+    ],
+    "summary": {
+      "en": "Designs machines, engines, robots, and mechanical systems, then tests them to make sure they work safely.",
+      "km": "រចនាគ្រឿងម៉ាស៊ីន ម៉ាស៊ីនចលករ រ៉ូបូត និងប្រព័ន្ធមេកានិច រួចសាកល្បងឱ្យដឹងថាវាដំណើរការដោយសុវត្ថិភាព។"
+    },
+    "skills": [
+      {
+        "en": "CAD design",
+        "km": "ការរចនា CAD"
+      },
+      {
+        "en": "Mechanics",
+        "km": "មេកានិច"
+      },
+      {
+        "en": "Problem solving",
+        "km": "ការដោះស្រាយបញ្ហា"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "mechanical-engineering",
+      "mechatronics-robotics",
+      "electrical-electronic-engineering"
+    ],
+    "source_name": "O*NET OnLine",
+    "source_url": "https://www.onetonline.org/link/summary/17-2141.00",
+    "industry_km": "វិស្វកម្ម និងការផលិត"
+  },
+  {
+    "slug": "graphic-designer",
+    "title": {
+      "en": "Graphic Designer",
+      "km": "អ្នករចនាក្រាហ្វិក"
+    },
+    "industry": "Creative & Media",
+    "riasec_codes": [
+      "A",
+      "C"
+    ],
+    "summary": {
+      "en": "Creates visual designs for websites, brands, advertisements, posters, and social media.",
+      "km": "បង្កើតការរចនាមើលឃើញសម្រាប់គេហទំព័រ ម៉ាកសញ្ញា ការផ្សាយពាណិជ្ជកម្ម ផ្ទាំងផ្សព្វផ្សាយ និងបណ្តាញសង្គម។"
+    },
+    "skills": [
+      {
+        "en": "Adobe Creative Suite",
+        "km": "Adobe Creative Suite"
+      },
+      {
+        "en": "Typography",
+        "km": "ការរៀបចំអក្សរ"
+      },
+      {
+        "en": "Layout design",
+        "km": "ការរចនាប្លង់"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree or portfolio",
+      "km": "បរិញ្ញាបត្រ ឬស្នាដៃផ្ទាល់ខ្លួន"
+    },
+    "related_majors": [
+      "graphic-design-multimedia",
+      "fine-arts",
+      "media-communications"
+    ],
+    "source_name": "O*NET OnLine",
+    "source_url": "https://www.onetonline.org/link/summary/27-1024.00",
+    "industry_km": "ច្នៃប្រឌិត និងមេឌា"
+  },
+  {
+    "slug": "architect",
+    "title": {
+      "en": "Architect",
+      "km": "ស្ថាបត្យករ"
+    },
+    "industry": "Design & Construction",
+    "riasec_codes": [
+      "R",
+      "C",
+      "A"
+    ],
+    "summary": {
+      "en": "Designs buildings and spaces that are safe, useful, and beautiful, and works with engineers and builders.",
+      "km": "រចនាអគារ និងទីធ្លាឱ្យមានសុវត្ថិភាព ប្រើប្រាស់បានល្អ និងស្រស់ស្អាត ហើយធ្វើការជាមួយវិស្វករ និងអ្នកសាងសង់។"
+    },
+    "skills": [
+      {
+        "en": "Design thinking",
+        "km": "ការគិតបែបរចនា"
+      },
+      {
+        "en": "AutoCAD / Revit",
+        "km": "AutoCAD / Revit"
+      },
+      {
+        "en": "Building codes",
+        "km": "បទប្បញ្ញត្តិសំណង់"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "architecture-urban-planning",
+      "civil-engineering",
+      "fine-arts"
+    ],
+    "source_name": "O*NET OnLine",
+    "source_url": "https://www.onetonline.org/link/summary/17-1011.00",
+    "industry_km": "រចនា និងសំណង់"
+  },
+  {
+    "slug": "registered-nurse",
+    "title": {
+      "en": "Registered Nurse",
+      "km": "គិលានុបដ្ឋាយិកា"
+    },
+    "industry": "Health Care",
+    "riasec_codes": [
+      "S",
+      "C",
+      "I"
+    ],
+    "summary": {
+      "en": "Cares for patients, supports their recovery, and teaches families how to stay healthy.",
+      "km": "ថែទាំអ្នកជំងឺ ជួយឱ្យពួកគេជាសះស្បើយ និងបង្រៀនគ្រួសារអំពីការថែរក្សាសុខភាព។"
+    },
+    "skills": [
+      {
+        "en": "Patient care",
+        "km": "ការថែទាំអ្នកជំងឺ"
+      },
+      {
+        "en": "Communication",
+        "km": "ការប្រាស្រ័យទាក់ទង"
+      },
+      {
+        "en": "Clinical judgment",
+        "km": "ការវិនិច្ឆ័យផ្នែកគ្លីនិក"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree in nursing",
+      "km": "បរិញ្ញាបត្រគិលានុបដ្ឋាក"
+    },
+    "related_majors": [
+      "nursing-science",
+      "public-health",
+      "general-medicine"
+    ],
+    "source_name": "O*NET OnLine",
+    "source_url": "https://www.onetonline.org/link/summary/29-1141.00",
+    "industry_km": "ថែទាំសុខភាព"
+  },
+  {
+    "slug": "high-school-teacher",
+    "title": {
+      "en": "High School Teacher",
+      "km": "គ្រូបង្រៀនវិទ្យាល័យ"
+    },
+    "industry": "Education",
+    "riasec_codes": [
+      "S"
+    ],
+    "summary": {
+      "en": "Plans lessons, explains subjects, and helps high school students learn and prepare for their future.",
+      "km": "រៀបចំមេរៀន ពន្យល់មុខវិជ្ជា និងជួយសិស្សវិទ្យាល័យឱ្យរៀន និងត្រៀមអនាគត។"
+    },
+    "skills": [
+      {
+        "en": "Lesson planning",
+        "km": "ការរៀបចំមេរៀន"
+      },
+      {
+        "en": "Communication",
+        "km": "ការប្រាស្រ័យទាក់ទង"
+      },
+      {
+        "en": "Classroom management",
+        "km": "ការគ្រប់គ្រងថ្នាក់"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "english-teaching-tefl",
+      "mathematics-statistics",
+      "physics-electronics"
+    ],
+    "source_name": "O*NET OnLine",
+    "source_url": "https://www.onetonline.org/link/summary/25-2031.00",
+    "industry_km": "ការអប់រំ"
+  },
+  {
+    "slug": "marketing-manager",
+    "title": {
+      "en": "Marketing Manager",
+      "km": "អ្នកគ្រប់គ្រងទីផ្សារ"
+    },
+    "industry": "Business & Marketing",
+    "riasec_codes": [
+      "E",
+      "C"
+    ],
+    "summary": {
+      "en": "Plans campaigns, studies what customers want, and leads a team to promote products or services.",
+      "km": "រៀបចំយុទ្ធនាការ សិក្សាអ្វីដែលអតិថិជនចង់បាន និងដឹកនាំក្រុមដើម្បីផ្សព្វផ្សាយផលិតផល ឬសេវាកម្ម។"
+    },
+    "skills": [
+      {
+        "en": "Market research",
+        "km": "ការស្រាវជ្រាវទីផ្សារ"
+      },
+      {
+        "en": "Communication",
+        "km": "ការប្រាស្រ័យទាក់ទង"
+      },
+      {
+        "en": "Team leadership",
+        "km": "ការដឹកនាំក្រុម"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "marketing-digital-media",
+      "business-administration",
+      "media-communications"
+    ],
+    "source_name": "O*NET OnLine",
+    "source_url": "https://www.onetonline.org/link/summary/11-2021.00",
+    "industry_km": "អាជីវកម្ម និងទីផ្សារ"
+  },
+  {
+    "slug": "accountant",
+    "title": {
+      "en": "Accountant",
+      "km": "គណនេយ្យករ"
+    },
+    "industry": "Finance & Business",
+    "riasec_codes": [
+      "C",
+      "E",
+      "I"
+    ],
+    "summary": {
+      "en": "Prepares financial records, checks that numbers are correct, and helps organizations follow tax rules.",
+      "km": "រៀបចំកំណត់ត្រាហិរញ្ញវត្ថុ ពិនិត្យភាពត្រឹមត្រូវនៃលេខ និងជួយឱ្យអង្គការអនុវត្តតាមច្បាប់ពន្ធ។"
+    },
+    "skills": [
+      {
+        "en": "Accounting",
+        "km": "គណនេយ្យ"
+      },
+      {
+        "en": "Excel",
+        "km": "Excel"
+      },
+      {
+        "en": "Attention to detail",
+        "km": "ការយកចិត្តទុកដាក់លម្អិត"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "accounting-auditing",
+      "banking-finance",
+      "business-administration"
+    ],
+    "source_name": "O*NET OnLine",
+    "source_url": "https://www.onetonline.org/link/summary/13-2011.00",
+    "industry_km": "ហិរញ្ញវត្ថុ និងអាជីវកម្ម"
+  }
+]

@@ -39,13 +39,13 @@ function PersonalityResultInner() {
         </span>
         <h1 className="mt-4 text-xl font-black text-[#111965]">
           {getLocalized({
-            en: "No Personality result on this device",
+            en: "No personality result yet",
             km: "គ្មានលទ្ធផលបុគ្គលិកលក្ខណៈនៅលើឧបករណ៍នេះទេ",
           })}
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-[#68708A]">
           {getLocalized({
-            en: "Take the free test first. Your result will appear here and stay in this browser.",
+            en: "Take the free test first. Your result will appear here when you finish.",
             km: "សូមធ្វើតេស្តឥតគិតថ្លៃជាមុនសិន។ លទ្ធផលរបស់អ្នកនឹងបង្ហាញនៅទីនេះ និងរក្សាទុកក្នុងកម្មវិធីរុករកនេះ។",
           })}
         </p>

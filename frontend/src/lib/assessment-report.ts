@@ -47,7 +47,7 @@ export interface AssessmentReportLabels {
 }
 
 export interface AssessmentReportModel {
-  kind: "personality" | "riasec";
+  kind: "personality" | "riasec" | "combined";
   title: string;
   subtitle: string;
   studentName: string;
@@ -82,7 +82,12 @@ function csvCell(value: unknown): string {
 
 function fileBase(model: AssessmentReportModel, extension: string): string {
   const date = model.generatedAt.toISOString().slice(0, 10);
-  const kind = model.kind === "personality" ? "Personality" : "RIASEC";
+  const kind =
+    model.kind === "personality"
+      ? "Personality"
+      : model.kind === "riasec"
+        ? "RIASEC"
+        : "Combined";
   const headline = model.headline.replace(/[^A-Za-z0-9-]/g, "");
   return `OrienX-${kind}-Report-${headline}-${date}.${extension}`;
 }
@@ -891,7 +896,7 @@ export async function downloadAssessmentPng(model: AssessmentReportModel) {
 
 export interface SharedAssessmentPayload {
   version: 1;
-  kind: "personality" | "riasec";
+  kind: "personality" | "riasec" | "combined";
   headline: string;
   headlineLabel: string;
   archetype: string;

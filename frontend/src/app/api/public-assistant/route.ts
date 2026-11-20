@@ -1,4 +1,5 @@
 import { greetingAnswer, isGreetingMessage } from "@/lib/guest/greeting";
+import { CAREER_IDEAS } from "@/lib/data/career-ideas";
 import {
   STATIC_MAJORS,
   STATIC_SCHOLARSHIPS,
@@ -283,10 +284,23 @@ function buildCatalogContext(
   lines.push("");
   lines.push("MAJORS:");
   STATIC_MAJORS.forEach((major) => {
+    const topUniversities = major.universities
+      .slice(0, 3)
+      .map((item) => item.university_name.en)
+      .join(", ");
     lines.push(
       `- ${major.name.en} — ${major.category}, RIASEC ${major.riasec_primary}${major.riasec_secondary}, ${major.universities_count} universities, from ${
         major.min_tuition_usd != null ? `$${Math.round(major.min_tuition_usd)}/year` : "tuition not published"
-      }`
+      }${topUniversities ? `. Examples: ${topUniversities}` : ""}`
+    );
+  });
+  lines.push("");
+  lines.push("CAREER IDEAS (from O*NET OnLine):");
+  CAREER_IDEAS.forEach((career) => {
+    lines.push(
+      `- ${career.title.en} (${career.riasec_codes.join("")}) — ${career.summary.en} Skills: ${career.skills
+        .map((skill) => skill.en)
+        .join(", ")}. Education: ${career.education.en}. Related majors: ${career.related_majors.join(", ")}.`
     );
   });
   lines.push("");
@@ -695,6 +709,7 @@ export async function POST(request: Request) {
   const systemPrompt = `You are Tara, a friendly and knowledgeable Cambodian university guidance counselor.
 
 Answer in ${language === "km" ? "natural Khmer Unicode" : "clear English"}.
+Use simple words for a student who has just finished high school. Avoid technical terms such as localStorage, JSON, API, catalog, retrieval, or database. Say "match score" instead of "interest fit".
 Answer the student's actual question in the first sentence, then add 2-4 useful details or a short list, and end with one practical next step.
 Sound conversational and natural, not like a brochure or a form. Match the student's level of detail.
 When the student asks a follow-up, use the conversation history and refer naturally to the previous subject.
@@ -702,7 +717,7 @@ Use the student's saved profile only when it directly helps answer the question.
 For a simple greeting or thanks, reply briefly and ask what they need. Do not list majors for small talk.
 For questions unrelated to studying in Cambodia, answer briefly if harmless, then offer a study-related next step.
 Use only the verified catalog below for university, major, tuition, scholarship, and admission facts. If the catalog lacks the answer, say so clearly and suggest checking the official university page.
-Never invent cutoff scores, deadlines, admission requirements, program names, or university facts. Never guarantee admission.
+Never invent cutoff scores, deadlines, admission requirements, program names, or university facts. Do not name a university for a major unless the context lists it. Never guarantee admission.
 When discussing fit, say "interest fit" or "published minimum".
 Do not claim to be a therapist or give medical advice.
 Do not mention that you are an AI or that you are reading a catalog.

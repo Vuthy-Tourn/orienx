@@ -132,7 +132,7 @@ export default function GuestPersonalityTestPage() {
         km: "ចាប់ផ្តើមឡើងវិញ?",
       }),
       description: getLocalized({
-        en: "Your current answers on this device will be deleted. This cannot be undone.",
+        en: "Your current answers will be deleted. This cannot be undone.",
         km: "ចម្លើយបច្ចុប្បន្ននៅលើឧបករណ៍នេះនឹងត្រូវលុប។ មិនអាចត្រឡប់វិញបានទេ។",
       }),
       confirmLabel: getLocalized({ en: "Start over", km: "ចាប់ផ្តើមឡើងវិញ" }),
@@ -273,8 +273,8 @@ export default function GuestPersonalityTestPage() {
                   <LockKeyhole className="mt-0.5 h-4 w-4 shrink-0 text-[#111965]" />
                   <p className="text-[11px] leading-relaxed text-[#68708A]">
                     {getLocalized({
-                      en: "Your answers and result stay in this browser. Nothing is sent to a server. Clear your browser data and they are gone — export a copy if you want to keep it.",
-                      km: "ចម្លើយ និងលទ្ធផលរបស់អ្នករក្សាទុកក្នុងកម្មវិធីរុករកនេះប៉ុណ្ណោះ។ គ្មានអ្វីត្រូវផ្ញើទៅម៉ាស៊ីនមេទេ។ ប្រសិនបើអ្នកលុបទិន្នន័យកម្មវិធីរុករក ពួកវានឹងបាត់ — សូមនាំចេញច្បាប់ចម្លងដើម្បីរក្សាទុក។",
+                      en: "Your answers are private. You can download a copy of your result at the end.",
+                      km: "ចម្លើយរបស់អ្នកគឺឯកជន។ អ្នកអាចទាញយកច្បាប់ចម្លងលទ្ធផលនៅចុងបញ្ចប់។",
                     })}
                   </p>
                 </div>
@@ -283,8 +283,8 @@ export default function GuestPersonalityTestPage() {
               {!storageAvailable && (
                 <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-[11px] leading-relaxed text-amber-900">
                   {getLocalized({
-                    en: "This browser is blocking local storage. You can still take the test, but your result will disappear when this tab closes.",
-                    km: "កម្មវិធីរុករកនេះបិទការរក្សាទុកក្នុងមូលដ្ឋាន។ អ្នកអាចធ្វើតេស្តបាន ប៉ុន្តែលទ្ធផលនឹងបាត់នៅពេលបិទផ្ទាំងនេះ។",
+                    en: "Your device is blocking saved answers. You can still take the test, but your result may disappear when you close this tab.",
+                    km: "ឧបករណ៍របស់អ្នកបិទការរក្សាទុកចម្លើយ។ អ្នកអាចធ្វើតេស្តបាន ប៉ុន្តែលទ្ធផលអាចបាត់នៅពេលបិទផ្ទាំងនេះ។",
                   })}
                 </div>
               )}
@@ -320,7 +320,7 @@ export default function GuestPersonalityTestPage() {
           <div className="mb-4 flex flex-col gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-[11px] font-semibold text-emerald-900 sm:flex-row sm:items-center sm:justify-between">
             <span>
               {getLocalized({
-                en: "Draft restored. Your answers are saved on this device.",
+                en: "Your answers were restored.",
                 km: "ស្តារសេចក្តីព្រាងឡើងវិញ។ ចម្លើយរបស់អ្នកត្រូវបានរក្សាទុកលើឧបករណ៍នេះ។",
               })}
             </span>

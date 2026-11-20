@@ -115,7 +115,7 @@ export default function GuestRiasecTestPage() {
         km: "ចាប់ផ្តើមឡើងវិញ?",
       }),
       description: getLocalized({
-        en: "Your current ratings on this device will be deleted. This cannot be undone.",
+        en: "Your current ratings will be deleted. This cannot be undone.",
         km: "ការវាយតម្លៃបច្ចុប្បន្ននៅលើឧបករណ៍នេះនឹងត្រូវលុប។ មិនអាចត្រឡប់វិញបានទេ។",
       }),
       confirmLabel: getLocalized({ en: "Start over", km: "ចាប់ផ្តើមឡើងវិញ" }),
@@ -134,8 +134,8 @@ export default function GuestRiasecTestPage() {
     if (answeredCount < QUESTIONS.length) {
       toast.warning(
         getLocalized({
-          en: "Please rate every activity before seeing your Holland code.",
-          km: "សូមវាយតម្លៃសកម្មភាពទាំងអស់មុនពេលមើលកូដ Holland របស់អ្នក។",
+          en: "Please rate every activity before seeing your result.",
+          km: "សូមវាយតម្លៃសកម្មភាពទាំងអស់មុនពេលមើលកូដចំណាប់អារម្មណ៍អាជីព របស់អ្នក។",
         })
       );
       return;
@@ -217,8 +217,8 @@ export default function GuestRiasecTestPage() {
                 </h1>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/80">
                   {getLocalized({
-                    en: "Rate real work activities to discover your Holland code and the majors that match your interests.",
-                    km: "វាយតម្លៃសកម្មភាពការងារពិតប្រាកដ ដើម្បីស្វែងរកកូដ Holland និងជំនាញដែលត្រូវនឹងចំណាប់អារម្មណ៍របស់អ្នក។",
+                    en: "Rate real work activities to discover your career interest code and the majors that match your interests.",
+                    km: "វាយតម្លៃសកម្មភាពការងារពិតប្រាកដ ដើម្បីស្វែងរកកូដចំណាប់អារម្មណ៍អាជីព និងជំនាញដែលត្រូវនឹងចំណាប់អារម្មណ៍របស់អ្នក។",
                   })}
                 </p>
               </div>
@@ -255,8 +255,8 @@ export default function GuestRiasecTestPage() {
                   <LockKeyhole className="mt-0.5 h-4 w-4 shrink-0 text-[#111965]" />
                   <p className="text-[11px] leading-relaxed text-[#68708A]">
                     {getLocalized({
-                      en: "Your answers and result stay in this browser. Nothing is sent to a server. Clear your browser data and they are gone — export a copy if you want to keep it.",
-                      km: "ចម្លើយ និងលទ្ធផលរបស់អ្នករក្សាទុកក្នុងកម្មវិធីរុករកនេះប៉ុណ្ណោះ។ គ្មានអ្វីត្រូវផ្ញើទៅម៉ាស៊ីនមេទេ។ ប្រសិនបើអ្នកលុបទិន្នន័យកម្មវិធីរុករក ពួកវានឹងបាត់ — សូមនាំចេញច្បាប់ចម្លងដើម្បីរក្សាទុក។",
+                      en: "Your answers are private. You can download a copy of your result at the end.",
+                      km: "ចម្លើយរបស់អ្នកគឺឯកជន។ អ្នកអាចទាញយកច្បាប់ចម្លងលទ្ធផលនៅចុងបញ្ចប់។",
                     })}
                   </p>
                 </div>
@@ -265,8 +265,8 @@ export default function GuestRiasecTestPage() {
               {!storageAvailable && (
                 <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-[11px] leading-relaxed text-amber-900">
                   {getLocalized({
-                    en: "This browser is blocking local storage. You can still take the test, but your result will disappear when this tab closes.",
-                    km: "កម្មវិធីរុករកនេះបិទការរក្សាទុកក្នុងមូលដ្ឋាន។ អ្នកអាចធ្វើតេស្តបាន ប៉ុន្តែលទ្ធផលនឹងបាត់នៅពេលបិទផ្ទាំងនេះ។",
+                    en: "Your device is blocking saved answers. You can still take the test, but your result may disappear when you close this tab.",
+                    km: "ឧបករណ៍របស់អ្នកបិទការរក្សាទុកចម្លើយ។ អ្នកអាចធ្វើតេស្តបាន ប៉ុន្តែលទ្ធផលអាចបាត់នៅពេលបិទផ្ទាំងនេះ។",
                   })}
                 </div>
               )}
@@ -305,7 +305,7 @@ export default function GuestRiasecTestPage() {
           <div className="mb-4 flex flex-col gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-[11px] font-semibold text-emerald-900 sm:flex-row sm:items-center sm:justify-between">
             <span>
               {getLocalized({
-                en: "Draft restored. Your ratings are saved on this device.",
+                en: "Your ratings were restored.",
                 km: "ស្តារសេចក្តីព្រាងឡើងវិញ។ ការវាយតម្លៃរបស់អ្នកត្រូវបានរក្សាទុកលើឧបករណ៍នេះ។",
               })}
             </span>
@@ -363,8 +363,8 @@ export default function GuestRiasecTestPage() {
           onClearDraft={handleClearDraft}
           isSubmitting={submitting}
           submitButtonText={getLocalized({
-            en: "See my Holland code",
-            km: "មើលកូដ Holland របស់ខ្ញុំ",
+            en: "See my result",
+            km: "មើលកូដចំណាប់អារម្មណ៍អាជីព របស់ខ្ញុំ",
           })}
         />
 

@@ -277,7 +277,7 @@ function answerResults(language: AssistantLanguage): StaticAssistantAnswer {
     return {
       answer: pick(
         language,
-        "You have not completed a test on this device yet. Start with the Personality or RIASEC test. Both are free and take only a few minutes.",
+        "You have not taken a test yet. Start with the Personality or career interest test. Both are free and take only a few minutes.",
         "អ្នកមិនទាន់បានធ្វើតេស្តនៅលើឧបករណ៍នេះទេ។ ចាប់ផ្តើមជាមួយតេស្តបុគ្គលិកលក្ខណៈ ឬ RIASEC។ ទាំងពីរឥតគិតថ្លៃ និងចំណាយពេលតែប៉ុន្មាននាទីប៉ុណ្ណោះ។"
       ),
       sources: [
@@ -322,7 +322,7 @@ function answerResults(language: AssistantLanguage): StaticAssistantAnswer {
       "ជំនាញដែលត្រូវគ្នាខ្លាំងបំផុតរបស់អ្នក៖"
     )}\n${lines.join("\n")}\n\n${pick(
       language,
-      "This is an interest fit, not an admission decision. Open My results to export or share the full report.",
+      "This is a match score, not an admission decision. Open My results to download or share the full report.",
       "នេះជាភាពត្រូវគ្នានៃចំណាប់អារម្មណ៍ មិនមែនជាការសម្រេចចិត្តចូលរៀនទេ។ បើកលទ្ធផលរបស់ខ្ញុំ ដើម្បីនាំចេញ ឬចែករំលែករបាយការណ៍ពេញលេញ។"
     )}`,
     sources: [
@@ -803,7 +803,7 @@ export function answerLocalQuestion(
           title_en: "My results",
           title_km: "លទ្ធផលរបស់ខ្ញុំ",
           url: "/assessments/results",
-          snippet_en: "Saved in this browser",
+          snippet_en: "Saved here",
           snippet_km: "រក្សាទុកក្នុងកម្មវិធីរុករកនេះ",
         },
       ],
@@ -821,8 +821,8 @@ export function answerLocalQuestion(
     return {
       answer: pick(
         language,
-        "Open any saved result, then choose Export report. You can download PDF, XLSX, CSV, JSON, Markdown, HTML, TXT, a PNG share card, or copy a read-only share link.\n\nEverything is generated in your browser. Nothing is uploaded.",
-        "បើកលទ្ធផលដែលបានរក្សាទុក រួចជ្រើសរើស នាំចេញរបាយការណ៍។ អ្នកអាចទាញយក PDF, XLSX, CSV, JSON, Markdown, HTML, TXT កាតចែករំលែក PNG ឬចម្លងតំណចែករំលែកបែបអានតែ។\n\nអ្វីៗត្រូវបានបង្កើតក្នុងកម្មវិធីរុករករបស់អ្នក។ គ្មានអ្វីត្រូវផ្ញើទៅម៉ាស៊ីនមេទេ។"
+        "Open any saved result, then choose Download. You can save a PDF, Excel file, table, data file, notes, web page, text file, image, or copy a link.\n\nEverything is created on your device. Nothing is sent away.",
+        "បើកលទ្ធផលដែលបានរក្សាទុក រួចជ្រើសរើស ទាញយក។ អ្នកអាចរក្សាទុក PDF ឯកសារ Excel តារាង ឯកសារទិន្នន័យ កំណត់ត្រា ទំព័រវែប ឯកសារអត្ថបទ រូបភាព ឬចម្លងតំណ។\n\nអ្វីៗត្រូវបានបង្កើតនៅលើឧបករណ៍របស់អ្នក។ គ្មានអ្វីត្រូវផ្ញើទៅណាទេ។"
       ),
       sources: [
         {
@@ -843,8 +843,8 @@ export function answerLocalQuestion(
     return {
       answer: pick(
         language,
-        "Your answers and results stay in this browser's localStorage. They are not sent to a server. Clearing browser data deletes them, so export a copy if you want to keep them. A share link contains the result data inside the link itself.",
-        "ចម្លើយ និងលទ្ធផលរបស់អ្នករក្សាទុកក្នុង localStorage របស់កម្មវិធីរុករកនេះ។ ពួកវាមិនត្រូវផ្ញើទៅម៉ាស៊ីនមេទេ។ ការលុបទិន្នន័យកម្មវិធីរុករកនឹងលុបពួកវា ដូច្នេះសូមនាំចេញច្បាប់ចម្លងប្រសិនបើចង់រក្សាទុក។ តំណចែករំលែកមានទិន្នន័យលទ្ធផលនៅក្នុងតំណខ្លួនវា។"
+        "Your answers stay on this device. If you delete your saved data, they will be gone. Download a copy if you want to keep them. A shared link contains your result.",
+        "ចម្លើយរបស់អ្នកនៅលើឧបករណ៍នេះ។ ប្រសិនបើអ្នកលុបទិន្នន័យដែលបានរក្សាទុក ពួកវានឹងបាត់។ សូមទាញយកច្បាប់ចម្លងប្រសិនបើចង់រក្សាទុក។ តំណចែករំលែកមានលទ្ធផលរបស់អ្នក។"
       ),
       sources: [
         {
@@ -873,7 +873,7 @@ export function answerLocalQuestion(
     return {
       answer: pick(
         language,
-        "Start with the RIASEC test if you want major and career direction, or the Personality test if you want to understand how you think and study. You can take both — they are free, take a few minutes, and save only in this browser. Taking both gives the strongest combined major matches.",
+        "Start with the career interest test if you want major and career direction, or the Personality test if you want to understand how you think and study. You can take both — they are free, take a few minutes, and stay on this device. Taking both gives the best major matches.",
         "ចាប់ផ្តើមជាមួយតេស្ត RIASEC ប្រសិនបើចង់រកទិសដៅជំនាញ និងអាជីព ឬតេស្តបុគ្គលិកលក្ខណៈ ប្រសិនបើចង់យល់ពីរបៀបគិត និងការរៀនរបស់អ្នក។ អ្នកអាចធ្វើទាំងពីរ — ឥតគិតថ្លៃ ចំណាយពេលតែប៉ុន្មាននាទី និងរក្សាទុកក្នុងកម្មវិធីរុករកនេះប៉ុណ្ណោះ។ ការធ្វើទាំងពីរផ្តល់ជំនាញត្រូវគ្នាល្អបំផុត។"
       ),
       sources: [

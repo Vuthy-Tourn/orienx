@@ -39,14 +39,14 @@ function RiasecResultInner() {
         </span>
         <h1 className="mt-4 text-xl font-black text-[#111965]">
           {getLocalized({
-            en: "No RIASEC result on this device",
+            en: "No career interest result yet",
             km: "គ្មានលទ្ធផល RIASEC នៅលើឧបករណ៍នេះទេ",
           })}
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-[#68708A]">
           {getLocalized({
-            en: "Take the free test first. Your Holland code will appear here and stay in this browser.",
-            km: "សូមធ្វើតេស្តឥតគិតថ្លៃជាមុនសិន។ កូដ Holland របស់អ្នកនឹងបង្ហាញនៅទីនេះ និងរក្សាទុកក្នុងកម្មវិធីរុករកនេះ។",
+            en: "Take the free test first. Your career interest code will appear here when you finish.",
+            km: "សូមធ្វើតេស្តឥតគិតថ្លៃជាមុនសិន។ កូដចំណាប់អារម្មណ៍អាជីព របស់អ្នកនឹងបង្ហាញនៅទីនេះ និងរក្សាទុកក្នុងកម្មវិធីរុករកនេះ។",
           })}
         </p>
         <div className="mt-5 flex flex-wrap justify-center gap-2">

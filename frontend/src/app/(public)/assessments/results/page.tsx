@@ -13,7 +13,6 @@ import {
   Sparkles,
   Trash2,
   Trophy,
-  UserRound,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
 import { useToast } from "@/components/ui/toast";
@@ -21,10 +20,7 @@ import { useConfirm } from "@/components/ui/confirm-dialog";
 import {
   clearAllGuestData,
   deleteResult,
-  exportGuestBackup,
   getAllResults,
-  readProfile,
-  saveProfile,
 } from "@/lib/guest/storage";
 import { recommendMajorMatches } from "@/lib/guest/recommendations";
 import type {
@@ -34,19 +30,13 @@ import type {
 } from "@/lib/guest/types";
 import { ARCHETYPE_META } from "@/lib/personality-meta";
 import { getHollandArchetype } from "@/lib/riasec-meta";
-import { STATIC_META } from "@/lib/data/catalog";
-
-function downloadText(content: string, fileName: string, mime: string) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-}
+import { buildCombinedReportModel } from "@/lib/guest/combined-report";
+import { AssessmentExportDialog } from "@/components/assessments/assessment-export-dialog";
+import {
+  exportAssessmentReport,
+  type AssessmentReportFormat,
+  type AssessmentReportLabels,
+} from "@/lib/assessment-report";
 
 function formatDate(value: string, locale: string) {
   return new Date(value).toLocaleString(locale, {
@@ -59,7 +49,7 @@ function formatDate(value: string, locale: string) {
 }
 
 export default function GuestResultsPage() {
-  const { getLocalized, language } = useLanguage();
+  const { t, getLocalized, language } = useLanguage();
   const toast = useToast();
   const confirm = useConfirm();
   const isKm = language === "km";
@@ -67,8 +57,9 @@ export default function GuestResultsPage() {
 
   const [rows, setRows] = useState<GuestResultRecord[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const [displayName, setDisplayName] = useState("");
-  const [savedName, setSavedName] = useState("");
+  const [combinedOpen, setCombinedOpen] = useState(false);
+  const [combinedExporting, setCombinedExporting] =
+    useState<AssessmentReportFormat | null>(null);
 
   const refresh = () => {
     setRows(getAllResults());
@@ -76,10 +67,6 @@ export default function GuestResultsPage() {
   };
 
   useEffect(() => {
-    const profile = readProfile();
-    const name = profile?.displayName ?? "";
-    setDisplayName(name);
-    setSavedName(name);
     refresh();
   }, []);
 
@@ -99,6 +86,63 @@ export default function GuestResultsPage() {
     });
   }, [personalityResult, riasecResult]);
 
+  const combinedLabels: AssessmentReportLabels = {
+    preparedFor: t("assessmentReport.preparedFor"),
+    generated: t("assessmentReport.generated"),
+    summary: t("assessmentReport.summary"),
+    dimensions: t("assessmentReport.dimensions"),
+    highlights: t("assessmentReport.highlights"),
+    recommendedMajors: t("assessmentReport.recommendedMajors"),
+    archetype: t("assessmentReport.archetype"),
+    profile: t("assessmentReport.profile"),
+    eyebrow: t("assessmentReport.eyebrow"),
+    fitScore: t("assessmentReport.fitScore"),
+    universities: t("assessmentReport.universities"),
+    print: t("assessmentReport.print"),
+    close: t("assessmentReport.close"),
+    footer: t("assessmentReport.footer"),
+    noResult: t("assessmentReport.noResult"),
+  };
+
+  const handleCombinedExport = async (format: AssessmentReportFormat) => {
+    if (!latestPersonality || !latestRiasec || !personalityResult || !riasecResult) {
+      return;
+    }
+    setCombinedExporting(format);
+    try {
+      const generatedAt = new Date(
+        Math.max(
+          new Date(latestPersonality.completedAt).getTime(),
+          new Date(latestRiasec.completedAt).getTime()
+        )
+      );
+      const model = buildCombinedReportModel({
+        personality: personalityResult,
+        riasec: riasecResult,
+        matches: combinedMajors,
+        labels: combinedLabels,
+        language: isKm ? "km" : "en",
+        generatedAt,
+        studentName: getLocalized({ en: "Student", km: "សិស្ស" }),
+        characterImageUrl:
+          typeof window !== "undefined"
+            ? `${window.location.origin}/images/personality-types/${personalityResult.type.toLowerCase()}.svg`
+            : undefined,
+      });
+      await exportAssessmentReport(model, format);
+      toast.success(t("assessmentReport.exported"));
+      setCombinedOpen(false);
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("popup")) {
+        toast.error(t("assessmentReport.pdfBlocked"));
+      } else {
+        toast.error(t("assessmentReport.failed"));
+      }
+    } finally {
+      setCombinedExporting(null);
+    }
+  };
+
   const handleDelete = async (row: GuestResultRecord) => {
     const confirmed = await confirm({
       title: getLocalized({
@@ -106,8 +150,8 @@ export default function GuestResultsPage() {
         km: "លុបលទ្ធផលនេះ?",
       }),
       description: getLocalized({
-        en: "The result will be removed from this browser. Other saved results are not affected.",
-        km: "លទ្ធផលនេះនឹងត្រូវលុបចេញពីកម្មវិធីរុករកនេះ។ លទ្ធផលផ្សេងទៀតមិនរងផលប៉ះពាល់ទេ។",
+        en: "This result will be deleted. Your other results will stay.",
+        km: "លទ្ធផលនេះនឹងត្រូវលុប។ លទ្ធផលផ្សេងទៀតរបស់អ្នកនឹងនៅដដែល។",
       }),
       confirmLabel: getLocalized({ en: "Delete", km: "លុប" }),
       cancelLabel: getLocalized({ en: "Cancel", km: "បោះបង់" }),
@@ -124,14 +168,14 @@ export default function GuestResultsPage() {
   const handleClearAll = async () => {
     const confirmed = await confirm({
       title: getLocalized({
-        en: "Clear all local data?",
-        km: "លុបទិន្នន័យមូលដ្ឋានទាំងអស់?",
+        en: "Delete all results?",
+        km: "លុបលទ្ធផលទាំងអស់?",
       }),
       description: getLocalized({
-        en: "All drafts, results, and history in this browser will be deleted. Download a backup first if you want to keep them.",
-        km: "សេចក្តីព្រាង លទ្ធផល និងប្រវត្តិទាំងអស់ក្នុងកម្មវិធីរុករកនេះនឹងត្រូវលុប។ សូមទាញយកច្បាប់ចម្លងបម្រុងទុកជាមុនប្រសិនបើចង់រក្សាទុក។",
+        en: "All saved answers and results will be deleted. Download a copy first if you want to keep them.",
+        km: "ចម្លើយ និងលទ្ធផលដែលបានរក្សាទុកទាំងអស់នឹងត្រូវលុប។ សូមទាញយកច្បាប់ចម្លងជាមុនប្រសិនបើចង់រក្សាទុក។",
       }),
-      confirmLabel: getLocalized({ en: "Clear everything", km: "លុបទាំងអស់" }),
+      confirmLabel: getLocalized({ en: "Delete all", km: "លុបទាំងអស់" }),
       cancelLabel: getLocalized({ en: "Cancel", km: "បោះបង់" }),
       tone: "danger",
     });
@@ -140,22 +184,8 @@ export default function GuestResultsPage() {
     refresh();
     toast.success(
       getLocalized({
-        en: "All local data cleared.",
-        km: "បានលុបទិន្នន័យមូលដ្ឋានទាំងអស់។",
-      })
-    );
-  };
-
-  const handleBackup = () => {
-    downloadText(
-      exportGuestBackup(),
-      `OrienX-Guest-Backup-${new Date().toISOString().slice(0, 10)}.json`,
-      "application/json;charset=utf-8;"
-    );
-    toast.success(
-      getLocalized({
-        en: "Backup downloaded.",
-        km: "បានទាញយកច្បាប់ចម្លងបម្រុងទុក។",
+        en: "All results deleted.",
+        km: "បានលុបលទ្ធផលទាំងអស់។",
       })
     );
   };
@@ -177,84 +207,35 @@ export default function GuestResultsPage() {
             </h1>
             <p className="mt-1 max-w-xl text-sm leading-relaxed text-[#68708A]">
               {getLocalized({
-                en: "Your drafts and results are stored only in this browser. Nothing is sent to a server.",
-                km: "សេចក្តីព្រាង និងលទ្ធផលរបស់អ្នករក្សាទុកក្នុងកម្មវិធីរុករកនេះប៉ុណ្ណោះ។ គ្មានអ្វីត្រូវផ្ញើទៅម៉ាស៊ីនមេទេ។",
+                en: "See your test results and download a copy.",
+                km: "មើលលទ្ធផលតេស្តរបស់អ្នក និងទាញយកច្បាប់ចម្លង។",
               })}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={handleBackup}
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-[#D9DEEA] bg-white px-3 text-[11px] font-black text-[#111965] transition-colors hover:border-[#111965]/40 hover:bg-[#F8FAFD]"
-            >
-              <Download className="h-3.5 w-3.5" />
-              {getLocalized({ en: "Backup JSON", km: "បម្រុងទុក JSON" })}
-            </button>
+            {latestPersonality && latestRiasec && (
+              <button
+                type="button"
+                onClick={() => setCombinedOpen(true)}
+                className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-[#111965] px-3 text-xs font-black text-white transition-colors hover:bg-[#1A2580]"
+              >
+                <Download className="h-3.5 w-3.5 text-[#F7CE4D]" />
+                {getLocalized({
+                  en: "Download all results",
+                  km: "ទាញយកលទ្ធផលទាំងអស់",
+                })}
+              </button>
+            )}
             <button
               type="button"
               onClick={handleClearAll}
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-rose-200 bg-white px-3 text-[11px] font-black text-rose-600 transition-colors hover:bg-rose-50"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-rose-200 bg-white px-3 text-xs font-black text-rose-600 transition-colors hover:bg-rose-50"
             >
               <Trash2 className="h-3.5 w-3.5" />
-              {getLocalized({ en: "Clear data", km: "លុបទិន្នន័យ" })}
+              {getLocalized({ en: "Delete results", km: "លុបលទ្ធផល" })}
             </button>
           </div>
         </div>
-
-        <section className="rounded-3xl border border-[#E6E8F0] bg-white p-4 shadow-xs sm:p-5">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#F0F2FA] text-[#111965]">
-                <UserRound className="h-4 w-4" />
-              </span>
-              <div>
-                <div className="text-base font-black text-[#111965]">
-                  {getLocalized({
-                    en: "Name on your reports",
-                    km: "ឈ្មោះនៅលើរបាយការណ៍របស់អ្នក",
-                  })}
-                </div>
-                <div className="text-xs font-semibold text-[#68708A]">
-                  {getLocalized({
-                    en: "Optional. Stored only in this browser.",
-                    km: "ស្រេចចិត្ត។ រក្សាទុកក្នុងកម្មវិធីរុករកនេះប៉ុណ្ណោះ។",
-                  })}
-                </div>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <input
-                value={displayName}
-                onChange={(event) => setDisplayName(event.target.value)}
-                placeholder={getLocalized({
-                  en: "Your name (optional)",
-                  km: "ឈ្មោះរបស់អ្នក (ស្រេចចិត្ត)",
-                })}
-                maxLength={80}
-                className="h-9 w-full min-w-0 rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3 text-sm font-semibold text-[#111965] outline-none focus:border-[#111965]/40 sm:w-56"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  saveProfile({ displayName: displayName.trim() });
-                  setSavedName(displayName.trim());
-                  toast.success(
-                    getLocalized({
-                      en: "Report name saved.",
-                      km: "បានរក្សាទុកឈ្មោះរបាយការណ៍។",
-                    })
-                  );
-                }}
-                className="inline-flex h-9 shrink-0 items-center rounded-xl bg-[#111965] px-3 text-xs font-black text-white hover:bg-[#1A2580]"
-              >
-                {savedName.length > 0 && displayName.trim() === savedName
-                  ? getLocalized({ en: "Saved", km: "បានរក្សាទុក" })
-                  : getLocalized({ en: "Save", km: "រក្សាទុក" })}
-              </button>
-            </div>
-          </div>
-        </section>
 
         {!loaded ? (
           <div className="grid gap-4 sm:grid-cols-2">
@@ -278,8 +259,8 @@ export default function GuestResultsPage() {
             </h2>
             <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-[#68708A]">
               {getLocalized({
-                en: "Take one or both free tests. Your result will appear here immediately and stay available on this device.",
-                km: "សូមធ្វើតេស្តឥតគិតថ្លៃមួយ ឬទាំងពីរ។ លទ្ធផលរបស់អ្នកនឹងបង្ហាញនៅទីនេះភ្លាមៗ និងអាចប្រើបាននៅលើឧបករណ៍នេះ។",
+                en: "Take one or both free tests. Your result will appear here when you finish.",
+                km: "សូមធ្វើតេស្តឥតគិតថ្លៃមួយ ឬទាំងពីរ។ លទ្ធផលរបស់អ្នកនឹងបង្ហាញនៅទីនេះនៅពេលអ្នកបញ្ចប់។",
               })}
             </p>
             <div className="mt-5 flex flex-wrap justify-center gap-2">
@@ -326,8 +307,8 @@ export default function GuestResultsPage() {
                     <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-amber-800">
                       <Trophy className="h-3 w-3" />
                       {getLocalized({
-                        en: "Combined interest fit",
-                        km: "ភាពត្រូវគ្នារួមបញ្ចូល",
+                        en: "Your best matches",
+                        km: "ជម្រើសដែលត្រូវគ្នាល្អបំផុត",
                       })}
                     </div>
                     <h2 className="mt-2 text-base font-black text-[#111965] sm:text-lg">
@@ -384,8 +365,8 @@ export default function GuestResultsPage() {
                   </h2>
                   <p className="text-xs font-semibold text-[#68708A]">
                     {getLocalized({
-                      en: "Up to 10 attempts per test are kept on this device.",
-                      km: "រក្សាទុករហូតដល់ ១០ ការប៉ុនប៉ងក្នុងមួយតេស្ត នៅលើឧបករណ៍នេះ។",
+                      en: "Your last 10 attempts are kept here.",
+                      km: "ការប៉ុនប៉ង ១០ លើកចុងក្រោយរបស់អ្នកត្រូវបានរក្សាទុកនៅទីនេះ។",
                     })}
                   </p>
                 </div>
@@ -456,15 +437,40 @@ export default function GuestResultsPage() {
               </div>
             </section>
 
-            <p className="text-center text-xs font-semibold text-[#94A3B8]">
-              {getLocalized({
-                en: `Data version ${STATIC_META.dataVersion} · Stored locally in this browser`,
-                km: `កំណែទិន្នន័យ ${STATIC_META.dataVersion} · រក្សាទុកក្នុងកម្មវិធីរុករកនេះ`,
-              })}
-            </p>
           </>
         )}
       </div>
+
+      <AssessmentExportDialog
+        open={combinedOpen}
+        onOpenChange={setCombinedOpen}
+        title={getLocalized({
+          en: "Download all results",
+          km: "ទាញយកលទ្ធផលទាំងអស់",
+        })}
+        subtitle={getLocalized({
+          en: "One report with your personality and career interest results.",
+          km: "របាយការណ៍មួយដែលរួមមានលទ្ធផលបុគ្គលិកលក្ខណៈ និងចំណាប់អារម្មណ៍អាជីព។",
+        })}
+        includes={[
+          `${personalityResult?.type ?? ""}`,
+          `${riasecResult?.hollandCode ?? ""}`,
+          `${combinedMajors.length} ${t("assessmentReport.recommendedMajors")}`,
+        ].filter(Boolean)}
+        exportingFormat={combinedExporting}
+        onExport={handleCombinedExport}
+        footer={t("assessmentReport.footer")}
+        formats={[
+          "pdf",
+          "excel",
+          "csv",
+          "json",
+          "markdown",
+          "html",
+          "text",
+          "png",
+        ]}
+      />
     </div>
   );
 }
@@ -570,8 +576,8 @@ function ResultCard({
                   km: "ស្វែងយល់ពីរបៀបគិត ចំណុចខ្លាំង និងជំនាញដែលត្រូវគ្នា។",
                 })
               : getLocalized({
-                  en: "Find your Holland code and the fields that match your interests.",
-                  km: "ស្វែងរកកូដ Holland និងវិស័យដែលត្រូវនឹងចំណាប់អារម្មណ៍របស់អ្នក។",
+                  en: "Find your career interest code and the fields that match your interests.",
+                  km: "ស្វែងរកកូដចំណាប់អារម្មណ៍អាជីព និងវិស័យដែលត្រូវនឹងចំណាប់អារម្មណ៍របស់អ្នក។",
                 })}
           </p>
           <Link

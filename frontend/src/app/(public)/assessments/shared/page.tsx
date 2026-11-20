@@ -129,8 +129,8 @@ export default function SharedAssessmentPage() {
           <h2 className="text-sm font-black text-[#111965]">
             {getLocalized({
               en: isPersonality
-                ? "Preference dimensions"
-                : "Interest dimensions",
+                ? "Your result details"
+                : "Your career interest scores",
               km: isPersonality ? "វិមាត្រចំណូលចិត្ត" : "វិមាត្រចំណាប់អារម្មណ៍",
             })}
           </h2>

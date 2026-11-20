@@ -14,6 +14,7 @@ import {
   Compass,
   Copy,
   Download,
+  ExternalLink,
   GraduationCap,
   Lightbulb,
   Link2,
@@ -53,6 +54,8 @@ import type {
   RiasecResult,
 } from "@/lib/guest/types";
 import { readProfile } from "@/lib/guest/storage";
+import { getCareerIdeasForCodes } from "@/lib/data/career-ideas";
+import { getStaticMajor } from "@/lib/data/catalog";
 
 function percent(value: number): number {
   return Math.round(Math.max(0, Math.min(100, value)));
@@ -254,6 +257,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
     )
   ).slice(0, 6);
   const primaryRiasec = topCodes[0] ? RIASEC_DIMENSIONS[topCodes[0]] : null;
+  const careerIdeas = riasec ? getCareerIdeasForCodes(topCodes, 6) : [];
   const riasecWorkEnvironment = holland
     ? getLocalized({
         en: holland.optimalWorkEnvironmentEn,
@@ -536,8 +540,8 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                       km: "អំពីប្រភេទបុគ្គលិកលក្ខណៈរបស់អ្នក",
                     })
                   : getLocalized({
-                      en: "About your Holland code",
-                      km: "អំពីកូដ Holland របស់អ្នក",
+                      en: "About your career interest code",
+                      km: "អំពីកូដចំណាប់អារម្មណ៍អាជីពរបស់អ្នក",
                     })}
               </h2>
               <p className="mt-1 text-sm font-semibold text-[#94A3B8]">
@@ -721,23 +725,23 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
               <h2 className="text-base font-black text-[#111965] sm:text-lg">
                 {record.kind === "personality"
                   ? getLocalized({
-                      en: "Your four preference dimensions",
-                      km: "វិមាត្រចំណូលចិត្តទាំង ៤ របស់អ្នក",
+                      en: "What your answers mean",
+                      km: "អត្ថន័យនៃចម្លើយរបស់អ្នក",
                     })
                   : getLocalized({
-                      en: "Your six interest dimensions",
-                      km: "វិមាត្រចំណាប់អារម្មណ៍ទាំង ៦ របស់អ្នក",
+                      en: "Your career interest scores",
+                      km: "ពិន្ទុចំណាប់អារម្មណ៍អាជីពរបស់អ្នក",
                     })}
               </h2>
               <p className="mt-1 text-sm leading-relaxed text-[#68708A]">
                 {record.kind === "personality"
                   ? getLocalized({
-                      en: "Each pair shows the stronger side and the balance between both traits.",
+                      en: "Each pair shows your stronger side and how the two traits balance.",
                       km: "គូនីមួយៗបង្ហាញពីផ្នែកខ្លាំង និងតុល្យភាពរវាងលក្ខណៈទាំងពីរ។",
                     })
                   : getLocalized({
-                      en: "Your top three letters form your Holland code.",
-                      km: "អក្សរកំពូលទាំង ៣ បង្កើតបានជាកូដ Holland របស់អ្នក។",
+                      en: "Your top three letters form your career interest code.",
+                      km: "អក្សរកំពូលទាំង ៣ បង្កើតបានជាកូដចំណាប់អារម្មណ៍អាជីពរបស់អ្នក។",
                     })}
               </p>
             </div>
@@ -787,8 +791,8 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
             <SectionHeading
               icon={Brain}
               title={getLocalized({
-                en: "Your four dimensions explained",
-                km: "វិមាត្រទាំង ៤ របស់អ្នក ត្រូវបានពន្យល់",
+                en: "What each part means",
+                km: "អត្ថន័យនៃផ្នែកនីមួយៗ",
               })}
               subtitle={getLocalized({
                 en: "Each preference pair shapes how you study, communicate, and make decisions.",
@@ -843,12 +847,12 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
             <SectionHeading
               icon={Compass}
               title={getLocalized({
-                en: "What your Holland code means",
-                km: "អត្ថន័យនៃកូដ Holland របស់អ្នក",
+                en: "What your career interest code means",
+                km: "អត្ថន័យនៃកូដចំណាប់អារម្មណ៍អាជីពរបស់អ្នក",
               })}
               subtitle={getLocalized({
-                en: "Your top three interest areas, in order. The first letter is your strongest driver.",
-                km: "វិស័យចំណាប់អារម្មណ៍កំពូលទាំង ៣ តាមលំដាប់។ អក្សរទីមួយជាកម្លាំងជំរុញខ្លាំងបំផុតរបស់អ្នក។",
+                en: "Your top three interest areas, in order. The first one is strongest.",
+                km: "វិស័យចំណាប់អារម្មណ៍កំពូលទាំង ៣ តាមលំដាប់។ ផ្នែកទីមួយខ្លាំងបំផុត។",
               })}
             />
             <div className="mt-5 space-y-3">
@@ -902,17 +906,104 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
           </section>
         )}
 
-        {displayCareers.length > 0 && (
+        {careerIdeas.length > 0 ? (
+          <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-7">
+            <SectionHeading
+              icon={Briefcase}
+              title={getLocalized({
+                en: "Career ideas for you",
+                km: "អាជីពដែលសាកសមសម្រាប់អ្នក",
+              })}
+              subtitle={getLocalized({
+                en: "Real job profiles that match your top interests. Use them to explore, not as a fixed path.",
+                km: "មុខរបរពិតប្រាកដដែលត្រូវនឹងចំណាប់អារម្មណ៍កំពូលរបស់អ្នក។ ប្រើពួកវាដើម្បីស្វែងយល់ មិនមែនជាផ្លូវកំណត់តែមួយទេ។",
+              })}
+            />
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              {careerIdeas.map((career) => (
+                <article
+                  key={career.slug}
+                  className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-[0.12em] text-[#D4A017]">
+                        {getLocalized({ en: career.industry, km: career.industry_km })}
+                      </div>
+                      <h3 className="mt-1 text-base font-black leading-snug text-[#111965]">
+                        {getLocalized(career.title)}
+                      </h3>
+                    </div>
+                    <span className="rounded-lg border border-[#E6E8F0] bg-white px-2 py-1 text-[10px] font-bold text-[#68708A]">
+                      {career.riasec_codes.join(" · ")}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-[#475569]">
+                    {getLocalized(career.summary)}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {career.skills.map((skill) => (
+                      <span
+                        key={skill.en}
+                        className="rounded-lg border border-[#E6E8F0] bg-white px-2 py-1 text-xs font-semibold text-[#475569]"
+                      >
+                        {getLocalized(skill)}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-3 border-t border-[#E6E8F0] pt-3">
+                    <div className="text-[10px] font-black uppercase tracking-[0.12em] text-[#94A3B8]">
+                      {getLocalized({
+                        en: "Related majors",
+                        km: "ជំនាញពាក់ព័ន្ធ",
+                      })}
+                    </div>
+                    <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
+                      {career.related_majors.slice(0, 3).map((slug) => {
+                        const major = getStaticMajor(slug);
+                        if (!major) return null;
+                        return (
+                          <Link
+                            key={slug}
+                            href={`/majors/${slug}`}
+                            className="text-xs font-bold text-[#111965] hover:underline"
+                          >
+                            {getLocalized(major.name)}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <span className="font-semibold text-[#68708A]">
+                      {getLocalized(career.education)}
+                    </span>
+                    <a
+                      href={career.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 font-bold text-[#111965] hover:underline"
+                    >
+                      {getLocalized({ en: "Source", km: "ប្រភព" })}:{" "}
+                      {career.source_name}
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : displayCareers.length > 0 ? (
           <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
             <SectionHeading
               icon={Briefcase}
               title={getLocalized({
-                en: "Careers to explore",
-                km: "អាជីពដែលអ្នកអាចស្វែងយល់",
+                en: "Career ideas",
+                km: "គំនិតអាជីព",
               })}
               subtitle={getLocalized({
-                en: "These are examples, not a fixed path. Use them to start exploring.",
-                km: "ទាំងនេះជាឧទាហរណ៍ មិនមែនជាផ្លូវកំណត់តែមួយទេ។ ប្រើពួកវាដើម្បីចាប់ផ្តើមស្វែងយល់។",
+                en: "Take the career interest test to see real job profiles that match your interests.",
+                km: "ធ្វើតេស្តចំណាប់អារម្មណ៍អាជីព ដើម្បីមើលមុខរបរពិតប្រាកដដែលត្រូវនឹងចំណាប់អារម្មណ៍របស់អ្នក។",
               })}
             />
             <div className="mt-4 flex flex-wrap gap-2">
@@ -926,14 +1017,14 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
               ))}
             </div>
           </section>
-        )}
+        ) : null}
 
 <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
           <div className="flex flex-wrap items-end justify-between gap-2">
             <div>
               <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-sm font-black uppercase tracking-[0.12em] text-amber-800">
                 <Target className="h-3 w-3" />
-                {getLocalized({ en: "Interest fit", km: "ភាពត្រូវគ្នានៃចំណាប់អារម្មណ៍" })}
+                {getLocalized({ en: "Match score", km: "ពិន្ទុត្រូវគ្នា" })}
               </div>
               <h2 className="mt-2 text-base font-black text-[#111965] sm:text-lg">
                 {getLocalized({
@@ -943,8 +1034,8 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
               </h2>
               <p className="mt-1 max-w-xl text-sm leading-relaxed text-[#68708A]">
                 {getLocalized({
-                  en: "This score compares your interests and personality affinity with each major. It is not an admission decision or a guarantee.",
-                  km: "ពិន្ទុនេះប្រៀបធៀបចំណាប់អារម្មណ៍ និងភាពត្រូវគ្នានៃបុគ្គលិកលក្ខណៈរបស់អ្នកជាមួយជំនាញនីមួយៗ។ វាមិនមែនជាការសម្រេចចិត្តចូលរៀន ឬការធានាទេ។",
+                  en: "This score shows how well each major matches your interests and personality. It does not promise admission.",
+                  km: "ពិន្ទុនេះបង្ហាញថាជំនាញនីមួយៗត្រូវនឹងចំណាប់អារម្មណ៍ និងបុគ្គលិកលក្ខណៈរបស់អ្នកកម្រិតណា។ វាមិនមែនជាការធានាចូលរៀនទេ។",
                 })}
               </p>
             </div>
@@ -1054,8 +1145,8 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#E6E8F0] bg-white px-4 py-3 text-xs font-semibold text-[#68708A]">
           <span>
             {getLocalized({
-              en: "Saved on this device only. Export a copy before clearing browser data.",
-              km: "រក្សាទុកលើឧបករណ៍នេះប៉ុណ្ណោះ។ សូមនាំចេញច្បាប់ចម្លងមុនពេលលុបទិន្នន័យកម្មវិធីរុករក។",
+              en: "Keep a copy of this result by downloading it.",
+              km: "រក្សាទុកលទ្ធផលនេះដោយទាញយកច្បាប់ចម្លង។",
             })}
           </span>
           <button
@@ -1110,8 +1201,8 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
               </DialogTitle>
               <DialogDescription>
                 {getLocalized({
-                  en: "Anyone with this link can read a read-only copy of the result. It is not connected to your browser storage.",
-                  km: "អ្នកណាមានតំណនេះអាចអានច្បាប់ចម្លងលទ្ធផលបែបអានតែប៉ុណ្ណោះ។ វាមិនភ្ជាប់ទៅការរក្សាទុកក្នុងកម្មវិធីរុករករបស់អ្នកទេ។",
+                  en: "Anyone with this link can view a copy of this result.",
+                  km: "អ្នកណាមានតំណនេះអាចមើលច្បាប់ចម្លងនៃលទ្ធផលនេះ។",
                 })}
               </DialogDescription>
             </div>
