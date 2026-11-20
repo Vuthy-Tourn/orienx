@@ -313,20 +313,27 @@ export default function MajorsPage() {
         onSearchChange={setSearchTerm}
         searchPlaceholder={t("majorsDirectory.searchPlaceholder")}
         clearSearchLabel={isKm ? "សម្អាតការស្វែងរក" : "Clear search"}
-        chips={[
+        selects={[
           {
-            value: "",
-            label: t("majorsDirectory.allCategories"),
-            count: catalogueStats?.majors,
+            key: "category",
+            value: selectedCategory,
+            onChange: setSelectedCategory,
+            options: [
+              {
+                value: "",
+                label: t("majorsDirectory.allCategories"),
+                count: catalogueStats?.majors ?? catalog.length,
+              },
+              ...categories.map((cat) => ({
+                value: cat,
+                label: t(`categories.${cat}`, cat),
+                count: categoryCounts[cat],
+              })),
+            ],
+            label: isKm ? "ប្រភេទជំនាញ" : "Category",
+            className: "md:w-[210px]",
           },
-          ...(categories || []).map((cat) => ({
-            value: cat,
-            label: t(`categories.${cat}`, cat),
-            count: categoryCounts[cat],
-          })),
         ]}
-        activeChip={selectedCategory}
-        onChipChange={setSelectedCategory}
         extra={
           <button
             type="button"
@@ -356,9 +363,6 @@ export default function MajorsPage() {
           gridLabel: isKm ? "ក្រឡាចត្រង្គ" : "Grid view",
           listLabel: isKm ? "បញ្ជី" : "List view",
         }}
-        onReset={resetFilters}
-        hasActiveFilters={hasActiveFilters}
-        resetLabel={t("majorsDirectory.resetFilters")}
       />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

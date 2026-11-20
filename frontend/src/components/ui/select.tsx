@@ -14,6 +14,8 @@ export interface SelectOption<T extends string = string> {
   label: string;
   /** Optional second line, shown in the menu only. */
   description?: string;
+  /** Optional right-aligned count, shown in the menu only. */
+  count?: number;
 }
 
 interface SelectProps<T extends string = string> {
@@ -343,11 +345,25 @@ export function Select<T extends string = string>({
                           isSelected && "font-bold"
                         )}
                       >
-                        <span className="min-w-0">
-                          <span className="block truncate">{option.label}</span>
-                          {option.description && (
-                            <span className="mt-0.5 block text-[11px] font-normal text-[#68708A] dark:text-slate-400">
-                              {option.description}
+                        <span className="flex min-w-0 flex-1 items-center justify-between gap-3">
+                          <span className="min-w-0">
+                            <span className="block truncate">{option.label}</span>
+                            {option.description && (
+                              <span className="mt-0.5 block text-[11px] font-normal text-[#68708A] dark:text-slate-400">
+                                {option.description}
+                              </span>
+                            )}
+                          </span>
+                          {option.count != null && (
+                            <span
+                              className={cn(
+                                "shrink-0 text-[11px] font-semibold tabular-nums",
+                                isSelected
+                                  ? "text-[#111965]/60 dark:text-white/60"
+                                  : "text-[#94A3B8] dark:text-slate-500"
+                              )}
+                            >
+                              {option.count}
                             </span>
                           )}
                         </span>

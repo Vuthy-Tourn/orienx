@@ -262,8 +262,8 @@ const INDUSTRY_GROUPS = [
     industries: ["Technology", "Technology & Data", "Technology & Security"],
   },
   {
-    name: "Engineering & Construction",
-    km: "វិស្វកម្ម និងសំណង់",
+    name: "Engineering",
+    km: "វិស្វកម្ម",
     industries: [
       "Engineering & Construction",
       "Design & Construction",
@@ -272,14 +272,16 @@ const INDUSTRY_GROUPS = [
     ],
   },
   {
-    name: "Finance & Accounting",
-    km: "ហិរញ្ញវត្ថុ និងគណនេយ្យ",
-    industries: ["Finance & Banking", "Finance & Business"],
-  },
-  {
-    name: "Business & Management",
-    km: "អាជីវកម្ម និងការគ្រប់គ្រង",
-    industries: ["Management & Operations", "Administrative"],
+    name: "Business & Finance",
+    km: "អាជីវកម្ម និងហិរញ្ញវត្ថុ",
+    industries: [
+      "Finance & Banking",
+      "Finance & Business",
+      "Management & Operations",
+      "Administrative",
+      "Sales & Business Development",
+      "Customer Service",
+    ],
   },
   {
     name: "Marketing & Media",
@@ -292,19 +294,19 @@ const INDUSTRY_GROUPS = [
     ],
   },
   {
-    name: "Sales & Customer Service",
-    km: "ការលក់ និងសេវាអតិថិជន",
-    industries: ["Sales & Business Development", "Customer Service"],
+    name: "Health & Science",
+    km: "សុខភាព និងវិទ្យាសាស្ត្រ",
+    industries: ["Health Care", "Research & Development", "Quality Assurance"],
   },
   {
-    name: "Health Care",
-    km: "ថែទាំសុខភាព",
-    industries: ["Health Care"],
-  },
-  {
-    name: "Education",
-    km: "ការអប់រំ",
-    industries: ["Education"],
+    name: "Education & Public Services",
+    km: "ការអប់រំ និងសេវាសាធារណៈ",
+    industries: [
+      "Education",
+      "Human Resources",
+      "Legal & Compliance",
+      "Translation & Languages",
+    ],
   },
   {
     name: "Hospitality & Tourism",
@@ -312,29 +314,9 @@ const INDUSTRY_GROUPS = [
     industries: ["Hospitality & Tourism", "Food & Beverage"],
   },
   {
-    name: "Human Resources",
-    km: "ធនធានមនុស្ស",
-    industries: ["Human Resources"],
-  },
-  {
-    name: "Legal & Compliance",
-    km: "ច្បាប់ និងការអនុលោម",
-    industries: ["Legal & Compliance"],
-  },
-  {
-    name: "Logistics & Supply Chain",
-    km: "ដឹកជញ្ជូន និងខ្សែចង្វាក់ផ្គត់ផ្គង់",
+    name: "Logistics & Supply",
+    km: "ដឹកជញ្ជូន និងផ្គត់ផ្គង់",
     industries: ["Logistics & Supply Chain", "Procurement & Supply Chain"],
-  },
-  {
-    name: "Science & Research",
-    km: "វិទ្យាសាស្ត្រ និងការស្រាវជ្រាវ",
-    industries: ["Research & Development", "Quality Assurance"],
-  },
-  {
-    name: "Languages & Translation",
-    km: "ភាសា និងការបកប្រែ",
-    industries: ["Translation & Languages"],
   },
 ] as const;
 
@@ -388,10 +370,7 @@ export default function CareersPage() {
         return {
           value: groupName,
           label: language === "km" ? group?.km ?? groupName : groupName,
-          description:
-            language === "km"
-              ? `${count} អាជីព`
-              : `${count} ${count === 1 ? "career" : "careers"}`,
+          count,
         };
       })
       .sort((a, b) => a.label.localeCompare(b.label, language));
@@ -400,10 +379,7 @@ export default function CareersPage() {
       {
         value: "",
         label: t("careersDirectory.allIndustries"),
-        description:
-          language === "km"
-            ? `${allCareers.length} អាជីព`
-            : `Show all ${allCareers.length} careers`,
+        count: allCareers.length,
       },
       ...industries,
     ];
@@ -530,7 +506,6 @@ export default function CareersPage() {
             options: industryOptions,
             label: language === "km" ? "វិស័យ" : "Industry",
             className: "md:w-[248px]",
-            searchable: true,
           },
         ]}
         sort={{
