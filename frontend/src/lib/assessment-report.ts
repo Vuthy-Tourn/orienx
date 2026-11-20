@@ -712,7 +712,7 @@ export async function downloadAssessmentPng(model: AssessmentReportModel) {
   const characterUrl =
     model.kind === "personality" && model.characterImageUrl
       ? model.characterImageUrl
-      : `${window.location.origin}/images/tara-emotion-cheer.webp`;
+      : `${window.location.origin}/images/tara-jump-action.webp`;
   const [character, logo] = await Promise.all([
     loadCanvasImage(characterUrl),
     loadCanvasImage(`${window.location.origin}/images/orienx-mark-dark.png`),
