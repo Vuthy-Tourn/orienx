@@ -1,5 +1,133 @@
 [
   {
+    "id": "6abc8ded-e27b-41a8-ad10-d17a849ca6c1",
+    "slug": "accountant",
+    "title": {
+      "en": "Accountant",
+      "km": "គណនេយ្យករ"
+    },
+    "industry": "Finance & Business",
+    "description": {
+      "en": "Prepares financial records, checks that numbers are correct, and helps organizations follow tax rules.",
+      "km": "រៀបចំកំណត់ត្រាហិរញ្ញវត្ថុ ពិនិត្យភាពត្រឹមត្រូវនៃលេខ និងជួយឱ្យអង្គការអនុវត្តតាមច្បាប់ពន្ធ។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "CEI",
+    "responsibilities": [
+      "Prepare financial records and reports",
+      "Check numbers and follow tax rules",
+      "Support audits and budget planning"
+    ],
+    "required_skills": [
+      "Accounting",
+      "Excel",
+      "Attention to detail"
+    ],
+    "work_environments": [
+      "Office",
+      "Finance team",
+      "Client meetings"
+    ],
+    "career_progression": [
+      "Junior Accountant",
+      "Accountant",
+      "Finance Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "3212e65e-b02e-4acb-b27a-7a496234c586",
+        "slug": "accounting-auditing",
+        "name": {
+          "en": "Accounting, Auditing & Taxation (ACCA/CAT)",
+          "km": "គណនេយ្យ សវនកម្ម និងពន្ធដារ"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "96cc69b0-ec1a-4ffd-b353-76104ddf9058",
+        "slug": "banking-finance",
+        "name": {
+          "en": "Banking & Financial Markets",
+          "km": "ធនាគារ និងទីផ្សារហិរញ្ញវត្ថុ"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      }
+    ]
+  },
+  {
+    "id": "30d643d2-4781-4c44-9101-0f06d70e96fc",
+    "slug": "architect",
+    "title": {
+      "en": "Architect",
+      "km": "ស្ថាបត្យករ"
+    },
+    "industry": "Design & Construction",
+    "description": {
+      "en": "Designs buildings and spaces that are safe, useful, and beautiful, and works with engineers and builders.",
+      "km": "រចនាអគារ និងទីធ្លាឱ្យមានសុវត្ថិភាព ប្រើប្រាស់បានល្អ និងស្រស់ស្អាត ហើយធ្វើការជាមួយវិស្វករ និងអ្នកសាងសង់។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "RCA",
+    "responsibilities": [
+      "Develop building designs and plans",
+      "Coordinate with engineers and construction teams",
+      "Check that designs meet safety and building rules"
+    ],
+    "required_skills": [
+      "Design thinking",
+      "AutoCAD / Revit",
+      "Building codes"
+    ],
+    "work_environments": [
+      "Design office",
+      "Construction sites",
+      "Client meetings"
+    ],
+    "career_progression": [
+      "Architectural Assistant",
+      "Architect",
+      "Project Architect"
+    ],
+    "related_majors": [
+      {
+        "id": "b0b317b1-002d-49d0-8b6c-6d0832616f0e",
+        "slug": "architecture-urban-planning",
+        "name": {
+          "en": "Architecture & Urban Planning",
+          "km": "ស្ថាបត្យកម្ម និងនគរូបនីយវិទ្យា"
+        },
+        "category": "Architecture & Design"
+      },
+      {
+        "id": "10a386a5-3976-4af8-81f9-53eddf01a29d",
+        "slug": "civil-engineering",
+        "name": {
+          "en": "Civil Engineering & Structural Design",
+          "km": "វិស្វកម្មសំណង់ស៊ីវិល និងការរចនាគ្រោងបង្គុំ"
+        },
+        "category": "Engineering"
+      },
+      {
+        "id": "122c84d9-24d7-4f8b-be52-023e6f73b802",
+        "slug": "fine-arts",
+        "name": {
+          "en": "Fine Arts & Traditional Sculpture/Painting",
+          "km": "វិចិត្រសិល្បៈ និងគំនូរ/ចម្លាក់ប្រពៃណី"
+        },
+        "category": "Architecture & Design"
+      }
+    ]
+  },
+  {
     "id": "ea79d47b-0711-4507-8bb8-822f56772c58",
     "slug": "civil-engineer",
     "title": {
@@ -40,6 +168,134 @@
           "km": "វិស្វកម្មសំណង់ស៊ីវិល និងការរចនាគ្រោងបង្គុំ"
         },
         "category": "Engineering"
+      }
+    ]
+  },
+  {
+    "id": "457d5d47-1342-4c46-b2df-6d288a631a01",
+    "slug": "cybersecurity-analyst",
+    "title": {
+      "en": "Cybersecurity Analyst",
+      "km": "អ្នកវិភាគសន្តិសុខសាយប័រ"
+    },
+    "industry": "Technology & Security",
+    "description": {
+      "en": "Protects computer systems and networks from attacks, watches for threats, and helps fix security problems.",
+      "km": "ការពារប្រព័ន្ធកុំព្យូទ័រ និងបណ្តាញពីការវាយប្រហារ ឃ្លាំមើលគ្រោះថ្នាក់ និងជួយដោះស្រាយបញ្ហាសន្តិសុខ។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "CI",
+    "responsibilities": [
+      "Monitor networks and systems for security threats",
+      "Investigate alerts and help respond to incidents",
+      "Help teams follow safe security practices"
+    ],
+    "required_skills": [
+      "Network security",
+      "Threat analysis",
+      "Linux basics"
+    ],
+    "work_environments": [
+      "Security operations center",
+      "Office or remote",
+      "IT teams"
+    ],
+    "career_progression": [
+      "Security Operations Analyst",
+      "Cybersecurity Analyst",
+      "Security Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "57e44287-8cb0-492c-aa44-b644b9a9386f",
+        "slug": "computer-science",
+        "name": {
+          "en": "Computer Science & Theoretical Computing",
+          "km": "វិទ្យាសាស្ត្រកុំព្យូទ័រ និងទ្រឹស្តីគណនា"
+        },
+        "category": "Information Technology"
+      },
+      {
+        "id": "f436465b-2e34-45f9-a302-e65dca71f927",
+        "slug": "cybersecurity-networking",
+        "name": {
+          "en": "Cybersecurity & Information Networks",
+          "km": "សន្តិសុខសាយប័រ និងបណ្តាញព័ត៌មាន"
+        },
+        "category": "Information Technology"
+      },
+      {
+        "id": "fc895e41-dff1-432d-a6e2-d132756b740a",
+        "slug": "information-technology",
+        "name": {
+          "en": "Information Technology & Digital Infrastructure",
+          "km": "បច្ចេកវិទ្យាព័ត៌មាន និងហេដ្ឋារចនាសម្ព័ន្ធឌីជីថល"
+        },
+        "category": "Information Technology"
+      }
+    ]
+  },
+  {
+    "id": "98a12166-7677-437f-b2ee-cd349cec8fe2",
+    "slug": "data-scientist",
+    "title": {
+      "en": "Data Scientist",
+      "km": "អ្នកវិទ្យាសាស្ត្រទិន្នន័យ"
+    },
+    "industry": "Technology & Data",
+    "description": {
+      "en": "Uses data, statistics, and programming to find patterns and help organizations make better decisions.",
+      "km": "ប្រើទិន្នន័យ ស្ថិតិ និងការសរសេរកូដ ដើម្បីរកលំនាំ និងជួយឱ្យអង្គការសម្រេចចិត្តបានកាន់តែល្អ។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "IC",
+    "responsibilities": [
+      "Collect and clean data for analysis",
+      "Build models and look for useful patterns",
+      "Explain findings with charts and reports"
+    ],
+    "required_skills": [
+      "Python or R",
+      "Statistics",
+      "Data visualization"
+    ],
+    "work_environments": [
+      "Office or remote",
+      "Data and research teams",
+      "Technology companies"
+    ],
+    "career_progression": [
+      "Junior Data Analyst",
+      "Data Scientist",
+      "Senior / Lead Data Scientist"
+    ],
+    "related_majors": [
+      {
+        "id": "57e44287-8cb0-492c-aa44-b644b9a9386f",
+        "slug": "computer-science",
+        "name": {
+          "en": "Computer Science & Theoretical Computing",
+          "km": "វិទ្យាសាស្ត្រកុំព្យូទ័រ និងទ្រឹស្តីគណនា"
+        },
+        "category": "Information Technology"
+      },
+      {
+        "id": "8a7ce897-a090-4f80-9eed-fe7e864e59f9",
+        "slug": "data-science-ai",
+        "name": {
+          "en": "Data Science & Artificial Intelligence",
+          "km": "វិទ្យាសាស្ត្រទិន្នន័យ និងបញ្ញាសិប្បនិម្មិត"
+        },
+        "category": "Information Technology"
+      },
+      {
+        "id": "f57d579c-ab09-40be-aeb9-753a9d1a9230",
+        "slug": "mathematics-statistics",
+        "name": {
+          "en": "Mathematics & Applied Statistics",
+          "km": "គណិតវិទ្យា និងស្ថិតិអនុវត្ត"
+        },
+        "category": "Natural Sciences"
       }
     ]
   },
@@ -93,6 +349,326 @@
           "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
         },
         "category": "Business & Economics"
+      }
+    ]
+  },
+  {
+    "id": "588e54cb-1dfe-4b05-818c-ec7f3af06acb",
+    "slug": "graphic-designer",
+    "title": {
+      "en": "Graphic Designer",
+      "km": "អ្នករចនាក្រាហ្វិក"
+    },
+    "industry": "Creative & Media",
+    "description": {
+      "en": "Creates visual designs for websites, brands, advertisements, posters, and social media.",
+      "km": "បង្កើតការរចនាមើលឃើញសម្រាប់គេហទំព័រ ម៉ាកសញ្ញា ការផ្សាយពាណិជ្ជកម្ម ផ្ទាំងផ្សព្វផ្សាយ និងបណ្តាញសង្គម។"
+    },
+    "education_level": "Bachelor's degree or portfolio",
+    "riasec_code": "AC",
+    "responsibilities": [
+      "Create designs for digital and print media",
+      "Work with clients on brand, layout, and visuals",
+      "Prepare final files for publication"
+    ],
+    "required_skills": [
+      "Adobe Creative Suite",
+      "Typography",
+      "Layout design"
+    ],
+    "work_environments": [
+      "Design studio",
+      "Creative agency",
+      "Remote or office"
+    ],
+    "career_progression": [
+      "Junior Designer",
+      "Graphic Designer",
+      "Art Director"
+    ],
+    "related_majors": [
+      {
+        "id": "122c84d9-24d7-4f8b-be52-023e6f73b802",
+        "slug": "fine-arts",
+        "name": {
+          "en": "Fine Arts & Traditional Sculpture/Painting",
+          "km": "វិចិត្រសិល្បៈ និងគំនូរ/ចម្លាក់ប្រពៃណី"
+        },
+        "category": "Architecture & Design"
+      },
+      {
+        "id": "916d800d-48fd-41f0-ae52-371abb75e1bd",
+        "slug": "graphic-design-multimedia",
+        "name": {
+          "en": "Graphic Design & Multimedia Arts",
+          "km": "រចនាក្រាហ្វិក និងសិល្បៈពហុព័ត៌មាន"
+        },
+        "category": "Architecture & Design"
+      },
+      {
+        "id": "a55da9ad-c6a8-4623-aa01-527d7971ec73",
+        "slug": "media-communications",
+        "name": {
+          "en": "Media, Journalism & Digital Communications",
+          "km": "ប្រព័ន្ធផ្សព្វផ្សាយ សារព័ត៌មាន និងទំនាក់ទំនង"
+        },
+        "category": "Law & Social Sciences"
+      }
+    ]
+  },
+  {
+    "id": "83d5feed-ab95-47ac-813b-3adfb7e0f1a3",
+    "slug": "high-school-teacher",
+    "title": {
+      "en": "High School Teacher",
+      "km": "គ្រូបង្រៀនវិទ្យាល័យ"
+    },
+    "industry": "Education",
+    "description": {
+      "en": "Plans lessons, explains subjects, and helps high school students learn and prepare for their future.",
+      "km": "រៀបចំមេរៀន ពន្យល់មុខវិជ្ជា និងជួយសិស្សវិទ្យាល័យឱ្យរៀន និងត្រៀមអនាគត។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "S",
+    "responsibilities": [
+      "Plan and teach lessons for high school students",
+      "Assess student progress and give feedback",
+      "Support students and communicate with parents"
+    ],
+    "required_skills": [
+      "Lesson planning",
+      "Communication",
+      "Classroom management"
+    ],
+    "work_environments": [
+      "Classroom",
+      "School campus",
+      "Student meetings"
+    ],
+    "career_progression": [
+      "Assistant Teacher",
+      "High School Teacher",
+      "Head of Department"
+    ],
+    "related_majors": [
+      {
+        "id": "59aef490-d851-418d-b102-f1c2c44f21ba",
+        "slug": "english-teaching-tefl",
+        "name": {
+          "en": "English Literature & TEFL / Education",
+          "km": "អក្សរសាស្ត្រអង់គ្លេស និងគរុកោសល្យភាសាអង់គ្លេស"
+        },
+        "category": "Law & Social Sciences"
+      },
+      {
+        "id": "f57d579c-ab09-40be-aeb9-753a9d1a9230",
+        "slug": "mathematics-statistics",
+        "name": {
+          "en": "Mathematics & Applied Statistics",
+          "km": "គណិតវិទ្យា និងស្ថិតិអនុវត្ត"
+        },
+        "category": "Natural Sciences"
+      },
+      {
+        "id": "d0430db2-7236-4c72-b090-696e5a1cadc7",
+        "slug": "physics-electronics",
+        "name": {
+          "en": "Physics & Applied Electronics",
+          "km": "រូបវិទ្យា និងអេឡិចត្រូនិកអនុវត្ត"
+        },
+        "category": "Natural Sciences"
+      }
+    ]
+  },
+  {
+    "id": "6ff59ff8-51b9-47b4-b448-aef2d1b1c742",
+    "slug": "marketing-manager",
+    "title": {
+      "en": "Marketing Manager",
+      "km": "អ្នកគ្រប់គ្រងទីផ្សារ"
+    },
+    "industry": "Business & Marketing",
+    "description": {
+      "en": "Plans campaigns, studies what customers want, and leads a team to promote products or services.",
+      "km": "រៀបចំយុទ្ធនាការ សិក្សាអ្វីដែលអតិថិជនចង់បាន និងដឹកនាំក្រុមដើម្បីផ្សព្វផ្សាយផលិតផល ឬសេវាកម្ម។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "EC",
+    "responsibilities": [
+      "Plan marketing campaigns and promotions",
+      "Study customer needs and competitor activity",
+      "Lead a team and track campaign results"
+    ],
+    "required_skills": [
+      "Market research",
+      "Communication",
+      "Team leadership"
+    ],
+    "work_environments": [
+      "Office",
+      "Agency",
+      "Events and campaigns"
+    ],
+    "career_progression": [
+      "Marketing Associate",
+      "Marketing Manager",
+      "Marketing Director"
+    ],
+    "related_majors": [
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "17149fb9-a4ba-4496-8040-ce4e24829d0e",
+        "slug": "marketing-digital-media",
+        "name": {
+          "en": "Marketing & Digital Media Strategy",
+          "km": "ទីផ្សារ និងយុទ្ធសាស្ត្រប្រព័ន្ធផ្សព្វផ្សាយឌីជីថល"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "a55da9ad-c6a8-4623-aa01-527d7971ec73",
+        "slug": "media-communications",
+        "name": {
+          "en": "Media, Journalism & Digital Communications",
+          "km": "ប្រព័ន្ធផ្សព្វផ្សាយ សារព័ត៌មាន និងទំនាក់ទំនង"
+        },
+        "category": "Law & Social Sciences"
+      }
+    ]
+  },
+  {
+    "id": "dc2a7007-3c39-4fe0-aa12-6d4cf3ddbced",
+    "slug": "mechanical-engineer",
+    "title": {
+      "en": "Mechanical Engineer",
+      "km": "វិស្វករមេកានិច"
+    },
+    "industry": "Engineering & Manufacturing",
+    "description": {
+      "en": "Designs machines, engines, robots, and mechanical systems, then tests them to make sure they work safely.",
+      "km": "រចនាគ្រឿងម៉ាស៊ីន ម៉ាស៊ីនចលករ រ៉ូបូត និងប្រព័ន្ធមេកានិច រួចសាកល្បងឱ្យដឹងថាវាដំណើរការដោយសុវត្ថិភាព។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "RIC",
+    "responsibilities": [
+      "Design mechanical parts, machines, and systems",
+      "Test prototypes and improve designs",
+      "Work with manufacturers and project teams"
+    ],
+    "required_skills": [
+      "CAD design",
+      "Mechanics",
+      "Problem solving"
+    ],
+    "work_environments": [
+      "Design studio",
+      "Factory or workshop",
+      "Engineering sites"
+    ],
+    "career_progression": [
+      "Junior Mechanical Engineer",
+      "Mechanical Engineer",
+      "Engineering Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "4237233d-4760-4a41-9a4a-0ef8cc44c620",
+        "slug": "electrical-electronic-engineering",
+        "name": {
+          "en": "Electrical & Electronic Engineering",
+          "km": "វិស្វកម្មអគ្គិសនី និងអេឡិចត្រូនិក"
+        },
+        "category": "Engineering"
+      },
+      {
+        "id": "43ef7887-47fa-478e-945c-218f372d7129",
+        "slug": "mechanical-engineering",
+        "name": {
+          "en": "Mechanical Engineering & Manufacturing",
+          "km": "វិស្វកម្មមេកានិក និងការផលិត"
+        },
+        "category": "Engineering"
+      },
+      {
+        "id": "ae424f08-a6a6-4b1d-9b96-db80e5393027",
+        "slug": "mechatronics-robotics",
+        "name": {
+          "en": "Mechatronics & Robotics Engineering",
+          "km": "វិស្វកម្មមេកាត្រូនិក និងរ៉ូបូត"
+        },
+        "category": "Engineering"
+      }
+    ]
+  },
+  {
+    "id": "e575611d-6c69-4c37-b2f5-3760827bb630",
+    "slug": "registered-nurse",
+    "title": {
+      "en": "Registered Nurse",
+      "km": "គិលានុបដ្ឋាយិកា"
+    },
+    "industry": "Health Care",
+    "description": {
+      "en": "Cares for patients, supports their recovery, and teaches families how to stay healthy.",
+      "km": "ថែទាំអ្នកជំងឺ ជួយឱ្យពួកគេជាសះស្បើយ និងបង្រៀនគ្រួសារអំពីការថែរក្សាសុខភាព។"
+    },
+    "education_level": "Bachelor's degree in nursing",
+    "riasec_code": "SCI",
+    "responsibilities": [
+      "Care for patients and monitor their recovery",
+      "Record health information and coordinate care",
+      "Explain health advice to patients and families"
+    ],
+    "required_skills": [
+      "Patient care",
+      "Communication",
+      "Clinical judgment"
+    ],
+    "work_environments": [
+      "Hospital or clinic",
+      "Patient wards",
+      "Community health center"
+    ],
+    "career_progression": [
+      "Staff Nurse",
+      "Senior Nurse",
+      "Nurse Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "6a84c382-993f-45aa-b21b-77d0dd9b4c62",
+        "slug": "general-medicine",
+        "name": {
+          "en": "Doctor of Medicine (MD) / General Medicine",
+          "km": "វេជ្ជបណ្ឌិតទូទៅ / វេជ្ជសាស្ត្រ"
+        },
+        "category": "Health Sciences"
+      },
+      {
+        "id": "ccac94eb-042e-447b-86ff-17cc52680441",
+        "slug": "nursing-science",
+        "name": {
+          "en": "Nursing Science & Patient Care",
+          "km": "គិលានុបដ្ឋាកវិទ្យា"
+        },
+        "category": "Health Sciences"
+      },
+      {
+        "id": "82f9fc12-e7fd-43b1-8645-148500425709",
+        "slug": "public-health",
+        "name": {
+          "en": "Public Health & Epidemiology",
+          "km": "សុខភាពសាធារណៈ និងរោគរាតត្បាត"
+        },
+        "category": "Health Sciences"
       }
     ]
   },

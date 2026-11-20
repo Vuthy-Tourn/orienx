@@ -1169,17 +1169,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
         exportingFormat={exportingFormat}
         onExport={handleExport}
         footer={t("assessmentReport.footer")}
-        formats={[
-          "pdf",
-          "excel",
-          "csv",
-          "json",
-          "markdown",
-          "html",
-          "text",
-          "png",
-          "share",
-        ]}
+        formats={["pdf", "excel", "png"]}
       />
 
       <Dialog

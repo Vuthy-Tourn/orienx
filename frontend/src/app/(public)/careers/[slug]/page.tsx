@@ -101,7 +101,7 @@ export default function CareerDetailPage() {
                   {career.industry}
                 </span>
                 <span className="px-2 py-0.5 rounded-full text-[12.5px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                  In-Demand Growth
+                  Career profile
                 </span>
               </div>
 
@@ -111,11 +111,11 @@ export default function CareerDetailPage() {
 
               <div className="flex items-center gap-4 text-xs font-medium text-[#68708A] pt-1">
                 <span>
-                  <strong className="text-[#111965]">Holland RIASEC Code:</strong> {career.riasec_code}
+                  <strong className="text-[#111965]">Career interest code:</strong> {career.riasec_code}
                 </span>
                 <span>•</span>
                 <span>
-                  <strong className="text-[#111965]">Minimum Education:</strong> {career.education_level}
+                  <strong className="text-[#111965]">Education:</strong> {career.education_level}
                 </span>
               </div>
             </div>

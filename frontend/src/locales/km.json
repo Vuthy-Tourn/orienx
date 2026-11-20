@@ -389,10 +389,10 @@
   "careerDetail": {
     "loading": "កំពុងទាញយកទិន្នន័យអាជីព...",
     "back": "ត្រឡប់ក្រោយ",
-    "responsibilities": "ការទទួលខុសត្រូវក្នុងការងារ",
-    "requiredSkills": "ជំនាញបច្ចេកទេសដែលត្រូវការ",
-    "progression": "ជណ្តើរឡើងនៃអាជីព",
-    "leadingMajors": "ជំនាញសាកលវិទ្យាល័យដែលនាំទៅរកអាជីពនេះ",
+    "responsibilities": "អ្វីដែលអ្នកធ្វើ",
+    "requiredSkills": "ជំនាញដែលអ្នកត្រូវការ",
+    "progression": "ផ្លូវអាជីព",
+    "leadingMajors": "ជំនាញពាក់ព័ន្ធ",
     "viewMajor": "មើលជំនាញ"
   },
   "aboutPage": {

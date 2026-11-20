@@ -1912,6 +1912,42 @@
   },
   {
     "type": "career",
+    "id": "6abc8ded-e27b-41a8-ad10-d17a849ca6c1",
+    "slug": "accountant",
+    "title": {
+      "en": "Accountant",
+      "km": "គណនេយ្យករ"
+    },
+    "subtitle": {
+      "en": "Finance & Business",
+      "km": "Finance & Business"
+    },
+    "keywords": [
+      "Finance & Business",
+      "CEI"
+    ],
+    "href": "/careers/accountant"
+  },
+  {
+    "type": "career",
+    "id": "30d643d2-4781-4c44-9101-0f06d70e96fc",
+    "slug": "architect",
+    "title": {
+      "en": "Architect",
+      "km": "ស្ថាបត្យករ"
+    },
+    "subtitle": {
+      "en": "Design & Construction",
+      "km": "Design & Construction"
+    },
+    "keywords": [
+      "Design & Construction",
+      "RCA"
+    ],
+    "href": "/careers/architect"
+  },
+  {
+    "type": "career",
     "id": "ea79d47b-0711-4507-8bb8-822f56772c58",
     "slug": "civil-engineer",
     "title": {
@@ -1930,6 +1966,42 @@
   },
   {
     "type": "career",
+    "id": "457d5d47-1342-4c46-b2df-6d288a631a01",
+    "slug": "cybersecurity-analyst",
+    "title": {
+      "en": "Cybersecurity Analyst",
+      "km": "អ្នកវិភាគសន្តិសុខសាយប័រ"
+    },
+    "subtitle": {
+      "en": "Technology & Security",
+      "km": "Technology & Security"
+    },
+    "keywords": [
+      "Technology & Security",
+      "CI"
+    ],
+    "href": "/careers/cybersecurity-analyst"
+  },
+  {
+    "type": "career",
+    "id": "98a12166-7677-437f-b2ee-cd349cec8fe2",
+    "slug": "data-scientist",
+    "title": {
+      "en": "Data Scientist",
+      "km": "អ្នកវិទ្យាសាស្ត្រទិន្នន័យ"
+    },
+    "subtitle": {
+      "en": "Technology & Data",
+      "km": "Technology & Data"
+    },
+    "keywords": [
+      "Technology & Data",
+      "IC"
+    ],
+    "href": "/careers/data-scientist"
+  },
+  {
+    "type": "career",
     "id": "25757364-db8b-4fe2-ba40-b6eff413c750",
     "slug": "financial-analyst",
     "title": {
@@ -1945,6 +2017,96 @@
       "CEI"
     ],
     "href": "/careers/financial-analyst"
+  },
+  {
+    "type": "career",
+    "id": "588e54cb-1dfe-4b05-818c-ec7f3af06acb",
+    "slug": "graphic-designer",
+    "title": {
+      "en": "Graphic Designer",
+      "km": "អ្នករចនាក្រាហ្វិក"
+    },
+    "subtitle": {
+      "en": "Creative & Media",
+      "km": "Creative & Media"
+    },
+    "keywords": [
+      "Creative & Media",
+      "AC"
+    ],
+    "href": "/careers/graphic-designer"
+  },
+  {
+    "type": "career",
+    "id": "83d5feed-ab95-47ac-813b-3adfb7e0f1a3",
+    "slug": "high-school-teacher",
+    "title": {
+      "en": "High School Teacher",
+      "km": "គ្រូបង្រៀនវិទ្យាល័យ"
+    },
+    "subtitle": {
+      "en": "Education",
+      "km": "Education"
+    },
+    "keywords": [
+      "Education",
+      "S"
+    ],
+    "href": "/careers/high-school-teacher"
+  },
+  {
+    "type": "career",
+    "id": "6ff59ff8-51b9-47b4-b448-aef2d1b1c742",
+    "slug": "marketing-manager",
+    "title": {
+      "en": "Marketing Manager",
+      "km": "អ្នកគ្រប់គ្រងទីផ្សារ"
+    },
+    "subtitle": {
+      "en": "Business & Marketing",
+      "km": "Business & Marketing"
+    },
+    "keywords": [
+      "Business & Marketing",
+      "EC"
+    ],
+    "href": "/careers/marketing-manager"
+  },
+  {
+    "type": "career",
+    "id": "dc2a7007-3c39-4fe0-aa12-6d4cf3ddbced",
+    "slug": "mechanical-engineer",
+    "title": {
+      "en": "Mechanical Engineer",
+      "km": "វិស្វករមេកានិច"
+    },
+    "subtitle": {
+      "en": "Engineering & Manufacturing",
+      "km": "Engineering & Manufacturing"
+    },
+    "keywords": [
+      "Engineering & Manufacturing",
+      "RIC"
+    ],
+    "href": "/careers/mechanical-engineer"
+  },
+  {
+    "type": "career",
+    "id": "e575611d-6c69-4c37-b2f5-3760827bb630",
+    "slug": "registered-nurse",
+    "title": {
+      "en": "Registered Nurse",
+      "km": "គិលានុបដ្ឋាយិកា"
+    },
+    "subtitle": {
+      "en": "Health Care",
+      "km": "Health Care"
+    },
+    "keywords": [
+      "Health Care",
+      "SCI"
+    ],
+    "href": "/careers/registered-nurse"
   },
   {
     "type": "career",

@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
-import { listStaticCareers } from "@/lib/data/catalog";
+import { getStaticMajor, listStaticCareers } from "@/lib/data/catalog";
 import { DirectoryControls } from "@/components/directory/directory-controls";
 import { DirectoryHeroStats } from "@/components/directory/directory-hero-stats";
 import {
@@ -17,23 +17,63 @@ import {
   Cpu,
   BarChart3,
   HardHat,
+  HeartPulse,
+  Palette,
+  Users,
+  FlaskConical,
   WifiOff,
   RefreshCw,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
 
-// Career salary benchmarks by experience tier (Cambodian Market 2026)
-const SALARY_TIERS: Record<string, {
+type SalaryTier = {
   junior: string;
   mid: string;
   senior: string;
   growthRate: string;
   growthRateKm: string;
-  iconName: "cpu" | "chart" | "construction";
+  iconName:
+    | "cpu"
+    | "chart"
+    | "construction"
+    | "health"
+    | "design"
+    | "education"
+    | "people"
+    | "science";
   recommendedMajors: { en: string; km: string; slug: string }[];
   milestones: string[];
-}> = {
+};
+
+function majorLink(slug: string): { en: string; km: string; slug: string } {
+  const major = getStaticMajor(slug);
+  return {
+    en: major?.name.en ?? slug,
+    km: major?.name.km ?? slug,
+    slug,
+  };
+}
+
+function pendingCareer(
+  iconName: SalaryTier["iconName"],
+  majorSlugs: string[],
+  milestones: string[]
+): SalaryTier {
+  return {
+    junior: "—",
+    mid: "—",
+    senior: "—",
+    growthRate: "New listing",
+    growthRateKm: "បញ្ជីថ្មី",
+    iconName,
+    recommendedMajors: majorSlugs.map(majorLink),
+    milestones,
+  };
+}
+
+// Career salary benchmarks by experience tier (Cambodian Market 2026)
+const SALARY_TIERS: Record<string, SalaryTier> = {
   "software-engineer": {
     junior: "$450 – $900",
     mid: "$950 – $1,600",
@@ -72,12 +112,66 @@ const SALARY_TIERS: Record<string, {
     ],
     milestones: ["Site Supervisor (0-2y)", "Structural Design Engineer (3-5y)", "Project Director (5y+)"],
   },
+  "data-scientist": pendingCareer(
+    "chart",
+    ["data-science-ai", "computer-science", "mathematics-statistics"],
+    ["Junior Data Analyst", "Data Scientist", "Senior / Lead Data Scientist"]
+  ),
+  "cybersecurity-analyst": pendingCareer(
+    "cpu",
+    ["cybersecurity-networking", "information-technology", "computer-science"],
+    ["Security Operations Analyst", "Cybersecurity Analyst", "Security Manager"]
+  ),
+  "mechanical-engineer": pendingCareer(
+    "construction",
+    ["mechanical-engineering", "mechatronics-robotics", "electrical-electronic-engineering"],
+    ["Junior Mechanical Engineer", "Mechanical Engineer", "Engineering Manager"]
+  ),
+  "graphic-designer": pendingCareer(
+    "design",
+    ["graphic-design-multimedia", "fine-arts", "media-communications"],
+    ["Junior Designer", "Graphic Designer", "Art Director"]
+  ),
+  "architect": pendingCareer(
+    "design",
+    ["architecture-urban-planning", "civil-engineering", "fine-arts"],
+    ["Architectural Assistant", "Architect", "Project Architect"]
+  ),
+  "registered-nurse": pendingCareer(
+    "health",
+    ["nursing-science", "public-health", "general-medicine"],
+    ["Staff Nurse", "Senior Nurse", "Nurse Manager"]
+  ),
+  "high-school-teacher": pendingCareer(
+    "education",
+    ["english-teaching-tefl", "mathematics-statistics", "physics-electronics"],
+    ["Assistant Teacher", "High School Teacher", "Head of Department"]
+  ),
+  "marketing-manager": pendingCareer(
+    "people",
+    ["marketing-digital-media", "business-administration", "media-communications"],
+    ["Marketing Associate", "Marketing Manager", "Marketing Director"]
+  ),
+  "accountant": pendingCareer(
+    "chart",
+    ["accounting-auditing", "banking-finance", "business-administration"],
+    ["Junior Accountant", "Accountant", "Finance Manager"]
+  ),
 };
 
 const INDUSTRY_KM: Record<string, string> = {
   Technology: "បច្ចេកវិទ្យា",
   "Finance & Banking": "ហិរញ្ញវត្ថុ & ធនាគារ",
   "Engineering & Construction": "វិស្វកម្ម & សំណង់",
+  "Technology & Data": "បច្ចេកវិទ្យា និងទិន្នន័យ",
+  "Technology & Security": "បច្ចេកវិទ្យា និងសន្តិសុខ",
+  "Engineering & Manufacturing": "វិស្វកម្ម និងការផលិត",
+  "Creative & Media": "ច្នៃប្រឌិត និងមេឌា",
+  "Design & Construction": "រចនា និងសំណង់",
+  "Health Care": "ថែទាំសុខភាព",
+  Education: "ការអប់រំ",
+  "Business & Marketing": "អាជីវកម្ម និងទីផ្សារ",
+  "Finance & Business": "ហិរញ្ញវត្ថុ និងអាជីវកម្ម",
 };
 
 const SENIORITY_LABELS = {
@@ -135,7 +229,7 @@ export default function CareersPage() {
     setSelectedRiasec(null);
   };
 
-  const renderIcon = (name: "cpu" | "chart" | "construction") => {
+  const renderIcon = (name: SalaryTier["iconName"]) => {
     switch (name) {
       case "cpu":
         return <Cpu className="h-3.5 w-3.5" />;
@@ -143,6 +237,16 @@ export default function CareersPage() {
         return <BarChart3 className="h-3.5 w-3.5" />;
       case "construction":
         return <HardHat className="h-3.5 w-3.5" />;
+      case "health":
+        return <HeartPulse className="h-3.5 w-3.5" />;
+      case "design":
+        return <Palette className="h-3.5 w-3.5" />;
+      case "education":
+        return <GraduationCap className="h-3.5 w-3.5" />;
+      case "people":
+        return <Users className="h-3.5 w-3.5" />;
+      case "science":
+        return <FlaskConical className="h-3.5 w-3.5" />;
       default:
         return <Briefcase className="h-3.5 w-3.5" />;
     }
@@ -204,9 +308,10 @@ export default function CareersPage() {
         clearSearchLabel={language === "km" ? "សម្អាតការស្វែងរក" : "Clear search"}
         chips={[
           { value: "", label: t("careersDirectory.allIndustries") },
-          { value: "Technology", label: language === "km" ? "បច្ចេកវិទ្យា" : "Technology" },
-          { value: "Finance & Banking", label: language === "km" ? "ហិរញ្ញវត្ថុ & ធនាគារ" : "Finance & Banking" },
-          { value: "Engineering & Construction", label: language === "km" ? "វិស្វកម្ម & សំណង់" : "Engineering & Construction" },
+          ...Object.entries(INDUSTRY_KM).map(([value, label]) => ({
+            value,
+            label: language === "km" ? label : value,
+          })),
         ]}
         activeChip={industryFilter}
         onChipChange={setIndustryFilter}

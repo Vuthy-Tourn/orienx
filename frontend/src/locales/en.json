@@ -389,10 +389,10 @@
   "careerDetail": {
     "loading": "Loading career details...",
     "back": "Back to Careers",
-    "responsibilities": "Key Responsibilities",
-    "requiredSkills": "Required Core Skills",
-    "progression": "Career Progression Ladder",
-    "leadingMajors": "University Majors Leading to This Career",
+    "responsibilities": "What you do",
+    "requiredSkills": "Skills you need",
+    "progression": "Career path",
+    "leadingMajors": "Related majors",
     "viewMajor": "View Major"
   },
   "aboutPage": {

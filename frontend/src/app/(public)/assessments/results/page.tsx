@@ -31,6 +31,7 @@ import type {
 import { ARCHETYPE_META } from "@/lib/personality-meta";
 import { getHollandArchetype } from "@/lib/riasec-meta";
 import { buildCombinedReportModel } from "@/lib/guest/combined-report";
+import { getCareerIdeasForCodes } from "@/lib/data/career-ideas";
 import { AssessmentExportDialog } from "@/components/assessments/assessment-export-dialog";
 import {
   exportAssessmentReport,
@@ -85,6 +86,15 @@ export default function GuestResultsPage() {
       limit: 6,
     });
   }, [personalityResult, riasecResult]);
+
+  const topInterestCodes = useMemo(
+    () => riasecResult?.ranked.slice(0, 3).map((item) => item.code) ?? [],
+    [riasecResult]
+  );
+  const careerIdeas = useMemo(
+    () => getCareerIdeasForCodes(topInterestCodes, 4),
+    [topInterestCodes]
+  );
 
   const combinedLabels: AssessmentReportLabels = {
     preparedFor: t("assessmentReport.preparedFor"),
@@ -354,6 +364,71 @@ export default function GuestResultsPage() {
               </section>
             )}
 
+            {careerIdeas.length > 0 && (
+              <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+                <div className="flex flex-wrap items-end justify-between gap-2">
+                  <div>
+                    <div className="inline-flex items-center gap-1.5 rounded-full border border-[#E6E8F0] bg-[#F8FAFD] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#111965]">
+                      <Compass className="h-3 w-3 text-[#D4A017]" />
+                      {getLocalized({
+                        en: "Career ideas",
+                        km: "គំនិតអាជីព",
+                      })}
+                    </div>
+                    <h2 className="mt-2 text-base font-black text-[#111965] sm:text-lg">
+                      {getLocalized({
+                        en: "Jobs that match your interests",
+                        km: "មុខរបរដែលត្រូវនឹងចំណាប់អារម្មណ៍របស់អ្នក",
+                      })}
+                    </h2>
+                    <p className="mt-1 text-sm leading-relaxed text-[#68708A]">
+                      {getLocalized({
+                        en: "These are real job profiles. Open one to see the skills and related majors.",
+                        km: "ទាំងនេះជាមុខរបរពិតប្រាកដ។ បើកមួយដើម្បីមើលជំនាញ និងជំនាញសិក្សាពាក់ព័ន្ធ។",
+                      })}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {careerIdeas.map((career) => (
+                    <Link
+                      key={career.slug}
+                      href={`/careers/${career.slug}`}
+                      className="group rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4 transition-colors hover:border-[#111965]/30 hover:bg-white"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <div className="text-[10px] font-black uppercase tracking-[0.12em] text-[#D4A017]">
+                            {getLocalized({
+                              en: career.industry,
+                              km: career.industry_km,
+                            })}
+                          </div>
+                          <h3 className="mt-1 text-sm font-black text-[#111965] group-hover:text-[#1A2580]">
+                            {getLocalized(career.title)}
+                          </h3>
+                        </div>
+                        <ArrowRight className="h-4 w-4 shrink-0 text-[#111965]" />
+                      </div>
+                      <p className="mt-2 line-clamp-2 text-sm leading-6 text-[#68708A]">
+                        {getLocalized(career.summary)}
+                      </p>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {career.skills.slice(0, 3).map((skill) => (
+                          <span
+                            key={skill.en}
+                            className="rounded-lg border border-[#E6E8F0] bg-white px-2 py-1 text-[11px] font-semibold text-[#475569]"
+                          >
+                            {getLocalized(skill)}
+                          </span>
+                        ))}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
+
             <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
               <div className="flex items-center gap-2">
                 <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F0F2FA] text-[#111965]">
@@ -460,16 +535,7 @@ export default function GuestResultsPage() {
         exportingFormat={combinedExporting}
         onExport={handleCombinedExport}
         footer={t("assessmentReport.footer")}
-        formats={[
-          "pdf",
-          "excel",
-          "csv",
-          "json",
-          "markdown",
-          "html",
-          "text",
-          "png",
-        ]}
+        formats={["pdf", "excel", "png"]}
       />
     </div>
   );

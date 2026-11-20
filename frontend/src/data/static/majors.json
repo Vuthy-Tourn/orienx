@@ -227,7 +227,23 @@
         "logo_url": "https://vanda.edu.kh/wp-content/uploads/2025/12/cropped-Logo-Vanda-32x32.png"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "6abc8ded-e27b-41a8-ad10-d17a849ca6c1",
+        "slug": "accountant",
+        "title": {
+          "en": "Accountant",
+          "km": "គណនេយ្យករ"
+        },
+        "industry": "Finance & Business",
+        "description": {
+          "en": "Prepares financial records, checks that numbers are correct, and helps organizations follow tax rules.",
+          "km": "រៀបចំកំណត់ត្រាហិរញ្ញវត្ថុ ពិនិត្យភាពត្រឹមត្រូវនៃលេខ និងជួយឱ្យអង្គការអនុវត្តតាមច្បាប់ពន្ធ។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "CEI"
+      }
+    ]
   },
   {
     "id": "40dbf190-21cc-4630-9dae-83167a8d1ce3",
@@ -726,7 +742,23 @@
         "logo_url": "https://upload.wikimedia.org/wikipedia/en/9/9f/RUFA_new_logo.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "30d643d2-4781-4c44-9101-0f06d70e96fc",
+        "slug": "architect",
+        "title": {
+          "en": "Architect",
+          "km": "ស្ថាបត្យករ"
+        },
+        "industry": "Design & Construction",
+        "description": {
+          "en": "Designs buildings and spaces that are safe, useful, and beautiful, and works with engineers and builders.",
+          "km": "រចនាអគារ និងទីធ្លាឱ្យមានសុវត្ថិភាព ប្រើប្រាស់បានល្អ និងស្រស់ស្អាត ហើយធ្វើការជាមួយវិស្វករ និងអ្នកសាងសង់។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "RCA"
+      }
+    ]
   },
   {
     "id": "0f68ade1-1509-4d5c-a4cb-0ec4bfdf43b3",
@@ -1275,6 +1307,21 @@
           "km": "វិភាគទិន្នន័យហិរញ្ញវត្ថុ ព្យាករណ៍ចំណូលចំណាយ និងផ្តល់អនុសាសន៍លើការវិនិយោគដល់ក្រុមហ៊ុន ឬធនាគារ។"
         },
         "education_level": "BACHELOR",
+        "riasec_code": "CEI"
+      },
+      {
+        "id": "6abc8ded-e27b-41a8-ad10-d17a849ca6c1",
+        "slug": "accountant",
+        "title": {
+          "en": "Accountant",
+          "km": "គណនេយ្យករ"
+        },
+        "industry": "Finance & Business",
+        "description": {
+          "en": "Prepares financial records, checks that numbers are correct, and helps organizations follow tax rules.",
+          "km": "រៀបចំកំណត់ត្រាហិរញ្ញវត្ថុ ពិនិត្យភាពត្រឹមត្រូវនៃលេខ និងជួយឱ្យអង្គការអនុវត្តតាមច្បាប់ពន្ធ។"
+        },
+        "education_level": "Bachelor's degree",
         "riasec_code": "CEI"
       }
     ]
@@ -1978,6 +2025,36 @@
         },
         "education_level": "BACHELOR",
         "riasec_code": "CEI"
+      },
+      {
+        "id": "6ff59ff8-51b9-47b4-b448-aef2d1b1c742",
+        "slug": "marketing-manager",
+        "title": {
+          "en": "Marketing Manager",
+          "km": "អ្នកគ្រប់គ្រងទីផ្សារ"
+        },
+        "industry": "Business & Marketing",
+        "description": {
+          "en": "Plans campaigns, studies what customers want, and leads a team to promote products or services.",
+          "km": "រៀបចំយុទ្ធនាការ សិក្សាអ្វីដែលអតិថិជនចង់បាន និងដឹកនាំក្រុមដើម្បីផ្សព្វផ្សាយផលិតផល ឬសេវាកម្ម។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "EC"
+      },
+      {
+        "id": "6abc8ded-e27b-41a8-ad10-d17a849ca6c1",
+        "slug": "accountant",
+        "title": {
+          "en": "Accountant",
+          "km": "គណនេយ្យករ"
+        },
+        "industry": "Finance & Business",
+        "description": {
+          "en": "Prepares financial records, checks that numbers are correct, and helps organizations follow tax rules.",
+          "km": "រៀបចំកំណត់ត្រាហិរញ្ញវត្ថុ ពិនិត្យភាពត្រឹមត្រូវនៃលេខ និងជួយឱ្យអង្គការអនុវត្តតាមច្បាប់ពន្ធ។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "CEI"
       }
     ]
   },
@@ -2339,6 +2416,21 @@
         },
         "education_level": "BACHELOR",
         "riasec_code": "RIC"
+      },
+      {
+        "id": "30d643d2-4781-4c44-9101-0f06d70e96fc",
+        "slug": "architect",
+        "title": {
+          "en": "Architect",
+          "km": "ស្ថាបត្យករ"
+        },
+        "industry": "Design & Construction",
+        "description": {
+          "en": "Designs buildings and spaces that are safe, useful, and beautiful, and works with engineers and builders.",
+          "km": "រចនាអគារ និងទីធ្លាឱ្យមានសុវត្ថិភាព ប្រើប្រាស់បានល្អ និងស្រស់ស្អាត ហើយធ្វើការជាមួយវិស្វករ និងអ្នកសាងសង់។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "RCA"
       }
     ]
   },
@@ -2665,7 +2757,38 @@
         "logo_url": "https://westernuniversity.edu.kh/assets/img/seo-og-image.png"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "457d5d47-1342-4c46-b2df-6d288a631a01",
+        "slug": "cybersecurity-analyst",
+        "title": {
+          "en": "Cybersecurity Analyst",
+          "km": "អ្នកវិភាគសន្តិសុខសាយប័រ"
+        },
+        "industry": "Technology & Security",
+        "description": {
+          "en": "Protects computer systems and networks from attacks, watches for threats, and helps fix security problems.",
+          "km": "ការពារប្រព័ន្ធកុំព្យូទ័រ និងបណ្តាញពីការវាយប្រហារ ឃ្លាំមើលគ្រោះថ្នាក់ និងជួយដោះស្រាយបញ្ហាសន្តិសុខ។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "CI"
+      },
+      {
+        "id": "98a12166-7677-437f-b2ee-cd349cec8fe2",
+        "slug": "data-scientist",
+        "title": {
+          "en": "Data Scientist",
+          "km": "អ្នកវិទ្យាសាស្ត្រទិន្នន័យ"
+        },
+        "industry": "Technology & Data",
+        "description": {
+          "en": "Uses data, statistics, and programming to find patterns and help organizations make better decisions.",
+          "km": "ប្រើទិន្នន័យ ស្ថិតិ និងការសរសេរកូដ ដើម្បីរកលំនាំ និងជួយឱ្យអង្គការសម្រេចចិត្តបានកាន់តែល្អ។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "IC"
+      }
+    ]
   },
   {
     "id": "cd6fed61-2aab-48bb-8101-ad3d9eb5ef41",
@@ -2858,7 +2981,23 @@
         "logo_url": "https://www.norton-u.com/images/logo.png"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "457d5d47-1342-4c46-b2df-6d288a631a01",
+        "slug": "cybersecurity-analyst",
+        "title": {
+          "en": "Cybersecurity Analyst",
+          "km": "អ្នកវិភាគសន្តិសុខសាយប័រ"
+        },
+        "industry": "Technology & Security",
+        "description": {
+          "en": "Protects computer systems and networks from attacks, watches for threats, and helps fix security problems.",
+          "km": "ការពារប្រព័ន្ធកុំព្យូទ័រ និងបណ្តាញពីការវាយប្រហារ ឃ្លាំមើលគ្រោះថ្នាក់ និងជួយដោះស្រាយបញ្ហាសន្តិសុខ។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "CI"
+      }
+    ]
   },
   {
     "id": "8a7ce897-a090-4f80-9eed-fe7e864e59f9",
@@ -3027,6 +3166,21 @@
         },
         "education_level": "BACHELOR",
         "riasec_code": "IRE"
+      },
+      {
+        "id": "98a12166-7677-437f-b2ee-cd349cec8fe2",
+        "slug": "data-scientist",
+        "title": {
+          "en": "Data Scientist",
+          "km": "អ្នកវិទ្យាសាស្ត្រទិន្នន័យ"
+        },
+        "industry": "Technology & Data",
+        "description": {
+          "en": "Uses data, statistics, and programming to find patterns and help organizations make better decisions.",
+          "km": "ប្រើទិន្នន័យ ស្ថិតិ និងការសរសេរកូដ ដើម្បីរកលំនាំ និងជួយឱ្យអង្គការសម្រេចចិត្តបានកាន់តែល្អ។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "IC"
       }
     ]
   },
@@ -3508,7 +3662,23 @@
         "logo_url": "https://k4all.org/wp-content/uploads/logos/Academia/Asia_Cambodia_University_Preah%20Kossomak%20Polytechnic%20Institute_logo.jpg"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "dc2a7007-3c39-4fe0-aa12-6d4cf3ddbced",
+        "slug": "mechanical-engineer",
+        "title": {
+          "en": "Mechanical Engineer",
+          "km": "វិស្វករមេកានិច"
+        },
+        "industry": "Engineering & Manufacturing",
+        "description": {
+          "en": "Designs machines, engines, robots, and mechanical systems, then tests them to make sure they work safely.",
+          "km": "រចនាគ្រឿងម៉ាស៊ីន ម៉ាស៊ីនចលករ រ៉ូបូត និងប្រព័ន្ធមេកានិច រួចសាកល្បងឱ្យដឹងថាវាដំណើរការដោយសុវត្ថិភាព។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "RIC"
+      }
+    ]
   },
   {
     "id": "59aef490-d851-418d-b102-f1c2c44f21ba",
@@ -3775,7 +3945,23 @@
         "logo_url": "https://westernuniversity.edu.kh/assets/img/seo-og-image.png"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "83d5feed-ab95-47ac-813b-3adfb7e0f1a3",
+        "slug": "high-school-teacher",
+        "title": {
+          "en": "High School Teacher",
+          "km": "គ្រូបង្រៀនវិទ្យាល័យ"
+        },
+        "industry": "Education",
+        "description": {
+          "en": "Plans lessons, explains subjects, and helps high school students learn and prepare for their future.",
+          "km": "រៀបចំមេរៀន ពន្យល់មុខវិជ្ជា និងជួយសិស្សវិទ្យាល័យឱ្យរៀន និងត្រៀមអនាគត។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "S"
+      }
+    ]
   },
   {
     "id": "8623c508-8ad3-44e0-80ad-eb0003596bdf",
@@ -3987,7 +4173,38 @@
         "logo_url": "https://upload.wikimedia.org/wikipedia/en/9/9f/RUFA_new_logo.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "588e54cb-1dfe-4b05-818c-ec7f3af06acb",
+        "slug": "graphic-designer",
+        "title": {
+          "en": "Graphic Designer",
+          "km": "អ្នករចនាក្រាហ្វិក"
+        },
+        "industry": "Creative & Media",
+        "description": {
+          "en": "Creates visual designs for websites, brands, advertisements, posters, and social media.",
+          "km": "បង្កើតការរចនាមើលឃើញសម្រាប់គេហទំព័រ ម៉ាកសញ្ញា ការផ្សាយពាណិជ្ជកម្ម ផ្ទាំងផ្សព្វផ្សាយ និងបណ្តាញសង្គម។"
+        },
+        "education_level": "Bachelor's degree or portfolio",
+        "riasec_code": "AC"
+      },
+      {
+        "id": "30d643d2-4781-4c44-9101-0f06d70e96fc",
+        "slug": "architect",
+        "title": {
+          "en": "Architect",
+          "km": "ស្ថាបត្យករ"
+        },
+        "industry": "Design & Construction",
+        "description": {
+          "en": "Designs buildings and spaces that are safe, useful, and beautiful, and works with engineers and builders.",
+          "km": "រចនាអគារ និងទីធ្លាឱ្យមានសុវត្ថិភាព ប្រើប្រាស់បានល្អ និងស្រស់ស្អាត ហើយធ្វើការជាមួយវិស្វករ និងអ្នកសាងសង់។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "RCA"
+      }
+    ]
   },
   {
     "id": "c38e7a00-38c0-4d9c-bd85-2ca19ffb53f5",
@@ -4337,7 +4554,23 @@
         "logo_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd1B5y4piLxwHOvUfi2tNoRrl_lNK3kJGGj2OMQ6pIOrJta7cXrJ-LGkyj&s=10"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "e575611d-6c69-4c37-b2f5-3760827bb630",
+        "slug": "registered-nurse",
+        "title": {
+          "en": "Registered Nurse",
+          "km": "គិលានុបដ្ឋាយិកា"
+        },
+        "industry": "Health Care",
+        "description": {
+          "en": "Cares for patients, supports their recovery, and teaches families how to stay healthy.",
+          "km": "ថែទាំអ្នកជំងឺ ជួយឱ្យពួកគេជាសះស្បើយ និងបង្រៀនគ្រួសារអំពីការថែរក្សាសុខភាព។"
+        },
+        "education_level": "Bachelor's degree in nursing",
+        "riasec_code": "SCI"
+      }
+    ]
   },
   {
     "id": "916d800d-48fd-41f0-ae52-371abb75e1bd",
@@ -4471,7 +4704,23 @@
         "logo_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWTSnymjEVdzLYeceDr0q0ygXafRXe5maxZxYycPIddVi-gl3cNECd6IIK&s=10"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "588e54cb-1dfe-4b05-818c-ec7f3af06acb",
+        "slug": "graphic-designer",
+        "title": {
+          "en": "Graphic Designer",
+          "km": "អ្នករចនាក្រាហ្វិក"
+        },
+        "industry": "Creative & Media",
+        "description": {
+          "en": "Creates visual designs for websites, brands, advertisements, posters, and social media.",
+          "km": "បង្កើតការរចនាមើលឃើញសម្រាប់គេហទំព័រ ម៉ាកសញ្ញា ការផ្សាយពាណិជ្ជកម្ម ផ្ទាំងផ្សព្វផ្សាយ និងបណ្តាញសង្គម។"
+        },
+        "education_level": "Bachelor's degree or portfolio",
+        "riasec_code": "AC"
+      }
+    ]
   },
   {
     "id": "b486d5f8-d21b-4ee4-8f17-65738183091f",
@@ -5234,7 +5483,23 @@
         "logo_url": "https://usea.edu.kh/assets/logo_update-BeRv3I2d.png"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "457d5d47-1342-4c46-b2df-6d288a631a01",
+        "slug": "cybersecurity-analyst",
+        "title": {
+          "en": "Cybersecurity Analyst",
+          "km": "អ្នកវិភាគសន្តិសុខសាយប័រ"
+        },
+        "industry": "Technology & Security",
+        "description": {
+          "en": "Protects computer systems and networks from attacks, watches for threats, and helps fix security problems.",
+          "km": "ការពារប្រព័ន្ធកុំព្យូទ័រ និងបណ្តាញពីការវាយប្រហារ ឃ្លាំមើលគ្រោះថ្នាក់ និងជួយដោះស្រាយបញ្ហាសន្តិសុខ។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "CI"
+      }
+    ]
   },
   {
     "id": "bbd7c379-7804-4262-858b-a395e9faf282",
@@ -6288,7 +6553,23 @@
         "logo_url": "https://uef.edu.kh/wp-content/uploads/2025/01/cropped-uef_logo.png"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "6ff59ff8-51b9-47b4-b448-aef2d1b1c742",
+        "slug": "marketing-manager",
+        "title": {
+          "en": "Marketing Manager",
+          "km": "អ្នកគ្រប់គ្រងទីផ្សារ"
+        },
+        "industry": "Business & Marketing",
+        "description": {
+          "en": "Plans campaigns, studies what customers want, and leads a team to promote products or services.",
+          "km": "រៀបចំយុទ្ធនាការ សិក្សាអ្វីដែលអតិថិជនចង់បាន និងដឹកនាំក្រុមដើម្បីផ្សព្វផ្សាយផលិតផល ឬសេវាកម្ម។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "EC"
+      }
+    ]
   },
   {
     "id": "f57d579c-ab09-40be-aeb9-753a9d1a9230",
@@ -6365,7 +6646,38 @@
         "logo_url": "https://www.rupp.edu.kh/logo.png"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "83d5feed-ab95-47ac-813b-3adfb7e0f1a3",
+        "slug": "high-school-teacher",
+        "title": {
+          "en": "High School Teacher",
+          "km": "គ្រូបង្រៀនវិទ្យាល័យ"
+        },
+        "industry": "Education",
+        "description": {
+          "en": "Plans lessons, explains subjects, and helps high school students learn and prepare for their future.",
+          "km": "រៀបចំមេរៀន ពន្យល់មុខវិជ្ជា និងជួយសិស្សវិទ្យាល័យឱ្យរៀន និងត្រៀមអនាគត។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "S"
+      },
+      {
+        "id": "98a12166-7677-437f-b2ee-cd349cec8fe2",
+        "slug": "data-scientist",
+        "title": {
+          "en": "Data Scientist",
+          "km": "អ្នកវិទ្យាសាស្ត្រទិន្នន័យ"
+        },
+        "industry": "Technology & Data",
+        "description": {
+          "en": "Uses data, statistics, and programming to find patterns and help organizations make better decisions.",
+          "km": "ប្រើទិន្នន័យ ស្ថិតិ និងការសរសេរកូដ ដើម្បីរកលំនាំ និងជួយឱ្យអង្គការសម្រេចចិត្តបានកាន់តែល្អ។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "IC"
+      }
+    ]
   },
   {
     "id": "43ef7887-47fa-478e-945c-218f372d7129",
@@ -6480,7 +6792,23 @@
         "logo_url": "https://k4all.org/wp-content/uploads/logos/Academia/Asia_Cambodia_University_Preah%20Kossomak%20Polytechnic%20Institute_logo.jpg"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "dc2a7007-3c39-4fe0-aa12-6d4cf3ddbced",
+        "slug": "mechanical-engineer",
+        "title": {
+          "en": "Mechanical Engineer",
+          "km": "វិស្វករមេកានិច"
+        },
+        "industry": "Engineering & Manufacturing",
+        "description": {
+          "en": "Designs machines, engines, robots, and mechanical systems, then tests them to make sure they work safely.",
+          "km": "រចនាគ្រឿងម៉ាស៊ីន ម៉ាស៊ីនចលករ រ៉ូបូត និងប្រព័ន្ធមេកានិច រួចសាកល្បងឱ្យដឹងថាវាដំណើរការដោយសុវត្ថិភាព។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "RIC"
+      }
+    ]
   },
   {
     "id": "ae424f08-a6a6-4b1d-9b96-db80e5393027",
@@ -6576,7 +6904,23 @@
         "logo_url": "https://npic.edu.kh/storage/2026/05/cropped-npicfavicon-32x32.png"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "dc2a7007-3c39-4fe0-aa12-6d4cf3ddbced",
+        "slug": "mechanical-engineer",
+        "title": {
+          "en": "Mechanical Engineer",
+          "km": "វិស្វករមេកានិច"
+        },
+        "industry": "Engineering & Manufacturing",
+        "description": {
+          "en": "Designs machines, engines, robots, and mechanical systems, then tests them to make sure they work safely.",
+          "km": "រចនាគ្រឿងម៉ាស៊ីន ម៉ាស៊ីនចលករ រ៉ូបូត និងប្រព័ន្ធមេកានិច រួចសាកល្បងឱ្យដឹងថាវាដំណើរការដោយសុវត្ថិភាព។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "RIC"
+      }
+    ]
   },
   {
     "id": "a55da9ad-c6a8-4623-aa01-527d7971ec73",
@@ -6691,7 +7035,38 @@
         "logo_url": "https://www.uc.edu.kh/images/logo_icon.png"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "588e54cb-1dfe-4b05-818c-ec7f3af06acb",
+        "slug": "graphic-designer",
+        "title": {
+          "en": "Graphic Designer",
+          "km": "អ្នករចនាក្រាហ្វិក"
+        },
+        "industry": "Creative & Media",
+        "description": {
+          "en": "Creates visual designs for websites, brands, advertisements, posters, and social media.",
+          "km": "បង្កើតការរចនាមើលឃើញសម្រាប់គេហទំព័រ ម៉ាកសញ្ញា ការផ្សាយពាណិជ្ជកម្ម ផ្ទាំងផ្សព្វផ្សាយ និងបណ្តាញសង្គម។"
+        },
+        "education_level": "Bachelor's degree or portfolio",
+        "riasec_code": "AC"
+      },
+      {
+        "id": "6ff59ff8-51b9-47b4-b448-aef2d1b1c742",
+        "slug": "marketing-manager",
+        "title": {
+          "en": "Marketing Manager",
+          "km": "អ្នកគ្រប់គ្រងទីផ្សារ"
+        },
+        "industry": "Business & Marketing",
+        "description": {
+          "en": "Plans campaigns, studies what customers want, and leads a team to promote products or services.",
+          "km": "រៀបចំយុទ្ធនាការ សិក្សាអ្វីដែលអតិថិជនចង់បាន និងដឹកនាំក្រុមដើម្បីផ្សព្វផ្សាយផលិតផល ឬសេវាកម្ម។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "EC"
+      }
+    ]
   },
   {
     "id": "949b1f86-0743-4a5b-920b-cba822eb2ca4",
@@ -6997,7 +7372,23 @@
         "logo_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd1B5y4piLxwHOvUfi2tNoRrl_lNK3kJGGj2OMQ6pIOrJta7cXrJ-LGkyj&s=10"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "e575611d-6c69-4c37-b2f5-3760827bb630",
+        "slug": "registered-nurse",
+        "title": {
+          "en": "Registered Nurse",
+          "km": "គិលានុបដ្ឋាយិកា"
+        },
+        "industry": "Health Care",
+        "description": {
+          "en": "Cares for patients, supports their recovery, and teaches families how to stay healthy.",
+          "km": "ថែទាំអ្នកជំងឺ ជួយឱ្យពួកគេជាសះស្បើយ និងបង្រៀនគ្រួសារអំពីការថែរក្សាសុខភាព។"
+        },
+        "education_level": "Bachelor's degree in nursing",
+        "riasec_code": "SCI"
+      }
+    ]
   },
   {
     "id": "78957e31-289f-4a20-81e6-bf183ea3b6bb",
@@ -7171,7 +7562,23 @@
         "logo_url": "https://www.rupp.edu.kh/logo.png"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "83d5feed-ab95-47ac-813b-3adfb7e0f1a3",
+        "slug": "high-school-teacher",
+        "title": {
+          "en": "High School Teacher",
+          "km": "គ្រូបង្រៀនវិទ្យាល័យ"
+        },
+        "industry": "Education",
+        "description": {
+          "en": "Plans lessons, explains subjects, and helps high school students learn and prepare for their future.",
+          "km": "រៀបចំមេរៀន ពន្យល់មុខវិជ្ជា និងជួយសិស្សវិទ្យាល័យឱ្យរៀន និងត្រៀមអនាគត។"
+        },
+        "education_level": "Bachelor's degree",
+        "riasec_code": "S"
+      }
+    ]
   },
   {
     "id": "44481705-430c-44d8-9572-6a0becccc0ae",
@@ -7479,7 +7886,23 @@
         "logo_url": "https://upload.wikimedia.org/wikipedia/en/6/66/UHS_Cambodia_logo.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original"
       }
     ],
-    "careers": []
+    "careers": [
+      {
+        "id": "e575611d-6c69-4c37-b2f5-3760827bb630",
+        "slug": "registered-nurse",
+        "title": {
+          "en": "Registered Nurse",
+          "km": "គិលានុបដ្ឋាយិកា"
+        },
+        "industry": "Health Care",
+        "description": {
+          "en": "Cares for patients, supports their recovery, and teaches families how to stay healthy.",
+          "km": "ថែទាំអ្នកជំងឺ ជួយឱ្យពួកគេជាសះស្បើយ និងបង្រៀនគ្រួសារអំពីការថែរក្សាសុខភាព។"
+        },
+        "education_level": "Bachelor's degree in nursing",
+        "riasec_code": "SCI"
+      }
+    ]
   },
   {
     "id": "a5db3c34-11e9-4dfa-b9e8-261c9494757d",
