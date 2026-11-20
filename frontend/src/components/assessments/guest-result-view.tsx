@@ -984,8 +984,15 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 font-bold text-[#111965] hover:underline"
                     >
-                      {getLocalized({ en: "Source", km: "ប្រភព" })}:{" "}
-                      {career.source_name}
+                      {career.jobnet_openings
+                        ? `${career.jobnet_openings} ${getLocalized({
+                            en: "jobs on JobNet",
+                            km: "ការងារនៅ JobNet",
+                          })}`
+                        : `${getLocalized({
+                            en: "Source",
+                            km: "ប្រភព",
+                          })}: ${career.source_name}`}
                       <ExternalLink className="h-3 w-3" />
                     </a>
                   </div>

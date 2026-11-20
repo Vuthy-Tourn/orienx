@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/language-context";
 import { getStaticCareer } from "@/lib/data/catalog";
+import { getCareerIdea } from "@/lib/data/career-ideas";
 import {
   Briefcase,
   ArrowLeft,
@@ -24,6 +25,13 @@ export default function CareerDetailPage() {
   const { t, getLocalized } = useLanguage();
 
   const career = getStaticCareer(slug);
+  const careerIdea = getCareerIdea(slug);
+  const industryLabel = career
+    ? getLocalized({
+        en: career.industry,
+        km: careerIdea?.industry_km || career.industry,
+      })
+    : "";
   const isLoading = false;
   const error = career ? null : new Error("Career not found");
 
@@ -98,7 +106,7 @@ export default function CareerDetailPage() {
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F0F2FA] text-[#111965]">
-                  {career.industry}
+                  {industryLabel}
                 </span>
                 <span className="px-2 py-0.5 rounded-full text-[12.5px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
                   Career profile

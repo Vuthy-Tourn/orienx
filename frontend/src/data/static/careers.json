@@ -64,6 +64,70 @@
     ]
   },
   {
+    "id": "11902696-6b72-44df-a574-3be587d3e17e",
+    "slug": "administrative-assistant",
+    "title": {
+      "en": "Administrative Assistant",
+      "km": "ជំនួយការរដ្ឋបាល"
+    },
+    "industry": "Administrative",
+    "description": {
+      "en": "Organizes files, schedules meetings, and supports the office team with daily tasks.",
+      "km": "រៀបចំឯកសារ កំណត់ការប្រជុំ និងគាំទ្រក្រុមការងារការិយាល័យក្នុងការងារប្រចាំថ្ងៃ។"
+    },
+    "education_level": "High school diploma or bachelor's degree",
+    "riasec_code": "CE",
+    "responsibilities": [
+      "Organize files, schedules, and office records",
+      "Prepare documents and support meetings",
+      "Help the team with daily administrative tasks"
+    ],
+    "required_skills": [
+      "Organization",
+      "Communication",
+      "Microsoft Office"
+    ],
+    "work_environments": [
+      "Office",
+      "Reception",
+      "Meeting rooms"
+    ],
+    "career_progression": [
+      "Office Assistant",
+      "Administrative Assistant",
+      "Office Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "3212e65e-b02e-4acb-b27a-7a496234c586",
+        "slug": "accounting-auditing",
+        "name": {
+          "en": "Accounting, Auditing & Taxation (ACCA/CAT)",
+          "km": "គណនេយ្យ សវនកម្ម និងពន្ធដារ"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "b49d733c-62dd-4b78-bb91-29c58b2880db",
+        "slug": "public-administration",
+        "name": {
+          "en": "Public Administration & Governance",
+          "km": "រដ្ឋបាលសាធារណៈ និងអភិបាលកិច្ច"
+        },
+        "category": "Law & Social Sciences"
+      }
+    ]
+  },
+  {
     "id": "30d643d2-4781-4c44-9101-0f06d70e96fc",
     "slug": "architect",
     "title": {
@@ -128,6 +192,125 @@
     ]
   },
   {
+    "id": "ad78f413-5c75-4249-8cb4-3a1f1692ee4c",
+    "slug": "business-development-manager",
+    "title": {
+      "en": "Business Development Manager",
+      "km": "អ្នកគ្រប់គ្រងអភិវឌ្ឍន៍អាជីវកម្ម"
+    },
+    "industry": "Sales & Business Development",
+    "description": {
+      "en": "Finds new business opportunities, builds partnerships, and helps the company grow.",
+      "km": "ស្វែងរកឱកាសអាជីវកម្មថ្មី កសាងដៃគូ និងជួយឱ្យក្រុមហ៊ុនរីកចម្រើន។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "ESC",
+    "responsibilities": [
+      "Find new business opportunities and partners",
+      "Prepare proposals and negotiate agreements",
+      "Manage relationships with key clients"
+    ],
+    "required_skills": [
+      "Negotiation",
+      "Market research",
+      "Relationship building"
+    ],
+    "work_environments": [
+      "Office",
+      "Client meetings",
+      "Travel to partners"
+    ],
+    "career_progression": [
+      "Business Development Executive",
+      "Business Development Manager",
+      "Head of Growth"
+    ],
+    "related_majors": [
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "d25b502b-b0cf-4df3-be26-7bf592f09431",
+        "slug": "international-business",
+        "name": {
+          "en": "International Business & Global Trade",
+          "km": "ពាណិជ្ជកម្មអន្តរជាតិ"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "17149fb9-a4ba-4496-8040-ce4e24829d0e",
+        "slug": "marketing-digital-media",
+        "name": {
+          "en": "Marketing & Digital Media Strategy",
+          "km": "ទីផ្សារ និងយុទ្ធសាស្ត្រប្រព័ន្ធផ្សព្វផ្សាយឌីជីថល"
+        },
+        "category": "Business & Economics"
+      }
+    ]
+  },
+  {
+    "id": "22420572-f220-40ec-8018-e47063521971",
+    "slug": "chef-fb-supervisor",
+    "title": {
+      "en": "Chef / F&B Supervisor",
+      "km": "ចុងភៅ / អ្នកត្រួតពិនិត្យម្ហូប និងភេសជ្ជៈ"
+    },
+    "industry": "Food & Beverage",
+    "description": {
+      "en": "Prepares food, leads the kitchen team, and keeps service clean, safe, and on time.",
+      "km": "រៀបចំអាហារ ដឹកនាំក្រុមផ្ទះបាយ និងធានាឱ្យសេវាមានអនាម័យ សុវត្ថិភាព និងទាន់ពេល។"
+    },
+    "education_level": "Culinary training or certificate",
+    "riasec_code": "RAE",
+    "responsibilities": [
+      "Prepare food and manage kitchen service",
+      "Lead kitchen staff and check food safety",
+      "Control stock, costs, and service quality"
+    ],
+    "required_skills": [
+      "Cooking",
+      "Team leadership",
+      "Food safety"
+    ],
+    "work_environments": [
+      "Restaurant kitchen",
+      "Hotel kitchen",
+      "Food service"
+    ],
+    "career_progression": [
+      "Kitchen Staff",
+      "Chef / F&B Supervisor",
+      "Head Chef / F&B Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "cd6fed61-2aab-48bb-8101-ad3d9eb5ef41",
+        "slug": "culinary-arts",
+        "name": {
+          "en": "Culinary Arts & Professional Kitchen Operations",
+          "km": "សិល្បៈធ្វើម្ហូប និងការគ្រប់គ្រងផ្ទះបាយវិជ្ជាជីវៈ"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "b486d5f8-d21b-4ee4-8f17-65738183091f",
+        "slug": "hospitality-tourism-management",
+        "name": {
+          "en": "Hospitality & International Tourism Management",
+          "km": "ការគ្រប់គ្រងបដិសណ្ឋារកិច្ច និងទេសចរណ៍អន្តរជាតិ"
+        },
+        "category": "Business & Economics"
+      }
+    ]
+  },
+  {
     "id": "ea79d47b-0711-4507-8bb8-822f56772c58",
     "slug": "civil-engineer",
     "title": {
@@ -168,6 +351,134 @@
           "km": "វិស្វកម្មសំណង់ស៊ីវិល និងការរចនាគ្រោងបង្គុំ"
         },
         "category": "Engineering"
+      }
+    ]
+  },
+  {
+    "id": "0afc2a6b-2f3e-4413-b320-c91c2eaa4296",
+    "slug": "credit-loan-officer",
+    "title": {
+      "en": "Credit / Loan Officer",
+      "km": "បុគ្គលិកឥណទាន"
+    },
+    "industry": "Finance & Banking",
+    "description": {
+      "en": "Talks with customers about loans, checks documents, and helps them apply.",
+      "km": "សម្ភាសអតិថិជនអំពីឥណទាន ពិនិត្យឯកសារ និងជួយពួកគេដាក់ពាក្យ។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "ECS",
+    "responsibilities": [
+      "Meet customers and explain loan options",
+      "Check documents and assess applications",
+      "Follow up on repayments and customer needs"
+    ],
+    "required_skills": [
+      "Sales",
+      "Customer service",
+      "Basic finance"
+    ],
+    "work_environments": [
+      "Bank branch",
+      "Customer visits",
+      "Office"
+    ],
+    "career_progression": [
+      "Loan Assistant",
+      "Credit / Loan Officer",
+      "Branch Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "3212e65e-b02e-4acb-b27a-7a496234c586",
+        "slug": "accounting-auditing",
+        "name": {
+          "en": "Accounting, Auditing & Taxation (ACCA/CAT)",
+          "km": "គណនេយ្យ សវនកម្ម និងពន្ធដារ"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "96cc69b0-ec1a-4ffd-b353-76104ddf9058",
+        "slug": "banking-finance",
+        "name": {
+          "en": "Banking & Financial Markets",
+          "km": "ធនាគារ និងទីផ្សារហិរញ្ញវត្ថុ"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      }
+    ]
+  },
+  {
+    "id": "32b16fd3-50aa-4df3-8b5f-9f86a985c23e",
+    "slug": "customer-service-officer",
+    "title": {
+      "en": "Customer Service Officer",
+      "km": "បុគ្គលិកសេវាអតិថិជន"
+    },
+    "industry": "Customer Service",
+    "description": {
+      "en": "Answers customer questions, solves problems, and keeps customers happy.",
+      "km": "ឆ្លើយសំណួរអតិថិជន ដោះស្រាយបញ្ហា និងធ្វើឱ្យអតិថិជនពេញចិត្ត។"
+    },
+    "education_level": "High school diploma or bachelor's degree",
+    "riasec_code": "SC",
+    "responsibilities": [
+      "Answer customer questions and complaints",
+      "Record cases and follow up until resolved",
+      "Explain products, services, and policies"
+    ],
+    "required_skills": [
+      "Communication",
+      "Patience",
+      "Problem solving"
+    ],
+    "work_environments": [
+      "Office or call center",
+      "Customer meetings",
+      "Online support"
+    ],
+    "career_progression": [
+      "Customer Service Trainee",
+      "Customer Service Officer",
+      "Customer Service Supervisor"
+    ],
+    "related_majors": [
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "b486d5f8-d21b-4ee4-8f17-65738183091f",
+        "slug": "hospitality-tourism-management",
+        "name": {
+          "en": "Hospitality & International Tourism Management",
+          "km": "ការគ្រប់គ្រងបដិសណ្ឋារកិច្ច និងទេសចរណ៍អន្តរជាតិ"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "a55da9ad-c6a8-4623-aa01-527d7971ec73",
+        "slug": "media-communications",
+        "name": {
+          "en": "Media, Journalism & Digital Communications",
+          "km": "ប្រព័ន្ធផ្សព្វផ្សាយ សារព័ត៌មាន និងទំនាក់ទំនង"
+        },
+        "category": "Law & Social Sciences"
       }
     ]
   },
@@ -296,6 +607,61 @@
           "km": "គណិតវិទ្យា និងស្ថិតិអនុវត្ត"
         },
         "category": "Natural Sciences"
+      }
+    ]
+  },
+  {
+    "id": "3359f96a-ce43-4f9d-9065-76cf87cfdc7c",
+    "slug": "electrician",
+    "title": {
+      "en": "Electrician",
+      "km": "អ្នកជាងអគ្គិសនី"
+    },
+    "industry": "Construction & Skilled Trades",
+    "description": {
+      "en": "Installs, checks, and repairs electrical systems in homes, buildings, and factories.",
+      "km": "ដំឡើង ពិនិត្យ និងជួសជុលប្រព័ន្ធអគ្គិសនីក្នុងផ្ទះ អគារ និងរោងចក្រ។"
+    },
+    "education_level": "Vocational certificate",
+    "riasec_code": "RI",
+    "responsibilities": [
+      "Install and repair electrical systems",
+      "Check wiring and follow safety rules",
+      "Find faults and test equipment"
+    ],
+    "required_skills": [
+      "Electrical basics",
+      "Safety",
+      "Troubleshooting"
+    ],
+    "work_environments": [
+      "Construction sites",
+      "Buildings",
+      "Workshop"
+    ],
+    "career_progression": [
+      "Electrical Assistant",
+      "Electrician",
+      "Electrical Supervisor"
+    ],
+    "related_majors": [
+      {
+        "id": "4237233d-4760-4a41-9a4a-0ef8cc44c620",
+        "slug": "electrical-electronic-engineering",
+        "name": {
+          "en": "Electrical & Electronic Engineering",
+          "km": "វិស្វកម្មអគ្គិសនី និងអេឡិចត្រូនិក"
+        },
+        "category": "Engineering"
+      },
+      {
+        "id": "ae424f08-a6a6-4b1d-9b96-db80e5393027",
+        "slug": "mechatronics-robotics",
+        "name": {
+          "en": "Mechatronics & Robotics Engineering",
+          "km": "វិស្វកម្មមេកាត្រូនិក និងរ៉ូបូត"
+        },
+        "category": "Engineering"
       }
     ]
   },
@@ -481,6 +847,308 @@
     ]
   },
   {
+    "id": "74b75dbb-37cb-4f25-9fcd-cfc2f1e8182f",
+    "slug": "hotel-supervisor",
+    "title": {
+      "en": "Hotel Supervisor",
+      "km": "អ្នកត្រួតពិនិត្យសណ្ឋាគារ"
+    },
+    "industry": "Hospitality & Tourism",
+    "description": {
+      "en": "Leads hotel staff, helps guests, and makes sure service runs smoothly.",
+      "km": "ដឹកនាំបុគ្គលិកសណ្ឋាគារ ជួយភ្ញៀវ និងធានាឱ្យសេវាដំណើរការរលូន។"
+    },
+    "education_level": "Bachelor's degree or hospitality training",
+    "riasec_code": "ESC",
+    "responsibilities": [
+      "Lead front-office and service staff",
+      "Handle guest requests and complaints",
+      "Check service quality and daily operations"
+    ],
+    "required_skills": [
+      "Leadership",
+      "Customer service",
+      "Planning"
+    ],
+    "work_environments": [
+      "Hotel",
+      "Front desk",
+      "Guest areas"
+    ],
+    "career_progression": [
+      "Hotel Staff",
+      "Hotel Supervisor",
+      "Hotel Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "b486d5f8-d21b-4ee4-8f17-65738183091f",
+        "slug": "hospitality-tourism-management",
+        "name": {
+          "en": "Hospitality & International Tourism Management",
+          "km": "ការគ្រប់គ្រងបដិសណ្ឋារកិច្ច និងទេសចរណ៍អន្តរជាតិ"
+        },
+        "category": "Business & Economics"
+      }
+    ]
+  },
+  {
+    "id": "3d8ce133-0b76-4678-a9ac-4c9c0cdc5a9f",
+    "slug": "human-resources-officer",
+    "title": {
+      "en": "Human Resources Officer",
+      "km": "បុគ្គលិកធនធានមនុស្ស"
+    },
+    "industry": "Human Resources",
+    "description": {
+      "en": "Helps hire and support employees, keeps records, and explains company rules.",
+      "km": "ជួយជ្រើសរើស និងគាំទ្របុគ្គលិក រក្សាកំណត់ត្រា និងពន្យល់ច្បាប់ក្រុមហ៊ុន។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "SEC",
+    "responsibilities": [
+      "Recruit and onboard new employees",
+      "Maintain employee records and attendance",
+      "Support staff with policies and questions"
+    ],
+    "required_skills": [
+      "Communication",
+      "Organization",
+      "Recruitment"
+    ],
+    "work_environments": [
+      "Office",
+      "HR team",
+      "Employee meetings"
+    ],
+    "career_progression": [
+      "HR Assistant",
+      "HR Officer",
+      "HR Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "4a0283c4-8a55-47bc-ab6f-fa6a4fcbeecc",
+        "slug": "human-resource-management",
+        "name": {
+          "en": "Human Resource Management & Talent Strategy",
+          "km": "ការគ្រប់គ្រងធនធានមនុស្ស និងយុទ្ធសាស្ត្រទេពកោសល្យ"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "4ea020fa-f4d3-43c0-aaeb-5fe56fbf74ce",
+        "slug": "psychology-counseling",
+        "name": {
+          "en": "Psychology & Counseling",
+          "km": "ចិត្តវិទ្យា និងការប្រឹក្សាយោបល់"
+        },
+        "category": "Law & Social Sciences"
+      }
+    ]
+  },
+  {
+    "id": "65f5048e-726a-4ee2-8919-d8d5420c9279",
+    "slug": "legal-officer",
+    "title": {
+      "en": "Legal Officer",
+      "km": "បុគ្គលិកច្បាប់"
+    },
+    "industry": "Legal & Compliance",
+    "description": {
+      "en": "Reviews contracts, checks rules, and helps the company follow the law.",
+      "km": "ពិនិត្យកិច្ចសន្យា ត្រួតពិនិត្យច្បាប់ និងជួយក្រុមហ៊ុនអនុវត្តតាមច្បាប់។"
+    },
+    "education_level": "Bachelor's degree in law",
+    "riasec_code": "CI",
+    "responsibilities": [
+      "Review contracts and legal documents",
+      "Research laws and prepare advice",
+      "Help the organization follow regulations"
+    ],
+    "required_skills": [
+      "Legal research",
+      "Writing",
+      "Attention to detail"
+    ],
+    "work_environments": [
+      "Office",
+      "Meeting rooms",
+      "Court or public offices"
+    ],
+    "career_progression": [
+      "Legal Assistant",
+      "Legal Officer",
+      "Legal Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "1166448e-1f54-4b90-bb76-5ab215981b2e",
+        "slug": "law-jurisprudence",
+        "name": {
+          "en": "Law & Jurisprudence",
+          "km": "ច្បាប់ និងនីតិសាស្ត្រ"
+        },
+        "category": "Law & Social Sciences"
+      },
+      {
+        "id": "b49d733c-62dd-4b78-bb91-29c58b2880db",
+        "slug": "public-administration",
+        "name": {
+          "en": "Public Administration & Governance",
+          "km": "រដ្ឋបាលសាធារណៈ និងអភិបាលកិច្ច"
+        },
+        "category": "Law & Social Sciences"
+      }
+    ]
+  },
+  {
+    "id": "4d74cc45-17d7-4202-b257-cc2ff7d13002",
+    "slug": "logistics-coordinator",
+    "title": {
+      "en": "Logistics Coordinator",
+      "km": "អ្នកសម្របសម្រួលដឹកជញ្ជូន"
+    },
+    "industry": "Logistics & Supply Chain",
+    "description": {
+      "en": "Plans deliveries, tracks goods, and helps make sure orders arrive on time.",
+      "km": "រៀបចំការដឹកជញ្ជូន តាមដានទំនិញ និងជួយឱ្យការបញ្ជាទិញមកដល់ទាន់ពេល។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "CE",
+    "responsibilities": [
+      "Plan deliveries and track shipments",
+      "Coordinate with warehouses and drivers",
+      "Resolve delays and update customers"
+    ],
+    "required_skills": [
+      "Planning",
+      "Excel",
+      "Problem solving"
+    ],
+    "work_environments": [
+      "Office",
+      "Warehouse",
+      "Transport coordination"
+    ],
+    "career_progression": [
+      "Logistics Assistant",
+      "Logistics Coordinator",
+      "Logistics Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "43c373de-dcc2-4cde-b37f-9e66a5e707ae",
+        "slug": "e-commerce-logistics",
+        "name": {
+          "en": "E-Commerce & Digital Business",
+          "km": "ពាណិជ្ជកម្មអេឡិចត្រូនិក និងអាជីវកម្មឌីជីថល"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "1a17d086-4a5e-41f1-893c-a94a7bd6a563",
+        "slug": "supply-chain-logistics",
+        "name": {
+          "en": "Supply Chain Management & Logistics",
+          "km": "ការគ្រប់គ្រងខ្សែច្រវាក់ផ្គត់ផ្គង់ និងភស្តុភារកម្ម"
+        },
+        "category": "Business & Economics"
+      }
+    ]
+  },
+  {
+    "id": "8d75d139-4fd3-4c5c-9f06-b1418f789f34",
+    "slug": "marketing-executive",
+    "title": {
+      "en": "Marketing Executive",
+      "km": "បុគ្គលិកទីផ្សារ"
+    },
+    "industry": "Marketing & Media",
+    "description": {
+      "en": "Plans campaigns, creates promotions, and helps promote products or services.",
+      "km": "រៀបចំយុទ្ធនាការ បង្កើតការផ្សព្វផ្សាយ និងជួយផ្សព្វផ្សាយផលិតផល ឬសេវាកម្ម។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "EA",
+    "responsibilities": [
+      "Plan marketing campaigns and promotions",
+      "Create content and coordinate promotions",
+      "Track campaign results and report findings"
+    ],
+    "required_skills": [
+      "Marketing",
+      "Communication",
+      "Content planning"
+    ],
+    "work_environments": [
+      "Office",
+      "Agency",
+      "Events and campaigns"
+    ],
+    "career_progression": [
+      "Marketing Assistant",
+      "Marketing Executive",
+      "Marketing Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "17149fb9-a4ba-4496-8040-ce4e24829d0e",
+        "slug": "marketing-digital-media",
+        "name": {
+          "en": "Marketing & Digital Media Strategy",
+          "km": "ទីផ្សារ និងយុទ្ធសាស្ត្រប្រព័ន្ធផ្សព្វផ្សាយឌីជីថល"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "a55da9ad-c6a8-4623-aa01-527d7971ec73",
+        "slug": "media-communications",
+        "name": {
+          "en": "Media, Journalism & Digital Communications",
+          "km": "ប្រព័ន្ធផ្សព្វផ្សាយ សារព័ត៌មាន និងទំនាក់ទំនង"
+        },
+        "category": "Law & Social Sciences"
+      }
+    ]
+  },
+  {
     "id": "6ff59ff8-51b9-47b4-b448-aef2d1b1c742",
     "slug": "marketing-manager",
     "title": {
@@ -609,6 +1277,253 @@
     ]
   },
   {
+    "id": "9529d66d-bc71-4adb-94bf-8de60c9a50d5",
+    "slug": "operations-manager",
+    "title": {
+      "en": "Operations Manager",
+      "km": "អ្នកគ្រប់គ្រងប្រតិបត្តិការ"
+    },
+    "industry": "Management & Operations",
+    "description": {
+      "en": "Plans daily operations, leads a team, and makes sure work is completed on time.",
+      "km": "រៀបចំប្រតិបត្តិការប្រចាំថ្ងៃ ដឹកនាំក្រុម និងធានាឱ្យការងារបញ្ចប់ទាន់ពេល។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "EC",
+    "responsibilities": [
+      "Plan daily operations and staff schedules",
+      "Track performance and solve operational problems",
+      "Lead the team and report results"
+    ],
+    "required_skills": [
+      "Leadership",
+      "Planning",
+      "Problem solving"
+    ],
+    "work_environments": [
+      "Office",
+      "Operations sites",
+      "Team meetings"
+    ],
+    "career_progression": [
+      "Operations Officer",
+      "Operations Manager",
+      "Head of Operations"
+    ],
+    "related_majors": [
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "b49d733c-62dd-4b78-bb91-29c58b2880db",
+        "slug": "public-administration",
+        "name": {
+          "en": "Public Administration & Governance",
+          "km": "រដ្ឋបាលសាធារណៈ និងអភិបាលកិច្ច"
+        },
+        "category": "Law & Social Sciences"
+      },
+      {
+        "id": "1a17d086-4a5e-41f1-893c-a94a7bd6a563",
+        "slug": "supply-chain-logistics",
+        "name": {
+          "en": "Supply Chain Management & Logistics",
+          "km": "ការគ្រប់គ្រងខ្សែច្រវាក់ផ្គត់ផ្គង់ និងភស្តុភារកម្ម"
+        },
+        "category": "Business & Economics"
+      }
+    ]
+  },
+  {
+    "id": "2a2b9264-7028-4456-b432-0d05a7aff01f",
+    "slug": "procurement-officer",
+    "title": {
+      "en": "Procurement Officer",
+      "km": "បុគ្គលិកលទ្ធកម្ម"
+    },
+    "industry": "Procurement & Supply Chain",
+    "description": {
+      "en": "Buys materials and services, compares suppliers, and checks prices and quality.",
+      "km": "ទិញសម្ភារៈ និងសេវាកម្ម ប្រៀបធៀបអ្នកផ្គត់ផ្គង់ និងពិនិត្យតម្លៃ និងគុណភាព។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "CE",
+    "responsibilities": [
+      "Compare suppliers, prices, and quality",
+      "Prepare purchase orders and contracts",
+      "Track deliveries and supplier performance"
+    ],
+    "required_skills": [
+      "Negotiation",
+      "Supplier research",
+      "Attention to detail"
+    ],
+    "work_environments": [
+      "Office",
+      "Supplier meetings",
+      "Warehouse visits"
+    ],
+    "career_progression": [
+      "Procurement Assistant",
+      "Procurement Officer",
+      "Procurement Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "1a17d086-4a5e-41f1-893c-a94a7bd6a563",
+        "slug": "supply-chain-logistics",
+        "name": {
+          "en": "Supply Chain Management & Logistics",
+          "km": "ការគ្រប់គ្រងខ្សែច្រវាក់ផ្គត់ផ្គង់ និងភស្តុភារកម្ម"
+        },
+        "category": "Business & Economics"
+      }
+    ]
+  },
+  {
+    "id": "1ecd7a9e-87dd-4d03-ae0c-1d6490905211",
+    "slug": "pr-officer",
+    "title": {
+      "en": "Public Relations Officer",
+      "km": "បុគ្គលិកទំនាក់ទំនងសាធារណៈ"
+    },
+    "industry": "PR & Communications",
+    "description": {
+      "en": "Writes announcements, talks to media, and protects the organization's public image.",
+      "km": "សរសេរសេចក្តីជូនដំណឹង និយាយជាមួយប្រព័ន្ធផ្សព្វផ្សាយ និងការពាររូបភាពសាធារណៈរបស់អង្គការ។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "ESA",
+    "responsibilities": [
+      "Write announcements and public messages",
+      "Contact media and organize interviews",
+      "Prepare events and protect public image"
+    ],
+    "required_skills": [
+      "Writing",
+      "Communication",
+      "Media relations"
+    ],
+    "work_environments": [
+      "Office",
+      "Media events",
+      "Client meetings"
+    ],
+    "career_progression": [
+      "PR Assistant",
+      "PR Officer",
+      "PR Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "8623c508-8ad3-44e0-80ad-eb0003596bdf",
+        "slug": "english-translation-interpreting",
+        "name": {
+          "en": "English for Translation & Interpreting",
+          "km": "ភាសាអង់គ្លេសសម្រាប់បកប្រែផ្ទាល់មាត់និងឯកសារ"
+        },
+        "category": "Law & Social Sciences"
+      },
+      {
+        "id": "17149fb9-a4ba-4496-8040-ce4e24829d0e",
+        "slug": "marketing-digital-media",
+        "name": {
+          "en": "Marketing & Digital Media Strategy",
+          "km": "ទីផ្សារ និងយុទ្ធសាស្ត្រប្រព័ន្ធផ្សព្វផ្សាយឌីជីថល"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "a55da9ad-c6a8-4623-aa01-527d7971ec73",
+        "slug": "media-communications",
+        "name": {
+          "en": "Media, Journalism & Digital Communications",
+          "km": "ប្រព័ន្ធផ្សព្វផ្សាយ សារព័ត៌មាន និងទំនាក់ទំនង"
+        },
+        "category": "Law & Social Sciences"
+      }
+    ]
+  },
+  {
+    "id": "d5c54541-3f48-40cb-9314-36f5641f2557",
+    "slug": "quality-assurance-officer",
+    "title": {
+      "en": "Quality Assurance Officer",
+      "km": "បុគ្គលិកធានាគុណភាព"
+    },
+    "industry": "Quality Assurance",
+    "description": {
+      "en": "Checks products and processes, records problems, and helps teams meet quality standards.",
+      "km": "ពិនិត្យផលិតផល និងដំណើរការ កត់ត្រាបញ្ហា និងជួយក្រុមឱ្យសម្រេចស្តង់ដារគុណភាព។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "CI",
+    "responsibilities": [
+      "Check products and processes against standards",
+      "Record problems and follow up on fixes",
+      "Prepare quality reports and support audits"
+    ],
+    "required_skills": [
+      "Attention to detail",
+      "Testing",
+      "Record keeping"
+    ],
+    "work_environments": [
+      "Factory",
+      "Laboratory",
+      "Office"
+    ],
+    "career_progression": [
+      "QA Assistant",
+      "QA Officer",
+      "QA Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "4db4c24b-da17-43c2-be2a-3ae5d9866652",
+        "slug": "biology-biotechnology",
+        "name": {
+          "en": "Biology & Applied Biotechnology",
+          "km": "វិទ្យាសាស្ត្រជីវសាស្រ្ត និងបច្ចេកវិទ្យាជីវៈ"
+        },
+        "category": "Natural Sciences"
+      },
+      {
+        "id": "4e2a8b2f-02f5-4945-ad19-bcfd136dddf8",
+        "slug": "chemistry-chemical-analysis",
+        "name": {
+          "en": "Chemistry & Applied Chemical Analysis",
+          "km": "គីមីវិទ្យា និងការវិភាគគីមីអនុវត្ត"
+        },
+        "category": "Natural Sciences"
+      },
+      {
+        "id": "a907fcd2-5aa9-4790-9091-98257ba82aea",
+        "slug": "food-technology-engineering",
+        "name": {
+          "en": "Food Technology & Chemical Engineering",
+          "km": "បច្ចេកវិទ្យាអាហារ និងវិស្វកម្មគីមី"
+        },
+        "category": "Engineering"
+      }
+    ]
+  },
+  {
     "id": "e575611d-6c69-4c37-b2f5-3760827bb630",
     "slug": "registered-nurse",
     "title": {
@@ -673,6 +1588,198 @@
     ]
   },
   {
+    "id": "fad0c7d1-a8ce-4569-b7e7-8626d5c4ddf8",
+    "slug": "research-development-officer",
+    "title": {
+      "en": "Research & Development Officer",
+      "km": "បុគ្គលិកស្រាវជ្រាវ និងអភិវឌ្ឍន៍"
+    },
+    "industry": "Research & Development",
+    "description": {
+      "en": "Tests ideas, studies data, and helps create new products or improve existing ones.",
+      "km": "សាកល្បងគំនិត សិក្សាទិន្នន័យ និងជួយបង្កើតផលិតផលថ្មី ឬកែលម្អផលិតផលដែលមានស្រាប់។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "IC",
+    "responsibilities": [
+      "Test ideas and collect research data",
+      "Analyze results and prepare reports",
+      "Support new product or process development"
+    ],
+    "required_skills": [
+      "Research",
+      "Data analysis",
+      "Testing"
+    ],
+    "work_environments": [
+      "Laboratory",
+      "Office",
+      "Field research"
+    ],
+    "career_progression": [
+      "Research Assistant",
+      "R&D Officer",
+      "R&D Manager"
+    ],
+    "related_majors": [
+      {
+        "id": "4db4c24b-da17-43c2-be2a-3ae5d9866652",
+        "slug": "biology-biotechnology",
+        "name": {
+          "en": "Biology & Applied Biotechnology",
+          "km": "វិទ្យាសាស្ត្រជីវសាស្រ្ត និងបច្ចេកវិទ្យាជីវៈ"
+        },
+        "category": "Natural Sciences"
+      },
+      {
+        "id": "4e2a8b2f-02f5-4945-ad19-bcfd136dddf8",
+        "slug": "chemistry-chemical-analysis",
+        "name": {
+          "en": "Chemistry & Applied Chemical Analysis",
+          "km": "គីមីវិទ្យា និងការវិភាគគីមីអនុវត្ត"
+        },
+        "category": "Natural Sciences"
+      },
+      {
+        "id": "a907fcd2-5aa9-4790-9091-98257ba82aea",
+        "slug": "food-technology-engineering",
+        "name": {
+          "en": "Food Technology & Chemical Engineering",
+          "km": "បច្ចេកវិទ្យាអាហារ និងវិស្វកម្មគីមី"
+        },
+        "category": "Engineering"
+      }
+    ]
+  },
+  {
+    "id": "65f73aea-cdcd-4070-8ea1-17f4afa6384b",
+    "slug": "sales-executive",
+    "title": {
+      "en": "Sales Executive",
+      "km": "បុគ្គលិកលក់"
+    },
+    "industry": "Sales & Business Development",
+    "description": {
+      "en": "Talks with customers, explains products or services, and helps close sales.",
+      "km": "សម្ភាសជាមួយអតិថិជន ពន្យល់ផលិតផល ឬសេវាកម្ម និងជួយបិទការលក់។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "ESC",
+    "responsibilities": [
+      "Talk with customers and explain products or services",
+      "Follow up with leads and close sales",
+      "Record customer information and sales activity"
+    ],
+    "required_skills": [
+      "Communication",
+      "Customer service",
+      "Negotiation"
+    ],
+    "work_environments": [
+      "Office or field",
+      "Customer meetings",
+      "Retail or showroom"
+    ],
+    "career_progression": [
+      "Sales Trainee",
+      "Sales Executive",
+      "Sales Supervisor"
+    ],
+    "related_majors": [
+      {
+        "id": "4baf6723-1ecd-495a-8b5b-2166d18f18b2",
+        "slug": "business-administration",
+        "name": {
+          "en": "Business Administration & Management",
+          "km": "រដ្ឋបាលពាណិជ្ជកម្ម និងការគ្រប់គ្រងសហគ្រាស"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "17149fb9-a4ba-4496-8040-ce4e24829d0e",
+        "slug": "marketing-digital-media",
+        "name": {
+          "en": "Marketing & Digital Media Strategy",
+          "km": "ទីផ្សារ និងយុទ្ធសាស្ត្រប្រព័ន្ធផ្សព្វផ្សាយឌីជីថល"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "a55da9ad-c6a8-4623-aa01-527d7971ec73",
+        "slug": "media-communications",
+        "name": {
+          "en": "Media, Journalism & Digital Communications",
+          "km": "ប្រព័ន្ធផ្សព្វផ្សាយ សារព័ត៌មាន និងទំនាក់ទំនង"
+        },
+        "category": "Law & Social Sciences"
+      }
+    ]
+  },
+  {
+    "id": "71c26be1-4377-43a2-8279-74c9d6927d5f",
+    "slug": "social-media-specialist",
+    "title": {
+      "en": "Social Media Specialist",
+      "km": "អ្នកជំនាញបណ្តាញសង្គម"
+    },
+    "industry": "Marketing & Media",
+    "description": {
+      "en": "Creates posts, manages social pages, and studies what content works best.",
+      "km": "បង្កើតការបង្ហោះ គ្រប់គ្រងទំព័រសង្គម និងសិក្សាថាមាតិកាណាមានប្រសិទ្ធភាព។"
+    },
+    "education_level": "Bachelor's degree or portfolio",
+    "riasec_code": "AE",
+    "responsibilities": [
+      "Create posts and manage social media pages",
+      "Respond to comments and messages",
+      "Review engagement and improve content"
+    ],
+    "required_skills": [
+      "Content creation",
+      "Social media",
+      "Design basics"
+    ],
+    "work_environments": [
+      "Office or remote",
+      "Creative team",
+      "Online platforms"
+    ],
+    "career_progression": [
+      "Content Assistant",
+      "Social Media Specialist",
+      "Social Media Lead"
+    ],
+    "related_majors": [
+      {
+        "id": "916d800d-48fd-41f0-ae52-371abb75e1bd",
+        "slug": "graphic-design-multimedia",
+        "name": {
+          "en": "Graphic Design & Multimedia Arts",
+          "km": "រចនាក្រាហ្វិក និងសិល្បៈពហុព័ត៌មាន"
+        },
+        "category": "Architecture & Design"
+      },
+      {
+        "id": "17149fb9-a4ba-4496-8040-ce4e24829d0e",
+        "slug": "marketing-digital-media",
+        "name": {
+          "en": "Marketing & Digital Media Strategy",
+          "km": "ទីផ្សារ និងយុទ្ធសាស្ត្រប្រព័ន្ធផ្សព្វផ្សាយឌីជីថល"
+        },
+        "category": "Business & Economics"
+      },
+      {
+        "id": "a55da9ad-c6a8-4623-aa01-527d7971ec73",
+        "slug": "media-communications",
+        "name": {
+          "en": "Media, Journalism & Digital Communications",
+          "km": "ប្រព័ន្ធផ្សព្វផ្សាយ សារព័ត៌មាន និងទំនាក់ទំនង"
+        },
+        "category": "Law & Social Sciences"
+      }
+    ]
+  },
+  {
     "id": "973432bf-e7c8-4957-aad3-b626ecdc856b",
     "slug": "software-engineer",
     "title": {
@@ -722,6 +1829,61 @@
           "km": "វិស្វកម្មសូហ្វវែរ និងការអភិវឌ្ឍកម្មវិធី"
         },
         "category": "Information Technology"
+      }
+    ]
+  },
+  {
+    "id": "6055d229-65ee-4639-a61c-d6854a768ad6",
+    "slug": "translator",
+    "title": {
+      "en": "Translator",
+      "km": "អ្នកបកប្រែភាសា"
+    },
+    "industry": "Translation & Languages",
+    "description": {
+      "en": "Translates documents and conversations between Khmer and other languages.",
+      "km": "បកប្រែឯកសារ និងការសន្ទនារវាងភាសាខ្មែរ និងភាសាផ្សេងទៀត។"
+    },
+    "education_level": "Bachelor's degree",
+    "riasec_code": "ASC",
+    "responsibilities": [
+      "Translate documents between Khmer and other languages",
+      "Interpret conversations and meetings",
+      "Proofread translated text for accuracy"
+    ],
+    "required_skills": [
+      "Khmer",
+      "English",
+      "Writing"
+    ],
+    "work_environments": [
+      "Office or remote",
+      "Meetings and events",
+      "Publishing teams"
+    ],
+    "career_progression": [
+      "Junior Translator",
+      "Translator",
+      "Senior Translator / Editor"
+    ],
+    "related_majors": [
+      {
+        "id": "59aef490-d851-418d-b102-f1c2c44f21ba",
+        "slug": "english-teaching-tefl",
+        "name": {
+          "en": "English Literature & TEFL / Education",
+          "km": "អក្សរសាស្ត្រអង់គ្លេស និងគរុកោសល្យភាសាអង់គ្លេស"
+        },
+        "category": "Law & Social Sciences"
+      },
+      {
+        "id": "8623c508-8ad3-44e0-80ad-eb0003596bdf",
+        "slug": "english-translation-interpreting",
+        "name": {
+          "en": "English for Translation & Interpreting",
+          "km": "ភាសាអង់គ្លេសសម្រាប់បកប្រែផ្ទាល់មាត់និងឯកសារ"
+        },
+        "category": "Law & Social Sciences"
       }
     ]
   }

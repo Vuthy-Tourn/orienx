@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
 import { getStaticMajor, listStaticCareers } from "@/lib/data/catalog";
+import { getCareerIdea } from "@/lib/data/career-ideas";
 import { DirectoryControls } from "@/components/directory/directory-controls";
 import { DirectoryHeroStats } from "@/components/directory/directory-hero-stats";
 import {
@@ -21,6 +22,7 @@ import {
   Palette,
   Users,
   FlaskConical,
+  ExternalLink,
   WifiOff,
   RefreshCw,
 } from "lucide-react";
@@ -157,6 +159,101 @@ const SALARY_TIERS: Record<string, SalaryTier> = {
     ["accounting-auditing", "banking-finance", "business-administration"],
     ["Junior Accountant", "Accountant", "Finance Manager"]
   ),
+  "sales-executive": pendingCareer(
+    "people",
+    ["business-administration", "marketing-digital-media", "media-communications"],
+    ["Sales Trainee", "Sales Executive", "Sales Supervisor"]
+  ),
+  "business-development-manager": pendingCareer(
+    "people",
+    ["business-administration", "marketing-digital-media", "international-business"],
+    ["Business Development Executive", "Business Development Manager", "Head of Growth"]
+  ),
+  "marketing-executive": pendingCareer(
+    "people",
+    ["marketing-digital-media", "media-communications", "business-administration"],
+    ["Marketing Assistant", "Marketing Executive", "Marketing Manager"]
+  ),
+  "social-media-specialist": pendingCareer(
+    "design",
+    ["marketing-digital-media", "media-communications", "graphic-design-multimedia"],
+    ["Content Assistant", "Social Media Specialist", "Social Media Lead"]
+  ),
+  "human-resources-officer": pendingCareer(
+    "people",
+    ["human-resource-management", "business-administration", "psychology-counseling"],
+    ["HR Assistant", "HR Officer", "HR Manager"]
+  ),
+  "logistics-coordinator": pendingCareer(
+    "chart",
+    ["supply-chain-logistics", "e-commerce-logistics", "business-administration"],
+    ["Logistics Assistant", "Logistics Coordinator", "Logistics Manager"]
+  ),
+  "procurement-officer": pendingCareer(
+    "chart",
+    ["supply-chain-logistics", "business-administration"],
+    ["Procurement Assistant", "Procurement Officer", "Procurement Manager"]
+  ),
+  "customer-service-officer": pendingCareer(
+    "people",
+    ["business-administration", "hospitality-tourism-management", "media-communications"],
+    ["Customer Service Trainee", "Customer Service Officer", "Customer Service Supervisor"]
+  ),
+  "credit-loan-officer": pendingCareer(
+    "chart",
+    ["banking-finance", "business-administration", "accounting-auditing"],
+    ["Loan Assistant", "Credit / Loan Officer", "Branch Manager"]
+  ),
+  "legal-officer": pendingCareer(
+    "chart",
+    ["law-jurisprudence", "public-administration"],
+    ["Legal Assistant", "Legal Officer", "Legal Manager"]
+  ),
+  "hotel-supervisor": pendingCareer(
+    "people",
+    ["hospitality-tourism-management", "business-administration"],
+    ["Hotel Staff", "Hotel Supervisor", "Hotel Manager"]
+  ),
+  "translator": pendingCareer(
+    "education",
+    ["english-translation-interpreting", "english-teaching-tefl"],
+    ["Junior Translator", "Translator", "Senior Translator / Editor"]
+  ),
+  "pr-officer": pendingCareer(
+    "people",
+    ["media-communications", "marketing-digital-media", "english-translation-interpreting"],
+    ["PR Assistant", "PR Officer", "PR Manager"]
+  ),
+  "research-development-officer": pendingCareer(
+    "science",
+    ["biology-biotechnology", "chemistry-chemical-analysis", "food-technology-engineering"],
+    ["Research Assistant", "R&D Officer", "R&D Manager"]
+  ),
+  "administrative-assistant": pendingCareer(
+    "people",
+    ["business-administration", "public-administration", "accounting-auditing"],
+    ["Office Assistant", "Administrative Assistant", "Office Manager"]
+  ),
+  "operations-manager": pendingCareer(
+    "people",
+    ["business-administration", "supply-chain-logistics", "public-administration"],
+    ["Operations Officer", "Operations Manager", "Head of Operations"]
+  ),
+  "chef-fb-supervisor": pendingCareer(
+    "people",
+    ["culinary-arts", "hospitality-tourism-management"],
+    ["Kitchen Staff", "Chef / F&B Supervisor", "Head Chef / F&B Manager"]
+  ),
+  "electrician": pendingCareer(
+    "construction",
+    ["electrical-electronic-engineering", "mechatronics-robotics"],
+    ["Electrical Assistant", "Electrician", "Electrical Supervisor"]
+  ),
+  "quality-assurance-officer": pendingCareer(
+    "science",
+    ["food-technology-engineering", "chemistry-chemical-analysis", "biology-biotechnology"],
+    ["QA Assistant", "QA Officer", "QA Manager"]
+  ),
 };
 
 const INDUSTRY_KM: Record<string, string> = {
@@ -172,6 +269,22 @@ const INDUSTRY_KM: Record<string, string> = {
   Education: "ការអប់រំ",
   "Business & Marketing": "អាជីវកម្ម និងទីផ្សារ",
   "Finance & Business": "ហិរញ្ញវត្ថុ និងអាជីវកម្ម",
+  "Sales & Business Development": "ការលក់ និងអភិវឌ្ឍន៍អាជីវកម្ម",
+  "Marketing & Media": "ទីផ្សារ និងមេឌា",
+  "Human Resources": "ធនធានមនុស្ស",
+  "Logistics & Supply Chain": "ដឹកជញ្ជូន និងខ្សែចង្វាក់ផ្គត់ផ្គង់",
+  "Procurement & Supply Chain": "លទ្ធកម្ម និងខ្សែចង្វាក់ផ្គត់ផ្គង់",
+  "Customer Service": "សេវាអតិថិជន",
+  "Legal & Compliance": "ច្បាប់ និងការអនុលោម",
+  "Hospitality & Tourism": "បដិសណ្ឋារកិច្ច និងទេសចរណ៍",
+  "Translation & Languages": "ការបកប្រែ និងភាសា",
+  "PR & Communications": "ទំនាក់ទំនងសាធារណៈ និងទំនាក់ទំនង",
+  "Research & Development": "ការស្រាវជ្រាវ និងអភិវឌ្ឍន៍",
+  Administrative: "រដ្ឋបាល",
+  "Management & Operations": "ការគ្រប់គ្រង និងប្រតិបត្តិការ",
+  "Food & Beverage": "អាហារ និងភេសជ្ជៈ",
+  "Construction & Skilled Trades": "សំណង់ និងជាងជំនាញ",
+  "Quality Assurance": "ការធានាគុណភាព",
 };
 
 const SENIORITY_LABELS = {
@@ -473,6 +586,7 @@ export default function CareersPage() {
         ) : filteredCareers && filteredCareers.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 xl:gap-6">
             {filteredCareers.map((c: any) => {
+              const jobnet = getCareerIdea(c.slug);
               const meta = SALARY_TIERS[c.slug] || {
                 junior: "$350 – $700",
                 mid: "$750 – $1,300",
@@ -591,6 +705,19 @@ export default function CareersPage() {
                       {activeSalary}
                     </div>
                   </div>
+
+                  {jobnet?.jobnet_openings ? (
+                    <a
+                      href={jobnet.jobnet_url || jobnet.source_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mx-5 mt-3 inline-flex items-center gap-1.5 text-[11px] font-bold text-[#111965] hover:underline"
+                    >
+                      {jobnet.jobnet_openings}{" "}
+                      {language === "km" ? "ការងារនៅ JobNet" : "open roles on JobNet"}
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  ) : null}
 
                   {/* Path + degree links */}
                   <div className="mt-4 space-y-3 border-t border-[#E6E8F0] px-5 py-3.5">

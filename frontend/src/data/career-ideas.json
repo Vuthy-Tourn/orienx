@@ -421,5 +421,843 @@
     "source_name": "O*NET OnLine",
     "source_url": "https://www.onetonline.org/link/summary/13-2011.00",
     "industry_km": "ហិរញ្ញវត្ថុ និងអាជីវកម្ម"
+  },
+  {
+    "slug": "sales-executive",
+    "title": {
+      "en": "Sales Executive",
+      "km": "បុគ្គលិកលក់"
+    },
+    "industry": "Sales & Business Development",
+    "industry_km": "ការលក់ និងអភិវឌ្ឍន៍អាជីវកម្ម",
+    "riasec_codes": [
+      "E",
+      "S",
+      "C"
+    ],
+    "summary": {
+      "en": "Talks with customers, explains products or services, and helps close sales.",
+      "km": "សម្ភាសជាមួយអតិថិជន ពន្យល់ផលិតផល ឬសេវាកម្ម និងជួយបិទការលក់។"
+    },
+    "skills": [
+      {
+        "en": "Communication",
+        "km": "ការប្រាស្រ័យទាក់ទង"
+      },
+      {
+        "en": "Customer service",
+        "km": "សេវាអតិថិជន"
+      },
+      {
+        "en": "Negotiation",
+        "km": "ការចរចា"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "business-administration",
+      "marketing-digital-media",
+      "media-communications"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/sales-business-development/c-30",
+    "jobnet_openings": 811,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/sales-business-development/c-30"
+  },
+  {
+    "slug": "business-development-manager",
+    "title": {
+      "en": "Business Development Manager",
+      "km": "អ្នកគ្រប់គ្រងអភិវឌ្ឍន៍អាជីវកម្ម"
+    },
+    "industry": "Sales & Business Development",
+    "industry_km": "ការលក់ និងអភិវឌ្ឍន៍អាជីវកម្ម",
+    "riasec_codes": [
+      "E",
+      "S",
+      "C"
+    ],
+    "summary": {
+      "en": "Finds new business opportunities, builds partnerships, and helps the company grow.",
+      "km": "ស្វែងរកឱកាសអាជីវកម្មថ្មី កសាងដៃគូ និងជួយឱ្យក្រុមហ៊ុនរីកចម្រើន។"
+    },
+    "skills": [
+      {
+        "en": "Negotiation",
+        "km": "ការចរចា"
+      },
+      {
+        "en": "Market research",
+        "km": "ការស្រាវជ្រាវទីផ្សារ"
+      },
+      {
+        "en": "Relationship building",
+        "km": "ការកសាងទំនាក់ទំនង"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "business-administration",
+      "marketing-digital-media",
+      "international-business"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/sales-business-development/c-30",
+    "jobnet_openings": 811,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/sales-business-development/c-30"
+  },
+  {
+    "slug": "marketing-executive",
+    "title": {
+      "en": "Marketing Executive",
+      "km": "បុគ្គលិកទីផ្សារ"
+    },
+    "industry": "Marketing & Media",
+    "industry_km": "ទីផ្សារ និងមេឌា",
+    "riasec_codes": [
+      "E",
+      "A"
+    ],
+    "summary": {
+      "en": "Plans campaigns, creates promotions, and helps promote products or services.",
+      "km": "រៀបចំយុទ្ធនាការ បង្កើតការផ្សព្វផ្សាយ និងជួយផ្សព្វផ្សាយផលិតផល ឬសេវាកម្ម។"
+    },
+    "skills": [
+      {
+        "en": "Marketing",
+        "km": "ទីផ្សារ"
+      },
+      {
+        "en": "Communication",
+        "km": "ការប្រាស្រ័យទាក់ទង"
+      },
+      {
+        "en": "Content planning",
+        "km": "ការរៀបចំមាតិកា"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "marketing-digital-media",
+      "media-communications",
+      "business-administration"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/marketing-media-creative/c-22",
+    "jobnet_openings": 166,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/marketing-media-creative/c-22"
+  },
+  {
+    "slug": "social-media-specialist",
+    "title": {
+      "en": "Social Media Specialist",
+      "km": "អ្នកជំនាញបណ្តាញសង្គម"
+    },
+    "industry": "Marketing & Media",
+    "industry_km": "ទីផ្សារ និងមេឌា",
+    "riasec_codes": [
+      "A",
+      "E"
+    ],
+    "summary": {
+      "en": "Creates posts, manages social pages, and studies what content works best.",
+      "km": "បង្កើតការបង្ហោះ គ្រប់គ្រងទំព័រសង្គម និងសិក្សាថាមាតិកាណាមានប្រសិទ្ធភាព។"
+    },
+    "skills": [
+      {
+        "en": "Content creation",
+        "km": "ការបង្កើតមាតិកា"
+      },
+      {
+        "en": "Social media",
+        "km": "បណ្តាញសង្គម"
+      },
+      {
+        "en": "Design basics",
+        "km": "មូលដ្ឋានរចនា"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree or portfolio",
+      "km": "បរិញ្ញាបត្រ ឬស្នាដៃផ្ទាល់ខ្លួន"
+    },
+    "related_majors": [
+      "marketing-digital-media",
+      "media-communications",
+      "graphic-design-multimedia"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/marketing-media-creative/c-22",
+    "jobnet_openings": 166,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/marketing-media-creative/c-22"
+  },
+  {
+    "slug": "human-resources-officer",
+    "title": {
+      "en": "Human Resources Officer",
+      "km": "បុគ្គលិកធនធានមនុស្ស"
+    },
+    "industry": "Human Resources",
+    "industry_km": "ធនធានមនុស្ស",
+    "riasec_codes": [
+      "S",
+      "E",
+      "C"
+    ],
+    "summary": {
+      "en": "Helps hire and support employees, keeps records, and explains company rules.",
+      "km": "ជួយជ្រើសរើស និងគាំទ្របុគ្គលិក រក្សាកំណត់ត្រា និងពន្យល់ច្បាប់ក្រុមហ៊ុន។"
+    },
+    "skills": [
+      {
+        "en": "Communication",
+        "km": "ការប្រាស្រ័យទាក់ទង"
+      },
+      {
+        "en": "Organization",
+        "km": "ការរៀបចំ"
+      },
+      {
+        "en": "Recruitment",
+        "km": "ការជ្រើសរើសបុគ្គលិក"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "human-resource-management",
+      "business-administration",
+      "psychology-counseling"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/hr-training-and-recruitment/c-16",
+    "jobnet_openings": 78,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/hr-training-and-recruitment/c-16"
+  },
+  {
+    "slug": "logistics-coordinator",
+    "title": {
+      "en": "Logistics Coordinator",
+      "km": "អ្នកសម្របសម្រួលដឹកជញ្ជូន"
+    },
+    "industry": "Logistics & Supply Chain",
+    "industry_km": "ដឹកជញ្ជូន និងខ្សែចង្វាក់ផ្គត់ផ្គង់",
+    "riasec_codes": [
+      "C",
+      "E"
+    ],
+    "summary": {
+      "en": "Plans deliveries, tracks goods, and helps make sure orders arrive on time.",
+      "km": "រៀបចំការដឹកជញ្ជូន តាមដានទំនិញ និងជួយឱ្យការបញ្ជាទិញមកដល់ទាន់ពេល។"
+    },
+    "skills": [
+      {
+        "en": "Planning",
+        "km": "ការរៀបចំផែនការ"
+      },
+      {
+        "en": "Excel",
+        "km": "Excel"
+      },
+      {
+        "en": "Problem solving",
+        "km": "ការដោះស្រាយបញ្ហា"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "supply-chain-logistics",
+      "e-commerce-logistics",
+      "business-administration"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/logistics-warehousing-port/c-19",
+    "jobnet_openings": 73,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/logistics-warehousing-port/c-19"
+  },
+  {
+    "slug": "procurement-officer",
+    "title": {
+      "en": "Procurement Officer",
+      "km": "បុគ្គលិកលទ្ធកម្ម"
+    },
+    "industry": "Procurement & Supply Chain",
+    "industry_km": "លទ្ធកម្ម និងខ្សែចង្វាក់ផ្គត់ផ្គង់",
+    "riasec_codes": [
+      "C",
+      "E"
+    ],
+    "summary": {
+      "en": "Buys materials and services, compares suppliers, and checks prices and quality.",
+      "km": "ទិញសម្ភារៈ និងសេវាកម្ម ប្រៀបធៀបអ្នកផ្គត់ផ្គង់ និងពិនិត្យតម្លៃ និងគុណភាព។"
+    },
+    "skills": [
+      {
+        "en": "Negotiation",
+        "km": "ការចរចា"
+      },
+      {
+        "en": "Supplier research",
+        "km": "ការស្រាវជ្រាវអ្នកផ្គត់ផ្គង់"
+      },
+      {
+        "en": "Attention to detail",
+        "km": "ការយកចិត្តទុកដាក់លម្អិត"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "supply-chain-logistics",
+      "business-administration"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/procurement-supply-chain/c-38",
+    "jobnet_openings": 67,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/procurement-supply-chain/c-38"
+  },
+  {
+    "slug": "customer-service-officer",
+    "title": {
+      "en": "Customer Service Officer",
+      "km": "បុគ្គលិកសេវាអតិថិជន"
+    },
+    "industry": "Customer Service",
+    "industry_km": "សេវាអតិថិជន",
+    "riasec_codes": [
+      "S",
+      "C"
+    ],
+    "summary": {
+      "en": "Answers customer questions, solves problems, and keeps customers happy.",
+      "km": "ឆ្លើយសំណួរអតិថិជន ដោះស្រាយបញ្ហា និងធ្វើឱ្យអតិថិជនពេញចិត្ត។"
+    },
+    "skills": [
+      {
+        "en": "Communication",
+        "km": "ការប្រាស្រ័យទាក់ទង"
+      },
+      {
+        "en": "Patience",
+        "km": "ភាពអត់ធ្មត់"
+      },
+      {
+        "en": "Problem solving",
+        "km": "ការដោះស្រាយបញ្ហា"
+      }
+    ],
+    "education": {
+      "en": "High school diploma or bachelor's degree",
+      "km": "សញ្ញាបត្រមធ្យមសិក្សា ឬបរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "business-administration",
+      "hospitality-tourism-management",
+      "media-communications"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/customer-service-support/c-6",
+    "jobnet_openings": 66,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/customer-service-support/c-6"
+  },
+  {
+    "slug": "credit-loan-officer",
+    "title": {
+      "en": "Credit / Loan Officer",
+      "km": "បុគ្គលិកឥណទាន"
+    },
+    "industry": "Finance & Banking",
+    "industry_km": "ហិរញ្ញវត្ថុ និងធនាគារ",
+    "riasec_codes": [
+      "E",
+      "C",
+      "S"
+    ],
+    "summary": {
+      "en": "Talks with customers about loans, checks documents, and helps them apply.",
+      "km": "សម្ភាសអតិថិជនអំពីឥណទាន ពិនិត្យឯកសារ និងជួយពួកគេដាក់ពាក្យ។"
+    },
+    "skills": [
+      {
+        "en": "Sales",
+        "km": "ការលក់"
+      },
+      {
+        "en": "Customer service",
+        "km": "សេវាអតិថិជន"
+      },
+      {
+        "en": "Basic finance",
+        "km": "ហិរញ្ញវត្ថុមូលដ្ឋាន"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "banking-finance",
+      "business-administration",
+      "accounting-auditing"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/finance-accounting-audit/c-1",
+    "jobnet_openings": 231,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/finance-accounting-audit/c-1"
+  },
+  {
+    "slug": "legal-officer",
+    "title": {
+      "en": "Legal Officer",
+      "km": "បុគ្គលិកច្បាប់"
+    },
+    "industry": "Legal & Compliance",
+    "industry_km": "ច្បាប់ និងការអនុលោម",
+    "riasec_codes": [
+      "C",
+      "I"
+    ],
+    "summary": {
+      "en": "Reviews contracts, checks rules, and helps the company follow the law.",
+      "km": "ពិនិត្យកិច្ចសន្យា ត្រួតពិនិត្យច្បាប់ និងជួយក្រុមហ៊ុនអនុវត្តតាមច្បាប់។"
+    },
+    "skills": [
+      {
+        "en": "Legal research",
+        "km": "ការស្រាវជ្រាវច្បាប់"
+      },
+      {
+        "en": "Writing",
+        "km": "ការសរសេរ"
+      },
+      {
+        "en": "Attention to detail",
+        "km": "ការយកចិត្តទុកដាក់លម្អិត"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree in law",
+      "km": "បរិញ្ញាបត្រច្បាប់"
+    },
+    "related_majors": [
+      "law-jurisprudence",
+      "public-administration"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/legal-risk-and-compliance/c-18",
+    "jobnet_openings": 34,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/legal-risk-and-compliance/c-18"
+  },
+  {
+    "slug": "hotel-supervisor",
+    "title": {
+      "en": "Hotel Supervisor",
+      "km": "អ្នកត្រួតពិនិត្យសណ្ឋាគារ"
+    },
+    "industry": "Hospitality & Tourism",
+    "industry_km": "បដិសណ្ឋារកិច្ច និងទេសចរណ៍",
+    "riasec_codes": [
+      "E",
+      "S",
+      "C"
+    ],
+    "summary": {
+      "en": "Leads hotel staff, helps guests, and makes sure service runs smoothly.",
+      "km": "ដឹកនាំបុគ្គលិកសណ្ឋាគារ ជួយភ្ញៀវ និងធានាឱ្យសេវាដំណើរការរលូន។"
+    },
+    "skills": [
+      {
+        "en": "Leadership",
+        "km": "ការដឹកនាំ"
+      },
+      {
+        "en": "Customer service",
+        "km": "សេវាអតិថិជន"
+      },
+      {
+        "en": "Planning",
+        "km": "ការរៀបចំផែនការ"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree or hospitality training",
+      "km": "បរិញ្ញាបត្រ ឬការបណ្តុះបណ្តាលបដិសណ្ឋារកិច្ច"
+    },
+    "related_majors": [
+      "hospitality-tourism-management",
+      "business-administration"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/hospitality-hotel-tourism/c-15",
+    "jobnet_openings": 9,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/hospitality-hotel-tourism/c-15"
+  },
+  {
+    "slug": "translator",
+    "title": {
+      "en": "Translator",
+      "km": "អ្នកបកប្រែភាសា"
+    },
+    "industry": "Translation & Languages",
+    "industry_km": "ការបកប្រែ និងភាសា",
+    "riasec_codes": [
+      "A",
+      "S",
+      "C"
+    ],
+    "summary": {
+      "en": "Translates documents and conversations between Khmer and other languages.",
+      "km": "បកប្រែឯកសារ និងការសន្ទនារវាងភាសាខ្មែរ និងភាសាផ្សេងទៀត។"
+    },
+    "skills": [
+      {
+        "en": "Khmer",
+        "km": "ភាសាខ្មែរ"
+      },
+      {
+        "en": "English",
+        "km": "ភាសាអង់គ្លេស"
+      },
+      {
+        "en": "Writing",
+        "km": "ការសរសេរ"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "english-translation-interpreting",
+      "english-teaching-tefl"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/translation/c-34",
+    "jobnet_openings": 5,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/translation/c-34"
+  },
+  {
+    "slug": "pr-officer",
+    "title": {
+      "en": "Public Relations Officer",
+      "km": "បុគ្គលិកទំនាក់ទំនងសាធារណៈ"
+    },
+    "industry": "PR & Communications",
+    "industry_km": "ទំនាក់ទំនងសាធារណៈ និងទំនាក់ទំនង",
+    "riasec_codes": [
+      "E",
+      "S",
+      "A"
+    ],
+    "summary": {
+      "en": "Writes announcements, talks to media, and protects the organization's public image.",
+      "km": "សរសេរសេចក្តីជូនដំណឹង និយាយជាមួយប្រព័ន្ធផ្សព្វផ្សាយ និងការពាររូបភាពសាធារណៈរបស់អង្គការ។"
+    },
+    "skills": [
+      {
+        "en": "Writing",
+        "km": "ការសរសេរ"
+      },
+      {
+        "en": "Communication",
+        "km": "ការប្រាស្រ័យទាក់ទង"
+      },
+      {
+        "en": "Media relations",
+        "km": "ទំនាក់ទំនងប្រព័ន្ធផ្សព្វផ្សាយ"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "media-communications",
+      "marketing-digital-media",
+      "english-translation-interpreting"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/pr-communications/c-25",
+    "jobnet_openings": 7,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/pr-communications/c-25"
+  },
+  {
+    "slug": "research-development-officer",
+    "title": {
+      "en": "Research & Development Officer",
+      "km": "បុគ្គលិកស្រាវជ្រាវ និងអភិវឌ្ឍន៍"
+    },
+    "industry": "Research & Development",
+    "industry_km": "ការស្រាវជ្រាវ និងអភិវឌ្ឍន៍",
+    "riasec_codes": [
+      "I",
+      "C"
+    ],
+    "summary": {
+      "en": "Tests ideas, studies data, and helps create new products or improve existing ones.",
+      "km": "សាកល្បងគំនិត សិក្សាទិន្នន័យ និងជួយបង្កើតផលិតផលថ្មី ឬកែលម្អផលិតផលដែលមានស្រាប់។"
+    },
+    "skills": [
+      {
+        "en": "Research",
+        "km": "ការស្រាវជ្រាវ"
+      },
+      {
+        "en": "Data analysis",
+        "km": "ការវិភាគទិន្នន័យ"
+      },
+      {
+        "en": "Testing",
+        "km": "ការសាកល្បង"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "biology-biotechnology",
+      "chemistry-chemical-analysis",
+      "food-technology-engineering"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/research-and-development/c-27",
+    "jobnet_openings": 10,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/research-and-development/c-27"
+  },
+  {
+    "slug": "administrative-assistant",
+    "title": {
+      "en": "Administrative Assistant",
+      "km": "ជំនួយការរដ្ឋបាល"
+    },
+    "industry": "Administrative",
+    "industry_km": "រដ្ឋបាល",
+    "riasec_codes": [
+      "C",
+      "E"
+    ],
+    "summary": {
+      "en": "Organizes files, schedules meetings, and supports the office team with daily tasks.",
+      "km": "រៀបចំឯកសារ កំណត់ការប្រជុំ និងគាំទ្រក្រុមការងារការិយាល័យក្នុងការងារប្រចាំថ្ងៃ។"
+    },
+    "skills": [
+      {
+        "en": "Organization",
+        "km": "ការរៀបចំ"
+      },
+      {
+        "en": "Communication",
+        "km": "ការប្រាស្រ័យទាក់ទង"
+      },
+      {
+        "en": "Microsoft Office",
+        "km": "Microsoft Office"
+      }
+    ],
+    "education": {
+      "en": "High school diploma or bachelor's degree",
+      "km": "សញ្ញាបត្រមធ្យមសិក្សា ឬបរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "business-administration",
+      "public-administration",
+      "accounting-auditing"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/administrative/c-2",
+    "jobnet_openings": 56,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/administrative/c-2"
+  },
+  {
+    "slug": "operations-manager",
+    "title": {
+      "en": "Operations Manager",
+      "km": "អ្នកគ្រប់គ្រងប្រតិបត្តិការ"
+    },
+    "industry": "Management & Operations",
+    "industry_km": "ការគ្រប់គ្រង និងប្រតិបត្តិការ",
+    "riasec_codes": [
+      "E",
+      "C"
+    ],
+    "summary": {
+      "en": "Plans daily operations, leads a team, and makes sure work is completed on time.",
+      "km": "រៀបចំប្រតិបត្តិការប្រចាំថ្ងៃ ដឹកនាំក្រុម និងធានាឱ្យការងារបញ្ចប់ទាន់ពេល។"
+    },
+    "skills": [
+      {
+        "en": "Leadership",
+        "km": "ការដឹកនាំ"
+      },
+      {
+        "en": "Planning",
+        "km": "ការរៀបចំផែនការ"
+      },
+      {
+        "en": "Problem solving",
+        "km": "ការដោះស្រាយបញ្ហា"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "business-administration",
+      "supply-chain-logistics",
+      "public-administration"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/management/c-20",
+    "jobnet_openings": 46,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/management/c-20"
+  },
+  {
+    "slug": "chef-fb-supervisor",
+    "title": {
+      "en": "Chef / F&B Supervisor",
+      "km": "ចុងភៅ / អ្នកត្រួតពិនិត្យម្ហូប និងភេសជ្ជៈ"
+    },
+    "industry": "Food & Beverage",
+    "industry_km": "អាហារ និងភេសជ្ជៈ",
+    "riasec_codes": [
+      "R",
+      "A",
+      "E"
+    ],
+    "summary": {
+      "en": "Prepares food, leads the kitchen team, and keeps service clean, safe, and on time.",
+      "km": "រៀបចំអាហារ ដឹកនាំក្រុមផ្ទះបាយ និងធានាឱ្យសេវាមានអនាម័យ សុវត្ថិភាព និងទាន់ពេល។"
+    },
+    "skills": [
+      {
+        "en": "Cooking",
+        "km": "ការចម្អិនអាហារ"
+      },
+      {
+        "en": "Team leadership",
+        "km": "ការដឹកនាំក្រុម"
+      },
+      {
+        "en": "Food safety",
+        "km": "សុវត្ថិភាពអាហារ"
+      }
+    ],
+    "education": {
+      "en": "Culinary training or certificate",
+      "km": "ការបណ្តុះបណ្តាល ឬសញ្ញាបត្រផ្នែកចុងភៅ"
+    },
+    "related_majors": [
+      "culinary-arts",
+      "hospitality-tourism-management"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/food-and-beverage/c-13",
+    "jobnet_openings": 44,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/food-and-beverage/c-13"
+  },
+  {
+    "slug": "electrician",
+    "title": {
+      "en": "Electrician",
+      "km": "អ្នកជាងអគ្គិសនី"
+    },
+    "industry": "Construction & Skilled Trades",
+    "industry_km": "សំណង់ និងជាងជំនាញ",
+    "riasec_codes": [
+      "R",
+      "I"
+    ],
+    "summary": {
+      "en": "Installs, checks, and repairs electrical systems in homes, buildings, and factories.",
+      "km": "ដំឡើង ពិនិត្យ និងជួសជុលប្រព័ន្ធអគ្គិសនីក្នុងផ្ទះ អគារ និងរោងចក្រ។"
+    },
+    "skills": [
+      {
+        "en": "Electrical basics",
+        "km": "មូលដ្ឋានអគ្គិសនី"
+      },
+      {
+        "en": "Safety",
+        "km": "សុវត្ថិភាព"
+      },
+      {
+        "en": "Troubleshooting",
+        "km": "ការដោះស្រាយបញ្ហា"
+      }
+    ],
+    "education": {
+      "en": "Vocational certificate",
+      "km": "សញ្ញាបត្របច្ចេកទេស"
+    },
+    "related_majors": [
+      "electrical-electronic-engineering",
+      "mechatronics-robotics"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/construction-skilled-workers/c-32",
+    "jobnet_openings": 13,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/construction-skilled-workers/c-32"
+  },
+  {
+    "slug": "quality-assurance-officer",
+    "title": {
+      "en": "Quality Assurance Officer",
+      "km": "បុគ្គលិកធានាគុណភាព"
+    },
+    "industry": "Quality Assurance",
+    "industry_km": "ការធានាគុណភាព",
+    "riasec_codes": [
+      "C",
+      "I"
+    ],
+    "summary": {
+      "en": "Checks products and processes, records problems, and helps teams meet quality standards.",
+      "km": "ពិនិត្យផលិតផល និងដំណើរការ កត់ត្រាបញ្ហា និងជួយក្រុមឱ្យសម្រេចស្តង់ដារគុណភាព។"
+    },
+    "skills": [
+      {
+        "en": "Attention to detail",
+        "km": "ការយកចិត្តទុកដាក់លម្អិត"
+      },
+      {
+        "en": "Testing",
+        "km": "ការសាកល្បង"
+      },
+      {
+        "en": "Record keeping",
+        "km": "ការរក្សាកំណត់ត្រា"
+      }
+    ],
+    "education": {
+      "en": "Bachelor's degree",
+      "km": "បរិញ្ញាបត្រ"
+    },
+    "related_majors": [
+      "food-technology-engineering",
+      "chemistry-chemical-analysis",
+      "biology-biotechnology"
+    ],
+    "source_name": "JobNet Cambodia",
+    "source_url": "https://www.jobnet.com.kh/jobs/quality-assurance/c-26",
+    "jobnet_openings": 11,
+    "jobnet_url": "https://www.jobnet.com.kh/jobs/quality-assurance/c-26"
   }
 ]

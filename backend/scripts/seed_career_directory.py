@@ -72,6 +72,101 @@ TASKS: dict[str, list[str]] = {
         "Check numbers and follow tax rules",
         "Support audits and budget planning",
     ],
+    "sales-executive": [
+        "Talk with customers and explain products or services",
+        "Follow up with leads and close sales",
+        "Record customer information and sales activity",
+    ],
+    "business-development-manager": [
+        "Find new business opportunities and partners",
+        "Prepare proposals and negotiate agreements",
+        "Manage relationships with key clients",
+    ],
+    "marketing-executive": [
+        "Plan marketing campaigns and promotions",
+        "Create content and coordinate promotions",
+        "Track campaign results and report findings",
+    ],
+    "social-media-specialist": [
+        "Create posts and manage social media pages",
+        "Respond to comments and messages",
+        "Review engagement and improve content",
+    ],
+    "human-resources-officer": [
+        "Recruit and onboard new employees",
+        "Maintain employee records and attendance",
+        "Support staff with policies and questions",
+    ],
+    "logistics-coordinator": [
+        "Plan deliveries and track shipments",
+        "Coordinate with warehouses and drivers",
+        "Resolve delays and update customers",
+    ],
+    "procurement-officer": [
+        "Compare suppliers, prices, and quality",
+        "Prepare purchase orders and contracts",
+        "Track deliveries and supplier performance",
+    ],
+    "customer-service-officer": [
+        "Answer customer questions and complaints",
+        "Record cases and follow up until resolved",
+        "Explain products, services, and policies",
+    ],
+    "credit-loan-officer": [
+        "Meet customers and explain loan options",
+        "Check documents and assess applications",
+        "Follow up on repayments and customer needs",
+    ],
+    "legal-officer": [
+        "Review contracts and legal documents",
+        "Research laws and prepare advice",
+        "Help the organization follow regulations",
+    ],
+    "hotel-supervisor": [
+        "Lead front-office and service staff",
+        "Handle guest requests and complaints",
+        "Check service quality and daily operations",
+    ],
+    "translator": [
+        "Translate documents between Khmer and other languages",
+        "Interpret conversations and meetings",
+        "Proofread translated text for accuracy",
+    ],
+    "pr-officer": [
+        "Write announcements and public messages",
+        "Contact media and organize interviews",
+        "Prepare events and protect public image",
+    ],
+    "research-development-officer": [
+        "Test ideas and collect research data",
+        "Analyze results and prepare reports",
+        "Support new product or process development",
+    ],
+    "administrative-assistant": [
+        "Organize files, schedules, and office records",
+        "Prepare documents and support meetings",
+        "Help the team with daily administrative tasks",
+    ],
+    "operations-manager": [
+        "Plan daily operations and staff schedules",
+        "Track performance and solve operational problems",
+        "Lead the team and report results",
+    ],
+    "chef-fb-supervisor": [
+        "Prepare food and manage kitchen service",
+        "Lead kitchen staff and check food safety",
+        "Control stock, costs, and service quality",
+    ],
+    "electrician": [
+        "Install and repair electrical systems",
+        "Check wiring and follow safety rules",
+        "Find faults and test equipment",
+    ],
+    "quality-assurance-officer": [
+        "Check products and processes against standards",
+        "Record problems and follow up on fixes",
+        "Prepare quality reports and support audits",
+    ],
 }
 
 ENVIRONMENTS: dict[str, list[str]] = {
@@ -84,6 +179,25 @@ ENVIRONMENTS: dict[str, list[str]] = {
     "high-school-teacher": ["Classroom", "School campus", "Student meetings"],
     "marketing-manager": ["Office", "Agency", "Events and campaigns"],
     "accountant": ["Office", "Finance team", "Client meetings"],
+    "sales-executive": ["Office or field", "Customer meetings", "Retail or showroom"],
+    "business-development-manager": ["Office", "Client meetings", "Travel to partners"],
+    "marketing-executive": ["Office", "Agency", "Events and campaigns"],
+    "social-media-specialist": ["Office or remote", "Creative team", "Online platforms"],
+    "human-resources-officer": ["Office", "HR team", "Employee meetings"],
+    "logistics-coordinator": ["Office", "Warehouse", "Transport coordination"],
+    "procurement-officer": ["Office", "Supplier meetings", "Warehouse visits"],
+    "customer-service-officer": ["Office or call center", "Customer meetings", "Online support"],
+    "credit-loan-officer": ["Bank branch", "Customer visits", "Office"],
+    "legal-officer": ["Office", "Meeting rooms", "Court or public offices"],
+    "hotel-supervisor": ["Hotel", "Front desk", "Guest areas"],
+    "translator": ["Office or remote", "Meetings and events", "Publishing teams"],
+    "pr-officer": ["Office", "Media events", "Client meetings"],
+    "research-development-officer": ["Laboratory", "Office", "Field research"],
+    "administrative-assistant": ["Office", "Reception", "Meeting rooms"],
+    "operations-manager": ["Office", "Operations sites", "Team meetings"],
+    "chef-fb-supervisor": ["Restaurant kitchen", "Hotel kitchen", "Food service"],
+    "electrician": ["Construction sites", "Buildings", "Workshop"],
+    "quality-assurance-officer": ["Factory", "Laboratory", "Office"],
 }
 
 PROGRESSION: dict[str, list[str]] = {
@@ -96,6 +210,25 @@ PROGRESSION: dict[str, list[str]] = {
     "high-school-teacher": ["Assistant Teacher", "High School Teacher", "Head of Department"],
     "marketing-manager": ["Marketing Associate", "Marketing Manager", "Marketing Director"],
     "accountant": ["Junior Accountant", "Accountant", "Finance Manager"],
+    "sales-executive": ["Sales Trainee", "Sales Executive", "Sales Supervisor"],
+    "business-development-manager": ["Business Development Executive", "Business Development Manager", "Head of Growth"],
+    "marketing-executive": ["Marketing Assistant", "Marketing Executive", "Marketing Manager"],
+    "social-media-specialist": ["Content Assistant", "Social Media Specialist", "Social Media Lead"],
+    "human-resources-officer": ["HR Assistant", "HR Officer", "HR Manager"],
+    "logistics-coordinator": ["Logistics Assistant", "Logistics Coordinator", "Logistics Manager"],
+    "procurement-officer": ["Procurement Assistant", "Procurement Officer", "Procurement Manager"],
+    "customer-service-officer": ["Customer Service Trainee", "Customer Service Officer", "Customer Service Supervisor"],
+    "credit-loan-officer": ["Loan Assistant", "Credit / Loan Officer", "Branch Manager"],
+    "legal-officer": ["Legal Assistant", "Legal Officer", "Legal Manager"],
+    "hotel-supervisor": ["Hotel Staff", "Hotel Supervisor", "Hotel Manager"],
+    "translator": ["Junior Translator", "Translator", "Senior Translator / Editor"],
+    "pr-officer": ["PR Assistant", "PR Officer", "PR Manager"],
+    "research-development-officer": ["Research Assistant", "R&D Officer", "R&D Manager"],
+    "administrative-assistant": ["Office Assistant", "Administrative Assistant", "Office Manager"],
+    "operations-manager": ["Operations Officer", "Operations Manager", "Head of Operations"],
+    "chef-fb-supervisor": ["Kitchen Staff", "Chef / F&B Supervisor", "Head Chef / F&B Manager"],
+    "electrician": ["Electrical Assistant", "Electrician", "Electrical Supervisor"],
+    "quality-assurance-officer": ["QA Assistant", "QA Officer", "QA Manager"],
 }
 
 

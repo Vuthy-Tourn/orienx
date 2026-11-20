@@ -92,7 +92,7 @@ export default function GuestResultsPage() {
     [riasecResult]
   );
   const careerIdeas = useMemo(
-    () => getCareerIdeasForCodes(topInterestCodes, 4),
+    () => getCareerIdeasForCodes(topInterestCodes, 6),
     [topInterestCodes]
   );
 

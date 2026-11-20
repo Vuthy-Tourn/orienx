@@ -1930,6 +1930,24 @@
   },
   {
     "type": "career",
+    "id": "11902696-6b72-44df-a574-3be587d3e17e",
+    "slug": "administrative-assistant",
+    "title": {
+      "en": "Administrative Assistant",
+      "km": "ជំនួយការរដ្ឋបាល"
+    },
+    "subtitle": {
+      "en": "Administrative",
+      "km": "Administrative"
+    },
+    "keywords": [
+      "Administrative",
+      "CE"
+    ],
+    "href": "/careers/administrative-assistant"
+  },
+  {
+    "type": "career",
     "id": "30d643d2-4781-4c44-9101-0f06d70e96fc",
     "slug": "architect",
     "title": {
@@ -1948,6 +1966,42 @@
   },
   {
     "type": "career",
+    "id": "ad78f413-5c75-4249-8cb4-3a1f1692ee4c",
+    "slug": "business-development-manager",
+    "title": {
+      "en": "Business Development Manager",
+      "km": "អ្នកគ្រប់គ្រងអភិវឌ្ឍន៍អាជីវកម្ម"
+    },
+    "subtitle": {
+      "en": "Sales & Business Development",
+      "km": "Sales & Business Development"
+    },
+    "keywords": [
+      "Sales & Business Development",
+      "ESC"
+    ],
+    "href": "/careers/business-development-manager"
+  },
+  {
+    "type": "career",
+    "id": "22420572-f220-40ec-8018-e47063521971",
+    "slug": "chef-fb-supervisor",
+    "title": {
+      "en": "Chef / F&B Supervisor",
+      "km": "ចុងភៅ / អ្នកត្រួតពិនិត្យម្ហូប និងភេសជ្ជៈ"
+    },
+    "subtitle": {
+      "en": "Food & Beverage",
+      "km": "Food & Beverage"
+    },
+    "keywords": [
+      "Food & Beverage",
+      "RAE"
+    ],
+    "href": "/careers/chef-fb-supervisor"
+  },
+  {
+    "type": "career",
     "id": "ea79d47b-0711-4507-8bb8-822f56772c58",
     "slug": "civil-engineer",
     "title": {
@@ -1963,6 +2017,42 @@
       "RIC"
     ],
     "href": "/careers/civil-engineer"
+  },
+  {
+    "type": "career",
+    "id": "0afc2a6b-2f3e-4413-b320-c91c2eaa4296",
+    "slug": "credit-loan-officer",
+    "title": {
+      "en": "Credit / Loan Officer",
+      "km": "បុគ្គលិកឥណទាន"
+    },
+    "subtitle": {
+      "en": "Finance & Banking",
+      "km": "Finance & Banking"
+    },
+    "keywords": [
+      "Finance & Banking",
+      "ECS"
+    ],
+    "href": "/careers/credit-loan-officer"
+  },
+  {
+    "type": "career",
+    "id": "32b16fd3-50aa-4df3-8b5f-9f86a985c23e",
+    "slug": "customer-service-officer",
+    "title": {
+      "en": "Customer Service Officer",
+      "km": "បុគ្គលិកសេវាអតិថិជន"
+    },
+    "subtitle": {
+      "en": "Customer Service",
+      "km": "Customer Service"
+    },
+    "keywords": [
+      "Customer Service",
+      "SC"
+    ],
+    "href": "/careers/customer-service-officer"
   },
   {
     "type": "career",
@@ -1999,6 +2089,24 @@
       "IC"
     ],
     "href": "/careers/data-scientist"
+  },
+  {
+    "type": "career",
+    "id": "3359f96a-ce43-4f9d-9065-76cf87cfdc7c",
+    "slug": "electrician",
+    "title": {
+      "en": "Electrician",
+      "km": "អ្នកជាងអគ្គិសនី"
+    },
+    "subtitle": {
+      "en": "Construction & Skilled Trades",
+      "km": "Construction & Skilled Trades"
+    },
+    "keywords": [
+      "Construction & Skilled Trades",
+      "RI"
+    ],
+    "href": "/careers/electrician"
   },
   {
     "type": "career",
@@ -2056,6 +2164,96 @@
   },
   {
     "type": "career",
+    "id": "74b75dbb-37cb-4f25-9fcd-cfc2f1e8182f",
+    "slug": "hotel-supervisor",
+    "title": {
+      "en": "Hotel Supervisor",
+      "km": "អ្នកត្រួតពិនិត្យសណ្ឋាគារ"
+    },
+    "subtitle": {
+      "en": "Hospitality & Tourism",
+      "km": "Hospitality & Tourism"
+    },
+    "keywords": [
+      "Hospitality & Tourism",
+      "ESC"
+    ],
+    "href": "/careers/hotel-supervisor"
+  },
+  {
+    "type": "career",
+    "id": "3d8ce133-0b76-4678-a9ac-4c9c0cdc5a9f",
+    "slug": "human-resources-officer",
+    "title": {
+      "en": "Human Resources Officer",
+      "km": "បុគ្គលិកធនធានមនុស្ស"
+    },
+    "subtitle": {
+      "en": "Human Resources",
+      "km": "Human Resources"
+    },
+    "keywords": [
+      "Human Resources",
+      "SEC"
+    ],
+    "href": "/careers/human-resources-officer"
+  },
+  {
+    "type": "career",
+    "id": "65f5048e-726a-4ee2-8919-d8d5420c9279",
+    "slug": "legal-officer",
+    "title": {
+      "en": "Legal Officer",
+      "km": "បុគ្គលិកច្បាប់"
+    },
+    "subtitle": {
+      "en": "Legal & Compliance",
+      "km": "Legal & Compliance"
+    },
+    "keywords": [
+      "Legal & Compliance",
+      "CI"
+    ],
+    "href": "/careers/legal-officer"
+  },
+  {
+    "type": "career",
+    "id": "4d74cc45-17d7-4202-b257-cc2ff7d13002",
+    "slug": "logistics-coordinator",
+    "title": {
+      "en": "Logistics Coordinator",
+      "km": "អ្នកសម្របសម្រួលដឹកជញ្ជូន"
+    },
+    "subtitle": {
+      "en": "Logistics & Supply Chain",
+      "km": "Logistics & Supply Chain"
+    },
+    "keywords": [
+      "Logistics & Supply Chain",
+      "CE"
+    ],
+    "href": "/careers/logistics-coordinator"
+  },
+  {
+    "type": "career",
+    "id": "8d75d139-4fd3-4c5c-9f06-b1418f789f34",
+    "slug": "marketing-executive",
+    "title": {
+      "en": "Marketing Executive",
+      "km": "បុគ្គលិកទីផ្សារ"
+    },
+    "subtitle": {
+      "en": "Marketing & Media",
+      "km": "Marketing & Media"
+    },
+    "keywords": [
+      "Marketing & Media",
+      "EA"
+    ],
+    "href": "/careers/marketing-executive"
+  },
+  {
+    "type": "career",
     "id": "6ff59ff8-51b9-47b4-b448-aef2d1b1c742",
     "slug": "marketing-manager",
     "title": {
@@ -2092,6 +2290,78 @@
   },
   {
     "type": "career",
+    "id": "9529d66d-bc71-4adb-94bf-8de60c9a50d5",
+    "slug": "operations-manager",
+    "title": {
+      "en": "Operations Manager",
+      "km": "អ្នកគ្រប់គ្រងប្រតិបត្តិការ"
+    },
+    "subtitle": {
+      "en": "Management & Operations",
+      "km": "Management & Operations"
+    },
+    "keywords": [
+      "Management & Operations",
+      "EC"
+    ],
+    "href": "/careers/operations-manager"
+  },
+  {
+    "type": "career",
+    "id": "2a2b9264-7028-4456-b432-0d05a7aff01f",
+    "slug": "procurement-officer",
+    "title": {
+      "en": "Procurement Officer",
+      "km": "បុគ្គលិកលទ្ធកម្ម"
+    },
+    "subtitle": {
+      "en": "Procurement & Supply Chain",
+      "km": "Procurement & Supply Chain"
+    },
+    "keywords": [
+      "Procurement & Supply Chain",
+      "CE"
+    ],
+    "href": "/careers/procurement-officer"
+  },
+  {
+    "type": "career",
+    "id": "1ecd7a9e-87dd-4d03-ae0c-1d6490905211",
+    "slug": "pr-officer",
+    "title": {
+      "en": "Public Relations Officer",
+      "km": "បុគ្គលិកទំនាក់ទំនងសាធារណៈ"
+    },
+    "subtitle": {
+      "en": "PR & Communications",
+      "km": "PR & Communications"
+    },
+    "keywords": [
+      "PR & Communications",
+      "ESA"
+    ],
+    "href": "/careers/pr-officer"
+  },
+  {
+    "type": "career",
+    "id": "d5c54541-3f48-40cb-9314-36f5641f2557",
+    "slug": "quality-assurance-officer",
+    "title": {
+      "en": "Quality Assurance Officer",
+      "km": "បុគ្គលិកធានាគុណភាព"
+    },
+    "subtitle": {
+      "en": "Quality Assurance",
+      "km": "Quality Assurance"
+    },
+    "keywords": [
+      "Quality Assurance",
+      "CI"
+    ],
+    "href": "/careers/quality-assurance-officer"
+  },
+  {
+    "type": "career",
     "id": "e575611d-6c69-4c37-b2f5-3760827bb630",
     "slug": "registered-nurse",
     "title": {
@@ -2110,6 +2380,60 @@
   },
   {
     "type": "career",
+    "id": "fad0c7d1-a8ce-4569-b7e7-8626d5c4ddf8",
+    "slug": "research-development-officer",
+    "title": {
+      "en": "Research & Development Officer",
+      "km": "បុគ្គលិកស្រាវជ្រាវ និងអភិវឌ្ឍន៍"
+    },
+    "subtitle": {
+      "en": "Research & Development",
+      "km": "Research & Development"
+    },
+    "keywords": [
+      "Research & Development",
+      "IC"
+    ],
+    "href": "/careers/research-development-officer"
+  },
+  {
+    "type": "career",
+    "id": "65f73aea-cdcd-4070-8ea1-17f4afa6384b",
+    "slug": "sales-executive",
+    "title": {
+      "en": "Sales Executive",
+      "km": "បុគ្គលិកលក់"
+    },
+    "subtitle": {
+      "en": "Sales & Business Development",
+      "km": "Sales & Business Development"
+    },
+    "keywords": [
+      "Sales & Business Development",
+      "ESC"
+    ],
+    "href": "/careers/sales-executive"
+  },
+  {
+    "type": "career",
+    "id": "71c26be1-4377-43a2-8279-74c9d6927d5f",
+    "slug": "social-media-specialist",
+    "title": {
+      "en": "Social Media Specialist",
+      "km": "អ្នកជំនាញបណ្តាញសង្គម"
+    },
+    "subtitle": {
+      "en": "Marketing & Media",
+      "km": "Marketing & Media"
+    },
+    "keywords": [
+      "Marketing & Media",
+      "AE"
+    ],
+    "href": "/careers/social-media-specialist"
+  },
+  {
+    "type": "career",
     "id": "973432bf-e7c8-4957-aad3-b626ecdc856b",
     "slug": "software-engineer",
     "title": {
@@ -2125,6 +2449,24 @@
       "IRE"
     ],
     "href": "/careers/software-engineer"
+  },
+  {
+    "type": "career",
+    "id": "6055d229-65ee-4639-a61c-d6854a768ad6",
+    "slug": "translator",
+    "title": {
+      "en": "Translator",
+      "km": "អ្នកបកប្រែភាសា"
+    },
+    "subtitle": {
+      "en": "Translation & Languages",
+      "km": "Translation & Languages"
+    },
+    "keywords": [
+      "Translation & Languages",
+      "ASC"
+    ],
+    "href": "/careers/translator"
   },
   {
     "type": "scholarship",
