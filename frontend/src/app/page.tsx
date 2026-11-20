@@ -82,6 +82,9 @@ export default function HomePage() {
 
   useEffect(() => {
     setMounted(true);
+    if (typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
@@ -134,6 +137,27 @@ export default function HomePage() {
           },
         }
       );
+
+      // Gentle section reveals for the rest of the home page.
+      gsap.utils.toArray<HTMLElement>(".home-reveal").forEach((section) => {
+        gsap.fromTo(
+          section,
+          { opacity: 0, y: 34 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 88%",
+              toggleActions: "play none none none",
+              once: true,
+            },
+            onComplete: () => gsap.set(section, { clearProps: "opacity,transform" }),
+          }
+        );
+      });
     });
 
     return () => ctx.revert();
@@ -220,7 +244,9 @@ export default function HomePage() {
       {/* =====================================================================
           3. FEATURED MAJORS PREVIEW (VIBRANT 3D STAGGERED SHOWCASE)
           ===================================================================== */}
-      <FeaturedMajorsGrid />
+      <div className="home-reveal">
+        <FeaturedMajorsGrid />
+      </div>
 
       {/* =====================================================================
           4. CAMBODIAN UNIVERSITIES (VERIFIED PRICING - FULL WIDTH 3D CIRCULAR GALLERY)
@@ -639,22 +665,30 @@ export default function HomePage() {
       {/* =====================================================================
           5. SCHOLARSHIPS ANNOUNCEMENT & FINANCIAL AID SHOWCASE
           ===================================================================== */}
-      <ScholarshipsShowcase />
+      <div className="home-reveal">
+        <ScholarshipsShowcase />
+      </div>
 
       {/* =====================================================================
           6. TESTIMONIALS (AUTO-CHANGING ELEVATED 3-STAGE CAROUSEL)
           ===================================================================== */}
-      <TestimonialsCarousel />
+      <div className="home-reveal">
+        <TestimonialsCarousel />
+      </div>
 
       {/* =====================================================================
           7. FAQ ACCORDION (ANIMATED AUTO-ADVANCE & COLLAPSIBLE ACCORDION)
           ===================================================================== */}
-      <FaqSection />
+      <div className="home-reveal">
+        <FaqSection />
+      </div>
 
       {/* =====================================================================
           8. CALL TO ACTION BANNER (REDESIGNED WITH TARA MASCOT)
           ===================================================================== */}
-      <CtaBanner />
+      <div className="home-reveal">
+        <CtaBanner />
+      </div>
     </div>
   );
 }
