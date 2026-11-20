@@ -328,7 +328,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
         typeof window !== "undefined"
           ? personality
             ? `${window.location.origin}/images/personality-types/${personality.type.toLowerCase()}.svg`
-            : `${window.location.origin}/images/tara-jump-action.webp`
+            : `${window.location.origin}/images/tara-result-jump.webp`
           : undefined,
       dimensions,
       highlights,
