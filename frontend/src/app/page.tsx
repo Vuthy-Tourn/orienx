@@ -142,15 +142,15 @@ export default function HomePage() {
       gsap.utils.toArray<HTMLElement>(".home-reveal").forEach((section) => {
         gsap.fromTo(
           section,
-          { opacity: 0, y: 34 },
+          { opacity: 0, y: 48 },
           {
             opacity: 1,
             y: 0,
-            duration: 0.9,
-            ease: "power3.out",
+            duration: 1.35,
+            ease: "power2.out",
             scrollTrigger: {
               trigger: section,
-              start: "top 88%",
+              start: "top 82%",
               toggleActions: "play none none none",
               once: true,
             },
