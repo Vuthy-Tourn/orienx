@@ -14,7 +14,6 @@ import {
   Compass,
   Copy,
   Download,
-  ExternalLink,
   GraduationCap,
   Lightbulb,
   Link2,
@@ -915,8 +914,8 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                 km: "អាជីពដែលសាកសមសម្រាប់អ្នក",
               })}
               subtitle={getLocalized({
-                en: "Real job profiles that match your top interests. Use them to explore, not as a fixed path.",
-                km: "មុខរបរពិតប្រាកដដែលត្រូវនឹងចំណាប់អារម្មណ៍កំពូលរបស់អ្នក។ ប្រើពួកវាដើម្បីស្វែងយល់ មិនមែនជាផ្លូវកំណត់តែមួយទេ។",
+                en: "Real career profiles that match your top interests. Use them to explore, not as a fixed path.",
+                km: "ទម្រង់អាជីពពិតប្រាកដដែលត្រូវនឹងចំណាប់អារម្មណ៍កំពូលរបស់អ្នក។ ប្រើពួកវាដើម្បីស្វែងយល់ មិនមែនជាផ្លូវកំណត់តែមួយទេ។",
               })}
             />
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -978,23 +977,16 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                     <span className="font-semibold text-[#68708A]">
                       {getLocalized(career.education)}
                     </span>
-                    <a
-                      href={career.source_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      href={`/careers/${career.slug}`}
                       className="inline-flex items-center gap-1 font-bold text-[#111965] hover:underline"
                     >
-                      {career.jobnet_openings
-                        ? `${career.jobnet_openings} ${getLocalized({
-                            en: "jobs on JobNet",
-                            km: "ការងារនៅ JobNet",
-                          })}`
-                        : `${getLocalized({
-                            en: "Source",
-                            km: "ប្រភព",
-                          })}: ${career.source_name}`}
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
+                      {getLocalized({
+                        en: "View career",
+                        km: "មើលអាជីព",
+                      })}
+                      <ArrowRight className="h-3 w-3" />
+                    </Link>
                   </div>
                 </article>
               ))}
@@ -1009,8 +1001,8 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                 km: "គំនិតអាជីព",
               })}
               subtitle={getLocalized({
-                en: "Take the career interest test to see real job profiles that match your interests.",
-                km: "ធ្វើតេស្តចំណាប់អារម្មណ៍អាជីព ដើម្បីមើលមុខរបរពិតប្រាកដដែលត្រូវនឹងចំណាប់អារម្មណ៍របស់អ្នក។",
+                en: "Take the career interest test to see career profiles that match your interests.",
+                km: "ធ្វើតេស្តចំណាប់អារម្មណ៍អាជីព ដើម្បីមើលទម្រង់អាជីពដែលត្រូវនឹងចំណាប់អារម្មណ៍របស់អ្នក។",
               })}
             />
             <div className="mt-4 flex flex-wrap gap-2">

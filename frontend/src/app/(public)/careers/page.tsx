@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
 import { getStaticMajor, listStaticCareers } from "@/lib/data/catalog";
-import { getCareerIdea } from "@/lib/data/career-ideas";
 import { DirectoryControls } from "@/components/directory/directory-controls";
 import { DirectoryHeroStats } from "@/components/directory/directory-hero-stats";
 import {
@@ -22,7 +21,6 @@ import {
   Palette,
   Users,
   FlaskConical,
-  ExternalLink,
   WifiOff,
   RefreshCw,
   X,
@@ -67,8 +65,8 @@ function pendingCareer(
     junior: "—",
     mid: "—",
     senior: "—",
-    growthRate: "New listing",
-    growthRateKm: "បញ្ជីថ្មី",
+    growthRate: "",
+    growthRateKm: "",
     iconName,
     recommendedMajors: majorSlugs.map(majorLink),
     milestones,
@@ -632,7 +630,6 @@ export default function CareersPage() {
         ) : filteredCareers && filteredCareers.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 xl:gap-6">
             {filteredCareers.map((c) => {
-              const jobnet = getCareerIdea(c.slug);
               const meta = SALARY_TIERS[c.slug] || {
                 junior: "$350 – $700",
                 mid: "$750 – $1,300",
@@ -684,16 +681,18 @@ export default function CareersPage() {
                     </div>
 
                     <div className="flex shrink-0 items-center gap-2">
-                      <span
-                        className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700"
-                        title={language === "km" ? meta.growthRateKm : meta.growthRate}
-                      >
-                        <TrendingUp className="h-3.5 w-3.5" />
-                        <span className="sm:hidden">
-                          {meta.growthRate.split(" ")[0]}
+                      {meta.growthRate ? (
+                        <span
+                          className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700"
+                          title={language === "km" ? meta.growthRateKm : meta.growthRate}
+                        >
+                          <TrendingUp className="h-3.5 w-3.5" />
+                          <span className="sm:hidden">
+                            {meta.growthRate.split(" ")[0]}
+                          </span>
+                          <span className="hidden sm:inline">{growthShort}</span>
                         </span>
-                        <span className="hidden sm:inline">{growthShort}</span>
-                      </span>
+                      ) : null}
                       <BookmarkButton entityType="career" entityId={c.id} />
                     </div>
                   </div>
@@ -751,19 +750,6 @@ export default function CareersPage() {
                       {activeSalary}
                     </div>
                   </div>
-
-                  {jobnet?.jobnet_openings ? (
-                    <a
-                      href={jobnet.jobnet_url || jobnet.source_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mx-5 mt-3 inline-flex items-center gap-1.5 text-[11px] font-bold text-[#111965] hover:underline"
-                    >
-                      {jobnet.jobnet_openings}{" "}
-                      {language === "km" ? "ការងារនៅ JobNet" : "open roles on JobNet"}
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
-                  ) : null}
 
                   {/* Path + degree links */}
                   <div className="mt-4 space-y-3 border-t border-[#E6E8F0] px-5 py-3.5">
@@ -841,7 +827,7 @@ export default function CareersPage() {
             </h3>
             <p className="text-xs text-[#68708A] max-w-md mx-auto">
               {language === "km"
-                ? "សូមជ្រើសរើស “គ្រប់វិស័យ” ឬសម្អាតពាក្យស្វែងរក ដើម្បីមើលឱកាសការងារទាំងអស់នៅកម្ពុជា។"
+                ? "សូមជ្រើសរើស “គ្រប់វិស័យ” ឬសម្អាតពាក្យស្វែងរក ដើម្បីមើលអាជីពទាំងអស់នៅកម្ពុជា។"
                 : "Try choosing \"All Industries\" or clearing your search term to see the complete list of career opportunities in Cambodia."}
             </p>
             <button

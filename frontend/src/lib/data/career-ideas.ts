@@ -12,8 +12,6 @@ export interface CareerIdea {
   related_majors: string[];
   source_name: string;
   source_url: string;
-  jobnet_openings?: number;
-  jobnet_url?: string;
 }
 
 export const CAREER_IDEAS = raw as CareerIdea[];

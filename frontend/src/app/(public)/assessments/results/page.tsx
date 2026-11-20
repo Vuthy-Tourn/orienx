@@ -377,14 +377,14 @@ export default function GuestResultsPage() {
                     </div>
                     <h2 className="mt-2 text-base font-black text-[#111965] sm:text-lg">
                       {getLocalized({
-                        en: "Jobs that match your interests",
-                        km: "មុខរបរដែលត្រូវនឹងចំណាប់អារម្មណ៍របស់អ្នក",
+                        en: "Careers that match your interests",
+                        km: "អាជីពដែលត្រូវនឹងចំណាប់អារម្មណ៍របស់អ្នក",
                       })}
                     </h2>
                     <p className="mt-1 text-sm leading-relaxed text-[#68708A]">
                       {getLocalized({
-                        en: "These are real job profiles. Open one to see the skills and related majors.",
-                        km: "ទាំងនេះជាមុខរបរពិតប្រាកដ។ បើកមួយដើម្បីមើលជំនាញ និងជំនាញសិក្សាពាក់ព័ន្ធ។",
+                        en: "These are career profiles. Open one to see the skills and related majors.",
+                        km: "ទាំងនេះជាទម្រង់អាជីព។ បើកមួយដើម្បីមើលជំនាញ និងជំនាញសិក្សាពាក់ព័ន្ធ។",
                       })}
                     </p>
                   </div>
