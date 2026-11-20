@@ -18,6 +18,8 @@ export interface DirectorySelectConfig {
   options: readonly SelectOption<string>[];
   label: string;
   className?: string;
+  /** Show a search field in the menu. Use for long option lists. */
+  searchable?: boolean;
 }
 
 interface DirectoryControlsProps {
@@ -25,9 +27,10 @@ interface DirectoryControlsProps {
   onSearchChange: (value: string) => void;
   searchPlaceholder: string;
   clearSearchLabel: string;
-  chips: readonly DirectoryChip[];
-  activeChip: string;
-  onChipChange: (value: string) => void;
+  /** Optional quick-filter chips. Omit for directories whose facet list is long; use a select instead. */
+  chips?: readonly DirectoryChip[];
+  activeChip?: string;
+  onChipChange?: (value: string) => void;
   selects?: readonly DirectorySelectConfig[];
   sort?: {
     value: string;
@@ -51,15 +54,16 @@ interface DirectoryControlsProps {
  * One sticky control surface for every directory page.
  *
  * Row 1: search + optional toggles/selects/sort/view.
- * Row 2: one segmented chip group for the page's primary facet.
+ * Row 2: an optional segmented chip group for the page's primary facet.
+ * Pages with many facet values (like careers) use a searchable select instead.
  */
 export function DirectoryControls({
   search,
   onSearchChange,
   searchPlaceholder,
   clearSearchLabel,
-  chips,
-  activeChip,
+  chips = [],
+  activeChip = "",
   onChipChange,
   selects = [],
   sort,
@@ -106,6 +110,7 @@ export function DirectoryControls({
                 options={select.options}
                 label={select.label}
                 align="start"
+                searchable={select.searchable}
                 className={cn(
                   "w-[150px] flex-1 shrink-0 sm:w-[172px] sm:flex-none",
                   select.className
@@ -156,48 +161,50 @@ export function DirectoryControls({
           </div>
         </div>
 
-        <div className="-mx-4 flex items-center gap-2 overflow-x-auto px-4 pb-3 sm:mx-0 sm:flex-wrap sm:px-0">
-          {chips.map((chip) => {
-            const isActive = activeChip === chip.value;
-            return (
-              <button
-                key={chip.value || "all"}
-                type="button"
-                onClick={() => onChipChange(chip.value)}
-                aria-pressed={isActive}
-                className={cn(
-                  "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg px-3 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30",
-                  isActive
-                    ? "bg-[#111965] text-white"
-                    : "bg-[#F5F6FA] text-[#5A6482] hover:bg-[#ECEFF7] hover:text-[#171A2C]"
-                )}
-              >
-                <span>{chip.label}</span>
-                {chip.count != null && (
-                  <span
-                    className={cn(
-                      "tabular-nums",
-                      isActive ? "text-white/60" : "text-[#68708A]"
-                    )}
-                  >
-                    {chip.count}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+        {(chips.length > 0 || (hasActiveFilters && onReset)) && (
+          <div className="-mx-4 flex items-center gap-2 overflow-x-auto px-4 pb-3 sm:mx-0 sm:flex-wrap sm:px-0">
+            {chips.map((chip) => {
+              const isActive = activeChip === chip.value;
+              return (
+                <button
+                  key={chip.value || "all"}
+                  type="button"
+                  onClick={() => onChipChange?.(chip.value)}
+                  aria-pressed={isActive}
+                  className={cn(
+                    "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-lg px-3 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30",
+                    isActive
+                      ? "bg-[#111965] text-white"
+                      : "bg-[#F5F6FA] text-[#5A6482] hover:bg-[#ECEFF7] hover:text-[#171A2C]"
+                  )}
+                >
+                  <span>{chip.label}</span>
+                  {chip.count != null && (
+                    <span
+                      className={cn(
+                        "tabular-nums",
+                        isActive ? "text-white/60" : "text-[#68708A]"
+                      )}
+                    >
+                      {chip.count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
 
-          {hasActiveFilters && onReset && (
-            <button
-              type="button"
-              onClick={onReset}
-              className="inline-flex h-8 shrink-0 items-center gap-1 rounded-lg px-2.5 text-xs font-bold text-rose-600 transition-colors hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300"
-            >
-              <X className="h-3.5 w-3.5" />
-              <span>{resetLabel}</span>
-            </button>
-          )}
-        </div>
+            {hasActiveFilters && onReset && (
+              <button
+                type="button"
+                onClick={onReset}
+                className="inline-flex h-8 shrink-0 items-center gap-1 rounded-lg px-2.5 text-xs font-bold text-rose-600 transition-colors hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300"
+              >
+                <X className="h-3.5 w-3.5" />
+                <span>{resetLabel}</span>
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

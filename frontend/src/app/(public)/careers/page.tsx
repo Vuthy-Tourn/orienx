@@ -25,6 +25,7 @@ import {
   ExternalLink,
   WifiOff,
   RefreshCw,
+  X,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
@@ -314,6 +315,36 @@ export default function CareersPage() {
   const [seniorityLevel, setSeniorityLevel] = useState<"junior" | "mid" | "senior">("junior");
   const [selectedRiasec, setSelectedRiasec] = useState<string | null>(null);
 
+  const industryOptions = useMemo(() => {
+    const allCareers = listStaticCareers();
+    const counts = new Map<string, number>();
+    for (const career of allCareers) {
+      counts.set(career.industry, (counts.get(career.industry) ?? 0) + 1);
+    }
+    const industries = Array.from(counts.entries())
+      .map(([industry, count]) => ({
+        value: industry,
+        label: language === "km" ? INDUSTRY_KM[industry] || industry : industry,
+        description:
+          language === "km"
+            ? `${count} អាជីព`
+            : `${count} ${count === 1 ? "career" : "careers"}`,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label, language));
+
+    return [
+      {
+        value: "",
+        label: t("careersDirectory.allIndustries"),
+        description:
+          language === "km"
+            ? `${allCareers.length} អាជីព`
+            : `Show all ${allCareers.length} careers`,
+      },
+      ...industries,
+    ];
+  }, [language, t]);
+
   const careers = listStaticCareers({
     search: searchTerm,
     industry: industryFilter || undefined,
@@ -366,7 +397,7 @@ export default function CareersPage() {
   };
 
   const statsSource = careers || [];
-  const industryCount = new Set(statsSource.map((c: any) => c.industry)).size;
+  const industryCount = new Set(statsSource.map((c) => c.industry)).size;
   const entrySalaries = Object.values(SALARY_TIERS)
     .map((tier) => {
       const match = tier.junior.match(/\d+/);
@@ -419,15 +450,17 @@ export default function CareersPage() {
         onSearchChange={setSearchTerm}
         searchPlaceholder={t("careersDirectory.searchPlaceholder")}
         clearSearchLabel={language === "km" ? "សម្អាតការស្វែងរក" : "Clear search"}
-        chips={[
-          { value: "", label: t("careersDirectory.allIndustries") },
-          ...Object.entries(INDUSTRY_KM).map(([value, label]) => ({
-            value,
-            label: language === "km" ? label : value,
-          })),
+        selects={[
+          {
+            key: "industry",
+            value: industryFilter,
+            onChange: setIndustryFilter,
+            options: industryOptions,
+            label: language === "km" ? "វិស័យ" : "Industry",
+            className: "md:w-[248px]",
+            searchable: true,
+          },
         ]}
-        activeChip={industryFilter}
-        onChipChange={setIndustryFilter}
         sort={{
           value: sortBy,
           onChange: (value) => setSortBy(value as typeof sortBy),
@@ -437,9 +470,22 @@ export default function CareersPage() {
           ],
           label: language === "km" ? "តម្រៀបតាម" : "Sort by",
         }}
-        onReset={resetFilters}
-        hasActiveFilters={hasActiveFilters}
-        resetLabel={t("careersDirectory.resetFilters")}
+        extra={
+          hasActiveFilters ? (
+            <button
+              type="button"
+              onClick={resetFilters}
+              aria-label={language === "km" ? "សម្អាតតម្រងទាំងអស់" : "Clear all filters"}
+              title={language === "km" ? "សម្អាតតម្រងទាំងអស់" : "Clear all filters"}
+              className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-lg border border-[#E6E8F0] bg-white px-2.5 text-xs font-bold text-[#68708A] transition-colors hover:border-slate-300 hover:text-[#171A2C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30 sm:px-3"
+            >
+              <X className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">
+                {language === "km" ? "សម្អាត" : "Clear"}
+              </span>
+            </button>
+          ) : undefined
+        }
       />
 
       {/* Main Content Area */}
@@ -585,7 +631,7 @@ export default function CareersPage() {
           </div>
         ) : filteredCareers && filteredCareers.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 xl:gap-6">
-            {filteredCareers.map((c: any) => {
+            {filteredCareers.map((c) => {
               const jobnet = getCareerIdea(c.slug);
               const meta = SALARY_TIERS[c.slug] || {
                 junior: "$350 – $700",
