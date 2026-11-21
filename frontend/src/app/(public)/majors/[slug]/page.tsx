@@ -1,28 +1,53 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useLanguage } from "@/contexts/language-context";
 import { getStaticMajor } from "@/lib/data/catalog";
+import { RIASEC_DIMENSIONS } from "@/lib/riasec-meta";
 import {
   ArrowLeft,
   BookOpen,
+  Building2,
+  Clock3,
   Compass,
   CheckCircle2,
   AlertTriangle,
+  ChevronDown,
+  ChevronUp,
+  GraduationCap,
   MapPin,
+  Wallet,
   WifiOff,
   RefreshCw,
 } from "lucide-react";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
 import { Skeleton } from "@/components/ui/skeleton";
 
+const UNIVERSITY_PREVIEW_COUNT = 6;
+
+const DEGREE_LEVEL_LABELS: Record<string, { en: string; km: string }> = {
+  BACHELOR: { en: "Bachelor", km: "បរិញ្ញាបត្រ" },
+  ASSOCIATE: { en: "Associate", km: "បរិញ្ញាបត្ររង" },
+};
+
+function formatDegreeLevel(level: string) {
+  return (
+    DEGREE_LEVEL_LABELS[level] ?? {
+      en: level.charAt(0) + level.slice(1).toLowerCase(),
+      km: level.charAt(0) + level.slice(1).toLowerCase(),
+    }
+  );
+}
+
 export default function MajorDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
   const router = useRouter();
-  const { t, getLocalized } = useLanguage();
+  const { t, getLocalized, language } = useLanguage();
+  const [showAllUniversities, setShowAllUniversities] = useState(false);
 
   const major = getStaticMajor(slug);
   const isLoading = false;
@@ -61,7 +86,7 @@ export default function MajorDetailPage() {
           <div className="space-y-1.5">
             <h2 className="text-lg font-black text-[#111965]">Major Not Found</h2>
             <p className="text-xs sm:text-sm text-[#68708A]">
-              We couldn't load this major's details. Please check your connection or try again.
+              {"We couldn't load this major's details. Please check your connection or try again."}
             </p>
           </div>
           <div className="pt-2 flex items-center justify-center gap-3">
@@ -84,6 +109,45 @@ export default function MajorDetailPage() {
       </div>
     );
   }
+
+  const universities = major.universities ?? [];
+  const universityCount = universities.length || major.universities_count || 0;
+  const visibleUniversities = showAllUniversities
+    ? universities
+    : universities.slice(0, UNIVERSITY_PREVIEW_COUNT);
+  const hasMoreUniversities = universities.length > UNIVERSITY_PREVIEW_COUNT;
+  const tuitionValues = universities
+    .map((university) => university.tuition_annual_usd)
+    .filter((value): value is number => typeof value === "number" && value > 0);
+  const minTuition =
+    tuitionValues.length > 0 ? Math.min(...tuitionValues) : major.min_tuition_usd;
+  const durationValues = Array.from(
+    new Set(
+      universities
+        .map((university) => university.duration_years)
+        .filter((value): value is number => typeof value === "number" && value > 0)
+    )
+  ).sort((a, b) => a - b);
+  const durationLabel =
+    durationValues.length === 0
+      ? "—"
+      : durationValues.length === 1
+        ? `${durationValues[0]} ${t("majorDetail.years")}`
+        : `${durationValues[0]}–${durationValues[durationValues.length - 1]} ${t("majorDetail.years")}`;
+  const degreeLevels = Array.from(
+    new Set(universities.map((university) => university.degree_level).filter(Boolean))
+  );
+  const degreeLabel =
+    degreeLevels.length > 0
+      ? degreeLevels.map((level) => getLocalized(formatDegreeLevel(level))).join(" · ")
+      : "—";
+  const personalityTypes =
+    major.personality_affinity
+      ?.split(",")
+      .map((type) => type.trim())
+      .filter(Boolean) ?? [];
+  const primaryInterest = RIASEC_DIMENSIONS[major.riasec_primary];
+  const secondaryInterest = RIASEC_DIMENSIONS[major.riasec_secondary];
 
   return (
     <div className="min-h-screen bg-[#F5F6FA] py-8 lg:py-12">
@@ -155,6 +219,58 @@ export default function MajorDetailPage() {
           <p className="text-sm text-[#171A2C] leading-relaxed">
             {getLocalized(major.description)}
           </p>
+
+          <div className="border-t border-[#E6E8F0] pt-5">
+            <div className="text-[10px] font-black uppercase tracking-[0.12em] text-[#68708A]">
+              {t("majorDetail.overview")}
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <div className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#68708A]">
+                  <Building2 className="h-3.5 w-3.5" />
+                  <span>{t("majorDetail.universitiesCount")}</span>
+                </div>
+                <div className="mt-1.5 text-xl font-black text-[#111965]">
+                  {universityCount}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#68708A]">
+                  <Wallet className="h-3.5 w-3.5" />
+                  <span>{t("majorDetail.tuitionFrom")}</span>
+                </div>
+                <div className="mt-1.5 text-xl font-black text-[#111965]">
+                  {minTuition ? `$${Math.round(minTuition)}` : "—"}
+                  {minTuition ? (
+                    <span className="ml-1 text-[11px] font-semibold text-[#68708A]">
+                      / yr
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#68708A]">
+                  <Clock3 className="h-3.5 w-3.5" />
+                  <span>{t("majorDetail.duration")}</span>
+                </div>
+                <div className="mt-1.5 text-lg font-black text-[#111965]">
+                  {durationLabel}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[#68708A]">
+                  <GraduationCap className="h-3.5 w-3.5" />
+                  <span>{t("majorDetail.degreeLevel")}</span>
+                </div>
+                <div className="mt-1.5 text-sm font-black leading-snug text-[#111965]">
+                  {degreeLabel}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Subjects, Skills & Challenges Grid */}
@@ -165,6 +281,9 @@ export default function MajorDetailPage() {
               <BookOpen className="w-4 h-4 text-[#111965]" />
               <span>{t("majorDetail.coreSubjects")}</span>
             </h3>
+            <p className="text-[11px] leading-relaxed text-[#68708A]">
+              {t("majorDetail.coreSubjectsHint")}
+            </p>
             <ul className="space-y-2 text-xs text-[#171A2C]">
               {major.subjects_studied?.map((sub: string, i: number) => (
                 <li key={i} className="flex items-start gap-2">
@@ -181,6 +300,9 @@ export default function MajorDetailPage() {
               <Compass className="w-4 h-4 text-[#111965]" />
               <span>{t("majorDetail.requiredSkills")}</span>
             </h3>
+            <p className="text-[11px] leading-relaxed text-[#68708A]">
+              {t("majorDetail.requiredSkillsHint")}
+            </p>
             <ul className="space-y-2 text-xs text-[#171A2C]">
               {major.required_skills?.map((sk: string, i: number) => (
                 <li key={i} className="flex items-start gap-2">
@@ -197,6 +319,9 @@ export default function MajorDetailPage() {
               <AlertTriangle className="w-4 h-4 text-amber-600" />
               <span>{t("majorDetail.challenges")}</span>
             </h3>
+            <p className="text-[11px] leading-relaxed text-[#68708A]">
+              {t("majorDetail.challengesHint")}
+            </p>
             <ul className="space-y-2 text-xs text-[#171A2C]">
               {major.potential_challenges?.map((ch: string, i: number) => (
                 <li key={i} className="flex items-start gap-2">
@@ -208,6 +333,72 @@ export default function MajorDetailPage() {
           </div>
         </div>
 
+        {/* Interest fit */}
+        {(primaryInterest || secondaryInterest) && (
+          <section className="rounded-3xl border border-[#E6E8F0] bg-white p-6 sm:p-8 shadow-xs">
+            <div className="flex items-start gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F0F2FA] text-[#111965]">
+                <Compass className="h-5 w-5" />
+              </span>
+              <div>
+                <h2 className="text-lg font-extrabold text-[#111965]">
+                  {t("majorDetail.fitTitle")}
+                </h2>
+              </div>
+            </div>
+
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              {primaryInterest && (
+                <div
+                  className={`rounded-2xl border p-4 ${primaryInterest.lightBg} ${primaryInterest.borderClass}`}
+                >
+                  <div className="text-[10px] font-black uppercase tracking-[0.1em] text-[#68708A]">
+                    {t("majorDetail.primaryInterest")}
+                  </div>
+                  <div className="mt-1 text-sm font-extrabold text-[#111965]">
+                    {language === "km" ? primaryInterest.nameKm : primaryInterest.nameEn}
+                  </div>
+                  <p className="mt-1.5 text-xs leading-relaxed text-[#475569]">
+                    {language === "km" ? primaryInterest.descKm : primaryInterest.descEn}
+                  </p>
+                </div>
+              )}
+
+              {secondaryInterest && (
+                <div
+                  className={`rounded-2xl border p-4 ${secondaryInterest.lightBg} ${secondaryInterest.borderClass}`}
+                >
+                  <div className="text-[10px] font-black uppercase tracking-[0.1em] text-[#68708A]">
+                    {t("majorDetail.secondaryInterest")}
+                  </div>
+                  <div className="mt-1 text-sm font-extrabold text-[#111965]">
+                    {language === "km" ? secondaryInterest.nameKm : secondaryInterest.nameEn}
+                  </div>
+                  <p className="mt-1.5 text-xs leading-relaxed text-[#475569]">
+                    {language === "km" ? secondaryInterest.descKm : secondaryInterest.descEn}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {personalityTypes.length > 0 && (
+              <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-[#E6E8F0] pt-4">
+                <span className="text-[11px] font-semibold text-[#68708A]">
+                  {t("majorDetail.personalityAffinity")}:
+                </span>
+                {personalityTypes.map((type) => (
+                  <span
+                    key={type}
+                    className="rounded-md bg-[#F0F2FA] px-2 py-1 text-[11px] font-bold text-[#111965]"
+                  >
+                    {type}
+                  </span>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
         {/* Cambodian Universities Offering This Program */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -215,12 +406,15 @@ export default function MajorDetailPage() {
               {t("majorDetail.universitiesOffering")}
             </h2>
             <span className="text-xs font-semibold text-[#68708A]">
-              {major.universities?.length || 0} {t("majorDetail.institutionsCount")}
+              {universityCount} {t("majorDetail.institutionsCount")}
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {major.universities?.map((u: any) => (
+          <div
+            id="major-universities-grid"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            {visibleUniversities.map((u) => (
               <div
                 key={`${u.university_id}-${u.degree_level}-${u.duration_years}`}
                 className="p-5 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-3 flex flex-col justify-between"
@@ -256,6 +450,41 @@ export default function MajorDetailPage() {
               </div>
             ))}
           </div>
+
+          {hasMoreUniversities && (
+            <div className="flex flex-col items-center gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setShowAllUniversities((value) => !value)}
+                aria-expanded={showAllUniversities}
+                aria-controls="major-universities-grid"
+                className="inline-flex items-center gap-2 rounded-xl border border-[#E6E8F0] bg-white px-4 py-2.5 text-xs font-bold text-[#111965] transition-colors hover:border-[#111965]/25 hover:bg-[#F8FAFD] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30"
+              >
+                <span>
+                  {showAllUniversities
+                    ? t("majorDetail.showFewerUniversities")
+                    : t("majorDetail.showAllUniversities").replace(
+                        "{count}",
+                        String(universityCount)
+                      )}
+                </span>
+                {showAllUniversities ? (
+                  <ChevronUp className="h-4 w-4" />
+                ) : (
+                  <ChevronDown className="h-4 w-4" />
+                )}
+              </button>
+
+              {!showAllUniversities && (
+                <span className="text-[11px] font-medium text-[#68708A]">
+                  {getLocalized({
+                    en: `Showing ${visibleUniversities.length} of ${universityCount}`,
+                    km: `បង្ហាញ ${visibleUniversities.length} ក្នុងចំណោម ${universityCount}`,
+                  })}
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Related Careers */}
@@ -265,7 +494,7 @@ export default function MajorDetailPage() {
               {t("majorDetail.relatedCareers")}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {major.careers.map((car: any) => (
+              {major.careers.map((car) => (
                 <div
                   key={car.id}
                   className="p-5 rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs space-y-2"

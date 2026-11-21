@@ -368,7 +368,22 @@
     "institutionsCount": "Institutions",
     "viewUni": "View University Profile →",
     "relatedCareers": "Related Career Pathways",
-    "exploreCareer": "Explore Career →"
+    "exploreCareer": "Explore Career →",
+    "overview": "At a glance",
+    "universitiesCount": "Universities",
+    "tuitionFrom": "Tuition from",
+    "duration": "Duration",
+    "degreeLevel": "Degree level",
+    "years": "years",
+    "coreSubjectsHint": "Courses and topics you will study in this program.",
+    "requiredSkillsHint": "Skills you will build and use in this field.",
+    "challengesHint": "Honest things to prepare for before choosing this path.",
+    "fitTitle": "Is this major a good fit for you?",
+    "primaryInterest": "Primary interest",
+    "secondaryInterest": "Also helpful",
+    "personalityAffinity": "Personality types often drawn to this field",
+    "showAllUniversities": "Show all {count} universities",
+    "showFewerUniversities": "Show fewer universities"
   },
   "careersDirectory": {
     "badge": "Career Opportunities Explorer",

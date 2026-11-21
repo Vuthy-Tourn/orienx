@@ -368,7 +368,22 @@
     "institutionsCount": "សាកលវិទ្យាល័យ",
     "viewUni": "មើលទម្រង់សាកលវិទ្យាល័យ →",
     "relatedCareers": "ឱកាសការងារដែលពាក់ព័ន្ធ",
-    "exploreCareer": "ស្វែងយល់ពីអាជីពនេះ →"
+    "exploreCareer": "ស្វែងយល់ពីអាជីពនេះ →",
+    "overview": "ព័ត៌មានសង្ខេប",
+    "universitiesCount": "សាកលវិទ្យាល័យ",
+    "tuitionFrom": "ថ្លៃសិក្សាចាប់ផ្តើម",
+    "duration": "រយៈពេល",
+    "degreeLevel": "កម្រិតសញ្ញាបត្រ",
+    "years": "ឆ្នាំ",
+    "coreSubjectsHint": "មុខវិជ្ជា និងប្រធានបទដែលអ្នកនឹងរៀនក្នុងកម្មវិធីនេះ។",
+    "requiredSkillsHint": "ជំនាញដែលអ្នកនឹងកសាង និងប្រើក្នុងវិស័យនេះ។",
+    "challengesHint": "ចំណុចពិតដែលគួរត្រៀមសម្រាប់មុនពេលជ្រើសរើសផ្លូវនេះ។",
+    "fitTitle": "តើជំនាញនេះសមស្របនឹងអ្នកឬទេ?",
+    "primaryInterest": "ចំណាប់អារម្មណ៍ចម្បង",
+    "secondaryInterest": "ចំណុចដែលជួយបន្ថែម",
+    "personalityAffinity": "ប្រភេទបុគ្គលិកលក្ខណៈដែលចូលចិត្តវិស័យនេះ",
+    "showAllUniversities": "បង្ហាញសាកលវិទ្យាល័យទាំង {count}",
+    "showFewerUniversities": "បង្ហាញសាកលវិទ្យាល័យតិចជាងនេះ"
   },
   "careersDirectory": {
     "badge": "ទីផ្សារការងារ និងអាជីព",
