@@ -1,8 +1,10 @@
 "use client";
 /* eslint-disable react-hooks/set-state-in-effect */
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight,
   Brain,
@@ -61,6 +63,7 @@ export default function GuestResultsPage() {
   const [combinedOpen, setCombinedOpen] = useState(false);
   const [combinedExporting, setCombinedExporting] =
     useState<AssessmentReportFormat | null>(null);
+  const resultsRootRef = useRef<HTMLDivElement>(null);
 
   const refresh = () => {
     setRows(getAllResults());
@@ -70,6 +73,76 @@ export default function GuestResultsPage() {
   useEffect(() => {
     refresh();
   }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
+    const root = resultsRootRef.current;
+    if (!root || typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      gsap.from(".results-header", {
+        opacity: 0,
+        y: 16,
+        duration: 0.55,
+        ease: "power2.out",
+      });
+
+      gsap.utils.toArray<HTMLElement>(".results-reveal").forEach((section, index) => {
+        gsap.fromTo(
+          section,
+          { opacity: 0, y: 22 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            delay: Math.min(index, 3) * 0.04,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 90%",
+              once: true,
+            },
+            onComplete: () =>
+              gsap.set(section, { clearProps: "opacity,transform" }),
+          }
+        );
+      });
+
+      gsap.utils.toArray<HTMLElement>(".results-headline").forEach((headline, index) => {
+        gsap.from(headline, {
+          opacity: 0,
+          scale: 0.94,
+          y: 8,
+          duration: 0.55,
+          delay: 0.15 + index * 0.08,
+          ease: "back.out(1.4)",
+        });
+      });
+
+      gsap.utils.toArray<HTMLElement>(".results-history-row").forEach((row, index) => {
+        gsap.fromTo(
+          row,
+          { opacity: 0, x: -10 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 0.45,
+            delay: Math.min(index, 6) * 0.04,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: row,
+              start: "top 95%",
+              once: true,
+            },
+          }
+        );
+      });
+    }, root);
+
+    return () => ctx.revert();
+  }, [loaded]);
 
   const latestPersonality = rows.find((row) => row.kind === "personality");
   const latestRiasec = rows.find((row) => row.kind === "riasec");
@@ -201,9 +274,12 @@ export default function GuestResultsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F6FA] px-4 pb-16 pt-8 sm:pt-12">
+    <div
+      ref={resultsRootRef}
+      className="min-h-screen bg-[#F5F6FA] px-4 pb-16 pt-8 sm:pt-12"
+    >
       <div className="mx-auto max-w-4xl space-y-6">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div className="results-header flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="inline-flex items-center gap-1.5 rounded-full border border-[#E6E8F0] bg-white px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-[#111965]">
               <Sparkles className="h-3 w-3 text-[#D4A017]" />
@@ -257,7 +333,7 @@ export default function GuestResultsPage() {
             ))}
           </div>
         ) : rows.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-[#D9DEEA] bg-white px-6 py-12 text-center">
+          <div className="results-reveal rounded-3xl border border-dashed border-[#D9DEEA] bg-white px-6 py-12 text-center">
             <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F0F2FA] text-[#111965]">
               <Compass className="h-6 w-6" />
             </span>
@@ -311,7 +387,7 @@ export default function GuestResultsPage() {
             </div>
 
             {combinedMajors.length > 0 && (
-              <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+              <section className="results-reveal rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
                 <div className="flex flex-wrap items-end justify-between gap-2">
                   <div>
                     <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-amber-800">
@@ -365,7 +441,7 @@ export default function GuestResultsPage() {
             )}
 
             {careerIdeas.length > 0 && (
-              <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+              <section className="results-reveal rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
                 <div className="flex flex-wrap items-end justify-between gap-2">
                   <div>
                     <div className="inline-flex items-center gap-1.5 rounded-full border border-[#E6E8F0] bg-[#F8FAFD] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#111965]">
@@ -429,7 +505,7 @@ export default function GuestResultsPage() {
               </section>
             )}
 
-            <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+            <section className="results-reveal rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
               <div className="flex items-center gap-2">
                 <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F0F2FA] text-[#111965]">
                   <History className="h-4 w-4" />
@@ -466,7 +542,7 @@ export default function GuestResultsPage() {
                   return (
                     <div
                       key={row.id}
-                      className="flex flex-wrap items-center justify-between gap-3 py-3"
+                      className="results-history-row flex flex-wrap items-center justify-between gap-3 py-3"
                     >
                       <div className="flex min-w-0 items-center gap-3">
                         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#F0F2FA] text-sm font-black text-[#111965]">
@@ -567,7 +643,7 @@ function ResultCard({
     : null;
 
   return (
-    <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs">
+    <section className="results-reveal rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2">
           <span
@@ -602,7 +678,7 @@ function ResultCard({
       {record && archetype ? (
         <>
           <div className="mt-4 flex items-end gap-3">
-            <div className="text-3xl font-black tracking-tight text-[#111965]">
+            <div className="results-headline text-3xl font-black tracking-tight text-[#111965]">
               {headline}
             </div>
             <div className="pb-1 text-sm font-bold leading-snug text-[#68708A]">
