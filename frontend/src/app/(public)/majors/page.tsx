@@ -545,7 +545,7 @@ export default function MajorsPage() {
                 <li
                   key={m.id}
                   data-reveal
-                  className="group relative flex flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-[#E6E8F0] transition-shadow duration-200 hover:shadow-[0_18px_40px_-24px_rgba(17,25,101,0.45)] hover:ring-[#111965]/25"
+                  className="group relative flex flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-[#E6E8F0] transition-shadow duration-200 hover:ring-[#111965]/20 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)]"
                 >
                   <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#F0F2FA]">
                     <Image

@@ -746,7 +746,7 @@ export function FeaturedMajorsGrid() {
                 <Link
                   key={m.id}
                   href={`/majors/${m.slug}`}
-                  className="group relative rounded-[20px] bg-white hover:bg-slate-50/70 border border-[#E6E8F0] hover:border-slate-300 p-6 sm:p-7 flex flex-col justify-between overflow-hidden shadow-[0_8px_24px_rgba(17,25,101,0.04)] hover:shadow-[0_16px_36px_rgba(17,25,101,0.08)] transition-all duration-300 ease-out hover:-translate-y-1.5 min-h-[310px] sm:min-h-[330px] h-full cursor-pointer"
+                  className="group relative rounded-[20px] bg-white hover:bg-slate-50/70 border border-[#E6E8F0] hover:border-slate-300 p-6 sm:p-7 flex flex-col justify-between overflow-hidden shadow-[0_8px_24px_rgba(17,25,101,0.04)] hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] transition-all duration-300 ease-out hover:-translate-y-1.5 min-h-[310px] sm:min-h-[330px] h-full cursor-pointer"
                 >
                   {/* Top Row: Icon Badge (Left) & Tag (Right) */}
                   <div className="flex items-center justify-between z-10 relative">

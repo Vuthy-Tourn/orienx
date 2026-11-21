@@ -413,7 +413,7 @@ function UniversitiesContent() {
                   key={uni.id}
                   data-reveal
                   onClick={() => router.push(`/universities/${uni.slug}`)}
-                  className={`group relative cursor-pointer rounded-2xl bg-white border transition-all duration-300 flex flex-col justify-between overflow-hidden shadow-2xs hover:shadow-lg hover:-translate-y-1 ${
+                  className={`group relative cursor-pointer rounded-2xl bg-white border transition-shadow duration-200 flex flex-col justify-between overflow-hidden hover:ring-[#111965]/20 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] ${
                     isSelected ? "border-[#111965] ring-2 ring-[#111965]/20" : "border-[#E6E8F0] hover:border-[#111965]/30"
                   }`}
                 >

@@ -432,7 +432,7 @@ export default function ScholarshipsPage() {
               return (
                 <article
                   key={s.id}
-                  className="group relative flex flex-col overflow-hidden rounded-[22px] bg-white ring-1 ring-[#E6E8F0] transition-all duration-300 hover:ring-[#111965]/25 hover:shadow-[0_26px_60px_-34px_rgba(17,25,101,0.45)] motion-reduce:transition-none"
+                  className="group relative flex flex-col overflow-hidden rounded-[22px] bg-white ring-1 ring-[#E6E8F0] transition-shadow duration-200 hover:ring-[#111965]/20 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] motion-reduce:transition-none"
                 >
                   {/* Coverage + deadline */}
                   <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 px-5 pt-4 sm:px-6">
