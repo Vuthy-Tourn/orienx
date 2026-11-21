@@ -137,7 +137,7 @@ const ENGINES = [
     color: "#059669",
     badgeClass: "bg-emerald-50 text-emerald-700 border-emerald-200",
     primaryLink: "/bacii",
-    testLink: "/dashboard/assessments/preferences",
+    testLink: "/bacii",
     linkTextEn: "Explore BACII Prerequisites",
     linkTextKm: "ស្វែងយល់លក្ខខណ្ឌបាក់ឌុប",
     startTextEn: "Set Academic Preferences",
@@ -663,13 +663,15 @@ export default function PublicAssessmentsHubPage() {
                     <span>{isKm ? engine.linkTextKm : engine.linkTextEn}</span>
                     <ChevronRight className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
                   </Link>
-                  <Link
-                    href={engine.testLink}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-[#111965] dark:bg-blue-600 hover:bg-[#18237c] dark:hover:bg-blue-500 text-white text-xs sm:text-sm font-black shadow-xs transition-all cursor-pointer whitespace-nowrap"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
-                    <span>{isKm ? engine.startTextKm : engine.startTextEn}</span>
-                  </Link>
+                  {engine.id !== "bacii" && (
+                    <Link
+                      href={engine.testLink}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-[#111965] dark:bg-blue-600 hover:bg-[#18237c] dark:hover:bg-blue-500 text-white text-xs sm:text-sm font-black shadow-xs transition-all cursor-pointer whitespace-nowrap"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
+                      <span>{isKm ? engine.startTextKm : engine.startTextEn}</span>
+                    </Link>
+                  )}
                 </div>
               </div>
             );

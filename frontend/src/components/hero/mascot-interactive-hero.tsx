@@ -292,7 +292,7 @@ export function MascotInteractiveHero() {
             {/* Action CTAs */}
             <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
               <Link
-                href="/dashboard/assessments/personality"
+                href="/assessments/riasec/test"
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-black text-xs sm:px-7 sm:py-3.5 sm:text-sm md:text-base text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-[0_4px_24px_rgba(247,206,77,0.3)] hover:shadow-[0_6px_28px_rgba(247,206,77,0.45)] transition-all active:scale-98"
               >
                 <Sparkles className="w-4 h-4 text-[#111965]" />

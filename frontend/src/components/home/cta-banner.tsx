@@ -140,21 +140,21 @@ export function CtaBanner({
               </div>
 
               {/* Action Buttons Row */}
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <div className="pt-2 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-4">
                 <Link
                   href={resolvedPrimaryHref}
-                  className="px-8 py-4 rounded-xl font-black text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#F3C432] shadow-[0_12px_28px_rgba(247,206,77,0.35)] hover:shadow-[0_16px_36px_rgba(247,206,77,0.45)] hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-2 group cursor-pointer"
+                  className="px-6 py-4 sm:px-8 rounded-xl font-black text-[13px] sm:text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#F3C432] shadow-[0_12px_28px_rgba(247,206,77,0.35)] hover:shadow-[0_16px_36px_rgba(247,206,77,0.45)] hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-2 group cursor-pointer"
                 >
-                  <span>{resolvedPrimaryText}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <span className="text-center sm:whitespace-nowrap">{resolvedPrimaryText}</span>
+                  <ArrowRight className="w-4 h-4 shrink-0 group-hover:translate-x-1 transition-transform" />
                 </Link>
 
                 <Link
                   href={resolvedSecondaryHref}
-                  className="px-6 py-4 rounded-xl font-bold text-sm text-white bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/30 backdrop-blur-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  className="px-5 py-4 sm:px-6 rounded-xl font-bold text-[13px] sm:text-sm text-white bg-white/10 hover:bg-white/15 border border-white/20 hover:border-white/30 backdrop-blur-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <Compass className="w-4 h-4 text-[#F7CE4D]" />
-                  <span>{resolvedSecondaryText}</span>
+                  <Compass className="w-4 h-4 shrink-0 text-[#F7CE4D]" />
+                  <span className="text-center sm:whitespace-nowrap">{resolvedSecondaryText}</span>
                 </Link>
               </div>
             </div>

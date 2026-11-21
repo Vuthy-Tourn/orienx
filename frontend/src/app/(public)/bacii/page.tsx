@@ -688,11 +688,15 @@ export default function PublicBaciiGuidePage() {
               {/* Action CTAs */}
               <div className="gsap-bacii-hero-anim pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
                 <Link
-                  href="/dashboard/assessments/preferences"
+                  href="/assessments"
                   className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-black text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-[0_4px_24px_rgba(247,206,77,0.3)] hover:shadow-[0_6px_28px_rgba(247,206,77,0.45)] transition-all active:scale-98 cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4 text-[#111965]" />
-                  <span>{isKm ? "ចាប់ផ្តើមបំពេញចំណូលចិត្ត (៥ នាទី)" : "Start Preference Diagnostic (5 Mins)"}</span>
+                  <span>
+                    {isKm
+                      ? "រកមើលការវាយតម្លៃឥតគិតថ្លៃ"
+                      : "Explore Free Assessments"}
+                  </span>
                   <ArrowRight className="w-4 h-4 text-[#111965]" />
                 </Link>
 
@@ -1231,17 +1235,7 @@ export default function PublicBaciiGuidePage() {
                 </div>
               </div>
 
-              {/* Diagnostic Link */}
-              <div className="pt-2">
-                <Link
-                  href="/dashboard/assessments/preferences"
-                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-[#111965] hover:bg-[#1A2580] text-white text-xs sm:text-sm font-black shadow-md hover:shadow-lg transition-all active:scale-[0.98] cursor-pointer"
-                >
-                  <Sparkles className="w-4 h-4 text-[#F7CE4D]" />
-                  <span>{isKm ? "រក្សាទុក និងគណនាចំណូលចិត្តពេញលេញ" : "Lock in & Save Preferences"}</span>
-                  <ArrowRight className="w-4 h-4 text-[#F7CE4D]" />
-                </Link>
-              </div>
+
             </div>
 
             {/* RIGHT RESULTS PANEL (7 cols) */}
@@ -1513,8 +1507,10 @@ export default function PublicBaciiGuidePage() {
             ? "ចំណាយពេលត្រឹមតែ ៥ នាទីដើម្បីកំណត់មុខវិជ្ជាពូកែ ថវិកាសិក្សា និងទីតាំង ដើម្បីឱ្យប្រព័ន្ធ AI ផ្គូផ្គងសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុត។"
             : "Spend only 5 minutes setting your strongest subjects, tuition budget, and campus preferences to unlock high-precision university recommendations."
         }
-        primaryButtonText={isKm ? "ចាប់ផ្តើមបំពេញចំណូលចិត្ត (៥ នាទី)" : "Start Preference Diagnostic (5 Mins)"}
-        primaryButtonHref="/dashboard/assessments/preferences"
+        primaryButtonText={
+          isKm ? "រកមើលការវាយតម្លៃឥតគិតថ្លៃ" : "Explore Free Assessments"
+        }
+        primaryButtonHref="/assessments"
         secondaryButtonText={isKm ? "មើលតេស្តវាយតម្លៃទាំងអស់" : "View All Assessments"}
         secondaryButtonHref="/assessments"
         mascotSpeech={isKm ? "តោះស្វែងរកសាកលវិទ្យាល័យដែលត្រូវនឹងថ្នាក់របស់អ្នក! 🎓" : "Let's find the best university for your stream! 🎓"}

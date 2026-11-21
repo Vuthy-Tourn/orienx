@@ -45,7 +45,7 @@ export function HowItWorksFlow() {
       position: "above" as const, // UP
       nodeX: 150,
       nodeY: 300,
-      href: "/dashboard/assessments/personality",
+      href: "/assessments/riasec/test",
     },
     {
       num: "02",
@@ -57,7 +57,7 @@ export function HowItWorksFlow() {
       position: "below" as const, // DOWN
       nodeX: 450,
       nodeY: 180,
-      href: "/dashboard/assessments/preferences",
+      href: "/bacii",
     },
     {
       num: "03",
@@ -69,7 +69,7 @@ export function HowItWorksFlow() {
       position: "above" as const, // UP
       nodeX: 750,
       nodeY: 300,
-      href: "/dashboard/recommendations",
+      href: "/assessments/results",
     },
     {
       num: "04",
