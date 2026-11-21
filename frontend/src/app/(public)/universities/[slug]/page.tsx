@@ -581,12 +581,6 @@ export default function UniversityDetailPage() {
                     />
                   </div>
 
-                  {uni.is_verified && (
-                    <div className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-[10.5px] font-bold text-emerald-800">
-                      <ShieldCheck className="h-3.5 w-3.5 shrink-0" />
-                      <span>{t("universityDetail.verifiedBy")}</span>
-                    </div>
-                  )}
                 </div>
               </aside>
             </div>
