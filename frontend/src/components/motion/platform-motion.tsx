@@ -268,9 +268,6 @@ export function ScrollReveal() {
       { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
     );
 
-    tagDashboardTargets();
-    scan();
-
     const mutationObserver = new MutationObserver((mutations) => {
       tagDashboardTargets();
       mutations.forEach((mutation) => {
@@ -279,11 +276,21 @@ export function ScrollReveal() {
         });
       });
     });
-    mutationObserver.observe(main, { childList: true, subtree: true });
+
+    // Wait for the page tree to finish hydrating before touching server-rendered
+    // class names. Mutating them earlier makes React report a hydration mismatch
+    // on pages that render their cards inside a Suspense boundary.
+    let startTimer: number | null = window.setTimeout(() => {
+      startTimer = null;
+      tagDashboardTargets();
+      scan();
+      mutationObserver.observe(main, { childList: true, subtree: true });
+    }, 300);
 
     return () => {
       observer?.disconnect();
       mutationObserver.disconnect();
+      if (startTimer !== null) window.clearTimeout(startTimer);
       timers.forEach((timer) => window.clearTimeout(timer));
       timers.clear();
       main
