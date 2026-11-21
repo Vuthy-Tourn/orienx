@@ -460,7 +460,7 @@ export default function AboutPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-14 relative z-20 space-y-16">
         <div className="gsap-stats-grid grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {/* Card 1: Majors */}
-          <div className="gsap-stat-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-md space-y-3 group hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
+          <div className="gsap-stat-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 group hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-1 transition-all duration-200">
             <div className="w-12 h-12 rounded-2xl bg-[#F0F2FA] text-[#111965] flex items-center justify-center font-bold shadow-2xs group-hover:scale-105 transition-transform duration-200">
               <GraduationCap className="w-6 h-6 text-[#111965]" />
             </div>
@@ -478,7 +478,7 @@ export default function AboutPage() {
           </div>
 
           {/* Card 2: Universities */}
-          <div className="gsap-stat-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-md space-y-3 group hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
+          <div className="gsap-stat-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 group hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-1 transition-all duration-200">
             <div className="w-12 h-12 rounded-2xl bg-[#FFF9E6] text-[#B45309] flex items-center justify-center font-bold shadow-2xs group-hover:scale-105 transition-transform duration-200">
               <Building2 className="w-6 h-6 text-[#B45309]" />
             </div>
@@ -496,7 +496,7 @@ export default function AboutPage() {
           </div>
 
           {/* Card 3: 100% Tuition Accuracy */}
-          <div className="gsap-stat-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-md space-y-3 group hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
+          <div className="gsap-stat-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 group hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-1 transition-all duration-200">
             <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center font-bold shadow-2xs group-hover:scale-105 transition-transform duration-200">
               <ShieldCheck className="w-6 h-6 text-emerald-700" />
             </div>
@@ -514,7 +514,7 @@ export default function AboutPage() {
           </div>
 
           {/* Card 4: Scientific Engine */}
-          <div className="gsap-stat-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-md space-y-3 group hover:shadow-xl hover:-translate-y-1 transition-all duration-200">
+          <div className="gsap-stat-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 group hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-1 transition-all duration-200">
             <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-900 flex items-center justify-center font-bold shadow-2xs group-hover:scale-105 transition-transform duration-200">
               <BrainCircuit className="w-6 h-6 text-purple-800" />
             </div>

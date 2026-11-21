@@ -393,7 +393,7 @@ export default function DashboardOverviewPage() {
               <Skeleton className="h-10 w-28 rounded-full" />
             </div>
           ) : topRec ? (
-          <div className="p-4 sm:p-5 rounded-[24px] bg-white border border-slate-200/90 shadow-2xs hover:shadow-md transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="p-4 sm:p-5 rounded-[24px] bg-white border border-slate-200/90 shadow-2xs hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             {/* Campus Thumbnail with Aspect Ratio & Subtle Match Badge */}
             <div className="flex items-center gap-4 flex-1 w-full">
               <div className="w-24 h-18 sm:w-28 sm:h-20 rounded-2xl overflow-hidden relative flex-shrink-0 shadow-2xs border border-slate-100">
@@ -803,7 +803,7 @@ export default function DashboardOverviewPage() {
         {/* 3. SCHOLARSHIP MILESTONE CARD (OrienX Primary & Secondary Gold Accent) */}
         <Link
           href="/dashboard/favorites"
-          className="block p-5 rounded-[26px] bg-gradient-to-br from-[#F0F2FA] via-[#FAFBFD] to-[#FFF9E6] border border-[#E6E8F0] hover:border-[#F7CE4D] shadow-xs hover:shadow-md transition-all relative overflow-hidden space-y-3 group cursor-pointer"
+          className="block p-5 rounded-[26px] bg-gradient-to-br from-[#F0F2FA] via-[#FAFBFD] to-[#FFF9E6] border border-[#E6E8F0] hover:border-[#F7CE4D] shadow-2xs hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] transition-all relative overflow-hidden space-y-3 group cursor-pointer"
         >
           <div className="flex items-start gap-3">
             {/* Award Icon: Accent Gold badge */}

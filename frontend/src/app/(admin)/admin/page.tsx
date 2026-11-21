@@ -1012,7 +1012,7 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
               type="button"
               onClick={() => onNavigate(card.tab)}
               className={cn(
-                "group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg dark:border-white/10 dark:bg-[#0B102B] dark:hover:border-white/20 dark:hover:shadow-[0_12px_24px_rgba(0,0,0,0.5)]",
+                "group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] dark:border-white/10 dark:bg-[#0B102B] dark:hover:border-white/20 dark:hover:shadow-[0_8px_20px_-16px_rgba(0,0,0,0.45)]",
                 card.borderAccent
               )}
             >
@@ -1414,7 +1414,7 @@ function OverviewPanel({ onNavigate }: { onNavigate: (tab: AdminTab) => void }) 
               key={action.label}
               type="button"
               onClick={() => onNavigate(action.tab)}
-              className="group relative flex items-center gap-3.5 rounded-2xl border border-slate-200/80 bg-white p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-white/10 dark:bg-[#0B102B] dark:hover:border-white/20 dark:hover:shadow-[0_8px_20px_rgba(0,0,0,0.4)]"
+              className="group relative flex items-center gap-3.5 rounded-2xl border border-slate-200/80 bg-white p-4 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] dark:border-white/10 dark:bg-[#0B102B] dark:hover:border-white/20 dark:hover:shadow-[0_8px_20px_-16px_rgba(0,0,0,0.45)]"
             >
               <div className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-2xs transition-transform group-hover:scale-105", action.iconBg)}>
                 <Icon className="h-5 w-5" />

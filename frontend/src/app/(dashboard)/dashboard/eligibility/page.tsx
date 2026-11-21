@@ -125,7 +125,7 @@ function EligibilityCard({
       : offering.degree_level;
 
   return (
-    <article className="rounded-2xl border border-[#E6E8F0] bg-white p-4 shadow-2xs transition-shadow hover:shadow-md">
+    <article className="rounded-2xl border border-[#E6E8F0] bg-white p-4 shadow-2xs transition-shadow hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)]">
       <div className="flex items-start gap-3">
         <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#E6E8F0] bg-white text-[#111965] dark:border-white/10 dark:bg-white/5">
           {offering.university_logo_url && !logoFailed ? (

@@ -602,7 +602,7 @@ export default function PublicAssessmentsHubPage() {
             return (
               <div
                 key={engine.id}
-                className="gsap-engine-card rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0B112C] p-6 sm:p-8 shadow-2xs hover:shadow-md dark:hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all flex flex-col justify-between space-y-6 relative overflow-hidden group"
+                className="gsap-engine-card rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0B112C] p-6 sm:p-8 shadow-2xs hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] dark:hover:shadow-[0_8px_20px_-16px_rgba(0,0,0,0.45)] transition-all flex flex-col justify-between space-y-6 relative overflow-hidden group"
               >
                 <div className="space-y-4">
                   {/* Header Row */}

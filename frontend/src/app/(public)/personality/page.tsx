@@ -429,7 +429,7 @@ export default function PublicPersonalityGuidePage() {
               className={`gsap-mbti-role-card p-5 rounded-2xl text-left transition-all border border-[#E6E8F0] dark:border-white/10 shadow-sm cursor-pointer ${
                 selectedRole === role.id
                   ? "bg-white dark:bg-[#111827] shadow-md ring-2"
-                  : "bg-white dark:bg-[#111827] hover:shadow hover:-translate-y-0.5"
+                  : "bg-white dark:bg-[#111827] hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-0.5"
               }`}
               style={
                 selectedRole === role.id
@@ -1001,7 +1001,7 @@ export default function PublicPersonalityGuidePage() {
                     <Link
                       key={idx}
                       href={`/majors/${m.slug}`}
-                      className="p-3.5 rounded-2xl bg-white border border-[#E6E8F0] hover:border-[#111965] hover:shadow-md transition-all flex flex-col justify-between space-y-2 group"
+                      className="p-3.5 rounded-2xl bg-white border border-[#E6E8F0] hover:border-[#111965] hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] transition-all flex flex-col justify-between space-y-2 group"
                     >
                       <div>
                         <div className="flex items-center justify-between gap-1 mb-1">

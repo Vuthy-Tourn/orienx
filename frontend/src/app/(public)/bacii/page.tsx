@@ -928,7 +928,7 @@ export default function PublicBaciiGuidePage() {
 
         <div className="gsap-bacii-matrix-grid grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* SCIENCE STREAM CARD */}
-          <div className="gsap-bacii-matrix-card rounded-3xl border-2 border-blue-200 bg-white p-6 sm:p-8 shadow-[0_10px_30px_rgba(37,99,235,0.06)] hover:shadow-[0_16px_40px_rgba(37,99,235,0.12)] transition-all relative overflow-hidden flex flex-col justify-between">
+          <div className="gsap-bacii-matrix-card rounded-3xl border-2 border-blue-200 bg-white p-6 sm:p-8 shadow-[0_10px_30px_rgba(37,99,235,0.06)] hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] transition-all relative overflow-hidden flex flex-col justify-between">
             <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-blue-100 to-transparent rounded-bl-full pointer-events-none" />
             <div className="relative space-y-6">
               <div className="flex items-start justify-between gap-4">
@@ -1004,7 +1004,7 @@ export default function PublicBaciiGuidePage() {
           </div>
 
           {/* SOCIAL SCIENCE STREAM CARD */}
-          <div className="gsap-bacii-matrix-card rounded-3xl border-2 border-emerald-200 bg-white p-6 sm:p-8 shadow-[0_10px_30px_rgba(5,150,105,0.06)] hover:shadow-[0_16px_40px_rgba(5,150,105,0.12)] transition-all relative overflow-hidden flex flex-col justify-between">
+          <div className="gsap-bacii-matrix-card rounded-3xl border-2 border-emerald-200 bg-white p-6 sm:p-8 shadow-[0_10px_30px_rgba(5,150,105,0.06)] hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] transition-all relative overflow-hidden flex flex-col justify-between">
             <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-emerald-100 to-transparent rounded-bl-full pointer-events-none" />
             <div className="relative space-y-6">
               <div className="flex items-start justify-between gap-4">
@@ -1264,7 +1264,7 @@ export default function PublicBaciiGuidePage() {
                 {simulatedMatches.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all space-y-3.5"
+                    className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:border-blue-300 transition-all space-y-3.5"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div>
@@ -1338,7 +1338,7 @@ export default function PublicBaciiGuidePage() {
           {TUITION_BENCHMARKS.map((t, idx) => (
             <div
               key={idx}
-              className="gsap-bacii-honors-card rounded-3xl border border-slate-200 bg-white p-6 sm:p-7 shadow-2xs hover:shadow-md transition-all space-y-5 flex flex-col justify-between"
+              className="gsap-bacii-honors-card rounded-3xl border border-slate-200 bg-white p-6 sm:p-7 shadow-2xs hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] transition-all space-y-5 flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <span className={`inline-block px-3 py-1 rounded-full text-xs font-black border ${t.tagBg}`}>

@@ -192,7 +192,7 @@ export default function FavoritesPage() {
                     return (
                       <div
                         key={m.id}
-                        className="rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group relative"
+                        className="rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group relative"
                       >
                         {/* Cover Image Header */}
                         <div className="relative h-40 w-full bg-slate-100 overflow-hidden">
@@ -316,7 +316,7 @@ export default function FavoritesPage() {
                     return (
                       <div
                         key={u.id}
-                        className="rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group relative"
+                        className="rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:border-slate-300 transition-all flex flex-col justify-between overflow-hidden group relative"
                       >
                         {/* Campus Image Header */}
                         <div className="relative h-40 w-full bg-slate-100 overflow-hidden">
@@ -431,7 +431,7 @@ export default function FavoritesPage() {
                   {favorites.careers.map((c: any) => (
                     <div
                       key={c.id}
-                      className="rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs hover:shadow-md hover:border-slate-300 transition-all p-5 sm:p-6 flex flex-col justify-between space-y-4 group relative"
+                      className="rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:border-slate-300 transition-all p-5 sm:p-6 flex flex-col justify-between space-y-4 group relative"
                     >
                       <div className="space-y-3">
                         {/* Industry & Bookmark */}
@@ -528,7 +528,7 @@ export default function FavoritesPage() {
                     return (
                       <div
                         key={s.id}
-                        className="rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs hover:shadow-md hover:border-slate-300 transition-all p-5 sm:p-6 flex flex-col justify-between space-y-4 group relative"
+                        className="rounded-2xl bg-white border border-[#E6E8F0] shadow-2xs hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:border-slate-300 transition-all p-5 sm:p-6 flex flex-col justify-between space-y-4 group relative"
                       >
                         <div className="space-y-3">
                           {/* Coverage & Status & Bookmark */}

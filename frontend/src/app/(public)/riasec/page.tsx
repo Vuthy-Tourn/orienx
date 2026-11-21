@@ -576,7 +576,7 @@ export default function RiasecPublicGuidePage() {
               <motion.div
                 key={code}
                 whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
-                className="gsap-dimension-card p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-xs hover:border-slate-300 hover:shadow-xl transition-shadow flex flex-col justify-between space-y-5"
+                className="gsap-dimension-card p-6 sm:p-7 rounded-3xl bg-white border border-[#E6E8F0] shadow-2xs hover:border-slate-300 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] transition-shadow flex flex-col justify-between space-y-5"
                 style={{ borderTopWidth: "4px", borderTopColor: meta.color }}
               >
                 <div className="space-y-4">
@@ -769,7 +769,7 @@ export default function RiasecPublicGuidePage() {
               key={item.code}
               type="button"
               onClick={() => setActiveArchetypeCode(item.code)}
-              className="gsap-archetype-card p-6 rounded-3xl bg-white border border-[#E6E8F0] text-left space-y-3 hover:border-slate-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+              className="gsap-archetype-card p-6 rounded-3xl bg-white border border-[#E6E8F0] text-left space-y-3 hover:border-slate-300 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] transition-all cursor-pointer group flex flex-col justify-between"
             >
               <div className="space-y-3 w-full">
                 <div className="flex items-center justify-between">
@@ -887,7 +887,7 @@ export default function RiasecPublicGuidePage() {
                   className={
                     primary
                       ? "gsap-pillar-card group relative flex flex-col gap-5 rounded-2xl bg-[#111965] p-5 text-white shadow-[0_20px_45px_-28px_rgba(17,25,101,0.9)] transition-transform duration-300 hover:-translate-y-1"
-                      : "gsap-pillar-card group relative flex flex-col gap-5 rounded-2xl border border-[#E6E8F0] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-md"
+                      : "gsap-pillar-card group relative flex flex-col gap-5 rounded-2xl border border-[#E6E8F0] bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)]"
                   }
                 >
                   <div className="flex items-start justify-between gap-3">

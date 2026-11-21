@@ -605,7 +605,7 @@ export default function UniversityDetailPage() {
                 <a
                   key={card.href}
                   href={card.href}
-                  className="group flex items-center gap-3 rounded-2xl border border-[#E6E8F0] bg-white p-3.5 transition-all hover:-translate-y-0.5 hover:border-[#111965]/20 hover:shadow-md"
+                  className="group flex items-center gap-3 rounded-2xl border border-[#E6E8F0] bg-white p-3.5 transition-all hover:-translate-y-0.5 hover:border-[#111965]/20 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)]"
                 >
                   <span
                     className={cn(
@@ -662,7 +662,7 @@ export default function UniversityDetailPage() {
                   <Link
                     key={`${offering.major_id}-${offering.degree_level}-${offering.language_of_instruction}`}
                     href={`/majors/${offering.major_slug}`}
-                    className="group flex gap-3.5 rounded-2xl border border-[#E6E8F0] bg-white p-3.5 transition-all hover:-translate-y-0.5 hover:border-[#111965]/25 hover:shadow-[0_18px_40px_-30px_rgba(17,25,101,0.5)] sm:gap-4 sm:p-4"
+                    className="group flex gap-3.5 rounded-2xl border border-[#E6E8F0] bg-white p-3.5 transition-all hover:-translate-y-0.5 hover:border-[#111965]/25 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] sm:gap-4 sm:p-4"
                   >
                     <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#F0F2FA] sm:h-24 sm:w-24">
                       {offering.major_image_url ? (
