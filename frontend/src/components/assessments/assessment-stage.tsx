@@ -571,7 +571,10 @@ export function AssessmentStage({
         {/* Clean White Card */}
         <div className="p-6 sm:p-10 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-8 text-center relative overflow-hidden">
           {/* Main Statement Prompt */}
-          <div className="max-w-xl mx-auto space-y-3 pt-2 pb-1 text-center">
+          <div
+            key={`prompt-${currentQ.id}`}
+            className="assessment-question-enter max-w-xl mx-auto space-y-3 pt-2 pb-1 text-center"
+          >
             <h2 className="text-xl sm:text-2xl font-black text-[#111965] leading-snug tracking-tight">
               {getLocalized({
                 km: currentQ.promptKm,
@@ -588,7 +591,10 @@ export function AssessmentStage({
           </div>
 
           {/* Unified Scale Component */}
-          <div className="w-full space-y-6 select-none py-1">
+          <div
+            key={`scale-${currentQ.id}`}
+            className="assessment-question-enter w-full space-y-6 select-none py-1"
+          >
             {scaleType === "7-point" ? (
               /* 16Personalities Official 7-Circle Scale */
               <div className="max-w-xl mx-auto space-y-6">

@@ -1,8 +1,10 @@
 "use client";
 /* eslint-disable react-hooks/set-state-in-effect */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import {
   AlertTriangle,
@@ -75,6 +77,67 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
   const [studentName, setStudentName] = useState("");
   const [shareOpen, setShareOpen] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
+  const resultRootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = resultRootRef.current;
+    if (!root || typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      gsap.utils
+        .toArray<HTMLElement>(".result-content > section, .result-content > .grid")
+        .forEach((section) => {
+          gsap.fromTo(
+            section,
+            { opacity: 0, y: 24 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.65,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: section,
+                start: "top 88%",
+                once: true,
+              },
+              onComplete: () =>
+                gsap.set(section, { clearProps: "opacity,transform" }),
+            }
+          );
+        });
+
+      gsap.utils.toArray<HTMLElement>(".result-score-bar").forEach((bar) => {
+        gsap.fromTo(
+          bar,
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            transformOrigin: "left center",
+            duration: 0.9,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: bar,
+              start: "top 92%",
+              once: true,
+            },
+          }
+        );
+      });
+
+      gsap.from(".result-hero-code", {
+        opacity: 0,
+        scale: 0.9,
+        y: 12,
+        duration: 0.7,
+        delay: 0.15,
+        ease: "back.out(1.5)",
+      });
+    }, root);
+
+    return () => ctx.revert();
+  }, [record.id]);
 
   useEffect(() => {
     const profile = readProfile();
@@ -395,8 +458,11 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F6FA] px-4 pb-16 pt-6 sm:pt-10">
-      <div className="mx-auto max-w-4xl space-y-6">
+    <div
+      ref={resultRootRef}
+      className="min-h-screen bg-[#F5F6FA] px-4 pb-16 pt-6 sm:pt-10"
+    >
+      <div className="result-content mx-auto max-w-4xl space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <Link
             href="/assessments"
@@ -442,7 +508,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                     })}
               </div>
               <div>
-                <div className="text-4xl font-black tracking-tight text-[#F7CE4D] sm:text-6xl">
+                <div className="result-hero-code text-4xl font-black tracking-tight text-[#F7CE4D] sm:text-6xl">
                   {headline}
                 </div>
                 <h1 className="mt-1 text-xl font-extrabold leading-snug sm:text-2xl">
@@ -771,7 +837,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                 </div>
                 <div className="h-2 overflow-hidden rounded-full bg-[#EEF1F7]">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-[#111965] via-[#26338F] to-[#F7CE4D] transition-all duration-700"
+                    className="result-score-bar h-full rounded-full bg-gradient-to-r from-[#111965] via-[#26338F] to-[#F7CE4D]"
                     style={{ width: `${percent(dimension.value)}%` }}
                   />
                 </div>

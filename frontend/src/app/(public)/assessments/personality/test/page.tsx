@@ -216,7 +216,7 @@ export default function GuestPersonalityTestPage() {
             {getLocalized({ en: "All assessments", km: "ការវាយតម្លៃទាំងអស់" })}
           </Link>
 
-          <div className="overflow-hidden rounded-3xl border border-[#E6E8F0] bg-white shadow-sm">
+          <div className="assessment-question-enter overflow-hidden rounded-3xl border border-[#E6E8F0] bg-white shadow-sm">
             <div className="relative overflow-hidden bg-gradient-to-br from-[#111965] via-[#1A2580] to-[#0D134E] px-6 py-8 text-white sm:px-9 sm:py-10">
               <div className="absolute -right-16 -top-20 h-64 w-64 rounded-full bg-[#F7CE4D]/15 blur-3xl" />
               <div className="relative">
