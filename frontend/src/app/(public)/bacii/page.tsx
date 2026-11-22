@@ -31,6 +31,7 @@ import {
   Zap,
   Clock,
   Compass,
+  Stethoscope,
   FileText,
   Binary,
   Scale,
@@ -260,7 +261,7 @@ const SIMULATOR_PRESETS = [
     stream: "science" as const,
     subjects: ["math", "informatics", "physics"],
     budget: 1500,
-    icon: "💻",
+    icon: Binary,
   },
   {
     id: "doctor",
@@ -269,7 +270,7 @@ const SIMULATOR_PRESETS = [
     stream: "science" as const,
     subjects: ["biology", "chemistry", "math"],
     budget: 2500,
-    icon: "🩺",
+    icon: Stethoscope,
   },
   {
     id: "lawyer-diplomat",
@@ -278,7 +279,7 @@ const SIMULATOR_PRESETS = [
     stream: "social" as const,
     subjects: ["khmer", "english", "history"],
     budget: 800,
-    icon: "⚖️",
+    icon: Scale,
   },
   {
     id: "fintech-banker",
@@ -287,7 +288,7 @@ const SIMULATOR_PRESETS = [
     stream: "social" as const,
     subjects: ["economics", "math", "english"],
     budget: 1200,
-    icon: "📈",
+    icon: TrendingUp,
   },
 ];
 
@@ -313,21 +314,23 @@ export default function PublicBaciiGuidePage() {
     setSelectedBudget(preset.budget);
   };
 
-  // Toggle subject selection in simulator
+  // Toggle subject selection in simulator. Zero subjects is valid.
   const toggleSubject = (id: string) => {
-    if (selectedSubjects.includes(id)) {
-      if (selectedSubjects.length > 1) {
-        setSelectedSubjects(selectedSubjects.filter((s) => s !== id));
+    setSelectedSubjects((current) => {
+      if (current.includes(id)) {
+        return current.filter((subjectId) => subjectId !== id);
       }
-    } else {
-      if (selectedSubjects.length < 4) {
-        setSelectedSubjects([...selectedSubjects, id]);
+      if (current.length < 4) {
+        return [...current, id];
       }
-    }
+      return current;
+    });
   };
 
   // Determine eligible recommendations based on selections
   const simulatedMatches = useMemo(() => {
+    if (selectedSubjects.length === 0) return [];
+
     const isScience = selectedStream === "science";
     const hasMath = selectedSubjects.includes("math");
     const hasInformatics = selectedSubjects.includes("informatics");
@@ -1132,17 +1135,20 @@ export default function PublicBaciiGuidePage() {
               <span className="text-xs text-slate-400 font-bold uppercase tracking-wider pr-1">
                 {isKm ? "ជម្រើសរហ័ស:" : "Quick Presets:"}
               </span>
-              {SIMULATOR_PRESETS.map((preset) => (
-                <button
-                  key={preset.id}
-                  type="button"
-                  onClick={() => applyPreset(preset)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 transition-all hover:scale-102 cursor-pointer shadow-2xs"
-                >
-                  <span>{preset.icon}</span>
-                  <span>{isKm ? preset.labelKm : preset.labelEn}</span>
-                </button>
-              ))}
+              {SIMULATOR_PRESETS.map((preset) => {
+                const PresetIcon = preset.icon;
+                return (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => applyPreset(preset)}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-2xs transition-colors hover:border-slate-300 hover:bg-slate-50"
+                  >
+                    <PresetIcon className="h-3.5 w-3.5 text-[#111965]" />
+                    <span>{isKm ? preset.labelKm : preset.labelEn}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -1165,7 +1171,10 @@ export default function PublicBaciiGuidePage() {
                         : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                     }`}
                   >
-                    <span>🔬 {isKm ? "ថ្នាក់វិទ្យាសាស្ត្រ" : "Science Stream"}</span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <Microscope className="h-4 w-4" />
+                      {isKm ? "ថ្នាក់វិទ្យាសាស្ត្រ" : "Science Stream"}
+                    </span>
                     <span className="text-[12.5px] font-semibold opacity-85">STEM Track</span>
                   </button>
                   <button
@@ -1177,7 +1186,10 @@ export default function PublicBaciiGuidePage() {
                         : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                     }`}
                   >
-                    <span>📚 {isKm ? "ថ្នាក់សង្គម" : "Social Stream"}</span>
+                    <span className="inline-flex items-center gap-1.5">
+                      <BookOpen className="h-4 w-4" />
+                      {isKm ? "ថ្នាក់សង្គម" : "Social Stream"}
+                    </span>
                     <span className="text-[12.5px] font-semibold opacity-85">Humanities Track</span>
                   </button>
                 </div>
@@ -1185,11 +1197,25 @@ export default function PublicBaciiGuidePage() {
 
               {/* Step 2: Strongest Subjects */}
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-500">
-                  <span>2. {isKm ? "ជ្រើសរើសមុខវិជ្ជាពូកែ (១ ដល់ ៤)" : "Select Strongest Subjects (1-4)"}</span>
-                  <span className="text-xs text-blue-600 font-bold">
-                    {selectedSubjects.length}/4 {isKm ? "បានរើស" : "selected"}
+                <div className="flex items-center justify-between gap-2 text-xs font-black uppercase tracking-wider text-slate-500">
+                  <span>
+                    2.{" "}
+                    {isKm ? "ជ្រើសរើសមុខវិជ្ជាពូកែ" : "Select Strongest Subjects"}
                   </span>
+                  <div className="flex shrink-0 items-center gap-2">
+                    {selectedSubjects.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setSelectedSubjects([])}
+                        className="normal-case rounded-full px-2 py-0.5 text-[11px] font-bold text-slate-500 transition-colors hover:bg-slate-100 hover:text-[#111965]"
+                      >
+                        {isKm ? "សម្អាត" : "Clear"}
+                      </button>
+                    )}
+                    <span className="text-xs text-blue-600 font-bold">
+                      {selectedSubjects.length}/4 {isKm ? "បានរើស" : "selected"}
+                    </span>
+                  </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   {AVAILABLE_SUBJECTS.map((sub) => {
@@ -1199,10 +1225,12 @@ export default function PublicBaciiGuidePage() {
                         key={sub.id}
                         type="button"
                         onClick={() => toggleSubject(sub.id)}
-                        className={`text-left p-2.5 rounded-xl border text-xs font-bold flex items-center justify-between transition-all cursor-pointer ${
+                        aria-pressed={isSelected}
+                        disabled={!isSelected && selectedSubjects.length >= 4}
+                        className={`text-left p-2.5 rounded-xl border text-xs font-bold flex items-center justify-between transition-all ${
                           isSelected
-                            ? "bg-[#111965] text-white border-[#111965] shadow-xs"
-                            : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                            ? "bg-[#111965] text-white border-[#111965] shadow-xs cursor-pointer"
+                            : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
                         }`}
                       >
                         <span className="truncate pr-1">{isKm ? sub.labelKm : sub.labelEn}</span>
@@ -1255,7 +1283,44 @@ export default function PublicBaciiGuidePage() {
               </div>
 
               <div className="space-y-3.5">
-                {simulatedMatches.map((item, idx) => (
+                {simulatedMatches.length === 0 ? (
+                  <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-8 text-center space-y-3">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F0F2FA] text-[#111965]">
+                      <GraduationCap className="h-6 w-6" />
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="text-sm font-black text-[#111965]">
+                        {selectedSubjects.length === 0
+                          ? isKm
+                            ? "ជ្រើសរើសមុខវិជ្ជាពូកែរបស់អ្នក"
+                            : "Choose your strongest subjects"
+                          : isKm
+                            ? "មិនទាន់ឃើញជំនាញដែលត្រូវគ្នាទេ"
+                            : "No direct match yet"}
+                      </h4>
+                      <p className="mx-auto max-w-sm text-xs leading-relaxed text-[#68708A]">
+                        {selectedSubjects.length === 0
+                          ? isKm
+                            ? "ជ្រើសរើសរហូតដល់ ៤ មុខវិជ្ជា ដើម្បីមើលជំនាញសាកលវិទ្យាល័យដែលត្រូវគ្នា។"
+                            : "Select up to 4 subjects to see compatible university majors."
+                          : isKm
+                            ? "សាកល្បងបន្ថែមគណិតវិទ្យា រូបវិទ្យា ឬមុខវិជ្ជាផ្សេងទៀត ដើម្បីមើលជម្រើសបន្ថែម។"
+                            : "Try adding Math, Physics, or another subject to see more pathways."}
+                      </p>
+                    </div>
+                    {selectedSubjects.length === 0 && (
+                      <button
+                        type="button"
+                        onClick={() => applyPreset(SIMULATOR_PRESETS[0])}
+                        className="inline-flex items-center gap-1.5 rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3 py-2 text-xs font-bold text-[#111965] transition-colors hover:border-[#111965]/25 hover:bg-white"
+                      >
+                        <Sparkles className="h-3.5 w-3.5 text-[#D4A017]" />
+                        {isKm ? "សាកល្បងជម្រើសគំរូ" : "Try a sample preset"}
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  simulatedMatches.map((item, idx) => (
                   <div
                     key={idx}
                     className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:border-blue-300 transition-all space-y-3.5"
@@ -1302,7 +1367,8 @@ export default function PublicBaciiGuidePage() {
                       </div>
                     </div>
                   </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
