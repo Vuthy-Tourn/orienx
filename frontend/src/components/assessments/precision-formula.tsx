@@ -9,7 +9,6 @@ type Variant = "dark" | "light";
 
 const PILLARS = [
   {
-    weight: 30,
     color: "#F59E0B",
     nameEn: "RIASEC interests",
     nameKm: "ចំណាប់អារម្មណ៍ RIASEC",
@@ -17,7 +16,6 @@ const PILLARS = [
     noteKm: "កូដ Holland",
   },
   {
-    weight: 25,
     color: "#2563EB",
     nameEn: "16-Personality",
     nameKm: "បុគ្គលិកលក្ខណៈ ១៦",
@@ -25,7 +23,6 @@ const PILLARS = [
     noteKm: "របៀបគិត",
   },
   {
-    weight: 25,
     color: "#10B981",
     nameEn: "BACII stream",
     nameKm: "ថ្នាក់បាក់ឌុប",
@@ -33,17 +30,16 @@ const PILLARS = [
     noteKm: "ថ្នាក់ ១២",
   },
   {
-    weight: 20,
     color: "#9333EA",
     nameEn: "Labor market",
     nameKm: "ទីផ្សារការងារ",
-    noteEn: "NEA data",
-    noteKm: "ទិន្នន័យ NEA",
+    noteEn: "Career profiles",
+    noteKm: "ទម្រង់អាជីព",
   },
 ] as const;
 
 /**
- * The 4-pillar weighting, drawn as one stacked bar with the legend aligned
+ * The four guidance pillars, drawn as one bar with the legend aligned
  * under each segment so a label never has to be matched to a colour by eye.
  *
  * `dark` sits on the navy assessment hero; `light` on white sections.
@@ -105,11 +101,11 @@ export function PrecisionFormula({
   const legendDelay = (index: number) => ({ transitionDelay: `${380 + index * 60}ms` });
 
   const heading =
-    title ?? (isKm ? "រូបមន្តផ្គូផ្គង ១០០%" : "The 100% matching formula");
+    title ?? (isKm ? "របៀបដែលវិមាត្រទាំង ៤ ផ្គុំគ្នា" : "How the four pillars fit together");
 
   const summary = isKm
-    ? "រូបមន្តផ្គូផ្គង៖ RIASEC ៣០%, បុគ្គលិកលក្ខណៈ ២៥%, ថ្នាក់បាក់ឌុប ២៥%, ទីផ្សារការងារ ២០%"
-    : "Matching formula: RIASEC 30%, 16-Personality 25%, BACII stream 25%, labor market 20%";
+    ? "វិមាត្រណែនាំ ៤៖ RIASEC, បុគ្គលិកលក្ខណៈ ១៦, បរិបទបាក់ឌុប និងទម្រង់អាជីព"
+    : "Four guidance pillars: RIASEC, 16-Personality, BACII context, and career profiles";
 
   return (
     <figure
@@ -142,8 +138,7 @@ export function PrecisionFormula({
             isDark ? "text-white/45" : "text-[#68708A]"
           )}
         >
-          {isKm ? "សរុប" : "Total"}{" "}
-          <span className={isDark ? "text-white/85" : "text-[#111965]"}>100%</span>
+          {isKm ? "វិមាត្រ ៤" : "4 pillars"}
         </span>
       </div>
 
@@ -156,7 +151,7 @@ export function PrecisionFormula({
             key={pillar.nameEn}
             className={segmentClass}
             style={{
-              flexGrow: pillar.weight,
+              flexGrow: 1,
               flexBasis: 0,
               backgroundColor: pillar.color,
               ...segmentStyle(index),
@@ -173,19 +168,11 @@ export function PrecisionFormula({
             key={pillar.nameEn}
             className={cn("min-w-0", legendClass)}
             style={{
-              flexGrow: pillar.weight,
+              flexGrow: 1,
               flexBasis: 0,
               ...legendDelay(index),
             }}
           >
-            <p
-              className={cn(
-                "text-[14px] font-extrabold leading-none tabular-nums",
-                isDark ? "text-white" : "text-[#111965]"
-              )}
-            >
-              {pillar.weight}%
-            </p>
             <p
               className={cn(
                 "mt-1 truncate text-[12.5px] font-semibold leading-snug",
@@ -206,7 +193,7 @@ export function PrecisionFormula({
         ))}
       </div>
 
-      {/* Small screens: two rows, weight first. */}
+      {/* Small screens: two rows. */}
       <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2.5 sm:hidden">
         {PILLARS.map((pillar, index) => (
           <div
@@ -234,7 +221,7 @@ export function PrecisionFormula({
                   isDark ? "text-white/45" : "text-[#68708A]"
                 )}
               >
-                {pillar.weight}% · {isKm ? pillar.noteKm : pillar.noteEn}
+                {isKm ? pillar.noteKm : pillar.noteEn}
               </dd>
             </div>
           </div>

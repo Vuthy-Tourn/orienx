@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/contexts/language-context";
+import { STATIC_MAJORS } from "@/lib/data/catalog";
 import {
   RIASEC_DIMENSIONS,
   getHollandArchetype,
@@ -441,7 +442,11 @@ export default function RiasecPublicGuidePage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
-                  <span>{language === "km" ? "ផ្គូផ្គង ១២០+ ជំនាញកម្ពុជា" : "120+ Cambodian Majors"}</span>
+                  <span>
+                    {language === "km"
+                      ? `ផ្គូផ្គងជំនាញកម្ពុជា ${STATIC_MAJORS.length}`
+                      : `${STATIC_MAJORS.length} Cambodian Majors`}
+                  </span>
                 </div>
               </div>
             </div>
@@ -1001,7 +1006,10 @@ export default function RiasecPublicGuidePage() {
           },
           {
             icon: <GraduationCap className="w-4 h-4 text-sky-400 shrink-0" />,
-            label: language === "km" ? "ផ្គូផ្គង ១២០+ ជំនាញ" : "120+ Majors Matched",
+            label:
+              language === "km"
+                ? `ផ្គូផ្គងជំនាញ ${STATIC_MAJORS.length}`
+                : `${STATIC_MAJORS.length} Majors Matched`,
           },
         ]}
         trustText={

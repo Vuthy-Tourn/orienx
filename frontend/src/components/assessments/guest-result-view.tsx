@@ -340,6 +340,73 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
           ? ((isKm ? archetype.bestFieldsKm : archetype.bestFieldsEn) ?? [])
           : riasecIndustries;
 
+  const personalityStrengths =
+    personality && archetype
+      ? ((isKm ? archetype.strengthsKm : archetype.strengthsEn) ?? [])
+      : [];
+  const personalityLearningStyle =
+    personality && archetype
+      ? getLocalized({
+          en: archetype.learningStyleEn,
+          km: archetype.learningStyleKm,
+        })
+      : "";
+  const profileChips =
+    personality && archetype
+      ? personalityStrengths.slice(0, 4)
+      : topRiasecMeta.map((meta) =>
+          isKm ? meta.shortNameKm : meta.shortNameEn
+        );
+  const topRiasecActivities =
+    topRiasecMeta[0]?.keyActivities.slice(0, 2).map((activity) =>
+      isKm ? activity.km : activity.en
+    ) ?? [];
+  const cleanTopActivities = topRiasecActivities.map(
+    (activity) => activity.charAt(0).toLowerCase() + activity.slice(1)
+  );
+  const profileNarrative =
+    personality && archetype
+      ? isKm
+        ? `${archetypeName} — ${tagline} ${overview} អ្នករៀនបានល្អបំផុតតាមរយៈ ${personalityLearningStyle}។ ចំណុចខ្លាំងរបស់អ្នករួមមាន ${personalityStrengths
+            .slice(0, 3)
+            .join(", ")}។ ចំណុចដែលគួរអភិវឌ្ឍគឺ ${
+            growthAreas[0] ?? (isKm ? "ការស្វែងយល់បន្ថែម" : "continued exploration")
+          }។`
+        : `${archetypeName} — ${tagline} ${overview} You learn best through ${personalityLearningStyle}. Your strengths include ${personalityStrengths.slice(0, 3).join(", ")}. A growth area to keep in mind is ${growthAreas[0] ?? "continued exploration"}.`
+      : riasec && holland
+        ? isKm
+          ? `${headline} — ${archetypeName}។ ${tagline} ចំណាប់អារម្មណ៍កំពូលរបស់អ្នកគឺ ${topRiasecMeta
+              .map((meta) => meta.shortNameKm)
+              .join(", ")}។ អ្នកមានថាមពលពី ${topRiasecActivities.join(" និង ")}។ អ្នកធ្វើការបានល្អបំផុតក្នុង ${riasecWorkEnvironment}។`
+          : `${headline} — ${archetypeName}. ${tagline} Your strongest interests are ${topRiasecMeta
+              .map((meta) => meta.shortNameEn)
+              .join(", ")}. You are energized by ${cleanTopActivities.join(" and ")}. You do your best work in ${riasecWorkEnvironment}.`
+        : tagline;
+
+  const reflectionPrompts = personality
+    ? [
+        isKm
+          ? "តើចំណុចខ្លាំងមួយណាដែលអ្នកឃើញច្បាស់ក្នុងខ្លួនអ្នក?"
+          : "Which of these strengths do you recognize in yourself?",
+        isKm
+          ? "តើចំណុចណាមួយដែលអ្នកចង់អភិវឌ្ឍឆ្នាំនេះ?"
+          : "Which growth area would you like to work on this year?",
+        isKm
+          ? "តើបរិយាកាសសិក្សាបែបណាដែលជួយឱ្យអ្នកផ្តោតអារម្មណ៍បានល្អ?"
+          : "What study environment helps you focus best?",
+      ]
+    : [
+        isKm
+          ? "តើចំណាប់អារម្មណ៍កំពូលមួយណាដែលមានអារម្មណ៍ដូចអ្នកបំផុត?"
+          : "Which top interest feels most like you?",
+        isKm
+          ? "តើបរិស្ថានការងារបែបណាដែលធ្វើឱ្យអ្នកមានថាមពល?"
+          : "Which work environment sounds most energizing?",
+        isKm
+          ? "តើជំនាញណាមួយដែលអ្នកចង់ស្វែងយល់មុនគេ?"
+          : "Which suggested major would you like to explore first?",
+      ];
+
   const labels: AssessmentReportLabels = {
     preparedFor: t("assessmentReport.preparedFor"),
     generated: t("assessmentReport.generated"),
@@ -586,6 +653,44 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
               </div>
             )}
           </div>
+        </section>
+
+        {/* Profile at a glance */}
+        <section className="rounded-3xl border border-[#E6E8F0] bg-gradient-to-br from-[#FFFDF5] via-white to-[#F8FAFD] p-5 shadow-xs sm:p-7">
+          <div className="flex items-start gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#F7CE4D]/15 text-[#B45309]">
+              <Sparkles className="h-5 w-5" />
+            </span>
+            <div>
+              <h2 className="text-base font-black text-[#111965] sm:text-lg">
+                {isKm
+                  ? "ទម្រង់របស់អ្នកក្នុងមួយនាទី"
+                  : "Your profile in one minute"}
+              </h2>
+              <p className="mt-1 text-sm font-semibold text-[#94A3B8]">
+                {isKm
+                  ? "សេចក្តីសង្ខេបខ្លីមុនពេលអានលម្អិត។"
+                  : "A quick summary before the detailed sections."}
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-4 text-sm leading-7 text-[#475569]">
+            {profileNarrative}
+          </p>
+
+          {profileChips.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {profileChips.map((chip) => (
+                <span
+                  key={chip}
+                  className="rounded-xl border border-[#E6E8F0] bg-white px-3 py-1.5 text-xs font-bold text-[#111965] shadow-2xs"
+                >
+                  {chip}
+                </span>
+              ))}
+            </div>
+          )}
         </section>
 
         <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-7">
@@ -945,6 +1050,23 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
                   <p className="mt-2.5 text-sm leading-6 text-[#475569]">
                     {getLocalized({ en: meta.descEn, km: meta.descKm })}
                   </p>
+                  {meta.strengths.length > 0 && (
+                    <div className="mt-3">
+                      <div className="text-[10px] font-black uppercase tracking-[0.12em] text-[#94A3B8]">
+                        {isKm ? "ចំណុចខ្លាំង" : "Strengths"}
+                      </div>
+                      <div className="mt-1.5 flex flex-wrap gap-1.5">
+                        {meta.strengths.slice(0, 4).map((strength) => (
+                          <span
+                            key={strength.en}
+                            className="rounded-lg border border-[#E6E8F0] bg-white px-2 py-1 text-[11px] font-semibold text-[#475569]"
+                          >
+                            {getLocalized(strength)}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   <ul className="mt-3 grid gap-2 sm:grid-cols-2">
                     {meta.keyActivities.map((activity) => (
                       <li
@@ -1204,6 +1326,35 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
               })}
               onClick={() => setExportOpen(true)}
             />
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-[#E6E8F0] bg-white p-5 shadow-xs sm:p-6">
+          <SectionHeading
+            icon={Lightbulb}
+            title={getLocalized({
+              en: "Reflect on this",
+              km: "សញ្ជឹងគិតអំពីរឿងនេះ",
+            })}
+            subtitle={getLocalized({
+              en: "Use these questions to turn the result into a next step.",
+              km: "ប្រើសំណួរទាំងនេះដើម្បីបំប្លែងលទ្ធផលទៅជាជំហានបន្ទាប់។",
+            })}
+          />
+          <div className="mt-4 space-y-3">
+            {reflectionPrompts.map((prompt, index) => (
+              <div
+                key={prompt}
+                className="flex items-start gap-3 rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-3.5"
+              >
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#111965] text-xs font-black text-[#F7CE4D]">
+                  {index + 1}
+                </span>
+                <p className="pt-1 text-sm leading-6 text-[#475569]">
+                  {prompt}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 

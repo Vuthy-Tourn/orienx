@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/contexts/language-context";
+import { STATIC_UNIVERSITIES } from "@/lib/data/catalog";
 import { FaqSection, FaqItem } from "@/components/home/faq-section";
 import { CtaBanner } from "@/components/home/cta-banner";
 import {
@@ -493,8 +494,8 @@ export default function PublicBaciiGuidePage() {
           ? "តើអាហារូបករណ៍រដ្ឋ MoEYS ដំណើរការយ៉ាងដូចម្តេច ហើយនិទ្ទេសណាខ្លះមានសិទ្ធិ?"
           : "How do MoEYS State Scholarships work and which BACII grades qualify?",
         answer: isKm
-          ? "សិស្សនិទ្ទេស A ទទួលបានអាហារូបករណ៍រដ្ឋ ១០០% ដោយស្វ័យប្រវត្តិតាមការជ្រើសរើស។ សិស្សនិទ្ទេស B, C និង D អាចដាក់ពាក្យស្នើសុំកូតាអាហារូបករណ៍រដ្ឋតាមមុខវិជ្ជាអាទិភាព (STEM, កសិកម្ម, សេដ្ឋកិច្ច) និងកូតាអាទិភាពសម្រាប់សិស្សនារី និងសិស្សមកពីបណ្តាខេត្ត។"
-          : "Grade A students receive 100% full-ride MoEYS priority state scholarships automatically upon university selection. Grade B, C, and D students qualify for ministerial scholarship quotas across priority disciplines (STEM, Agriculture, Digital Economy) as well as provincial and female student quotas.",
+          ? "និទ្ទេស A មានឱកាសខ្ពស់ក្នុងការប្រកួតប្រជែងសម្រាប់អាហារូបករណ៍រដ្ឋ ប៉ុន្តែក្រសួងអប់រំ និងសាកលវិទ្យាល័យនីមួយៗប្រកាសកូតា និងលក្ខខណ្ឌដោយឡែកពីគ្នា។ សិស្សគ្រប់និទ្ទេសគួរផ្ទៀងផ្ទាត់សេចក្តីជូនដំណឹងផ្លូវការមុនពេលដាក់ពាក្យ។"
+          : "Grade A students are often competitive for state scholarships, but MoEYS and each university announce their own quotas and conditions. Students of every grade should verify the current official notice before applying.",
       },
       {
         id: "faq-budget-factoring",
@@ -502,17 +503,17 @@ export default function PublicBaciiGuidePage() {
           ? "តើប្រព័ន្ធ OrienX ពិចារណាលើលទ្ធភាពហិរញ្ញវត្ថុគ្រួសារខ្ញុំយ៉ាងដូចម្តេច?"
           : "How does OrienX factor in my family's financial situation?",
         answer: isKm
-          ? "នៅក្នុងតេស្តចំណូលចិត្តសិក្សា អ្នកអាចកំណត់កម្រិតថវិកាប្រចាំឆ្នាំ ($៥០០ ដល់ $៥,០០០+)។ ប្រព័ន្ធ AI នឹងមិនណែនាំសាកលវិទ្យាល័យដែលលើសពីលទ្ធភាពរបស់អ្នកឡើយ លើកលែងតែកម្មវិធីនោះមានអាហារូបករណ៍ ១០០% ត្រូវគ្នានឹងនិទ្ទេសរបស់អ្នក។"
-          : "In the Academic Preferences assessment, you specify your annual tuition budget ($400 to $5,000+). Our matching algorithm will never recommend out-of-budget programs unless you qualify for 100% full-ride state scholarships (MoEYS or CADT).",
+          ? "ឧបករណ៍នេះប្រើថវិការបស់អ្នកដើម្បីបង្ហាញបរិបទថ្លៃសិក្សាប្រចាំឆ្នាំ។ វាមិនមែនជាការធានាអាហារូបករណ៍ទេ។ សូមផ្ទៀងផ្ទាត់ថ្លៃសិក្សា និងលក្ខខណ្ឌអាហារូបករណ៍ជាមួយសាកលវិទ្យាល័យនីមួយៗ។"
+          : "The simulator uses your budget to frame typical annual tuition context. It does not guarantee a scholarship. Always verify current fees and scholarship conditions with each university.",
       },
       {
         id: "faq-matching-weight",
         question: isKm
-          ? "តើទម្ងន់នៃតេស្តចំណូលចិត្តសិក្សាមានប៉ុន្មានភាគរយក្នុងរូបមន្តផ្គូផ្គងរបស់ OrienX?"
-          : "What weight does this prerequisite test carry in OrienX's matching formula?",
+          ? "តើខ្ញុំគួរប្រើឧបករណ៍ពិសោធន៍លក្ខខណ្ឌនេះយ៉ាងដូចម្តេច?"
+          : "How should I use this prerequisite simulator?",
         answer: isKm
-          ? "តេស្តចំណូលចិត្ត និងថ្នាក់បាក់ឌុបមានទម្ងន់ ២៥% នៅក្នុងរូបមន្តវិទ្យាសាស្ត្រ ១០០% របស់ OrienX (៣០% RIASEC + ២៥% បុគ្គលិកលក្ខណៈ MBTI + ២៥% ថ្នាក់បាក់ឌុប និងមុខវិជ្ជាពូកែ + ២០% ទីផ្សារការងារ NEA)។"
-          : "The BACII Stream and Academic Preferences test represents 25% of OrienX's 4-Pillar Scientific Formula (30% RIASEC + 25% 16-Personality + 25% BACII Prerequisites + 20% Cambodian Labor Demand).",
+          ? "ចាត់ទុកវាជាឧបករណ៍ណែនាំ មិនមែនជាពិន្ទុចូលរៀនផ្លូវការទេ។ វាជួយអ្នកប្រៀបធៀបថ្នាក់ មុខវិជ្ជាពូកែ និងថវិកាជាមួយបរិបទផ្លូវសិក្សាទូទៅ។ ការសម្រេចចិត្តចូលរៀនជាកម្មសិទ្ធិរបស់សាកលវិទ្យាល័យនីមួយៗ។"
+          : "Treat it as a guidance tool, not a formal admission score. It helps you compare your stream, subjects, and budget with common pathway context. Final admission decisions belong to each university.",
       },
     ];
   }, [isKm]);
@@ -684,7 +685,7 @@ export default function PublicBaciiGuidePage() {
                 <p className="gsap-bacii-hero-anim text-sm sm:text-base text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
                   {isKm
                     ? "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នារវាងថ្នាក់វិទ្យាសាស្ត្រពិត ឬវិទ្យាសាស្ត្រសង្គម មុខវិជ្ជាពូកែ និងកម្រិតថវិកាសិក្សា ជាមួយលក្ខខណ្ឌចូលរៀនផ្លូវការនៃសាកលវិទ្យាល័យជាង ៥០ នៅកម្ពុជា ដើម្បីជៀសវាងការជ្រើសរើសខុសជំនាញ។"
-                    : "Cross-validate your Grade 12 National Exam track (Science vs. Social stream), strongest high school subjects, and tuition budget against official admission criteria across 50+ Cambodian universities to prevent costly major dropouts."}
+                    : "Compare your Grade 12 track, strongest subjects, and tuition budget with common admission context for Cambodian university majors."}
                 </p>
               </div>
 
@@ -724,7 +725,11 @@ export default function PublicBaciiGuidePage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
-                  <span>{isKm ? "៥០+ សាកលវិទ្យាល័យកម្ពុជា" : "50+ Cambodian Institutions"}</span>
+                  <span>
+                    {isKm
+                      ? `សាកលវិទ្យាល័យកម្ពុជា ${STATIC_UNIVERSITIES.length}`
+                      : `${STATIC_UNIVERSITIES.length} Cambodian Institutions`}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
@@ -1334,7 +1339,7 @@ export default function PublicBaciiGuidePage() {
                           {item.fitLevel === "high" ? (
                             <span className="px-2.5 py-0.5 rounded-full text-[12.5px] font-black bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
                               <Check className="w-3 h-3 text-emerald-600" />
-                              <span>{isKm ? "ត្រូវគ្នា ១០០%" : "100% Eligible"}</span>
+                              <span>{isKm ? "ត្រូវគ្នាខ្លាំង" : "Strong match"}</span>
                             </span>
                           ) : (
                             <span className="px-2.5 py-0.5 rounded-full text-[12.5px] font-black bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
@@ -1587,7 +1592,9 @@ export default function PublicBaciiGuidePage() {
           },
           {
             icon: <Building2 className="w-4 h-4 text-emerald-400 shrink-0" />,
-            label: isKm ? "៥០+ សាកលវិទ្យាល័យកម្ពុជា" : "50+ Cambodian Univs",
+            label: isKm
+              ? `សាកលវិទ្យាល័យកម្ពុជា ${STATIC_UNIVERSITIES.length}`
+              : `${STATIC_UNIVERSITIES.length} Cambodian Univs`,
           },
           {
             icon: <ShieldCheck className="w-4 h-4 text-sky-400 shrink-0" />,

@@ -8,6 +8,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/contexts/language-context";
 import { useAuth } from "@/contexts/auth-context";
+import {
+  STATIC_CAREERS,
+  STATIC_MAJORS,
+  STATIC_UNIVERSITIES,
+} from "@/lib/data/catalog";
 import { FaqSection, FaqItem } from "@/components/home/faq-section";
 import { CtaBanner } from "@/components/home/cta-banner";
 import {
@@ -48,7 +53,6 @@ const ENGINES = [
   {
     id: "riasec",
     number: "01",
-    weight: "30%",
     heroTitleEn: "RIASEC Interests",
     heroTitleKm: "ចំណាប់អារម្មណ៍ RIASEC",
     titleEn: "Holland RIASEC Vocational Test",
@@ -59,8 +63,8 @@ const ENGINES = [
       "Measures 6 foundational vocational dimensions (Realistic, Investigative, Artistic, Social, Enterprising, Conventional) to identify your authentic affinity for real day-to-day work tasks.",
     descKm:
       "វាស់វែងចំណាប់អារម្មណ៍ការងារ ៦ វិមាត្រ (ជាក់ស្តែង, ស្រាវជ្រាវ, សិល្បៈ, សង្គម, ភាពជាអ្នកដឹកនាំ, ការិយាល័យ) ដើម្បីស្វែងរកការងារដែលអ្នកចូលចិត្តធ្វើពីធម្មជាតិ។",
-    metricsEn: "30 Questions • 10-12 Mins • Free",
-    metricsKm: "៣០ សំណួរ • ១០-១២ នាទី • ឥតគិតថ្លៃ",
+    metricsEn: "18 activities • About 4 min • Free",
+    metricsKm: "១៨ សកម្មភាព • ប្រហែល ៤ នាទី • ឥតគិតថ្លៃ",
     icon: Compass,
     color: "#D97706",
     badgeClass: "bg-amber-50 text-amber-700 border-amber-200",
@@ -72,19 +76,18 @@ const ENGINES = [
     startTextKm: "ធ្វើតេស្ត RIASEC",
     featuresEn: [
       "Identifies your 3-letter Holland code (e.g. IAS, RIE)",
-      "Maps directly to 120+ Cambodian university majors",
-      "Prevents career dissatisfaction and major switching",
+      `Connects to ${STATIC_MAJORS.length} Cambodian university majors in the directory`,
+      "Helps you compare pathways before choosing a major",
     ],
     featuresKm: [
       "កំណត់កូដហូឡង់ ៣ តួអក្សរផ្ទាល់ខ្លួន (ឧទាហរណ៍៖ IAS, RIE)",
-      "ភ្ជាប់ផ្ទាល់ទៅកាន់ជំនាញសាកលវិទ្យាល័យជាង ១២០ នៅកម្ពុជា",
-      "ការពារកុំឱ្យបាក់ទឹកចិត្ត ឬប្តូរជំនាញពាក់កណ្តាលទី",
+      `ភ្ជាប់ទៅកាន់ជំនាញសាកលវិទ្យាល័យកម្ពុជា ${STATIC_MAJORS.length} ក្នុងបញ្ជី`,
+      "ជួយអ្នកប្រៀបធៀបផ្លូវសិក្សាមុនពេលជ្រើសរើសជំនាញ",
     ],
   },
   {
     id: "personality",
     number: "02",
-    weight: "25%",
     heroTitleEn: "16-Personality",
     heroTitleKm: "បុគ្គលិកលក្ខណៈ ១៦",
     titleEn: "16 Personalities (MBTI Cognitive Style)",
@@ -95,8 +98,8 @@ const ENGINES = [
       "Assesses your cognitive information-processing style across 4 temperaments (Analysts, Diplomats, Sentinels, Explorers) to understand study endurance, stress resilience, and team dynamics.",
     descKm:
       "វាយតម្លៃលើមុខងារនៃការគិត ៤ ក្រុមធំៗ (អ្នកវិភាគ, អ្នកការទូត, អ្នកការពារ, អ្នករុករក) ដើម្បីយល់ដឹងពីភាពធន់ក្នុងការរៀនសូត្រ ការដោះស្រាយសម្ពាធ និងការធ្វើការជាក្រុម។",
-    metricsEn: "60 Questions • 12-15 Mins • Free",
-    metricsKm: "៦០ សំណួរ • ១២-១៥ នាទី • ឥតគិតថ្លៃ",
+    metricsEn: "12 statements • About 3 min • Free",
+    metricsKm: "១២ សំណើ • ប្រហែល ៣ នាទី • ឥតគិតថ្លៃ",
     icon: Sparkles,
     color: "#2563EB",
     badgeClass: "bg-blue-50 text-blue-700 border-blue-200",
@@ -107,20 +110,19 @@ const ENGINES = [
     startTextEn: "Start Personality Test",
     startTextKm: "ធ្វើតេស្តបុគ្គលិកលក្ខណៈ",
     featuresEn: [
-      "Deep analysis of 16 Cambodian student archetypes",
-      "Determines ideal learning environments and work styles",
-      "Highlights communication strengths and blindspots",
+      "Explains all 16 personality types",
+      "Shows how you learn, communicate, and work in teams",
+      "Highlights strengths and growth areas",
     ],
     featuresKm: [
-      "វិភាគស៊ីជម្រៅលើបុគ្គលិកលក្ខណៈទាំង ១៦ របស់សិស្សកម្ពុជា",
-      "កំណត់បរិយាកាសសិក្សា និងរបៀបធ្វើការដែលស័ក្តិសមបំផុត",
-      "បង្ហាញពីចំណុចខ្លាំងនៃការទំនាក់ទំនង និងចំណុចខ្វះខាត",
+      "ពន្យល់បុគ្គលិកលក្ខណៈទាំង ១៦ ប្រភេទ",
+      "បង្ហាញពីរបៀបរៀន ប្រាស្រ័យទាក់ទង និងធ្វើការជាក្រុម",
+      "បង្ហាញចំណុចខ្លាំង និងចំណុចដែលគួរអភិវឌ្ឍ",
     ],
   },
   {
     id: "bacii",
     number: "03",
-    weight: "25%",
     heroTitleEn: "BACII Stream",
     heroTitleKm: "ថ្នាក់បាក់ឌុប",
     titleEn: "BACII Stream & Academic Prerequisites",
@@ -128,11 +130,11 @@ const ENGINES = [
     taglineEn: "MoEYS & University Admission Criteria",
     taglineKm: "លក្ខខណ្ឌតម្រូវផ្លូវការនៃក្រសួងអប់រំ និងសាកលវិទ្យាល័យ",
     descEn:
-      "Cross-validates your Grade 12 National Exam stream (Science vs. Social stream), strongest high school subjects, and tuition budget against official admission rules across 50+ Cambodian universities.",
+      "Compare your Grade 12 stream, strongest subjects, and tuition budget with common admission expectations for Cambodian university majors.",
     descKm:
-      "ផ្ទៀងផ្ទាត់ភាពត្រូវគ្នារវាងថ្នាក់វិទ្យាសាស្ត្រពិត ឬវិទ្យាសាស្ត្រសង្គម មុខវិជ្ជាពូកែ និងកម្រិតថវិកាសិក្សា ជាមួយលក្ខខណ្ឌចូលរៀនផ្លូវការនៃសាកលវិទ្យាល័យជាង ៥០ នៅកម្ពុជា។",
-    metricsEn: "10 Criteria • 5 Mins • Verified",
-    metricsKm: "១០ លក្ខខណ្ឌ • ៥ នាទី • ផ្ទៀងផ្ទាត់ផ្លូវការ",
+      "ប្រៀបធៀបថ្នាក់បាក់ឌុប មុខវិជ្ជាពូកែ និងថវិកាសិក្សារបស់អ្នក ជាមួយលក្ខខណ្ឌចូលរៀនទូទៅនៃជំនាញសាកលវិទ្យាល័យកម្ពុជា។",
+    metricsEn: "3 inputs • Instant results • Free",
+    metricsKm: "៣ ចំណុច • លទ្ធផលភ្លាមៗ • ឥតគិតថ្លៃ",
     icon: GraduationCap,
     color: "#059669",
     badgeClass: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -143,32 +145,31 @@ const ENGINES = [
     startTextEn: "Set Academic Preferences",
     startTextKm: "កំណត់ចំណូលចិត្តសិក្សា",
     featuresEn: [
-      "Checks science vs. social stream entrance eligibility",
-      "Filters programs by verified 4-year tuition budgets",
-      "Identifies MoEYS & CADT Techo scholarship quotas",
+      "Checks Science vs. Social stream alignment",
+      "Shows tuition context for matching pathways",
+      "Highlights prerequisite subjects for popular majors",
     ],
     featuresKm: [
-      "ពិនិត្យសិទ្ធិប្រឡងចូលថ្នាក់វិទ្យាសាស្ត្រ និងសង្គម",
-      "ច្រោះជំនាញតាមកម្រិតថវិកាសិក្សាជាក់ស្តែង ៤ ឆ្នាំពេញ",
-      "កំណត់កូតាអាហារូបករណ៍រដ្ឋ MoEYS និង CADT តេជោ",
+      "ពិនិត្យភាពត្រូវគ្នារវាងថ្នាក់វិទ្យាសាស្ត្រ និងសង្គម",
+      "បង្ហាញព័ត៌មានថ្លៃសិក្សាសម្រាប់ផ្លូវសិក្សាដែលត្រូវគ្នា",
+      "បង្ហាញមុខវិជ្ជាតម្រូវការសម្រាប់ជំនាញពេញនិយម",
     ],
   },
   {
     id: "labor",
     number: "04",
-    weight: "20%",
     heroTitleEn: "Labor Market",
     heroTitleKm: "ទីផ្សារការងារ",
     titleEn: "Cambodian Labor Market & Salary Realities",
     titleKm: "តម្រូវការទីផ្សារការងារ & ប្រាក់ខែជាក់ស្តែងនៅកម្ពុជា",
-    taglineEn: "National Employment Agency (NEA) Data",
-    taglineKm: "ទិន្នន័យផ្លូវការពីទីភ្នាក់ងារជាតិមុខរបរ និងការងារ",
+    taglineEn: "Cambodian Career & Salary Context",
+    taglineKm: "បរិបទអាជីព និងប្រាក់ខែនៅកម្ពុជា",
     descEn:
-      "Weights every recommendation by authentic Cambodian job market realities, entry-to-senior salary benchmarks ($600–$2,400+), and 5-year industry hiring trends in Cambodia's digital economy.",
+      "Connects majors to career profiles, skills, related majors, and salary ranges where verified. Missing salary data is shown clearly instead of guessed.",
     descKm:
-      "ថ្លឹងថ្លែងរាល់ការណែនាំដោយផ្អែកលើតម្រូវការការងារពិតប្រាកដនៅកម្ពុជា កម្រិតប្រាក់ខែជាក់ស្តែង ($៦០០ ដល់ $២,៤០០+) និងនិន្នាការកំណើនការងារក្នុងសេដ្ឋកិច្ចឌីជីថល ៥ ឆ្នាំទៅមុខ។",
-    metricsEn: "Real-time NEA Data • 80+ Careers",
-    metricsKm: "ទិន្នន័យ NEA ផ្ទាល់ • ជាង ៨០ អាជីព",
+      "ភ្ជាប់ជំនាញសិក្សាទៅកាន់ទម្រង់អាជីព ជំនាញ ជំនាញពាក់ព័ន្ធ និងកម្រិតប្រាក់ខែដែលបានផ្ទៀងផ្ទាត់។ ទិន្នន័យដែលមិនទាន់មានត្រូវបង្ហាញយ៉ាងច្បាស់ មិនមែនប៉ាន់ស្មានទេ។",
+    metricsEn: `${STATIC_CAREERS.length} careers • Salary context where verified`,
+    metricsKm: `${STATIC_CAREERS.length} អាជីព • ប្រាក់ខែដែលបានផ្ទៀងផ្ទាត់`,
     icon: TrendingUp,
     color: "#9333EA",
     badgeClass: "bg-purple-50 text-purple-700 border-purple-200",
@@ -179,14 +180,14 @@ const ENGINES = [
     startTextEn: "View Labor Data",
     startTextKm: "មើលទិន្នន័យការងារ",
     featuresEn: [
-      "Entry, mid, and senior salary ranges verified in USD",
-      "High-demand vs saturated Cambodian market classifications",
-      "Direct alignment with emerging Tech, FinTech & Green sectors",
+      "Salary ranges shown only where verified",
+      "Skills, related majors, and career paths",
+      "Missing data is marked instead of guessed",
     ],
     featuresKm: [
-      "កម្រិតប្រាក់ខែដំបូង មធ្យម និងជាន់ខ្ពស់គិតជាប្រាក់ដុល្លារ",
-      "បែងចែកវិស័យកំពុងខ្វះកម្លាំងពលកម្ម និងវិស័យដែលឆ្អែត",
-      "ត្រូវគ្នានឹងវិស័យបច្ចេកវិទ្យា ហិរញ្ញវត្ថុ និងថាមពលស្អាត",
+      "បង្ហាញកម្រិតប្រាក់ខែតែនៅកន្លែងដែលបានផ្ទៀងផ្ទាត់",
+      "ជំនាញ ជំនាញសិក្សាពាក់ព័ន្ធ និងផ្លូវអាជីព",
+      "ទិន្នន័យដែលខ្វះត្រូវបានសម្គាល់ មិនមែនប៉ាន់ស្មាន",
     ],
   },
 ];
@@ -207,40 +208,40 @@ const COMPARISON_ROWS: ComparisonRow[] = [
   {
     featureEn: "Scientific Methodology",
     featureKm: "វិធីសាស្ត្របែបវិទ្យាសាស្ត្រ",
-    orienxEn: "4-Pillar algorithmic formula (RIASEC, MBTI, BACII stream, and NEA labor market data).",
-    orienxKm: "រូបមន្តវិទ្យាសាស្ត្រ ៤ វិមាត្រ (RIASEC, MBTI, ថ្នាក់បាក់ឌុប និងទីផ្សារការងារ NEA)។",
+    orienxEn: "4-pillar guidance framework: interests, personality, BACII context, and career profiles.",
+    orienxKm: "ក្របខ័ណ្ឌណែនាំ ៤ ជំហាន៖ ចំណាប់អារម្មណ៍ បុគ្គលិកលក្ខណៈ បរិបទបាក់ឌុប និងទម្រង់អាជីព។",
     genericEn: "Single 5-question pop quiz based on superficial hobbies and random guessing.",
     genericKm: "កម្រងសំណួរកម្សាន្ត ៥ សំណួរទាយតាមចំណង់ចំណូលចិត្តបណ្តោះអាសន្ន។",
   },
   {
     featureEn: "Cambodian Context Localization",
     featureKm: "ការផ្សារភ្ជាប់បរិបទកម្ពុជា",
-    orienxEn: "100% localized for RUPP, ITC, CADT, RULE, and 50+ accredited Cambodian institutions.",
-    orienxKm: "ត្រូវគ្នា ១០០% ជាមួយ RUPP, ITC, CADT, RULE និងសាកលវិទ្យាល័យជាង ៥០ នៅកម្ពុជា។",
+    orienxEn: "Built around Cambodian majors, universities, tuition context, and admission pathways.",
+    orienxKm: "បង្កើតឡើងសម្រាប់ជំនាញ សាកលវិទ្យាល័យ ថ្លៃសិក្សា និងផ្លូវចូលរៀននៅកម្ពុជា។",
     genericEn: "Generic foreign systems completely irrelevant to Cambodian degrees and colleges.",
     genericKm: "ប្រើប្រព័ន្ធបរទេស មិនត្រូវនឹងសាកលវិទ្យាល័យ និងជំនាញនៅស្រុកខ្មែរឡើយ។",
   },
   {
     featureEn: "Financial & Tuition Prerequisite",
     featureKm: "ការផ្ទៀងផ្ទាត់តម្លៃសិក្សា",
-    orienxEn: "Filters by verified 4-year tuition ($500 state to $2,500+ private) to ensure affordability.",
-    orienxKm: "ច្រោះតាមតម្លៃសិក្សា ៤ ឆ្នាំពិតប្រាកដ ($៥០០ សាលារដ្ឋ ដល់ $២,៥០០+ ឯកជន)។",
+    orienxEn: "Shows tuition where verified and marks missing figures instead of guessing.",
+    orienxKm: "បង្ហាញថ្លៃសិក្សាដែលបានផ្ទៀងផ្ទាត់ និងសម្គាល់ទិន្នន័យដែលមិនទាន់មាន។",
     genericEn: "Zero budget checks; often recommends unaffordable programs leading to dropouts.",
     genericKm: "គ្មានការពិនិត្យថវិកា ណែនាំសាលាដែលលើសពីលទ្ធភាពហិរញ្ញវត្ថុគ្រួសារ។",
   },
   {
     featureEn: "BACII High School Stream Check",
     featureKm: "ការផ្ទៀងផ្ទាត់ថ្នាក់បាក់ឌុប",
-    orienxEn: "Validates Grade 12 Science vs. Social stream prerequisite subjects before recommending.",
-    orienxKm: "ផ្ទៀងផ្ទាត់លក្ខខណ្ឌមុខវិជ្ជាថ្នាក់វិទ្យាសាស្ត្រ ឬសង្គម ដើម្បីធានាសិទ្ធិចូលរៀន។",
+    orienxEn: "Uses your Grade 12 stream and strongest subjects to highlight likely prerequisites.",
+    orienxKm: "ប្រើថ្នាក់បាក់ឌុប និងមុខវិជ្ជាពូកែរបស់អ្នក ដើម្បីបង្ហាញលក្ខខណ្ឌដែលអាចត្រូវការ។",
     genericEn: "Ignores Grade 12 tracks, risking entrance exam disqualification.",
     genericKm: "មិនគិតពីថ្នាក់រៀន នាំឱ្យខុសលក្ខខណ្ឌ និងធ្លាក់ការប្រឡងជ្រើសរើសចូលរៀន។",
   },
   {
-    featureEn: "Labor Market & Salaries (NEA)",
-    featureKm: "ទីផ្សារការងារ & ប្រាក់ខែ",
-    orienxEn: "Weighted by authentic NEA hiring demand and verified salary scales ($600–$2,400+).",
-    orienxKm: "ផ្អែកលើទិន្នន័យ NEA៖ កម្រិតប្រាក់ខែជាក់ស្តែង ($៦០០–$២,៤០០+) និងតម្រូវការការងារពិត។",
+    featureEn: "Career & Salary Context",
+    featureKm: "បរិបទអាជីព & ប្រាក់ខែ",
+    orienxEn: "Connects majors to career profiles and salary context where verified.",
+    orienxKm: "ភ្ជាប់ជំនាញសិក្សាទៅទម្រង់អាជីព និងកម្រិតប្រាក់ខែដែលបានផ្ទៀងផ្ទាត់។",
     genericEn: "Zero local employment insights or exaggerated Western wage estimates.",
     genericKm: "គ្មានទិន្នន័យទីផ្សារការងារ ឬដាក់ប្រាក់ខែបរទេសដែលមិនពិតនៅកម្ពុជា។",
   },
@@ -268,11 +269,11 @@ export default function PublicAssessmentsHubPage() {
       {
         id: "faq-free-access",
         question: isKm
-          ? "តើតេស្តទាំង ៤ នេះឥតគិតថ្លៃ ១០០% សម្រាប់សិស្សកម្ពុជាឬទេ?"
-          : "Are all 4 diagnostic assessments 100% free for Cambodian students?",
+          ? "តើឧបករណ៍ណែនាំទាំង ៤ នេះឥតគិតថ្លៃសម្រាប់សិស្សកម្ពុជាឬទេ?"
+          : "Are all 4 guidance tools free for Cambodian students?",
         answer: isKm
-          ? "ឥតគិតថ្លៃ ១០០%! សិស្សានុសិស្ស និងអាណាព្យាបាលកម្ពុជាទាំងអស់អាចធ្វើតេស្តទាំង ៤ (RIASEC, បុគ្គលិកលក្ខណៈទាំង ១៦, ថ្នាក់បាក់ឌុប និងទិន្នន័យទីផ្សារការងារ) ដោយសេរី ដោយគ្មានការគិតថ្លៃ ឬទាមទារបង់ប្រាក់ឡើយ។"
-          : "Yes, 100% free! Every Cambodian student and parent can complete all 4 assessments (Holland RIASEC, 16 Personalities, BACII Stream Validator, and Labor Market alignment) with zero fees, paywalls, or hidden charges.",
+          ? "បាទ/ចាស! សិស្ស និងអាណាព្យាបាលកម្ពុជាអាចប្រើឧបករណ៍ទាំង ៤ (RIASEC, បុគ្គលិកលក្ខណៈ ១៦, ព័ត៌មានថ្នាក់បាក់ឌុប និងទម្រង់អាជីព) ដោយឥតគិតថ្លៃ។"
+          : "Yes. Cambodian students and parents can use all four tools (RIASEC, 16 Personalities, BACII context, and career profiles) without a fee.",
       },
       {
         id: "faq-conflicting-results",
@@ -280,8 +281,8 @@ export default function PublicAssessmentsHubPage() {
           ? "ចុះប្រសិនបើតេស្ត RIASEC និងបុគ្គលិកលក្ខណៈផ្តល់លទ្ធផលមិនដូចគ្នា?"
           : "What if my RIASEC score and 16-Personality suggest different fields?",
         answer: isKm
-          ? "នេះជាចំណុចខ្លាំងនៃរូបមន្ត ៤ វិមាត្ររបស់ OrienX! តេស្ត RIASEC វាស់លើកិច្ចការ និងមុខវិជ្ជាដែលអ្នកចូលចិត្តធ្វើ ចំណែកតេស្តបុគ្គលិកលក្ខណៈវាស់លើរបៀបដែលអ្នកគិត ទំនាក់ទំនង និងដោះស្រាយសម្ពាធ។ ក្បួនដោះស្រាយ AI នឹងស្វែងរកចំណុចប្រសព្វ (ឧទាហរណ៍៖ ប្រសិនបើអ្នកចូលចិត្តបច្ចេកវិទ្យា តែចូលចិត្តទំនាក់ទំនងមនុស្ស ប្រព័ន្ធនឹងណែនាំ IT Product Management ឬ FinTech Consulting)។"
-          : "This is the core strength of OrienX's multi-pillar formula! RIASEC measures the concrete work tasks and academic subjects you naturally enjoy, while 16-Personalities measures how your brain processes information, collaborates in teams, and handles study stress. When they point in different directions, our algorithm resolves the overlap—for example, pairing a high tech interest (RIASEC) with high social extraversion (MBTI) to recommend hybrid careers like IT Product Management or FinTech Consulting.",
+          ? "តេស្ត RIASEC វាស់កិច្ចការ និងមុខវិជ្ជាដែលអ្នកចូលចិត្តធ្វើ ចំណែកតេស្តបុគ្គលិកលក្ខណៈវាស់របៀបដែលអ្នកគិត ទំនាក់ទំនង និងដោះស្រាយសម្ពាធ។ នៅពេលលទ្ធផលខុសគ្នា សូមអានផ្នែកដែលត្រួតគ្នា ហើយប្រៀបធៀបជំនាញដែលទាក់ទងនឹងចំណាប់អារម្មណ៍ និងរបៀបធ្វើការរបស់អ្នក។"
+          : "RIASEC measures the work tasks and subjects you naturally enjoy, while the personality result shows how you think, communicate, and handle study stress. When they point in different directions, compare the overlapping majors and read the details for each path instead of treating either result as a fixed label.",
       },
       {
         id: "faq-cambodia-matching-engine",
@@ -289,8 +290,8 @@ export default function PublicAssessmentsHubPage() {
           ? "តើ OrienX ភ្ជាប់ពិន្ទុតេស្តទៅកាន់សាកលវិទ្យាល័យកម្ពុជា និងទីផ្សារការងារដោយរបៀបណា?"
           : "How does OrienX match my scores to Cambodian universities and real job market data?",
         answer: isKm
-          ? "OrienX ផ្គូផ្គងកម្មវិធីសិក្សានៃសាកលវិទ្យាល័យជាង ៥០ នៅកម្ពុជា (ដូចជា ITC, RUPP, CADT, Paragon, RULE និង NUM) ជាមួយប្រព័ន្ធវិភាគ។ រាល់ការណែនាំសុទ្ធតែផ្ទៀងផ្ទាត់ជាមួយទិន្នន័យទីភ្នាក់ងារជាតិមុខរបរ និងការងារ (NEA) កម្រិតប្រាក់ខែជាក់ស្តែងនៅកម្ពុជា ($៦០០ ដល់ $២,៤០០+) និងតម្លៃសិក្សា ៤ ឆ្នាំពិតប្រាកដ។"
-          : "OrienX maps accredited degree curricula across 50+ Cambodian institutions (such as ITC, RUPP, CADT, Paragon, RULE, and NUM) to our diagnostic framework. Every recommendation cross-references official National Employment Agency (NEA) labor data, entry-to-senior Cambodian salary benchmarks ($600–$2,400+), and verified 4-year tuition fee realities.",
+          ? `OrienX ភ្ជាប់លទ្ធផលទៅកាន់ជំនាញសាកលវិទ្យាល័យកម្ពុជា ${STATIC_MAJORS.length} ក្នុងបញ្ជី សាកលវិទ្យាល័យ ${STATIC_UNIVERSITIES.length} និងទម្រង់អាជីព ${STATIC_CAREERS.length}។ ទិន្នន័យថ្លៃសិក្សា និងប្រាក់ខែត្រូវបង្ហាញតែនៅកន្លែងដែលបានផ្ទៀងផ្ទាត់។`
+          : `OrienX connects results to ${STATIC_MAJORS.length} Cambodian majors, ${STATIC_UNIVERSITIES.length} universities, and ${STATIC_CAREERS.length} career profiles. Tuition and salary data are shown only where verified.`,
       },
       {
         id: "faq-share-with-parents",
@@ -298,17 +299,17 @@ export default function PublicAssessmentsHubPage() {
           ? "តើខ្ញុំអាចទាញយករបាយការណ៍ចែករំលែកជាមួយឪពុកម្តាយ ឬលោកគ្រូអ្នកគ្រូបានទេ?"
           : "Can I download and share my diagnostic report with my parents or high school counselor?",
         answer: isKm
-          ? "បានយ៉ាងងាយស្រួល! នៅពេលអ្នកបញ្ចប់តេស្ត អ្នកអាចទាញយករបាយការណ៍វិភាគកម្រិតខ្ពស់ជាទម្រង់ PDF ដែលមានគំនូសតាងរ៉ាដា RIASEC បុគ្គលិកលក្ខណៈ ភាពត្រូវគ្នានឹងថ្នាក់បាក់ឌុប តម្លៃសិក្សា ៤ ឆ្នាំ និងប្រាក់ខែគោលដៅ ដើម្បីពិភាក្សាជាមួយឪពុកម្តាយប្រកបដោយទំនុកចិត្ត។"
-          : "Yes! Upon completing the diagnostic journey, you can export a comprehensive counselor-grade PDF report. It includes your Holland RIASEC radar profile, MBTI cognitive archetype, BACII stream eligibility, verified tuition budget schedules, and career salary outlooks, making family educational planning transparent and stress-free.",
+          ? "បាទ/ចាស! បន្ទាប់ពីបញ្ចប់តេស្ត អ្នកអាចទាញយករបាយការណ៍ PDF ដែលមានពិន្ទុ ចំណុចខ្លាំង ជំនាញដែលត្រូវគ្នា និងជំហានបន្ទាប់ ដើម្បីពិភាក្សាជាមួយគ្រួសារ ឬគ្រូប្រឹក្សា។"
+          : "Yes. After finishing a test, you can export a PDF report with your scores, strengths, matching majors, and suggested next steps to discuss with family or a counselor.",
       },
       {
         id: "faq-total-duration",
         question: isKm
-          ? "តើត្រូវចំណាយពេលប៉ុន្មានដើម្បីបញ្ចប់តេស្តទាំង ៤ នេះ?"
-          : "How long does it take to complete all 4 assessments?",
+          ? "តើត្រូវចំណាយពេលប៉ុន្មានដើម្បីប្រើឧបករណ៍ទាំង ៤ នេះ?"
+          : "How long does it take to use all 4 guidance tools?",
         answer: isKm
-          ? "ដំណើរការវាយតម្លៃទាំងមូលចំណាយពេលសរុបប្រហែល ២៥ ទៅ ៣០ នាទីប៉ុណ្ណោះ៖ តេស្ត RIASEC (~១០ នាទី) បុគ្គលិកលក្ខណៈ (~១២ នាទី) និងចំណូលចិត្តថ្នាក់បាក់ឌុប (~៥ នាទី)។ អ្នកអាចធ្វើម្តងមួយៗតាមភាពងាយស្រួល ហើយប្រព័ន្ធនឹងរក្សាទុកវឌ្ឍនភាពរបស់អ្នកដោយស្វ័យប្រវត្តិ។"
-          : "The complete journey takes approximately 25 to 30 minutes in total: Holland RIASEC (~10 mins), 16 Personalities (~12 mins), and BACII Stream & Preferences (~5 mins). You can take them sequentially or one at a time—your progress is automatically saved to your OrienX student profile.",
+          ? "ប្រហែល ១០ នាទីសម្រាប់ការណែនាំទាំងមូល៖ RIASEC (~៤ នាទី) បុគ្គលិកលក្ខណៈ (~៣ នាទី) និងកម្មវិធីពិសោធន៍ថ្នាក់បាក់ឌុប (លទ្ធផលភ្លាមៗ)។ អ្នកអាចធ្វើម្តងមួយៗ ហើយចម្លើយនឹងត្រូវរក្សាទុកលើឧបករណ៍របស់អ្នក។"
+          : "About 10 minutes in total: RIASEC (~4 mins), 16 Personalities (~3 mins), and the BACII simulator (instant results). You can use them one at a time, and your answers are saved on your device.",
       },
     ];
   }, [isKm]);
@@ -457,14 +458,14 @@ export default function PublicAssessmentsHubPage() {
                     <>
                       Scientific Self-Discovery
                       <br className="hidden sm:inline" />
-                      <span className="text-[#F7CE4D]"> & AI Major Matching</span>
+                      <span className="text-[#F7CE4D]"> & Major Matching</span>
                     </>
                   )}
                 </h1>
                 <p className="gsap-assess-hero-anim max-w-[46ch] text-[15px] font-normal leading-relaxed text-slate-300/90 sm:text-base">
                   {isKm
-                    ? "តេស្តវិទ្យាសាស្ត្រ ៤ ប្រភេទ ផ្តល់ផ្លូវច្បាស់លាស់មួយទៅកាន់ជំនាញ និងសាកលវិទ្យាល័យដែលស័ក្តិសមនឹងអ្នក។"
-                    : "Four evidence-based assessments, one clear path to the Cambodian major and university that fit you."}
+                    ? "ឧបករណ៍ណែនាំ ៤ ប្រភេទ ផ្តល់ផ្លូវច្បាស់លាស់មួយទៅកាន់ជំនាញ និងសាកលវិទ្យាល័យដែលស័ក្តិសមនឹងអ្នក។"
+                    : "Four evidence-based guidance tools, one clearer path to a Cambodian major and university that fit you."}
                 </p>
               </div>
 
@@ -498,9 +499,17 @@ export default function PublicAssessmentsHubPage() {
               </div>
 
               <div className="gsap-assess-hero-anim flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-white/10 pt-4 text-[11px] font-medium text-white/45">
-                <span>{isKm ? "ជំនាញ ១២០+" : "120+ majors"}</span>
+                <span>
+                  {isKm
+                    ? `ជំនាញ ${STATIC_MAJORS.length}`
+                    : `${STATIC_MAJORS.length} majors`}
+                </span>
                 <span className="h-1 w-1 rounded-full bg-white/25" />
-                <span>{isKm ? "សាកលវិទ្យាល័យ ៥០+" : "50+ universities"}</span>
+                <span>
+                  {isKm
+                    ? `សាកលវិទ្យាល័យ ${STATIC_UNIVERSITIES.length}`
+                    : `${STATIC_UNIVERSITIES.length} universities`}
+                </span>
                 <span className="h-1 w-1 rounded-full bg-white/25" />
                 <span>{isKm ? "ឥតគិតថ្លៃ ១០០%" : "100% free"}</span>
               </div>
@@ -531,7 +540,7 @@ export default function PublicAssessmentsHubPage() {
                         key={engine.id}
                         className="rounded-full"
                         style={{
-                          flexGrow: parseFloat(engine.weight),
+                          flexGrow: 1,
                           flexBasis: 0,
                           backgroundColor: engine.color,
                         }}
@@ -550,9 +559,7 @@ export default function PublicAssessmentsHubPage() {
                           <span className="min-w-0 flex-1 truncate text-[12.5px] font-semibold text-white/90">
                             {isKm ? engine.heroTitleKm : engine.heroTitleEn}
                           </span>
-                          <span className="shrink-0 text-[12px] font-extrabold tabular-nums text-[#F7CE4D]">
-                            {engine.weight}
-                          </span>
+                          <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
                         </div>
                       );
                     })}
@@ -560,7 +567,7 @@ export default function PublicAssessmentsHubPage() {
 
                   <div className="mt-3 flex items-center justify-between gap-3 border-t border-white/10 pt-3.5">
                     <span className="text-[10.5px] font-medium text-white/40">
-                      {isKm ? "២៥–៣០ នាទីសរុប" : "25–30 min total"}
+                      {isKm ? "ប្រហែល ១០ នាទីសរុប" : "About 10 min total"}
                     </span>
                     <Link
                       href="#engines"
@@ -584,7 +591,7 @@ export default function PublicAssessmentsHubPage() {
         <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#111965]/5 dark:bg-white/10 border border-[#111965]/10 dark:border-white/15 text-[12px] font-bold text-[#111965] dark:text-blue-300 tracking-wider uppercase">
             <Zap className="w-3.5 h-3.5 text-[#F7CE4D]" />
-            <span>{isKm ? "ម៉ាស៊ីនវិភាគទាំង ៤ របស់ OrienX" : "The 4 Pillars of Precision Matching"}</span>
+            <span>{isKm ? "មូលដ្ឋានណែនាំទាំង ៤ របស់ OrienX" : "The 4 Guidance Pillars"}</span>
           </div>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111965] dark:text-white tracking-tight">
             {isKm ? "តេស្តវិភាគលម្អិតសម្រាប់សិស្សកម្ពុជា" : "Dedicated Diagnostic Engines"}
@@ -613,7 +620,7 @@ export default function PublicAssessmentsHubPage() {
                           PILLAR {engine.number}
                         </span>
                         <span className={`px-2.5 py-0.5 rounded-full text-xs font-black border ${engine.badgeClass}`}>
-                          Weight: {engine.weight}
+                          {isKm ? "វិមាត្រសំខាន់" : "Core pillar"}
                         </span>
                       </div>
                       <h3 className="text-xl sm:text-2xl font-black text-[#111965] dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
@@ -694,8 +701,8 @@ export default function PublicAssessmentsHubPage() {
             </h2>
             <p className="text-xs sm:text-sm text-[#68708A] dark:text-slate-300 leading-relaxed">
               {isKm
-                ? "ចំណាយពេលត្រឹមតែ ២៥-៣០ នាទីដើម្បីទទួលបានផែនទីបង្ហាញផ្លូវសិក្សា និងអាជីពពេញលេញ។"
-                : "From authentic self-discovery to confident enrollment in your dream university program."}
+                ? "ចំណាយពេលប្រហែល ១០ នាទីដើម្បីទទួលបានទិសដៅសិក្សា និងអាជីពកាន់តែច្បាស់។"
+                : "A short, transparent path from self-discovery to a clearer study shortlist."}
             </p>
           </div>
 
@@ -710,12 +717,12 @@ export default function PublicAssessmentsHubPage() {
                 </h3>
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   {isKm
-                    ? "ឆ្លើយ ៣០ សំណួរជាក់ស្តែងដើម្បីស្វែងរកចំណាប់អារម្មណ៍ការងារពីធម្មជាតិ ៦ វិមាត្រ។"
-                    : "Complete 30 localized question items to measure your natural affinity for practical, analytical, or social tasks."}
+                    ? "ឆ្លើយ ១៨ សកម្មភាពជាក់ស្តែងដើម្បីស្វែងរកចំណាប់អារម្មណ៍ការងារពីធម្មជាតិ ៦ វិមាត្រ។"
+                    : "Complete 18 activity items to measure your natural affinity for practical, analytical, or social tasks."}
                 </p>
               </div>
               <div className="text-[12px] font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/40 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
-                ~10 Mins • 30 Items
+                ~4 Mins • 18 Activities
               </div>
             </div>
 
@@ -730,11 +737,11 @@ export default function PublicAssessmentsHubPage() {
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   {isKm
                     ? "ស្វែងយល់ពីរចនាប័ទ្មនៃការគិត ភាពធន់នឹងសម្ពាធ និងរបៀបធ្វើការងារជាក្រុម។"
-                    : "Explore your cognitive information style and study endurance across 4 temperament archetypes."}
+                    : "Explore how you think, communicate, and work in teams across four preference pairs."}
                 </p>
               </div>
               <div className="text-[12px] font-bold text-blue-800 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/40 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
-                ~12 Mins • 60 Items
+                ~3 Mins • 12 Statements
               </div>
             </div>
 
@@ -748,12 +755,12 @@ export default function PublicAssessmentsHubPage() {
                 </h3>
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   {isKm
-                    ? "កំណត់មុខវិជ្ជាពូកែ ថ្នាក់វិទ្យាសាស្ត្រ ឬសង្គម ថវិកាសិក្សា និងទីតាំងសាកលវិទ្យាល័យ។"
-                    : "Confirm Grade 12 Science vs. Social stream prerequisites, annual tuition budget, and campus location."}
+                    ? "កំណត់មុខវិជ្ជាពូកែ ថ្នាក់វិទ្យាសាស្ត្រ ឬសង្គម និងថវិកាសិក្សា។"
+                    : "Choose your Grade 12 stream, strongest subjects, and annual tuition budget."}
                 </p>
               </div>
               <div className="text-[12px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
-                ~5 Mins • 10 Criteria
+                Instant • 3 Inputs
               </div>
             </div>
 
@@ -763,16 +770,16 @@ export default function PublicAssessmentsHubPage() {
                   4
                 </div>
                 <h3 className="text-base font-extrabold text-[#111965] dark:text-white">
-                  {isKm ? "៤. លទ្ធផលផ្គូផ្គង AI" : "4. AI Recommendations"}
+                  {isKm ? "៤. លទ្ធផលផ្ទាល់ខ្លួន" : "4. Your Results"}
                 </h3>
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                   {isKm
-                    ? "ប្រព័ន្ធ AI បញ្ចូលទិន្នន័យទាំង ៤ វិមាត្រដើម្បីបង្កើតបញ្ជីជំនាញ និងសាកលវិទ្យាល័យស័ក្តិសម ១០០%។"
-                    : "Receive transparent fit percentage scores, tuition schedules, and parent-shareable counselor PDF reports."}
+                    ? "ទទួលបានពិន្ទុត្រូវគ្នា ជំនាញពាក់ព័ន្ធ និងជម្រើសអាជីព ដែលអាចទាញយក ឬចែករំលែកបាន។"
+                    : "Receive transparent match scores, related majors, and career ideas you can export or share."}
                 </p>
               </div>
               <div className="text-[12px] font-bold text-purple-800 dark:text-purple-300 bg-purple-200 dark:bg-purple-950/40 border border-purple-300 dark:border-purple-800/40 px-2.5 py-1 rounded-xl inline-block mt-3 self-start">
-                Instant • 100% Precision
+                Instant Results
               </div>
             </div>
           </div>
@@ -878,9 +885,9 @@ export default function PublicAssessmentsHubPage() {
         subtitle={
           isKm
             ? "ចាប់ផ្តើមធ្វើតេស្ត Holland RIASEC ជាជំហានដំបូង រួចបន្តទៅកាន់បុគ្គលិកលក្ខណៈទាំង ១៦ និងលក្ខខណ្ឌសិក្សា ដើម្បីទទួលបានលទ្ធផលផ្គូផ្គងភ្លាមៗ។"
-            : "Begin with the 10-minute Holland RIASEC assessment, followed by 16 Personalities and BACII stream validation for 100% precision matching."
+            : "Begin with the short Holland RIASEC assessment, then explore 16 Personalities and your BACII stream context."
         }
-        primaryButtonText={isKm ? "ចាប់ផ្តើមធ្វើតេស្ត RIASEC (១០ នាទី)" : "Start Free Assessment (10 Mins)"}
+        primaryButtonText={isKm ? "ចាប់ផ្តើមតេស្ត RIASEC (ប្រហែល ៤ នាទី)" : "Start Free RIASEC (About 4 Mins)"}
         primaryButtonHref="/assessments/riasec/test"
         secondaryButtonText={isKm ? "ស្វែងរកជំនាញសាកលវិទ្យាល័យ" : "Explore University Majors"}
         secondaryButtonHref="/majors"
@@ -888,21 +895,23 @@ export default function PublicAssessmentsHubPage() {
         badges={[
           {
             icon: <Clock className="w-4 h-4 text-[#F7CE4D] shrink-0" />,
-            label: isKm ? "ដំណើរការ ២៥-៣០ នាទី" : "25–30 Min Total Journey",
+            label: isKm ? "ប្រហែល ១០ នាទីសរុប" : "About 10 Min Total",
           },
           {
             icon: <Target className="w-4 h-4 text-emerald-400 shrink-0" />,
-            label: isKm ? "រូបមន្តវិទ្យាសាស្ត្រ ៤ វិមាត្រ" : "4-Pillar Precision Formula",
+            label: isKm ? "ក្របខ័ណ្ឌណែនាំ ៤ ជំហាន" : "4 Guidance Pillars",
           },
           {
             icon: <GraduationCap className="w-4 h-4 text-sky-400 shrink-0" />,
-            label: isKm ? "ផ្គូផ្គង ១២០+ ជំនាញ" : "120+ Verified Majors",
+            label: isKm
+              ? `ជំនាញ ${STATIC_MAJORS.length} ក្នុងបញ្ជី`
+              : `${STATIC_MAJORS.length} Majors in the Directory`,
           },
         ]}
         trustText={
           isKm
-            ? "ផ្អែកលើស្តង់ដារចិត្តវិទ្យា John Holland, MBTI, MoEYS និងទិន្នន័យទីផ្សារការងារ NEA"
-            : "Based on John Holland's standard, MBTI, MoEYS and NEA labor market data"
+            ? "ផ្អែកលើក្របខ័ណ្ឌ Holland RIASEC, បុគ្គលិកលក្ខណៈ ១៦ ប្រភេទ, បរិបទបាក់ឌុប និងទម្រង់អាជីពកម្ពុជា"
+            : "Built on Holland's RIASEC framework, 16 personality styles, BACII context, and Cambodian career profiles"
         }
       />
     </div>
