@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Plus_Jakarta_Sans, Noto_Sans_Khmer } from "next/font/google";
 import "./globals.css";
@@ -33,20 +33,174 @@ const notoSansKhmer = Noto_Sans_Khmer({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#101965" },
+    { media: "(prefers-color-scheme: dark)", color: "#080D2B" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata: Metadata = {
-  title: "OrienX — Discover Your Direction. Shape Your Future.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://orienx.edu.kh"),
+  title: {
+    default: "OrienX — Discover Your Direction. Shape Your Future.",
+    template: "%s | OrienX Cambodia",
+  },
   description:
-    "Cambodia's modern education and career guidance platform. Discover your interests through MBTI and RIASEC assessments, explore verified Cambodian university majors, compare tuition, and find scholarships.",
+    "Cambodia's modern education and career guidance ecosystem. Discover your authentic strengths through Holland RIASEC & MBTI assessments, explore verified Cambodian university majors and tuition fees, and unlock full-ride scholarships.",
+  applicationName: "OrienX",
+  authors: [{ name: "OrienX Team", url: "https://orienx.edu.kh" }],
+  creator: "OrienX",
+  publisher: "OrienX Higher Education Platform",
+  category: "Education",
+  classification: "Higher Education & Career Guidance",
   keywords: [
+    // English keywords
     "Cambodia education",
     "Cambodian universities",
-    "RUPP",
-    "ITC Techno",
-    "AUPP",
-    "Major recommendation",
+    "RUPP Royal University of Phnom Penh",
+    "ITC Institute of Technology Cambodia Techno",
+    "AUPP American University of Phnom Penh",
+    "CADT Cambodia Academy of Digital Technology",
+    "Paragon International University",
+    "National University of Management NUM",
+    "Major recommendation Cambodia",
     "Career guidance Cambodia",
-    "Scholarships Cambodia",
+    "University tuition fees Cambodia",
+    "Scholarships in Cambodia",
     "Grade 12 BacII guidance",
+    "Holland RIASEC test Cambodia",
+    "16 Personalities test Khmer",
+    "MoEYS scholarships",
+    // Khmer search keywords (essential for local Google ranking)
+    "សាកលវិទ្យាល័យនៅកម្ពុជា",
+    "រៀនជំនាញអ្វី",
+    "តម្លៃសិក្សាសាកលវិទ្យាល័យ",
+    "អាហារូបករណ៍",
+    "តេស្តជំនាញ",
+    "តេស្ត RIASEC",
+    "សាកលវិទ្យាល័យភូមិន្ទភ្នំពេញ",
+    "វិទ្យាស្ថានបច្ចេកវិទ្យាកម្ពុជា",
+    "ការប្រឡងបាក់ឌុប",
+    "ឱកាសការងារ និងប្រាក់ខែ",
+  ],
+  alternates: {
+    canonical: "/",
+    languages: {
+      "km-KH": "/",
+      "en-US": "/?lang=en",
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/images/orienx-mark.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/images/orienx-mark.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  openGraph: {
+    title: "OrienX — Discover Your Direction. Shape Your Future.",
+    description:
+      "Cambodia's modern guidance ecosystem pairing Holland RIASEC & MBTI self-discovery with verified university tuitions, BacII cutoffs, and 100% scholarships.",
+    url: "/",
+    siteName: "OrienX",
+    locale: "km_KH",
+    alternateLocale: ["en_US"],
+    type: "website",
+    images: [
+      {
+        url: "/images/og-image.webp",
+        width: 1200,
+        height: 630,
+        alt: "OrienX — Discover Your Direction. Shape Your Future.",
+        type: "image/webp",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OrienX — Discover Your Direction. Shape Your Future.",
+    description:
+      "Cambodia's modern guidance ecosystem pairing Holland RIASEC & MBTI self-discovery with verified university tuitions, BacII cutoffs, and 100% scholarships.",
+    images: ["/images/og-image.webp"],
+  },
+};
+
+const jsonLdSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://orienx.edu.kh/#website",
+      url: "https://orienx.edu.kh",
+      name: "OrienX",
+      alternateName: ["OrienX Cambodia", "Futera OrienX"],
+      description:
+        "Cambodia's modern higher education, university major guidance, and career intelligence ecosystem.",
+      inLanguage: ["km-KH", "en-US"],
+      potentialAction: {
+        "@type": "SearchAction",
+        target: "https://orienx.edu.kh/majors?search={search_term_string}",
+        "query-input": "required name=search_term_string",
+      },
+    },
+    {
+      "@type": "EducationalOrganization",
+      "@id": "https://orienx.edu.kh/#organization",
+      name: "OrienX",
+      url: "https://orienx.edu.kh",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://orienx.edu.kh/images/orienx-mark.png",
+        width: "344",
+        height: "386",
+      },
+      description:
+        "Comprehensive, objective education and career guidance platform for Cambodian high school students and university undergraduates.",
+      areaServed: {
+        "@type": "Country",
+        name: "Cambodia",
+      },
+      knowsAbout: [
+        "Higher Education in Cambodia",
+        "Holland RIASEC Vocational Psychology",
+        "16 Personalities MBTI Assessment",
+        "Cambodian University Tuition Fees",
+        "Grade 12 BacII Stream Matching",
+        "National Employment Agency Labor Trends",
+      ],
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://orienx.edu.kh/#app",
+      name: "OrienX Educational Guidance & Career Recommendation System",
+      applicationCategory: "EducationalApplication",
+      operatingSystem: "All",
+      browserRequirements: "Requires JavaScript. Requires HTML5.",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+      description:
+        "Psychometric assessment tools (RIASEC, MBTI), Grade 12 BacII stream prerequisites check, and verified Cambodian university major matching.",
+    },
   ],
 };
 
@@ -65,6 +219,10 @@ export default function RootLayout({
         <Script id="theme-init" strategy="beforeInteractive">
           {`(function(){try{var t=localStorage.getItem('futera_theme');var d=t==='dark'||((!t||t==='system')&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d){document.documentElement.classList.add('dark');}}catch(e){}})();`}
         </Script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }}
+        />
       </head>
       <body className="min-h-screen flex flex-col bg-[#F5F6FA] text-[#171A2C] selection:bg-[#F7CE4D] selection:text-[#111965]">
         <HeroUIProvider>
