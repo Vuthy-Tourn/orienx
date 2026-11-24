@@ -511,6 +511,15 @@ const CATEGORY_VISUAL_MAP: Record<
   },
 };
 
+const POPULAR_MAJOR_SLUGS = [
+  "business-administration",
+  "information-technology",
+  "banking-finance",
+  "law-jurisprudence",
+  "civil-engineering",
+  "english-teaching-tefl",
+] as const;
+
 export function FeaturedMajorsGrid() {
   const { t, getLocalized, language } = useLanguage();
 
@@ -522,7 +531,11 @@ export function FeaturedMajorsGrid() {
   const refetch = () => {};
 
   const majors = useMemo(() => {
-    return (majorsData || []).slice(0, 6);
+    const bySlug = new Map(majorsData.map((major) => [major.slug, major]));
+    return POPULAR_MAJOR_SLUGS.flatMap((slug) => {
+      const major = bySlug.get(slug);
+      return major ? [major] : [];
+    });
   }, [majorsData]);
 
   return (
