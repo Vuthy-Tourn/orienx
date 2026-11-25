@@ -900,9 +900,9 @@ export function AssessmentStage({
             type="button"
             onClick={onSubmit}
             disabled={answeredCount < totalCount || isSubmitting}
-            className="inline-flex items-center gap-2 px-5 sm:px-7 py-2.5 rounded-full font-black text-xs text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-md disabled:opacity-40 transition-all whitespace-nowrap flex-shrink-0 cursor-pointer select-none"
+            className="inline-flex items-center gap-2 px-5 sm:px-7 py-2.5 rounded-full font-black text-xs sm:text-sm text-[#0F1754] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-md disabled:opacity-40 transition-all whitespace-nowrap flex-shrink-0 cursor-pointer select-none"
           >
-            <Sparkles className="w-4 h-4 text-[#111965] flex-shrink-0" />
+            <Sparkles className="w-4 h-4 text-[#0F1754] flex-shrink-0" />
             <span className="whitespace-nowrap">
               {isSubmitting
                 ? t("personalityAssessment.evaluating") || "កំពុងគណនា..."
@@ -924,7 +924,7 @@ export function AssessmentStage({
 
       {/* Helper Banner for Unready Questions if user reached end */}
       {currentIndex === totalCount - 1 && unreadyCount > 0 && (
-        <div className="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs animate-in fade-in">
+        <div className="flex items-center justify-between gap-3 p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm animate-in fade-in">
           <div className="flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-amber-600 flex-shrink-0" />
             <span className="font-bold">
@@ -938,7 +938,7 @@ export function AssessmentStage({
           <button
             type="button"
             onClick={() => onIndexChange(unreadyIndices[0])}
-            className="px-3 py-1.5 rounded-xl bg-amber-200 hover:bg-amber-300 font-extrabold text-[#111965] transition-colors whitespace-nowrap cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-[#F7CE4D] hover:bg-[#F5C430] font-extrabold text-[#0F1754] shadow-xs transition-colors whitespace-nowrap cursor-pointer"
           >
             {getLocalized({ km: "បំពេញសំណួរនៅសល់ →", en: "Answer remaining questions →" })}
           </button>

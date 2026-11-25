@@ -210,9 +210,9 @@ export default function GuestPersonalityTestPage() {
         <div className="mx-auto max-w-3xl space-y-6">
           <Link
             href="/assessments"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#68708A] transition-colors hover:text-[#111965]"
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#68708A] transition-colors hover:text-[#111965]"
           >
-            <ArrowRight className="h-3.5 w-3.5 rotate-180" />
+            <ArrowRight className="h-4 w-4 rotate-180" />
             {getLocalized({ en: "All assessments", km: "ការវាយតម្លៃទាំងអស់" })}
           </Link>
 
@@ -220,7 +220,7 @@ export default function GuestPersonalityTestPage() {
             <div className="relative overflow-hidden bg-gradient-to-br from-[#111965] via-[#1A2580] to-[#0D134E] px-6 py-8 text-white sm:px-9 sm:py-10">
               <div className="absolute -right-16 -top-20 h-64 w-64 rounded-full bg-[#F7CE4D]/15 blur-3xl" />
               <div className="relative">
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#F7CE4D]">
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-xs font-black uppercase tracking-[0.12em] text-[#F7CE4D]">
                   <Sparkles className="h-3.5 w-3.5" />
                   {getLocalized({
                     en: "Free • No account needed",
@@ -233,7 +233,7 @@ export default function GuestPersonalityTestPage() {
                     km: "ការវាយតម្លៃបុគ្គលិកលក្ខណៈ ១៦",
                   })}
                 </h1>
-                <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/80">
+                <p className="mt-2.5 max-w-xl text-sm sm:text-base leading-relaxed text-white/85">
                   {getLocalized({
                     en: "Discover your cognitive style, learning strengths, and the university majors that fit how you think.",
                     km: "ស្វែងយល់ពីរបៀបគិត ចំណុចខ្លាំងក្នុងការរៀន និងជំនាញសាកលវិទ្យាល័យដែលត្រូវនឹងអ្នក។",
@@ -243,7 +243,7 @@ export default function GuestPersonalityTestPage() {
             </div>
 
             <div className="space-y-5 p-6 sm:p-8">
-              <div className="grid gap-2 sm:grid-cols-3">
+              <div className="grid gap-2.5 sm:grid-cols-3">
                 {[
                   {
                     icon: FileCheck2,
@@ -260,18 +260,18 @@ export default function GuestPersonalityTestPage() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="flex items-center gap-2 rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] px-3 py-2.5 text-[11px] font-bold text-[#111965]"
+                    className="flex items-center gap-2.5 rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] px-3.5 py-3 text-xs sm:text-sm font-bold text-[#111965]"
                   >
-                    <item.icon className="h-4 w-4 text-[#D4A017]" />
+                    <item.icon className="h-4 w-4 shrink-0 text-[#D4A017]" />
                     {item.label}
                   </div>
                 ))}
               </div>
 
-              <div className="rounded-2xl border border-[#E6E8F0] bg-white px-4 py-3">
+              <div className="rounded-2xl border border-[#E6E8F0] bg-white px-4 py-3.5">
                 <div className="flex items-start gap-2.5">
                   <LockKeyhole className="mt-0.5 h-4 w-4 shrink-0 text-[#111965]" />
-                  <p className="text-[11px] leading-relaxed text-[#68708A]">
+                  <p className="text-xs sm:text-sm leading-relaxed text-[#68708A]">
                     {getLocalized({
                       en: "Your answers are private. You can download a copy of your result at the end.",
                       km: "ចម្លើយរបស់អ្នកគឺឯកជន។ អ្នកអាចទាញយកច្បាប់ចម្លងលទ្ធផលនៅចុងបញ្ចប់។",
@@ -281,7 +281,7 @@ export default function GuestPersonalityTestPage() {
               </div>
 
               {!storageAvailable && (
-                <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-[11px] leading-relaxed text-amber-900">
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3.5 text-xs sm:text-sm leading-relaxed text-amber-900">
                   {getLocalized({
                     en: "Your device is blocking saved answers. You can still take the test, but your result may disappear when you close this tab.",
                     km: "ឧបករណ៍របស់អ្នកបិទការរក្សាទុកចម្លើយ។ អ្នកអាចធ្វើតេស្តបាន ប៉ុន្តែលទ្ធផលអាចបាត់នៅពេលបិទផ្ទាំងនេះ។",
@@ -292,13 +292,13 @@ export default function GuestPersonalityTestPage() {
               <button
                 type="button"
                 onClick={() => setStarted(true)}
-                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-[#111965] px-5 text-sm font-black text-white shadow-sm transition-all hover:bg-[#1A2580] active:scale-[0.99]"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#111965] px-5 text-sm sm:text-base font-black text-white shadow-sm transition-all hover:bg-[#1A2580] active:scale-[0.99]"
               >
                 {getLocalized({ en: "Start the test", km: "ចាប់ផ្តើមធ្វើតេស្ត" })}
                 <ArrowRight className="h-4 w-4 text-[#F7CE4D]" />
               </button>
 
-              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] font-semibold text-[#68708A]">
+              <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm font-semibold text-[#68708A]">
                 <Link href="/assessments/results" className="hover:text-[#111965]">
                   {getLocalized({ en: "My saved results", km: "លទ្ធផលដែលបានរក្សាទុក" })}
                 </Link>
@@ -341,15 +341,6 @@ export default function GuestPersonalityTestPage() {
             en: "No account needed",
             km: "មិនត្រូវការគណនី",
           })}
-          headerAction={
-            <Link
-              href="/assessments/results"
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-[#D9DEEA] bg-white px-3 text-[11px] font-black text-[#111965] transition-colors hover:border-[#111965]/40 hover:bg-[#F8FAFD]"
-            >
-              <FileCheck2 className="h-3.5 w-3.5" />
-              {getLocalized({ en: "My results", km: "លទ្ធផលរបស់ខ្ញុំ" })}
-            </Link>
-          }
           questions={formattedQuestions}
           currentIndex={currentIndex}
           onIndexChange={setCurrentIndex}
@@ -375,9 +366,9 @@ export default function GuestPersonalityTestPage() {
           })}
         />
 
-        <div className="mx-auto mt-4 flex max-w-3xl flex-wrap items-center justify-between gap-2 px-1 text-[10.5px] font-semibold text-[#68708A]">
-          <span className="inline-flex items-center gap-1.5">
-            <Wand2 className="h-3.5 w-3.5" />
+        <div className="mx-auto mt-4 flex max-w-3xl flex-wrap items-center justify-between gap-2 px-1 text-xs sm:text-sm font-semibold text-[#68708A]">
+          <span className="inline-flex items-center gap-2">
+            <Wand2 className="h-4 w-4" />
             {getLocalized({
               en: "Tip: use the 1–5 keys to answer faster.",
               km: "គន្លឹះ៖ ប្រើគ្រាប់ចុច ១–៥ ដើម្បីឆ្លើយលឿនជាងមុន។",
@@ -386,9 +377,9 @@ export default function GuestPersonalityTestPage() {
           <button
             type="button"
             onClick={handleClearDraft}
-            className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-[10.5px] font-bold text-[#68708A] transition-colors hover:bg-white hover:text-rose-600"
+            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs sm:text-sm font-bold text-[#68708A] transition-colors hover:bg-white hover:text-rose-600"
           >
-            <RotateCcw className="h-3 w-3" />
+            <RotateCcw className="h-3.5 w-3.5" />
             {getLocalized({ en: "Start over", km: "ចាប់ផ្តើមឡើងវិញ" })}
           </button>
         </div>
