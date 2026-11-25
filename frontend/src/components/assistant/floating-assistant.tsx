@@ -18,6 +18,7 @@ import {
 
 import { apiFetch } from "@/lib/api-client";
 import { IS_STATIC_MODE } from "@/lib/app-mode";
+import { useTestFocusMode } from "@/lib/test-focus";
 import { answerLocalQuestion, buildStudentAssistantContext, detectResponseLanguage } from "@/lib/guest/assistant";
 import { useAuth } from "@/contexts/auth-context";
 import { useLanguage } from "@/contexts/language-context";
@@ -85,6 +86,7 @@ const TOOL_ICONS: Record<string, React.ComponentType<{ className?: string }>> = 
 
 export function FloatingAssistant() {
   const pathname = usePathname();
+  const isTestFocus = useTestFocusMode();
   const { user } = useAuth();
   const { language, t, tList, getLocalized } = useLanguage();
   const copy = {
@@ -221,7 +223,7 @@ export function FloatingAssistant() {
     };
   }, []);
 
-  if (!pathname || HIDDEN_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
+  if (!pathname || isTestFocus || HIDDEN_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
     return null;
   }
 

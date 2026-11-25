@@ -12,6 +12,7 @@ import { useLanguage } from "@/contexts/language-context";
 import { useAuth } from "@/contexts/auth-context";
 import { IS_STATIC_MODE } from "@/lib/app-mode";
 import { getAllResults, GUEST_STORAGE_EVENT } from "@/lib/guest/storage";
+import { useTestFocusMode } from "@/lib/test-focus";
 import {
   Compass,
   GraduationCap,
@@ -143,7 +144,9 @@ export function Navbar() {
     pathname?.startsWith("/share") ||
     pathname?.startsWith("/admin");
 
-  if (isAuthPage) {
+  const isTestFocus = useTestFocusMode();
+
+  if (isAuthPage || isTestFocus) {
     return null;
   }
 

@@ -224,27 +224,27 @@ export const AGREE_TO_DISAGREE_5 = [
   },
 ];
 
-// 5-Point Dislike-to-Enjoy Config (RIASEC Interest standard: Left = Dislike, Right = Highly Enjoy)
+// 5-Point Enjoy-to-Dislike Config (Unified Positive-Left -> Negative-Right direction matching Agree-to-Disagree)
 export const DISLIKE_TO_ENJOY_5 = [
   {
-    level: 1,
-    faceIndex: 7,
-    labelEn: "Dislike",
-    labelKm: "មិនចូលចិត្ត",
-    themeColor: "#E5484D",
-    idleBg: "bg-[#FFEBEF]",
-    idleBorder: "border-[#FF8A96]",
-    activeGlow: "shadow-[0_8px_24px_rgba(229,72,77,0.35)] ring-4 ring-[#FF8A96]/50",
+    level: 5,
+    faceIndex: 1,
+    labelEn: "Highly Enjoy",
+    labelKm: "ចូលចិត្តខ្លាំង",
+    themeColor: "#10B981",
+    idleBg: "bg-[#E6F9F0]",
+    idleBorder: "border-[#63D69E]",
+    activeGlow: "shadow-[0_8px_24px_rgba(16,185,129,0.35)] ring-4 ring-[#63D69E]/50",
   },
   {
-    level: 2,
-    faceIndex: 5,
-    labelEn: "Slight Dislike",
-    labelKm: "មិនសូវចូលចិត្ត",
-    themeColor: "#F76808",
-    idleBg: "bg-[#FFF0E6]",
-    idleBorder: "border-[#FFA767]",
-    activeGlow: "shadow-[0_8px_24px_rgba(247,104,8,0.35)] ring-4 ring-[#FFA767]/50",
+    level: 4,
+    faceIndex: 2,
+    labelEn: "Enjoy",
+    labelKm: "ចូលចិត្ត",
+    themeColor: "#059669",
+    idleBg: "bg-[#ECFDF5]",
+    idleBorder: "border-[#A7F3D0]",
+    activeGlow: "shadow-[0_8px_24px_rgba(5,150,105,0.35)] ring-4 ring-[#A7F3D0]/50",
   },
   {
     level: 3,
@@ -257,24 +257,24 @@ export const DISLIKE_TO_ENJOY_5 = [
     activeGlow: "shadow-[0_8px_24px_rgba(217,119,6,0.35)] ring-4 ring-[#FFD043]/50",
   },
   {
-    level: 4,
-    faceIndex: 2,
-    labelEn: "Enjoy",
-    labelKm: "ចូលចិត្ត",
-    themeColor: "#10B981",
-    idleBg: "bg-[#E6F9F0]",
-    idleBorder: "border-[#63D69E]",
-    activeGlow: "shadow-[0_8px_24px_rgba(16,185,129,0.35)] ring-4 ring-[#63D69E]/50",
+    level: 2,
+    faceIndex: 5,
+    labelEn: "Slight Dislike",
+    labelKm: "មិនសូវចូលចិត្ត",
+    themeColor: "#F76808",
+    idleBg: "bg-[#FFF0E6]",
+    idleBorder: "border-[#FFA767]",
+    activeGlow: "shadow-[0_8px_24px_rgba(247,104,8,0.35)] ring-4 ring-[#FFA767]/50",
   },
   {
-    level: 5,
-    faceIndex: 1,
-    labelEn: "Highly Enjoy",
-    labelKm: "ចូលចិត្តខ្លាំង",
-    themeColor: "#0EA5E9",
-    idleBg: "bg-[#E0F4FF]",
-    idleBorder: "border-[#64C6FF]",
-    activeGlow: "shadow-[0_8px_24px_rgba(14,165,233,0.35)] ring-4 ring-[#64C6FF]/50",
+    level: 1,
+    faceIndex: 7,
+    labelEn: "Dislike",
+    labelKm: "មិនចូលចិត្ត",
+    themeColor: "#E5484D",
+    idleBg: "bg-[#FFEBEF]",
+    idleBorder: "border-[#FF8A96]",
+    activeGlow: "shadow-[0_8px_24px_rgba(229,72,77,0.35)] ring-4 ring-[#FF8A96]/50",
   },
 ];
 
@@ -360,18 +360,20 @@ export function AssessmentStage({
       const value = Number(event.key);
       if (Number.isInteger(value) && value >= 1 && value <= totalSteps) {
         event.preventDefault();
-        onAnswer(currentQ.id, value);
+        const chosen = steps[value - 1];
+        if (chosen) onAnswer(currentQ.id, chosen.level);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentQ, onAnswer, totalSteps]);
+  }, [currentQ, onAnswer, steps, totalSteps]);
 
   const activeLevel = hovered ?? currentValue;
   const currentStep = steps.find((s) => s.level === activeLevel);
-  const thumbLevel = activeLevel ?? Math.ceil(totalSteps / 2);
-  const thumbStep = currentStep ?? steps[Math.floor(totalSteps / 2)];
-  const thumbPercent = ((thumbLevel - 0.5) / totalSteps) * 100;
+  const foundIndex = activeLevel !== null ? steps.findIndex((s) => s.level === activeLevel) : -1;
+  const thumbStepIndex = foundIndex >= 0 ? foundIndex : Math.floor(totalSteps / 2);
+  const thumbStep = steps[thumbStepIndex] ?? steps[Math.floor(totalSteps / 2)];
+  const thumbPercent = ((thumbStepIndex + 0.5) / totalSteps) * 100;
 
   // Track dragging / clicking
   const getLevelFromClientX = useCallback(
@@ -687,18 +689,8 @@ export function AssessmentStage({
                     className="flex items-center gap-2 group cursor-pointer transition-transform hover:scale-105 active:scale-95 select-none"
                     onClick={() => onAnswer(currentQ.id, steps[0].level)}
                   >
-                    <span
-                      className={cn(
-                        "w-2.5 h-2.5 rounded-full flex-shrink-0",
-                        isAgreeToDisagree ? "bg-[#10B981]" : "bg-[#DC2626]"
-                      )}
-                    />
-                    <span
-                      className={cn(
-                        "text-sm sm:text-base font-black tracking-tight",
-                        isAgreeToDisagree ? "text-emerald-700" : "text-rose-700"
-                      )}
-                    >
+                    <span className="w-2.5 h-2.5 rounded-full flex-shrink-0 bg-[#10B981]" />
+                    <span className="text-sm sm:text-base font-black tracking-tight text-emerald-700">
                       {getLocalized({ km: leftAnchorKm, en: leftAnchorEn })}
                     </span>
                   </button>
@@ -708,20 +700,10 @@ export function AssessmentStage({
                     className="flex items-center gap-2 group cursor-pointer transition-transform hover:scale-105 active:scale-95 select-none"
                     onClick={() => onAnswer(currentQ.id, steps[steps.length - 1].level)}
                   >
-                    <span
-                      className={cn(
-                        "text-sm sm:text-base font-black tracking-tight",
-                        isAgreeToDisagree ? "text-rose-700" : "text-sky-800"
-                      )}
-                    >
+                    <span className="text-sm sm:text-base font-black tracking-tight text-rose-700">
                       {getLocalized({ km: rightAnchorKm, en: rightAnchorEn })}
                     </span>
-                    <span
-                      className={cn(
-                        "w-2.5 h-2.5 rounded-full flex-shrink-0",
-                        isAgreeToDisagree ? "bg-[#DC2626]" : "bg-[#0284C7]"
-                      )}
-                    />
+                    <span className="w-2.5 h-2.5 rounded-full flex-shrink-0 bg-[#DC2626]" />
                   </button>
                 </div>
 
@@ -785,9 +767,8 @@ export function AssessmentStage({
                       style={{
                         left: `calc(100% / ${totalSteps * 2} - 11px)`,
                         right: `calc(100% / ${totalSteps * 2} - 11px)`,
-                        background: isAgreeToDisagree
-                          ? "linear-gradient(to right, #10B981 0%, #34D399 25%, #FFD043 50%, #F76808 75%, #E5484D 100%)"
-                          : "linear-gradient(to right, #E5484D 0%, #F76808 25%, #FFD043 50%, #34D399 75%, #0091FF 100%)",
+                        background:
+                          "linear-gradient(to right, #10B981 0%, #34D399 25%, #FFD043 50%, #F76808 75%, #E5484D 100%)",
                       }}
                     />
 

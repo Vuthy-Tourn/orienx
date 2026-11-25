@@ -6,10 +6,12 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/layout/logo";
 import { useLanguage } from "@/contexts/language-context";
+import { useTestFocusMode } from "@/lib/test-focus";
 
 export function Footer() {
   const pathname = usePathname();
   const { getLocalized } = useLanguage();
+  const isTestFocus = useTestFocusMode();
 
   const isAuthPage =
     pathname === "/login" ||
@@ -25,7 +27,7 @@ export function Footer() {
     pathname?.startsWith("/share") ||
     pathname?.startsWith("/admin");
 
-  if (isAuthPage) {
+  if (isAuthPage || isTestFocus) {
     return null;
   }
   return (

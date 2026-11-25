@@ -1040,10 +1040,10 @@ export default function RiasecAssessmentPage() {
         answers={ratings}
         onAnswer={(qId, level) => handleRatingChange(qId, level)}
         scaleType="5-point"
-        leftAnchorKm="មិនចូលចិត្តទាល់តែសោះ"
-        leftAnchorEn="Strong Dislike"
-        rightAnchorKm="ចូលចិត្តខ្លាំងបំផុត"
-        rightAnchorEn="Highly Enjoy"
+        leftAnchorKm="ចូលចិត្តខ្លាំងបំផុត"
+        leftAnchorEn="Highly Enjoy"
+        rightAnchorKm="មិនចូលចិត្តទាល់តែសោះ"
+        rightAnchorEn="Strong Dislike"
         mascotSpeech={
           currentVal !== undefined && currentVal !== null
             ? currentVal === 5

@@ -2,18 +2,8 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  ArrowRight,
-  Clock3,
-  Download,
-  FileCheck2,
-  LockKeyhole,
-  RotateCcw,
-  Sparkles,
-  Wand2,
-} from "lucide-react";
+import { RotateCcw, Wand2 } from "lucide-react";
 import rawQuestions from "@/data/static/personality-questions.json";
 import { STATIC_META } from "@/lib/data/catalog";
 import {
@@ -34,6 +24,11 @@ import { useLanguage } from "@/contexts/language-context";
 import { useToast } from "@/components/ui/toast";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { AssessmentStage } from "@/components/assessments/assessment-stage";
+import {
+  GuestAssessmentIntro,
+  TestFocusBar,
+} from "@/components/assessments/guest-assessment-intro";
+import { useSyncTestFocus } from "@/lib/test-focus";
 import { DIMENSION_TITLES, type DimensionGroup } from "@/lib/personality-meta";
 
 const QUESTIONS = rawQuestions as PersonalityQuestion[];
@@ -52,12 +47,16 @@ export default function GuestPersonalityTestPage() {
   const [submitting, setSubmitting] = useState(false);
   const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  useSyncTestFocus(started);
+
   useEffect(() => {
     setStorageAvailable(isGuestStorageAvailable());
-    const retake =
-      new URLSearchParams(window.location.search).get("retake") === "1";
+    const params = new URLSearchParams(window.location.search);
+    const retake = params.get("retake") === "1";
+    const autostart = params.get("autostart") === "1";
     if (retake) {
       clearPersonalityDraft();
+      if (autostart) setStarted(true);
       return;
     }
     const draft = readPersonalityDraft();
@@ -68,6 +67,10 @@ export default function GuestPersonalityTestPage() {
       );
       setStarted(true);
       setRestoredDraft(true);
+      return;
+    }
+    if (autostart) {
+      setStarted(true);
     }
   }, []);
 
@@ -206,115 +209,22 @@ export default function GuestPersonalityTestPage() {
 
   if (!started) {
     return (
-      <div className="min-h-screen bg-[#F5F6FA] px-4 py-10 sm:py-16">
-        <div className="mx-auto max-w-3xl space-y-6">
-          <Link
-            href="/assessments"
-            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#68708A] transition-colors hover:text-[#111965]"
-          >
-            <ArrowRight className="h-4 w-4 rotate-180" />
-            {getLocalized({ en: "All assessments", km: "ការវាយតម្លៃទាំងអស់" })}
-          </Link>
-
-          <div className="assessment-question-enter overflow-hidden rounded-3xl border border-[#E6E8F0] bg-white shadow-sm">
-            <div className="relative overflow-hidden bg-gradient-to-br from-[#111965] via-[#1A2580] to-[#0D134E] px-6 py-8 text-white sm:px-9 sm:py-10">
-              <div className="absolute -right-16 -top-20 h-64 w-64 rounded-full bg-[#F7CE4D]/15 blur-3xl" />
-              <div className="relative">
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-xs font-black uppercase tracking-[0.12em] text-[#F7CE4D]">
-                  <Sparkles className="h-3.5 w-3.5" />
-                  {getLocalized({
-                    en: "Free • No account needed",
-                    km: "ឥតគិតថ្លៃ • មិនត្រូវការគណនី",
-                  })}
-                </div>
-                <h1 className="mt-4 text-2xl font-black tracking-tight sm:text-3xl">
-                  {getLocalized({
-                    en: "16-Personality Assessment",
-                    km: "ការវាយតម្លៃបុគ្គលិកលក្ខណៈ ១៦",
-                  })}
-                </h1>
-                <p className="mt-2.5 max-w-xl text-sm sm:text-base leading-relaxed text-white/85">
-                  {getLocalized({
-                    en: "Discover your cognitive style, learning strengths, and the university majors that fit how you think.",
-                    km: "ស្វែងយល់ពីរបៀបគិត ចំណុចខ្លាំងក្នុងការរៀន និងជំនាញសាកលវិទ្យាល័យដែលត្រូវនឹងអ្នក។",
-                  })}
-                </p>
-              </div>
-            </div>
-
-            <div className="space-y-5 p-6 sm:p-8">
-              <div className="grid gap-2.5 sm:grid-cols-3">
-                {[
-                  {
-                    icon: FileCheck2,
-                    label: getLocalized({ en: "12 statements", km: "១២ សំណើ" }),
-                  },
-                  {
-                    icon: Clock3,
-                    label: getLocalized({ en: "About 3 minutes", km: "ប្រហែល ៣ នាទី" }),
-                  },
-                  {
-                    icon: Download,
-                    label: getLocalized({ en: "Export your report", km: "នាំចេញរបាយការណ៍" }),
-                  },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="flex items-center gap-2.5 rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] px-3.5 py-3 text-xs sm:text-sm font-bold text-[#111965]"
-                  >
-                    <item.icon className="h-4 w-4 shrink-0 text-[#D4A017]" />
-                    {item.label}
-                  </div>
-                ))}
-              </div>
-
-              <div className="rounded-2xl border border-[#E6E8F0] bg-white px-4 py-3.5">
-                <div className="flex items-start gap-2.5">
-                  <LockKeyhole className="mt-0.5 h-4 w-4 shrink-0 text-[#111965]" />
-                  <p className="text-xs sm:text-sm leading-relaxed text-[#68708A]">
-                    {getLocalized({
-                      en: "Your answers are private. You can download a copy of your result at the end.",
-                      km: "ចម្លើយរបស់អ្នកគឺឯកជន។ អ្នកអាចទាញយកច្បាប់ចម្លងលទ្ធផលនៅចុងបញ្ចប់។",
-                    })}
-                  </p>
-                </div>
-              </div>
-
-              {!storageAvailable && (
-                <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3.5 text-xs sm:text-sm leading-relaxed text-amber-900">
-                  {getLocalized({
-                    en: "Your device is blocking saved answers. You can still take the test, but your result may disappear when you close this tab.",
-                    km: "ឧបករណ៍របស់អ្នកបិទការរក្សាទុកចម្លើយ។ អ្នកអាចធ្វើតេស្តបាន ប៉ុន្តែលទ្ធផលអាចបាត់នៅពេលបិទផ្ទាំងនេះ។",
-                  })}
-                </div>
-              )}
-
-              <button
-                type="button"
-                onClick={() => setStarted(true)}
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#111965] px-5 text-sm sm:text-base font-black text-white shadow-sm transition-all hover:bg-[#1A2580] active:scale-[0.99]"
-              >
-                {getLocalized({ en: "Start the test", km: "ចាប់ផ្តើមធ្វើតេស្ត" })}
-                <ArrowRight className="h-4 w-4 text-[#F7CE4D]" />
-              </button>
-
-              <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm font-semibold text-[#68708A]">
-                <Link href="/assessments/results" className="hover:text-[#111965]">
-                  {getLocalized({ en: "My saved results", km: "លទ្ធផលដែលបានរក្សាទុក" })}
-                </Link>
-                <Link href="/assessments/riasec/test" className="hover:text-[#111965]">
-                  {getLocalized({ en: "Take RIASEC instead", km: "ធ្វើតេស្ត RIASEC ជំនួស" })}
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <GuestAssessmentIntro
+        activeKind="personality"
+        storageAvailable={storageAvailable}
+        onStart={() => setStarted(true)}
+      />
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F6FA] px-4 pb-16 pt-6 sm:pt-10">
+    <div className="min-h-screen bg-[#F5F6FA] px-4 pb-16 pt-6 sm:pt-8">
+      <TestFocusBar
+        title={getLocalized({
+          en: "16-Personality Assessment",
+          km: "ការវាយតម្លៃបុគ្គលិកលក្ខណៈ ១៦",
+        })}
+      />
       <div className="mx-auto max-w-4xl">
         {restoredDraft && (
           <div className="mb-4 flex flex-col gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-[11px] font-semibold text-emerald-900 sm:flex-row sm:items-center sm:justify-between">
