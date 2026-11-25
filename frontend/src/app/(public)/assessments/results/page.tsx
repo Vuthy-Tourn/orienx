@@ -281,13 +281,7 @@ export default function GuestResultsPage() {
       <div className="mx-auto max-w-4xl space-y-6">
         <div className="results-header flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-[#E6E8F0] bg-white px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-[#111965]">
-              <Sparkles className="h-3 w-3 text-[#D4A017]" />
-              {getLocalized({
-                en: "No account needed",
-                km: "មិនត្រូវការគណនី",
-              })}
-            </div>
+
             <h1 className="mt-2 text-2xl font-black tracking-tight text-[#111965] sm:text-3xl">
               {getLocalized({ en: "My results", km: "លទ្ធផលរបស់ខ្ញុំ" })}
             </h1>

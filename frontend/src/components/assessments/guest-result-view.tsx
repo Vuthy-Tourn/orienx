@@ -532,7 +532,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
       <div className="result-content mx-auto max-w-4xl space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <Link
-            href="/assessments"
+            href="/assessments/results"
             className="inline-flex items-center gap-1.5 text-sm font-bold text-[#68708A] transition-colors hover:text-[#111965]"
           >
             <ArrowRight className="h-3.5 w-3.5 rotate-180" />
