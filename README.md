@@ -1,25 +1,55 @@
-# ORIENX — Complete Education & Career Guidance Platform for Cambodia
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="frontend/public/images/orienx-mark-dark.png" />
+    <source media="(prefers-color-scheme: light)" srcset="frontend/public/images/orienx-mark.png" />
+    <img src="frontend/public/images/orienx-mark.png" alt="OrienX Logo" width="96" />
+  </picture>
 
-> **"Discover Your Direction. Shape Your Future."**  
-> *ស្វែងរកទិសដៅរបស់អ្នក។ កំណត់អនាគតរបស់អ្នក។*
+  <h1>OrienX — Complete Education & Career Guidance Platform for Cambodia</h1>
 
-OrienX is a modern, responsive, full-stack student guidance ecosystem engineered for Cambodian high school students, Grade 12 graduates, and university undergraduates. Moving beyond basic quiz tools and passive directories, OrienX pairs psychometric self-discovery (MBTI-inspired & Holland RIASEC assessments) with an explainable recommendation engine and verified Cambodian higher education data.
+  <p>
+    <strong>"Discover Your Direction. Shape Your Future."</strong><br />
+    <em>ស្វែងរកទិសដៅរបស់អ្នក។ កំណត់អនាគតរបស់អ្នក។</em>
+  </p>
+
+  <p>
+    <img src="frontend/public/images/og-image.webp" alt="OrienX Platform Banner" width="760" />
+  </p>
+</div>
+
+**OrienX** is a modern, responsive, full-stack student guidance ecosystem engineered for Cambodian high school students, Grade 12 graduates, and university undergraduates. Moving beyond basic quiz tools and passive directories, OrienX pairs psychometric self-discovery (MBTI-inspired & Holland RIASEC assessments) with an explainable recommendation engine and verified Cambodian higher education data.
 
 ---
 
-## 🧭 Brand Identity & Design System
+## 🧭 Brand Identity, Mascot & Design System
+
+<table align="center">
+  <tr>
+    <td align="center" width="220">
+      <img src="frontend/public/images/welcome-hd.webp" alt="Tara — OrienX Official Mascot" width="160" />
+      <br />
+      <strong>Tara (តារា)</strong>
+      <br />
+      <sub>Official OrienX Guidance Buddy</sub>
+    </td>
+    <td>
+      <strong>Tara</strong> is OrienX's interactive star companion who guides students through personality &amp; RIASEC assessments, reacts to choices in real time, and powers the grounded bilingual guidance assistant across public and dashboard pages.
+    </td>
+  </tr>
+</table>
 
 | Element | Specification | Visual Role |
 | :--- | :--- | :--- |
-| **Primary Navy** | `#111965` | Navigation, headers, brand accents, footer |
-| **Accent Yellow** | `#F7CE4D` | Action buttons (CTAs), active states, badges, highlights |
-| **Canvas Background** | `#F5F6FA` | App workspace, dashboard backing |
+| **Primary Navy** | `#111965` / `#080D2B` | Navigation, headers, brand accents, dark surfaces |
+| **Accent Yellow** | `#F7CE4D` / `#F69D0D` | Action buttons (CTAs), active states, badges, highlights |
+| **Emerald Growth** | `#33A474` | Scholarships, match scores, success indicators |
+| **Canvas Background** | `#F5F6FA` | Light-mode app workspace, dashboard backing |
 | **Surface White** | `#FFFFFF` | Cards, forms, comparison matrices, modals |
 | **Primary Text** | `#171A2C` | High-contrast body copy & headings |
 | **Secondary Text** | `#68708A` | Subtitles, helper text, metadata |
 | **Border** | `#E6E8F0` | Structural dividers & card boundaries |
 | **Khmer Font** | `Noto Sans Khmer` | Authentic Cambodian typography |
-| **English Font** | `Inter` / `Plus Jakarta Sans` | Modern high-density startup UI |
+| **English Font** | `Plus Jakarta Sans` / `Inter` | Modern high-density startup UI |
 
 ---
 
@@ -37,23 +67,40 @@ OrienX strictly uses fact-verified institutional data reflecting actual tuition 
 
 ## ⚡ Core Architecture & Technology Stack
 
-OrienX is strictly decoupled into a high-performance Next.js frontend and an async Python FastAPI REST backend with zero direct frontend-to-database connections:
+OrienX supports both a **Static Guest Mode** (`NEXT_PUBLIC_APP_MODE=static` for zero-backend Vercel deployments) and a decoupled **Full-Stack Mode** (`NEXT_PUBLIC_APP_MODE=full` with Next.js + FastAPI + PostgreSQL/`pgvector`):
 
-```
-┌────────────────────────────────┐         ┌────────────────────────────────┐         ┌───────────────────────┐
-│ Next.js 16 (React 19 / TS)     │  HTTP   │ FastAPI Backend (Python 3.12)  │ Asyncpg │ PostgreSQL 16 + pgvector │
-│ Port 3000                      │ ──────> │ Port 8000                      │ ──────> │ Port 5433 (Host)      │
-│ TanStack Query v5 + Recharts   │ REST/v1 │ SQLAlchemy 2.0 Async + Alembic │ Pool    │ 28 Core Tables        │
-└────────────────────────────────┘         └────────────────────────────────┘         └───────────────────────┘
+```mermaid
+flowchart LR
+    User["Student / Visitor Browser"] --> Next["Next.js 16 App Router (Port 3000)"]
+
+    subgraph Frontend["Frontend Ecosystem (React 19 / TypeScript)"]
+        Next --> StaticData["Static JSON Catalog & LocalStorage Assessments"]
+        Next --> PublicAI["/api/public-assistant (Server Route)"]
+    end
+
+    PublicAI -->|Optional API Key| Gemini["Google Gemini API"]
+    PublicAI -->|Zero-Key Fallback| LocalGuide["Local Rule-Based Guide"]
+
+    Next -->|Full Mode HTTP REST/v1| FastAPI["FastAPI Backend (Python 3.12 / Port 8000)"]
+
+    subgraph Backend["Backend & AI Services"]
+        FastAPI --> RecEngine["Explainable Recommendation Engine"]
+        FastAPI --> RAG["Hybrid RAG Advisor & Deterministic Tools"]
+        RAG --> Ollama["Local Ollama (gemma3 + bge-m3)"]
+        RAG --> Gemini
+    end
+
+    FastAPI -->|Asyncpg Pool| Postgres["PostgreSQL 16 + pgvector (28 Tables / Port 5433)"]
 ```
 
 ### Frontend (`/frontend`)
 - **Framework:** Next.js 16 (App Router) with React 19 and TypeScript.
-- **Styling:** Tailwind CSS with OrienX custom design tokens.
-- **Data Fetching:** TanStack Query v5 (`@tanstack/react-query`) with automatic query caching and deduplication.
+- **Styling & Motion:** Tailwind CSS, HeroUI, GSAP + ScrollTrigger, Motion, and OrienX custom design tokens.
+- **Data Fetching:** TanStack Query v5 (`@tanstack/react-query`) in full mode; committed static JSON + `localStorage` persistence in static mode.
 - **Visualizations:** Recharts (interactive 6-axis Holland RIASEC radar charts and analytics).
 - **Icons & Effects:** Lucide React icons & Canvas Confetti celebration feedback.
 - **Bilingual i18n:** Built-in reactive English (`en`) and Khmer (`km`) language context with full vocabulary dictionaries.
+- **SEO:** Dynamic `sitemap.xml`, `robots.txt`, `manifest.webmanifest`, JSON-LD Schema.org structured data, and custom WebP Open Graph card.
 
 ### Backend (`/backend`)
 - **API Framework:** FastAPI with Pydantic v2 validation.
@@ -65,14 +112,30 @@ OrienX is strictly decoupled into a high-performance Next.js frontend and an asy
 
 ## 🚀 Quickstart & Setup Guide
 
-### Option 1: One-Click Launch via Docker Compose (Recommended)
+### Option 1: Static Guest Mode (Frontend Only / Vercel)
+
+Run the platform without PostgreSQL or FastAPI using the bundled Cambodian catalog and browser-local assessments:
+
+```bash
+cd frontend
+cp .env.example .env
+# Ensure NEXT_PUBLIC_APP_MODE=static (optionally set GEMINI_API_KEY for live Tara AI chat)
+npm install
+npm run dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000).
+
+---
+
+### Option 2: One-Click Full Stack via Docker Compose
 
 Make sure Docker and Docker Compose are installed and running on your machine:
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/futera/futera.git
-cd Futera
+git clone https://github.com/Vuthy-Tourn/orienx.git
+cd orienx
 
 # 2. Launch complete stack (PostgreSQL + FastAPI + Next.js)
 docker compose up --build
@@ -85,13 +148,13 @@ Access the platform:
 
 ---
 
-### Option 2: Local Development Setup
+### Option 3: Local Full-Stack Development Setup
 
 #### 1. Start the PostgreSQL Container
 ```bash
 docker compose up -d postgres
 ```
-*(Runs PostgreSQL 16 on port `5433`)*
+*(Runs PostgreSQL 16 with `pgvector` on port `5433`)*
 
 #### 2. Configure and Start Backend
 ```bash
@@ -118,10 +181,8 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```bash
 cd frontend
 
-# Install npm packages
+# Set NEXT_PUBLIC_APP_MODE=full and BACKEND_INTERNAL_URL=http://127.0.0.1:8000 in .env
 npm install
-
-# Start Next.js development server
 npm run dev
 ```
 
@@ -129,7 +190,7 @@ Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🔑 Pre-Seeded Demonstration Accounts
+## 🔑 Pre-Seeded Demonstration Accounts *(Full Mode)*
 
 | Role | Email Address | Password | Pre-Configured State |
 | :--- | :--- | :--- | :--- |
@@ -141,22 +202,24 @@ Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🤖 Zero-Cost AI Advisor (Local, No API Keys)
+## 🤖 Zero-Cost AI Advisor & Public Mascot Assistant
 
-OrienX ships a free education advisor at **`/dashboard/advisor`**. It has two modes:
+OrienX ships two complementary AI guidance flows:
 
-1. **Local model mode** — if [Ollama](https://ollama.com) is running on the same machine, answers are generated by a small open-weights model. No API key, no per-token cost.
-2. **Retrieval-only mode** — if Ollama is not installed, the same endpoint answers directly from verified database records. The UI stays fully usable.
+1. **Public Mascot Assistant (`/api/public-assistant` in Static Mode):**
+   - Grounded in the verified static catalog (46 universities, 57 majors, scholarships, and local assessment context).
+   - Uses `GEMINI_API_KEY` server-side if configured, and automatically falls back to the local rule-based guide if the key is omitted or rate-limited. See [`docs/public-assistant-gemini.md`](docs/public-assistant-gemini.md).
+2. **Full-Stack Advisor (`/dashboard/advisor` in Full Mode):**
+   - **Local model mode:** Uses [Ollama](https://ollama.com) (`gemma3` + `bge-m3`) with zero API keys and zero per-token cost.
+   - **Retrieval-only mode:** If Ollama is not installed, answers directly from verified PostgreSQL records.
 
-Retrieval is **hybrid**: local `bge-m3` embeddings in PostgreSQL via `pgvector` are blended with the keyword/Khmer n-gram scorer, then the top records are grounded with deterministic tools:
+Retrieval is **hybrid**: local `bge-m3` embeddings in PostgreSQL via `pgvector` are blended with the keyword/Khmer n-gram scorer, then grounded with deterministic tools:
 
 - `search_universities` — filter by major, province, or budget
 - `compare_universities` — compare tuition and program fees
 - `check_eligibility` — compare a BACII grade against published admission requirements
 
-The tools run in Python, so they work even though Gemma 3 does not expose Ollama tool-calling. Every question, grounded answer, source list, tools used, latency, and optional thumbs-up/down feedback is stored in `ai_interactions`.
-
-Export it as JSONL whenever you have enough rows:
+Every question, grounded answer, source list, tools used, latency, and optional thumbs-up/down feedback is stored in `ai_interactions`. Export it as JSONL whenever you have enough rows:
 
 ```bash
 cd backend
@@ -235,6 +298,7 @@ The included baseline report is `backend/data/eval/reports/advisor_eval_baseline
 
 | Method | Endpoint | Purpose |
 | :--- | :--- | :--- |
+| `POST` | `/api/public-assistant` | Grounded Gemini / local fallback answer for static guest mode |
 | `GET` | `/api/v1/ai/status` | Detects whether a local model is available |
 | `POST` | `/api/v1/ai/advisor` | Ask a question (authenticated, full JSON response) |
 | `POST` | `/api/v1/ai/advisor/stream` | Same question, streamed as Server-Sent Events |
@@ -247,16 +311,16 @@ The included baseline report is `backend/data/eval/reports/advisor_eval_baseline
 A small mascot assistant appears at the bottom-right of public and dashboard pages (hidden on login, admin, and the full advisor page). It uses the same verified retrieval and tools, then asks Gemini to phrase the answer.
 
 1. Create an API key in Google AI Studio.
-2. Add it to `backend/.env` — **never** in a `NEXT_PUBLIC_*` variable:
+2. Add it to `frontend/.env` (static mode) or `backend/.env` (full mode) — **never** in a `NEXT_PUBLIC_*` variable:
 
 ```env
 GEMINI_API_KEY=your-key-here
 GEMINI_MODEL=gemini-3.1-flash-lite
 ```
 
-3. Restart the backend.
+3. Restart the server.
 
-The key is only read on the server. `backend/.env` is gitignored and excluded from Docker builds; Compose reads it at runtime. If the key is missing, invalid, or Gemini is temporarily down, the widget falls back to the deterministic verified-data answer and shows a warning instead of failing. Gemini usage is billed by Google; the local Ollama advisor remains free.
+The key is only read on the server. `.env` files are gitignored and excluded from Docker builds; Compose reads `backend/.env` at runtime. If the key is missing, invalid, or Gemini is temporarily down, the widget falls back to the deterministic verified-data answer instead of failing. Gemini usage is billed by Google; the local Ollama advisor remains free.
 
 ---
 
@@ -287,7 +351,7 @@ OrienX models a comprehensive relational schema:
 8. `favorite_majors`, `favorite_universities`, `favorite_scholarships`
 9. `admin_audit_logs`
 10. `ai_interactions`
-11. `knowledge_embeddings` (pgvector, 1024 dimensions)
+11. `knowledge_embeddings` (`pgvector`, 1024 dimensions)
 
 ---
 
@@ -295,4 +359,3 @@ OrienX models a comprehensive relational schema:
 
 Developed with pride for the students of Cambodia.  
 Built with Next.js, FastAPI, PostgreSQL, and Tailwind CSS.
-
