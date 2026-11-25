@@ -14,7 +14,9 @@
     "signIn": "Sign In",
     "getStarted": "Get Started",
     "dashboard": "Dashboard",
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "takeTest": "Take Test",
+    "myResults": "My Results"
   },
   "hero": {
     "badge": "Designed for Cambodian High School & University Students",

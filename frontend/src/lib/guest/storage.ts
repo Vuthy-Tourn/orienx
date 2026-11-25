@@ -16,9 +16,17 @@ export const GUEST_STORAGE_KEYS = {
   riasecResults: "orienx.guest.riasec.results.v1",
 } as const;
 
+export const GUEST_STORAGE_EVENT = "orienx-guest-storage-changed";
+
 const MAX_RESULTS = 10;
 const memoryFallback = new Map<string, string>();
 let storageWarningShown = false;
+
+function notifyGuestStorageChanged() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(GUEST_STORAGE_EVENT));
+  }
+}
 
 function storage(): Storage | null {
   if (typeof window === "undefined") return null;
@@ -46,13 +54,16 @@ function writeRaw(key: string, value: string): boolean {
   const store = storage();
   if (!store) {
     memoryFallback.set(key, value);
+    notifyGuestStorageChanged();
     return false;
   }
   try {
     store.setItem(key, value);
+    notifyGuestStorageChanged();
     return true;
   } catch {
     memoryFallback.set(key, value);
+    notifyGuestStorageChanged();
     return false;
   } finally {
     if (!store && !storageWarningShown && typeof window !== "undefined") {
@@ -64,11 +75,16 @@ function writeRaw(key: string, value: string): boolean {
 function removeRaw(key: string) {
   memoryFallback.delete(key);
   const store = storage();
-  if (!store) return;
+  if (!store) {
+    notifyGuestStorageChanged();
+    return;
+  }
   try {
     store.removeItem(key);
   } catch {
     // Ignore storage failures; the UI still works with in-memory data.
+  } finally {
+    notifyGuestStorageChanged();
   }
 }
 

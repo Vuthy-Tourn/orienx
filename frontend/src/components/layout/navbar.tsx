@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
@@ -11,6 +11,7 @@ import { SearchTrigger } from "@/components/search/search-trigger";
 import { useLanguage } from "@/contexts/language-context";
 import { useAuth } from "@/contexts/auth-context";
 import { IS_STATIC_MODE } from "@/lib/app-mode";
+import { getAllResults, GUEST_STORAGE_EVENT } from "@/lib/guest/storage";
 import {
   Compass,
   GraduationCap,
@@ -31,6 +32,19 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const subscribeGuestResults = (onStoreChange: () => void) => {
+  if (typeof window === "undefined" || !IS_STATIC_MODE) return () => {};
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(GUEST_STORAGE_EVENT, onStoreChange);
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(GUEST_STORAGE_EVENT, onStoreChange);
+  };
+};
+
+const getGuestHasCompletedTest = () =>
+  IS_STATIC_MODE && getAllResults().length > 0;
+
 export function Navbar() {
   const pathname = usePathname();
   const { t, language } = useLanguage();
@@ -41,6 +55,22 @@ export function Navbar() {
   const [exploreOpen, setExploreOpen] = useState(false);
   const [mobileAssessmentsOpen, setMobileAssessmentsOpen] = useState(false);
   const [mobileExploreOpen, setMobileExploreOpen] = useState(false);
+  const hasCompletedTest = useSyncExternalStore(
+    subscribeGuestResults,
+    getGuestHasCompletedTest,
+    () => false
+  );
+  const staticCta = hasCompletedTest
+    ? {
+        href: "/assessments/results",
+        label: t("nav.myResults", "លទ្ធផលរបស់ខ្ញុំ"),
+        Icon: FileCheck2,
+      }
+    : {
+        href: "/assessments/personality/test",
+        label: t("nav.takeTest", "ធ្វើតេស្ត"),
+        Icon: Sparkles,
+      };
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const exploreTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -582,22 +612,13 @@ export function Navbar() {
           <ThemeToggle />
 
           {IS_STATIC_MODE ? (
-            <div className="flex items-center gap-2">
-              <Link
-                href="/assessments/results"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs xl:text-sm font-bold text-[#111965] hover:bg-slate-100/80 dark:hover:bg-white/10 transition-colors whitespace-nowrap"
-              >
-                <FileCheck2 className="w-3.5 h-3.5" />
-                <span>{t("nav.myResults", "លទ្ធផលរបស់ខ្ញុំ")}</span>
-              </Link>
-              <Link
-                href="/assessments/personality/test"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs xl:text-sm font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#F5C430] shadow-xs transition-all active:scale-95 whitespace-nowrap"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>{t("nav.takeTest", "ធ្វើតេស្ត")}</span>
-              </Link>
-            </div>
+            <Link
+              href={staticCta.href}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs xl:text-sm font-bold text-[#0F1754] bg-[#F7CE4D] hover:bg-[#F5C430] shadow-xs transition-all active:scale-95 whitespace-nowrap"
+            >
+              <staticCta.Icon className="w-3.5 h-3.5" />
+              <span>{staticCta.label}</span>
+            </Link>
           ) : user ? (
             <div className="flex items-center gap-2">
               <Link
@@ -995,24 +1016,14 @@ export function Navbar() {
                 {/* Mobile Bottom Actions */}
                 <div className="pt-4 border-t border-[#E6E8F0] space-y-2.5">
                   {IS_STATIC_MODE ? (
-                    <div className="space-y-2">
-                      <Link
-                        href="/assessments/personality/test"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl text-sm font-bold text-[#111965] bg-[#F7CE4D] shadow-xs active:scale-98 transition-transform"
-                      >
-                        <Sparkles className="w-4 h-4" />
-                        <span>{t("nav.takeTest", "ធ្វើតេស្ត")}</span>
-                      </Link>
-                      <Link
-                        href="/assessments/results"
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl text-xs font-bold text-[#111965] bg-white border border-[#E6E8F0]"
-                      >
-                        <FileCheck2 className="w-3.5 h-3.5" />
-                        <span>{t("nav.myResults", "លទ្ធផលរបស់ខ្ញុំ")}</span>
-                      </Link>
-                    </div>
+                    <Link
+                      href={staticCta.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl text-sm font-bold text-[#0F1754] bg-[#F7CE4D] shadow-xs active:scale-98 transition-transform"
+                    >
+                      <staticCta.Icon className="w-4 h-4" />
+                      <span>{staticCta.label}</span>
+                    </Link>
                   ) : user ? (
                     <div className="space-y-2">
                       <Link
