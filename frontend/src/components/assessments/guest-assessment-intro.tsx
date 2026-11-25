@@ -13,6 +13,7 @@ import {
   FileCheck2,
   LockKeyhole,
   Sparkles,
+  X,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
@@ -54,21 +55,28 @@ function getSummaryKey(): string {
   return `${pRes?.id ?? "none"}|${rRes?.id ?? "none"}|${pCount}|${rCount}`;
 }
 
-export function TestFocusBar({ title }: { title: string }) {
+export function TestFocusBar({
+  title,
+  onExit,
+}: {
+  title: string;
+  onExit: () => void;
+}) {
   const { getLocalized } = useLanguage();
 
   return (
     <div className="mx-auto mb-5 flex max-w-4xl items-center justify-between gap-3 rounded-2xl border border-[#E6E8F0] bg-white/90 px-4 py-2.5 shadow-2xs backdrop-blur-md dark:border-white/10 dark:bg-[#0D1445]/80">
       <div className="flex min-w-0 items-center gap-3">
-        <Link
-          href="/assessments"
-          className="inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs sm:text-sm font-bold text-[#68708A] transition-colors hover:bg-slate-100 hover:text-[#111965] dark:hover:bg-white/10"
+        <button
+          type="button"
+          onClick={onExit}
+          className="inline-flex cursor-pointer items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs sm:text-sm font-bold text-[#68708A] transition-colors hover:bg-slate-100 hover:text-[#111965] dark:hover:bg-white/10"
         >
           <ArrowLeft className="h-4 w-4 shrink-0" />
           <span className="truncate">
             {getLocalized({ en: "Exit test", km: "ចាកចេញពីតេស្ត" })}
           </span>
-        </Link>
+        </button>
         <span className="hidden h-4 w-px bg-[#E6E8F0] dark:bg-white/15 sm:block" />
         <span className="hidden truncate text-xs sm:text-sm font-extrabold text-[#111965] sm:block">
           {title}
@@ -81,6 +89,38 @@ export function TestFocusBar({ title }: { title: string }) {
         </div>
         <LanguageSwitcher />
         <ThemeToggle />
+      </div>
+    </div>
+  );
+}
+
+export function DraftRestoredBanner({
+  message,
+  progress,
+  onDismiss,
+}: {
+  message: string;
+  progress: number;
+  onDismiss: () => void;
+}) {
+  return (
+    <div className="mx-auto mt-5 flex max-w-3xl items-center justify-between gap-3 rounded-2xl border border-emerald-200/90 bg-emerald-50/90 px-4 py-3 text-xs sm:text-sm font-semibold text-emerald-900 shadow-2xs dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200">
+      <div className="flex items-center gap-2.5 min-w-0">
+        <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-300" />
+        <span className="leading-relaxed">{message}</span>
+      </div>
+      <div className="flex shrink-0 items-center gap-2">
+        <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs sm:text-sm font-black text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-200">
+          {progress}%
+        </span>
+        <button
+          type="button"
+          onClick={onDismiss}
+          aria-label="Dismiss"
+          className="rounded-lg p-1 text-emerald-700/80 transition-colors hover:bg-emerald-100 hover:text-emerald-900 dark:text-emerald-300 dark:hover:bg-emerald-500/20 cursor-pointer"
+        >
+          <X className="h-4 w-4" />
+        </button>
       </div>
     </div>
   );
@@ -223,13 +263,6 @@ export function GuestAssessmentIntro({
       <div className="mx-auto max-w-4xl space-y-6">
         {/* Top Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <Link
-            href="/assessments"
-            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#68708A] transition-colors hover:text-[#111965]"
-          >
-            <ArrowRight className="h-4 w-4 rotate-180" />
-            {getLocalized({ en: "All assessments", km: "ការវាយតម្លៃទាំងអស់" })}
-          </Link>
 
           {hasAnyResult && (
             <Link

@@ -22,9 +22,11 @@ import { useToast } from "@/components/ui/toast";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { AssessmentStage } from "@/components/assessments/assessment-stage";
 import {
+  DraftRestoredBanner,
   GuestAssessmentIntro,
   TestFocusBar,
 } from "@/components/assessments/guest-assessment-intro";
+import { getRiasecMascotSpeech } from "@/components/assessments/mascot-speech";
 import { useSyncTestFocus } from "@/lib/test-focus";
 import { RIASEC_DIMENSIONS } from "@/lib/riasec-meta";
 
@@ -189,6 +191,13 @@ export default function GuestRiasecTestPage() {
     };
   });
 
+  const handleExitTest = () => {
+    if (Object.keys(answers).length > 0) {
+      saveRiasecDraft({ answers, currentIndex });
+    }
+    setStarted(false);
+  };
+
   if (!started) {
     return (
       <GuestAssessmentIntro
@@ -206,20 +215,9 @@ export default function GuestRiasecTestPage() {
           en: "RIASEC Interest Assessment",
           km: "ការវាយតម្លៃចំណាប់អារម្មណ៍ RIASEC",
         })}
+        onExit={handleExitTest}
       />
       <div className="mx-auto max-w-4xl">
-        {restoredDraft && (
-          <div className="mb-4 flex flex-col gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-[11px] font-semibold text-emerald-900 sm:flex-row sm:items-center sm:justify-between">
-            <span>
-              {getLocalized({
-                en: "Your ratings were restored.",
-                km: "ស្តារសេចក្តីព្រាងឡើងវិញ។ ការវាយតម្លៃរបស់អ្នកត្រូវបានរក្សាទុកលើឧបករណ៍នេះ។",
-              })}
-            </span>
-            <span className="font-black text-emerald-700">{progress}%</span>
-          </div>
-        )}
-
         <AssessmentStage
           breadcrumbText={getLocalized({
             en: "OrienX / Free assessment",
@@ -243,10 +241,14 @@ export default function GuestRiasecTestPage() {
           leftAnchorEn="Highly Enjoy"
           rightAnchorKm="មិនចូលចិត្តទាល់តែសោះ"
           rightAnchorEn="Strong Dislike"
-          mascotSpeech={getLocalized({
-            en: "How would you feel about doing this activity? Trust your first reaction.",
-            km: "តើអ្នកមានអារម្មណ៍យ៉ាងណាចំពោះសកម្មភាពនេះ? ជឿលើអារម្មណ៍ដំបូងរបស់អ្នក។",
-          })}
+          mascotSpeech={getLocalized(
+            getRiasecMascotSpeech({
+              rating: answers[QUESTIONS[currentIndex]?.id] ?? null,
+              category: QUESTIONS[currentIndex]?.category,
+              currentIndex,
+              totalCount: QUESTIONS.length,
+            })
+          )}
           mascotScaleLevel={
             answers[QUESTIONS[currentIndex]?.id] != null
               ? answers[QUESTIONS[currentIndex]?.id] <= 2
@@ -262,7 +264,7 @@ export default function GuestRiasecTestPage() {
           isSubmitting={submitting}
           submitButtonText={getLocalized({
             en: "See my result",
-            km: "មើលកូដចំណាប់អារម្មណ៍អាជីព របស់ខ្ញុំ",
+            km: "មើលលទ្ធផលរបស់ខ្ញុំ",
           })}
         />
 
@@ -283,6 +285,17 @@ export default function GuestRiasecTestPage() {
             {getLocalized({ en: "Start over", km: "ចាប់ផ្តើមឡើងវិញ" })}
           </button>
         </div>
+
+        {restoredDraft && (
+          <DraftRestoredBanner
+            message={getLocalized({
+              en: "Your previous ratings were restored on this device.",
+              km: "ស្តារសេចក្តីព្រាងឡើងវិញ។ ការវាយតម្លៃរបស់អ្នកត្រូវបានរក្សាទុកលើឧបករណ៍នេះ។",
+            })}
+            progress={progress}
+            onDismiss={() => setRestoredDraft(false)}
+          />
+        )}
       </div>
     </div>
   );

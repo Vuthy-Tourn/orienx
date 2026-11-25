@@ -25,9 +25,11 @@ import { useToast } from "@/components/ui/toast";
 import { useConfirm } from "@/components/ui/confirm-dialog";
 import { AssessmentStage } from "@/components/assessments/assessment-stage";
 import {
+  DraftRestoredBanner,
   GuestAssessmentIntro,
   TestFocusBar,
 } from "@/components/assessments/guest-assessment-intro";
+import { getPersonalityMascotSpeech } from "@/components/assessments/mascot-speech";
 import { useSyncTestFocus } from "@/lib/test-focus";
 import { DIMENSION_TITLES, type DimensionGroup } from "@/lib/personality-meta";
 
@@ -207,6 +209,13 @@ export default function GuestPersonalityTestPage() {
     };
   });
 
+  const handleExitTest = () => {
+    if (Object.keys(answers).length > 0) {
+      savePersonalityDraft({ answers, currentIndex });
+    }
+    setStarted(false);
+  };
+
   if (!started) {
     return (
       <GuestAssessmentIntro
@@ -224,20 +233,9 @@ export default function GuestPersonalityTestPage() {
           en: "16-Personality Assessment",
           km: "ការវាយតម្លៃបុគ្គលិកលក្ខណៈ ១៦",
         })}
+        onExit={handleExitTest}
       />
       <div className="mx-auto max-w-4xl">
-        {restoredDraft && (
-          <div className="mb-4 flex flex-col gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-[11px] font-semibold text-emerald-900 sm:flex-row sm:items-center sm:justify-between">
-            <span>
-              {getLocalized({
-                en: "Your answers were restored.",
-                km: "ស្តារសេចក្តីព្រាងឡើងវិញ។ ចម្លើយរបស់អ្នកត្រូវបានរក្សាទុកលើឧបករណ៍នេះ។",
-              })}
-            </span>
-            <span className="font-black text-emerald-700">{progress}%</span>
-          </div>
-        )}
-
         <AssessmentStage
           breadcrumbText={getLocalized({
             en: "OrienX / Free assessment",
@@ -261,10 +259,14 @@ export default function GuestPersonalityTestPage() {
           leftAnchorEn="Agree"
           rightAnchorKm="មិនយល់ស្រប"
           rightAnchorEn="Disagree"
-          mascotSpeech={getLocalized({
-            en: "Answer honestly. There are no right or wrong choices — only what feels like you.",
-            km: "ឆ្លើយដោយស្មោះត្រង់។ គ្មានចម្លើយត្រូវ ឬខុសទេ — គ្រាន់តែជាអ្វីដែលត្រូវនឹងអ្នក។",
-          })}
+          mascotSpeech={getLocalized(
+            getPersonalityMascotSpeech({
+              scaleLevel: answers[QUESTIONS[currentIndex]?.id]?.scaleLevel ?? null,
+              dimension: QUESTIONS[currentIndex]?.dimension,
+              currentIndex,
+              totalCount: QUESTIONS.length,
+            })
+          )}
           mascotScaleLevel={answers[QUESTIONS[currentIndex]?.id]?.scaleLevel ?? null}
           onPrefill={handlePrefill}
           onSubmit={handleSubmit}
@@ -293,6 +295,17 @@ export default function GuestPersonalityTestPage() {
             {getLocalized({ en: "Start over", km: "ចាប់ផ្តើមឡើងវិញ" })}
           </button>
         </div>
+
+        {restoredDraft && (
+          <DraftRestoredBanner
+            message={getLocalized({
+              en: "Your previous answers were restored on this device.",
+              km: "ស្តារសេចក្តីព្រាងឡើងវិញ។ ចម្លើយរបស់អ្នកត្រូវបានរក្សាទុកលើឧបករណ៍នេះ។",
+            })}
+            progress={progress}
+            onDismiss={() => setRestoredDraft(false)}
+          />
+        )}
       </div>
     </div>
   );

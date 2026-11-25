@@ -308,19 +308,33 @@ export function AssessmentStage({
   const { t, getLocalized } = useLanguage();
   const [hovered, setHovered] = useState<number | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [dragLevel, setDragLevel] = useState<number | null>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const railRef = useRef<HTMLDivElement>(null);
+  const dotsScrollRef = useRef<HTMLDivElement>(null);
   const activeStepRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (activeStepRef.current) {
-      activeStepRef.current.scrollIntoView({
+    const stepEl = activeStepRef.current;
+    const container = dotsScrollRef.current;
+    if (!stepEl || !container) return;
+    const rafId = window.requestAnimationFrame(() => {
+      const containerRect = container.getBoundingClientRect();
+      const stepRect = stepEl.getBoundingClientRect();
+      const stepCenter =
+        stepRect.left - containerRect.left + container.scrollLeft + stepRect.width / 2;
+      const maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
+      const targetLeft = Math.max(
+        0,
+        Math.min(maxScroll, stepCenter - container.clientWidth / 2)
+      );
+      container.scrollTo({
+        left: targetLeft,
         behavior: "smooth",
-        block: "nearest",
-        inline: "center",
       });
-    }
-  }, [currentIndex]);
+    });
+    return () => window.cancelAnimationFrame(rafId);
+  }, [currentIndex, questions.length]);
 
   const totalCount = questions.length;
   const currentQ = questions[currentIndex] || questions[0];
@@ -368,7 +382,7 @@ export function AssessmentStage({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [currentQ, onAnswer, steps, totalSteps]);
 
-  const activeLevel = hovered ?? currentValue;
+  const activeLevel = isDragging ? dragLevel : hovered ?? currentValue;
   const currentStep = steps.find((s) => s.level === activeLevel);
   const foundIndex = activeLevel !== null ? steps.findIndex((s) => s.level === activeLevel) : -1;
   const thumbStepIndex = foundIndex >= 0 ? foundIndex : Math.floor(totalSteps / 2);
@@ -393,22 +407,18 @@ export function AssessmentStage({
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {}
-    setIsDragging(true);
     const newLevel = getLevelFromClientX(e.clientX);
-    onAnswer(currentQ.id, newLevel);
+    setIsDragging(true);
+    setDragLevel(newLevel);
     setHovered(newLevel);
   };
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     const newLevel = getLevelFromClientX(e.clientX);
     if (isDragging) {
-      if (newLevel !== currentValue) {
-        onAnswer(currentQ.id, newLevel);
-      }
-      setHovered(newLevel);
-    } else {
-      setHovered(newLevel);
+      setDragLevel(newLevel);
     }
+    setHovered(newLevel);
   };
 
   const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -416,7 +426,24 @@ export function AssessmentStage({
       try {
         e.currentTarget.releasePointerCapture(e.pointerId);
       } catch {}
+      const finalLevel = getLevelFromClientX(e.clientX);
       setIsDragging(false);
+      setDragLevel(null);
+      setHovered(null);
+      if (currentQ) {
+        onAnswer(currentQ.id, finalLevel);
+      }
+    }
+  };
+
+  const handlePointerCancel = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isDragging) {
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {}
+      setIsDragging(false);
+      setDragLevel(null);
+      setHovered(null);
     }
   };
 
@@ -710,7 +737,7 @@ export function AssessmentStage({
                 {/* Row of Uniform Emotion Face Cards */}
                 <div className="flex items-center justify-between max-w-xl mx-auto gap-2 sm:gap-3 px-2 sm:px-4">
                   {steps5.map((step) => {
-                    const isSelected = currentValue === step.level;
+                    const isSelected = activeLevel === step.level;
                     const isHovered = hovered === step.level;
 
                     return (
@@ -759,7 +786,7 @@ export function AssessmentStage({
                     onPointerDown={handlePointerDown}
                     onPointerMove={handlePointerMove}
                     onPointerUp={handlePointerUp}
-                    onPointerCancel={handlePointerUp}
+                    onPointerCancel={handlePointerCancel}
                     onPointerLeave={handlePointerLeave}
                   >
                     <div
@@ -827,22 +854,25 @@ export function AssessmentStage({
         </div>
       </div>
 
-      {/* 4. BOTTOM NAVIGATION & CHECKPOINT NUMBER DOTS (Strict Single Row) */}
-      <div className="pt-3 flex items-center justify-between gap-2 sm:gap-4 w-full">
+      {/* 4. BOTTOM NAVIGATION & CHECKPOINT NUMBER DOTS */}
+      <div className="pt-3 flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 sm:gap-4 w-full">
         {/* Previous Button */}
         <button
           type="button"
           onClick={handlePrev}
           disabled={currentIndex === 0}
-          className="inline-flex items-center gap-1.5 px-3.5 sm:px-5 py-2.5 rounded-full text-xs font-bold text-[#68708A] hover:text-[#111965] hover:bg-[#F0F2FA] disabled:opacity-25 disabled:pointer-events-none transition-colors whitespace-nowrap flex-shrink-0 cursor-pointer select-none"
+          className="order-2 sm:order-1 inline-flex items-center gap-1.5 px-3.5 sm:px-5 py-2.5 rounded-full text-xs font-bold text-[#68708A] hover:text-[#111965] hover:bg-[#F0F2FA] disabled:opacity-25 disabled:pointer-events-none transition-colors whitespace-nowrap flex-shrink-0 cursor-pointer select-none"
         >
           <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
           <span className="whitespace-nowrap">{t("personalityAssessment.previous") || "សំណួរមុន"}</span>
         </button>
 
-        {/* Checkpoint Dots (1 to N) - Strictly Single Row Centered */}
-        <div className="flex-1 max-w-full overflow-x-auto no-scrollbar scroll-smooth flex items-center justify-center px-1">
-          <div className="flex items-center gap-1 sm:gap-1.5 flex-nowrap py-1 px-1">
+        {/* Checkpoint Dots (1 to N) - Unclipped scrollable row */}
+        <div
+          ref={dotsScrollRef}
+          className="relative order-1 sm:order-2 w-full sm:w-auto sm:min-w-0 sm:flex-1 overflow-x-auto no-scrollbar scroll-smooth"
+        >
+          <div className="mx-auto flex w-max items-center gap-1 sm:gap-1.5 flex-nowrap py-1.5 px-3">
             {questions.map((q, idx) => {
               const isQAnswered = answers[q.id] !== undefined && answers[q.id] !== null;
               const isCurrent = idx === currentIndex;
@@ -881,7 +911,7 @@ export function AssessmentStage({
             type="button"
             onClick={onSubmit}
             disabled={answeredCount < totalCount || isSubmitting}
-            className="inline-flex items-center gap-2 px-5 sm:px-7 py-2.5 rounded-full font-black text-xs sm:text-sm text-[#0F1754] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-md disabled:opacity-40 transition-all whitespace-nowrap flex-shrink-0 cursor-pointer select-none"
+            className="order-3 inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-full font-black text-xs sm:text-sm text-[#0F1754] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-md disabled:opacity-40 transition-all whitespace-nowrap flex-shrink-0 cursor-pointer select-none"
           >
             <Sparkles className="w-4 h-4 text-[#0F1754] flex-shrink-0" />
             <span className="whitespace-nowrap">
@@ -895,7 +925,7 @@ export function AssessmentStage({
           <button
             type="button"
             onClick={handleNext}
-            className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-full font-bold text-xs text-white bg-[#111965] hover:bg-[#1E277A] disabled:opacity-30 transition-all shadow-xs whitespace-nowrap flex-shrink-0 cursor-pointer select-none"
+            className="order-3 inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-full font-bold text-xs text-white bg-[#111965] hover:bg-[#1E277A] disabled:opacity-30 transition-all shadow-xs whitespace-nowrap flex-shrink-0 cursor-pointer select-none"
           >
             <span className="whitespace-nowrap">{t("personalityAssessment.next") || "បន្ទាប់"}</span>
             <ArrowRight className="w-4 h-4 flex-shrink-0" />
