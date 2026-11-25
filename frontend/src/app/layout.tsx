@@ -43,8 +43,21 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "https://orienx.vercel.app");
+
+const OG_IMAGE_WEBP =
+  "https://res.cloudinary.com/dt1mvi7gy/image/upload/v1795617518/og-image_krxic7.webp";
+const OG_IMAGE_JPG =
+  "https://res.cloudinary.com/dt1mvi7gy/image/upload/q_auto/v1795617518/og-image_krxic7.jpg";
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://orienx.edu.kh"),
+  metadataBase: new URL(siteUrl),
   title: {
     default: "OrienX — Discover Your Direction. Shape Your Future.",
     template: "%s | OrienX Cambodia",
@@ -52,7 +65,7 @@ export const metadata: Metadata = {
   description:
     "Cambodia's modern education and career guidance ecosystem. Discover your authentic strengths through Holland RIASEC & MBTI assessments, explore verified Cambodian university majors and tuition fees, and unlock full-ride scholarships.",
   applicationName: "OrienX",
-  authors: [{ name: "OrienX Team", url: "https://orienx.edu.kh" }],
+  authors: [{ name: "OrienX Team", url: siteUrl }],
   creator: "OrienX",
   publisher: "OrienX Higher Education Platform",
   category: "Education",
@@ -125,11 +138,20 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/og-image.webp",
+        url: OG_IMAGE_WEBP,
+        secureUrl: OG_IMAGE_WEBP,
         width: 1200,
         height: 630,
         alt: "OrienX — Discover Your Direction. Shape Your Future.",
         type: "image/webp",
+      },
+      {
+        url: OG_IMAGE_JPG,
+        secureUrl: OG_IMAGE_JPG,
+        width: 1200,
+        height: 630,
+        alt: "OrienX — Discover Your Direction. Shape Your Future.",
+        type: "image/jpeg",
       },
     ],
   },
@@ -138,7 +160,12 @@ export const metadata: Metadata = {
     title: "OrienX — Discover Your Direction. Shape Your Future.",
     description:
       "Cambodia's modern guidance ecosystem pairing Holland RIASEC & MBTI self-discovery with verified university tuitions, BacII cutoffs, and 100% scholarships.",
-    images: ["/images/og-image.webp"],
+    images: [
+      {
+        url: OG_IMAGE_WEBP,
+        alt: "OrienX — Discover Your Direction. Shape Your Future.",
+      },
+    ],
   },
 };
 
@@ -147,30 +174,32 @@ const jsonLdSchema = {
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://orienx.edu.kh/#website",
-      url: "https://orienx.edu.kh",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
       name: "OrienX",
       alternateName: ["OrienX Cambodia", "Futera OrienX"],
       description:
         "Cambodia's modern higher education, university major guidance, and career intelligence ecosystem.",
       inLanguage: ["km-KH", "en-US"],
+      image: OG_IMAGE_WEBP,
       potentialAction: {
         "@type": "SearchAction",
-        target: "https://orienx.edu.kh/majors?search={search_term_string}",
+        target: `${siteUrl}/majors?search={search_term_string}`,
         "query-input": "required name=search_term_string",
       },
     },
     {
       "@type": "EducationalOrganization",
-      "@id": "https://orienx.edu.kh/#organization",
+      "@id": `${siteUrl}/#organization`,
       name: "OrienX",
-      url: "https://orienx.edu.kh",
+      url: siteUrl,
       logo: {
         "@type": "ImageObject",
-        url: "https://orienx.edu.kh/images/orienx-mark.png",
+        url: `${siteUrl}/images/orienx-mark.png`,
         width: "344",
         height: "386",
       },
+      image: OG_IMAGE_WEBP,
       description:
         "Comprehensive, objective education and career guidance platform for Cambodian high school students and university undergraduates.",
       areaServed: {
@@ -188,7 +217,7 @@ const jsonLdSchema = {
     },
     {
       "@type": "WebApplication",
-      "@id": "https://orienx.edu.kh/#app",
+      "@id": `${siteUrl}/#app`,
       name: "OrienX Educational Guidance & Career Recommendation System",
       applicationCategory: "EducationalApplication",
       operatingSystem: "All",
