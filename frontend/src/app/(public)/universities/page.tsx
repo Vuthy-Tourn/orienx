@@ -661,7 +661,7 @@ function UniversitiesContent() {
 
                 <Link
                   href={`/universities/compare?ids=${selectedForCompare.join(",")}`}
-                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all shadow-md whitespace-nowrap"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-black text-[#0F1754] dark:text-[#0F1754] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all shadow-md whitespace-nowrap"
                 >
                   <span>Full Comparison</span>
                   <ArrowRight className="w-3.5 h-3.5 shrink-0" />
@@ -675,71 +675,134 @@ function UniversitiesContent() {
       {/* Quick Comparison Modal Dialog */}
       {isCompareModalOpen && (
         <Dialog open={isCompareModalOpen} onOpenChange={setIsCompareModalOpen} hideClose>
-          <div className="space-y-5">
-            <div className="flex items-start justify-between border-b border-[#E6E8F0] pb-3">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-[#68708A]">
-                  Direct Comparison
+          <div className="space-y-4">
+            <div className="flex items-start justify-between gap-3 border-b border-[#E6E8F0] pb-3.5">
+              <div className="min-w-0">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#68708A]">
+                  <Scale className="w-3.5 h-3.5 text-[#D4A017]" />
+                  {getLocalized({ en: "Direct Comparison", km: "ការប្រៀបធៀបផ្ទាល់" })}
                 </span>
-                <h3 className="text-xl font-black text-[#111965] mt-0.5">
-                  Side-by-Side Institutional Analysis
+                <h3 className="text-lg sm:text-xl font-black text-[#111965] mt-1 leading-snug">
+                  {getLocalized({
+                    en: "Side-by-Side Institutional Analysis",
+                    km: "ការវិភាគប្រៀបធៀបសាកលវិទ្យាល័យ",
+                  })}
                 </h3>
               </div>
               <button
+                type="button"
                 onClick={() => setIsCompareModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                aria-label="Close"
+                className="shrink-0 p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:hover:bg-white/10 dark:hover:text-white transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Matrix comparison table */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {comparedUniversities.map((uni) => (
-                <div key={uni.id} className="p-3.5 rounded-xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-2">
-                  <div className="font-mono text-[12.5px] font-bold text-[#68708A] uppercase">
-                    {getLocalized(uni.acronym) || uni.slug.toUpperCase()}
-                  </div>
-                  <div className="text-xs font-bold text-[#111965] line-clamp-1">
-                    {getLocalized(uni.name)}
-                  </div>
-                  <div className="pt-1 text-[12px] space-y-1 text-[#68708A]">
-                    <div>
-                      <span className="font-bold text-[#171A2C]">Type: </span>
-                      <span>{uni.university_type === "PUBLIC" ? "Public" : "Private"}</span>
-                    </div>
-                    <div>
-                      <span className="font-bold text-[#171A2C]">Tuition: </span>
-                      <span>${Math.round(uni.tuition_range_min_usd || 0)} - ${Math.round(uni.tuition_range_max_usd || 0)}/yr</span>
-                    </div>
-                    <div>
-                      <span className="font-bold text-[#171A2C]">Programs: </span>
-                      <span>{uni.majors_count || 0}</span>
-                    </div>
-                  </div>
-                  <Link
-                    href={`/universities/${uni.slug}`}
-                    className="block pt-2 text-[12px] font-bold text-[#111965] hover:underline"
+            {/* Responsive University Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[58vh] overflow-y-auto pr-0.5">
+              {comparedUniversities.map((uni) => {
+                const isPublic = uni.university_type === "PUBLIC";
+                const minUsd = Math.round(uni.tuition_range_min_usd || 0);
+                const maxUsd = Math.round(uni.tuition_range_max_usd || minUsd);
+                return (
+                  <div
+                    key={uni.id}
+                    className="flex flex-col justify-between p-4 rounded-2xl bg-[#F5F6FA] border border-[#E6E8F0] space-y-3"
                   >
-                    View Campus Profile →
-                  </Link>
-                </div>
-              ))}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="inline-flex items-center rounded-lg bg-white dark:bg-white/10 border border-[#E6E8F0] px-2 py-0.5 font-mono text-[11px] font-black text-[#111965] uppercase">
+                          {getLocalized(uni.acronym) || uni.slug.toUpperCase()}
+                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span
+                            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold whitespace-nowrap ${
+                              isPublic
+                                ? "bg-blue-50 text-blue-700 border border-blue-200"
+                                : "bg-purple-50 text-purple-700 border border-purple-200"
+                            }`}
+                          >
+                            {isPublic
+                              ? getLocalized({ en: "Public", km: "រដ្ឋ" })
+                              : getLocalized({ en: "Private", km: "ឯកជន" })}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => toggleCompare(uni.slug)}
+                            aria-label={t("universitiesDirectory.compareRemove")}
+                            className="p-1 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <h4 className="text-sm font-black text-[#111965] leading-snug line-clamp-2">
+                        {getLocalized(uni.name)}
+                      </h4>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 rounded-xl bg-white border border-[#E6E8F0] p-2.5 text-xs">
+                      <div className="min-w-0">
+                        <div className="text-[11px] font-semibold text-[#68708A]">
+                          {getLocalized({ en: "Tuition / yr", km: "ថ្លៃសិក្សា / ឆ្នាំ" })}
+                        </div>
+                        <div className="mt-0.5 font-black text-[#111965] whitespace-nowrap">
+                          {minUsd > 0 ? `$${minUsd}–$${maxUsd}` : "—"}
+                        </div>
+                      </div>
+                      <div className="min-w-0 border-l border-[#E6E8F0] pl-2.5">
+                        <div className="text-[11px] font-semibold text-[#68708A]">
+                          {getLocalized({ en: "Programs", km: "ជំនាញ" })}
+                        </div>
+                        <div className="mt-0.5 font-black text-[#111965] whitespace-nowrap">
+                          {uni.majors_count || 0}{" "}
+                          {getLocalized({ en: "majors", km: "ជំនាញ" })}
+                        </div>
+                      </div>
+                    </div>
+
+                    <Link
+                      href={`/universities/${uni.slug}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#111965] hover:underline whitespace-nowrap"
+                    >
+                      <span>
+                        {getLocalized({
+                          en: "View Campus Profile",
+                          km: "មើលព័ត៌មានសាកលវិទ្យាល័យ",
+                        })}
+                      </span>
+                      <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-[#E6E8F0]">
+            {/* Modal Footer */}
+            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-2.5 pt-3 border-t border-[#E6E8F0]">
               <button
-                onClick={() => setSelectedForCompare([])}
-                className="text-xs font-semibold text-rose-600 hover:underline"
+                type="button"
+                onClick={() => {
+                  setSelectedForCompare([]);
+                  setIsCompareModalOpen(false);
+                }}
+                className="inline-flex items-center justify-center px-3.5 py-2.5 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 border border-rose-200/70 transition-colors cursor-pointer whitespace-nowrap"
               >
-                Clear Selected
+                {getLocalized({ en: "Clear Selected", km: "លុបការជ្រើសរើស" })}
               </button>
               <Link
                 href={`/universities/compare?ids=${selectedForCompare.join(",")}`}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black text-[#0F1754] dark:text-[#0F1754] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors shadow-sm whitespace-nowrap"
               >
-                <span>Open Dedicated Comparison Matrix</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>
+                  {getLocalized({
+                    en: "Full Comparison Matrix",
+                    km: "បើកតារាងប្រៀបធៀបពេញលេញ",
+                  })}
+                </span>
+                <ArrowRight className="w-3.5 h-3.5 shrink-0" />
               </Link>
             </div>
           </div>
