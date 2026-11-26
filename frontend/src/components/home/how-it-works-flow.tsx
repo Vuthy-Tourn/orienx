@@ -597,7 +597,7 @@ export function HowItWorksFlow() {
                       ref={(el) => {
                         watermarksRef.current[idx] = el;
                       }}
-                      className="absolute top-3 right-4 text-4xl lg:text-5xl font-black text-[#111965]/10 dark:text-white/10 select-none pointer-events-none leading-none tracking-tight"
+                      className="absolute top-3 right-4 text-4xl lg:text-5xl font-black text-[#111965]/22 dark:text-white/30 select-none pointer-events-none leading-none tracking-tight"
                     >
                       {step.watermark}
                     </div>
@@ -666,8 +666,8 @@ export function HowItWorksFlow() {
 
                 {/* Content Card */}
                 <div className="flex-1 bg-white p-5 rounded-2xl border border-slate-100 shadow-[0_4px_16px_rgba(0,0,0,0.03)] space-y-2 relative overflow-hidden">
-                  {/* Faint Watermark Number */}
-                  <div className="absolute -top-3 -right-1 text-5xl font-black text-[#111965]/10 dark:text-white/10 select-none pointer-events-none">
+                  {/* Clear Watermark Number */}
+                  <div className="absolute top-1.5 right-3.5 text-4xl sm:text-5xl font-black text-[#111965]/22 dark:text-white/30 select-none pointer-events-none leading-none">
                     {step.watermark}
                   </div>
 

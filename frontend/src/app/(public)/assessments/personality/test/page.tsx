@@ -245,10 +245,6 @@ export default function GuestPersonalityTestPage() {
             en: "16-Personality Assessment",
             km: "ការវាយតម្លៃបុគ្គលិកលក្ខណៈ ១៦",
           })}
-          badgeLabel={getLocalized({
-            en: "No account needed",
-            km: "មិនត្រូវការគណនី",
-          })}
           questions={formattedQuestions}
           currentIndex={currentIndex}
           onIndexChange={setCurrentIndex}

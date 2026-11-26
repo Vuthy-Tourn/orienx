@@ -278,7 +278,7 @@ export default function ScholarshipsPage() {
         {spotlightScholarship && !hasActiveFilters && (
           <div className="relative rounded-3xl bg-gradient-to-br from-[#111965] via-[#1E277A] to-[#0A0F3D] text-white p-6 sm:p-8 shadow-xl overflow-hidden">
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-              <div className="lg:col-span-8 space-y-4">
+              <div className="lg:col-span-7 space-y-4">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#F7CE4D] text-[#111965] text-xs font-black">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>{t("scholarshipsPage.spotlight")}</span>
@@ -330,9 +330,9 @@ export default function ScholarshipsPage() {
                 </div>
               </div>
 
-              {/* Poster thumbnail preview */}
-              <div className="lg:col-span-4 flex justify-center lg:justify-end">
-                <div className="relative w-52 h-64 sm:w-60 sm:h-72 rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 bg-slate-900 group">
+              {/* Full-width Poster Preview */}
+              <div className="lg:col-span-5 w-full">
+                <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl border border-white/20 bg-slate-900/60 group">
                   <Image
                     src={
                       spotlightScholarship.poster_url ||
@@ -340,8 +340,9 @@ export default function ScholarshipsPage() {
                       "/images/scholarships/techo-scholarship-poster.jpg"
                     }
                     alt={getLocalized(spotlightScholarship.title) || "Poster"}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    width={900}
+                    height={1100}
+                    className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-500"
                   />
                 </div>
               </div>

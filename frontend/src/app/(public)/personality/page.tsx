@@ -98,18 +98,12 @@ export default function PublicPersonalityGuidePage() {
   const smoothMouseX = useSpring(mouseX, springConfig);
   const smoothMouseY = useSpring(mouseY, springConfig);
 
-  // Layered depth transforms for top row, flanks, and bottom row
+  // Layered depth transforms for top row and bottom row
   const topRowX = useTransform(smoothMouseX, [-0.5, 0.5], [-14, 14]);
   const topRowY = useTransform(smoothMouseY, [-0.5, 0.5], [-8, 8]);
 
   const bottomRowX = useTransform(smoothMouseX, [-0.5, 0.5], [14, -14]);
   const bottomRowY = useTransform(smoothMouseY, [-0.5, 0.5], [8, -8]);
-
-  const leftFlankX = useTransform(smoothMouseX, [-0.5, 0.5], [-16, 10]);
-  const leftFlankY = useTransform(smoothMouseY, [-0.5, 0.5], [-6, 6]);
-
-  const rightFlankX = useTransform(smoothMouseX, [-0.5, 0.5], [-10, 16]);
-  const rightFlankY = useTransform(smoothMouseY, [-0.5, 0.5], [6, -6]);
 
   // Spotlight coordinates in %
   const spotlightX = useTransform(smoothMouseX, [-0.5, 0.5], [20, 80]);
@@ -249,11 +243,11 @@ export default function PublicPersonalityGuidePage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFD] text-[#111965] selection:bg-[#F7CE4D] selection:text-[#111965] pb-24">
-      {/* 1. HERO SECTION WITH 16 ANIMATED VECTOR SVGS AS PURE BACKGROUND */}
+      {/* 1. COMPACT EDITORIAL HERO WITH INTEGRATED 16-CHARACTER SHOWCASE */}
       <section
         onMouseMove={handleHeroMouseMove}
         onMouseLeave={handleHeroMouseLeave}
-        className="hero-screen relative overflow-hidden bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white pt-24 pb-32 md:pb-36 lg:pb-40 px-4 sm:px-6 lg:px-8 select-none"
+        className="relative overflow-hidden bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white pt-10 pb-16 sm:pt-14 sm:pb-20 lg:pt-16 lg:pb-24 px-4 sm:px-6 lg:px-8 select-none"
       >
         {/* Dynamic Cursor Spotlight Beam (Subtle Brand Tint) */}
         <motion.div
@@ -267,117 +261,15 @@ export default function PublicPersonalityGuidePage() {
         <div className="absolute inset-0 pointer-events-none opacity-20 z-0 [background-image:radial-gradient(rgba(255,255,255,0.22)_1px,transparent_1px)] [background-size:32px_32px] [mask-image:radial-gradient(ellipse_at_center,black_45%,transparent_80%)]" />
 
         {/* Ambient Glow Orbs */}
-        <div className="absolute -top-32 -left-32 w-[500px] h-[500px] bg-[#88619A]/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-[#33A474]/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-12 left-1/4 w-[450px] h-[250px] bg-[#4298B4]/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-12 right-1/4 w-[450px] h-[250px] bg-[#E4AE3A]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -left-24 w-[420px] h-[420px] bg-[#88619A]/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-[420px] h-[420px] bg-[#33A474]/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-6 left-1/4 w-[380px] h-[200px] bg-[#4298B4]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-6 right-1/4 w-[380px] h-[200px] bg-[#E4AE3A]/15 rounded-full blur-3xl pointer-events-none" />
 
-        {/* LIVING BACKGROUND: 16 Vector Characters in Harmonious Floating Wave + Smooth Parallax */}
-        <div className="absolute inset-0 max-w-7xl mx-auto pointer-events-none select-none flex flex-col justify-between pt-6 sm:pt-12 pb-24 sm:pb-28 px-1 sm:px-4 md:px-8 z-0">
-          {/* TOP ROW: 7 Characters (Analysts & Diplomats) */}
-          <motion.div
-            style={{ x: topRowX, y: topRowY }}
-            className="flex items-end justify-between px-0.5 sm:px-2 will-change-transform"
-          >
-            {HERO_TOP_ARCHETYPES.map((arch, idx) => {
-              const motionProps = getWaveProps(idx, false);
-              return (
-                <motion.div
-                  key={arch.code}
-                  animate={motionProps.animate}
-                  transition={motionProps.transition}
-                  className="flex items-center justify-center shrink-0"
-                >
-                  <div className="relative h-14 sm:h-22 lg:h-32 w-11 sm:w-16 lg:w-24 flex items-center justify-center">
-                    <Image
-                      src={`/images/personality-types/${arch.code.toLowerCase()}.svg`}
-                      alt={arch.code}
-                      width={100}
-                      height={120}
-                      className="max-h-14 sm:max-h-22 lg:max-h-32 w-auto object-contain"
-                    />
-                  </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-
-          {/* MIDDLE FLANKS: Left ISTJ, Right INFP */}
-          <div className="flex items-center justify-between px-2 my-2">
-            {/* Left Flank: ISTJ */}
-            <motion.div
-              style={{ x: leftFlankX, y: leftFlankY }}
-              className="hidden sm:flex items-center justify-center pl-2 shrink-0 will-change-transform"
-            >
-              <motion.div
-                animate={{ y: [0, -7, 0] }}
-                transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
-                className="relative h-26 sm:h-30 lg:h-36 w-20 sm:w-24 lg:w-28 flex items-center justify-center"
-              >
-                <Image
-                  src={`/images/personality-types/${HERO_LEFT_ARCHETYPE.code.toLowerCase()}.svg`}
-                  alt={HERO_LEFT_ARCHETYPE.code}
-                  width={110}
-                  height={130}
-                  className="max-h-26 sm:max-h-30 lg:max-h-36 object-contain"
-                />
-              </motion.div>
-            </motion.div>
-
-            {/* Right Flank: INFP */}
-            <motion.div
-              style={{ x: rightFlankX, y: rightFlankY }}
-              className="hidden sm:flex items-center justify-center pr-2 shrink-0 will-change-transform"
-            >
-              <motion.div
-                animate={{ y: [0, -7, 0] }}
-                transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut", delay: 1.6 }}
-                className="relative h-26 sm:h-30 lg:h-36 w-20 sm:w-24 lg:w-28 flex items-center justify-center"
-              >
-                <Image
-                  src={`/images/personality-types/${HERO_RIGHT_ARCHETYPE.code.toLowerCase()}.svg`}
-                  alt={HERO_RIGHT_ARCHETYPE.code}
-                  width={110}
-                  height={130}
-                  className="max-h-26 sm:max-h-30 lg:max-h-36 object-contain"
-                />
-              </motion.div>
-            </motion.div>
-          </div>
-
-          {/* BOTTOM ROW: 7 Characters (Sentinels & Explorers) */}
-          <motion.div
-            style={{ x: bottomRowX, y: bottomRowY }}
-            className="flex items-start justify-between px-0.5 sm:px-2 will-change-transform"
-          >
-            {HERO_BOTTOM_ARCHETYPES.map((arch, idx) => {
-              const motionProps = getWaveProps(idx, true);
-              return (
-                <motion.div
-                  key={arch.code}
-                  animate={motionProps.animate}
-                  transition={motionProps.transition}
-                  className="flex items-center justify-center shrink-0"
-                >
-                  <div className="relative h-14 sm:h-22 lg:h-32 w-11 sm:w-16 lg:w-24 flex items-center justify-center">
-                    <Image
-                      src={`/images/personality-types/${arch.code.toLowerCase()}.svg`}
-                      alt={arch.code}
-                      width={100}
-                      height={120}
-                      className="max-h-14 sm:max-h-22 lg:max-h-32 w-auto object-contain"
-                    />
-                  </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </div>
-
-        {/* FOREGROUND HERO CONTENT (Crisp, High-Contrast & Interactive) */}
-        <div className="max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 relative z-10 my-6 sm:my-14 lg:my-16 py-2 sm:py-4 px-2 sm:px-4">
-          <div className="gsap-mbti-hero-anim inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[12.5px] sm:text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 shadow-xs uppercase tracking-wider">
-            <Sparkles className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#F7CE4D]" />
+        {/* FOREGROUND HERO CONTENT */}
+        <div className="max-w-3xl mx-auto text-center space-y-3 sm:space-y-4 relative z-10 px-1 sm:px-4">
+          <div className="gsap-mbti-hero-anim inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black bg-white/10 backdrop-blur-md text-[#F7CE4D] border border-white/20 shadow-xs uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-[#F7CE4D]" />
             <span>NERIS & 16Personalities Standard</span>
           </div>
 
@@ -393,14 +285,14 @@ export default function PublicPersonalityGuidePage() {
               : "Discover Your Cognitive Strengths, Temperament & Ideal Majors"}
           </p>
 
-          <p className="gsap-mbti-hero-anim text-xs sm:text-sm text-slate-200/95 max-w-lg mx-auto font-medium leading-relaxed drop-shadow-xs">
+          <p className="gsap-mbti-hero-anim text-xs sm:text-sm text-slate-200/95 max-w-xl mx-auto font-medium leading-relaxed drop-shadow-xs">
             {getLocalized({
               km: "ស្វែងយល់ពីទម្រង់ចិត្តគំនិត ទេពកោសល្យពីកំណើត របៀបសិក្សា និងមុខជំនាញសាកលវិទ្យាល័យដែលស័ក្តិសមបំផុតសម្រាប់បុគ្គលិកលក្ខណៈនីមួយៗ។",
               en: "Explore cognitive strengths, natural tendencies, learning styles, and ideal university majors across all 16 official personality archetypes.",
             })}
           </p>
 
-          <div className="gsap-mbti-hero-anim pt-2 sm:pt-3">
+          <div className="gsap-mbti-hero-anim pt-2">
             <Link
               href="/assessments/personality/test"
               className="inline-flex items-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 rounded-2xl text-xs sm:text-sm font-black bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-2xl transition-all hover:scale-105 active:scale-95 cursor-pointer"
@@ -415,6 +307,68 @@ export default function PublicPersonalityGuidePage() {
               <ArrowRight className="w-4 h-4 text-[#111965]" />
             </Link>
           </div>
+        </div>
+
+        {/* GROUNDED 16-CHARACTER PARADE STAGE (Cleanly fitted below CTA, zero clipping or awkward gaps) */}
+        <div className="relative z-10 max-w-6xl mx-auto mt-8 sm:mt-10 space-y-2.5 sm:space-y-3 pointer-events-none select-none">
+          {/* Top Wave: 8 Characters (Analysts & Diplomats) */}
+          <motion.div
+            style={{ x: topRowX, y: topRowY }}
+            className="grid grid-cols-8 items-end gap-1 sm:gap-2 px-1 sm:px-4 will-change-transform"
+          >
+            {[...HERO_TOP_ARCHETYPES, HERO_RIGHT_ARCHETYPE].map((arch, idx) => {
+              const motionProps = getWaveProps(idx, false);
+              return (
+                <motion.div
+                  key={arch.code}
+                  animate={motionProps.animate}
+                  transition={motionProps.transition}
+                  className="flex flex-col items-center justify-end"
+                >
+                  <div className="relative h-12 sm:h-20 lg:h-24 w-full flex items-end justify-center">
+                    <Image
+                      src={`/images/personality-types/${arch.code.toLowerCase()}.svg`}
+                      alt={arch.code}
+                      width={96}
+                      height={112}
+                      className="max-h-12 sm:max-h-20 lg:max-h-24 w-auto object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.35)]"
+                    />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+
+          {/* Subtle Stage Divider Line */}
+          <div className="mx-auto max-w-5xl h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+          {/* Bottom Wave: 8 Characters (Sentinels & Explorers) */}
+          <motion.div
+            style={{ x: bottomRowX, y: bottomRowY }}
+            className="grid grid-cols-8 items-end gap-1 sm:gap-2 px-1 sm:px-4 will-change-transform"
+          >
+            {[HERO_LEFT_ARCHETYPE, ...HERO_BOTTOM_ARCHETYPES].map((arch, idx) => {
+              const motionProps = getWaveProps(idx, true);
+              return (
+                <motion.div
+                  key={arch.code}
+                  animate={motionProps.animate}
+                  transition={motionProps.transition}
+                  className="flex flex-col items-center justify-end"
+                >
+                  <div className="relative h-12 sm:h-20 lg:h-24 w-full flex items-end justify-center">
+                    <Image
+                      src={`/images/personality-types/${arch.code.toLowerCase()}.svg`}
+                      alt={arch.code}
+                      width={96}
+                      height={112}
+                      className="max-h-12 sm:max-h-20 lg:max-h-24 w-auto object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.35)]"
+                    />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
         </div>
       </section>
 

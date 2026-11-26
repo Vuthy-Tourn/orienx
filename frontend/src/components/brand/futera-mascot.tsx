@@ -142,7 +142,7 @@ export function FuteraMascot({
           >
             <div
               key={renderedSpeech}
-              className="relative bg-white dark:bg-[#1E293B] px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-slate-200/90 dark:border-slate-700 shadow-sm dark:shadow-md max-w-[200px] sm:max-w-[260px] text-right animate-in fade-in zoom-in-95 duration-200"
+              className="relative bg-white dark:bg-[#1E293B] px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-slate-200/90 dark:border-slate-700 shadow-sm dark:shadow-md max-w-[calc(100vw-9.5rem)] sm:max-w-[260px] text-right animate-in fade-in zoom-in-95 duration-200"
             >
               <p className="text-xs sm:text-[14px] font-bold text-[#111965] dark:text-[#F8FAFC] leading-snug">
                 {renderedSpeech}

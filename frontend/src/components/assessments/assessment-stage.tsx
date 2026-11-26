@@ -477,12 +477,14 @@ export function AssessmentStage({
         {/* Top Badges / Segmented View Switcher */}
         {headerAction ? (
           headerAction
-        ) : (
+        ) : badgeLabel || resultProfileBadge ? (
           <div className="flex items-center gap-2.5">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black bg-[#111965] text-white shadow-2xs">
-              <BadgeIcon className="w-3.5 h-3.5" />
-              <span>{badgeLabel}</span>
-            </div>
+            {badgeLabel && (
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black bg-[#111965] text-white shadow-2xs">
+                <BadgeIcon className="w-3.5 h-3.5" />
+                <span>{badgeLabel}</span>
+              </div>
+            )}
 
             {resultProfileBadge && (
               <button
@@ -497,33 +499,33 @@ export function AssessmentStage({
               </button>
             )}
           </div>
-        )}
+        ) : null}
       </div>
 
       {/* 2. DIMENSION PROGRESS PILL & BAR */}
       <div className="space-y-2.5">
-        <div className="flex items-center justify-between text-xs font-extrabold text-[#68708A]">
-          <div className="flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full text-[12.5px] sm:text-[12px] font-black bg-[#111965] text-[#F7CE4D] uppercase tracking-wider">
+        <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-extrabold text-[#68708A]">
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
+            <span className="inline-flex items-center rounded-2xl sm:rounded-full px-3 py-1 text-[11.5px] sm:text-xs font-black bg-[#111965] text-[#F7CE4D] uppercase tracking-wider leading-snug">
               {getLocalized({ km: currentQ.dimensionNameKm, en: currentQ.dimensionNameEn })}
             </span>
-            <span className="text-[#111965] font-black tracking-wide">
+            <span className="whitespace-nowrap shrink-0 text-[#111965] font-black tracking-wide">
               • {currentIndex + 1} / {totalCount}
             </span>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex shrink-0 items-center gap-2 ml-auto">
             {onPrefill && (
               <button
                 type="button"
                 onClick={onPrefill}
-                className="text-[12px] font-bold text-[#111965] bg-[#F0F2FA] hover:bg-[#E6E8F0] px-2.5 py-0.5 rounded-full transition-colors cursor-pointer border border-[#E6E8F0]"
+                className="whitespace-nowrap shrink-0 text-[12px] font-bold text-[#111965] bg-[#F0F2FA] hover:bg-[#E6E8F0] px-2.5 py-1 rounded-full transition-colors cursor-pointer border border-[#E6E8F0]"
                 title="Fill sample answers"
               >
                 ⚡ {t("assessmentStage.prefillSample")}
               </button>
             )}
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-[#EBF3FE] text-[#1B6EF3]">
+            <span className="whitespace-nowrap shrink-0 px-2.5 py-1 rounded-full text-xs font-black bg-[#EBF3FE] text-[#1B6EF3]">
               {progressPercent}%
             </span>
           </div>
@@ -585,12 +587,13 @@ export function AssessmentStage({
         </div>
       </div>
 
-      {/* 3. MAIN CARD WITH OVERHANGING TARA MASCOT (Generous Top Clearance to prevent overlap) */}
-      <div className="relative pt-9 sm:pt-11">
-        {/* Mascot Peeking in Top-Right Corner */}
-        <div className="absolute -top-12 -right-1 sm:-top-14 sm:-right-2 z-20 pointer-events-auto">
+      {/* 3. MAIN CARD WITH TARA MASCOT SITTING CLEANLY ON TOP EDGE (Zero overlap with prompt text) */}
+      <div className="relative">
+        {/* Mascot Row positioned cleanly above card border */}
+        <div className="relative z-20 flex justify-end pr-1 sm:pr-3 -mb-5 sm:-mb-6 pointer-events-auto">
           <FuteraMascot
             variant="peeking-right"
+            size={110}
             scaleLevel={mascotScaleLevel}
             showSpeech={true}
             speechText={mascotSpeech}
@@ -598,11 +601,11 @@ export function AssessmentStage({
         </div>
 
         {/* Clean White Card */}
-        <div className="p-6 sm:p-10 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-8 text-center relative overflow-hidden">
+        <div className="p-6 pt-8 sm:p-10 sm:pt-10 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-8 text-center relative overflow-hidden">
           {/* Main Statement Prompt */}
           <div
             key={`prompt-${currentQ.id}`}
-            className="assessment-question-enter max-w-xl mx-auto space-y-3 pt-2 pb-1 text-center"
+            className="assessment-question-enter max-w-xl mx-auto space-y-3 pb-1 text-center"
           >
             <h2 className="text-xl sm:text-2xl font-black text-[#111965] leading-snug tracking-tight">
               {getLocalized({
@@ -612,7 +615,7 @@ export function AssessmentStage({
             </h2>
             {currentQ.statementKm && currentQ.statementKm !== currentQ.promptKm && (
               <div className="pt-1">
-                <span className="inline-block px-5 py-2.5 rounded-2xl bg-[#EEF2FF] text-[#1E293B] font-bold text-xs sm:text-sm border border-[#E0E7FF] shadow-2xs">
+                <span className="inline-block px-5 py-2.5 rounded-2xl bg-[#EEF2FF] text-[#1E293B] dark:bg-indigo-500/15 dark:text-slate-100 dark:border-indigo-400/30 font-bold text-xs sm:text-sm border border-[#E0E7FF] shadow-2xs">
                   {getLocalized({ km: currentQ.statementKm, en: currentQ.statementEn })}
                 </span>
               </div>

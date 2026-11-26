@@ -309,7 +309,7 @@ export default function GuestResultsPage() {
             <button
               type="button"
               onClick={handleClearAll}
-              className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-rose-200 bg-white px-3 text-xs font-black text-rose-600 transition-colors hover:bg-rose-50"
+              className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-rose-600 px-3.5 text-xs font-black text-white shadow-xs transition-colors hover:bg-rose-700 dark:bg-rose-600 dark:text-white dark:hover:bg-rose-700 cursor-pointer"
             >
               <Trash2 className="h-3.5 w-3.5" />
               {getLocalized({ en: "Delete results", km: "លុបលទ្ធផល" })}
@@ -650,7 +650,7 @@ function ResultCard({
             )}
           </span>
           <div>
-            <div className="text-[10px] font-black uppercase tracking-[0.14em] text-[#94A3B8]">
+            <div className="text-xs font-black uppercase tracking-[0.1em] text-[#94A3B8]">
               {isPersonality
                 ? getLocalized({ en: "16-Personality", km: "បុគ្គលិកលក្ខណៈ ១៦" })
                 : "RIASEC"}
@@ -662,7 +662,7 @@ function ResultCard({
             </div>
           </div>
         </div>
-        <span className="rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-2 py-1 text-[9px] font-bold text-[#68708A]">
+        <span className="shrink-0 rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-2.5 py-1 text-xs font-bold text-[#68708A]">
           {isPersonality
             ? getLocalized({ en: "12 questions", km: "១២ សំណួរ" })
             : getLocalized({ en: "18 activities", km: "១៨ សកម្មភាព" })}
@@ -731,6 +731,6 @@ function ResultCard({
 
 function cnIcon(isPersonality: boolean): string {
   return isPersonality
-    ? "flex h-9 w-9 items-center justify-center rounded-xl bg-[#EEF2FF] text-[#111965]"
-    : "flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-700";
+    ? "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300"
+    : "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300";
 }

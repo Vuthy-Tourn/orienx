@@ -356,11 +356,11 @@ export function GuestAssessmentIntro({
                         className={cn(
                           "flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors",
                           isSelected
-                            ? "border-[#111965] bg-[#111965] text-white dark:border-[#F7CE4D] dark:bg-[#F7CE4D] dark:text-[#0F1754]"
+                            ? "border-[#111965] bg-[#111965] text-white dark:border-[#F7CE4D] dark:text-white"
                             : "border-slate-300 bg-transparent dark:border-white/25"
                         )}
                       >
-                        {isSelected && <Check className="h-3.5 w-3.5 stroke-[3]" />}
+                        {isSelected && <Check className="h-3.5 w-3.5 stroke-[3] text-white" />}
                       </span>
                     </div>
                   </div>

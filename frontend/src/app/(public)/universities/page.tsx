@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -96,6 +96,22 @@ function UniversitiesContent() {
     }
     return list;
   }, [universities, sortBy]);
+
+  // Notify FloatingAssistant when the sticky compare tray is visible so the mascot never overlaps it
+  useEffect(() => {
+    const isActive = selectedForCompare.length > 0;
+    window.dispatchEvent(
+      new CustomEvent("orienx:compare-tray", { detail: isActive })
+    );
+  }, [selectedForCompare.length]);
+
+  useEffect(() => {
+    return () => {
+      window.dispatchEvent(
+        new CustomEvent("orienx:compare-tray", { detail: false })
+      );
+    };
+  }, []);
 
   // Selected universities for quick comparison modal
   const comparedUniversities = useMemo(() => {
@@ -583,45 +599,74 @@ function UniversitiesContent() {
 
         {/* Sticky Floating Compare Tray */}
         {selectedForCompare.length > 0 && (
-          <div className="fixed bottom-6 inset-x-4 max-w-2xl mx-auto z-40 p-4 rounded-2xl bg-[#111965] text-white shadow-2xl flex items-center justify-between border border-[#1E277A] animate-in fade-in slide-in-from-bottom-4">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#F7CE4D] text-[#111965] flex items-center justify-center font-bold">
-                <Scale className="w-5 h-5" />
-              </div>
-              <div className="text-xs">
-                <div className="font-bold text-white text-sm">
-                  <span className="text-[#F7CE4D]">{selectedForCompare.length}</span> / 4 {t("universitiesDirectory.selectedNotice")}
+          <div className="fixed bottom-3 sm:bottom-5 inset-x-3 sm:inset-x-4 max-w-3xl mx-auto z-40 p-3.5 sm:p-4 rounded-2xl bg-[#111965]/95 backdrop-blur-md text-white shadow-2xl border border-white/15 animate-in fade-in slide-in-from-bottom-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              {/* Selection summary & chips */}
+              <div className="flex items-start justify-between gap-2.5 min-w-0">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-9 h-9 shrink-0 rounded-xl bg-[#F7CE4D] text-[#111965] flex items-center justify-center font-bold shadow-xs">
+                    <Scale className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0 space-y-1">
+                    <div className="flex items-center gap-1.5 text-xs sm:text-sm font-extrabold text-white whitespace-nowrap">
+                      <span className="inline-flex items-center rounded-md bg-white/15 px-1.5 py-0.5 text-xs font-black text-[#F7CE4D]">
+                        {selectedForCompare.length} / 4
+                      </span>
+                      <span className="truncate">{t("universitiesDirectory.selectedNotice")}</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {selectedForCompare.map((slug) => (
+                        <button
+                          key={slug}
+                          type="button"
+                          onClick={() => toggleCompare(slug)}
+                          className="inline-flex items-center gap-1 rounded-md bg-white/10 hover:bg-white/20 px-2 py-0.5 font-mono text-[11px] font-bold text-slate-100 transition-colors cursor-pointer"
+                          title={t("universitiesDirectory.compareRemove")}
+                        >
+                          <span>{slug.toUpperCase()}</span>
+                          <X className="w-3 h-3 text-slate-300" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-slate-300 font-mono text-[12px] truncate max-w-xs">
-                  {selectedForCompare.map((s) => s.toUpperCase()).join(", ")}
-                </div>
+
+                {/* Mobile Clear shortcut */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedForCompare([])}
+                  className="sm:hidden shrink-0 px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  {t("universitiesDirectory.clear")}
+                </button>
               </div>
-            </div>
 
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setSelectedForCompare([])}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white transition-colors"
-              >
-                {t("universitiesDirectory.clear")}
-              </button>
+              {/* Action buttons */}
+              <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setSelectedForCompare([])}
+                  className="hidden sm:inline-flex px-3 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  {t("universitiesDirectory.clear")}
+                </button>
 
-              <button
-                type="button"
-                onClick={() => setIsCompareModalOpen(true)}
-                className="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-white/20 hover:bg-white/30 transition-colors"
-              >
-                Quick Preview
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setIsCompareModalOpen(true)}
+                  className="inline-flex items-center justify-center px-3.5 py-2.5 rounded-xl text-xs font-bold text-white bg-white/15 hover:bg-white/25 border border-white/15 transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  Quick Preview
+                </button>
 
-              <Link
-                href={`/universities/compare?ids=${selectedForCompare.join(",")}`}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all shadow-md"
-              >
-                <span>Full Comparison</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+                <Link
+                  href={`/universities/compare?ids=${selectedForCompare.join(",")}`}
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all shadow-md whitespace-nowrap"
+                >
+                  <span>Full Comparison</span>
+                  <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                </Link>
+              </div>
             </div>
           </div>
         )}

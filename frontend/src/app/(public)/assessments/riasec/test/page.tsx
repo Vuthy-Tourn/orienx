@@ -227,10 +227,6 @@ export default function GuestRiasecTestPage() {
             en: "RIASEC Interest Assessment",
             km: "ការវាយតម្លៃចំណាប់អារម្មណ៍ RIASEC",
           })}
-          badgeLabel={getLocalized({
-            en: "No account needed",
-            km: "មិនត្រូវការគណនី",
-          })}
           questions={formattedQuestions}
           currentIndex={currentIndex}
           onIndexChange={setCurrentIndex}

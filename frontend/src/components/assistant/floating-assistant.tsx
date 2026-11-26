@@ -136,6 +136,7 @@ export function FloatingAssistant() {
   } | null>(null);
   const isHome = pathname === "/";
   const [pastHero, setPastHero] = useState(false);
+  const [compareTrayActive, setCompareTrayActive] = useState(false);
 
   const contextualTeaser = pathname?.startsWith("/dashboard/eligibility")
     ? t("aiAssistant.context.eligibility")
@@ -220,6 +221,16 @@ export function FloatingAssistant() {
     return () => {
       window.clearTimeout(timer);
       window.removeEventListener("orienx:mascot-handoff", handler);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handler = (event: Event) => {
+      setCompareTrayActive(Boolean((event as CustomEvent<boolean>).detail));
+    };
+    window.addEventListener("orienx:compare-tray", handler);
+    return () => {
+      window.removeEventListener("orienx:compare-tray", handler);
     };
   }, []);
 
@@ -356,7 +367,7 @@ export function FloatingAssistant() {
       : IS_STATIC_MODE
         ? staticSuggestions
         : copy.suggestions;
-  const assistantVisible = !open && (isHome ? pastHero : true);
+  const assistantVisible = !open && !compareTrayActive && (isHome ? pastHero : true);
 
   return (
     <>
