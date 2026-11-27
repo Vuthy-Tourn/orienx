@@ -252,18 +252,22 @@ export function ScholarshipsShowcase() {
           {/* =================================================================
               LEFT SIDE: EDITORIAL SPOTLIGHT (SMOOTH SYNCED ANIMATIONS & TRUST PROOFS)
               ================================================================= */}
-          <div className="lg:col-span-6 flex flex-col justify-between min-h-[460px] space-y-6">
+          <div className="lg:col-span-6 flex flex-col justify-between lg:min-h-[460px] space-y-6">
             <div className="space-y-3.5">
-              {/* Category Eyebrow Badge with Pulsing Live Status */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#E6E8F0] shadow-2xs backdrop-blur-xs">
-                <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                <span className="text-[12.5px] sm:text-[12px] font-black uppercase tracking-widest text-[#111965]">
-                  {language === "km" ? "អាហារូបករណ៍ផ្លូវការដែលបានផ្ទៀងផ្ទាត់" : "VERIFIED SCHOLARSHIPS 2026"}
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
-                <span className="text-[12.5px] sm:text-[12px] font-bold text-emerald-700">
-                  {scholarships.length} {language === "km" ? "កម្មវិធីសកម្ម" : "Active Programs"}
-                </span>
+              {/* Category Eyebrow Badges with Pulsing Live Status */}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white/90 border border-[#E6E8F0] shadow-2xs backdrop-blur-xs">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500 shrink-0" />
+                  <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[#111965] whitespace-nowrap">
+                    {language === "km" ? "អាហារូបករណ៍ផ្លូវការដែលបានផ្ទៀងផ្ទាត់" : "VERIFIED SCHOLARSHIPS 2026"}
+                  </span>
+                </div>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 shadow-2xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                  <span className="text-[11px] sm:text-xs font-bold text-emerald-700 whitespace-nowrap">
+                    {scholarships.length} {language === "km" ? "កម្មវិធីសកម្ម" : "Active Programs"}
+                  </span>
+                </div>
               </div>
 
               {/* Dynamic Headline & Description (Smooth Slide-Fade on Change) */}

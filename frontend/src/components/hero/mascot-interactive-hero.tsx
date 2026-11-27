@@ -9,10 +9,22 @@ import {
   Compass,
   ArrowRight,
   CheckCircle2,
-  ShieldCheck,
   Sparkles,
 } from "lucide-react";
 import TechText from "@/components/react-bits/tech-text";
+
+function getHeroScrollConfig(docTop: number, vw: number, vh: number) {
+  if (vw >= 1024) {
+    return {
+      activation: Math.max(0, docTop - vh * 0.55) + vh * 0.16,
+      travelDistance: vh * 1.0,
+    };
+  }
+  return {
+    activation: Math.min(90, Math.max(12, docTop - vh * 0.72)),
+    travelDistance: Math.max(260, vh * 0.48),
+  };
+}
 
 export function MascotInteractiveHero() {
   const { t, getLocalized } = useLanguage();
@@ -42,15 +54,14 @@ export function MascotInteractiveHero() {
       if (!node) return 0;
       const rect = node.getBoundingClientRect();
       const docTop = rect.top + window.scrollY;
-      const activation =
-        Math.max(0, docTop - window.innerHeight * 0.55) +
-        window.innerHeight * 0.16;
+      const { activation, travelDistance } = getHeroScrollConfig(
+        docTop,
+        window.innerWidth,
+        window.innerHeight
+      );
       return Math.min(
         1,
-        Math.max(
-          0,
-          (window.scrollY - activation) / (window.innerHeight * 1.0)
-        )
+        Math.max(0, (window.scrollY - activation) / travelDistance)
       );
     };
 
@@ -125,8 +136,7 @@ export function MascotInteractiveHero() {
   const endLeft = startRect ? startRect.vw - 20 - endWidth : 0;
   const endTop = startRect ? startRect.vh - 20 - endHeight : 0;
   const activation = startRect
-    ? Math.max(0, startRect.top - startRect.vh * 0.55) +
-      startRect.vh * 0.16
+    ? getHeroScrollConfig(startRect.top, startRect.vw, startRect.vh).activation
     : 0;
   const naturalTop = startRect
     ? startRect.top - Math.min(scrollPosition, activation)
@@ -227,7 +237,7 @@ export function MascotInteractiveHero() {
   };
 
   return (
-    <section className="relative w-full min-h-[calc(100vh-4rem)] lg:h-[calc(100vh-4rem)] flex items-center bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white border-b border-white/10 overflow-hidden py-8 sm:py-12 lg:py-0 select-none">
+    <section className="relative w-full min-h-[calc(100svh-4rem)] lg:h-[calc(100vh-4rem)] flex items-center bg-gradient-to-b from-[#080D2B] via-[#0F1754] to-[#0A0F36] text-white border-b border-white/10 overflow-hidden pt-6 pb-10 sm:py-12 lg:py-0 select-none">
       {/* Subtle Radial Ambient Starlight Illumination */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[450px] bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(247,206,77,0.12),transparent_70%)] pointer-events-none" />
       <div className="absolute top-1/3 right-1/4 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-[#1B6EF3]/12 blur-[140px] pointer-events-none" />
@@ -235,7 +245,7 @@ export function MascotInteractiveHero() {
 
       {/* Seamless Cambodian University Campuses Skyline Backdrop with Gradient Feather Mask (No Hard Seam!) */}
       <div
-        className="absolute inset-x-0 bottom-0 pointer-events-none select-none overflow-hidden h-[460px] sm:h-[520px] lg:h-[580px] z-0"
+        className="absolute inset-x-0 bottom-0 pointer-events-none select-none overflow-hidden h-[420px] sm:h-[520px] lg:h-[580px] z-0"
         style={{
           WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 45%, rgba(0,0,0,0) 100%)",
           maskImage: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 45%, rgba(0,0,0,0) 100%)",
@@ -254,19 +264,44 @@ export function MascotInteractiveHero() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 sm:gap-10 lg:gap-14 items-center">
           {/* ===================================================================
-              LEFT COLUMN: PIC 2 (ORIENX TECHTEXT CENTERPIECE) + SUBTITLE + CTAS
+              LEFT COLUMN: ORIENX TECHTEXT CENTERPIECE + SUBTITLE + CTAS
               =================================================================== */}
-          <div className="lg:col-span-6 xl:col-span-6 space-y-4 sm:space-y-5 text-left">
-            {/* Category / Verified Pill */}
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-semibold border border-emerald-500/30 backdrop-blur-xs">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-              <span>{t("universitiesSection.verifiedNotice")}</span>
+          <div className="lg:col-span-6 xl:col-span-6 space-y-4 sm:space-y-5 text-center lg:text-left">
+            {/* Sleek Editorial Kicker (replaces redundant verified pill) */}
+            <div className="inline-flex items-center justify-center lg:justify-start gap-2 text-[11px] sm:text-xs font-bold tracking-[0.12em] uppercase text-[#F7CE4D]/95">
+              <span className="h-px w-5 bg-gradient-to-r from-transparent to-[#F7CE4D]/60 lg:hidden" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#F7CE4D] shadow-[0_0_8px_rgba(247,206,77,0.85)] shrink-0" />
+              <span>
+                {getLocalized({
+                  en: "Cambodia's Career & University Guide",
+                  km: "មគ្គុទ្ទេសក៍ជ្រើសរើសជំនាញ និងសាកលវិទ្យាល័យ",
+                })}
+              </span>
+              <span className="h-px w-5 bg-gradient-to-l from-transparent to-[#F7CE4D]/60 lg:hidden" />
             </div>
 
-            {/* PIC 2: Interactive TechText OrienX Wordmark (Single Bold Headline Piece) */}
-            <div className="w-full max-w-[280px] sm:max-w-[400px] h-16 sm:h-30 -ml-1">
+            {/* Interactive TechText OrienX Wordmark: centered on mobile/tablet, left-aligned on desktop */}
+            <div className="lg:hidden w-full max-w-[300px] sm:max-w-[380px] h-20 sm:h-28 mx-auto">
+              <TechText
+                text="OrienX"
+                fontSize={150}
+                fontWeight={800}
+                color="#FFFFFF"
+                accentColor="#F69D0D"
+                align="center"
+                lineStyle="dashed"
+                labels={true}
+                draggable={true}
+                clickKick={true}
+                intro="assemble"
+                introDuration={1.2}
+                className="w-full h-full"
+              />
+            </div>
+
+            <div className="hidden lg:block w-full max-w-[400px] h-30 -ml-1">
               <TechText
                 text="OrienX"
                 fontSize={150}
@@ -285,19 +320,19 @@ export function MascotInteractiveHero() {
             </div>
 
             {/* Subtitle */}
-            <p className="text-[13px] sm:text-base lg:text-lg text-slate-300 max-w-xl font-normal leading-relaxed pt-1">
+            <p className="text-[13px] sm:text-base lg:text-lg text-slate-300 max-w-xl mx-auto lg:mx-0 font-normal leading-relaxed pt-0.5">
               {t("hero.subtitle")}
             </p>
 
             {/* Action CTAs */}
-            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5">
+            <div className="pt-1.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3">
               <Link
                 href="/assessments/riasec/test"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-black text-xs sm:px-7 sm:py-3.5 sm:text-sm md:text-base text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-[0_4px_24px_rgba(247,206,77,0.3)] hover:shadow-[0_6px_28px_rgba(247,206,77,0.45)] transition-all active:scale-98"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-black text-xs sm:px-7 sm:py-3.5 sm:text-sm md:text-base text-[#0F1754] dark:text-[#0F1754] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-[0_4px_24px_rgba(247,206,77,0.3)] hover:shadow-[0_6px_28px_rgba(247,206,77,0.45)] transition-all active:scale-98"
               >
-                <Sparkles className="w-4 h-4 text-[#111965]" />
+                <Sparkles className="w-4 h-4 text-[#0F1754]" />
                 <span>{t("mascotHero.startFree")}</span>
-                <ArrowRight className="w-4 h-4 text-[#111965]" />
+                <ArrowRight className="w-4 h-4 text-[#0F1754]" />
               </Link>
 
               <Link
@@ -310,7 +345,7 @@ export function MascotInteractiveHero() {
             </div>
 
             {/* Quiet, Minimal Trust Indicators */}
-            <div className="pt-5 border-t border-white/10 flex flex-wrap items-center gap-4 sm:gap-6 text-[11px] sm:text-xs font-semibold text-slate-300">
+            <div className="pt-4 sm:pt-5 border-t border-white/10 flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2 sm:gap-6 text-[11px] sm:text-xs font-semibold text-slate-300">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-[#F7CE4D] flex-shrink-0" />
                 <span>{t("mascotHero.verifiedInfo")}</span>
@@ -327,84 +362,84 @@ export function MascotInteractiveHero() {
           </div>
 
           {/* ===================================================================
-              RIGHT COLUMN: PIC 1 TARA MASCOT + FLOATING SPEECH BUBBLE (EXACT PIC 1)
+              RIGHT COLUMN: TARA MASCOT + FLOATING SPEECH BUBBLE (Wrapped inside hero bg on mobile)
               =================================================================== */}
-          <div className="lg:col-span-6 xl:col-span-6 flex flex-col items-center justify-center relative min-h-[440px] sm:min-h-[480px]">
+          <div className="lg:col-span-6 xl:col-span-6 flex flex-col items-center justify-center relative lg:min-h-[480px]">
             <div className="relative w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center">
-              {/* Natural Conversational Speech Bubble (Floating to the upper-left of Tara - Exact Pic 1) */}
+              {/* Natural Conversational Speech Bubble */}
               {!assistantOpen && (
-              <div
-                className="w-full lg:absolute lg:-top-6 lg:-left-6 xl:-left-25 z-50 max-w-sm sm:max-w-[340px] mb-4 lg:mb-0 cursor-pointer"
-                onMouseEnter={() => setIsPaused(true)}
-                onMouseLeave={() => setIsPaused(false)}
-                onClick={advanceDialogue}
-                title={t("mascotHero.nextTip")}
-              >
-                <div className="relative rounded-2xl bg-[#0B1038]/90 backdrop-blur-xl border border-white/20 shadow-[0_16px_36px_rgba(0,0,0,0.4)] p-4 transition-all hover:border-[#F7CE4D]/50 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
-                  {/* Subtle Bubble Header with Dialogue Indicator Dots */}
-                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="text-xs font-bold text-white tracking-wide">
-                        {t("mascotHero.guideBadge")}
-                      </span>
+                <div
+                  className="w-full lg:absolute lg:-top-6 lg:-left-6 xl:-left-25 z-50 max-w-sm sm:max-w-[340px] mb-3 lg:mb-0 cursor-pointer"
+                  onMouseEnter={() => setIsPaused(true)}
+                  onMouseLeave={() => setIsPaused(false)}
+                  onClick={advanceDialogue}
+                  title={t("mascotHero.nextTip")}
+                >
+                  <div className="relative rounded-2xl bg-[#0B1038]/90 backdrop-blur-xl border border-white/20 shadow-[0_16px_36px_rgba(0,0,0,0.4)] p-3.5 sm:p-4 transition-all hover:border-[#F7CE4D]/50 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+                    {/* Subtle Bubble Header with Dialogue Indicator Dots */}
+                    <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <span className="text-xs font-bold text-white tracking-wide">
+                          {t("mascotHero.guideBadge")}
+                        </span>
+                      </div>
+
+                      {/* Interactive Carousel Progress Dots */}
+                      <div className="flex items-center gap-1">
+                        {greetings.map((_, i) => (
+                          <span
+                            key={i}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentIdx(i);
+                              setTaraBounce(true);
+                              setTimeout(() => setTaraBounce(false), 450);
+                            }}
+                            className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                              i === currentIdx % greetings.length
+                                ? "w-4 bg-[#F7CE4D]"
+                                : "w-1.5 bg-white/25 hover:bg-white/40"
+                            }`}
+                          />
+                        ))}
+                      </div>
                     </div>
 
-                    {/* Interactive Carousel Progress Dots */}
-                    <div className="flex items-center gap-1">
-                      {greetings.map((_, i) => (
-                        <span
-                          key={i}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setCurrentIdx(i);
-                            setTaraBounce(true);
-                            setTimeout(() => setTaraBounce(false), 450);
-                          }}
-                          className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                            i === currentIdx % greetings.length
-                              ? "w-4 bg-[#F7CE4D]"
-                              : "w-1.5 bg-white/25 hover:bg-white/40"
-                          }`}
-                        />
-                      ))}
+                    {/* Speech Message (Auto-types and rotates with read delay) */}
+                    <div className="min-h-[44px] sm:min-h-[50px] flex items-center">
+                      <p className="text-xs sm:text-[14px] font-medium text-slate-100 leading-relaxed">
+                        {renderFormattedSpeech(displayedSpeech)}
+                        {isTyping && (
+                          <span className="inline-block w-1.5 h-3 ml-1 bg-[#F7CE4D] animate-pulse rounded-full align-middle" />
+                        )}
+                      </p>
                     </div>
-                  </div>
 
-                  {/* Speech Message (Auto-types and rotates with read delay) */}
-                  <div className="min-h-[50px] flex items-center">
-                    <p className="text-xs sm:text-[14px] font-medium text-slate-100 leading-relaxed">
-                      {renderFormattedSpeech(displayedSpeech)}
-                      {isTyping && (
-                        <span className="inline-block w-1.5 h-3 ml-1 bg-[#F7CE4D] animate-pulse rounded-full align-middle" />
-                      )}
-                    </p>
-                  </div>
-
-                  {/* Downward-Right Tail pointing toward Tara's shoulder/face */}
-                  <div className="hidden lg:block absolute -bottom-2.5 right-8 pointer-events-none">
-                    <svg className="w-4 h-2.5 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]" viewBox="0 0 16 10" fill="none">
-                      <path d="M0 0 C4 0 6 3 8 10 C10 3 12 0 16 0 Z" fill="#0B1038" />
-                      <path d="M0 0 C4 0 6 3 8 10 C10 3 12 0 16 0" stroke="rgba(255,255,255,0.2)" strokeWidth="1" fill="none" />
-                    </svg>
+                    {/* Downward tail pointing toward Tara */}
+                    <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:right-8 pointer-events-none">
+                      <svg className="w-4 h-2.5 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]" viewBox="0 0 16 10" fill="none">
+                        <path d="M0 0 C4 0 6 3 8 10 C10 3 12 0 16 0 Z" fill="#0B1038" />
+                        <path d="M0 0 C4 0 6 3 8 10 C10 3 12 0 16 0" stroke="rgba(255,255,255,0.2)" strokeWidth="1" fill="none" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
-              </div>
               )}
 
-              {/* Placeholder keeps the hero layout while the fixed mascot travels */}
+              {/* Tara Mascot: rendered inside the dark hero background on mobile/tablet; desktop uses portal handoff */}
               <div
                 onClick={advanceDialogue}
                 className="relative flex flex-col items-center group cursor-pointer select-none lg:ml-20 xl:ml-28"
                 title="Tap Tara to wave!"
               >
                 {/* Soft Contact Ground Shadow */}
-                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-64 sm:w-72 md:w-80 h-5 rounded-[100%] bg-black/40 blur-md pointer-events-none transition-all group-hover:scale-95" />
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-48 sm:w-64 md:w-72 lg:w-80 h-4 sm:h-5 rounded-[100%] bg-black/40 blur-md pointer-events-none transition-all group-hover:scale-95" />
 
                 <div
                   ref={mascotPlaceholderRef}
                   aria-hidden
-                  className="relative z-10 w-72 sm:w-80 md:w-88 lg:w-[350px] xl:w-[380px] aspect-[720/760]"
+                  className="relative z-10 w-52 sm:w-68 md:w-80 lg:w-[350px] xl:w-[380px] aspect-[720/760]"
                 >
                   {!startRect && (
                     <Image

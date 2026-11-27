@@ -458,74 +458,74 @@ export default function AboutPage() {
       {/* 2. ELEVATED BENTO PLATFORM METRICS */}
       {/* ========================================================= */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-14 relative z-20 space-y-16">
-        <div className="gsap-stats-grid grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="gsap-stats-grid grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
           {/* Card 1: Majors */}
-          <div className="gsap-stat-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 group hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-1 transition-all duration-200">
-            <div className="w-12 h-12 rounded-2xl bg-[#F0F2FA] text-[#111965] flex items-center justify-center font-bold shadow-2xs group-hover:scale-105 transition-transform duration-200">
-              <GraduationCap className="w-6 h-6 text-[#111965]" />
+          <div className="gsap-stat-card flex flex-col justify-between h-full p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 group hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-1 transition-all duration-200">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[#F0F2FA] text-[#111965] flex items-center justify-center font-bold shadow-2xs group-hover:scale-105 transition-transform duration-200">
+              <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6 text-[#111965]" />
             </div>
             <div className="space-y-1">
-              <div className="text-2xl sm:text-4xl font-black text-[#111965] tracking-tight">
+              <div className="text-xl sm:text-3xl lg:text-4xl font-black text-[#111965] tracking-tight leading-tight whitespace-nowrap">
                 <NumberTicker value={50} suffix="+" />
               </div>
-              <div className="text-xs sm:text-sm font-black text-[#171A2C]">
+              <div className="text-xs sm:text-sm font-black text-[#171A2C] leading-snug">
                 {t("aboutPage.statMajors", "Curated Cambodian Majors")}
               </div>
-              <div className="text-[12px] text-[#68708A] leading-relaxed">
+              <div className="text-[11.5px] sm:text-[12px] text-[#68708A] leading-relaxed">
                 {language === "km" ? "STEM, AI, ពាណិជ្ជកម្ម & មុខវិជ្ជាច្នៃប្រឌិត" : "STEM, AI, Business, & Creative Curricula"}
               </div>
             </div>
           </div>
 
           {/* Card 2: Universities */}
-          <div className="gsap-stat-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 group hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-1 transition-all duration-200">
-            <div className="w-12 h-12 rounded-2xl bg-[#FFF9E6] text-[#B45309] flex items-center justify-center font-bold shadow-2xs group-hover:scale-105 transition-transform duration-200">
-              <Building2 className="w-6 h-6 text-[#B45309]" />
+          <div className="gsap-stat-card flex flex-col justify-between h-full p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 group hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-1 transition-all duration-200">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[#FFF9E6] text-[#B45309] flex items-center justify-center font-bold shadow-2xs group-hover:scale-105 transition-transform duration-200">
+              <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-[#B45309]" />
             </div>
             <div className="space-y-1">
-              <div className="text-2xl sm:text-4xl font-black text-[#111965] tracking-tight">
-                <NumberTicker value={6} suffix={language === "km" ? " សាកលវិទ្យាល័យ" : " Campuses"} />
+              <div className="text-xl sm:text-3xl lg:text-4xl font-black text-[#111965] tracking-tight leading-tight whitespace-nowrap">
+                <NumberTicker value={6} suffix={language === "km" ? " សាកល" : " Campuses"} />
               </div>
-              <div className="text-xs sm:text-sm font-black text-[#171A2C]">
+              <div className="text-xs sm:text-sm font-black text-[#171A2C] leading-snug">
                 {t("aboutPage.statUniversities", "Verified Universities")}
               </div>
-              <div className="text-[12px] text-[#68708A] leading-relaxed">
+              <div className="text-[11.5px] sm:text-[12px] text-[#68708A] leading-relaxed">
                 RUPP, ITC, CADT, AUPP, Paragon, NUM
               </div>
             </div>
           </div>
 
           {/* Card 3: 100% Tuition Accuracy */}
-          <div className="gsap-stat-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 group hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-1 transition-all duration-200">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center font-bold shadow-2xs group-hover:scale-105 transition-transform duration-200">
-              <ShieldCheck className="w-6 h-6 text-emerald-700" />
+          <div className="gsap-stat-card flex flex-col justify-between h-full p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 group hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-1 transition-all duration-200">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center font-bold shadow-2xs group-hover:scale-105 transition-transform duration-200">
+              <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-700" />
             </div>
             <div className="space-y-1">
-              <div className="text-2xl sm:text-4xl font-black text-emerald-700 tracking-tight">
+              <div className="text-xl sm:text-3xl lg:text-4xl font-black text-emerald-700 tracking-tight leading-tight whitespace-nowrap">
                 <NumberTicker value={100} suffix="%" />
               </div>
-              <div className="text-xs sm:text-sm font-black text-[#171A2C]">
+              <div className="text-xs sm:text-sm font-black text-[#171A2C] leading-snug">
                 {t("aboutPage.statTuition", "Verified Tuition Data")}
               </div>
-              <div className="text-[12px] text-[#68708A] leading-relaxed">
+              <div className="text-[11.5px] sm:text-[12px] text-[#68708A] leading-relaxed">
                 {language === "km" ? "ផ្ទៀងផ្ទាត់ជាមួយសេចក្តីជូនដំណឹងចូលរៀនរបស់ MoEYS" : "Cross-referenced with MoEYS admission notices"}
               </div>
             </div>
           </div>
 
           {/* Card 4: Scientific Engine */}
-          <div className="gsap-stat-card p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 group hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-1 transition-all duration-200">
-            <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-900 flex items-center justify-center font-bold shadow-2xs group-hover:scale-105 transition-transform duration-200">
-              <BrainCircuit className="w-6 h-6 text-purple-800" />
+          <div className="gsap-stat-card flex flex-col justify-between h-full p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 group hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] hover:-translate-y-1 transition-all duration-200">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-purple-50 text-purple-900 flex items-center justify-center font-bold shadow-2xs group-hover:scale-105 transition-transform duration-200">
+              <BrainCircuit className="w-5 h-5 sm:w-6 sm:h-6 text-purple-800" />
             </div>
             <div className="space-y-1">
-              <div className="text-2xl sm:text-4xl font-black text-[#111965] tracking-tight">
+              <div className="text-xl sm:text-3xl lg:text-4xl font-black text-[#111965] tracking-tight leading-tight whitespace-nowrap">
                 {language === "km" ? "៤ សសរស្តម្ភ" : "4 Pillars"}
               </div>
-              <div className="text-xs sm:text-sm font-black text-[#171A2C]">
+              <div className="text-xs sm:text-sm font-black text-[#171A2C] leading-snug">
                 {t("aboutPage.statScience", "Scientific Matching Engine")}
               </div>
-              <div className="text-[12px] text-[#68708A] leading-relaxed">
+              <div className="text-[11.5px] sm:text-[12px] text-[#68708A] leading-relaxed">
                 {language === "km" ? "RIASEC + MBTI + លទ្ធផលសិក្សា + ទីផ្សារការងារ" : "RIASEC + MBTI + Academics + Labor Market"}
               </div>
             </div>

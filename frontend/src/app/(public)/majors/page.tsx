@@ -10,7 +10,6 @@ import {
   ArrowRight,
   Sparkles,
   Building2,
-  BookOpen,
   GraduationCap,
   FlaskConical,
   Wallet,
@@ -22,7 +21,6 @@ import { BookmarkButton } from "@/components/ui/bookmark-button";
 import { DirectoryControls } from "@/components/directory/directory-controls";
 import { DirectoryHeroStats } from "@/components/directory/directory-hero-stats";
 import type { SelectOption } from "@/components/ui/select";
-import { Dialog } from "@/components/ui/dialog";
 
 type Major = {
   id: string;
@@ -51,54 +49,6 @@ const MAJOR_IMAGES: Record<string, string> = {
   "digital-marketing": "/images/majors/digital-marketing.webp",
   "architecture": "/images/majors/architecture.webp",
   "law": "/images/majors/law.webp",
-};
-
-// Curriculum preview roadmap data for interactive modal
-const MAJOR_CURRICULUM_DATA: Record<string, {
-  years: { year: number; titleEn: string; titleKm: string; focus: string }[];
-  keySkills: string[];
-  sampleCareers: string[];
-}> = {
-  "software-engineering": {
-    years: [
-      { year: 1, titleEn: "Computer Science Foundations", titleKm: "មូលដ្ឋានគ្រឹះវិទ្យាសាស្ត្រកុំព្យូទ័រ", focus: "Python, C++, Discrete Math, Algorithms" },
-      { year: 2, titleEn: "Software Architecture & OOP", titleKm: "ស្ថាបត្យកម្មប្រព័ន្ធ និង OOP", focus: "Java, Data Structures, Relational Databases, Web Tech" },
-      { year: 3, titleEn: "Cloud Systems & DevOps", titleKm: "ប្រព័ន្ធក្លោដ និង DevOps", focus: "Distributed Systems, Microservices, CI/CD, Cybersecurity" },
-      { year: 4, titleEn: "Capstone & Industry Internship", titleKm: "គម្រោងបញ្ចប់ការសិក្សា និងកម្មសិក្សា", focus: "Full-Stack Production Capstone, Corporate Placement" },
-    ],
-    keySkills: ["System Design", "Cloud Computing", "Full-Stack Development", "Database Optimization"],
-    sampleCareers: ["Full-Stack Software Engineer", "Cloud Solutions Architect", "DevOps Engineer"],
-  },
-  "data-science-ai": {
-    years: [
-      { year: 1, titleEn: "Mathematics & Programming", titleKm: "គណិតវិទ្យា និងការសរសេរកូដ", focus: "Linear Algebra, Calculus, Python, Statistics" },
-      { year: 2, titleEn: "Data Mining & Databases", titleKm: "ការទាញយកទិន្នន័យ និងមូលដ្ឋានទិន្នន័យ", focus: "SQL, NoSQL, Data Visualization, Exploratory Analysis" },
-      { year: 3, titleEn: "Machine Learning & NLP", titleKm: "ការរៀនម៉ាស៊ីន និង NLP", focus: "Supervised Learning, Deep Neural Networks, PyTorch" },
-      { year: 4, titleEn: "AI Capstone & Applied Analytics", titleKm: "គម្រោង AI និងការវិភាគអនុវត្តជាក់ស្តែង", focus: "LLM Fine-Tuning, Predictive Modeling, Industry Thesis" },
-    ],
-    keySkills: ["Machine Learning", "Statistical Modeling", "Python/R", "Big Data Pipelines"],
-    sampleCareers: ["AI/ML Engineer", "Data Scientist", "Business Intelligence Lead"],
-  },
-  "banking-finance": {
-    years: [
-      { year: 1, titleEn: "Micro & Macro Economics", titleKm: "សេដ្ឋកិច្ចមីក្រូ និងម៉ាក្រូ", focus: "Financial Accounting, Economic Principles, Business Math" },
-      { year: 2, titleEn: "Corporate Finance & Banking Law", titleKm: "ហិរញ្ញវត្ថុសាជីវកម្ម និងច្បាប់ធនាគារ", focus: "Commercial Banking, Capital Markets, Valuation" },
-      { year: 3, titleEn: "Investment Analysis & FinTech", titleKm: "ការវិភាគការវិនិយោគ និង FinTech", focus: "Portfolio Management, Risk Modeling, Digital Banking" },
-      { year: 4, titleEn: "Applied Financial Practicum", titleKm: "ការអនុវត្តហិរញ្ញវត្ថុជាក់ស្តែង", focus: "Commercial Credit Evaluation, Banking Internship" },
-    ],
-    keySkills: ["Financial Modeling", "Risk Management", "Investment Valuation", "Regulatory Compliance"],
-    sampleCareers: ["Investment Banker", "Risk Analyst", "Financial Controller"],
-  },
-  "civil-engineering": {
-    years: [
-      { year: 1, titleEn: "Engineering Physics & Mechanics", titleKm: "រូបវិទ្យាវិស្វកម្ម និងមេកានិច", focus: "Statics, Calculus, Engineering Graphics, Chemistry" },
-      { year: 2, titleEn: "Structural Mechanics & Materials", titleKm: "មេកានិចសំណង់ និងសម្ភារ", focus: "Strength of Materials, Fluid Mechanics, Surveying" },
-      { year: 3, titleEn: "Reinforced Concrete & Geotechnical", titleKm: "បេតុងអាម៉េ និងភូគព្ភសាស្ត្រ", focus: "Foundation Engineering, Structural Analysis, CAD/BIM" },
-      { year: 4, titleEn: "Infrastructure Capstone", titleKm: "គម្រោងហេដ្ឋារចនាសម្ព័ន្ធ", focus: "Bridge & Highway Design, Project Management Internship" },
-    ],
-    keySkills: ["Structural Analysis", "AutoCAD / BIM", "Project Management", "Soil Mechanics"],
-    sampleCareers: ["Structural Engineer", "Project Construction Manager", "Site Supervisor"],
-  },
 };
 
 // Holland RIASEC display helpers without emojis
@@ -166,8 +116,8 @@ export default function MajorsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [stemOnly, setStemOnly] = useState(false);
-  const [sortBy, setSortBy] = useState<SortKey>("default");  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [activePreviewMajor, setActivePreviewMajor] = useState<Major | null>(null);
+  const [sortBy, setSortBy] = useState<SortKey>("default");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const sortOptions: SelectOption<SortKey>[] = [
     {
@@ -504,17 +454,7 @@ export default function MajorsPage() {
                       </div>
                     </div>
 
-                    <div className="col-span-2 flex items-center justify-between gap-2 pt-1 sm:col-span-1 sm:justify-end sm:pt-0">
-                      <button
-                        type="button"
-                        onClick={() => setActivePreviewMajor(m)}
-                        className="inline-flex h-9 items-center gap-1.5 rounded-lg px-2 text-xs font-bold text-[#111965] transition-colors hover:bg-[#F0F2FA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30"
-                        aria-label={isKm ? "មើលកម្មវិធីសិក្សា" : "Preview curriculum"}
-                      >
-                        <BookOpen className="h-3.5 w-3.5" />
-                        <span className="hidden md:inline">Curriculum</span>
-                      </button>
-
+                    <div className="col-span-2 flex items-center justify-end gap-2 pt-1 sm:col-span-1 sm:pt-0">
                       <div className="flex items-center gap-2">
                         <BookmarkButton entityType="major" entityId={m.id} />
 
@@ -633,23 +573,13 @@ export default function MajorsPage() {
                         </div>
                       </dl>
 
-                      <div className="mt-4 flex items-center justify-between gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setActivePreviewMajor(m)}
-                          aria-label={isKm ? "មើលកម្មវិធីសិក្សា" : "Preview curriculum"}
-                          className="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-[13px] font-bold text-[#111965] transition-colors hover:bg-[#F0F2FA] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30"
-                        >
-                          <BookOpen className="h-3.5 w-3.5" />
-                          <span className="hidden sm:inline">Curriculum</span>
-                        </button>
-
+                      <div className="mt-4">
                         <Link
                           href={`/majors/${m.slug}`}
-                          className="inline-flex h-8 items-center gap-1 rounded-md bg-[#111965] px-3 text-[13px] font-bold text-white transition-colors hover:bg-[#1E277A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30 focus-visible:ring-offset-2"
+                          className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-xl bg-[#111965] px-3 text-[13px] font-bold text-white transition-colors hover:bg-[#1E277A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30 focus-visible:ring-offset-2"
                         >
                           <span>{t("majorsDirectory.details")}</span>
-                          <ArrowRight className="h-3 w-3" />
+                          <ArrowRight className="h-3.5 w-3.5" />
                         </Link>
                       </div>
                     </div>
@@ -660,87 +590,6 @@ export default function MajorsPage() {
           </ul>
         )}
       </div>
-
-      {/* Curriculum preview */}
-      {activePreviewMajor && (
-        <Dialog open={!!activePreviewMajor} onOpenChange={(open) => !open && setActivePreviewMajor(null)}>
-          <div className="space-y-5">
-            <div className="border-b border-[#E6E8F0] pb-4 pr-10">
-              <p className="text-xs font-semibold text-[#68708A]">
-                {isKm ? "កម្មវិធីសិក្សា" : "Curriculum overview"}
-              </p>
-              <h3 className="mt-1 text-xl font-bold leading-snug text-[#111965]">
-                {getLocalized(activePreviewMajor.name)}
-              </h3>
-            </div>
-
-            {MAJOR_CURRICULUM_DATA[activePreviewMajor.slug] ? (
-              <div className="space-y-4">
-                <ol className="space-y-2">
-                  {MAJOR_CURRICULUM_DATA[activePreviewMajor.slug].years.map((y) => (
-                    <li key={y.year} className="flex gap-4 rounded-lg border border-[#E6E8F0] p-3.5">
-                      <span className="flex h-6 min-w-[2.6rem] shrink-0 items-center justify-center rounded-md bg-[#F0F2FA] px-1.5 text-[12px] font-bold tabular-nums text-[#111965]">
-                        {isKm ? "ឆ្នាំ" : "Year"} {y.year}
-                      </span>
-                      <div className="min-w-0">
-                        <p className="text-sm font-bold leading-snug text-[#171A2C]">
-                          {isKm ? y.titleKm : y.titleEn}
-                        </p>
-                        <p className="mt-0.5 text-[13.5px] leading-relaxed text-[#68708A]">{y.focus}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-
-                <div className="rounded-lg bg-[#F0F2FA] p-3.5">
-                  <p className="text-xs font-bold text-[#111965]">
-                    {isKm ? "ជំនាញដែលទទួលបាន" : "Skills you graduate with"}
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {MAJOR_CURRICULUM_DATA[activePreviewMajor.slug].keySkills.map((s) => (
-                      <span key={s} className="rounded border border-[#E6E8F0] bg-white px-2 py-0.5 text-[13px] font-medium text-[#171A2C]">
-                        {s}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {MAJOR_CURRICULUM_DATA[activePreviewMajor.slug].sampleCareers?.length > 0 && (
-                  <div>
-                    <p className="text-xs font-bold text-[#111965]">
-                      {isKm ? "អាជីពដែលអាចបន្ត" : "Roles this leads to"}
-                    </p>
-                    <p className="mt-1 text-[13.5px] leading-relaxed text-[#68708A]">
-                      {MAJOR_CURRICULUM_DATA[activePreviewMajor.slug].sampleCareers.join(", ")}
-                    </p>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p className="py-6 text-center text-sm leading-relaxed text-[#68708A]">
-                {isKm
-                  ? "កម្មវិធីសិក្សាលម្អិតកំពុងត្រូវបានធ្វើបច្ចុប្បន្នភាពពីសាកលវិទ្យាល័យ។"
-                  : "The detailed syllabus is being updated from the university faculty catalogue."}
-              </p>
-            )}
-
-            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#E6E8F0] pt-4">
-              <span className="inline-flex items-center gap-1.5 text-[13.5px] text-[#68708A]">
-                <GraduationCap className="h-4 w-4" />
-                {activePreviewMajor.universities_count || 0}{" "}
-                {isKm ? "សាកលវិទ្យាល័យ" : "universities offer this"}
-              </span>
-              <Link
-                href={`/majors/${activePreviewMajor.slug}`}
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#111965] px-3.5 text-xs font-bold text-white transition-colors hover:bg-[#1E277A]"
-              >
-                <span>{isKm ? "មើលព័ត៌មានពេញលេញ" : "Open full profile"}</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </div>
-        </Dialog>
-      )}
     </div>
   );
 }
