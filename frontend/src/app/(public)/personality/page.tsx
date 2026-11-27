@@ -738,11 +738,11 @@ export default function PublicPersonalityGuidePage() {
           <div className="relative z-10 shrink-0">
             <Link
               href="/assessments/personality/test"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl text-sm font-black bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#111965] shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl text-sm font-black bg-[#F7CE4D] hover:bg-[#E5BD3B] text-[#0F1754] dark:text-[#0F1754] shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer whitespace-nowrap"
             >
-              <Compass className="w-4 h-4 text-[#111965]" />
+              <Compass className="w-4 h-4 text-[#0F1754] dark:text-[#0F1754]" />
               <span>{getLocalized({ km: "ចាប់ផ្តើមធ្វើតេស្តឥឡូវនេះ", en: "Start Free Assessment" })}</span>
-              <ArrowRight className="w-4 h-4 text-[#111965]" />
+              <ArrowRight className="w-4 h-4 text-[#0F1754] dark:text-[#0F1754]" />
             </Link>
           </div>
         </div>
@@ -786,7 +786,7 @@ export default function PublicPersonalityGuidePage() {
                   >
                     {activeArchetype.roleNameEn} • {activeArchetype.roleNameKm}
                   </span>
-                  <span className="px-2.5 py-1 rounded-full text-xs font-black bg-[#F7CE4D] text-[#111965]">
+                  <span className="px-2.5 py-1 rounded-full text-xs font-black bg-[#F7CE4D] text-[#0F1754] dark:text-[#0F1754]">
                     {activeArchetypeCode}
                   </span>
                 </div>
@@ -876,7 +876,7 @@ export default function PublicPersonalityGuidePage() {
                     {getLocalized({ km: "ចំណុចខ្លាំងសំខាន់ៗ", en: "Key Strengths" })}
                   </h4>
                 </div>
-                <ul className="space-y-2 text-xs sm:text-sm text-emerald-950 font-medium">
+                <ul className="space-y-2 text-xs sm:text-sm text-emerald-950 dark:text-emerald-100 font-medium">
                   {((language === "km" ? activeArchetype.strengthsKm : activeArchetype.strengthsEn) || activeArchetype.strengthsKm || []).map((s, idx) => (
                     <li key={idx} className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
@@ -894,7 +894,7 @@ export default function PublicPersonalityGuidePage() {
                     {getLocalized({ km: "ឱកាសអភិវឌ្ឍន៍ & ចំណុចខ្វះខាត", en: "Growth Areas & Blindspots" })}
                   </h4>
                 </div>
-                <ul className="space-y-2 text-xs sm:text-sm text-amber-950 font-medium">
+                <ul className="space-y-2 text-xs sm:text-sm text-amber-950 dark:text-amber-100 font-medium">
                   {((language === "km" ? activeArchetype.growthAreasKm : activeArchetype.growthAreasEn) || activeArchetype.growthAreasKm || [
                     language === "km" ? "អាចមានភាពតឹងតែងក្នុងកាលៈទេសៈសម្ពាធ" : "Can be rigid under stress",
                   ]).map((g, idx) => (
@@ -909,7 +909,7 @@ export default function PublicPersonalityGuidePage() {
 
             {/* Learning Style & Classroom Preferences */}
             {(activeArchetype.learningStyleKm || activeArchetype.learningStyleEn) && (
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#F0F4FF] border border-[#D4DEF8] space-y-2">
+              <div className="p-4 sm:p-5 rounded-2xl bg-[#F0F4FF] dark:bg-[#1E293B] border border-[#D4DEF8] dark:border-slate-700/80 space-y-2">
                 <div className="flex items-center gap-2 text-[#111965]">
                   <GraduationCap className="w-4 h-4 text-[#111965] shrink-0" />
                   <h4 className="text-xs sm:text-sm font-black uppercase tracking-wider">

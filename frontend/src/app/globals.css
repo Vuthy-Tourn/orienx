@@ -318,6 +318,7 @@ body {
 
 /* ---------- Surfaces: raised ---------- */
 .dark .bg-\[\#F0F2FA\],
+.dark .bg-\[\#F0F4FF\],
 .dark .bg-\[\#F8FAFC\],
 .dark .bg-\[\#E6E8F0\],
 .dark .bg-slate-100 {
@@ -473,6 +474,9 @@ body {
 .dark .text-\[\#B45309\] {
   color: #FCD34D !important;
 }
+.dark .text-amber-950 {
+  color: #FEF3C7 !important;
+}
 
 .dark .bg-blue-50,
 .dark .bg-blue-100 {
@@ -494,6 +498,9 @@ body {
 .dark .text-emerald-800,
 .dark .text-emerald-900 {
   color: #6EE7B7 !important;
+}
+.dark .text-emerald-950 {
+  color: #D1FAE5 !important;
 }
 
 .dark .bg-purple-50,
