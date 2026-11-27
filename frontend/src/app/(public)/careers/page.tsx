@@ -2,9 +2,11 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
 import { getStaticMajor, listStaticCareers } from "@/lib/data/catalog";
+import { isInteractiveCardTarget } from "@/lib/utils";
 import { DirectoryControls } from "@/components/directory/directory-controls";
 import { DirectoryHeroStats } from "@/components/directory/directory-hero-stats";
 import {
@@ -350,6 +352,7 @@ const RIASEC_MAP: Record<string, { titleEn: string; titleKm: string; desc: strin
 };
 
 export default function CareersPage() {
+  const router = useRouter();
   const { t, getLocalized, language } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [industryFilter, setIndustryFilter] = useState("");
@@ -524,7 +527,7 @@ export default function CareersPage() {
               onClick={resetFilters}
               aria-label={language === "km" ? "សម្អាតតម្រងទាំងអស់" : "Clear all filters"}
               title={language === "km" ? "សម្អាតតម្រងទាំងអស់" : "Clear all filters"}
-              className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-lg border border-[#E6E8F0] bg-white px-2.5 text-xs font-bold text-[#68708A] transition-colors hover:border-slate-300 hover:text-[#171A2C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30 sm:px-3"
+              className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-lg border border-rose-200 bg-rose-50 px-2.5 text-xs font-bold text-rose-600 transition-colors hover:border-rose-300 hover:bg-rose-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300 sm:px-3 cursor-pointer"
             >
               <X className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">
@@ -584,7 +587,7 @@ export default function CareersPage() {
                 type="button"
                 onClick={() => refetch()}
                 disabled={isFetching}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] active:scale-95 transition-all shadow-xs cursor-pointer disabled:opacity-60"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black text-[#0F1754] dark:text-[#0F1754] bg-[#F7CE4D] hover:bg-[#E5BD3B] active:scale-95 transition-all shadow-xs cursor-pointer disabled:opacity-60"
               >
                 <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
                 <span>{language === "km" ? "ព្យាយាមម្តងទៀត" : "Try Again"}</span>
@@ -622,16 +625,22 @@ export default function CareersPage() {
                   ? industryGroup.km
                   : industryGroup.name
                 : c.industry;
+              const hasSalary = activeSalary && activeSalary !== "—";
 
               return (
                 <article
                   key={c.id}
-                  className="group relative flex flex-col overflow-hidden rounded-[22px] bg-white ring-1 ring-[#E6E8F0] transition-shadow duration-200 hover:ring-[#111965]/20 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] motion-reduce:transition-none"
+                  onClick={(event) => {
+                    if (!isInteractiveCardTarget(event.target)) {
+                      router.push(`/careers/${c.slug}`);
+                    }
+                  }}
+                  className="group relative flex cursor-pointer flex-col overflow-hidden rounded-[22px] bg-white ring-1 ring-[#E6E8F0] transition-shadow duration-200 hover:ring-[#111965]/25 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] motion-reduce:transition-none"
                 >
                   {/* Industry + demand + save */}
                   <div className="flex items-center justify-between gap-3 px-5 pt-4">
                     <div className="flex min-w-0 items-center gap-2">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#F0F2FA] text-[#111965]">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#111965] text-[#F7CE4D]">
                         {renderIcon(meta.iconName)}
                       </span>
                       <span
@@ -677,21 +686,18 @@ export default function CareersPage() {
                         {getLocalized(c.title)}
                       </Link>
                     </h3>
-                    <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[#68708A]">
-                      <span>
-                        <span className="font-bold text-[#111965]">
-                          {language === "km" ? "រីស៊ីស" : "RIASEC"}
-                        </span>{" "}
-                        {c.riasec_code}
+                    <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[11px]">
+                      <span className="inline-flex items-center gap-1 rounded-md border border-[#111965]/15 bg-[#F0F2FA] px-2 py-0.5 font-bold text-[#111965]">
+                        <span>{language === "km" ? "រីស៊ីស" : "RIASEC"}</span>
+                        <span className="font-mono">{c.riasec_code}</span>
                       </span>
-                      <span className="text-slate-300">·</span>
-                      <span>
+                      <span className="inline-flex items-center gap-1 rounded-md border border-[#E6E8F0] bg-[#F8FAFD] px-2 py-0.5 font-semibold text-[#68708A]">
+                        <span>{language === "km" ? "អប្បបរមា" : "Min."}</span>
                         <span className="font-bold text-[#111965]">
-                          {language === "km" ? "អប្បបរមា" : "Min."}
-                        </span>{" "}
-                        {language === "km"
-                          ? "បរិញ្ញាបត្រ"
-                          : c.education_level || "Bachelor"}
+                          {language === "km"
+                            ? "បរិញ្ញាបត្រ"
+                            : c.education_level || "Bachelor"}
+                        </span>
                       </span>
                     </div>
                   </div>
@@ -705,14 +711,18 @@ export default function CareersPage() {
                   </p>
 
                   {/* Live salary benchmark */}
-                  <div className="mx-5 mt-4 rounded-xl bg-[#F0F2FA] px-4 py-3">
+                  <div className="mx-5 mt-4 rounded-xl border border-[#E6E8F0] bg-[#F0F2FA] px-4 py-3">
                     <div className="flex items-start justify-between gap-3 text-[10px] font-bold uppercase tracking-[0.1em] text-[#68708A]">
                       <span>{SENIORITY_LABELS[seniorityLevel][language]}</span>
                       <span className="shrink-0">
                         {language === "km" ? "ដុល្លារ / ខែ" : "USD / month"}
                       </span>
                     </div>
-                    <div className="mt-1.5 text-[22px] font-extrabold leading-none tracking-[-0.02em] tabular-nums text-[#111965]">
+                    <div
+                      className={`mt-1.5 text-[22px] font-extrabold leading-none tracking-[-0.02em] tabular-nums ${
+                        hasSalary ? "text-[#111965]" : "text-[#68708A]"
+                      }`}
+                    >
                       {activeSalary}
                     </div>
                   </div>
@@ -727,7 +737,7 @@ export default function CareersPage() {
                         {meta.milestones.map((m, idx) => (
                           <span key={idx} className="inline-flex items-center gap-1">
                             {idx > 0 && (
-                              <ChevronRight className="h-3 w-3 shrink-0 text-slate-300" />
+                              <ChevronRight className="h-3 w-3 shrink-0 text-[#68708A]" />
                             )}
                             <span title={m}>{shortMilestone(m)}</span>
                           </span>
@@ -738,22 +748,18 @@ export default function CareersPage() {
                     {meta.recommendedMajors.length > 0 && (
                       <div>
                         <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-[#68708A]">
-                          <GraduationCap className="h-3.5 w-3.5" />
+                          <GraduationCap className="h-3.5 w-3.5 text-[#111965]" />
                           <span>{t("careersDirectory.degreePathways")}</span>
                         </p>
-                        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
-                          {meta.recommendedMajors.map((m, idx) => (
-                            <span key={m.slug} className="inline-flex items-center gap-2">
-                              <Link
-                                href={`/majors/${m.slug}`}
-                                className="text-[11.5px] font-semibold text-[#111965] underline-offset-2 transition-colors hover:text-[#1E277A] hover:underline"
-                              >
-                                {language === "km" ? m.km : m.en}
-                              </Link>
-                              {idx < meta.recommendedMajors.length - 1 && (
-                                <span className="text-slate-300">·</span>
-                              )}
-                            </span>
+                        <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                          {meta.recommendedMajors.map((m) => (
+                            <Link
+                              key={m.slug}
+                              href={`/majors/${m.slug}`}
+                              className="inline-flex items-center rounded-md border border-[#E6E8F0] bg-[#F8FAFD] px-2 py-0.5 text-[11px] font-semibold text-[#111965] transition-colors hover:border-[#111965]/30 hover:bg-[#F0F2FA]"
+                            >
+                              {language === "km" ? m.km : m.en}
+                            </Link>
                           ))}
                         </div>
                       </div>
@@ -767,7 +773,7 @@ export default function CareersPage() {
                     </span>
                     <Link
                       href={`/careers/${c.slug}`}
-                      className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#F7CE4D] px-3.5 text-[12px] font-extrabold text-[#111965] transition-colors hover:bg-[#E5BD3B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30 focus-visible:ring-offset-2"
+                      className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#F7CE4D] px-3.5 text-[12px] font-extrabold text-[#0F1754] dark:text-[#0F1754] transition-colors hover:bg-[#E5BD3B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30 focus-visible:ring-offset-2"
                     >
                       <span>{t("careersDirectory.viewProfile")}</span>
                       <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -798,7 +804,7 @@ export default function CareersPage() {
             </p>
             <button
               onClick={resetFilters}
-              className="px-4 py-2 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors"
+              className="px-4 py-2 rounded-xl text-xs font-bold text-[#0F1754] dark:text-[#0F1754] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-colors"
             >
               {t("careersDirectory.resetFilters")}
             </button>
@@ -823,7 +829,7 @@ export default function CareersPage() {
 
             <Link
               href="/assessments/riasec/test"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all shadow-md shrink-0 self-start sm:self-auto"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-[#0F1754] dark:text-[#0F1754] bg-[#F7CE4D] hover:bg-[#E5BD3B] transition-all shadow-md shrink-0 self-start sm:self-auto"
             >
               <span>{language === "km" ? "ធ្វើតេស្ត RIASEC" : "Take RIASEC Test"}</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -840,7 +846,7 @@ export default function CareersPage() {
                   onClick={() => setSelectedRiasec(isSelected ? null : key)}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     isSelected
-                      ? "bg-[#F7CE4D] text-[#111965] border-[#F7CE4D] shadow-md font-bold"
+                      ? "bg-[#F7CE4D] text-[#0F1754] dark:text-[#0F1754] border-[#F7CE4D] shadow-md font-bold"
                       : "bg-white/10 hover:bg-white/15 text-white border-white/10"
                   }`}
                 >

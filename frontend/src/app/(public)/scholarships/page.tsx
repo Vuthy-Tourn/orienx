@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/api-client";
@@ -12,6 +12,7 @@ import { DirectoryHeroStats } from "@/components/directory/directory-hero-stats"
 import { useAuth } from "@/contexts/auth-context";
 import { IS_STATIC_MODE } from "@/lib/app-mode";
 import { listStaticScholarships } from "@/lib/data/catalog";
+import { isInteractiveCardTarget } from "@/lib/utils";
 import {
   Award,
   Calendar,
@@ -58,6 +59,7 @@ function formatScholarshipDeadline(
 
 export default function ScholarshipsPage() {
   const pathname = usePathname();
+  const router = useRouter();
   const isDashboard = pathname?.startsWith("/dashboard");
   const linkPrefix = isDashboard ? "/dashboard" : "";
   const { t, getLocalized, language } = useLanguage();
@@ -189,90 +191,6 @@ export default function ScholarshipsPage() {
 
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8">
-        {/* Interactive "Do I Qualify?" Scholarship Eligibility Radar */}
-        <div className="p-6 rounded-3xl bg-white border border-[#E6E8F0] shadow-sm space-y-4">
-          <div className="flex items-center gap-2 border-b border-[#E6E8F0] pb-3">
-            <div className="p-2 rounded-xl bg-amber-50 text-amber-800">
-              <FileCheck className="w-4 h-4" />
-            </div>
-            <div>
-              <h3 className="text-sm font-black text-[#111965]">
-                {language === "km" ? "កម្មវិធីពិនិត្យសិទ្ធិទទួលអាហារូបករណ៍តាមនិទ្ទេសបាក់ឌុប" : "Instant Eligibility Checker"}
-              </h3>
-              <p className="text-xs text-[#68708A]">
-                {language === "km" ? "ជ្រើសរើសនិទ្ទេសបាក់ឌុបដែលអ្នករំពឹង ដើម្បីមើលអាហារូបករណ៍ដែលអាចទទួលបាន" : "Select your expected Grade 12 National Exam standing to preview verified funding"}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-            {/* Grade Selection */}
-            <div className="space-y-1.5">
-              <label className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
-                {language === "km" ? "និទ្ទេសបាក់ឌុប" : "BacII Exam Grade"}
-              </label>
-              <div className="grid grid-cols-4 gap-1.5">
-                {["ALL", "A", "B", "C"].map((grade) => (
-                  <button
-                    key={grade}
-                    type="button"
-                    onClick={() => setTargetBaciiGrade(grade)}
-                    className={`py-2 text-xs font-bold rounded-xl border transition-all ${
-                      targetBaciiGrade === grade
-                        ? "bg-[#111965] text-white border-[#111965] shadow-xs"
-                        : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
-                    }`}
-                  >
-                    {grade === "ALL" ? (language === "km" ? "ទាំងអស់" : "Any") : language === "km" ? `និទ្ទេស ${grade}` : `Grade ${grade}`}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Study Field Selection */}
-            <div className="space-y-1.5">
-              <label className="text-[12px] font-bold text-[#68708A] uppercase tracking-wider">
-                {language === "km" ? "វិស័យដែលចង់រៀន" : "Intended Field"}
-              </label>
-              <div className="grid grid-cols-3 gap-1.5">
-                {[
-                  { id: "ALL", label: language === "km" ? "ទាំងអស់" : "Any" },
-                  { id: "STEM", label: language === "km" ? "STEM/បច្ចេកវិទ្យា" : "STEM/Tech" },
-                  { id: "BIZ", label: language === "km" ? "ពាណិជ្ជកម្ម" : "Business" },
-                ].map((field) => (
-                  <button
-                    key={field.id}
-                    type="button"
-                    onClick={() => setTargetStudyField(field.id)}
-                    className={`py-2 text-xs font-bold rounded-xl border transition-all ${
-                      targetStudyField === field.id
-                        ? "bg-[#111965] text-white border-[#111965] shadow-xs"
-                        : "bg-[#F8FAFC] text-[#171A2C] border-[#E6E8F0] hover:border-slate-300"
-                    }`}
-                  >
-                    {field.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Live Eligibility Result Box */}
-            <div className="p-3.5 rounded-2xl bg-[#F0F2FA]/80 border border-[#E6E8F0] flex items-center justify-between">
-              <div>
-                <div className="text-[12.5px] font-bold text-[#68708A] uppercase">
-                  {language === "km" ? "កម្មវិធីដែលមានសិទ្ធិ" : "Qualified Programs"}
-                </div>
-                <div className="text-sm font-black text-emerald-700">
-                  {targetBaciiGrade === "A" ? (language === "km" ? "អាហារូបករណ៍ពេញ ១០០% + ប្រាក់ឧបត្ថម្ភ" : "100% Full Tuition + Stipend") : (language === "km" ? "មានអាហារូបករណ៍ពេញ និងមួយផ្នែក" : "Full & Partial Tuition Available")}
-                </div>
-                <div className="text-[12px] text-[#68708A]">CADT, MoEYS, AUPP, ITC</div>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
-                <Check className="w-4 h-4" />
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Spotlight Flagship Banner */}
         {spotlightScholarship && !hasActiveFilters && (
@@ -433,7 +351,12 @@ export default function ScholarshipsPage() {
               return (
                 <article
                   key={s.id}
-                  className="group relative flex flex-col overflow-hidden rounded-[22px] bg-white ring-1 ring-[#E6E8F0] transition-shadow duration-200 hover:ring-[#111965]/20 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] motion-reduce:transition-none"
+                  onClick={(event) => {
+                    if (!isInteractiveCardTarget(event.target)) {
+                      router.push(`${linkPrefix}/scholarships/${s.slug}`);
+                    }
+                  }}
+                  className="group relative flex cursor-pointer flex-col overflow-hidden rounded-[22px] bg-white ring-1 ring-[#E6E8F0] transition-shadow duration-200 hover:ring-[#111965]/20 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)] motion-reduce:transition-none"
                 >
                   {/* Coverage + deadline */}
                   <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 px-5 pt-4 sm:px-6">

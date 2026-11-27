@@ -2,10 +2,11 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
 import { STATIC_MAJORS, getStaticMajorCategories, listStaticMajors } from "@/lib/data/catalog";
-import { cn } from "@/lib/utils";
+import { cn, isInteractiveCardTarget } from "@/lib/utils";
 import {
   ArrowRight,
   Sparkles,
@@ -111,6 +112,7 @@ function RiasecPair({
 }
 
 export default function MajorsPage() {
+  const router = useRouter();
   const { t, getLocalized, language } = useLanguage();
   const isKm = language === "km";
   const [searchTerm, setSearchTerm] = useState("");
@@ -398,7 +400,12 @@ export default function MajorsPage() {
               return (
                 <li
                   key={m.id}
-                  className="group border-b border-[#E6E8F0] transition-colors last:border-b-0 hover:bg-[#FAFBFD]"
+                  onClick={(event) => {
+                    if (!isInteractiveCardTarget(event.target)) {
+                      router.push(`/majors/${m.slug}`);
+                    }
+                  }}
+                  className="group cursor-pointer border-b border-[#E6E8F0] transition-colors last:border-b-0 hover:bg-[#FAFBFD]"
                 >
                   <div className="grid grid-cols-[64px_minmax(0,1fr)] items-start gap-3 px-4 py-4 sm:grid-cols-[88px_minmax(0,1fr)_auto] sm:items-center sm:gap-4 sm:px-5">
                     <div className="relative h-16 w-16 overflow-hidden rounded-lg bg-[#F0F2FA] sm:h-[72px] sm:w-[88px]">
@@ -414,7 +421,10 @@ export default function MajorsPage() {
                     <div className="min-w-0">
                       <div className="flex items-start gap-2">
                         <h3 className="text-[16px] font-bold leading-snug text-[#111965] transition-colors group-hover:text-[#1E277A] sm:text-base">
-                          <Link href={`/majors/${m.slug}`} className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30">
+                          <Link
+                            href={`/majors/${m.slug}`}
+                            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111965]/30"
+                          >
                             {getLocalized(m.name)}
                           </Link>
                         </h3>
@@ -485,7 +495,12 @@ export default function MajorsPage() {
                 <li
                   key={m.id}
                   data-reveal
-                  className="group relative flex flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-[#E6E8F0] transition-shadow duration-200 hover:ring-[#111965]/20 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)]"
+                  onClick={(event) => {
+                    if (!isInteractiveCardTarget(event.target)) {
+                      router.push(`/majors/${m.slug}`);
+                    }
+                  }}
+                  className="group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-[#E6E8F0] transition-shadow duration-200 hover:ring-[#111965]/20 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)]"
                 >
                   <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#F0F2FA]">
                     <Image

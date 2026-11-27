@@ -200,3 +200,11 @@ export function formatTuitionDisplay({
   return `${prefix}${amount} / ${period}`;
 }
 
+/** Returns true when a card click originated inside a nested interactive control or text selection. */
+export function isInteractiveCardTarget(target: EventTarget | null): boolean {
+  if (typeof window !== "undefined" && window.getSelection()?.toString()) {
+    return true;
+  }
+  return target instanceof Element && Boolean(target.closest("a, button"));
+}
+
