@@ -34,9 +34,13 @@ import { ARCHETYPE_META } from "@/lib/personality-meta";
 import { getHollandArchetype } from "@/lib/riasec-meta";
 import { buildCombinedReportModel } from "@/lib/guest/combined-report";
 import { getCareerIdeasForCodes } from "@/lib/data/career-ideas";
-import { AssessmentExportDialog } from "@/components/assessments/assessment-export-dialog";
+import {
+  AssessmentExportDialog,
+  PngSaveModal,
+} from "@/components/assessments/assessment-export-dialog";
 import {
   exportAssessmentReport,
+  type AssessmentPngPreview,
   type AssessmentReportFormat,
   type AssessmentReportLabels,
 } from "@/lib/assessment-report";
@@ -63,6 +67,7 @@ export default function GuestResultsPage() {
   const [combinedOpen, setCombinedOpen] = useState(false);
   const [combinedExporting, setCombinedExporting] =
     useState<AssessmentReportFormat | null>(null);
+  const [pngPreview, setPngPreview] = useState<AssessmentPngPreview | null>(null);
   const resultsRootRef = useRef<HTMLDivElement>(null);
 
   const refresh = () => {
@@ -212,8 +217,12 @@ export default function GuestResultsPage() {
             ? `${window.location.origin}/images/personality-types/${personalityResult.type.toLowerCase()}.svg`
             : undefined,
       });
-      await exportAssessmentReport(model, format);
-      toast.success(t("assessmentReport.exported"));
+      const result = await exportAssessmentReport(model, format);
+      if (result?.imagePreview) {
+        setPngPreview(result.imagePreview);
+      } else {
+        toast.success(t("assessmentReport.exported"));
+      }
       setCombinedOpen(false);
     } catch (error) {
       if (error instanceof Error && error.message.includes("popup")) {
@@ -606,6 +615,11 @@ export default function GuestResultsPage() {
         onExport={handleCombinedExport}
         footer={t("assessmentReport.footer")}
         formats={["pdf", "excel", "png"]}
+      />
+
+      <PngSaveModal
+        preview={pngPreview}
+        onClose={() => setPngPreview(null)}
       />
     </div>
   );

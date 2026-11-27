@@ -92,16 +92,42 @@ function fileBase(model: AssessmentReportModel, extension: string): string {
   return `OrienX-${kind}-Report-${headline}-${date}.${extension}`;
 }
 
-function downloadBlob(content: BlobPart, mime: string, fileName: string) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
+export interface AssessmentPngPreview {
+  dataUrl: string;
+  blob: Blob;
+  fileName: string;
+}
+
+export function isIosSafariOrWebKit(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+  );
+}
+
+function triggerUrlDownload(
+  url: string,
+  fileName: string,
+  shouldRevoke = false
+) {
   const link = document.createElement("a");
   link.href = url;
   link.download = fileName;
+  link.rel = "noopener";
+  link.style.display = "none";
   document.body.appendChild(link);
   link.click();
   link.remove();
-  URL.revokeObjectURL(url);
+  if (shouldRevoke) {
+    window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  }
+}
+
+function downloadBlob(content: BlobPart, mime: string, fileName: string) {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  triggerUrlDownload(url, fileName, true);
 }
 
 export function downloadAssessmentCsv(model: AssessmentReportModel) {
@@ -931,10 +957,21 @@ export async function downloadAssessmentPng(model: AssessmentReportModel) {
   ctx.fillText("orienx", 1016, 1305);
   ctx.textAlign = "left";
 
-  const link = document.createElement("a");
-  link.href = canvas.toDataURL("image/png");
-  link.download = fileBase(model, "png");
-  link.click();
+  const fileName = fileBase(model, "png");
+  const dataUrl = canvas.toDataURL("image/png");
+  const blob =
+    (await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, "image/png")
+    )) ??
+    (await (await fetch(dataUrl)).blob());
+
+  if (isIosSafariOrWebKit()) {
+    return { dataUrl, blob, fileName };
+  }
+
+  const blobUrl = URL.createObjectURL(blob);
+  triggerUrlDownload(blobUrl, fileName, true);
+  return undefined;
 }
 
 export interface SharedAssessmentPayload {
@@ -999,7 +1036,7 @@ export function decodeAssessmentShare(
 export async function exportAssessmentReport(
   model: AssessmentReportModel,
   format: AssessmentReportFormat
-): Promise<{ shareUrl?: string } | void> {
+): Promise<{ shareUrl?: string; imagePreview?: AssessmentPngPreview } | void> {
   switch (format) {
     case "pdf": {
       const opened = openAssessmentPdf(model);
@@ -1024,9 +1061,10 @@ export async function exportAssessmentReport(
     case "text":
       downloadAssessmentText(model);
       return;
-    case "png":
-      await downloadAssessmentPng(model);
-      return;
+    case "png": {
+      const imagePreview = await downloadAssessmentPng(model);
+      return imagePreview ? { imagePreview } : undefined;
+    }
     case "share":
       return { shareUrl: encodeAssessmentShareUrl(model) };
     default:

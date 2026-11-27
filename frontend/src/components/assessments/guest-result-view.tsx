@@ -34,9 +34,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { AssessmentExportDialog } from "@/components/assessments/assessment-export-dialog";
+import {
+  AssessmentExportDialog,
+  PngSaveModal,
+} from "@/components/assessments/assessment-export-dialog";
 import {
   exportAssessmentReport,
+  type AssessmentPngPreview,
   type AssessmentReportFormat,
   type AssessmentReportLabels,
   type AssessmentReportModel,
@@ -77,6 +81,7 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
   const [studentName, setStudentName] = useState("");
   const [shareOpen, setShareOpen] = useState(false);
   const [shareUrl, setShareUrl] = useState("");
+  const [pngPreview, setPngPreview] = useState<AssessmentPngPreview | null>(null);
   const resultRootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -476,7 +481,9 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
     try {
       const model = buildReport();
       const result = await exportAssessmentReport(model, format);
-      if (format === "share" && result?.shareUrl) {
+      if (result?.imagePreview) {
+        setPngPreview(result.imagePreview);
+      } else if (format === "share" && result?.shareUrl) {
         setShareUrl(result.shareUrl);
         setShareOpen(true);
         try {
@@ -1386,6 +1393,11 @@ export function GuestResultView({ record }: { record: GuestResultRecord }) {
         onExport={handleExport}
         footer={t("assessmentReport.footer")}
         formats={["pdf", "excel", "png"]}
+      />
+
+      <PngSaveModal
+        preview={pngPreview}
+        onClose={() => setPngPreview(null)}
       />
 
       <Dialog
