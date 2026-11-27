@@ -30,6 +30,7 @@ import { BorderBeam } from "@/components/magicui/border-beam";
 import { Dialog } from "@/components/ui/dialog";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
 import { useToast } from "@/components/ui/toast";
+import { localizeProvince } from "@/lib/utils";
 
 // Cambodian university campus photos mapping
 const UNIVERSITY_IMAGES: Record<string, string> = {
@@ -386,7 +387,7 @@ function UniversitiesContent() {
                       {/* Verified & Acronym on Image Bottom */}
                       <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between text-white text-xs">
                         <span className="font-mono text-xs bg-black/60 backdrop-blur-xs px-2.5 py-0.5 rounded-md font-bold tracking-wider">
-                          {getLocalized(uni.acronym) || uni.slug.toUpperCase()}
+                          {uni.acronym?.en || uni.acronym?.km || uni.slug.toUpperCase()}
                         </span>
 
                         {uni.is_tuition_verified && (
@@ -420,7 +421,15 @@ function UniversitiesContent() {
                         </div>
                         <div className="flex items-center gap-1.5 text-xs text-[#68708A] mt-1">
                           <MapPin className="w-3.5 h-3.5 text-[#111965] shrink-0" />
-                          <span>{getLocalized(uni.province) || uni.province || (language === "km" ? "ភ្នំពេញ, កម្ពុជា" : "Phnom Penh, Cambodia")}</span>
+                          <span>
+                            {localizeProvince(
+                              getLocalized(uni.province) || uni.province,
+                              language
+                            ) ||
+                              (language === "km"
+                                ? "ភ្នំពេញ, កម្ពុជា"
+                                : "Phnom Penh, Cambodia")}
+                          </span>
                         </div>
                       </div>
 
@@ -610,7 +619,7 @@ function UniversitiesContent() {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between gap-2">
                         <span className="inline-flex items-center rounded-lg bg-white dark:bg-white/10 border border-[#E6E8F0] px-2 py-0.5 font-mono text-[11px] font-black text-[#111965] uppercase">
-                          {getLocalized(uni.acronym) || uni.slug.toUpperCase()}
+                          {uni.acronym?.en || uni.acronym?.km || uni.slug.toUpperCase()}
                         </span>
                         <div className="flex items-center gap-1.5">
                           <span

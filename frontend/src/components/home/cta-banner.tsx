@@ -90,10 +90,6 @@ export function CtaBanner({
 
   return (
     <section className={cn("py-16 sm:py-24 bg-[#F8F9FC] border-b border-[#E6E8F0] relative overflow-hidden select-none", className)}>
-      {/* Background Subtle Atmosphere */}
-      <div className="absolute inset-0 bg-[radial-gradient(#111965_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.03] pointer-events-none" />
-      <div className="absolute -top-32 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-32 right-1/4 w-96 h-96 bg-[#F7CE4D]/15 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0D1445] via-[#111965] to-[#0A0F3D] border border-white/15 shadow-[0_25px_60px_-15px_rgba(17,25,101,0.5)] text-white p-8 sm:p-12 lg:p-14">

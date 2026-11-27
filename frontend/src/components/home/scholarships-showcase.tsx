@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useSyncExternalStore } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
@@ -45,8 +45,28 @@ interface ScholarshipApiItem {
   is_verified: boolean;
 }
 
+function subscribeThemeClass(callback: () => void) {
+  if (typeof document === "undefined") return () => {};
+  const observer = new MutationObserver(callback);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+  return () => observer.disconnect();
+}
+
+function getIsDarkTheme() {
+  if (typeof document === "undefined") return false;
+  return document.documentElement.classList.contains("dark");
+}
+
 export function ScholarshipsShowcase() {
   const { t, getLocalized, language } = useLanguage();
+  const isDark = useSyncExternalStore(
+    subscribeThemeClass,
+    getIsDarkTheme,
+    () => false
+  );
   const cardSwapRef = useRef<CardSwapHandle>(null);
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
@@ -88,10 +108,13 @@ export function ScholarshipsShowcase() {
 
   // Dynamic benefit, badge, and deadline text purely using i18n and real item data
   const getScholarshipMetadata = (item?: ScholarshipApiItem) => {
+    const unifiedBadgeClass =
+      "bg-[#FFF9E6] text-[#92400E] border border-[#F7CE4D]/60 dark:bg-[#F7CE4D]/15 dark:text-[#F7CE4D] dark:border-[#F7CE4D]/30";
+
     if (!item) {
       return {
         badgeText: "",
-        badgeColor: "bg-[#0284C7] text-white",
+        badgeColor: unifiedBadgeClass,
         benefitText: "",
         deadlineText: "",
         scopeText: "",
@@ -104,7 +127,7 @@ export function ScholarshipsShowcase() {
     if (item.slug === "techo-digital-talent-scholarship") {
       return {
         badgeText: t("scholarshipsShowcase.techoBadge"),
-        badgeColor: "bg-[#0284C7] text-white",
+        badgeColor: unifiedBadgeClass,
         benefitText: t("scholarshipsShowcase.techoBenefit"),
         deadlineText: t("scholarshipsShowcase.techoDeadline"),
         scopeText: item.country_or_institution || "CADT, RUPP, ITC, NUM, Paragon, AUPP",
@@ -115,7 +138,7 @@ export function ScholarshipsShowcase() {
     if (item.slug === "aupp-merit-scholarship") {
       return {
         badgeText: t("scholarshipsShowcase.auppBadge"),
-        badgeColor: "bg-rose-600 text-white",
+        badgeColor: unifiedBadgeClass,
         benefitText: t("scholarshipsShowcase.auppBenefit"),
         deadlineText: t("scholarshipsShowcase.auppDeadline"),
         scopeText: item.country_or_institution || "AUPP • Univ of Arizona • Fort Hays State",
@@ -126,7 +149,7 @@ export function ScholarshipsShowcase() {
     if (item.slug === "moeys-national-scholarship") {
       return {
         badgeText: t("scholarshipsShowcase.moeysBadge"),
-        badgeColor: "bg-[#111965] text-[#F7CE4D]",
+        badgeColor: unifiedBadgeClass,
         benefitText: t("scholarshipsShowcase.moeysBenefit"),
         deadlineText: t("scholarshipsShowcase.moeysDeadline"),
         scopeText: item.country_or_institution || "RUPP, ITC (តិចណូ), NUM, UHS, RULE",
@@ -140,7 +163,7 @@ export function ScholarshipsShowcase() {
         item.coverage_percentage === 100
           ? t("scholarshipsShowcase.fullCoverageBadge")
           : `${item.coverage_percentage || 50}% ${t("scholarshipsShowcase.partialCoverageBadge")}`,
-      badgeColor: "bg-[#0284C7] text-white",
+      badgeColor: unifiedBadgeClass,
       benefitText:
         item.coverage_percentage === 100
           ? t("scholarshipsShowcase.fullCoverage")
@@ -242,32 +265,26 @@ export function ScholarshipsShowcase() {
       {/* =====================================================================
           ATMOSPHERIC LIGHTING & SUBTLE TECH GRID BACKDROP
           ===================================================================== */}
-      <div className="absolute inset-0 bg-[radial-gradient(#111965_1px,transparent_1px)] [background-size:28px_28px] opacity-[0.03] pointer-events-none" />
-      <div className="absolute -top-24 -left-20 w-[500px] h-[500px] bg-blue-400/12 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 -right-16 w-[550px] h-[450px] bg-[#F7CE4D]/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[420px] bg-[radial-gradient(ellipse_at_center,rgba(17,25,101,0.035),transparent_75%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(#111965_1px,transparent_1px)] [background-size:28px_28px] opacity-[0.025] pointer-events-none" />
+      <div className="absolute -bottom-24 -right-16 w-[480px] h-[380px] bg-[#F7CE4D]/8 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           {/* =================================================================
-              LEFT SIDE: EDITORIAL SPOTLIGHT (SMOOTH SYNCED ANIMATIONS & TRUST PROOFS)
+              LEFT SIDE: EDITORIAL SPOTLIGHT
               ================================================================= */}
           <div className="lg:col-span-6 flex flex-col justify-between lg:min-h-[460px] space-y-6">
             <div className="space-y-3.5">
-              {/* Category Eyebrow Badges with Pulsing Live Status */}
-              <div className="flex flex-wrap items-center gap-2">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-white/90 border border-[#E6E8F0] shadow-2xs backdrop-blur-xs">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500 shrink-0" />
-                  <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[#111965] whitespace-nowrap">
-                    {language === "km" ? "អាហារូបករណ៍ផ្លូវការដែលបានផ្ទៀងផ្ទាត់" : "VERIFIED SCHOLARSHIPS 2026"}
-                  </span>
-                </div>
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 shadow-2xs">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                  <span className="text-[11px] sm:text-xs font-bold text-emerald-700 whitespace-nowrap">
-                    {scholarships.length} {language === "km" ? "កម្មវិធីសកម្ម" : "Active Programs"}
-                  </span>
-                </div>
+              {/* Single Clean Eyebrow Badge with Subtle Brand Accents */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-[#E6E8F0] dark:bg-white/5 dark:border-white/10 shadow-2xs">
+                <Sparkles className="w-3.5 h-3.5 text-[#D4A017] dark:text-[#F7CE4D] shrink-0" />
+                <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#111965] whitespace-nowrap">
+                  {language === "km" ? "អាហារូបករណ៍ផ្លូវការ" : "VERIFIED SCHOLARSHIPS 2026"}
+                </span>
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
+                <span className="text-[11px] sm:text-xs font-semibold text-[#68708A] dark:text-slate-300 whitespace-nowrap">
+                  {scholarships.length} {language === "km" ? "កម្មវិធី" : "Programs"}
+                </span>
               </div>
 
               {/* Dynamic Headline & Description (Smooth Slide-Fade on Change) */}
@@ -294,11 +311,11 @@ export function ScholarshipsShowcase() {
                 BENEFIT SPOTLIGHT CARD
                 =============================================================== */}
             <div className="rounded-2xl bg-white border border-[#E6E8F0] p-4 sm:p-5 shadow-xs space-y-3.5 min-h-[156px] flex flex-col justify-between relative overflow-hidden group">
-              {/* Highlight Ribbon: Coverage & Badge */}
-              <div className="rounded-xl bg-gradient-to-r from-amber-500/10 via-[#F7CE4D]/15 to-transparent border border-[#F7CE4D]/45 p-3 sm:p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              {/* Highlight Ribbon: Subtle Warm Gold Tint */}
+              <div className="rounded-xl bg-[#FFFDF5] dark:bg-[#F7CE4D]/[0.06] border border-[#F7CE4D]/40 dark:border-[#F7CE4D]/25 p-3 sm:p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div className="space-y-0.5">
-                  <span className="text-[12.5px] sm:text-[12px] font-black uppercase tracking-wider text-amber-900 flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-amber-600" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#B45309] dark:text-[#F7CE4D] flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3 text-[#D4A017] dark:text-[#F7CE4D]" />
                     <span>{t("scholarshipsShowcase.verifiedBenefit")}</span>
                   </span>
                   <div className="min-h-[26px] flex items-center">
@@ -319,7 +336,7 @@ export function ScholarshipsShowcase() {
 
                 {meta.badgeText && (
                   <span
-                    className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-black shadow-2xs self-start sm:self-auto shrink-0 ${meta.badgeColor}`}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold self-start sm:self-auto shrink-0 ${meta.badgeColor}`}
                   >
                     <Award className="w-3.5 h-3.5" />
                     <span>{meta.badgeText}</span>
@@ -330,7 +347,7 @@ export function ScholarshipsShowcase() {
               {/* Key Details Row: Deadline & Scope */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-0.5">
                 <div className="flex items-center gap-2 text-[#68708A]">
-                  <Calendar className="w-4 h-4 text-amber-600 shrink-0" />
+                  <Calendar className="w-4 h-4 text-[#D4A017] dark:text-[#F7CE4D] shrink-0" />
                   <span className="truncate">
                     <strong className="text-[#111965]">
                       {t("scholarshipsShowcase.deadline")}{" "}
@@ -340,7 +357,7 @@ export function ScholarshipsShowcase() {
                 </div>
 
                 <div className="flex items-center gap-2 text-[#68708A]">
-                  <Building2 className="w-4 h-4 text-[#0284C7] shrink-0" />
+                  <Building2 className="w-4 h-4 text-[#111965]/70 dark:text-blue-300/80 shrink-0" />
                   <span className="truncate">
                     <strong className="text-[#111965]">{t("scholarshipsShowcase.scope")} </strong>
                     {meta.scopeText}
@@ -355,7 +372,7 @@ export function ScholarshipsShowcase() {
                 {/* Primary CTA: Dedicated Scholarship Detail Page */}
                 <Link
                   href={`/scholarships/${current?.slug}`}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#111965] hover:bg-[#1E277A] shadow-xs hover:shadow-sm transition-all hover:translate-x-0.5 active:scale-98"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#111965] hover:bg-[#1E277A] shadow-xs hover:shadow-sm transition-all active:scale-98"
                 >
                   <span>{t("scholarshipsShowcase.viewDetails")}</span>
                   <ArrowRight className="w-4 h-4 text-[#F7CE4D]" />
@@ -367,7 +384,7 @@ export function ScholarshipsShowcase() {
                     href={current.official_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-[#111965] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-2xs hover:shadow-xs transition-all active:scale-98"
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-black text-[#0F1754] dark:text-[#0F1754] bg-[#F7CE4D] hover:bg-[#E5BD3B] shadow-2xs transition-all active:scale-98"
                   >
                     <span>{t("scholarshipsShowcase.applyOnline")}</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -410,11 +427,11 @@ export function ScholarshipsShowcase() {
             {/* Trust Proof Micro-Badges */}
             <div className="pt-2 border-t border-[#E6E8F0]/80 flex flex-wrap items-center gap-y-2 gap-x-5 text-[12px] text-[#68708A] font-semibold">
               <span className="inline-flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span>{language === "km" ? "ទិន្នន័យផ្លូវការពីក្រសួង និងដៃគូ" : "Verified Admissions Data"}</span>
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#0284C7]" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#D4A017] dark:text-[#F7CE4D]" />
                 <span>{language === "km" ? "ឥតគិតថ្លៃ ១០០% សម្រាប់សិស្ស" : "100% Free For Students"}</span>
               </span>
             </div>
@@ -433,16 +450,17 @@ export function ScholarshipsShowcase() {
                 ref={cardSwapRef}
                 width={560}
                 height={380}
-                cardDistance={52}
-                verticalDistance={40}
+                cardDistance={40}
+                verticalDistance={28}
                 depth={85}
-                skewAmount={5}
+                skewAmount={4}
+                dim={0.85}
                 visibleCards={Math.min(3, scholarships.length)}
                 delay={4200}
                 autoplay={true}
                 pauseOnHover={true}
                 draggable={true}
-                theme="light"
+                theme={isDark ? "dark" : "light"}
                 cardRadius={24}
                 onChange={(idx) => {
                   if (typeof idx === "number" && idx >= 0 && idx < scholarships.length) {
@@ -456,33 +474,21 @@ export function ScholarshipsShowcase() {
                   return (
                     <Card
                       key={s.id || s.slug}
-                      className="relative w-full h-full cursor-grab active:cursor-grabbing overflow-hidden border border-[#E6E8F0] bg-white shadow-xl group select-none touch-none"
+                      className="relative w-full h-full cursor-grab active:cursor-grabbing overflow-hidden border border-[#E6E8F0] dark:border-white/15 bg-slate-950 shadow-xl group select-none touch-none"
                     >
-                      <div className="relative w-full h-full bg-slate-900 overflow-hidden select-none pointer-events-none">
+                      <div className="relative w-full h-full bg-slate-950 overflow-hidden select-none pointer-events-none">
                         <Image
                           src={sMeta.posterImage}
                           alt={getLocalized(s.title)}
                           fill
                           draggable={false}
-                          className="object-cover group-hover:scale-103 transition-transform duration-500 pointer-events-none select-none [-webkit-user-drag:none]"
+                          className="object-cover brightness-[0.9] saturate-[0.82] group-hover:scale-103 transition-transform duration-500 pointer-events-none select-none [-webkit-user-drag:none]"
                           priority={i === 0}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent pointer-events-none select-none" />
 
-                        {/* Top Floating Badge */}
-                        {sMeta.badgeText && (
-                          <div className="absolute top-4 left-4 z-10 pointer-events-none">
-                            <span
-                              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black shadow-md ${sMeta.badgeColor}`}
-                            >
-                              <Sparkles className="w-3.5 h-3.5" />
-                              <span>{sMeta.badgeText}</span>
-                            </span>
-                          </div>
-                        )}
-
                         {/* Bottom Banner on Card */}
-                        <div className="absolute bottom-4 left-4 right-4 z-10 text-white space-y-1.5 pointer-events-none">
+                        <div className="absolute bottom-4 left-4 right-4 z-10 text-white space-y-1 pointer-events-none">
                           <div className="text-xs font-bold text-[#F7CE4D] uppercase tracking-wider truncate">
                             {getLocalized(s.provider)}
                           </div>

@@ -27,7 +27,13 @@ import {
   ShieldCheck,
   WifiOff,
 } from "lucide-react";
-import { cn, formatUSD } from "@/lib/utils";
+import {
+  cn,
+  formatUSD,
+  localizeDegreeLevel,
+  localizeInstructionLanguage,
+  localizeProvince,
+} from "@/lib/utils";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -37,6 +43,122 @@ function formatEnumLabel(value?: string) {
     .toLowerCase()
     .replaceAll("_", " ")
     .replace(/\b\w/g, (character) => character.toUpperCase());
+}
+
+function splitLongParagraph(text: string): string[] {
+  const sentences: string[] = [];
+  let start = 0;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (ch !== "." && ch !== "!" && ch !== "?" && ch !== "។") continue;
+    const next = text[i + 1];
+    if (next && !/\s/.test(next)) continue;
+
+    // Avoid splitting inside initials like "U.S." or "A.E.U."
+    const prev = i > 0 ? text[i - 1] : "";
+    const prevTwo = i > 1 ? text[i - 2] : "";
+    if (ch === "." && /[A-Za-z]/.test(prev) && (i === 1 || prevTwo === "." || /\s/.test(prevTwo))) {
+      continue;
+    }
+
+    const chunk = text.slice(start, i + 1).trim();
+    if (chunk.length > 0) {
+      sentences.push(chunk);
+      start = i + 1;
+    }
+  }
+  const rest = text.slice(start).trim();
+  if (rest.length > 0) sentences.push(rest);
+  return sentences.length > 0 ? sentences : [text];
+}
+
+function renderHighlightedInline(text: string): React.ReactNode {
+  // Highlight acronyms like (ACAC), U.S.-accredited, numbers/years/durations like 2017, 2-year, 21st-century, ២០១៧
+  const tokenRegex =
+    /(\([A-Z0-9.\s]{2,14}\)|\b(?:19|20)\d{2}\b|\b\d+(?:st|nd|rd|th)?[-–]?(?:year|years|month|months|century)\b|[០-៩]{2,4}(?:\s?(?:ឆ្នាំ|ខែ|នាក់))?|\b\d+(?:,\d+)*(?:\+|%)?|\b(?:STEM|AI|IT|DevOps|Full-stack|MoEYS|CADT|RUPP|ITC|AUPP|ACAC|AEU|AIB|BBU|NUM)\b)/g;
+
+  const parts = text.split(tokenRegex);
+  return parts.map((part, idx) => {
+    if (!part) return null;
+    if (idx % 2 === 1) {
+      return (
+        <strong
+          key={idx}
+          className="font-extrabold text-[#0F1754] dark:text-[#F7CE4D]"
+        >
+          {part}
+        </strong>
+      );
+    }
+    return <React.Fragment key={idx}>{part}</React.Fragment>;
+  });
+}
+
+function UniversityDescription({ text }: { text: string }) {
+  const rawBlocks = text
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  let lead = rawBlocks[0] ?? text;
+  let highlights: string[] = [];
+
+  if (rawBlocks.length === 1 && rawBlocks[0].length > 240) {
+    const sentences = splitLongParagraph(rawBlocks[0]);
+    if (sentences.length > 1) {
+      lead = sentences[0];
+      highlights = sentences.slice(1);
+    }
+  } else if (rawBlocks.length > 1) {
+    // If the first paragraph itself is very long, split off its opening sentence
+    if (rawBlocks[0].length > 280) {
+      const firstSentences = splitLongParagraph(rawBlocks[0]);
+      if (firstSentences.length > 1) {
+        lead = firstSentences[0];
+        highlights = [...firstSentences.slice(1), ...rawBlocks.slice(1)];
+      } else {
+        highlights = rawBlocks.slice(1);
+      }
+    } else {
+      highlights = rawBlocks.slice(1);
+    }
+  }
+
+  return (
+    <div className="space-y-3.5">
+      <p className="text-sm sm:text-base font-medium leading-relaxed text-[#171A2C] dark:text-slate-100">
+        {renderHighlightedInline(lead)}
+      </p>
+
+      {highlights.length > 0 && (
+        <ul className="space-y-2 rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-3.5 sm:p-4 dark:border-white/10 dark:bg-white/[0.03]">
+          {highlights.map((rawItem, idx) => {
+            const isSectionHeader = /^[^:]{2,28}:$/.test(rawItem);
+            const cleaned = rawItem.replace(/^[•\-–*]\s*/, "");
+            if (isSectionHeader) {
+              return (
+                <li
+                  key={idx}
+                  className="pt-1 text-xs font-black uppercase tracking-wider text-[#0F1754] dark:text-[#F7CE4D] list-none"
+                >
+                  {cleaned}
+                </li>
+              );
+            }
+            return (
+              <li
+                key={idx}
+                className="flex items-start gap-2.5 text-sm leading-relaxed text-[#475569] dark:text-slate-300"
+              >
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#0F1754] dark:bg-[#F7CE4D]" />
+                <span>{renderHighlightedInline(cleaned)}</span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 function FactRow({
@@ -56,10 +178,10 @@ function FactRow({
         <Icon className="h-3.5 w-3.5" />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[9.5px] font-black uppercase tracking-[0.12em] text-[#94A3B8]">
+        <span className="block text-xs font-black uppercase tracking-[0.1em] text-[#68708A]">
           {label}
         </span>
-        <span className="mt-0.5 block break-words text-[11.5px] font-semibold leading-snug text-[#171A2C]">
+        <span className="mt-0.5 block break-words text-sm font-semibold leading-snug text-[#171A2C]">
           {value}
         </span>
       </span>
@@ -107,7 +229,7 @@ function ActionTile({
       <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#F0F2FA] text-[#111965] transition-colors group-hover:bg-[#111965] group-hover:text-[#F7CE4D]">
         <Icon className="h-3.5 w-3.5" />
       </span>
-      <span className="truncate text-[11px] font-bold text-[#111965]">
+      <span className="truncate text-xs sm:text-sm font-bold text-[#111965]">
         {label}
       </span>
     </>
@@ -221,10 +343,10 @@ export default function UniversityDetailPage() {
   }
 
   const name = getLocalized(uni.name);
-  const acronym = getLocalized(uni.acronym) || uni.slug?.toUpperCase();
+  const acronym = uni.acronym?.en || uni.acronym?.km || uni.slug?.toUpperCase();
   const description = getLocalized(uni.description);
   const addressText = getLocalized(uni.address);
-  const province = uni.province || "";
+  const province = localizeProvince(uni.province, language);
   const isPublic = uni.university_type === "PUBLIC";
   const offerings: any[] = uni.offerings || [];
   const programCount = offerings.length;
@@ -247,7 +369,7 @@ export default function UniversityDetailPage() {
       : "Information not available";
 
   const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    [addressText || province || "Cambodia", "Cambodia"]
+    [addressText || uni.province || "Cambodia", "Cambodia"]
       .filter(Boolean)
       .join(", ")
   )}`;
@@ -255,14 +377,19 @@ export default function UniversityDetailPage() {
   const uniqueDegreeLevels = Array.from(
     new Set(
       offerings
-        .map((offering) => formatEnumLabel(offering.degree_level))
+        .map((offering) => localizeDegreeLevel(offering.degree_level, language))
         .filter(Boolean)
     )
   );
   const uniqueLanguages = Array.from(
     new Set(
       offerings
-        .map((offering) => formatEnumLabel(offering.language_of_instruction))
+        .map((offering) =>
+          localizeInstructionLanguage(
+            offering.language_of_instruction,
+            language
+          )
+        )
         .filter(Boolean)
     )
   );
@@ -280,11 +407,17 @@ export default function UniversityDetailPage() {
   const admissionRequirements = uni.admission_requirements as
     | { en?: string[]; km?: string[] }
     | null;
-  const reqList = admissionRequirements?.en ?? [];
+  const reqList =
+    (language === "km" && admissionRequirements?.km?.length
+      ? admissionRequirements.km
+      : admissionRequirements?.en) ?? [];
   const facilities = uni.facilities as
     | { en?: string[]; km?: string[] }
     | null;
-  const facList = facilities?.en ?? [];
+  const facList =
+    (language === "km" && facilities?.km?.length
+      ? facilities.km
+      : facilities?.en) ?? [];
 
   const handleShare = async () => {
     const url = window.location.href;
@@ -442,7 +575,7 @@ export default function UniversityDetailPage() {
                 <h1 className="text-2xl font-black leading-tight text-[#111965] sm:text-3xl lg:text-4xl">
                   {name}
                 </h1>
-                <p className="mt-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-[#68708A]">
+                <p className="mt-1 text-xs sm:text-sm font-bold uppercase tracking-[0.12em] text-[#68708A]">
                   {acronym}
                   {establishedYear
                     ? ` • ${t("universityDetail.established")} ${establishedYear}`
@@ -453,32 +586,28 @@ export default function UniversityDetailPage() {
 
             <div className="mt-4 flex flex-wrap items-center gap-2">
               {province && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-2.5 py-1 text-[10.5px] font-bold text-[#68708A]">
-                  <MapPin className="h-3 w-3 text-[#111965]" />
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-3 py-1.5 text-xs font-bold text-[#68708A]">
+                  <MapPin className="h-3.5 w-3.5 text-[#111965]" />
                   {province}
                 </span>
               )}
-              <span className="inline-flex items-center gap-1.5 rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-2.5 py-1 text-[10.5px] font-bold text-[#68708A]">
-                <GraduationCap className="h-3 w-3 text-[#111965]" />
+              <span className="inline-flex items-center gap-1.5 rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-3 py-1.5 text-xs font-bold text-[#68708A]">
+                <GraduationCap className="h-3.5 w-3.5 text-[#111965]" />
                 {programCount} {programLabel}
               </span>
               {uni.is_tuition_verified && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10.5px] font-bold text-emerald-800">
-                  <ShieldCheck className="h-3 w-3" />
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-800">
+                  <ShieldCheck className="h-3.5 w-3.5" />
                   {t("universityDetail.verifiedTuition")}
                 </span>
               )}
             </div>
 
-            <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-8">
+            <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_350px] lg:gap-8">
               <div className="min-w-0">
-                {description && (
-                  <p className="text-sm leading-relaxed text-[#171A2C]">
-                    {description}
-                  </p>
-                )}
+                {description && <UniversityDescription text={description} />}
 
-                <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
                   <ActionTile
                     icon={Navigation}
                     label={t("universityDetail.directions")}
@@ -510,7 +639,7 @@ export default function UniversityDetailPage() {
                 </div>
 
                 {programCount > 0 && (
-                  <div className="mt-4 grid grid-cols-3 gap-2">
+                  <div className="mt-4 grid grid-cols-1 gap-2.5 sm:grid-cols-3">
                     {[
                       {
                         label: t("universityDetail.degree"),
@@ -527,12 +656,12 @@ export default function UniversityDetailPage() {
                     ].map((item) => (
                       <div
                         key={item.label}
-                        className="rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3 py-2.5"
+                        className="rounded-xl border border-[#E6E8F0] bg-[#F8FAFD] px-3.5 py-3"
                       >
-                        <div className="text-[9px] font-black uppercase tracking-[0.12em] text-[#94A3B8]">
+                        <div className="text-xs font-black uppercase tracking-[0.08em] text-[#68708A]">
                           {item.label}
                         </div>
-                        <div className="mt-0.5 line-clamp-1 text-[11px] font-bold text-[#111965]">
+                        <div className="mt-1 line-clamp-1 text-sm font-bold text-[#111965]">
                           {item.value}
                         </div>
                       </div>
@@ -543,7 +672,7 @@ export default function UniversityDetailPage() {
 
               <aside className="min-w-0">
                 <div className="rounded-2xl border border-[#E6E8F0] bg-[#F8FAFD] p-4 sm:p-5">
-                  <h2 className="text-[10px] font-black uppercase tracking-[0.14em] text-[#68708A]">
+                  <h2 className="text-xs font-black uppercase tracking-[0.12em] text-[#68708A]">
                     {t("universityDetail.atAGlance")}
                   </h2>
 
@@ -588,8 +717,8 @@ export default function UniversityDetailPage() {
         </div>
 
         {/* Section navigation */}
-        <section className="space-y-2.5">
-          <h2 className="text-xs font-black uppercase tracking-[0.12em] text-[#68708A]">
+        <section className="space-y-3">
+          <h2 className="text-xs sm:text-sm font-black uppercase tracking-[0.1em] text-[#68708A]">
             {t("universityDetail.exploreSections")}
           </h2>
           <div className="grid gap-3 sm:grid-cols-3">
@@ -599,25 +728,25 @@ export default function UniversityDetailPage() {
                 <a
                   key={card.href}
                   href={card.href}
-                  className="group flex items-center gap-3 rounded-2xl border border-[#E6E8F0] bg-white p-3.5 transition-all hover:-translate-y-0.5 hover:border-[#111965]/20 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)]"
+                  className="group flex items-center gap-3.5 rounded-2xl border border-[#E6E8F0] bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-[#111965]/20 hover:shadow-[0_8px_20px_-16px_rgba(17,25,101,0.22)]"
                 >
                   <span
                     className={cn(
-                      "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
+                      "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl",
                       card.tone
                     )}
                   >
-                    <Icon className="h-4 w-4" />
+                    <Icon className="h-5 w-5" />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block text-[11px] font-black text-[#111965]">
+                    <span className="block text-sm font-black text-[#111965]">
                       {card.title}
                     </span>
-                    <span className="mt-0.5 block truncate text-[10px] text-[#94A3B8]">
+                    <span className="mt-0.5 block truncate text-xs text-[#68708A]">
                       {card.hint}
                     </span>
                   </span>
-                  <ArrowRight className="h-3.5 w-3.5 shrink-0 text-[#94A3B8] transition-transform group-hover:translate-x-0.5" />
+                  <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition-transform group-hover:translate-x-0.5" />
                 </a>
               );
             })}
@@ -631,12 +760,12 @@ export default function UniversityDetailPage() {
               <h2 className="text-xl font-black text-[#111965] sm:text-2xl">
                 {t("universityDetail.availablePrograms")}
               </h2>
-              <p className="mt-0.5 text-xs text-[#68708A]">
+              <p className="mt-0.5 text-sm text-[#68708A]">
                 {t("universityDetail.programsSubtitle")}
               </p>
             </div>
-            <span className="inline-flex items-center gap-1.5 self-start rounded-full border border-[#E6E8F0] bg-white px-2.5 py-1 text-[10.5px] font-bold text-[#68708A]">
-              <BookOpen className="h-3 w-3" />
+            <span className="inline-flex items-center gap-1.5 self-start rounded-full border border-[#E6E8F0] bg-white px-3 py-1 text-xs font-bold text-[#68708A]">
+              <BookOpen className="h-3.5 w-3.5" />
               {programCount} {programLabel}
             </span>
           </div>
@@ -677,7 +806,7 @@ export default function UniversityDetailPage() {
                     <div className="flex min-w-0 flex-1 flex-col justify-between gap-2.5">
                       <div>
                         <div className="flex items-center justify-between gap-2">
-                          <span className="truncate rounded-md bg-[#F0F2FA] px-2 py-0.5 text-[10px] font-bold text-[#111965]">
+                          <span className="truncate rounded-md bg-[#F0F2FA] px-2.5 py-0.5 text-xs font-bold text-[#111965]">
                             {t(
                               `categories.${offering.major_category}`,
                               formatEnumLabel(offering.major_category)
@@ -685,7 +814,7 @@ export default function UniversityDetailPage() {
                           </span>
                           <span
                             className={cn(
-                              "shrink-0 text-[10.5px] font-black",
+                              "shrink-0 text-xs sm:text-sm font-black",
                               offering.is_tuition_verified
                                 ? "text-emerald-700"
                                 : "text-[#68708A]"
@@ -694,18 +823,18 @@ export default function UniversityDetailPage() {
                             {tuition}
                           </span>
                         </div>
-                        <h3 className="mt-1.5 line-clamp-2 text-sm font-black leading-snug text-[#111965] transition-colors group-hover:text-[#1E277A]">
+                        <h3 className="mt-1.5 line-clamp-2 text-sm sm:text-base font-black leading-snug text-[#111965] transition-colors group-hover:text-[#1E277A]">
                           {majorName}
                         </h3>
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10.5px] font-semibold text-[#68708A]">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold text-[#68708A]">
                         <span className="inline-flex items-center gap-1">
-                          <GraduationCap className="h-3 w-3" />
-                          {formatEnumLabel(offering.degree_level)}
+                          <GraduationCap className="h-3.5 w-3.5" />
+                          {localizeDegreeLevel(offering.degree_level, language)}
                         </span>
                         <span className="inline-flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
+                          <Clock className="h-3.5 w-3.5" />
                           {offering.duration_years}{" "}
                           {language === "km"
                             ? t("universityDetail.years")
@@ -714,10 +843,13 @@ export default function UniversityDetailPage() {
                             : "years"}
                         </span>
                         <span className="inline-flex items-center gap-1">
-                          <Globe className="h-3 w-3" />
-                          {formatEnumLabel(offering.language_of_instruction)}
+                          <Globe className="h-3.5 w-3.5" />
+                          {localizeInstructionLanguage(
+                            offering.language_of_instruction,
+                            language
+                          )}
                         </span>
-                        <ArrowRight className="ml-auto h-3.5 w-3.5 text-[#111965] transition-transform group-hover:translate-x-0.5" />
+                        <ArrowRight className="ml-auto h-4 w-4 text-[#111965] transition-transform group-hover:translate-x-0.5" />
                       </div>
                     </div>
                   </Link>
@@ -743,10 +875,10 @@ export default function UniversityDetailPage() {
                 <GraduationCap className="h-4 w-4" />
               </span>
               <div>
-                <h2 className="text-sm font-black text-[#111965]">
+                <h2 className="text-base font-black text-[#111965]">
                   {t("universityDetail.admissionRequirements")}
                 </h2>
-                <p className="mt-0.5 text-[10.5px] text-[#94A3B8]">
+                <p className="mt-0.5 text-xs text-[#68708A]">
                   {t("universityDetail.admissionsHint")}
                 </p>
               </div>
@@ -757,17 +889,17 @@ export default function UniversityDetailPage() {
                 reqList.map((requirement: string, index: number) => (
                   <li
                     key={index}
-                    className="flex items-start gap-2.5 text-xs leading-relaxed text-[#171A2C]"
+                    className="flex items-start gap-2.5 text-sm leading-relaxed text-[#171A2C]"
                   >
-                    <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                    <span className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                       <CheckCircle2 className="h-3 w-3" />
                     </span>
                     <span>{requirement}</span>
                   </li>
                 ))
               ) : (
-                <li className="flex items-start gap-2.5 text-xs leading-relaxed text-[#171A2C]">
-                  <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                <li className="flex items-start gap-2.5 text-sm leading-relaxed text-[#171A2C]">
+                  <span className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
                     <CheckCircle2 className="h-3 w-3" />
                   </span>
                   <span>{t("universityDetail.standardAdmission")}</span>
@@ -785,10 +917,10 @@ export default function UniversityDetailPage() {
                 <Building2 className="h-4 w-4" />
               </span>
               <div>
-                <h2 className="text-sm font-black text-[#111965]">
+                <h2 className="text-base font-black text-[#111965]">
                   {t("universityDetail.facilities")}
                 </h2>
-                <p className="mt-0.5 text-[10.5px] text-[#94A3B8]">
+                <p className="mt-0.5 text-xs text-[#68708A]">
                   {t("universityDetail.facilitiesHint")}
                 </p>
               </div>
@@ -799,17 +931,17 @@ export default function UniversityDetailPage() {
                 facList.map((facility: string, index: number) => (
                   <li
                     key={index}
-                    className="flex items-start gap-2.5 text-xs leading-relaxed text-[#171A2C]"
+                    className="flex items-start gap-2.5 text-sm leading-relaxed text-[#171A2C]"
                   >
-                    <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-sky-50 text-sky-600">
+                    <span className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-sky-50 text-sky-600">
                       <CheckCircle2 className="h-3 w-3" />
                     </span>
                     <span>{facility}</span>
                   </li>
                 ))
               ) : (
-                <li className="flex items-start gap-2.5 text-xs leading-relaxed text-[#171A2C]">
-                  <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-sky-50 text-sky-600">
+                <li className="flex items-start gap-2.5 text-sm leading-relaxed text-[#171A2C]">
+                  <span className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-sky-50 text-sky-600">
                     <CheckCircle2 className="h-3 w-3" />
                   </span>
                   <span>{t("universityDetail.standardFacilities")}</span>
@@ -828,10 +960,10 @@ export default function UniversityDetailPage() {
                 <GraduationCap className="h-5 w-5" />
               </span>
               <div>
-                <h2 className="text-base font-black text-[#111965]">
+                <h2 className="text-base sm:text-lg font-black text-[#111965]">
                   {t("universityDetail.readyTitle")}
                 </h2>
-                <p className="mt-0.5 text-xs text-[#68708A]">
+                <p className="mt-0.5 text-xs sm:text-sm text-[#68708A]">
                   {t("universityDetail.readyHint")}
                 </p>
               </div>
@@ -840,7 +972,7 @@ export default function UniversityDetailPage() {
             <div className="flex flex-wrap items-center gap-2">
               <a
                 href="#programs"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7CE4D] px-4 py-2.5 text-xs font-black text-[#111965] transition-colors hover:bg-[#E5BD3B]"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7CE4D] px-4 py-2.5 text-xs sm:text-sm font-black text-[#0F1754] dark:text-[#0F1754] transition-colors hover:bg-[#E5BD3B]"
               >
                 {t("universityDetail.explorePrograms")}
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -850,7 +982,7 @@ export default function UniversityDetailPage() {
                   href={uni.website_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#E6E8F0] bg-white px-4 py-2.5 text-xs font-bold text-[#111965] transition-colors hover:border-[#111965]/25"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-[#E6E8F0] bg-white px-4 py-2.5 text-xs sm:text-sm font-bold text-[#111965] transition-colors hover:border-[#111965]/25"
                 >
                   {t("universityDetail.officialWebsite")}
                   <ExternalLink className="h-3.5 w-3.5" />

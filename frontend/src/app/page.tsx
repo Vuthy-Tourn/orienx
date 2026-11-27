@@ -44,7 +44,7 @@ import {
   Building2,
   ExternalLink,
 } from "lucide-react";
-import { formatUSD } from "@/lib/utils";
+import { formatUSD, localizeProvince } from "@/lib/utils";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { NumberTicker } from "@/components/magicui/number-ticker";
@@ -175,7 +175,7 @@ export default function HomePage() {
     const list = universitiesData && universitiesData.length > 0 ? universitiesData : [];
     return list.map((u: any) => {
       const name = getLocalized(u.name);
-      const acronym = getLocalized(u.acronym) || u.slug?.toUpperCase();
+      const acronym = u.acronym?.en || u.acronym?.km || u.slug?.toUpperCase();
       const typeLabel =
         u.university_type === "PUBLIC"
           ? t("featuredUniversities.public")
@@ -184,7 +184,10 @@ export default function HomePage() {
         u.tuition_range_min_usd && u.tuition_range_max_usd
           ? `$${Math.round(u.tuition_range_min_usd)} – $${Math.round(u.tuition_range_max_usd)} / year`
           : t("common.tuition");
-      const location = getLocalized(u.province) || "Phnom Penh";
+      const location = localizeProvince(
+        getLocalized(u.province) || u.province || "Phnom Penh",
+        language
+      );
       const highlight = getLocalized(u.description) || "";
       const majorsCount = `${u.majors_count || 0} Programs`;
       const rawImage =
@@ -212,7 +215,7 @@ export default function HomePage() {
         isTuitionVerified: u.is_tuition_verified,
       };
     });
-  }, [universitiesData, getLocalized, t]);
+  }, [universitiesData, getLocalized, t, language]);
 
   // Gallery items for CircularGallery WebGL
   const galleryItems = useMemo(() => {

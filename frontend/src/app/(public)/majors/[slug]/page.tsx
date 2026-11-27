@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { localizeDegreeLevel, localizeProvince } from "@/lib/utils";
 
 const UNIVERSITY_PREVIEW_COUNT = 6;
 
@@ -422,7 +423,7 @@ export default function MajorDetailPage() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-[12px] font-bold text-[#68708A] uppercase">
-                      {getLocalized(u.university_acronym)}
+                      {u.university_acronym?.en || u.university_acronym?.km || u.university_slug?.toUpperCase()}
                     </span>
                     <span className="text-xs font-extrabold text-emerald-700">
                       {u.tuition_annual_usd ? `$${Math.round(u.tuition_annual_usd)} / yr` : "Tuition N/A"}
@@ -435,7 +436,15 @@ export default function MajorDetailPage() {
 
                   <div className="text-xs text-[#68708A] flex items-center gap-1">
                     <MapPin className="w-3.5 h-3.5 text-[#111965] shrink-0" />
-                    <span>{u.province} • {u.duration_years} Years ({u.degree_level})</span>
+                    <span>
+                      {localizeProvince(u.province, language)} • {u.duration_years}{" "}
+                      {language === "km"
+                        ? "ឆ្នាំ"
+                        : u.duration_years === 1
+                        ? "Year"
+                        : "Years"}{" "}
+                      ({localizeDegreeLevel(u.degree_level, language)})
+                    </span>
                   </div>
                 </div>
 

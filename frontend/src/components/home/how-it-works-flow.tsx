@@ -605,7 +605,7 @@ export function HowItWorksFlow() {
                     <div className="relative z-10">
                       {/* Step Pill */}
                       <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200/70 text-[#111965] text-[12px] font-bold tracking-wide mb-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#111965]" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#111965] dark:bg-[#F7CE4D]" />
                         <span>STEP {step.num}</span>
                       </div>
 

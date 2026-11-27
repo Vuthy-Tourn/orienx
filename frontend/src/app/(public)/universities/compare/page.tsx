@@ -17,6 +17,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { localizeProvince } from "@/lib/utils";
 
 function getAdmissionReqs(
   reqs: unknown,
@@ -133,7 +134,7 @@ function UniversityCompareContent() {
                   >
                     <div className="flex items-center justify-between gap-2">
                       <span className="inline-flex items-center rounded-md bg-[#F0F2FA] px-2 py-0.5 font-mono text-[11px] font-black text-[#111965] uppercase">
-                        {getLocalized(u.acronym)}
+                        {u.acronym?.en || u.acronym?.km || u.slug?.toUpperCase()}
                       </span>
                       <span
                         className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold whitespace-nowrap ${
@@ -172,7 +173,7 @@ function UniversityCompareContent() {
                       className="flex items-center justify-between gap-3 rounded-xl bg-[#F8FAFD] border border-[#E6E8F0] px-3.5 py-2.5"
                     >
                       <span className="font-mono text-xs font-black text-[#111965] uppercase shrink-0">
-                        {getLocalized(u.acronym)}
+                        {u.acronym?.en || u.acronym?.km || u.slug?.toUpperCase()}
                       </span>
                       <div className="text-right">
                         <div className="text-sm font-black text-[#111965] whitespace-nowrap">
@@ -206,11 +207,11 @@ function UniversityCompareContent() {
                     >
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-mono text-xs font-black text-[#111965] uppercase">
-                          {getLocalized(u.acronym)}
+                          {u.acronym?.en || u.acronym?.km || u.slug?.toUpperCase()}
                         </span>
                         <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#68708A]">
                           <MapPin className="w-3.5 h-3.5 text-[#111965] shrink-0" />
-                          <span>{u.province}</span>
+                          <span>{localizeProvince(u.province, language)}</span>
                         </span>
                       </div>
                       <div className="text-xs font-extrabold text-[#111965]">
@@ -243,7 +244,7 @@ function UniversityCompareContent() {
                       >
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-mono text-xs font-black text-[#111965] uppercase">
-                            {getLocalized(u.acronym)}
+                            {u.acronym?.en || u.acronym?.km || u.slug?.toUpperCase()}
                           </span>
                           {u.website_url && (
                             <a
@@ -291,7 +292,7 @@ function UniversityCompareContent() {
                     {universities.map((u: any) => (
                       <th key={u.id} className="p-5 text-left border-l border-[#E6E8F0] w-1/4">
                         <div className="text-[12px] font-bold text-[#68708A] uppercase">
-                          {getLocalized(u.acronym)}
+                          {u.acronym?.en || u.acronym?.km || u.slug?.toUpperCase()}
                         </div>
                         <div className="text-sm font-bold text-[#111965] mt-0.5 leading-snug">
                           {getLocalized(u.name)}
@@ -361,7 +362,7 @@ function UniversityCompareContent() {
                       <td key={u.id} className="p-5 border-l border-[#E6E8F0] text-[#171A2C]">
                         <div className="flex items-center gap-1.5 font-medium">
                           <MapPin className="w-3.5 h-3.5 text-[#111965] shrink-0" />
-                          <span>{getLocalized(u.province) || u.province}</span>
+                          <span>{localizeProvince(getLocalized(u.province) || u.province, language)}</span>
                         </div>
                       </td>
                     ))}
