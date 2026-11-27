@@ -25,7 +25,11 @@ import {
 } from "lucide-react";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { localizeDegreeLevel, localizeProvince } from "@/lib/utils";
+import {
+  formatTuitionDisplay,
+  localizeDegreeLevel,
+  localizeProvince,
+} from "@/lib/utils";
 
 const UNIVERSITY_PREVIEW_COUNT = 6;
 
@@ -242,10 +246,22 @@ export default function MajorDetailPage() {
                   <span>{t("majorDetail.tuitionFrom")}</span>
                 </div>
                 <div className="mt-1.5 text-xl font-black text-[#111965]">
-                  {minTuition ? `$${Math.round(minTuition)}` : "—"}
+                  {minTuition
+                    ? formatTuitionDisplay({
+                        min: minTuition,
+                        isVerified:
+                          universities.find(
+                            (u) => u.tuition_annual_usd === minTuition
+                          )?.is_tuition_verified ?? false,
+                        language,
+                        includePeriod: false,
+                      })
+                    : language === "km"
+                    ? "មិនមានព័ត៌មាន"
+                    : "No information"}
                   {minTuition ? (
                     <span className="ml-1 text-[11px] font-semibold text-[#68708A]">
-                      / yr
+                      / {language === "km" ? "ឆ្នាំ" : "yr"}
                     </span>
                   ) : null}
                 </div>
@@ -426,7 +442,11 @@ export default function MajorDetailPage() {
                       {u.university_acronym?.en || u.university_acronym?.km || u.university_slug?.toUpperCase()}
                     </span>
                     <span className="text-xs font-extrabold text-emerald-700">
-                      {u.tuition_annual_usd ? `$${Math.round(u.tuition_annual_usd)} / yr` : "Tuition N/A"}
+                      {formatTuitionDisplay({
+                        min: u.tuition_annual_usd,
+                        isVerified: u.is_tuition_verified,
+                        language,
+                      })}
                     </span>
                   </div>
 

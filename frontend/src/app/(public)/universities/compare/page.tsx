@@ -17,7 +17,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { localizeProvince } from "@/lib/utils";
+import { formatTuitionDisplay, localizeProvince } from "@/lib/utils";
 
 function getAdmissionReqs(
   reqs: unknown,
@@ -177,11 +177,12 @@ function UniversityCompareContent() {
                       </span>
                       <div className="text-right">
                         <div className="text-sm font-black text-[#111965] whitespace-nowrap">
-                          {u.tuition_range_min_usd !== null
-                            ? `$${Math.round(u.tuition_range_min_usd)} – $${Math.round(
-                                u.tuition_range_max_usd || u.tuition_range_min_usd
-                              )} / yr`
-                            : t("universitiesCompare.tuitionNotAvailable")}
+                          {formatTuitionDisplay({
+                            min: u.tuition_range_min_usd,
+                            max: u.tuition_range_max_usd,
+                            isVerified: u.is_tuition_verified,
+                            language,
+                          })}
                         </div>
                         {u.is_tuition_verified && (
                           <div className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
@@ -338,11 +339,12 @@ function UniversityCompareContent() {
                     {universities.map((u: any) => (
                       <td key={u.id} className="p-5 border-l border-[#E6E8F0]">
                         <div className="font-extrabold text-[#111965] text-sm sm:text-base whitespace-nowrap">
-                          {u.tuition_range_min_usd !== null
-                            ? `$${Math.round(u.tuition_range_min_usd)} – $${Math.round(
-                                u.tuition_range_max_usd || u.tuition_range_min_usd
-                              )} / yr`
-                            : t("universitiesCompare.tuitionNotAvailable")}
+                          {formatTuitionDisplay({
+                            min: u.tuition_range_min_usd,
+                            max: u.tuition_range_max_usd,
+                            isVerified: u.is_tuition_verified,
+                            language,
+                          })}
                         </div>
                         {u.is_tuition_verified && (
                           <div className="text-[12px] text-emerald-700 font-semibold mt-1">

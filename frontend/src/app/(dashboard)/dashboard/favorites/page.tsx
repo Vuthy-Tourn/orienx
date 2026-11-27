@@ -23,6 +23,7 @@ import { BookmarkButton } from "@/components/ui/bookmark-button";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/components/ui/toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatTuitionDisplay, localizeProvince } from "@/lib/utils";
 
 // Image lookups matching public directory
 const MAJOR_IMAGES: Record<string, string> = {
@@ -357,7 +358,7 @@ export default function FavoritesPage() {
                             </span>
                             <span className="text-[12px] font-medium bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded-md flex items-center gap-1">
                               <MapPin className="w-3 h-3 text-[#F7CE4D]" />
-                              <span>{u.province || "Phnom Penh"}</span>
+                              <span>{localizeProvince(u.province || "Phnom Penh", language)}</span>
                             </span>
                           </div>
                         </div>
@@ -368,11 +369,22 @@ export default function FavoritesPage() {
                             <h3 className="text-base sm:text-lg font-black text-[#111965] group-hover:text-[#B45309] transition-colors leading-snug line-clamp-1">
                               {formatName(u.name)}
                             </h3>
-                            {u.tuition_range_min_usd && (
-                              <div className="text-xs font-bold text-emerald-700 flex items-center gap-1">
-                                <span>${u.tuition_range_min_usd} – ${u.tuition_range_max_usd || u.tuition_range_min_usd} / ឆ្នាំ</span>
-                              </div>
-                            )}
+                            <div
+                              className={`text-xs font-bold flex items-center gap-1 ${
+                                u.tuition_range_min_usd != null
+                                  ? "text-emerald-700"
+                                  : "text-[#68708A]"
+                              }`}
+                            >
+                              <span>
+                                {formatTuitionDisplay({
+                                  min: u.tuition_range_min_usd,
+                                  max: u.tuition_range_max_usd,
+                                  isVerified: u.is_tuition_verified,
+                                  language,
+                                })}
+                              </span>
+                            </div>
                             {u.description && (
                               <p className="text-xs text-[#68708A] line-clamp-2 leading-relaxed">
                                 {formatName(u.description)}

@@ -150,3 +150,53 @@ export function localizeInstructionLanguage(
   return key.charAt(0) + key.slice(1).toLowerCase();
 }
 
+export interface FormatTuitionOptions {
+  min?: number | null;
+  max?: number | null;
+  isVerified?: boolean | null;
+  language?: "en" | "km";
+  currency?: "USD" | "KHR";
+  includePeriod?: boolean;
+  periodStyle?: "short" | "long";
+}
+
+/** Formats university or program tuition with "≈" for estimates and "No information" when missing. */
+export function formatTuitionDisplay({
+  min,
+  max,
+  isVerified = false,
+  language = "en",
+  currency = "USD",
+  includePeriod = true,
+  periodStyle = "short",
+}: FormatTuitionOptions): string {
+  if (min === undefined || min === null || !Number.isFinite(min)) {
+    return language === "km" ? "មិនមានព័ត៌មាន" : "No information";
+  }
+
+  const effectiveMax =
+    max !== undefined && max !== null && Number.isFinite(max) ? max : min;
+  const roundedMin = Math.round(min);
+  const roundedMax = Math.round(effectiveMax);
+
+  const fmt = (usd: number) => {
+    if (currency === "KHR") {
+      const khrVal = Math.round(usd * 4100);
+      return `${(khrVal / 1000000).toFixed(1)}M KHR`;
+    }
+    return formatUSD(usd);
+  };
+
+  const amount =
+    roundedMin === roundedMax
+      ? fmt(roundedMin)
+      : `${fmt(roundedMin)} – ${fmt(roundedMax)}`;
+
+  const prefix = isVerified ? "" : "≈ ";
+  if (!includePeriod) return `${prefix}${amount}`;
+
+  const period =
+    language === "km" ? "ឆ្នាំ" : periodStyle === "long" ? "year" : "yr";
+  return `${prefix}${amount} / ${period}`;
+}
+

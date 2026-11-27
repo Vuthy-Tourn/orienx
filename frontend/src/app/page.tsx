@@ -44,7 +44,7 @@ import {
   Building2,
   ExternalLink,
 } from "lucide-react";
-import { formatUSD, localizeProvince } from "@/lib/utils";
+import { formatTuitionDisplay, formatUSD, localizeProvince } from "@/lib/utils";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { NumberTicker } from "@/components/magicui/number-ticker";
@@ -180,10 +180,13 @@ export default function HomePage() {
         u.university_type === "PUBLIC"
           ? t("featuredUniversities.public")
           : t("featuredUniversities.private");
-      const tuition =
-        u.tuition_range_min_usd && u.tuition_range_max_usd
-          ? `$${Math.round(u.tuition_range_min_usd)} – $${Math.round(u.tuition_range_max_usd)} / year`
-          : t("common.tuition");
+      const tuition = formatTuitionDisplay({
+        min: u.tuition_range_min_usd,
+        max: u.tuition_range_max_usd,
+        isVerified: u.is_tuition_verified,
+        language,
+        periodStyle: "long",
+      });
       const location = localizeProvince(
         getLocalized(u.province) || u.province || "Phnom Penh",
         language

@@ -30,7 +30,7 @@ import { BorderBeam } from "@/components/magicui/border-beam";
 import { Dialog } from "@/components/ui/dialog";
 import { BookmarkButton } from "@/components/ui/bookmark-button";
 import { useToast } from "@/components/ui/toast";
-import { localizeProvince } from "@/lib/utils";
+import { formatTuitionDisplay, localizeProvince } from "@/lib/utils";
 
 // Cambodian university campus photos mapping
 const UNIVERSITY_IMAGES: Record<string, string> = {
@@ -445,9 +445,13 @@ function UniversitiesContent() {
                           )}
                         </div>
                         <div className="text-base font-extrabold text-[#111965]">
-                          {uni.tuition_range_min_usd !== null
-                            ? `${formatMoney(uni.tuition_range_min_usd)} – ${formatMoney(uni.tuition_range_max_usd || uni.tuition_range_min_usd)} ${language === "km" ? "/ ឆ្នាំ" : "/ yr"}`
-                            : t("universitiesDirectory.tuitionPending")}
+                          {formatTuitionDisplay({
+                            min: uni.tuition_range_min_usd,
+                            max: uni.tuition_range_max_usd,
+                            isVerified: uni.is_tuition_verified,
+                            language,
+                            currency,
+                          })}
                         </div>
                       </div>
 
@@ -609,8 +613,6 @@ function UniversitiesContent() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[58vh] overflow-y-auto pr-0.5">
               {comparedUniversities.map((uni) => {
                 const isPublic = uni.university_type === "PUBLIC";
-                const minUsd = Math.round(uni.tuition_range_min_usd || 0);
-                const maxUsd = Math.round(uni.tuition_range_max_usd || minUsd);
                 return (
                   <div
                     key={uni.id}
@@ -655,7 +657,13 @@ function UniversitiesContent() {
                           {getLocalized({ en: "Tuition / yr", km: "ថ្លៃសិក្សា / ឆ្នាំ" })}
                         </div>
                         <div className="mt-0.5 font-black text-[#111965] whitespace-nowrap">
-                          {minUsd > 0 ? `$${minUsd}–$${maxUsd}` : "—"}
+                          {formatTuitionDisplay({
+                            min: uni.tuition_range_min_usd,
+                            max: uni.tuition_range_max_usd,
+                            isVerified: uni.is_tuition_verified,
+                            language,
+                            includePeriod: false,
+                          })}
                         </div>
                       </div>
                       <div className="min-w-0 border-l border-[#E6E8F0] pl-2.5">

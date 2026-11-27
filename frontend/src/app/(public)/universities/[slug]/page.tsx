@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import {
   cn,
+  formatTuitionDisplay,
   formatUSD,
   localizeDegreeLevel,
   localizeInstructionLanguage,
@@ -358,15 +359,12 @@ export default function UniversityDetailPage() {
       : "programs";
   const establishedYear = uni.established_year;
 
-  const tuitionText =
-    uni.tuition_range_min_usd !== null &&
-    uni.tuition_range_min_usd !== undefined
-      ? `${formatUSD(uni.tuition_range_min_usd)} – ${formatUSD(
-          uni.tuition_range_max_usd ?? uni.tuition_range_min_usd
-        )} / ${language === "km" ? "ឆ្នាំ" : "yr"}`
-      : language === "km"
-      ? "មិនមានព័ត៌មាន"
-      : "Information not available";
+  const tuitionText = formatTuitionDisplay({
+    min: uni.tuition_range_min_usd,
+    max: uni.tuition_range_max_usd,
+    isVerified: uni.is_tuition_verified,
+    language,
+  });
 
   const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
     [addressText || uni.province || "Cambodia", "Cambodia"]
@@ -774,13 +772,11 @@ export default function UniversityDetailPage() {
             <div className="grid gap-3 md:grid-cols-2">
               {offerings.map((offering: any) => {
                 const majorName = getLocalized(offering.major_name);
-                const tuition = offering.tuition_annual_usd
-                  ? `${formatUSD(offering.tuition_annual_usd)} / ${
-                      language === "km" ? "ឆ្នាំ" : "yr"
-                    }`
-                  : language === "km"
-                  ? "គ្មានព័ត៌មាន"
-                  : "Tuition N/A";
+                const tuition = formatTuitionDisplay({
+                  min: offering.tuition_annual_usd,
+                  isVerified: offering.is_tuition_verified,
+                  language,
+                });
                 return (
                   <Link
                     key={`${offering.major_id}-${offering.degree_level}-${offering.language_of_instruction}`}
