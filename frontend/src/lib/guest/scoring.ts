@@ -32,10 +32,21 @@ function calcPair(
   };
 }
 
+const PERSONALITY_SCALE_WEIGHTS: Record<
+  number,
+  { optionIndex: 0 | 1; multiplier: number }
+> = {
+  1: { optionIndex: 0, multiplier: 2.0 }, // Strongly Agree
+  2: { optionIndex: 0, multiplier: 1.0 }, // Agree
+  3: { optionIndex: 0, multiplier: 0.0 }, // Neutral (no bias toward either trait)
+  4: { optionIndex: 1, multiplier: 1.0 }, // Disagree
+  5: { optionIndex: 1, multiplier: 2.0 }, // Strongly Disagree
+};
+
 /**
- * Port of the backend's Personality scoring. The UI maps levels 1-3 to the
- * Agree option and 4-5 to the Disagree option, so the selected option is used
- * when present and that mapping is the fallback.
+ * Weighted 5-point Personality scoring:
+ * Strongly Agree/Disagree contribute 2x, Agree/Disagree contribute 1x,
+ * and Neutral contributes 0 so neither pole is skewed.
  */
 export function scorePersonality(
   questions: PersonalityQuestion[],
@@ -55,13 +66,24 @@ export function scorePersonality(
   for (const question of questions) {
     const answer = answers[question.id];
     if (!answer) continue;
-    const option =
-      question.options.find((item) => item.id === answer.optionId) ??
-      (answer.scaleLevel >= 4 ? question.options[1] : question.options[0]);
+
+    const scaleMapping = PERSONALITY_SCALE_WEIGHTS[answer.scaleLevel];
+    if (scaleMapping) {
+      if (scaleMapping.multiplier <= 0) continue;
+      const option = question.options[scaleMapping.optionIndex];
+      if (!option) continue;
+      const trait = option.target_trait as keyof typeof scores;
+      if (trait in scores) {
+        scores[trait] += (Number(option.weight) || 1) * scaleMapping.multiplier;
+      }
+      continue;
+    }
+
+    const option = question.options.find((item) => item.id === answer.optionId);
     if (!option) continue;
     const trait = option.target_trait as keyof typeof scores;
     if (trait in scores) {
-      scores[trait] += Number(option.weight) || 0;
+      scores[trait] += Number(option.weight) || 1;
     }
   }
 

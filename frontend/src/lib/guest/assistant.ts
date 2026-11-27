@@ -286,8 +286,8 @@ function answerResults(language: AssistantLanguage): StaticAssistantAnswer {
           title_en: "Personality test",
           title_km: "តេស្តបុគ្គលិកលក្ខណៈ",
           url: "/assessments/personality/test",
-          snippet_en: "12 statements · about 3 minutes",
-          snippet_km: "១២ សំណើ · ប្រហែល ៣ នាទី",
+          snippet_en: "24 statements · about 5 minutes",
+          snippet_km: "២៤ សំណើ · ប្រហែល ៥ នាទី",
         },
         {
           type: "page",
@@ -890,8 +890,8 @@ export function answerLocalQuestion(
           title_en: "Personality test",
           title_km: "តេស្តបុគ្គលិកលក្ខណៈ",
           url: "/assessments/personality/test",
-          snippet_en: "12 statements · about 3 minutes",
-          snippet_km: "១២ សំណើ · ប្រហែល ៣ នាទី",
+          snippet_en: "24 statements · about 5 minutes",
+          snippet_km: "២៤ សំណើ · ប្រហែល ៥ នាទី",
         },
       ],
       suggested_questions: suggestions(language).slice(0, 4),
@@ -966,8 +966,8 @@ export function answerLocalQuestion(
           )
         : pick(
             language,
-            "The Personality test looks at four preference pairs: E/I, S/N, T/F, and J/P. Your four-letter type describes how you recharge, take in information, make decisions, and plan. It takes about 3 minutes and does not need an account.",
-            "តេស្តបុគ្គលិកលក្ខណៈពិនិត្យលើគូចំណូលចិត្ត ៤៖ E/I, S/N, T/F និង J/P។ ប្រភេទអក្សរ ៤ ពិពណ៌នាពីរបៀបដែលអ្នកបញ្ចូលថាមពល ទទួលព័ត៌មាន សម្រេចចិត្ត និងរៀបចំផែនការ។ ចំណាយពេលប្រហែល ៣ នាទី និងមិនត្រូវការគណនី។"
+            "The Personality test looks at four preference pairs: E/I, S/N, T/F, and J/P. Your four-letter type describes how you recharge, take in information, make decisions, and plan. It takes about 5 minutes and does not need an account.",
+            "តេស្តបុគ្គលិកលក្ខណៈពិនិត្យលើគូចំណូលចិត្ត ៤៖ E/I, S/N, T/F និង J/P។ ប្រភេទអក្សរ ៤ ពិពណ៌នាពីរបៀបដែលអ្នកបញ្ចូលថាមពល ទទួលព័ត៌មាន សម្រេចចិត្ត និងរៀបចំផែនការ។ ចំណាយពេលប្រហែល ៥ នាទី និងមិនត្រូវការគណនី។"
           ),
       sources: [
         {
@@ -975,8 +975,8 @@ export function answerLocalQuestion(
           title_en: "Take the Personality test",
           title_km: "ធ្វើតេស្តបុគ្គលិកលក្ខណៈ",
           url: "/assessments/personality/test",
-          snippet_en: "12 statements · free",
-          snippet_km: "១២ សំណើ · ឥតគិតថ្លៃ",
+          snippet_en: "24 statements · free",
+          snippet_km: "២៤ សំណើ · ឥតគិតថ្លៃ",
         },
         {
           type: "page",

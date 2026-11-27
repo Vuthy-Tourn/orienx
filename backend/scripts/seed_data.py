@@ -602,71 +602,91 @@ async def seed():
         # -----------------------------------------------------------------
         # 8. ORIGINAL BILINGUAL PERSONALITY ASSESSMENT QUESTIONS
         # -----------------------------------------------------------------
-        # 12 official 16Personalities standard statements covering 4 dimensions: EI, SN, TF, JP
+        # 24 balanced bilingual statements covering 4 dimensions: EI, SN, TF, JP (6 per axis, 3 forward + 3 reverse)
         personality_q_data = [
-            # EI Questions (Mind: Extraversion vs Introversion)
+            # Cycle 1: Forward (Agree -> E, S, T, J)
             ("EI", "You feel energized after spending time with a large group of people or collaborating on team projects.",
-             "អ្នកមានកម្លាំងចិត្ត និងស្រស់ស្រាយក្រោយពេលចំណាយពេលជាមួយមនុស្សច្រើន ឬធ្វើការជាក្រុម។", 1,
-             [("Agree", "យល់ស្រប", "E", 1.0),
-              ("Disagree", "មិនយល់ស្រប", "I", 1.0)]),
-            
-            ("EI", "After a busy week, you prefer going out to social events rather than spending quiet time alone.",
-             "បន្ទាប់ពីសប្តាហ៍ដ៏មមាញឹក អ្នកចូលចិត្តចេញក្រៅជួបជុំមិត្តភក្តិ ជាជាងចំណាយពេលស្ងប់ស្ងាត់ម្នាក់ឯង។", 2,
-             [("Agree", "យល់ស្រប", "E", 1.0),
-              ("Disagree", "មិនយល់ស្រប", "I", 1.0)]),
-
-            ("EI", "In a new room or gathering, you comfortably initiate conversations and make new friends right away.",
-             "នៅកន្លែងថ្មី ឬកម្មវិធីជួបជុំ អ្នកតែងតែចាប់ផ្តើមជជែក និងបង្កើតមិត្តភក្តិថ្មីៗបានយ៉ាងងាយស្រួល។", 3,
-             [("Agree", "យល់ស្រប", "E", 1.0),
-              ("Disagree", "មិនយល់ស្រប", "I", 1.0)]),
-
-            # SN Questions (Energy: Sensing vs Intuition)
+             "អ្នកមានអារម្មណ៍ស្វាហាប់ និងសប្បាយចិត្ត នៅពេលបានចំណាយពេលនៅជាមួយមនុស្សច្រើន ឬធ្វើការងារជាក្រុម។", 1,
+             [("Agree", "យល់ស្រប", "E", 1.0), ("Disagree", "មិនយល់ស្រប", "I", 1.0)]),
             ("SN", "You are more drawn to practical facts and real-world examples than to abstract theories and future possibilities.",
-             "អ្នកចាប់អារម្មណ៍លើការពិតជាក់ស្តែង និងឧទាហរណ៍ក្នុងជីវិត ជាជាងទ្រឹស្តីអរូបី និងការស្រមើស្រមៃ។", 4,
-             [("Agree", "យល់ស្រប", "S", 1.0),
-              ("Disagree", "មិនយល់ស្រប", "N", 1.0)]),
-
-            ("SN", "When solving problems, you rely on proven methods and practical experience rather than untested novel ideas.",
-             "នៅពេលដោះស្រាយបញ្ហា អ្នកចូលចិត្តពឹងលើវិធីសាស្ត្រដែលធ្លាប់បានបញ្ជាក់ ជាជាងគំនិតថ្មីៗដែលមិនទាន់បានសាកល្បង។", 5,
-             [("Agree", "យល់ស្រប", "S", 1.0),
-              ("Disagree", "មិនយល់ស្រប", "N", 1.0)]),
-
-            ("SN", "You prefer specific, step-by-step instructions with clear criteria rather than open-ended creative freedom.",
-             "អ្នកចូលចិត្តការណែនាំលម្អិតមួយជំហានៗដែលមានលក្ខណៈវិនិច្ឆ័យច្បាស់ ជាជាងការទុកសេរីភាពបើកទូលាយ។", 6,
-             [("Agree", "យល់ស្រប", "S", 1.0),
-              ("Disagree", "មិនយល់ស្រប", "N", 1.0)]),
-
-            # TF Questions (Nature: Thinking vs Feeling)
+             "អ្នកចូលចិត្តរៀនពីរឿងពិត និងឧទាហរណ៍ជាក់ស្តែង ជាជាងទ្រឹស្តីពិបាកយល់ ឬការស្រមៃទៅថ្ងៃមុខ។", 2,
+             [("Agree", "យល់ស្រប", "S", 1.0), ("Disagree", "មិនយល់ស្រប", "N", 1.0)]),
             ("TF", "You prioritize objective logic and evidence over personal feelings when making important decisions.",
-             "អ្នកផ្តល់អាទិភាពលើតក្កវិជ្ជា និងភស្តុតាងជាក់ស្តែង ជាជាងអារម្មណ៍ផ្ទាល់ខ្លួន នៅពេលធ្វើការសម្រេចចិត្តសំខាន់ៗ។", 7,
-             [("Agree", "យល់ស្រប", "T", 1.0),
-              ("Disagree", "មិនយល់ស្រប", "F", 1.0)]),
-
-            ("TF", "If someone makes a mistake, your instinct is to point out the factual flaws directly so they can be fixed.",
-             "ប្រសិនបើនរណាម្នាក់ធ្វើខុស អ្នកចូលចិត្តចង្អុលបង្ហាញកំហុសជាក់ស្តែងដោយត្រង់ៗ ដើម្បីកែលម្អបានទាន់ពេល។", 8,
-             [("Agree", "យល់ស្រប", "T", 1.0),
-              ("Disagree", "មិនយល់ស្រប", "F", 1.0)]),
-
-            ("TF", "You value praise for rigorous reasoning and analytical excellence more than praise for warmth and harmony.",
-             "អ្នកឱ្យតម្លៃការសរសើរលើការវិភាគឆ្លាតវៃ និងសុក្រឹតភាព ច្រើនជាងការសរសើរលើភាពកក់ក្តៅ និងសាមគ្គីភាព។", 9,
-             [("Agree", "យល់ស្រប", "T", 1.0),
-              ("Disagree", "មិនយល់ស្រប", "F", 1.0)]),
-
-            # JP Questions (Tactics: Judging vs Prospecting)
+             "ពេលសម្រេចចិត្តរឿងសំខាន់ អ្នកគិតតាមហេតុផល និងភស្តុតាងជាក់ស្តែង ជាជាងធ្វើតាមអារម្មណ៍ផ្ទាល់ខ្លួន។", 3,
+             [("Agree", "យល់ស្រប", "T", 1.0), ("Disagree", "មិនយល់ស្រប", "F", 1.0)]),
             ("JP", "You like to plan a detailed schedule and stick closely to deadlines rather than keeping things open-ended.",
-             "អ្នកចូលចិត្តរៀបចំកាលវិភាគច្បាស់លាស់ និងគោរពតាមពេលវេលាកំណត់ ជាជាងទុកឱ្យអ្វីៗបត់បែនតាមអារម្មណ៍។", 10,
-             [("Agree", "យល់ស្រប", "J", 1.0),
-              ("Disagree", "មិនយល់ស្រប", "P", 1.0)]),
+             "អ្នកចូលចិត្តរៀបចំកាលវិភាគច្បាស់លាស់ និងធ្វើតាមពេលកំណត់ ជាជាងកែប្រែតាមស្ថានភាពជាក់ស្តែង។", 4,
+             [("Agree", "យល់ស្រប", "J", 1.0), ("Disagree", "មិនយល់ស្រប", "P", 1.0)]),
 
+            # Cycle 2: Reverse-balanced (Agree -> I, N, F, P)
+            ("EI", "After a busy day at school or events, you need quiet time alone to recharge your energy.",
+             "បន្ទាប់ពីរៀន ឬចូលរួមកម្មវិធីពេញមួយថ្ងៃ អ្នកត្រូវការពេលស្ងៀមស្ងាត់ម្នាក់ឯង ដើម្បីឱ្យមានថាមពលឡើងវិញ។", 5,
+             [("Agree", "យល់ស្រប", "I", 1.0), ("Disagree", "មិនយល់ស្រប", "E", 1.0)]),
+            ("SN", "You enjoy imagining big-picture possibilities and brainstorming brand-new ways to do things.",
+             "អ្នកចូលចិត្តស្រមៃគិតពីគំនិតថ្មីៗ និងរកវិធីប្លែកៗសម្រាប់ធ្វើកិច្ចការទៅថ្ងៃមុខ។", 6,
+             [("Agree", "យល់ស្រប", "N", 1.0), ("Disagree", "មិនយល់ស្រប", "S", 1.0)]),
+            ("TF", "When a classmate makes a choice you disagree with, protecting their feelings matters more than winning the debate.",
+             "ពេលមិត្តភក្តិគិតខុសពីអ្នក អ្នកសុខចិត្តយល់ដល់ទឹកចិត្តគេ ជាជាងប្រកែកចង់ឈ្នះថាខ្លួនឯងត្រូវ។", 7,
+             [("Agree", "យល់ស្រប", "F", 1.0), ("Disagree", "មិនយល់ស្រប", "T", 1.0)]),
+            ("JP", "You prefer keeping your options flexible rather than locking yourself into a strict daily routine.",
+             "អ្នកចូលចិត្តមានសេរីភាពផ្លាស់ប្តូរគម្រោងបានគ្រប់ពេល ជាជាងធ្វើតាមកាលវិភាគតឹងរ៉ឹងរាល់ថ្ងៃ។", 8,
+             [("Agree", "យល់ស្រប", "P", 1.0), ("Disagree", "មិនយល់ស្រប", "J", 1.0)]),
+
+            # Cycle 3: Forward (Agree -> E, S, T, J)
+            ("EI", "In a new room or gathering, you comfortably initiate conversations and make new friends right away.",
+             "ពេលទៅកន្លែងថ្មី ឬកម្មវិធីជួបជុំ អ្នកងាយស្រួលចាប់ផ្តើមនិយាយរកគេ និងរាប់អានមិត្តថ្មីៗភ្លាមៗ។", 9,
+             [("Agree", "យល់ស្រប", "E", 1.0), ("Disagree", "មិនយល់ស្រប", "I", 1.0)]),
+            ("SN", "When solving problems, you rely on proven methods and practical experience rather than untested novel ideas.",
+             "ពេលដោះស្រាយបញ្ហា អ្នកចូលចិត្តប្រើវិធីដែលធ្លាប់ធ្វើបានផលរួចមកហើយ ជាជាងសាកល្បងគំនិតថ្មីៗដែលមិនទាន់ច្បាស់លាស់។", 10,
+             [("Agree", "យល់ស្រប", "S", 1.0), ("Disagree", "មិនយល់ស្រប", "N", 1.0)]),
+            ("TF", "If someone makes a mistake, your instinct is to point out the factual flaws directly so they can be fixed.",
+             "បើមានអ្នកណាម្នាក់ធ្វើខុស អ្នកតែងតែប្រាប់ត្រង់ៗពីចំណុចខុស ដើម្បីឱ្យគេកែប្រែបានលឿន។", 11,
+             [("Agree", "យល់ស្រប", "T", 1.0), ("Disagree", "មិនយល់ស្រប", "F", 1.0)]),
             ("JP", "You prefer to have a structured, organized plan before traveling or starting an activity rather than being spontaneous.",
-             "អ្នកចូលចិត្តមានផែនការរៀបរយជាមុនសម្រាប់ការដើរកម្សាន្ត ឬសកម្មភាពនានា ជាជាងធ្វើតាមការនឹកឃើញភ្លាមៗ។", 11,
-             [("Agree", "យល់ស្រប", "J", 1.0),
-              ("Disagree", "មិនយល់ស្រប", "P", 1.0)]),
+             "មុនពេលដើរលេង ឬចាប់ផ្តើមធ្វើអ្វីមួយ អ្នកចូលចិត្តរៀបចំផែនការទុកជាមុន ជាជាងសម្រេចចិត្តធ្វើភ្លាមៗ។", 12,
+             [("Agree", "យល់ស្រប", "J", 1.0), ("Disagree", "មិនយល់ស្រប", "P", 1.0)]),
 
-            ("JP", "You feel most at ease when tasks and assignments are completely finished well ahead of their deadline.",
-             "អ្នកមានអារម្មណ៍ធូរស្រាល និងស្ងប់ចិត្តបំផុត នៅពេលកិច្ចការត្រូវបានបញ្ចប់រួចរាល់មុនថ្ងៃកំណត់។", 12,
-             [("Agree", "យល់ស្រប", "J", 1.0),
-              ("Disagree", "មិនយល់ស្រប", "P", 1.0)])
+            # Cycle 4: Reverse-balanced (Agree -> I, N, F, P)
+            ("EI", "You usually prefer deep one-on-one conversations with a close friend over lively group discussions.",
+             "ជាទូទៅ អ្នកចូលចិត្តជជែកស៊ីជម្រៅតែពីរនាក់ជាមួយមិត្តជិតស្និទ្ធ ជាជាងនិយាយគ្នាក្នុងក្រុមធំដែលអ៊ូអរ។", 13,
+             [("Agree", "យល់ស្រប", "I", 1.0), ("Disagree", "មិនយល់ស្រប", "E", 1.0)]),
+            ("SN", "You prefer coming up with your own new way to do a task rather than following the exact example shown to you.",
+             "អ្នកចូលចិត្តគិតរកវិធីថ្មីដោយខ្លួនឯង ជាជាងធ្វើតាមគំរូដែលគេបង្ហាញឱ្យទាំងស្រុង។", 14,
+             [("Agree", "យល់ស្រប", "N", 1.0), ("Disagree", "មិនយល់ស្រប", "S", 1.0)]),
+            ("TF", "Friends naturally come to you for empathy and emotional comfort when they are going through a tough time.",
+             "ពេលមិត្តភក្តិជួបទុក្ខលំបាក គេតែងតែមករកអ្នកដើម្បីឱ្យអ្នកយល់ចិត្ត និងជួយលួងលោមផ្លូវចិត្ត។", 15,
+             [("Agree", "យល់ស្រប", "F", 1.0), ("Disagree", "មិនយល់ស្រប", "T", 1.0)]),
+            ("JP", "You do some of your best work under last-minute pressure rather than finishing everything days in advance.",
+             "អ្នកច្រើនតែធ្វើកិច្ចការបានល្អនៅពេលជិតដល់ថ្ងៃកំណត់ ជាជាងធ្វើទុកឱ្យរួចរាល់មុនច្រើនថ្ងៃ។", 16,
+             [("Agree", "យល់ស្រប", "P", 1.0), ("Disagree", "មិនយល់ស្រប", "J", 1.0)]),
+
+            # Cycle 5: Forward (Agree -> E, S, T, J)
+            ("EI", "After a busy week, you prefer going out to social events rather than spending quiet time alone.",
+             "បន្ទាប់ពីរៀន ឬធ្វើការហត់ពេញមួយសប្តាហ៍ អ្នកចូលចិត្តចេញក្រៅជួបជុំមិត្តភក្តិ ជាជាងសម្រាកស្ងៀមស្ងាត់ម្នាក់ឯង។", 17,
+             [("Agree", "យល់ស្រប", "E", 1.0), ("Disagree", "មិនយល់ស្រប", "I", 1.0)]),
+            ("SN", "You prefer specific, step-by-step instructions with clear criteria rather than open-ended creative freedom.",
+             "អ្នកចូលចិត្តឱ្យមានការណែនាំច្បាស់លាស់តាមលំដាប់ជំហាន ជាជាងឱ្យអ្នកគិត ឬច្នៃធ្វើដោយខ្លួនឯង។", 18,
+             [("Agree", "យល់ស្រប", "S", 1.0), ("Disagree", "មិនយល់ស្រប", "N", 1.0)]),
+            ("TF", "You value praise for rigorous reasoning and analytical excellence more than praise for warmth and harmony.",
+             "អ្នកសប្បាយចិត្តពេលគេសរសើរថាអ្នកគិតបានហ្មត់ចត់ និងពូកែវិភាគ ច្រើនជាងគេសរសើរថាអ្នកចិត្តល្អ និងរួសរាយ។", 19,
+             [("Agree", "យល់ស្រប", "T", 1.0), ("Disagree", "មិនយល់ស្រប", "F", 1.0)]),
+            ("JP", "You cannot truly relax or enjoy hanging out while homework or tasks are still unfinished—you have to finish work before relaxing.",
+             "បើកិច្ចការសាលា ឬការងារមិនទាន់ធ្វើហើយទេ អ្នកពិបាកនឹងសម្រាកលេងសប្បាយណាស់—ទាល់តែបង្ហើយការងារសិន ទើបអ្នកដើរលេង ឬសម្រាកបានស្រួលចិត្ត។", 20,
+             [("Agree", "យល់ស្រប", "J", 1.0), ("Disagree", "មិនយល់ស្រប", "P", 1.0)]),
+
+            # Cycle 6: Reverse-balanced (Agree -> I, N, F, P)
+            ("EI", "You prefer thinking through your ideas silently before sharing them with a class or team.",
+             "អ្នកចូលចិត្តគិតពិចារណាឱ្យច្បាស់ក្នុងចិត្តសិន មុនពេលនិយាយបញ្ចេញគំនិតក្នុងថ្នាក់ ឬក្នុងក្រុម។", 21,
+             [("Agree", "យល់ស្រប", "I", 1.0), ("Disagree", "មិនយល់ស្រប", "E", 1.0)]),
+            ("SN", "In school projects, you get bored by repetitive step-by-step tasks and prefer exploring open creative concepts.",
+             "ក្នុងគម្រោងសាលា អ្នកឆាប់ធុញនឹងការងារដដែលៗតាមលំដាប់ ហើយចូលចិត្តសាកល្បងគំនិតថ្មីៗដោយសេរី។", 22,
+             [("Agree", "យល់ស្រប", "N", 1.0), ("Disagree", "មិនយល់ស្រប", "S", 1.0)]),
+            ("TF", "You make your best choices when a decision feels right in line with your personal values and helps people around you.",
+             "ពេលសម្រេចចិត្តធ្វើអ្វីមួយ អ្នកតែងតែគិតថាតើរឿងនោះល្អត្រឹមត្រូវ ហើយអាចជួយដល់អ្នកជុំវិញខ្លួនឬអត់។", 23,
+             [("Agree", "យល់ស្រប", "F", 1.0), ("Disagree", "មិនយល់ស្រប", "T", 1.0)]),
+            ("JP", "Your study desk or daily to-do list stays flexible—you happily switch tasks whenever something more interesting comes up.",
+             "តារាងកិច្ចការប្រចាំថ្ងៃរបស់អ្នកមិនសូវតឹងរ៉ឹងទេ—បើមានរឿងថ្មីគួរឱ្យចាប់អារម្មណ៍ អ្នកងាយប្តូរទៅធ្វើភ្លាមៗ។", 24,
+             [("Agree", "យល់ស្រប", "P", 1.0), ("Disagree", "មិនយល់ស្រប", "J", 1.0)])
         ]
 
         for dim, p_en, p_km, o_idx, options in personality_q_data:
@@ -694,23 +714,23 @@ async def seed():
         riasec_q_data = [
             # Realistic (R)
             ("R", "Assembling, repairing, or troubleshooting mechanical devices or electronic circuits",
-             "ការតម្លើង ជួសជុល ឬដោះស្រាយបញ្ហាគ្រឿងម៉ាស៊ីន និងសៀគ្វីអេឡិចត្រូនិក", 1),
+             "ការដំឡើង ជួសជុល ឬស្វែងរកបញ្ហាលើគ្រឿងម៉ាស៊ីន និងសៀគ្វីអគ្គិសនី", 1),
             ("R", "Working outdoors with hands-on tools, building physical structures or equipment",
-             "ការធ្វើការនៅទីវាលជាមួយឧបករណ៍ជាង ឬការសាងសង់ហេដ្ឋារចនាសម្ព័ន្ធរូបវន្ត", 2),
+             "ការធ្វើការនៅខាងក្រៅ ប្រើឧបករណ៍ជាងដោយផ្ទាល់ដៃ ឬការងារសាងសង់ និងដំឡើងសម្ភារៈ", 2),
             ("R", "Operating technical machinery, drones, or computer hardware diagnostics",
-             "ការបញ្ជាគ្រឿងយន្តបច្ចេកវិទ្យា ដ្រូន ឬការដំឡើងគ្រឿងបន្លាស់កុំព្យូទ័រ", 3),
+             "ការបញ្ជាគ្រឿងម៉ាស៊ីនបច្ចេកទេស ដ្រូន ឬការត្រួតពិនិត្យ និងជួសជុលគ្រឿងកុំព្យូទ័រ", 3),
 
             # Investigative (I)
             ("I", "Analyzing complex scientific data, statistics, and solving mathematical equations",
-             "ការវិភាគទិន្នន័យវិទ្យាសាស្ត្រ ស្ថិតិ និងការដោះស្រាយលំហាត់គណិតវិទ្យាស្មុគស្មាញ", 4),
+             "ការវិភាគទិន្នន័យវិទ្យាសាស្ត្រ ស្ថិតិ និងការដោះស្រាយលំហាត់គណិតវិទ្យាពិបាកៗ", 4),
             ("I", "Investigating how computer algorithms, artificial intelligence, or software programs work",
-             "ការស្រាវជ្រាវស្វែងយល់ពីរបៀបដំណើរការនៃក្បួនដោះស្រាយកុំព្យូទ័រ និងបញ្ញាសិប្បនិម្មិត", 5),
+             "ការសិក្សាស្វែងយល់ពីរបៀបដំណើរការនៃកម្មវិធីកុំព្យូទ័រ ប្រព័ន្ធសរសេរកូដ និងបច្ចេកវិទ្យា AI", 5),
             ("I", "Conducting laboratory experiments or research to discover underlying causes of problems",
-             "ការធ្វើពិសោធន៍ក្នុងបន្ទប់ពិសោធន៍ ឬការស្រាវជ្រាវដើម្បីរកឫសគល់នៃបញ្ហា", 6),
+             "ការធ្វើពិសោធន៍ក្នុងមន្ទីរពិសោធន៍ ឬការស្រាវជ្រាវដើម្បីរកមូលហេតុពិតនៃបញ្ហា", 6),
 
             # Artistic (A)
             ("A", "Designing logos, user interfaces, digital graphics, or aesthetic layouts",
-             "ការរចនាឡូហ្គោ ទម្រង់កម្មវិធីទូរស័ព្ទ (UI) រូបភាពឌីជីថល ឬផ្ទាំងផ្សាយពាណិជ្ជកម្ម", 7),
+             "ការរចនាឡូហ្គោ ទម្រង់កម្មវិធីទូរស័ព្ទ និងវេបសាយ (UI) រូបភាពឌីជីថល ឬផ្ទាំងរូបភាពស្អាតៗ", 7),
             ("A", "Expressing ideas through creative writing, storytelling, poetry, or screenplays",
              "ការបញ្ចេញគំនិតតាមរយៈការសរសេរប្រលោមលោក រឿងរ៉ាវច្នៃប្រឌិត ឬស្គ្រីបវីដេអូ", 8),
             ("A", "Composing music, creating digital media, photography, or video editing",
@@ -720,25 +740,25 @@ async def seed():
             ("S", "Teaching, mentoring, or explaining difficult subjects to fellow students",
              "ការបង្រៀន ការបង្ហាត់បង្ហាញ ឬការពន្យល់មេរៀនពិបាកៗដល់មិត្តរួមថ្នាក់", 10),
             ("S", "Volunteering in community development projects to help underprivileged people",
-             "ការស្ម័គ្រចិត្តក្នុងសកម្មភាពអភិវឌ្ឍន៍សហគមន៍ ដើម្បីជួយដល់ជនងាយរងគ្រោះ", 11),
+             "ការស្ម័គ្រចិត្តជួយសហគមន៍ និងជួយឧបត្ថម្ភដល់អ្នកខ្វះខាត", 11),
             ("S", "Counseling peers and offering empathetic support when they face personal issues",
-             "ការស្តាប់ ផ្តល់ប្រឹក្សា និងលើកទឹកចិត្តដល់អ្នកដទៃនៅពេលពួកគេជួបបញ្ហាផ្លូវចិត្ត", 12),
+             "ការស្តាប់ ផ្តល់យោបល់ និងលើកទឹកចិត្តមិត្តភក្តិ ឬអ្នកដទៃពេលគេជួបបញ្ហា", 12),
 
             # Enterprising (E)
             ("E", "Leading a student association, organizing campus events, and motivating people",
-             "ការដឹកនាំសមាគមសិស្ស ការរៀបចំកម្មវិធីសាលា និងការជំរុញទឹកចិត្តមនុស្ស", 13),
+             "ការដឹកនាំក្រុម ឬសមាគមសិស្ស ការរៀបចំកម្មវិធីសាលា និងការលើកទឹកចិត្តអ្នកដទៃ", 13),
             ("E", "Starting a business, selling a product or service, and negotiating deals",
-             "ការចាប់ផ្តើមអាជីវកម្ម ការលក់ផលិតផល ឬសេវាកម្ម និងការចរចាស្វែងរកផលចំណេញ", 14),
+             "ការចាប់ផ្តើមរកស៊ី ការលក់ផលិតផល ឬសេវាកម្ម និងការចរចាធ្វើកិច្ចព្រមព្រៀង", 14),
             ("E", "Persuading others to adopt an innovative proposal through public speaking",
-             "ការបញ្ចុះបញ្ចូលអ្នកដទៃឱ្យគាំទ្រគម្រោងថ្មី តាមរយៈការឡើងថ្លែងសុន្ទរកថាសាធារណៈ", 15),
+             "ការនិយាយបញ្ចុះបញ្ចូលអ្នកដទៃឱ្យគាំទ្រគំនិត ឬគម្រោងថ្មីរបស់អ្នក នៅចំពោះមុខមហាជន", 15),
 
             # Conventional (C)
             ("C", "Organizing detailed spreadsheets, tracking expenditures, and financial records",
              "ការរៀបចំឯកសារតារាង Excel ការតាមដានចំណូលចំណាយ និងបញ្ជីគណនេយ្យ", 16),
             ("C", "Developing step-by-step operating checklists and ensuring systematic compliance",
-             "ការបង្កើតបញ្ជីត្រួតពិនិត្យការងារជាប្រព័ន្ធ និងការធានាភាពត្រឹមត្រូវតាមច្បាប់", 17),
+             "ការរៀបចំតារាងតាមដានការងារតាមលំដាប់ និងការធ្វើឱ្យប្រាកដថាអ្វីៗធ្វើតាមគោលការណ៍ត្រឹមត្រូវ", 17),
             ("C", "Managing database registries, structured records, and archived documents",
-             "ការគ្រប់គ្រងទិន្នន័យក្នុងប្រព័ន្ធ ការរក្សាទុកកំណត់ត្រាឱ្យមានរបៀបរៀបរយ", 18)
+             "ការគ្រប់គ្រងទិន្នន័យក្នុងប្រព័ន្ធ និងការរៀបចំទុកដាក់ឯកសារឱ្យមានសណ្តាប់ធ្នាប់", 18)
         ]
 
         for cat, p_en, p_km, o_idx in riasec_q_data:

@@ -678,7 +678,7 @@ function ResultCard({
         </div>
         <span className="shrink-0 rounded-lg border border-[#E6E8F0] bg-[#F8FAFD] px-2.5 py-1 text-xs font-bold text-[#68708A]">
           {isPersonality
-            ? getLocalized({ en: "12 questions", km: "១២ សំណួរ" })
+            ? getLocalized({ en: "24 questions", km: "២៤ សំណួរ" })
             : getLocalized({ en: "18 activities", km: "១៨ សកម្មភាព" })}
         </span>
       </div>

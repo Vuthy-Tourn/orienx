@@ -184,12 +184,12 @@ export function GuestAssessmentIntro({
         km: "បុគ្គលិកលក្ខណៈ ១៦",
       }),
       countLabel: getLocalized({
-        en: "12 statements",
-        km: "១២ សំណើ",
+        en: "24 statements",
+        km: "២៤ សំណើ",
       }),
       timeLabel: getLocalized({
-        en: "~3 min",
-        km: "~៣ នាទី",
+        en: "~5 min",
+        km: "~៥ នាទី",
       }),
       desc: getLocalized({
         en: "Understand your cognitive style, study endurance, and matching academic environments.",

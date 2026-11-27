@@ -220,7 +220,7 @@ export default function RecommendationsPage() {
                   {language === "km" ? "តេស្ត 16-Personality (MBTI)" : "16-Personality (MBTI)"}
                 </div>
                 <p className="text-[12px] text-[#68708A]">
-                  {language === "km" ? "១២ សំណួរ · ប្រហែល ៤ នាទី" : "12 questions · about 4 min"}
+                  {language === "km" ? "២៤ សំណួរ · ប្រហែល ៥ នាទី" : "24 questions · about 5 min"}
                 </p>
               </div>
               <ArrowRight className="mt-1 h-4 w-4 shrink-0 text-[#68708A] transition-transform group-hover:translate-x-0.5" />

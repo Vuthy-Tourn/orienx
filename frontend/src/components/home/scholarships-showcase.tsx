@@ -423,18 +423,6 @@ export function ScholarshipsShowcase() {
                 </button>
               </div>
             </div>
-
-            {/* Trust Proof Micro-Badges */}
-            <div className="pt-2 border-t border-[#E6E8F0]/80 flex flex-wrap items-center gap-y-2 gap-x-5 text-[12px] text-[#68708A] font-semibold">
-              <span className="inline-flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span>{language === "km" ? "ទិន្នន័យផ្លូវការពីក្រសួង និងដៃគូ" : "Verified Admissions Data"}</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#D4A017] dark:text-[#F7CE4D]" />
-                <span>{language === "km" ? "ឥតគិតថ្លៃ ១០០% សម្រាប់សិស្ស" : "100% Free For Students"}</span>
-              </span>
-            </div>
           </div>
 
           {/* =================================================================

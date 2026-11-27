@@ -98,8 +98,8 @@ const ENGINES = [
       "Assesses your cognitive information-processing style across 4 temperaments (Analysts, Diplomats, Sentinels, Explorers) to understand study endurance, stress resilience, and team dynamics.",
     descKm:
       "វាយតម្លៃលើមុខងារនៃការគិត ៤ ក្រុមធំៗ (អ្នកវិភាគ, អ្នកការទូត, អ្នកការពារ, អ្នករុករក) ដើម្បីយល់ដឹងពីភាពធន់ក្នុងការរៀនសូត្រ ការដោះស្រាយសម្ពាធ និងការធ្វើការជាក្រុម។",
-    metricsEn: "12 statements • About 3 min • Free",
-    metricsKm: "១២ សំណើ • ប្រហែល ៣ នាទី • ឥតគិតថ្លៃ",
+    metricsEn: "24 statements • About 5 min • Free",
+    metricsKm: "២៤ សំណើ • ប្រហែល ៥ នាទី • ឥតគិតថ្លៃ",
     icon: Sparkles,
     color: "#2563EB",
     badgeClass: "bg-blue-50 text-blue-700 border-blue-200",

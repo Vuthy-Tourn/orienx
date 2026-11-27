@@ -97,7 +97,11 @@ export default function GuestPersonalityTestPage() {
     const question = QUESTIONS.find((item) => item.id === questionId);
     if (!question) return;
     const option =
-      scaleLevel >= 4 ? question.options[1] : question.options[0];
+      scaleLevel === 3
+        ? null
+        : scaleLevel >= 4
+        ? question.options[1]
+        : question.options[0];
     setAnswers((current) => ({
       ...current,
       [questionId]: {

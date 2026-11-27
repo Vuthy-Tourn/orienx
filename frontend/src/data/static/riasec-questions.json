@@ -4,7 +4,7 @@
     "category": "R",
     "prompt": {
       "en": "Assembling, repairing, or troubleshooting mechanical devices or electronic circuits",
-      "km": "ការតម្លើង ជួសជុល ឬដោះស្រាយបញ្ហាគ្រឿងម៉ាស៊ីន និងសៀគ្វីអេឡិចត្រូនិក"
+      "km": "ការដំឡើង ជួសជុល ឬស្វែងរកបញ្ហាលើគ្រឿងម៉ាស៊ីន និងសៀគ្វីអគ្គិសនី"
     },
     "order_index": 1
   },
@@ -13,7 +13,7 @@
     "category": "R",
     "prompt": {
       "en": "Working outdoors with hands-on tools, building physical structures or equipment",
-      "km": "ការធ្វើការនៅទីវាលជាមួយឧបករណ៍ជាង ឬការសាងសង់ហេដ្ឋារចនាសម្ព័ន្ធរូបវន្ត"
+      "km": "ការធ្វើការនៅខាងក្រៅ ប្រើឧបករណ៍ជាងដោយផ្ទាល់ដៃ ឬការងារសាងសង់ និងដំឡើងសម្ភារៈ"
     },
     "order_index": 2
   },
@@ -22,7 +22,7 @@
     "category": "R",
     "prompt": {
       "en": "Operating technical machinery, drones, or computer hardware diagnostics",
-      "km": "ការបញ្ជាគ្រឿងយន្តបច្ចេកវិទ្យា ដ្រូន ឬការដំឡើងគ្រឿងបន្លាស់កុំព្យូទ័រ"
+      "km": "ការបញ្ជាគ្រឿងម៉ាស៊ីនបច្ចេកទេស ដ្រូន ឬការត្រួតពិនិត្យ និងជួសជុលគ្រឿងកុំព្យូទ័រ"
     },
     "order_index": 3
   },
@@ -31,7 +31,7 @@
     "category": "I",
     "prompt": {
       "en": "Analyzing complex scientific data, statistics, and solving mathematical equations",
-      "km": "ការវិភាគទិន្នន័យវិទ្យាសាស្ត្រ ស្ថិតិ និងការដោះស្រាយលំហាត់គណិតវិទ្យាស្មុគស្មាញ"
+      "km": "ការវិភាគទិន្នន័យវិទ្យាសាស្ត្រ ស្ថិតិ និងការដោះស្រាយលំហាត់គណិតវិទ្យាពិបាកៗ"
     },
     "order_index": 4
   },
@@ -40,7 +40,7 @@
     "category": "I",
     "prompt": {
       "en": "Investigating how computer algorithms, artificial intelligence, or software programs work",
-      "km": "ការស្រាវជ្រាវស្វែងយល់ពីរបៀបដំណើរការនៃក្បួនដោះស្រាយកុំព្យូទ័រ និងបញ្ញាសិប្បនិម្មិត"
+      "km": "ការសិក្សាស្វែងយល់ពីរបៀបដំណើរការនៃកម្មវិធីកុំព្យូទ័រ ប្រព័ន្ធសរសេរកូដ និងបច្ចេកវិទ្យា AI"
     },
     "order_index": 5
   },
@@ -49,7 +49,7 @@
     "category": "I",
     "prompt": {
       "en": "Conducting laboratory experiments or research to discover underlying causes of problems",
-      "km": "ការធ្វើពិសោធន៍ក្នុងបន្ទប់ពិសោធន៍ ឬការស្រាវជ្រាវដើម្បីរកឫសគល់នៃបញ្ហា"
+      "km": "ការធ្វើពិសោធន៍ក្នុងមន្ទីរពិសោធន៍ ឬការស្រាវជ្រាវដើម្បីរកមូលហេតុពិតនៃបញ្ហា"
     },
     "order_index": 6
   },
@@ -58,7 +58,7 @@
     "category": "A",
     "prompt": {
       "en": "Designing logos, user interfaces, digital graphics, or aesthetic layouts",
-      "km": "ការរចនាឡូហ្គោ ទម្រង់កម្មវិធីទូរស័ព្ទ (UI) រូបភាពឌីជីថល ឬផ្ទាំងផ្សាយពាណិជ្ជកម្ម"
+      "km": "ការរចនាឡូហ្គោ ទម្រង់កម្មវិធីទូរស័ព្ទ និងវេបសាយ (UI) រូបភាពឌីជីថល ឬផ្ទាំងរូបភាពស្អាតៗ"
     },
     "order_index": 7
   },
@@ -94,7 +94,7 @@
     "category": "S",
     "prompt": {
       "en": "Volunteering in community development projects to help underprivileged people",
-      "km": "ការស្ម័គ្រចិត្តក្នុងសកម្មភាពអភិវឌ្ឍន៍សហគមន៍ ដើម្បីជួយដល់ជនងាយរងគ្រោះ"
+      "km": "ការស្ម័គ្រចិត្តជួយសហគមន៍ និងជួយឧបត្ថម្ភដល់អ្នកខ្វះខាត"
     },
     "order_index": 11
   },
@@ -103,7 +103,7 @@
     "category": "S",
     "prompt": {
       "en": "Counseling peers and offering empathetic support when they face personal issues",
-      "km": "ការស្តាប់ ផ្តល់ប្រឹក្សា និងលើកទឹកចិត្តដល់អ្នកដទៃនៅពេលពួកគេជួបបញ្ហាផ្លូវចិត្ត"
+      "km": "ការស្តាប់ ផ្តល់យោបល់ និងលើកទឹកចិត្តមិត្តភក្តិ ឬអ្នកដទៃពេលគេជួបបញ្ហា"
     },
     "order_index": 12
   },
@@ -112,7 +112,7 @@
     "category": "E",
     "prompt": {
       "en": "Leading a student association, organizing campus events, and motivating people",
-      "km": "ការដឹកនាំសមាគមសិស្ស ការរៀបចំកម្មវិធីសាលា និងការជំរុញទឹកចិត្តមនុស្ស"
+      "km": "ការដឹកនាំក្រុម ឬសមាគមសិស្ស ការរៀបចំកម្មវិធីសាលា និងការលើកទឹកចិត្តអ្នកដទៃ"
     },
     "order_index": 13
   },
@@ -121,7 +121,7 @@
     "category": "E",
     "prompt": {
       "en": "Starting a business, selling a product or service, and negotiating deals",
-      "km": "ការចាប់ផ្តើមអាជីវកម្ម ការលក់ផលិតផល ឬសេវាកម្ម និងការចរចាស្វែងរកផលចំណេញ"
+      "km": "ការចាប់ផ្តើមរកស៊ី ការលក់ផលិតផល ឬសេវាកម្ម និងការចរចាធ្វើកិច្ចព្រមព្រៀង"
     },
     "order_index": 14
   },
@@ -130,7 +130,7 @@
     "category": "E",
     "prompt": {
       "en": "Persuading others to adopt an innovative proposal through public speaking",
-      "km": "ការបញ្ចុះបញ្ចូលអ្នកដទៃឱ្យគាំទ្រគម្រោងថ្មី តាមរយៈការឡើងថ្លែងសុន្ទរកថាសាធារណៈ"
+      "km": "ការនិយាយបញ្ចុះបញ្ចូលអ្នកដទៃឱ្យគាំទ្រគំនិត ឬគម្រោងថ្មីរបស់អ្នក នៅចំពោះមុខមហាជន"
     },
     "order_index": 15
   },
@@ -148,7 +148,7 @@
     "category": "C",
     "prompt": {
       "en": "Developing step-by-step operating checklists and ensuring systematic compliance",
-      "km": "ការបង្កើតបញ្ជីត្រួតពិនិត្យការងារជាប្រព័ន្ធ និងការធានាភាពត្រឹមត្រូវតាមច្បាប់"
+      "km": "ការរៀបចំតារាងតាមដានការងារតាមលំដាប់ និងការធ្វើឱ្យប្រាកដថាអ្វីៗធ្វើតាមគោលការណ៍ត្រឹមត្រូវ"
     },
     "order_index": 17
   },
@@ -157,7 +157,7 @@
     "category": "C",
     "prompt": {
       "en": "Managing database registries, structured records, and archived documents",
-      "km": "ការគ្រប់គ្រងទិន្នន័យក្នុងប្រព័ន្ធ ការរក្សាទុកកំណត់ត្រាឱ្យមានរបៀបរៀបរយ"
+      "km": "ការគ្រប់គ្រងទិន្នន័យក្នុងប្រព័ន្ធ និងការរៀបចំទុកដាក់ឯកសារឱ្យមានសណ្តាប់ធ្នាប់"
     },
     "order_index": 18
   }
