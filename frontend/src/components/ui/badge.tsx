@@ -9,7 +9,7 @@ export function Badge({ className, variant = "default", ...props }: BadgeProps) 
   const variantStyles = {
     default: "bg-[#111965] text-white",
     secondary: "bg-[#F0F2FA] text-[#111965]",
-    accent: "bg-[#F7CE4D] text-[#111965] font-bold",
+    accent: "bg-[#F7CE4D] text-[#0F1754] dark:text-[#0F1754] font-bold",
     outline: "border border-[#E6E8F0] text-[#171A2C] bg-white",
     success: "bg-emerald-50 text-emerald-700 border border-emerald-200",
     warning: "bg-amber-50 text-amber-800 border border-amber-200",

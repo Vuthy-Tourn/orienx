@@ -399,6 +399,12 @@ body {
   color: #F8FAFC !important;
 }
 
+.dark .text-\[\#111965\]\/70,
+.dark .text-\[\#111965\]\/75,
+.dark .text-\[\#111965\]\/80 {
+  color: #E2E8F0 !important;
+}
+
 .dark .text-\[\#68708A\],
 .dark .text-\[\#4A5568\],
 .dark .text-\[\#5A6482\],
@@ -454,6 +460,32 @@ body {
 }
 .dark .bg-\[\#0A0F3D\] {
   background-color: #141a26 !important;
+}
+
+/* Keep deep navy ink (#0F1754) on solid yellow/gold buttons & badges in both light and dark modes */
+.bg-\[\#F7CE4D\],
+.bg-\[\#FFD043\],
+.bg-\[\#F5C430\],
+.bg-\[\#E5BD3B\],
+.bg-\[\#F3C432\],
+.bg-amber-300,
+.bg-amber-400,
+.bg-yellow-300,
+.bg-yellow-400,
+.dark .bg-\[\#F7CE4D\],
+.dark .bg-\[\#FFD043\],
+.dark .bg-\[\#F5C430\],
+.dark .bg-\[\#E5BD3B\],
+.dark .bg-\[\#F3C432\],
+.dark .bg-amber-300,
+.dark .bg-amber-400,
+.dark .bg-yellow-300,
+.dark .bg-yellow-400,
+.dark .dark\:bg-\[\#F7CE4D\]:not(.bg-\[\#111965\]),
+.dark .bg-\[\#F7CE4D\] .text-\[\#111965\],
+.dark .bg-\[\#FFD043\] .text-\[\#111965\],
+.dark .bg-\[\#F5C430\] .text-\[\#111965\] {
+  color: #0F1754 !important;
 }
 
 .dark .border-\[\#E6E8F0\]\/80,

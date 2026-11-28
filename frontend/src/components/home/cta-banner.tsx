@@ -139,7 +139,7 @@ export function CtaBanner({
               <div className="pt-2 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-4">
                 <Link
                   href={resolvedPrimaryHref}
-                  className="px-6 py-4 sm:px-8 rounded-xl font-black text-[13px] sm:text-sm text-[#111965] bg-[#F7CE4D] hover:bg-[#F3C432] shadow-[0_12px_28px_rgba(247,206,77,0.35)] hover:shadow-[0_16px_36px_rgba(247,206,77,0.45)] hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-2 group cursor-pointer"
+                  className="px-6 py-4 sm:px-8 rounded-xl font-black text-[13px] sm:text-sm text-[#0F1754] dark:text-[#0F1754] bg-[#F7CE4D] hover:bg-[#F3C432] shadow-[0_12px_28px_rgba(247,206,77,0.35)] hover:shadow-[0_16px_36px_rgba(247,206,77,0.45)] hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-2 group cursor-pointer"
                 >
                   <span className="text-center sm:whitespace-nowrap">{resolvedPrimaryText}</span>
                   <ArrowRight className="w-4 h-4 shrink-0 group-hover:translate-x-1 transition-transform" />
@@ -190,6 +190,7 @@ export function CtaBanner({
                   width={380}
                   height={400}
                   priority
+                  unoptimized
                   className="relative z-10 w-60 sm:w-72 lg:w-80 h-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-transform duration-500 ease-out group-hover:scale-105 group-hover:-translate-y-2"
                 />
               </div>

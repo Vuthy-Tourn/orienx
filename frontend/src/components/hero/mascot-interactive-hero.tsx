@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,17 +13,26 @@ import {
 } from "lucide-react";
 import TechText from "@/components/react-bits/tech-text";
 
-function getHeroScrollConfig(docTop: number, vw: number, vh: number) {
+function getHeroScrollConfig(vw: number, vh: number) {
   if (vw >= 1024) {
     return {
-      activation: Math.max(0, docTop - vh * 0.55) + vh * 0.16,
-      travelDistance: vh * 1.0,
+      activation: 12,
+      travelDistance: Math.min(440, Math.max(300, vh * 0.46)),
     };
   }
   return {
-    activation: Math.min(90, Math.max(12, docTop - vh * 0.72)),
-    travelDistance: Math.max(260, vh * 0.48),
+    activation: 10,
+    travelDistance: Math.min(340, Math.max(220, vh * 0.36)),
   };
+}
+
+interface MascotRect {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  vw: number;
+  vh: number;
 }
 
 export function MascotInteractiveHero() {
@@ -36,82 +45,180 @@ export function MascotInteractiveHero() {
   const [assistantOpen, setAssistantOpen] = useState(false);
 
   const mascotPlaceholderRef = useRef<HTMLDivElement | null>(null);
-  const [startRect, setStartRect] = useState<{
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-    vw: number;
-    vh: number;
-  } | null>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const portalContainerRef = useRef<HTMLDivElement | null>(null);
+  const portalRotateRef = useRef<HTMLDivElement | null>(null);
+  const startRectRef = useRef<MascotRect | null>(null);
   const handoffRef = useRef(false);
+  const rafRef = useRef<number | null>(null);
+
+  const [portalBox, setPortalBox] = useState<{ width: number; height: number } | null>(null);
 
   useEffect(() => {
-    const computeProgress = () => {
-      const node = mascotPlaceholderRef.current;
-      if (!node) return 0;
-      const rect = node.getBoundingClientRect();
-      const docTop = rect.top + window.scrollY;
-      const { activation, travelDistance } = getHeroScrollConfig(
-        docTop,
-        window.innerWidth,
-        window.innerHeight
-      );
-      return Math.min(
-        1,
-        Math.max(0, (window.scrollY - activation) / travelDistance)
+    const endWidth = 96;
+    const endHeight = 104;
+
+    const dispatchHandoff = (active: boolean) => {
+      const globalWindow = window as Window & { __orienxHandoff?: boolean };
+      globalWindow.__orienxHandoff = active;
+      if (handoffRef.current === active) return;
+      handoffRef.current = active;
+      window.dispatchEvent(
+        new CustomEvent("orienx:mascot-handoff", { detail: active })
       );
     };
 
     const measure = () => {
       const node = mascotPlaceholderRef.current;
-      if (node) {
-        const rect = node.getBoundingClientRect();
-        setStartRect({
-          left: rect.left,
-          top: rect.top + window.scrollY,
-          width: rect.width,
-          height: rect.height,
-          vw: window.innerWidth,
-          vh: window.innerHeight,
-        });
-      }
-      setScrollProgress((previous) => {
-        const next = computeProgress();
-        return Math.abs(next - previous) < 0.002 ? previous : next;
-      });
-      setScrollPosition(window.scrollY);
-    };
-    const updateProgress = () => {
-      setScrollProgress((previous) => {
-        const next = computeProgress();
-        return Math.abs(next - previous) < 0.002 ? previous : next;
-      });
-      setScrollPosition(window.scrollY);
+      if (!node) return;
+      const rect = node.getBoundingClientRect();
+      if (rect.width < 10 || rect.height < 10) return;
+      const next: MascotRect = {
+        left: rect.left,
+        top: rect.top + window.scrollY,
+        width: rect.width,
+        height: rect.height,
+        vw: window.innerWidth,
+        vh: window.innerHeight,
+      };
+      startRectRef.current = next;
+      setPortalBox((prev) =>
+        prev && Math.abs(prev.width - next.width) < 1 && Math.abs(prev.height - next.height) < 1
+          ? prev
+          : { width: next.width, height: next.height }
+      );
     };
 
-    const timer = window.setTimeout(measure, 0);
-    window.addEventListener("resize", measure);
-    window.addEventListener("scroll", updateProgress, { passive: true });
+    const applyTransform = () => {
+      rafRef.current = null;
+      const box = startRectRef.current;
+      const container = portalContainerRef.current;
+      const rotator = portalRotateRef.current;
+      if (!box) return;
+
+      const scrollY = window.scrollY;
+      const { activation, travelDistance } = getHeroScrollConfig(box.vw, box.vh);
+
+      // Re-sync resting origin whenever near top so post-navigation font/layout shifts never leave stale coords
+      if (scrollY <= activation) {
+        const node = mascotPlaceholderRef.current;
+        if (node) {
+          const rect = node.getBoundingClientRect();
+          if (rect.width >= 10) {
+            box.left = rect.left;
+            box.top = rect.top + scrollY;
+            box.width = rect.width;
+            box.height = rect.height;
+          }
+        }
+      }
+
+      const rawT = Math.min(1, Math.max(0, (scrollY - activation) / travelDistance));
+      const eased = rawT * rawT * (3 - 2 * rawT);
+
+      const endLeft = box.vw - 20 - endWidth;
+      const endTop = box.vh - 20 - endHeight;
+      const endScale = endWidth / box.width;
+
+      const naturalTop = box.top - Math.min(scrollY, activation);
+      const currentX = box.left + eased * (endLeft - box.left);
+      const currentY = naturalTop + eased * (endTop - naturalTop);
+      const currentScale = 1 + eased * (endScale - 1);
+      const currentRotate = eased * -8;
+      const currentOpacity = rawT <= 0.88 ? 1 : Math.max(0, 1 - (rawT - 0.88) / 0.12);
+
+      if (container) {
+        container.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0) scale(${currentScale.toFixed(4)})`;
+        container.style.opacity = currentOpacity.toFixed(3);
+      }
+      if (rotator) {
+        rotator.style.transform = `rotate(${currentRotate.toFixed(2)}deg)`;
+      }
+
+      dispatchHandoff(rawT >= 0.96);
+    };
+
+    const scheduleFrame = () => {
+      if (rafRef.current !== null) return;
+      rafRef.current = window.requestAnimationFrame(applyTransform);
+    };
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const handleReducedScroll = () => {
+        dispatchHandoff(window.scrollY > window.innerHeight * 0.45);
+      };
+      handleReducedScroll();
+      window.addEventListener("scroll", handleReducedScroll, { passive: true });
+      return () => {
+        window.removeEventListener("scroll", handleReducedScroll);
+        dispatchHandoff(false);
+      };
+    }
+
+    const handleResize = () => {
+      measure();
+      scheduleFrame();
+    };
+
+    // Reset handoff immediately on mount so coming back from another page never flashes stuck state
+    dispatchHandoff(false);
+    measure();
+    scheduleFrame();
+
+    // Re-measure cleanly after Next.js route transition / fonts settle
+    const settleTimer1 = window.setTimeout(handleResize, 60);
+    const settleTimer2 = window.setTimeout(handleResize, 240);
+    document.fonts?.ready?.then(handleResize).catch(() => {});
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined" && mascotPlaceholderRef.current) {
+      resizeObserver = new ResizeObserver(handleResize);
+      resizeObserver.observe(mascotPlaceholderRef.current);
+    }
+
+    window.addEventListener("resize", handleResize);
+    window.addEventListener("scroll", scheduleFrame, { passive: true });
     return () => {
-      window.clearTimeout(timer);
-      window.removeEventListener("resize", measure);
-      window.removeEventListener("scroll", updateProgress);
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      window.clearTimeout(settleTimer1);
+      window.clearTimeout(settleTimer2);
+      resizeObserver?.disconnect();
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", scheduleFrame);
+      dispatchHandoff(false);
     };
   }, []);
 
-  useEffect(() => {
-    const active = scrollProgress >= 0.995;
-    const globalWindow = window as Window & { __orienxHandoff?: boolean };
-    globalWindow.__orienxHandoff = active;
-    if (handoffRef.current === active) return;
-    handoffRef.current = active;
-    window.dispatchEvent(
-      new CustomEvent("orienx:mascot-handoff", { detail: active })
-    );
-  }, [scrollProgress]);
+  // Synchronously position the portal node before the first browser paint when portalBox mounts/resizes
+  useLayoutEffect(() => {
+    const box = startRectRef.current;
+    const container = portalContainerRef.current;
+    const rotator = portalRotateRef.current;
+    if (!portalBox || !box || !container) return;
+
+    const scrollY = window.scrollY;
+    const { activation, travelDistance } = getHeroScrollConfig(box.vw, box.vh);
+    const rawT = Math.min(1, Math.max(0, (scrollY - activation) / travelDistance));
+    const eased = rawT * rawT * (3 - 2 * rawT);
+
+    const endLeft = box.vw - 20 - 96;
+    const endTop = box.vh - 20 - 104;
+    const endScale = 96 / box.width;
+    const naturalTop = box.top - Math.min(scrollY, activation);
+
+    const x = box.left + eased * (endLeft - box.left);
+    const y = naturalTop + eased * (endTop - naturalTop);
+    const scale = 1 + eased * (endScale - 1);
+    const opacity = rawT <= 0.88 ? 1 : Math.max(0, 1 - (rawT - 0.88) / 0.12);
+
+    container.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+    container.style.opacity = opacity.toFixed(3);
+    if (rotator) {
+      rotator.style.transform = `rotate(${(eased * -8).toFixed(2)}deg)`;
+    }
+  }, [portalBox]);
 
   useEffect(() => {
     const handler = (event: Event) => {
@@ -129,34 +236,6 @@ export function MascotInteractiveHero() {
     return () =>
       window.removeEventListener("orienx:assistant-visibility", handler);
   }, []);
-
-  const progress = startRect ? scrollProgress : 0;
-  const endWidth = 96;
-  const endHeight = 104;
-  const endLeft = startRect ? startRect.vw - 20 - endWidth : 0;
-  const endTop = startRect ? startRect.vh - 20 - endHeight : 0;
-  const activation = startRect
-    ? getHeroScrollConfig(startRect.top, startRect.vw, startRect.vh).activation
-    : 0;
-  const naturalTop = startRect
-    ? startRect.top - Math.min(scrollPosition, activation)
-    : 0;
-  const portalLeft = startRect
-    ? startRect.left + progress * (endLeft - startRect.left)
-    : 0;
-  const portalTop = startRect
-    ? naturalTop + progress * (endTop - naturalTop)
-    : 0;
-  const portalWidth = startRect
-    ? startRect.width + progress * (endWidth - startRect.width)
-    : endWidth;
-  const portalHeight = startRect
-    ? startRect.height + progress * (endHeight - startRect.height)
-    : endHeight;
-  const portalRotate = progress * -8;
-  const portalOpacity = progress <= 0.92
-    ? 1
-    : Math.max(0, 1 - (progress - 0.92) / 0.08);
 
   // Conversational dialogues from Tara (rotating automatically)
   const greetings = [
@@ -295,8 +374,7 @@ export function MascotInteractiveHero() {
                 labels={true}
                 draggable={true}
                 clickKick={true}
-                intro="assemble"
-                introDuration={1.2}
+                intro="none"
                 className="w-full h-full"
               />
             </div>
@@ -313,8 +391,7 @@ export function MascotInteractiveHero() {
                 labels={true}
                 draggable={true}
                 clickKick={true}
-                intro="assemble"
-                introDuration={1.2}
+                intro="none"
                 className="w-full h-full"
               />
             </div>
@@ -441,13 +518,14 @@ export function MascotInteractiveHero() {
                   aria-hidden
                   className="relative z-10 w-52 sm:w-68 md:w-80 lg:w-[350px] xl:w-[380px] aspect-[720/760]"
                 >
-                  {!startRect && (
+                  {!portalBox && (
                     <Image
                       src="/images/welcome-hd.webp"
                       alt=""
                       width={720}
                       height={760}
                       priority
+                      unoptimized
                       className={`h-full w-full object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)] transition-transform duration-300 ease-out ${
                         taraBounce ? "scale-110 -translate-y-4" : ""
                       }`}
@@ -460,24 +538,27 @@ export function MascotInteractiveHero() {
         </div>
       </div>
 
-      {typeof document !== "undefined" && startRect
+      {typeof document !== "undefined" && portalBox
         ? createPortal(
             <div
+              ref={portalContainerRef}
               aria-hidden
               style={{
                 position: "fixed",
-                left: portalLeft,
-                top: portalTop,
-                width: portalWidth,
-                height: portalHeight,
-                opacity: portalOpacity,
+                left: 0,
+                top: 0,
+                width: portalBox.width,
+                height: portalBox.height,
+                transformOrigin: "top left",
+                willChange: "transform, opacity",
                 zIndex: 40,
                 pointerEvents: "none",
               }}
               className="select-none"
             >
               <div
-                style={{ transform: `rotate(${portalRotate}deg)` }}
+                ref={portalRotateRef}
+                style={{ willChange: "transform" }}
                 className="h-full w-full origin-center"
               >
                 <Image
@@ -486,6 +567,7 @@ export function MascotInteractiveHero() {
                   width={720}
                   height={760}
                   priority
+                  unoptimized
                   className={`h-full w-full object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.35)] transition-transform duration-300 ease-out ${
                     taraBounce ? "scale-110 -translate-y-4" : ""
                   }`}

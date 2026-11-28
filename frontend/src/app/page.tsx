@@ -52,8 +52,12 @@ import { DotPattern } from "@/components/magicui/dot-pattern";
 import { BentoGrid, BentoGridItem } from "@/components/aceternity/bento-grid";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import CircularGallery from "@/components/ui/circular-gallery";
 import { useTheme } from "@/contexts/theme-context";
+
+const CircularGallery = dynamic(
+  () => import("@/components/ui/circular-gallery"),
+  { ssr: false }
+);
 
 export default function HomePage() {
   const { t, getLocalized, language } = useLanguage();
@@ -61,6 +65,7 @@ export default function HomePage() {
   const isDark = resolvedTheme === "dark";
   const [activeUniIndex, setActiveUniIndex] = useState<number>(0);
   const [mounted, setMounted] = useState<boolean>(false);
+  const [galleryInView, setGalleryInView] = useState<boolean>(false);
   const quickSelectScrollRef = useRef<HTMLDivElement>(null);
   const quickSelectButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -83,7 +88,27 @@ export default function HomePage() {
   useEffect(() => {
     setMounted(true);
     if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const uniSection = document.getElementById("featured-universities-section");
+    let galleryObserver: IntersectionObserver | null = null;
+    if (uniSection && typeof IntersectionObserver !== "undefined") {
+      galleryObserver = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            setGalleryInView(true);
+            galleryObserver?.disconnect();
+          }
+        },
+        { rootMargin: "800px 0px" }
+      );
+      galleryObserver.observe(uniSection);
+    } else {
+      setGalleryInView(true);
+    }
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return () => galleryObserver?.disconnect();
+    }
 
     gsap.registerPlugin(ScrollTrigger);
 
@@ -104,40 +129,6 @@ export default function HomePage() {
         }
       );
 
-      gsap.fromTo(
-        ".gsap-uni-gallery",
-        { opacity: 0, scale: 0.96 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.8,
-          delay: 0.15,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: "#featured-universities-section",
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      gsap.fromTo(
-        ".gsap-uni-spotlight",
-        { opacity: 0, y: 25 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.65,
-          delay: 0.25,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: "#featured-universities-section",
-            start: "top 75%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
       // Gentle section reveals for the rest of the home page.
       gsap.utils.toArray<HTMLElement>(".home-reveal").forEach((section) => {
         gsap.fromTo(
@@ -146,11 +137,11 @@ export default function HomePage() {
           {
             opacity: 1,
             y: 0,
-            duration: 1.35,
+            duration: 1.05,
             ease: "power2.out",
             scrollTrigger: {
               trigger: section,
-              start: "top 82%",
+              start: "top 85%",
               toggleActions: "play none none none",
               once: true,
             },
@@ -160,8 +151,63 @@ export default function HomePage() {
       });
     });
 
-    return () => ctx.revert();
+    const rafId = window.requestAnimationFrame(() => ScrollTrigger.refresh());
+    const settleTimer = window.setTimeout(() => ScrollTrigger.refresh(), 200);
+    document.fonts?.ready?.then(() => ScrollTrigger.refresh()).catch(() => {});
+
+    return () => {
+      galleryObserver?.disconnect();
+      window.cancelAnimationFrame(rafId);
+      window.clearTimeout(settleTimer);
+      ctx.revert();
+    };
   }, []);
+
+  useEffect(() => {
+    if (!mounted || typeof window === "undefined") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    const ctx = gsap.context(() => {
+      if (document.querySelector(".gsap-uni-gallery")) {
+        gsap.fromTo(
+          ".gsap-uni-gallery",
+          { opacity: 0, scale: 0.96 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.7,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: "#featured-universities-section",
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+      if (document.querySelector(".gsap-uni-spotlight")) {
+        gsap.fromTo(
+          ".gsap-uni-spotlight",
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            delay: 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: "#featured-universities-section",
+              start: "top 75%",
+              toggleActions: "play none none none",
+            },
+          }
+        );
+      }
+    });
+
+    return () => ctx.revert();
+  }, [mounted]);
 
   // Public landing page reads the bundled static catalogue.
   const universitiesData = STATIC_UNIVERSITIES;
@@ -451,7 +497,7 @@ export default function HomePage() {
                 <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
 
-              {galleryItems.length > 0 && (
+              {galleryInView && galleryItems.length > 0 && (
                 <CircularGallery
                   items={galleryItems}
                   bend={0.85}

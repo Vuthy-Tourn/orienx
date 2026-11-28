@@ -21,6 +21,7 @@ export function HowItWorksFlow() {
   const primaryPathRef = useRef<SVGPathElement>(null);
   const secondaryPathRef = useRef<SVGPathElement>(null);
   const nodesRef = useRef<(HTMLDivElement | null)[]>([]);
+  const stemsRef = useRef<(HTMLDivElement | null)[]>([]);
   const textBlocksRef = useRef<(HTMLDivElement | null)[]>([]);
   const watermarksRef = useRef<(HTMLDivElement | null)[]>([]);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
@@ -169,6 +170,11 @@ export function HowItWorksFlow() {
         0.58
       );
       tl.to(
+        stemsRef.current[0],
+        { opacity: 1, duration: 0.35, ease: "power2.out" },
+        0.6
+      );
+      tl.to(
         watermarksRef.current[0],
         {
           opacity: 0.85,
@@ -225,6 +231,11 @@ export function HowItWorksFlow() {
           ease: "back.out(2.2)",
         },
         1.68
+      );
+      tl.to(
+        stemsRef.current[1],
+        { opacity: 1, duration: 0.35, ease: "power2.out" },
+        1.7
       );
       tl.to(
         watermarksRef.current[1],
@@ -285,6 +296,11 @@ export function HowItWorksFlow() {
         2.78
       );
       tl.to(
+        stemsRef.current[2],
+        { opacity: 1, duration: 0.35, ease: "power2.out" },
+        2.8
+      );
+      tl.to(
         watermarksRef.current[2],
         {
           opacity: 0.85,
@@ -343,6 +359,11 @@ export function HowItWorksFlow() {
         3.88
       );
       tl.to(
+        stemsRef.current[3],
+        { opacity: 1, duration: 0.35, ease: "power2.out" },
+        3.9
+      );
+      tl.to(
         watermarksRef.current[3],
         {
           opacity: 0.85,
@@ -390,6 +411,9 @@ export function HowItWorksFlow() {
     nodesRef.current.forEach((node) => {
       if (node) gsap.set(node, { xPercent: -50, yPercent: -50, scale: 0, opacity: 0 });
     });
+    stemsRef.current.forEach((stem) => {
+      if (stem) gsap.set(stem, { opacity: 0 });
+    });
     textBlocksRef.current.forEach((block, idx) => {
       const isAbove = steps[idx].position === "above";
       if (block) gsap.set(block, { xPercent: -50, opacity: 0, y: isAbove ? -14 : 14 });
@@ -400,14 +424,20 @@ export function HowItWorksFlow() {
 
     const trigger = ScrollTrigger.create({
       trigger: sectionRef.current,
-      start: "top 55%", // Wait until the user scrolls down and this section enters the active viewport
+      start: "top 78%",
       onEnter: () => {
         runAnimation();
       },
       once: true,
     });
 
+    const rafId = window.requestAnimationFrame(() => ScrollTrigger.refresh());
+    const settleTimer = window.setTimeout(() => ScrollTrigger.refresh(), 220);
+    document.fonts?.ready?.then(() => ScrollTrigger.refresh()).catch(() => {});
+
     return () => {
+      window.cancelAnimationFrame(rafId);
+      window.clearTimeout(settleTimer);
       trigger.kill();
       if (timelineRef.current) timelineRef.current.kill();
     };
@@ -562,6 +592,9 @@ export function HowItWorksFlow() {
 
                 {/* 2. DEDICATED CONNECTOR STEM LINKING NODE DIRECTLY TO CARD */}
                 <div
+                  ref={(el) => {
+                    stemsRef.current[idx] = el;
+                  }}
                   style={{
                     left: `${leftPct}%`,
                     ...(isAbove

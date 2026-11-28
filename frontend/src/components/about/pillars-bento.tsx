@@ -74,11 +74,14 @@ export function PillarsBento({ pillars }: { pillars: ScientificPillar[] }) {
             </span>
           </div>
 
-          <p className="mt-4 text-[11.5px] font-semibold leading-snug text-[#68708A]">
-            <span className="font-bold text-[#111965]/70">
+          <p className="mt-4 text-[11.5px] font-semibold leading-snug text-[#68708A] dark:text-slate-300">
+            <span
+              className={isDark ? "font-bold" : "font-bold text-[#111965]/75"}
+              style={isDark ? { color: accent } : undefined}
+            >
               {isKm ? `សសរ ${pillar.number}` : `Pillar ${pillar.number}`}
             </span>
-            <span className="mx-1 text-[#68708A]/60">·</span>
+            <span className="mx-1 text-[#68708A]/60 dark:text-slate-400/70">·</span>
             {isKm ? pillar.categoryKm : pillar.categoryEn}
           </p>
 

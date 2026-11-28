@@ -564,7 +564,7 @@ export default function ScholarshipsPage() {
               <span>{t("scholarshipsPage.tipsTitle")}</span>
             </div>
             <h3 className="text-xl font-extrabold text-[#111965]">
-              3 Essential Steps for Grade 12 Graduates & Cambodian Students
+              {t("scholarshipsPage.stepsHeading")}
             </h3>
             <p className="text-xs text-[#68708A]">
               {t("scholarshipsPage.tipsDesc")}
@@ -576,9 +576,11 @@ export default function ScholarshipsPage() {
               <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-900 flex items-center justify-center font-bold text-sm">
                 1
               </div>
-              <h4 className="text-sm font-bold text-[#111965]">Academic Credentials</h4>
+              <h4 className="text-sm font-bold text-[#111965]">
+                {t("scholarshipsPage.step1Title")}
+              </h4>
               <p className="text-xs text-[#68708A] leading-relaxed">
-                Keep certified copies of your Grade 12 BacII National Examination certificate, Grade 10–12 transcripts, and national ID ready.
+                {t("scholarshipsPage.step1Desc")}
               </p>
             </div>
 
@@ -586,9 +588,11 @@ export default function ScholarshipsPage() {
               <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-900 flex items-center justify-center font-bold text-sm">
                 2
               </div>
-              <h4 className="text-sm font-bold text-[#111965]">Motivation Statement</h4>
+              <h4 className="text-sm font-bold text-[#111965]">
+                {t("scholarshipsPage.step2Title")}
+              </h4>
               <p className="text-xs text-[#68708A] leading-relaxed">
-                Explain your personal drive, career vision, and how you will contribute to Cambodia's socioeconomic and digital development.
+                {t("scholarshipsPage.step2Desc")}
               </p>
             </div>
 
@@ -596,9 +600,11 @@ export default function ScholarshipsPage() {
               <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-900 flex items-center justify-center font-bold text-sm">
                 3
               </div>
-              <h4 className="text-sm font-bold text-[#111965]">Aptitude & Interview Prep</h4>
+              <h4 className="text-sm font-bold text-[#111965]">
+                {t("scholarshipsPage.step3Title")}
+              </h4>
               <p className="text-xs text-[#68708A] leading-relaxed">
-                Prepare for logic, English proficiency, and basic STEM math questions frequently requested by CADT, AUPP, and MoEYS scholarship committees.
+                {t("scholarshipsPage.step3Desc")}
               </p>
             </div>
           </div>

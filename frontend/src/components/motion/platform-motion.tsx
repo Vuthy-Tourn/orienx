@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useTestFocusMode } from "@/lib/test-focus";
 import {
   motion,
   useReducedMotion,
@@ -38,6 +39,12 @@ function isDashboardPath(pathname: string) {
   return pathname === "/dashboard" || pathname.startsWith("/dashboard/");
 }
 
+function isAssessmentTestPath(pathname: string) {
+  return pathname === "/assessments/personality/test" ||
+    pathname === "/assessments/riasec/test" ||
+    pathname.endsWith("/test");
+}
+
 /**
  * A quiet fade between public pages. Opacity-only so fixed and sticky
  * elements inside pages are not affected by a transformed ancestor.
@@ -53,9 +60,9 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
       key={pathname}
-      initial={{ opacity: 0.9 }}
+      initial={{ opacity: 0.96 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.16, ease: "easeOut" }}
     >
       {children}
     </motion.div>
@@ -119,6 +126,7 @@ export function SmoothAnchors() {
 export function ScrollProgress() {
   const pathname = usePathname() ?? "/";
   const reduceMotion = useReducedMotion();
+  const isTestFocus = useTestFocusMode();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 140,
@@ -126,7 +134,12 @@ export function ScrollProgress() {
     mass: 0.2,
   });
 
-  if (isPrivatePath(pathname) || reduceMotion) {
+  if (
+    isPrivatePath(pathname) ||
+    isTestFocus ||
+    isAssessmentTestPath(pathname) ||
+    reduceMotion
+  ) {
     return null;
   }
 

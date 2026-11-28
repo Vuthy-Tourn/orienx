@@ -180,7 +180,7 @@ function ConfirmDialog({
               "inline-flex h-10 items-center justify-center gap-2 rounded-xl px-4 text-xs font-black text-white transition-colors",
               tone === "danger"
                 ? "bg-rose-600 hover:bg-rose-700"
-                : "bg-[#111965]/100 hover:bg-[#1E277A] dark:bg-[#F7CE4D] dark:text-white dark:hover:bg-[#E5BD3B]"
+                : "bg-[#111965]/100 hover:bg-[#1E277A] dark:bg-[#F7CE4D] dark:text-[#0F1754] dark:hover:bg-[#E5BD3B]"
             )}
           >
             {options.confirmLabel ?? "Confirm"}

@@ -100,7 +100,7 @@ export function AdminPagination({
               className={cn(
                 baseButton,
                 item === page
-                  ? "border-[#111965] bg-[#111965]/100 text-white dark:border-[#F7CE4D] dark:bg-[#F7CE4D] dark:text-white"
+                  ? "border-[#111965] bg-[#111965]/100 text-white dark:border-[#F7CE4D] dark:bg-[#F7CE4D] dark:text-[#0F1754]"
                   : "border-[#E6E8F0] bg-white text-[#68708A] hover:bg-[#F0F2FA] hover:text-[#111965] dark:border-white/10 dark:bg-transparent dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-white"
               )}
             >

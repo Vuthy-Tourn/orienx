@@ -58,10 +58,12 @@ export function Footer() {
             </p>
             <div className="pt-2 flex items-center gap-3 text-xs text-slate-400">
               <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-white/10 text-[#F7CE4D] font-bold border border-white/10 shadow-xs">
-                Cambodia Edition 2026
+                {getLocalized({ en: "Cambodia Edition 2026", km: "កំណែសម្រាប់កម្ពុជា ២០២៦" })}
               </span>
               <span>•</span>
-              <span className="font-medium text-slate-300">Bilingual EN / ខ្មែរ</span>
+              <span className="font-medium text-slate-300">
+                {getLocalized({ en: "Bilingual EN / ខ្មែរ", km: "ពីរភាសា ខ្មែរ / EN" })}
+              </span>
             </div>
           </div>
 
@@ -118,27 +120,27 @@ export function Footer() {
             <ul className="space-y-2.5 text-sm text-slate-300">
               <li>
                 <Link href="/universities/rupp" className="hover:text-white hover:translate-x-0.5 inline-block transition-all">
-                  Royal University of Phnom Penh (RUPP)
+                  {getLocalized({ en: "Royal University of Phnom Penh (RUPP)", km: "សាកលវិទ្យាល័យភូមិន្ទភ្នំពេញ (RUPP)" })}
                 </Link>
               </li>
               <li>
                 <Link href="/universities/itc" className="hover:text-white hover:translate-x-0.5 inline-block transition-all">
-                  Institute of Technology (Techno)
+                  {getLocalized({ en: "Institute of Technology (Techno)", km: "វិទ្យាស្ថានបច្ចេកវិទ្យាកម្ពុជា (តិចណូ)" })}
                 </Link>
               </li>
               <li>
                 <Link href="/universities/aupp" className="hover:text-white hover:translate-x-0.5 inline-block transition-all">
-                  American University of Phnom Penh (AUPP)
+                  {getLocalized({ en: "American University of Phnom Penh (AUPP)", km: "សាកលវិទ្យាល័យអាមេរិកាំងភ្នំពេញ (AUPP)" })}
                 </Link>
               </li>
               <li>
                 <Link href="/universities/paragoniu" className="hover:text-white hover:translate-x-0.5 inline-block transition-all">
-                  Paragon International University
+                  {getLocalized({ en: "Paragon International University", km: "សាកលវិទ្យាល័យអន្តរជាតិផារ៉ាហ្គន (Paragon.U)" })}
                 </Link>
               </li>
               <li>
                 <Link href="/universities/num" className="hover:text-white hover:translate-x-0.5 inline-block transition-all">
-                  National University of Management (NUM)
+                  {getLocalized({ en: "National University of Management (NUM)", km: "សាកលវិទ្យាល័យជាតិគ្រប់គ្រង (NUM)" })}
                 </Link>
               </li>
             </ul>
@@ -152,18 +154,12 @@ export function Footer() {
                 km: "តម្លាភាព និងក្រមសីលធម៌",
               })}
             </h4>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-sm text-slate-400 leading-relaxed">
               {getLocalized({
                 en: "Assessment results reflect self-reported student preferences and are designed to broaden horizons, not definitively restrict opportunities. University tuition and admission requirements are sourced from official published portals.",
                 km: "លទ្ធផលវាយតម្លៃឆ្លុះបញ្ចាំងពីចំណូលចិត្តផ្ទាល់ខ្លួន ដើម្បីពង្រីកឱកាសសិក្សា និងមិនកំណត់សិទ្ធិរបស់សិស្សឡើយ។ តម្លៃសិក្សា និងលក្ខខណ្ឌចូលរៀនត្រូវបានប្រមូលពីប្រភពផ្លូវការ។",
               })}
             </p>
-            <div className="pt-1 text-xs text-slate-400">
-              {getLocalized({ en: "Support:", km: "ទំនាក់ទំនងគាំទ្រ:" })}{" "}
-              <a href="mailto:guidance@orienx.edu.kh" className="text-[#F7CE4D] hover:underline font-bold">
-                guidance@orienx.edu.kh
-              </a>
-            </div>
           </div>
         </div>
       </div>
@@ -171,16 +167,18 @@ export function Footer() {
       {/* Bottom Copyright Bar */}
       <div className="relative z-10 bg-[#060A24]/90 backdrop-blur-md border-t border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© {new Date().getFullYear()} OrienX Platform. Discover Your Direction. Shape Your Future.</p>
+          <p>
+            {getLocalized({
+              en: `© ${new Date().getFullYear()} OrienX Discover Your Direction and Shape Your Future.`,
+              km: `© ${new Date().getFullYear()} OrienX ស្វែងរកទិសដៅរបស់អ្នក និង កំណត់អនាគតរបស់អ្នក`,
+            })}
+          </p>
           <div className="flex items-center gap-6">
             <Link href="/about" className="hover:text-white transition-colors">
-              About Methodology
+              {getLocalized({ en: "About Methodology", km: "អំពីវិធីសាស្ត្រ" })}
             </Link>
-            <Link href="/about#privacy" className="hover:text-white transition-colors">
-              Data Privacy
-            </Link>
-            <Link href="/about#terms" className="hover:text-white transition-colors">
-              Terms of Guidance
+            <Link href="/about" className="hover:text-white transition-colors">
+              {getLocalized({ en: "Terms of Guidance", km: "គោលការណ៍ណែនាំ" })}
             </Link>
           </div>
         </div>

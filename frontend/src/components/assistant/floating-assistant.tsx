@@ -178,8 +178,10 @@ export function FloatingAssistant() {
 
   useEffect(() => {
     if (!isHome) return;
-    if (window.scrollY >= 100) return;
-    const timer = window.setTimeout(() => setPastHero(false), 0);
+    const globalWindow = window as Window & { __orienxHandoff?: boolean };
+    const timer = window.setTimeout(() => {
+      setPastHero(Boolean(globalWindow.__orienxHandoff));
+    }, 0);
     return () => window.clearTimeout(timer);
   }, [isHome]);
 
@@ -401,6 +403,7 @@ export function FloatingAssistant() {
                 width={96}
                 height={102}
                 priority={false}
+                unoptimized
                 className="h-full w-full object-contain drop-shadow-[0_18px_16px_rgba(17,25,101,0.28)]"
               />
             </motion.span>
